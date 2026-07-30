@@ -1,0 +1,133 @@
+/*
+ * World Anvil Import triage
+ * Priority stays typographic; colour is reserved for migration state.
+ */
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .bases-cards-item {
+  border-color: var(--background-modifier-border);
+  box-shadow: inset 3px 0 0 var(--background-modifier-border);
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-property[data-property="formula.next_action"] .bases-cards-label,
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-property[data-property="formula.action_steps"] .bases-cards-label {
+  display: none !important;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-property[data-property="formula.next_action"] {
+  padding-top: 0.25rem;
+  padding-bottom: 0.3rem;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-property[data-property="formula.action_steps"] {
+  padding-top: 0;
+  padding-bottom: 0.55rem;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-tier {
+  display: inline-block;
+  padding: 0.05rem 0;
+  color: var(--text-muted);
+  font-size: 0.74em;
+  font-weight: 750;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-tier--1 {
+  color: var(--text-normal);
+  font-weight: 850;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-priority-reason {
+  display: block;
+  color: var(--text-faint);
+  font-size: 0.76em;
+  line-height: 1.35;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-action {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0.16rem 0.38rem;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  font-size: 0.74em;
+  font-weight: 750;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-guidance {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.76em;
+  line-height: 1.35;
+}
+
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-missing {
+  color: var(--vc-state-warning, var(--color-yellow));
+  font-weight: 750;
+}
+
+/* Conflict: red. */
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--conflict) {
+  border-color: color-mix(in srgb, var(--vc-state-danger, var(--color-red)) 45%, var(--background-modifier-border));
+  box-shadow: inset 3px 0 0 var(--vc-state-danger, var(--color-red));
+}
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-action--conflict {
+  color: var(--vc-state-danger, var(--color-red));
+}
+
+/* Pending structural decisions: amber. */
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--type),
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--edition),
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--era),
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--relationship) {
+  border-color: color-mix(in srgb, var(--vc-state-warning, var(--color-yellow)) 42%, var(--background-modifier-border));
+  box-shadow: inset 3px 0 0 var(--vc-state-warning, var(--color-yellow));
+}
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  :is(.wa-action--type, .wa-action--edition, .wa-action--era, .wa-action--relationship) {
+  color: var(--vc-state-warning, var(--color-yellow));
+}
+
+/* Link repair is a reference/navigation problem: blue. */
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--links) {
+  border-color: color-mix(in srgb, var(--vc-state-reference, var(--color-blue)) 42%, var(--background-modifier-border));
+  box-shadow: inset 3px 0 0 var(--vc-state-reference, var(--color-blue));
+}
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-action--links {
+  color: var(--vc-state-reference, var(--color-blue));
+}
+
+/* Low-priority review/artwork stays neutral. */
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--assets),
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--review) {
+  box-shadow: inset 3px 0 0 var(--text-faint);
+}
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  :is(.wa-action--assets, .wa-action--review) {
+  color: var(--text-muted);
+}
+
+/* Ready: green. */
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
+  .bases-cards-item:has(.wa-action--ready) {
+  border-color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 38%, var(--background-modifier-border));
+  box-shadow: inset 3px 0 0 var(--vc-state-success, var(--color-green));
+}
+.workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-action--ready {
+  color: var(--vc-state-success, var(--color-green));
+}

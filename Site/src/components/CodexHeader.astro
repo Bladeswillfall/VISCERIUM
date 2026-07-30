@@ -1,0 +1,74 @@
+---
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import CodexSearch from './CodexSearch.astro';
+import EraContextControls from './EraContextControls.astro';
+---
+
+<div class="header codex-header">
+  <div class="title-wrapper sl-flex">
+    <button
+      class="codex-sidebar-toggle"
+      type="button"
+      data-codex-sidebar-toggle
+      aria-controls="starlight__sidebar"
+      aria-expanded="false"
+      aria-label="Show sidebar"
+    >
+      <span aria-hidden="true">☰</span>
+    </button>
+    <SiteTitle />
+  </div>
+
+  <div class="codex-header-search print:hidden" data-codex-header-search>
+    <CodexSearch />
+  </div>
+
+  <!--
+    Telescope injects its hidden controller into `.right-group`; CodexSearch
+    provides the visible header trigger. Keep this class stable.
+  -->
+  <div class="right-group codex-header-controls print:hidden" data-codex-header-controls>
+    <EraContextControls />
+    <div class="codex-theme-control" title="Colour theme">
+      <ThemeSelect />
+    </div>
+    <LanguageSelect />
+  </div>
+</div>
+
+<style is:global>
+  /* Restored pre-background-stack grain treatment. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: url('/assets/images/codex-noise-v2.webp') repeat;
+    opacity: .2;
+    visibility: visible;
+    pointer-events: none;
+    display: block;
+    mix-blend-mode: soft-light;
+  }
+
+  :root[data-theme='light'] body::before {
+    opacity: .2;
+  }
+
+  :root[data-exploration-focus] .codex-header {
+    display: none !important;
+  }
+
+  @media print, (forced-colors: active) {
+    body::before {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import '../scripts/telescope-scope.js';
+  import '../scripts/codex-shell.js';
+</script>

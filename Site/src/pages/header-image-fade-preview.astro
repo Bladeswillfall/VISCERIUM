@@ -1,0 +1,19 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Header Image Fade Preview',
+    description: 'A regression preview for the shared grainy bottom-edge header image fade.',
+    headerImage: '/assets/images/viscerium-banner.webp',
+    alt: 'VISCERIUM banner artwork used to exercise the shared header-image treatment.',
+    pagefind: false,
+    giscus: false,
+  }}
+>
+  <p>
+    This page exercises the same shared header-image treatment used across normal Codex pages.
+    The image should dissolve into a longer grainy continuation that passes behind the page title.
+  </p>
+</StarlightPage>

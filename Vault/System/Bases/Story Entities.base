@@ -1,0 +1,208 @@
+filters:
+  and:
+    - '!file.inFolder("Templates")'
+    - or:
+        - type == "fauna"
+        - type == "flora"
+        - type == "fungi"
+        - type == "item"
+        - type == "myrkild-unit"
+formulas:
+  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
+  era_count: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))'
+properties:
+  title:
+    displayName: Entity
+  description:
+    displayName: Identity
+  type:
+    displayName: Type
+  entity_id:
+    displayName: Continuity ID
+  development_level:
+    displayName: Development
+  formula.era_context:
+    displayName: Era / scope
+  formula.era_count:
+    displayName: Era count
+  locations:
+    displayName: Locations
+  rarity:
+    displayName: Rarity
+  file.mtime:
+    displayName: Modified
+views:
+  - type: table
+    name: All Entities
+    order:
+      - title
+      - type
+      - entity_id
+      - description
+      - formula.era_context
+      - locations
+      - rarity
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: Continuity
+    filters:
+      and:
+        - '!entity_id.isEmpty()'
+    groupBy:
+      property: entity_id
+      direction: ASC
+    order:
+      - title
+      - type
+      - formula.era_context
+      - development_level
+      - file.mtime
+    sort:
+      - property: formula.era_context
+        direction: ASC
+  - type: table
+    name: Needs edition split
+    filters:
+      and:
+        - formula.era_count > 1
+    order:
+      - title
+      - type
+      - formula.era_context
+      - entity_id
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: By Type
+    groupBy:
+      property: type
+      direction: ASC
+    order:
+      - title
+      - description
+      - formula.era_context
+      - entity_id
+      - locations
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: CITADEL
+    filters:
+      or:
+        - era == "CITADEL"
+        - list(eras).contains("CITADEL")
+        - era == "Universal"
+    order:
+      - title
+      - type
+      - entity_id
+      - locations
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: SMOG
+    filters:
+      or:
+        - era == "SMOG"
+        - list(eras).contains("SMOG")
+        - era == "Universal"
+    order:
+      - title
+      - type
+      - entity_id
+      - locations
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: NEARSIGHT
+    filters:
+      or:
+        - era == "NEARSIGHT"
+        - list(eras).contains("NEARSIGHT")
+        - era == "Universal"
+    order:
+      - title
+      - type
+      - entity_id
+      - locations
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: ENTROPY
+    filters:
+      or:
+        - era == "ENTROPY"
+        - list(eras).contains("ENTROPY")
+        - era == "Universal"
+    order:
+      - title
+      - type
+      - entity_id
+      - locations
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: Universal
+    filters:
+      and:
+        - era == "Universal"
+    order:
+      - title
+      - type
+      - entity_id
+      - locations
+      - development_level
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC
+  - type: table
+    name: Recently Modified
+    order:
+      - title
+      - type
+      - formula.era_context
+      - entity_id
+      - development_level
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Stubs
+    filters:
+      and:
+        - development_level == "stub"
+    order:
+      - title
+      - type
+      - description
+      - formula.era_context
+      - entity_id
+      - locations
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC

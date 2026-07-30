@@ -1,0 +1,233 @@
+---
+const { starlightRoute } = Astro.locals;
+const references = Array.isArray(starlightRoute.entry.data.referencedIn)
+  ? starlightRoute.entry.data.referencedIn
+  : [];
+
+const typeLabels = new Map([
+  ['article', 'Articles'],
+  ['calendar', 'Calendars'],
+  ['character', 'Characters'],
+  ['event', 'Events'],
+  ['faction', 'Factions'],
+  ['fauna', 'Fauna'],
+  ['flora', 'Flora'],
+  ['fungi', 'Fungi'],
+  ['image', 'Images'],
+  ['item', 'Items'],
+  ['location', 'Locations'],
+  ['map', 'Maps'],
+  ['organisation', 'Organisations'],
+  ['organization', 'Organisations'],
+  ['person', 'People'],
+  ['species', 'Species'],
+  ['timeline', 'Timelines'],
+]);
+
+function groupLabel(type) {
+  const key = String(type ?? 'article').trim().toLowerCase();
+  if (typeLabels.has(key)) return typeLabels.get(key);
+  const words = key.replace(/[-_]+/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return words.endsWith('s') ? words : `${words}s`;
+}
+
+const groupMap = new Map();
+for (const reference of references) {
+  const label = groupLabel(reference.type);
+  const entries = groupMap.get(label) ?? [];
+  entries.push(reference);
+  groupMap.set(label, entries);
+}
+
+const groups = [...groupMap.entries()]
+  .map(([label, entries]) => ({
+    label,
+    entries: [...entries].sort((left, right) => left.title.localeCompare(right.title)),
+  }))
+  .sort((left, right) => left.label.localeCompare(right.label));
+---
+
+{references.length > 0 && (
+  <section class="codex-referenced-in not-content" aria-labelledby="codex-referenced-in-title">
+    <span class="codex-referenced-in-bracket-label" aria-hidden="true">Index</span>
+    <div class="codex-referenced-in-inner">
+      <header class="codex-referenced-in-heading">
+        <h2 id="codex-referenced-in-title">Referenced in</h2>
+        <span>{references.length} {references.length === 1 ? 'record' : 'records'}</span>
+      </header>
+
+      <div class="codex-referenced-in-groups">
+        {groups.map((group) => (
+          <section class="codex-referenced-in-group" aria-labelledby={`referenced-in-${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
+            <h3 id={`referenced-in-${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>{group.label}</h3>
+            <ul>
+              {group.entries.map((reference) => (
+                <li>
+                  <a href={reference.href}>{reference.title}</a>
+                  {reference.era && <span>{reference.era}</span>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  @layer starlight.core {
+    .codex-referenced-in {
+      position: relative;
+      box-sizing: border-box;
+      margin-block: 3.5rem 1.25rem;
+      padding: .65rem 0 .65rem 2rem;
+      color: var(--sl-color-gray-2);
+    }
+
+    .codex-referenced-in::before {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: .85rem;
+      border-block: 1px solid var(--sl-color-accent-high);
+      border-inline-start: 1px solid var(--sl-color-accent-high);
+      content: '';
+      opacity: .82;
+      pointer-events: none;
+    }
+
+    .codex-referenced-in-bracket-label {
+      position: absolute;
+      inset-inline-start: -.12rem;
+      inset-block-start: 50%;
+      z-index: 1;
+      padding: .18rem .38rem;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      background: var(--sl-color-bg);
+      color: var(--sl-color-accent-high);
+      font-family: var(--sl-font-system);
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .codex-referenced-in-inner {
+      min-width: 0;
+    }
+
+    .codex-referenced-in-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-block-end: 1.15rem;
+    }
+
+    .codex-referenced-in-heading h2 {
+      margin: 0;
+      color: var(--sl-color-white);
+      font-family: var(--sl-font-system);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .codex-referenced-in-heading > span {
+      flex: 0 0 auto;
+      color: var(--sl-color-gray-3);
+      font-family: var(--sl-font-system);
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .codex-referenced-in-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.35rem 2rem;
+    }
+
+    .codex-referenced-in-group {
+      min-width: 0;
+    }
+
+    .codex-referenced-in-group h3 {
+      margin: 0 0 .48rem;
+      padding-block-end: .38rem;
+      border-block-end: 1px solid color-mix(in oklch, var(--codex-border, var(--sl-color-gray-5)) 72%, transparent);
+      color: var(--sl-color-accent-high);
+      font-family: var(--sl-font-system);
+      font-size: .64rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .codex-referenced-in-group ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .codex-referenced-in-group li {
+      display: flex;
+      min-width: 0;
+      align-items: baseline;
+      gap: .45rem;
+      margin: .3rem 0;
+    }
+
+    .codex-referenced-in-group a {
+      min-width: 0;
+      color: var(--sl-color-gray-2);
+      font-family: var(--sl-font);
+      font-size: .9rem;
+      line-height: 1.35;
+      text-decoration: none;
+    }
+
+    .codex-referenced-in-group a:hover,
+    .codex-referenced-in-group a:focus-visible {
+      color: var(--sl-color-white);
+      text-decoration: underline;
+      text-decoration-color: var(--sl-color-accent-high);
+      text-underline-offset: .16em;
+    }
+
+    .codex-referenced-in-group li > span {
+      flex: 0 0 auto;
+      color: var(--sl-color-gray-4);
+      font-family: var(--sl-font-system);
+      font-size: .59rem;
+      letter-spacing: .07em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 42rem) {
+      .codex-referenced-in {
+        margin-block-start: 2.75rem;
+        padding-inline-start: 1.35rem;
+      }
+
+      .codex-referenced-in::before {
+        width: .5rem;
+      }
+
+      .codex-referenced-in-bracket-label {
+        display: none;
+      }
+
+      .codex-referenced-in-groups {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.15rem;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,37 @@
+/*
+ * Heading hierarchy
+ * Makes long notes easier to scan in Reading View and Live Preview.
+ * Typography comes from Creator UI foundation; colour is a restrained hierarchy cue.
+ */
+
+.markdown-rendered h1,
+.markdown-source-view.mod-cm6 .HyperMD-header-1 {
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+
+.markdown-rendered h2,
+.markdown-source-view.mod-cm6 .HyperMD-header-2 {
+  margin-top: 1.9em;
+  padding-bottom: 0.32em;
+  border-bottom: 1px solid var(--vc-accent-line, var(--background-modifier-border));
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.markdown-rendered h3,
+.markdown-source-view.mod-cm6 .HyperMD-header-3 {
+  margin-top: 1.6em;
+  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 18%, var(--text-normal));
+  line-height: 1.25;
+}
+
+.markdown-rendered h4,
+.markdown-source-view.mod-cm6 .HyperMD-header-4 {
+  margin-top: 1.45em;
+  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 16%, var(--text-muted));
+  font-size: 0.92em;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}

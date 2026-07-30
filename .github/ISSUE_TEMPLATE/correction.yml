@@ -1,0 +1,9 @@
+name: Lore correction
+description: Report an error on a published page.
+body:
+  - type: input
+    id: page
+    attributes: { label: Page URL }
+  - type: textarea
+    id: correction
+    attributes: { label: Correction }

@@ -1,0 +1,700 @@
+/* ==========================================================================
+   Era primer pages
+
+   Consolidated from era-primer.css, era-primer-mobile.css, era-primer-editorial.css. Section order is intentional:
+   later sections may refine or override earlier ownership layers. Keep the
+   provenance comments when moving rules so cascade-sensitive behaviour remains
+   understandable in isolation.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Primer foundation
+   Origin: era-primer.css
+
+   Defines the era-primer component and primary composition.
+   -------------------------------------------------------------------------- */
+
+/* Era primers: compact editorial gateways above each era timeline. */
+.era-primer {
+  --era-primer-accent: var(--era-e1-base);
+  --era-primer-bg: var(--sl-color-bg);
+  --era-primer-surface: var(--codex-surface-raised-color);
+  --era-primer-surface-soft: color-mix(in oklch, var(--era-primer-surface) 72%, var(--era-primer-bg));
+  --era-primer-text: var(--sl-color-white);
+  --era-primer-body: var(--sl-color-gray-2);
+  --era-primer-muted: var(--sl-color-gray-3);
+  --era-primer-line: var(--sl-color-hairline-light);
+  position: relative;
+  display: grid;
+  gap: clamp(2.6rem, 5vw, 4.8rem);
+  margin-block: 1.5rem clamp(3.2rem, 6vw, 5.5rem);
+  color: var(--era-primer-body);
+  font-family: var(--vc-font-body);
+}
+
+.era-primer *,
+.era-primer *::before,
+.era-primer *::after {
+  box-sizing: border-box;
+}
+
+.era-primer :where(h2, h3, h4, p, dl, dd, dt) {
+  margin: 0;
+}
+
+.era-primer :where(h2, h3, h4) {
+  color: var(--era-primer-text);
+  text-wrap: balance;
+}
+
+.era-primer :where(p, dd) {
+  text-wrap: pretty;
+}
+
+.era-primer a {
+  color: inherit;
+}
+
+.era-primer__eyebrow {
+  color: var(--era-primer-accent);
+  font-family: var(--vc-font-ui);
+  font-size: .67rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.era-primer__hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(2rem, 4vw, 3.8rem);
+  border: 1px solid color-mix(in oklch, var(--era-primer-accent) 28%, var(--era-primer-line));
+  border-radius: .8rem;
+  background:
+    linear-gradient(135deg, color-mix(in oklch, var(--era-primer-accent) 10%, transparent), transparent 48%),
+    repeating-linear-gradient(0deg, transparent 0 1.1rem, color-mix(in oklch, var(--era-primer-accent) 5%, transparent) 1.14rem 1.18rem),
+    var(--era-primer-surface-soft);
+  box-shadow: inset 0 .18rem 0 color-mix(in oklch, var(--era-primer-accent) 52%, transparent);
+}
+
+.era-primer__hero::after {
+  content: '';
+  position: absolute;
+  right: -8rem;
+  bottom: -10rem;
+  width: 24rem;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in oklch, var(--era-primer-accent) 16%, transparent);
+  border-radius: 50%;
+  opacity: .65;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 3rem color-mix(in oklch, var(--era-primer-accent) 3%, transparent),
+    0 0 0 7rem color-mix(in oklch, var(--era-primer-accent) 2%, transparent);
+}
+
+.era-primer__hero h2 {
+  max-width: 48rem;
+  margin-top: .55rem;
+  font-family: var(--vc-font-display);
+  font-size: clamp(2.15rem, 1.55rem + 2.4vw, 4.3rem);
+  line-height: .96;
+}
+
+.era-primer__lead {
+  max-width: 58rem;
+  margin-top: 1.15rem !important;
+  color: var(--era-primer-body);
+  font-size: clamp(1.02rem, .97rem + .25vw, 1.2rem);
+  line-height: 1.62;
+}
+
+.era-primer__traits,
+.era-primer__terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+}
+
+.era-primer__traits {
+  margin-top: 1.5rem;
+}
+
+.era-primer__trait,
+.era-primer__term {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: .35rem .7rem;
+  border: 1px solid color-mix(in oklch, var(--era-primer-accent) 26%, var(--era-primer-line));
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--era-primer-accent) 5%, var(--era-primer-bg));
+  color: var(--era-primer-text);
+  font-family: var(--vc-font-ui);
+  font-size: .69rem;
+  font-weight: 750;
+  letter-spacing: .04em;
+  text-decoration: none;
+}
+
+.era-primer__term {
+  border-style: dashed;
+  color: var(--era-primer-accent);
+}
+
+.era-primer__tip {
+  position: relative;
+  cursor: help;
+  outline: none;
+}
+
+.era-primer__tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  z-index: 30;
+  left: 50%;
+  bottom: calc(100% + .65rem);
+  width: min(19rem, 76vw);
+  padding: .7rem .8rem;
+  border: 1px solid color-mix(in oklch, var(--era-primer-accent) 30%, var(--era-primer-line));
+  border-radius: .55rem;
+  background: color-mix(in oklch, var(--sl-color-bg) 96%, var(--codex-surface-raised-color));
+  color: var(--sl-color-white);
+  font-family: var(--vc-font-body);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.45;
+  text-align: left;
+  text-transform: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, .35rem);
+  transition: opacity .14s ease, transform .14s ease;
+  box-shadow: 0 .8rem 2rem var(--codex-shadow-color);
+}
+
+.era-primer__tip:hover::after,
+.era-primer__tip:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.era-primer__tip:focus-visible {
+  box-shadow: 0 0 0 .18rem color-mix(in oklch, var(--era-primer-accent) 35%, transparent);
+}
+
+.era-primer__jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1.25rem;
+  margin-top: 1.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--era-primer-line);
+}
+
+.era-primer__jump a,
+.era-primer__inline-link,
+.era-primer__record-links a {
+  color: var(--era-primer-accent);
+  font-family: var(--vc-font-ui);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.era-primer__jump a:hover,
+.era-primer__jump a:focus-visible,
+.era-primer__inline-link:hover,
+.era-primer__inline-link:focus-visible,
+.era-primer__record-links a:hover,
+.era-primer__record-links a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: .25rem;
+}
+
+.era-primer__world {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .65fr);
+  gap: clamp(1.4rem, 3vw, 2.4rem);
+  align-items: stretch;
+}
+
+.era-primer__map {
+  position: relative;
+  min-height: clamp(20rem, 42vw, 34rem);
+  overflow: hidden;
+  border: 1px solid var(--era-primer-line);
+  border-radius: .75rem;
+  background: var(--era-primer-surface);
+  color: var(--era-primer-text) !important;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+.era-primer__map img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform .35s ease, filter .35s ease;
+}
+
+.era-primer__map:hover img,
+.era-primer__map:focus-visible img {
+  transform: scale(1.025);
+  filter: contrast(1.04);
+}
+
+.era-primer__map-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, transparent 38%, color-mix(in oklch, var(--sl-color-bg) 88%, transparent)),
+    linear-gradient(90deg, color-mix(in oklch, var(--era-primer-accent) 9%, transparent), transparent 48%);
+  pointer-events: none;
+}
+
+.era-primer__map-label,
+.era-primer__map-action {
+  position: absolute;
+  z-index: 2;
+}
+
+.era-primer__map-label {
+  left: 1.15rem;
+  bottom: 1.05rem;
+  display: grid;
+  gap: .12rem;
+  text-shadow: 0 .15rem 1rem var(--codex-shadow-color);
+}
+
+.era-primer__map-label small {
+  color: var(--era-primer-accent);
+  font-family: var(--vc-font-ui);
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.era-primer__map-label strong {
+  color: var(--sl-color-white);
+  font-family: var(--vc-font-display);
+  font-size: clamp(1.35rem, 1.1rem + .8vw, 2rem);
+}
+
+.era-primer__map-action {
+  top: 1rem;
+  right: 1rem;
+  padding: .45rem .65rem;
+  border: 1px solid color-mix(in oklch, var(--sl-color-white) 28%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--sl-color-bg) 82%, transparent);
+  font-family: var(--vc-font-ui);
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(.45rem);
+}
+
+.era-primer__world-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(.35rem, 2vw, 1.2rem);
+}
+
+.era-primer__world-copy h3,
+.era-primer__section-head h3,
+.era-primer__knowledge h3,
+.era-primer__record h3 {
+  margin-top: .55rem;
+  font-family: var(--vc-font-display);
+  font-size: clamp(1.65rem, 1.3rem + 1.1vw, 2.75rem);
+  line-height: 1.02;
+}
+
+.era-primer__world-copy > p:not(.era-primer__eyebrow) {
+  margin-top: 1rem;
+  line-height: 1.65;
+}
+
+.era-primer__terms {
+  margin-top: 1.35rem;
+}
+
+.era-primer__section {
+  display: grid;
+  gap: 1.35rem;
+}
+
+.era-primer__section-head {
+  max-width: 54rem;
+}
+
+.era-primer__section-head > p:not(.era-primer__eyebrow),
+.era-primer__section-head--row > p {
+  margin-top: .65rem;
+  color: var(--era-primer-muted);
+}
+
+.era-primer__section-head--row {
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, .42fr);
+  gap: 1.5rem;
+  align-items: end;
+}
+
+.era-primer__section-head--row > p {
+  margin: 0;
+  text-align: right;
+}
+
+.era-primer__essentials {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .8rem;
+}
+
+.era-primer__essential {
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--era-primer-line);
+  border-radius: .65rem;
+  background:
+    linear-gradient(160deg, color-mix(in oklch, var(--era-primer-accent) 6%, transparent), transparent 52%),
+    var(--era-primer-surface-soft);
+}
+
+.era-primer__essential h4,
+.era-primer__power h4 {
+  margin-top: .42rem;
+  font-family: var(--vc-font-display);
+  font-size: 1.25rem;
+  line-height: 1.08;
+}
+
+.era-primer__essential > p:not(.era-primer__eyebrow) {
+  margin-top: .75rem;
+  color: var(--era-primer-body);
+  font-size: .94rem;
+  line-height: 1.58;
+}
+
+.era-primer__inline-link {
+  display: inline-flex;
+  margin-top: 1rem;
+}
+
+.era-primer__powers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+
+.era-primer__power {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--era-primer-line);
+  border-radius: .65rem;
+  background: var(--era-primer-surface-soft);
+}
+
+.era-primer__power img {
+  width: 4.6rem;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: .78;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.era-primer__power h4 {
+  margin-top: 0;
+}
+
+.era-primer__power h4 a {
+  color: var(--era-primer-text);
+  text-decoration-color: color-mix(in oklch, var(--era-primer-accent) 52%, transparent);
+  text-underline-offset: .2rem;
+}
+
+.era-primer__power p {
+  margin-top: .4rem;
+  color: var(--era-primer-muted);
+  font-size: .88rem;
+  line-height: 1.5;
+}
+
+.era-primer__knowledge {
+  display: grid;
+  grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-block: 1px solid color-mix(in oklch, var(--era-primer-accent) 28%, var(--era-primer-line));
+  background:
+    linear-gradient(90deg, color-mix(in oklch, var(--era-primer-accent) 7%, transparent), transparent 48%);
+}
+
+.era-primer__knowledge-intro > p:not(.era-primer__eyebrow) {
+  margin-top: .8rem;
+  color: var(--era-primer-muted);
+  line-height: 1.6;
+}
+
+.era-primer__knowledge-grid {
+  display: grid;
+  gap: .7rem;
+}
+
+.era-primer__knowledge-grid > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: .75rem;
+  border-bottom: 1px solid var(--era-primer-line);
+}
+
+.era-primer__knowledge-grid > div:last-child {
+  border-bottom: 0;
+}
+
+.era-primer__knowledge dt {
+  color: var(--era-primer-accent);
+  font-family: var(--vc-font-ui);
+  font-size: .67rem;
+  font-weight: 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.era-primer__knowledge dd {
+  color: var(--era-primer-body);
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.era-primer__record {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+  padding-top: .3rem;
+}
+
+.era-primer__record > div {
+  max-width: 52rem;
+}
+
+.era-primer__record > div > p:not(.era-primer__eyebrow) {
+  margin-top: .75rem;
+  color: var(--era-primer-muted);
+  line-height: 1.58;
+}
+
+.era-primer__record-links {
+  display: grid;
+  gap: .6rem;
+  justify-items: end;
+  padding-bottom: .15rem;
+}
+
+@media (max-width: 60rem) {
+  .era-primer__world,
+  .era-primer__knowledge {
+    grid-template-columns: 1fr;
+  }
+
+  .era-primer__world-copy {
+    padding-inline: 0;
+  }
+
+  .era-primer__essentials {
+    grid-template-columns: 1fr;
+  }
+
+  .era-primer__section-head--row {
+    grid-template-columns: 1fr;
+  }
+
+  .era-primer__section-head--row > p {
+    text-align: left;
+  }
+}
+
+@media (max-width: 42rem) {
+  .era-primer {
+    gap: 2.6rem;
+  }
+
+  .era-primer__hero {
+    padding: 1.35rem;
+  }
+
+  .era-primer__jump {
+    gap: .5rem 1rem;
+  }
+
+  .era-primer__map {
+    min-height: 18rem;
+  }
+
+  .era-primer__map-action {
+    display: none;
+  }
+
+  .era-primer__powers {
+    grid-template-columns: 1fr;
+  }
+
+  .era-primer__power {
+    grid-template-columns: 3.8rem minmax(0, 1fr);
+  }
+
+  .era-primer__power img {
+    width: 3.8rem;
+  }
+
+  .era-primer__knowledge {
+    padding-inline: 0;
+    background: transparent;
+  }
+
+  .era-primer__knowledge-grid > div {
+    grid-template-columns: 1fr;
+    gap: .35rem;
+  }
+
+  .era-primer__record {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .era-primer__record-links {
+    justify-items: start;
+  }
+
+  .era-primer__tip::after {
+    left: 0;
+    transform: translate(0, .35rem);
+  }
+
+  .era-primer__tip:hover::after,
+  .era-primer__tip:focus-visible::after {
+    transform: translate(0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .era-primer__map img,
+  .era-primer__tip::after {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive primer
+   Origin: era-primer-mobile.css
+
+   Adapts primer sections and navigation for narrow containers.
+   -------------------------------------------------------------------------- */
+
+/* Mobile primer tooltips become viewport-bound callouts so hidden pseudo-elements cannot widen the page. */
+@media (max-width: 42rem) {
+  .era-primer__tip::after {
+    position: fixed;
+    inset: auto 1rem 1rem;
+    width: auto;
+    max-width: none;
+    transform: translateY(.35rem);
+  }
+
+  .era-primer__tip:hover::after,
+  .era-primer__tip:focus-visible::after {
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Editorial finish
+   Origin: era-primer-editorial.css
+
+   Adds final typography and long-form presentation refinements.
+   -------------------------------------------------------------------------- */
+
+/* Era primer editorial pass: informational groups should read as reference matter, not tappable cards. */
+
+/* Era landing pages use calendar bounds to drive chronology, but that range is not an event date. */
+body:has(.era-primer) .calendar-date-badge {
+  display: none;
+}
+
+.era-primer__hero,
+.era-primer__map,
+.era-primer__essential,
+.era-primer__power {
+  border-radius: 0;
+}
+
+/* Preserve the full 2:1 era artwork rather than cropping it into a generic map panel. */
+.era-primer__map {
+  min-height: 0;
+  aspect-ratio: 2 / 1;
+  align-self: center;
+}
+
+.era-primer__map img {
+  object-fit: cover;
+}
+
+/* These are reading blocks. A ruled editorial treatment makes that distinction clear. */
+.era-primer__essentials,
+.era-primer__powers {
+  column-gap: clamp(1rem, 2.4vw, 1.75rem);
+  row-gap: 1.35rem;
+}
+
+.era-primer__essential,
+.era-primer__power {
+  padding: 1.15rem 0 0;
+  border: 0;
+  border-top: 1px solid color-mix(in oklch, var(--era-primer-accent) 30%, var(--era-primer-line));
+  background: transparent;
+  box-shadow: none;
+}
+
+.era-primer__essential {
+  padding-inline-end: clamp(.2rem, 1vw, .8rem);
+}
+
+.era-primer__power {
+  padding-inline-end: clamp(.2rem, 1vw, .8rem);
+}
+
+/* The hero remains a framing panel, but its square silhouette now reads as page architecture rather than UI. */
+.era-primer__hero {
+  box-shadow: inset 0 .18rem 0 color-mix(in oklch, var(--era-primer-accent) 52%, transparent);
+}
+
+@media (max-width: 60rem) {
+  .era-primer__map {
+    width: 100%;
+  }
+}
+
+@media (max-width: 42rem) {
+  .era-primer__essential,
+  .era-primer__power {
+    padding-top: 1rem;
+  }
+}

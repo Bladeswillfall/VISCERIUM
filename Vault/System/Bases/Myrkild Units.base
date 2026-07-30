@@ -1,0 +1,267 @@
+filters:
+  and:
+    - type == "myrkild-unit"
+    - '!file.inFolder("Templates")'
+properties:
+  unit_id:
+    displayName: Unit ID
+  unit_name:
+    displayName: Unit
+  era:
+    displayName: Era
+  origin:
+    displayName: Origin
+  myrkild_species:
+    displayName: Species
+  natural_host:
+    displayName: Natural host
+  role:
+    displayName: Role
+  size_class:
+    displayName: Size
+  threat_rating:
+    displayName: Threat
+  strain:
+    displayName: Strain
+  subtype:
+    displayName: Subtype
+  rarity:
+    displayName: Rarity
+  locations:
+    displayName: Locations
+  biomes:
+    displayName: Biomes
+  image:
+    displayName: Artwork
+  review_status:
+    displayName: Review
+views:
+  - type: cards
+    name: All Units
+    groupBy:
+      property: myrkild_species
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - origin
+      - era
+      - role
+      - size_class
+      - threat_rating
+      - strain
+      - subtype
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: cards
+    name: CITADEL
+    filters:
+      and:
+        - era == "CITADEL"
+    groupBy:
+      property: myrkild_species
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - origin
+      - role
+      - size_class
+      - threat_rating
+      - strain
+      - subtype
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: cards
+    name: SMOG
+    filters:
+      and:
+        - era == "SMOG"
+    groupBy:
+      property: myrkild_species
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - origin
+      - role
+      - size_class
+      - threat_rating
+      - strain
+      - subtype
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: cards
+    name: NEARSIGHT
+    filters:
+      and:
+        - era == "NEARSIGHT"
+    groupBy:
+      property: myrkild_species
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - origin
+      - role
+      - size_class
+      - threat_rating
+      - strain
+      - subtype
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: cards
+    name: ENTROPY
+    filters:
+      and:
+        - era == "ENTROPY"
+    groupBy:
+      property: myrkild_species
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - origin
+      - role
+      - size_class
+      - threat_rating
+      - strain
+      - subtype
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: cards
+    name: Mutated
+    filters:
+      and:
+        - origin == "Mutated"
+    groupBy:
+      property: era
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - era
+      - natural_host
+      - role
+      - size_class
+      - threat_rating
+      - strain
+      - subtype
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: cards
+    name: Purespawn
+    filters:
+      and:
+        - origin == "Purespawn"
+    groupBy:
+      property: era
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - era
+      - role
+      - size_class
+      - threat_rating
+      - subtype
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: cards
+    name: Irradiated
+    filters:
+      and:
+        - subtype == "Irradiated"
+    groupBy:
+      property: era
+      direction: ASC
+    order:
+      - unit_name
+      - myrkild_species
+      - origin
+      - era
+      - role
+      - size_class
+      - threat_rating
+    sort:
+      - property: threat_rating
+        direction: DESC
+      - property: unit_name
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: table
+    name: Database
+    groupBy:
+      property: era
+      direction: ASC
+    order:
+      - unit_id
+      - unit_name
+      - origin
+      - myrkild_species
+      - natural_host
+      - role
+      - size_class
+      - threat_rating
+      - strain
+      - subtype
+      - rarity
+      - locations
+      - biomes
+      - review_status
+      - file.mtime
+    sort:
+      - property: unit_id
+        direction: ASC

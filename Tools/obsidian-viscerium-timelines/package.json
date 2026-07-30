@@ -1,0 +1,21 @@
+{
+  "name": "obsidian-viscerium-timelines",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.mjs production",
+    "dev": "node esbuild.config.mjs development"
+  },
+  "dependencies": {
+    "chronos-timeline-md": "1.1.0",
+    "vis-timeline": "8.5.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "obsidian": "^1.8.7"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  }
+}

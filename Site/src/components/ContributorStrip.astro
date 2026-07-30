@@ -1,0 +1,151 @@
+---
+import contributorRegistry from '../data/contributors.json';
+
+type ContributorProfile = {
+  name: string;
+  github: string;
+  avatar: string;
+};
+
+type Contributor = ContributorProfile & {
+  id: string;
+  roles: string[];
+};
+
+const profiles = contributorRegistry.profiles as Record<string, ContributorProfile>;
+const entry = Astro.locals.starlightRoute?.entry?.data ?? {};
+const routeId = String(entry.slug ?? Astro.locals.starlightRoute?.entry?.id ?? '')
+  .replace(/\.(md|mdx)$/i, '')
+  .replace(/^\/+|\/+$/g, '');
+const eligibleTypes = new Set(['article', 'character', 'event', 'era', 'faction', 'image', 'location', 'map', 'timeline']);
+const useDefaults = entry.defaultContributors !== false
+  && entry.status === 'published'
+  && routeId !== 'index'
+  && eligibleTypes.has(entry.type ?? 'article');
+const requested = [
+  ...(useDefaults ? contributorRegistry.defaultContributors : []),
+  ...(Array.isArray(entry.contributors) ? entry.contributors : []),
+];
+const byId = new Map<string, Contributor>();
+
+for (const item of requested) {
+  const reference = typeof item === 'string' ? { id: item } : item;
+  const id = reference?.id?.trim().toLowerCase();
+  if (!id || !profiles[id]) continue;
+
+  const contributor = byId.get(id) ?? { id, ...profiles[id], roles: [] };
+  const roles = Array.isArray(reference.roles) ? reference.roles : [reference.role ?? 'Contributor'];
+  for (const role of roles.map(String).map((value) => value.trim()).filter(Boolean)) {
+    if (!contributor.roles.some((value) => value.toLowerCase() === role.toLowerCase())) contributor.roles.push(role);
+  }
+  byId.set(id, contributor);
+}
+
+const contributors = [...byId.values()].sort((a, b) => (
+  Number(b.roles.some((role) => role.toLowerCase() === 'author'))
+  - Number(a.roles.some((role) => role.toLowerCase() === 'author'))
+  || a.name.localeCompare(b.name)
+));
+const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) || 7);
+---
+
+{contributors.length > 0 && (
+  <section class="codex-contributors" aria-label="Contributors">
+    <details open={contributors.length <= collapsedLimit}>
+      <summary>Contributors <span>{contributors.length}</span></summary>
+      <ul>
+        {contributors.map((contributor) => {
+          const roles = contributor.roles.join(', ');
+          const isAuthor = contributor.roles.some((role) => role.toLowerCase() === 'author');
+          return (
+            <li>
+              <a
+                class:list={{ 'is-author': isAuthor }}
+                href={`https://github.com/${contributor.github}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${contributor.name}, ${roles}. Open GitHub profile in a new tab.`}
+              >
+                <img
+                  src={`/assets/contributors/${contributor.avatar}`}
+                  alt=""
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span><strong>{contributor.name}</strong><small>{roles}</small></span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </details>
+  </section>
+)}
+
+<style>
+  .codex-contributors {
+    margin-block: 2.5rem 1.5rem;
+    border-block-start: 1px solid var(--sl-color-hairline-light);
+    padding: 1.5rem var(--sl-content-pad-x);
+  }
+
+  summary {
+    cursor: pointer;
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-lg);
+    font-weight: 700;
+  }
+
+  summary span {
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin: .85rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+  }
+
+  a:hover strong {
+    color: var(--sl-color-accent-high);
+  }
+
+  img {
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid var(--sl-color-bg);
+    border-radius: 50%;
+    background: var(--codex-surface-raised-color);
+    object-fit: cover;
+  }
+
+  .is-author img {
+    border-color: var(--sl-color-accent-high);
+  }
+
+  a span {
+    display: grid;
+  }
+
+  strong {
+    color: var(--sl-color-white);
+  }
+
+  small {
+    color: var(--sl-color-gray-3);
+  }
+</style>

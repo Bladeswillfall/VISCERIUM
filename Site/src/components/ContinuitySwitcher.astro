@@ -1,0 +1,37 @@
+---
+import { HISTORICAL_ERAS, normaliseEra } from '../lib/era-context.mjs';
+
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+const continuity = entry.continuity && typeof entry.continuity === 'object' ? entry.continuity : undefined;
+const editions = continuity?.editions && typeof continuity.editions === 'object' ? continuity.editions : {};
+const rawEra = Array.isArray(entry.era) ? entry.era[0] : entry.era;
+const currentEra = normaliseEra(rawEra);
+const isHub = entry.type === 'continuity';
+const hasHistoricalEditions = HISTORICAL_ERAS.some((era) => typeof editions[era] === 'string');
+const eraChoices = hasHistoricalEditions ? HISTORICAL_ERAS : ['Universal'];
+const showSwitcher = Boolean(continuity?.hub) && eraChoices.some((era) => typeof editions[era] === 'string');
+---
+
+{showSwitcher ? (
+  <nav class="codex-continuity-switcher" aria-label="Era editions" data-pagefind-ignore>
+    <span class="codex-continuity-switcher__label">Era</span>
+    <a
+      href={continuity.hub}
+      class:list={{ 'codex-continuity-chip': true, active: isHub }}
+      aria-current={isHub ? 'page' : undefined}
+      data-era-exit
+    >All eras</a>
+    {eraChoices.map((era) => typeof editions[era] === 'string' ? (
+      <a
+        href={editions[era]}
+        class:list={{ 'codex-continuity-chip': true, active: currentEra === era && !isHub }}
+        aria-current={currentEra === era && !isHub ? 'page' : undefined}
+      >{era}</a>
+    ) : (
+      <span class="codex-continuity-chip unavailable" aria-disabled="true" title={`No published ${era} edition`}>{era}</span>
+    ))}
+  </nav>
+) : currentEra === 'Universal' ? (
+  <div class="codex-universal-badge" data-pagefind-ignore>Universal</div>
+) : null}

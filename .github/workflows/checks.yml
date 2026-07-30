@@ -1,0 +1,97 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: Site
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 500
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Site/package-lock.json
+
+      - run: npm ci --silent --no-audit --no-fund
+      - run: npm run doctor:vault
+
+      - name: Run unit tests
+        run: |
+          set -o pipefail
+          npm run test:unit 2>&1 | tee "$RUNNER_TEMP/unit-tests.log"
+
+      - name: Upload unit test log
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: unit-test-log
+          path: ${{ runner.temp }}/unit-tests.log
+          if-no-files-found: warn
+          retention-days: 1
+
+      - run: npm run benchmark:timelines
+      - run: npm run build
+
+      - name: Build Obsidian timeline plugin
+        working-directory: Tools/obsidian-viscerium-timelines
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          grep -q 'open-storyline-project-timeline' dist/main.js
+          grep -q 'diagnose-storyline-integration' dist/main.js
+          cmp --silent dist/main.js ../../Vault/.obsidian/plugins/viscerium-timelines/main.js
+          cmp --silent dist/styles.css ../../Vault/.obsidian/plugins/viscerium-timelines/styles.css
+          cmp --silent dist/manifest.json ../../Vault/.obsidian/plugins/viscerium-timelines/manifest.json
+
+      - name: Upload Obsidian timeline plugin bundle
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: viscerium-timelines-plugin
+          path: Tools/obsidian-viscerium-timelines/dist/
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Install browser runtime
+        run: |
+          npm install --no-save --package-lock=false --legacy-peer-deps --no-audit --no-fund @playwright/test@1.55.0
+          npx --no-install playwright install chromium
+
+      - name: Start preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/viscerium-preview.log"
+          exit 1
+
+      - name: Run browser checks
+        run: |
+          set -o pipefail
+          npx --no-install playwright test tests/browser --reporter=line --workers=1 2>&1 | tee "$RUNNER_TEMP/playwright.log"
+
+      - name: Upload browser check log
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-check-log
+          path: ${{ runner.temp }}/playwright.log
+          if-no-files-found: warn
+          retention-days: 1

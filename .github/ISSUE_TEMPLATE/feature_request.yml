@@ -1,0 +1,70 @@
+name: Feature request
+description: Suggest a site feature, navigation improvement, content workflow, or new Codex tool.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for public, trackable Codex improvements. Keep unreleased lore, private notes, credentials, and personal data out of the issue body.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature area
+      description: Pick the closest area.
+      options:
+        - Authoring templates / Markdown workflow
+        - Page layout / visual design
+        - Navigation / sidebar
+        - Search / tags / graph
+        - Calendar
+        - Map / timeline
+        - Feeds / changelog
+        - Comments / community
+        - Analytics / integrations
+        - Accessibility
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Feature summary
+      description: What would you like added or changed?
+      placeholder: Add a reusable template for...
+    validations:
+      required: true
+  - type: textarea
+    id: benefit
+    attributes:
+      label: Why would this help?
+      description: Explain the reader, editing, worldbuilding, maintenance, or community benefit.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested approach
+      description: Outline the workflow, UI, content model, or technical direction if you have one.
+      placeholder: I think this could work by...
+    validations:
+      required: false
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or references
+      description: Optional examples, screenshots, sites, plugins, or pages with a similar pattern.
+    validations:
+      required: false
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This improves the public Codex rather than only my private workflow.
+          required: false
+        - label: This can be implemented without exposing private or unreleased lore.
+          required: false
+        - label: This may need design screenshots or before/after captures.
+          required: false

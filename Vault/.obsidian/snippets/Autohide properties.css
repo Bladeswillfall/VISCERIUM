@@ -1,0 +1,32 @@
+/*
+ * Autohide properties
+ * Optional: collapses Properties until hovered or focused.
+ * Keep this separate from Compact properties so either behaviour can be toggled alone.
+ */
+
+body:not(.is-mobile) .markdown-source-view.mod-cm6 .metadata-container {
+  position: relative;
+  max-height: 1.25rem;
+  overflow: hidden;
+  opacity: 0.62;
+  transition: max-height 160ms ease, opacity 160ms ease;
+}
+
+body:not(.is-mobile) .markdown-source-view.mod-cm6 .metadata-container::after {
+  content: "Properties · hover to expand";
+  position: absolute;
+  inset: 0 auto auto 0;
+  color: var(--text-faint);
+  font-size: 0.72em;
+  pointer-events: none;
+}
+
+body:not(.is-mobile) .markdown-source-view.mod-cm6 .metadata-container:is(:hover, :focus-within) {
+  max-height: 60rem;
+  overflow: visible;
+  opacity: 1;
+}
+
+body:not(.is-mobile) .markdown-source-view.mod-cm6 .metadata-container:is(:hover, :focus-within)::after {
+  display: none;
+}

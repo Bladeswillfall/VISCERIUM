@@ -1,0 +1,173 @@
+/*
+ * File explorer
+ * One owner for explorer density, hierarchy, root roles, active state and Home placement.
+ * Colour identifies top-level vault location only; descendant names stay neutral.
+ */
+
+:root {
+  --explorer-lore: var(--vc-canon, #5ac8fa);
+  --explorer-drafts: var(--vc-wip, #f2b84b);
+  --explorer-private: var(--vc-private, #ef6f91);
+  --explorer-system: var(--vc-tools, #a78bfa);
+  --explorer-templates: var(--vc-reuse, #65d6ad);
+  --explorer-stories: var(--vc-writing, #f97316);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container {
+  padding: 0.15rem 0.25rem 0.5rem;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] :is(.nav-file-title, .nav-folder-title) {
+  min-height: 1.5rem;
+  padding-block: 0.08rem;
+  padding-right: 0.25rem;
+  border-radius: var(--vc-radius-control, 4px);
+  color: var(--text-normal);
+  line-height: 1.25;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] :is(.nav-file-title-content, .nav-folder-title-content) {
+  font-size: 0.9em;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-children {
+  margin-left: 0.42rem;
+  padding-left: 0.26rem;
+  border-left: 1px solid var(--background-modifier-border);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .collapse-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-right: 0.03rem;
+  opacity: 0.55;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] :is(.nav-file-title, .nav-folder-title):hover .collapse-icon {
+  opacity: 0.9;
+}
+
+/* Folder weight softens with depth. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-title { font-weight: 600; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-children .nav-folder-title { font-weight: 550; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-children .nav-folder-children .nav-folder-title { font-weight: 500; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-children .nav-folder-children .nav-folder-children .nav-folder-title { font-weight: 450; }
+
+/* Root role markers and labels. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Lore"] { --explorer-folder-color: var(--explorer-lore); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Drafts"] { --explorer-folder-color: var(--explorer-drafts); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Private"] { --explorer-folder-color: var(--explorer-private); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="System"] { --explorer-folder-color: var(--explorer-system); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Templates"] { --explorer-folder-color: var(--explorer-templates); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Stories"] { --explorer-folder-color: var(--explorer-stories); }
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title:is(
+  [data-path="Lore"], [data-path="Drafts"], [data-path="Private"],
+  [data-path="System"], [data-path="Templates"], [data-path="Stories"]
+) {
+  margin-top: 0.32rem;
+  font-weight: 700;
+  letter-spacing: 0.012em;
+  --nav-collapse-icon-color: var(--text-muted);
+  --nav-item-background-hover: var(--background-modifier-hover);
+  --nav-item-color-hover: var(--text-normal);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title:is(
+  [data-path="Lore"], [data-path="Drafts"], [data-path="Private"],
+  [data-path="System"], [data-path="Templates"], [data-path="Stories"]
+) .nav-folder-title-content {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+  font-size: 0.96em;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title:is(
+  [data-path="Lore"], [data-path="Drafts"], [data-path="Private"],
+  [data-path="System"], [data-path="Templates"], [data-path="Stories"]
+) .nav-folder-title-content::before {
+  content: "";
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 3px;
+  height: 0.9em;
+  margin-right: 0.42rem;
+  background: var(--explorer-folder-color);
+  vertical-align: -0.04em;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title:is(
+  [data-path="Lore"], [data-path="Drafts"], [data-path="Private"],
+  [data-path="System"], [data-path="Templates"], [data-path="Stories"]
+) .nav-folder-title-content::after {
+  margin-inline-start: auto;
+  padding-left: 0.45rem;
+  color: var(--text-faint);
+  font-family: var(--font-interface);
+  font-size: 0.53rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Lore"] .nav-folder-title-content::after { content: "CANON"; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Stories"] .nav-folder-title-content::after { content: "WRITING"; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Drafts"] .nav-folder-title-content::after { content: "WIP"; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Private"] .nav-folder-title-content::after { content: "PRIVATE"; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="System"] .nav-folder-title-content::after { content: "TOOLS"; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Templates"] .nav-folder-title-content::after { content: "REUSE"; }
+
+/* Active file gets one location-coloured cue; ordinary descendants remain neutral. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Lore/"] { --explorer-active-color: var(--explorer-lore); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Drafts/"] { --explorer-active-color: var(--explorer-drafts); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Private/"] { --explorer-active-color: var(--explorer-private); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="System/"] { --explorer-active-color: var(--explorer-system); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Templates/"] { --explorer-active-color: var(--explorer-templates); }
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Stories/"] { --explorer-active-color: var(--explorer-stories); }
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title.is-active {
+  color: var(--text-normal);
+  background: color-mix(in srgb, var(--explorer-active-color, var(--interactive-accent)) 8%, transparent);
+  box-shadow: inset 3px 0 0 var(--explorer-active-color, var(--interactive-accent));
+  font-weight: 650;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title.is-active:hover {
+  background: color-mix(in srgb, var(--explorer-active-color, var(--interactive-accent)) 12%, transparent);
+}
+
+/* Home is the first route in the root explorer, not a separate card. */
+.workspace-leaf-content[data-type="file-explorer"] :is(.nav-files-container, .nav-folder-children):has(> .nav-file > .nav-file-title[data-path="Home.md"]) {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] :is(.nav-files-container, .nav-folder-children):has(> .nav-file > .nav-file-title[data-path="Home.md"]) > :is(.nav-folder, .nav-file) {
+  order: 0;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] :is(.nav-files-container, .nav-folder-children):has(> .nav-file > .nav-file-title[data-path="Home.md"]) > .nav-file:has(> .nav-file-title[data-path="Home.md"]) {
+  order: -10000 !important;
+  margin-bottom: 0.28rem;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path="Home.md"] {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-weight: 700;
+  --explorer-active-color: var(--interactive-accent);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path="Home.md"] .nav-file-title-content::before {
+  content: "⌂";
+  display: inline-grid;
+  place-items: center;
+  width: 1rem;
+  margin-right: 0.3rem;
+  color: var(--text-muted);
+  font-weight: 900;
+}

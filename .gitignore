@@ -1,0 +1,74 @@
+# Node / Astro
+Site/node_modules/
+Site/dist/
+Site/.astro/
+Site/src/data/timelines/*.json
+Site/timeline-browser-diagnostics/
+Site/test-results/
+Site/playwright-report/
+
+# Raster artwork policy
+# VISCERIUM keeps raster images as WebP. SVG remains allowed for genuine vectors.
+*.[Pp][Nn][Gg]
+*.[Jj][Pp][Gg]
+*.[Jj][Pp][Ee][Gg]
+*.[Gg][Ii][Ff]
+*.[Bb][Mm][Pp]
+*.[Aa][Vv][Ii][Ff]
+*.[Tt][Ii][Ff]
+*.[Tt][Ii][Ff][Ff]
+*.[Hh][Ee][Ii][Cc]
+*.[Hh][Ee][Ii][Ff]
+
+# Obsidian timeline plugin build artifacts
+Tools/obsidian-viscerium-timelines/node_modules/
+Tools/obsidian-viscerium-timelines/dist/
+
+# Installed Obsidian community plugin bundles
+Vault/.obsidian/plugins/*/main.js
+Vault/.obsidian/plugins/*/styles.css
+
+# Plugin-generated settings backups are device-local churn; keep the live config only.
+Vault/.obsidian/plugins/iconic/data.json.backup*
+
+# MySnippets is intentionally vendored because the community-store 1.2.3
+# bundle is incompatible with current Obsidian menu/toggle behaviour.
+!Vault/.obsidian/plugins/mysnippets-plugin/main.js
+!Vault/.obsidian/plugins/mysnippets-plugin/styles.css
+
+# VISCERIUM Timelines is maintained in this repository. Track the runnable
+# bundle so the vault integration works immediately after pulling.
+!Vault/.obsidian/plugins/viscerium-timelines/main.js
+!Vault/.obsidian/plugins/viscerium-timelines/styles.css
+
+# First-party VISCERIUM creator plugins also ship with their runnable bundles.
+!Vault/.obsidian/plugins/viscerium-creator-tools/main.js
+!Vault/.obsidian/plugins/viscerium-creator-tools/styles.css
+!Vault/.obsidian/plugins/viscerium-layout-tools/main.js
+!Vault/.obsidian/plugins/viscerium-layout-tools/styles.css
+
+# Obsidian workspace state
+Vault/.obsidian/workspace.json
+Vault/.obsidian/workspace-mobile.json
+Vault/.obsidian/workspace*.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!**/.env.example
+Site/.dev.vars
+
+# Local-only/private authoring
+Vault/Drafts/
+Vault/Private/
+Vault/Stories/
+
+# Local-only/private authoring
+Vault/Drafts/
+Vault/Private/
+Vault/Stories/

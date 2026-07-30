@@ -1,0 +1,30 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import WorldMap from '../../components/WorldMap.astro';
+import maps from '../../data/maps.json';
+export function getStaticPaths() { return Object.keys(maps).map((id) => ({ params: { id } })); }
+const map = maps[Astro.params.id];
+---
+<StarlightPage frontmatter={{ title: map?.title ?? 'Map', description: map?.description ?? 'Interactive map.', explorationPage: true, tableOfContents: false, giscus: false }}><WorldMap map={map} /></StarlightPage>
+
+<style is:global>
+  /* Starlight still emits the title panel wrapper even though exploration pages suppress its contents. */
+  .codex-exploration-page main > .content-panel:first-child {
+    display: none;
+  }
+
+  /* Keep Leaflet panes and expanded layer controls inside the map's stacking context. */
+  .atlas__frame {
+    z-index: 0;
+    isolation: isolate;
+  }
+
+  /* Search results must remain above the complete map, regardless of Leaflet layer count. */
+  .atlas__toolbar {
+    z-index: 20;
+  }
+
+  .atlas-search__results {
+    z-index: 30;
+  }
+</style>

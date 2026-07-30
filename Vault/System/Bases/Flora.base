@@ -1,0 +1,74 @@
+filters:
+  and:
+    - type == "flora"
+    - '!file.inFolder("Templates")'
+formulas:
+  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
+properties:
+  title:
+    displayName: Flora
+  description:
+    displayName: Identity
+  entity_id:
+    displayName: Continuity ID
+  formula.era_context:
+    displayName: Era / scope
+  growth_form:
+    displayName: Growth form
+  locations:
+    displayName: Locations
+  biomes:
+    displayName: Biomes
+  rarity:
+    displayName: Rarity
+  growth_conditions:
+    displayName: Growth conditions
+  human_relevance:
+    displayName: Why people care
+  hazards:
+    displayName: Hazards
+  development_level:
+    displayName: Development
+  image:
+    displayName: Artwork
+views:
+  - type: cards
+    name: Flora Cards
+    order:
+      - title
+      - description
+      - formula.era_context
+      - growth_form
+      - locations
+      - rarity
+    sort:
+      - property: title
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: table
+    name: Database
+    order:
+      - title
+      - entity_id
+      - formula.era_context
+      - growth_form
+      - locations
+      - biomes
+      - rarity
+      - identification
+      - signs_of_presence
+      - growth_conditions
+      - ecological_relationships
+      - human_relevance
+      - hazards
+      - cultural_significance
+      - story_complication
+      - development_level
+      - status
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC

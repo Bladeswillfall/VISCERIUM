@@ -1,0 +1,271 @@
+@layer ion {
+  /* Ion layout and type metrics. Core colour ownership lives in color-tokens.css; shell-specific theme overrides live here. */
+  :root {
+    --codex-radius: .75rem;
+    --sl-icon-size: 1.25rem;
+    --sl-text-body: .875rem;
+    --sl-text-body-sm: .8125rem;
+    --sl-text-4xl: 2rem;
+    --sl-text-3xl: 1.75rem;
+    --sl-text-2xl: 1.5rem;
+  }
+
+  /* Navigation stays OLED black in both themes and owns its foreground scale. */
+  header.header,
+  #starlight__sidebar {
+    --codex-accent: var(--codex-nav-text);
+    --codex-accent-high: var(--codex-nav-text);
+    --codex-border: var(--codex-nav-border);
+    --sl-color-text: var(--codex-nav-text);
+    --sl-color-accent: var(--codex-nav-text);
+    --sl-color-accent-high: var(--codex-nav-text);
+    --sl-color-white: var(--codex-nav-text);
+    --sl-color-gray-1: var(--codex-nav-text);
+    --sl-color-gray-2: var(--codex-nav-text);
+    --sl-color-gray-3: var(--codex-nav-muted);
+    --sl-color-gray-4: var(--codex-nav-muted);
+    --sl-color-gray-5: var(--codex-nav-border);
+    --sl-color-gray-6: var(--codex-nav-hover);
+    --sl-color-black: var(--codex-nav-bg);
+    --sl-color-hairline: var(--codex-nav-border);
+    --sl-color-hairline-light: var(--codex-nav-border);
+    --sl-border: var(--codex-nav-border);
+  }
+
+  /* Change background color of sidebar & add border */
+  #starlight__sidebar {
+    background-color: var(--sl-color-bg-sidebar);
+    border-right: 1px solid var(--codex-nav-border);
+  }
+
+  /* Change background of header & add border */
+  header.header {
+    background-color: var(--sl-color-bg-nav);
+    border-bottom: 1px solid var(--codex-nav-border);
+  }
+
+  /* Remove the border for the theme selector since it is disabled */
+  .social-icons::after {
+    border: none;
+  }
+
+  /* Add a gap to the now split + flex site title */
+  .site-title {
+    gap: 1rem;
+  }
+
+  .site-title > span {
+    display: flex;
+    gap: 0.5rem;
+    color: var(--sl-color-white);
+  }
+
+  /* Change link color for icons from accent-light to white */
+  .social-icons a {
+    color: var(--sl-color-white);
+  }
+
+  /* Add border-radius to card, change padding, add transition */
+  .card,
+  .sl-link-card {
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    transition: all 0.1s ease;
+  }
+
+  /* Keep the right sidebar predictable without forcing main content to shrink. */
+  .right-sidebar-panel {
+    width: var(--sl-sidebar-width);
+  }
+
+  .sl-container {
+    margin-left: 0 !important;
+    max-width: none !important;
+  }
+
+  /* Add a border to the footer,  */
+  .page-footer {
+    border-top: 1px solid var(--sl-color-gray-6);
+    padding: 1.5rem var(--sl-content-pad-x);
+    font-size: var(--sl-text-sm);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  /* Adjust padding on pages with hero component */
+  .hero ~ footer .page-footer {
+    padding: 2rem !important;
+  }
+
+  /* Add padding to meta */
+  .meta {
+    padding-inline-end: var(--sl-content-pad-x);
+  }
+
+  /* Adjust padding on pages with hero component */
+  .hero ~ footer .meta {
+    padding-inline-end: 2rem !important;
+  }
+
+  /* Add better spacing to footer */
+  .page-footer div {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+  }
+
+  /* Remove default padding... */
+  .content-panel:has(footer) {
+    padding: 0;
+  }
+
+  /* ... and instead add it to the content itself to allow for proper full-width borders */
+  .sl-markdown-content {
+    padding: 1.5rem var(--sl-content-pad-x);
+    padding-top: 0;
+    font-size: var(--sl-text-body);
+  }
+
+  /* Link styles */
+  a:not(.sidebar a):not(footer a) {
+    transition: color 0.1s ease;
+    width: fit-content;
+  }
+
+  /* Make sure mobile links fill the entire space, not just fit the content */
+  nav[aria-labelledby="starlight__on-this-page--mobile"] a {
+    width: 100% !important;
+  }
+
+  /* Adjust link color on footer */
+  .page-footer a {
+    color: var(--sl-color-gray-2);
+  }
+
+  a:hover,
+  a[aria-current="true"] {
+    color: var(--sl-color-white) !important;
+  }
+
+  /* Adjust font fot "On this page" header */
+  #starlight__on-this-page {
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-size: var(--sl-text-md);
+  }
+
+  /* Adjust padding for TOC */
+  starlight-toc a {
+    padding-inline: calc(1rem * var(--depth)) var(--pad-inline) !important;
+  }
+
+  /* Change tab color */
+  a[role="tab"][aria-selected="true"] {
+    border-color: var(--sl-color-accent) !important;
+    font-weight: 400 !important;
+    color: var(--sl-color-accent) !important;
+  }
+
+  /* Adjust styles for search */
+  .pagefind-ui__search-clear::before {
+    background-color: var(--sl-color-accent) !important;
+  }
+
+  .pagefind-ui__result-inner * {
+    transition: all 0.1s ease;
+  }
+
+  .pagefind-ui__result-title,
+  .pagefind-ui__result-nested {
+    outline-color: var(--sl-color-accent) !important;
+  }
+
+  dialog {
+    background-color: var(--sl-color-black) !important;
+  }
+
+  /* Adjust padding for markdown content to match hero section if it exists */
+  .hero + .sl-markdown-content {
+    padding: 2rem;
+  }
+
+  /* Make sure the main page takes up all space if it's page with a hero because the sidebar won't exist */
+  .main-pane:has(.hero) {
+    width: 100% !important;
+  }
+
+  /* Any headers containing badges should be flex headers */
+  :is(h1, h2, h3):has(.sl-badge-lg) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  /* Fix small misalignment in navbar links */
+  .flex-link svg + span {
+    position: relative;
+    top: 1px;
+  }
+
+  .flex-link .sl-badge {
+    position: relative;
+    top: 2px;
+  }
+
+  /* Remove default padding on main since we have a footer */
+  main:has(.page-footer) {
+    padding-bottom: 0 !important;
+  }
+
+  @media screen and (max-width: 1250px) {
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr !important;
+      --stagger-height: 0rem !important;
+    }
+  }
+
+  @media (max-width: 72rem) {
+    .main-pane {
+      width: 100% !important;
+    }
+  }
+
+  .icon-container {
+    display: inline-flex;
+  }
+
+  .icon-container svg {
+    height: 1em;
+    width: 1em;
+  }
+
+  #_top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Adjust file tree color & border radius */
+  starlight-file-tree.not-content {
+    background-color: var(--sl-color-black);
+    border-radius: 12px;
+  }
+
+  .meta.sl-flex:not(:has(*)) {
+    display: none;
+  }
+
+  h1 > code,
+  h2 > code,
+  h3 > code,
+  h4 > code,
+  h5 > code,
+  h6 > code {
+    font-size: 0.925em !important;
+  }
+}

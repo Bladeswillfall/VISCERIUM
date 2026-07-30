@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private contact
+    url: https://www.viscerium.co.uk/contact/
+    about: Use this for private messages, collaboration, or rights/credit concerns.
+  - name: Support page
+    url: https://www.viscerium.co.uk/support/
+    about: See all support, contact, social, and contribution options.

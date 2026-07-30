@@ -1,0 +1,13 @@
+# Copy to Site/.dev.vars for local Cloudflare Worker development.
+# Never commit Site/.dev.vars.
+
+# Resend
+RESEND_API_KEY=
+CONTACT_TO_EMAIL=
+CONTACT_FROM_EMAIL=
+
+# Turnstile and request validation
+TURNSTILE_SECRET_KEY=
+CONTACT_ALLOWED_ORIGIN=https://www.viscerium.co.uk
+TURNSTILE_EXPECTED_HOSTNAME=www.viscerium.co.uk
+TURNSTILE_EXPECTED_ACTION=contact

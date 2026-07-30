@@ -1,0 +1,189 @@
+/* Presentation-only layout helpers for VISCERIUM authoring. */
+
+:root {
+  --vc-layout-indent-step: 2.25rem;
+}
+
+/*
+ * Any renderer path that the plugin has positively identified as a VISCERIUM
+ * layout indent gets this class. It is deliberately stronger than theme and
+ * blockquote snippets: this is ordinary document flow with a left offset.
+ */
+.vc-layout-indent-rendered,
+.markdown-rendered .vc-layout-indent-rendered,
+.markdown-preview-view .vc-layout-indent-rendered,
+.markdown-rendered blockquote.vc-layout-indent-rendered,
+.markdown-preview-view blockquote.vc-layout-indent-rendered {
+  margin-block: 0.75em !important;
+  margin-inline: var(--vc-layout-indent-step) 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-inline-start: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font: inherit !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-style: normal !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+}
+
+.vc-layout-indent-rendered::before,
+.vc-layout-indent-rendered::after,
+.markdown-rendered blockquote.vc-layout-indent-rendered::before,
+.markdown-rendered blockquote.vc-layout-indent-rendered::after,
+.markdown-preview-view blockquote.vc-layout-indent-rendered::before,
+.markdown-preview-view blockquote.vc-layout-indent-rendered::after {
+  content: none !important;
+  display: none !important;
+}
+
+.vc-layout-indent-rendered > .callout-title,
+.callout[data-callout="vc-indent"] > .callout-title {
+  display: none !important;
+}
+
+.vc-layout-indent-rendered > .callout-content,
+.callout[data-callout="vc-indent"] > .callout-content {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  font: inherit !important;
+}
+
+.vc-layout-indent-rendered .vc-layout-indent-marker,
+.callout[data-callout="vc-indent"] .vc-layout-indent-marker {
+  display: none !important;
+}
+
+.vc-layout-indent-rendered > :first-child,
+.vc-layout-indent-rendered > .callout-content > :first-child {
+  margin-top: 0 !important;
+}
+
+.vc-layout-indent-rendered > :last-child,
+.vc-layout-indent-rendered > .callout-content > :last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Primary path before the Markdown post-processor runs. */
+.callout[data-callout="vc-indent"],
+.markdown-rendered .callout[data-callout="vc-indent"] {
+  margin-block: 0.75em !important;
+  margin-inline: var(--vc-layout-indent-step) 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-inline-start: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Legacy blocks used collapsed-callout syntax. Never allow that state to hide layout content. */
+.callout[data-callout="vc-indent"].is-collapsed > .callout-content {
+  display: block !important;
+}
+
+/* Repeated visual indents deliberately compound rather than turning into list nesting. */
+.vc-layout-indent-rendered .vc-layout-indent-rendered,
+.callout[data-callout="vc-indent"] .callout[data-callout="vc-indent"] {
+  margin-inline-start: var(--vc-layout-indent-step) !important;
+}
+
+/*
+ * CSS fallback for a correctly-authored indent before the post-processor has
+ * tagged it. The post-processor is authoritative for malformed legacy nesting.
+ */
+.markdown-rendered blockquote:has(.vc-layout-indent-marker),
+.markdown-preview-view blockquote:has(.vc-layout-indent-marker) {
+  margin-block: 0.75em !important;
+  margin-inline: var(--vc-layout-indent-step) 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-inline-start: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font: inherit !important;
+  font-style: normal !important;
+  line-height: inherit !important;
+}
+
+.markdown-rendered blockquote:has(.vc-layout-indent-marker)::before,
+.markdown-rendered blockquote:has(.vc-layout-indent-marker)::after,
+.markdown-preview-view blockquote:has(.vc-layout-indent-marker)::before,
+.markdown-preview-view blockquote:has(.vc-layout-indent-marker)::after {
+  content: none !important;
+  display: none !important;
+}
+
+.markdown-rendered blockquote:has(.vc-layout-indent-marker) > p:first-child,
+.markdown-preview-view blockquote:has(.vc-layout-indent-marker) > p:first-child,
+.markdown-rendered blockquote:has(.vc-layout-indent-marker) > p:has(.vc-layout-indent-marker),
+.markdown-preview-view blockquote:has(.vc-layout-indent-marker) > p:has(.vc-layout-indent-marker) {
+  display: none !important;
+}
+
+.markdown-rendered blockquote:has(.vc-layout-indent-marker) .vc-layout-indent-marker,
+.markdown-preview-view blockquote:has(.vc-layout-indent-marker) .vc-layout-indent-marker {
+  display: none !important;
+}
+
+/* Responsive [cols] / [col] authoring preview for Obsidian Reading View. */
+.markdown-preview-sizer,
+.markdown-rendered {
+  container-type: inline-size;
+  container-name: vc-reading-pane;
+}
+
+.vc-layout-cols-rendered {
+  --vc-layout-gap: 1rem;
+  --vc-layout-align: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--vc-layout-gap);
+  align-items: var(--vc-layout-align);
+  margin-block: 1.5rem;
+  min-inline-size: 0;
+}
+
+.vc-layout-col-rendered {
+  min-inline-size: 0;
+}
+
+.vc-layout-col-rendered > :first-child {
+  margin-top: 0 !important;
+}
+
+.vc-layout-col-rendered > :last-child {
+  margin-bottom: 0 !important;
+}
+
+.vc-layout-col-rendered > p > img:only-child,
+.vc-layout-col-rendered .image-embed img,
+.vc-layout-col-rendered .internal-embed.image-embed img {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  block-size: auto;
+  object-fit: contain;
+}
+
+@container vc-reading-pane (min-width: 44rem) {
+  .vc-layout-cols-rendered {
+    grid-template-columns: var(--vc-layout-columns, repeat(2, minmax(0, 1fr)));
+  }
+}

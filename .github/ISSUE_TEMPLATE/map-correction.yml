@@ -1,0 +1,9 @@
+name: Map correction
+description: Report a marker or map issue.
+body:
+  - type: input
+    id: map
+    attributes: { label: Map URL }
+  - type: textarea
+    id: issue
+    attributes: { label: Issue }

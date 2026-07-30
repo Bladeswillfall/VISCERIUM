@@ -1,0 +1,26 @@
+/*
+ * Link styling
+ * Makes internal and external links easier to scan without changing Markdown.
+ */
+
+.markdown-rendered a.internal-link,
+.markdown-rendered a.external-link {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  transition: color 120ms ease, text-decoration-color 120ms ease;
+}
+
+.markdown-rendered a.internal-link:not(:hover),
+.markdown-rendered a.external-link:not(:hover) {
+  text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.markdown-rendered a.internal-link:hover,
+.markdown-rendered a.external-link:hover {
+  text-decoration-color: currentColor;
+}
+
+.cm-s-obsidian span.cm-hmd-internal-link,
+.cm-s-obsidian span.cm-link {
+  text-underline-offset: 0.14em;
+}

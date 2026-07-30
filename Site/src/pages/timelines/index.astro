@@ -1,0 +1,36 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import manifest from '../../data/timelines/manifest.json';
+import { formatAbsoluteDay } from '../../lib/calendar/runtime.mjs';
+import '../../styles/timeline-canvas.css';
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Timelines',
+    description: 'Explore the generated chronology of VISCERIUM across all four eras.',
+    timelinePage: true,
+  }}
+>
+  <header class="vc-timeline-page-header">
+    <p class="timeline-kicker">Absolute world-time archive</p>
+    <h1>VISCERIUM Timelines</h1>
+    <p>Every timeline is compiled from canon event notes. Calendar labels can change; event positions cannot.</p>
+  </header>
+  <div class="vc-timeline-index">
+    {manifest.timelines.map((timeline) => (
+      <article class:list={['vc-timeline-index-card', `timeline-${timeline.id}`]}>
+        <p class="timeline-kicker">{timeline.eventCount} event{timeline.eventCount === 1 ? '' : 's'}</p>
+        <h2><a href={timeline.href}>{timeline.title}</a></h2>
+        <p>{timeline.description}</p>
+        <p class="timeline-date">
+          {formatAbsoluteDay(timeline.absoluteStartDay, timeline.defaultCalendar, 'year')} — {formatAbsoluteDay(timeline.absoluteEndDay, timeline.defaultCalendar, 'year')}
+        </p>
+        <p class="vc-timeline-index-actions">
+          <a href={timeline.href}>Open timeline</a>
+          {timeline.eraArticle && <a href={timeline.eraArticle}>Era article</a>}
+        </p>
+      </article>
+    ))}
+  </div>
+</StarlightPage>

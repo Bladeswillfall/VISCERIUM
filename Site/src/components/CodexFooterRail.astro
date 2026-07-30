@@ -1,0 +1,126 @@
+---
+import LocalIcon from './LocalIcon.astro';
+import siteConfig from '../../site.config.mjs';
+---
+
+<footer class="ion-codex-footer">
+  <strong>© VISCERIUM Codex</strong>
+  <nav aria-label="Footer">
+    <a href="/">Start Here</a>
+    <a href="/calendar/">Calendar</a>
+    <a href="/graph/">World Graph</a>
+    <a href="/support/">Support</a>
+    <a href="/contact/">
+      <LocalIcon name="mail" />
+      <span>Contact</span>
+    </a>
+    <a href="/rss.xml">RSS</a>
+    <a href="/atom.xml">Atom</a>
+    <a href={siteConfig.githubRepoUrl} target="_blank" rel="noreferrer">
+      <LocalIcon name="github" />
+      <span>GitHub</span>
+      <span class="codex-sr-only"> (opens in a new tab)</span>
+    </a>
+  </nav>
+</footer>
+
+<style>
+  @layer starlight.core {
+    .ion-codex-footer {
+      --ion-codex-footer-padding: 2rem clamp(1.5rem, 3vw, 2.125rem) 1.25rem;
+      position: sticky;
+      bottom: 0;
+      z-index: -1;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
+      align-items: end;
+      inline-size: 100%;
+      min-block-size: 7rem;
+      gap: 1.5rem;
+      margin-top: -20px;
+      padding: var(--ion-codex-footer-padding);
+      border: 0;
+      border-block-start: 1px solid var(--codex-nav-border);
+      background: linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--codex-nav-bg) 78%, var(--codex-palette-deep)),
+        var(--codex-nav-bg)
+      );
+      color: var(--codex-nav-text);
+      font-size: var(--sl-text-sm);
+    }
+
+    .ion-codex-footer::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 2rem;
+      inset-inline-start: 50%;
+      inline-size: 3.375rem;
+      block-size: 0.1875rem;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: var(--codex-nav-border);
+    }
+
+    .ion-codex-footer > strong {
+      align-self: end;
+      color: var(--codex-nav-text);
+      letter-spacing: 0.02em;
+    }
+
+    .ion-codex-footer nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+    }
+
+    .ion-codex-footer nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--codex-nav-text);
+      text-decoration: none;
+    }
+
+    .ion-codex-footer nav a:hover,
+    .ion-codex-footer nav a:focus-visible {
+      color: var(--codex-fixed-light) !important;
+      text-decoration: underline;
+    }
+
+    .ion-codex-footer nav :global(svg) {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    @media (max-width: 40rem) {
+      .ion-codex-footer {
+        grid-template-columns: 1fr;
+        align-items: start;
+        min-block-size: 8.5rem;
+      }
+
+      .ion-codex-footer nav {
+        justify-content: flex-start;
+      }
+    }
+
+    @media print, (forced-colors: active) {
+      .ion-codex-footer {
+        position: static;
+        z-index: auto;
+        min-block-size: auto;
+        margin-top: 0;
+        background: Canvas;
+        color: CanvasText;
+      }
+
+      .ion-codex-footer::before {
+        display: none;
+      }
+    }
+  }
+</style>

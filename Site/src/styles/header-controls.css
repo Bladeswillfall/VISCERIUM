@@ -1,0 +1,358 @@
+/* ==========================================================================
+   Header controls
+
+   Consolidated from header-controls.css, mobile-era-fixes.css. Section order is intentional:
+   later sections may refine or override earlier ownership layers. Keep the
+   provenance comments when moving rules so cascade-sensitive behaviour remains
+   understandable in isolation.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Header actions
+   Origin: header-controls.css
+
+   Owns search, theme and navigation control presentation.
+   -------------------------------------------------------------------------- */
+
+/*
+  Persistent top-ribbon controls.
+
+  Keep this file unlayered. Astro 7 currently emits the base rules but drops the
+  responsive media block from the built Starlight stylesheet. CodexHeader therefore
+  owns a matchMedia-backed root attribute and these selectors consume that state.
+*/
+
+/*
+  The complete header ribbon is intentionally borderless. Include descendants and
+  pseudo-elements so Starlight and injected plugins cannot reintroduce dividers,
+  button rims or keyboard-key borders through their own component styles.
+*/
+header.header,
+header.header *,
+header.header *::before,
+header.header *::after,
+.codex-header,
+.codex-header *,
+.codex-header *::before,
+.codex-header *::after {
+  border: 0 !important;
+}
+
+.codex-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: .5rem;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.codex-header .title-wrapper {
+  min-width: 0;
+  max-width: 100%;
+  justify-self: start;
+  gap: .4rem;
+  overflow: clip;
+  padding: .25rem;
+  margin: -.25rem;
+}
+
+.codex-header .codex-sidebar-toggle {
+  position: static;
+  inset: auto;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0 !important;
+  padding: 0;
+  background: var(--sl-color-bg-nav, var(--sl-color-black));
+  color: var(--sl-color-gray-2);
+  box-shadow: none;
+  transition:
+    background-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.codex-header .codex-sidebar-toggle:hover {
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+}
+
+.codex-header .codex-sidebar-toggle:focus-visible {
+  outline: 2px solid var(--sl-color-accent-high);
+  outline-offset: 2px;
+}
+
+/*
+  Starlight fixes the header and reserves its height inside `.main-frame` by default.
+  On wide displays the Codex deliberately returns the header to normal flow as a
+  sticky ribbon, so remove that otherwise duplicated navigation-height offset.
+*/
+html[data-codex-wide-header] header.header {
+  position: sticky !important;
+  inset-block-start: 0;
+}
+
+html[data-codex-wide-header] .main-frame {
+  padding-top: var(--sl-mobile-toc-height, 0rem);
+}
+
+/*
+  Mobile keeps Starlight's fixed-header geometry, but the ribbon can translate out
+  of view. Main-frame retains Starlight's normal nav-height padding, preventing
+  layout movement when the fixed ribbon hides or returns.
+*/
+html[data-codex-mobile-header] header.header {
+  position: fixed !important;
+  inset-block-start: 0;
+  inset-inline: 0;
+  width: 100%;
+  transform: translateY(0);
+  transition: transform .28s cubic-bezier(.22, .61, .36, 1);
+  will-change: transform;
+}
+
+html[data-codex-mobile-header][data-codex-mobile-header-hidden] header.header {
+  transform: translateY(calc(-100% - 1px));
+}
+
+/*
+  Keep Starlight's mobile On-this-page control fixed and functionally unchanged,
+  but let it occupy the space directly beneath whichever header state is active.
+  When the header hides, the TOC rises to the viewport edge; when the header returns,
+  both surfaces move together using the same timing curve.
+*/
+html[data-codex-mobile-header] mobile-starlight-toc > nav {
+  top: calc(var(--sl-nav-height, 3.5rem) - 1px) !important;
+  transition: top .28s cubic-bezier(.22, .61, .36, 1);
+  will-change: top;
+}
+
+html[data-codex-mobile-header][data-codex-mobile-header-hidden] mobile-starlight-toc > nav {
+  top: 0 !important;
+}
+
+/*
+  Starlight's mobile menu button is independently fixed near the top edge. When the
+  Codex header is visible, move that floating bubble and the sidebar pane down by
+  the same navigation height so the returning header never covers the control.
+  They use the same easing as the header, making all three surfaces travel together.
+*/
+html[data-codex-mobile-header] .sidebar > starlight-menu-button button {
+  transform: translateY(var(--sl-nav-height, 3.5rem));
+  transition: transform .28s cubic-bezier(.22, .61, .36, 1);
+  will-change: transform;
+}
+
+html[data-codex-mobile-header][data-codex-mobile-header-hidden] .sidebar > starlight-menu-button button {
+  transform: translateY(0);
+}
+
+html[data-codex-mobile-header] .sidebar-pane {
+  inset-block-start: var(--sl-nav-height, 3.5rem);
+  transition: inset-block-start .28s cubic-bezier(.22, .61, .36, 1);
+}
+
+html[data-codex-mobile-header][data-codex-mobile-header-hidden] .sidebar-pane {
+  inset-block-start: 0;
+}
+
+.codex-header-search {
+  display: flex;
+  min-width: 0;
+  justify-self: center;
+  justify-content: center;
+}
+
+.codex-header-search button[data-open-modal] {
+  display: flex !important;
+  width: 2.5rem !important;
+  min-width: 2.5rem !important;
+  max-width: none !important;
+  height: 2.5rem;
+  justify-content: center !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  background: var(--sl-color-bg-nav, var(--sl-color-black)) !important;
+  background-image: none !important;
+  color: var(--sl-color-gray-2);
+  box-shadow: none !important;
+}
+
+.codex-header-search button[data-open-modal]:hover {
+  background: var(--sl-color-gray-6) !important;
+  background-image: none !important;
+  color: var(--sl-color-white);
+}
+
+.codex-header-controls {
+  display: flex;
+  min-width: max-content;
+  flex: 0 0 auto;
+  justify-self: end;
+  gap: .4rem;
+  align-items: center;
+}
+
+.codex-theme-control,
+.codex-theme-control starlight-theme-select,
+.codex-theme-control label {
+  display: inline-grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+}
+
+.codex-theme-control label {
+  position: relative;
+  background: var(--sl-color-bg-nav, var(--sl-color-black));
+  color: var(--sl-color-gray-2);
+}
+
+.codex-theme-control label:hover {
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+}
+
+.codex-theme-control select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+}
+
+.codex-theme-control .label-icon {
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.codex-theme-control .caret {
+  display: none;
+}
+
+.codex-header telescope-search {
+  display: none;
+}
+
+.codex-header-search button[data-open-modal]:focus-visible {
+  outline: 2px solid var(--sl-color-accent-high);
+  outline-offset: 2px;
+}
+
+html[data-codex-wide-header] .codex-header {
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 34rem) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+html[data-codex-wide-header] .codex-header-search {
+  width: 100% !important;
+  min-width: 14rem !important;
+}
+
+html[data-codex-wide-header] .codex-header-search site-search {
+  display: contents;
+}
+
+html[data-codex-wide-header] .codex-header-search button[data-open-modal] {
+  width: 100% !important;
+  min-width: 14rem !important;
+  max-width: none !important;
+  justify-content: flex-start !important;
+  padding-inline: .85rem .65rem !important;
+}
+
+html[data-codex-wide-header] .codex-header-search button[data-open-modal] > span {
+  display: block !important;
+}
+
+html[data-codex-wide-header] .codex-header-search button[data-open-modal] > kbd {
+  display: flex !important;
+  margin-inline-start: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-codex-mobile-header] header.header,
+  html[data-codex-mobile-header] mobile-starlight-toc > nav,
+  html[data-codex-mobile-header] .sidebar > starlight-menu-button button,
+  html[data-codex-mobile-header] .sidebar-pane {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile collision guards
+   Origin: mobile-era-fixes.css
+
+   Protects persistent era controls from compact-header collisions.
+   -------------------------------------------------------------------------- */
+
+/*
+ * Mobile-only collision guards for the persistent era controls.
+ *
+ * Keep these rules unlayered: Starlight's header/menu controls are component-scoped
+ * and the Codex shell needs deterministic geometry rather than relying on cascade
+ * order inside the theme layers.
+ */
+html[data-codex-mobile-header] .codex-header-search button[data-open-modal] {
+  width: max-content !important;
+  min-width: max-content !important;
+  max-width: none !important;
+  padding-inline: .35rem !important;
+  overflow: visible;
+}
+
+html[data-codex-mobile-header] .codex-header-search button[data-open-modal] > kbd {
+  display: none !important;
+}
+
+html[data-codex-mobile-header] .codex-header-controls {
+  min-width: max-content;
+  gap: .55rem;
+  overflow: visible;
+}
+
+html[data-codex-mobile-header] .codex-header-controls > * {
+  flex: 0 0 auto;
+}
+
+html[data-codex-mobile-header] .codex-era-context-control {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  max-width: 2.5rem;
+  margin-inline-end: 0;
+  overflow: visible;
+}
+
+html[data-codex-mobile-header] .codex-era-context-exit,
+html[data-codex-mobile-header] .codex-theme-control {
+  position: relative;
+}
+
+html[data-codex-mobile-header] .codex-era-context-exit {
+  z-index: 2;
+}
+
+html[data-codex-mobile-header] .codex-theme-control {
+  z-index: 1;
+}
+
+/*
+ * The mobile drawer's own close bubble occupies the upper-right corner. Reserve
+ * that lane so the scoped "Exit · All eras" action is always fully visible and
+ * remains the element receiving pointer input at its centre.
+ */
+html[data-codex-mobile-header] .codex-sidebar-era-toolbar {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  padding-inline-end: 4.25rem;
+}
+
+html[data-codex-mobile-header] .codex-sidebar-era-toolbar a {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  white-space: nowrap;
+}

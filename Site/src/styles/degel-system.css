@@ -1,0 +1,704 @@
+/* ==========================================================================
+   Degel System explorer
+
+   Consolidated from degel-system.css, degel-system-art.css, degel-system-layout.css. Section order is intentional:
+   later sections may refine or override earlier ownership layers. Keep the
+   provenance comments when moving rules so cascade-sensitive behaviour remains
+   understandable in isolation.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Explorer core
+   Origin: degel-system.css
+
+   Owns the interactive system explorer and object presentation.
+   -------------------------------------------------------------------------- */
+
+@layer starlight.core {
+  .codex-degel-system-page main .sl-markdown-content {
+    display: none;
+  }
+
+  .degel-system-explorer {
+    --degel-map-line: color-mix(in oklch, var(--degel-map-ink) 24%, transparent);
+    --degel-map-muted: color-mix(in oklch, var(--degel-map-ink) 62%, transparent);
+    width: 100%;
+    margin-block: 2rem 3rem;
+    color: var(--sl-color-gray-2);
+  }
+
+  .degel-system-explorer__intro,
+  .degel-system-explorer__toolbar,
+  .degel-system-view-heading {
+    width: min(100%, 48rem);
+    margin-inline: auto;
+  }
+
+  .degel-system-explorer__kicker {
+    margin: 0 0 .35rem;
+    color: var(--codex-accent-high);
+    font-family: var(--vc-font-ui);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .degel-system-explorer h2,
+  .degel-system-explorer h3 {
+    color: var(--sl-color-white);
+  }
+
+  .degel-system-explorer__intro h2,
+  .degel-system-view-heading h3 {
+    margin-block: 0 .5rem;
+  }
+
+  .degel-system-explorer__intro p:last-child,
+  .degel-system-view-heading p:last-child {
+    margin-bottom: 0;
+  }
+
+  .degel-system-explorer__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1rem;
+    margin-block: 1.5rem 2rem;
+    padding-block: 1rem;
+    border-block: 1px solid var(--codex-border);
+  }
+
+  .degel-system-view-switch {
+    display: inline-grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--codex-border);
+    background: var(--codex-surface-raised);
+  }
+
+  .degel-system-view-switch button {
+    min-block-size: 2.75rem;
+    padding: .6rem .9rem;
+    border: 0;
+    border-inline-end: 1px solid var(--codex-border);
+    border-radius: 0;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    font: 700 var(--sl-text-sm) / 1.2 var(--vc-font-ui);
+    cursor: pointer;
+  }
+
+  .degel-system-view-switch button:last-child {
+    border-inline-end: 0;
+  }
+
+  .degel-system-view-switch button[aria-pressed='true'] {
+    background: color-mix(in oklch, var(--codex-accent) 18%, transparent);
+    color: var(--sl-color-white);
+    box-shadow: inset 0 -2px 0 var(--sl-color-accent-high);
+  }
+
+  .degel-system-view-switch button:hover {
+    background: color-mix(in oklch, var(--codex-accent) 10%, transparent);
+    color: var(--sl-color-white);
+  }
+
+  .degel-system-view-switch button:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 3px;
+  }
+
+  .degel-system-explorer__hint {
+    flex: 1 1 18rem;
+    margin: 0;
+    color: var(--sl-color-gray-3);
+    font-family: var(--vc-font-ui);
+    font-size: var(--sl-text-sm);
+  }
+
+  .degel-system-explorer__views {
+    width: 100%;
+  }
+
+  .degel-system-view-heading {
+    margin-block-end: 1rem;
+  }
+
+  .degel-system-map-view,
+  .degel-system-list-view {
+    width: 100%;
+  }
+
+  .degel-system-map {
+    position: relative;
+    width: 100%;
+    max-width: 256rem;
+    min-height: 170rem;
+    margin-inline: auto;
+    overflow: hidden;
+    border-block: 1px solid var(--codex-border);
+    background: var(--degel-map-background);
+    aspect-ratio: var(--degel-map-ratio, 4096 / 7600);
+    isolation: isolate;
+  }
+
+  .degel-system-map::before,
+  .degel-system-map::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    inset-inline: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--degel-map-line), transparent);
+  }
+
+  .degel-system-map::before {
+    top: 0;
+  }
+
+  .degel-system-map::after {
+    bottom: 0;
+  }
+
+  .degel-system-map__guides {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .degel-system-map__guides path {
+    fill: none;
+    stroke: var(--degel-map-line);
+    stroke-width: 1;
+    stroke-dasharray: 4 8;
+  }
+
+  .degel-system-map__guide-label {
+    position: absolute;
+    z-index: 2;
+    inset-inline-start: clamp(.75rem, 2.4vw, 4rem);
+    top: calc(var(--guide-y) * 1%);
+    transform: translateY(-50%);
+    color: var(--degel-map-muted);
+    font-family: var(--vc-font-ui);
+    font-size: clamp(.62rem, .7vw, .9rem);
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .degel-system-object {
+    position: absolute;
+    z-index: 3;
+    left: calc(var(--object-x) * 1%);
+    top: calc(var(--object-y) * 1%);
+    display: block;
+    width: max(2.75rem, calc(var(--object-size) * 1%));
+    color: inherit;
+    text-decoration: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .degel-system-object__art {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border: 1px solid color-mix(in oklch, var(--codex-fixed-light) 18%, transparent);
+    border-radius: 50%;
+    background: color-mix(in oklch, var(--codex-fixed-light) 4%, transparent);
+    box-shadow: 0 1.5rem 4rem color-mix(in oklch, var(--codex-shadow-color) 48%, transparent);
+    transition: filter .18s ease, outline-color .18s ease, transform .18s ease;
+  }
+
+  .degel-system-object__art img,
+  .degel-system-object__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: contain;
+  }
+
+  .degel-system-object__placeholder {
+    overflow: hidden;
+  }
+
+  .degel-system-object--star .degel-system-object__art {
+    border-color: color-mix(in oklch, var(--degel-star-core) 38%, transparent);
+    background:
+      radial-gradient(
+        circle at 46% 46%,
+        var(--degel-star-core) 0 7%,
+        var(--degel-star-mid) 28%,
+        var(--degel-star-edge) 58%,
+        color-mix(in oklch, var(--degel-star-ember) 78%, transparent) 72%,
+        transparent 73%
+      ),
+      radial-gradient(circle, color-mix(in oklch, var(--degel-star-glow) 45%, transparent), transparent 66%);
+    box-shadow:
+      0 0 8rem color-mix(in oklch, var(--degel-star-edge) 26%, transparent),
+      0 3rem 8rem color-mix(in oklch, var(--codex-shadow-color) 55%, transparent);
+  }
+
+  .degel-system-object--rocky .degel-system-object__placeholder {
+    background:
+      radial-gradient(circle at 72% 30%, color-mix(in oklch, var(--degel-star-core) 22%, transparent) 0 4%, transparent 5%),
+      radial-gradient(circle at 34% 68%, color-mix(in oklch, var(--degel-errack-dark) 34%, transparent) 0 9%, transparent 10%),
+      conic-gradient(
+        from 20deg,
+        var(--degel-errack-mid),
+        var(--degel-errack-light),
+        var(--degel-errack-dark),
+        var(--degel-errack-warm),
+        var(--degel-errack-mid)
+      );
+  }
+
+  .degel-system-object--terrestrial .degel-system-object__placeholder {
+    background:
+      radial-gradient(ellipse at 58% 43%, color-mix(in oklch, var(--degel-okse-dryland) 80%, transparent) 0 8%, transparent 9%),
+      radial-gradient(ellipse at 30% 68%, color-mix(in oklch, var(--degel-okse-land) 84%, transparent) 0 12%, transparent 13%),
+      conic-gradient(
+        from 140deg,
+        var(--degel-okse-ocean),
+        var(--degel-okse-land),
+        var(--degel-okse-dryland),
+        var(--degel-okse-deep),
+        var(--degel-okse-coast),
+        var(--degel-okse-ocean)
+      );
+  }
+
+  .degel-system-object--moon .degel-system-object__placeholder,
+  .degel-system-object--moon-small .degel-system-object__placeholder {
+    background:
+      radial-gradient(circle at 32% 30%, color-mix(in oklch, var(--codex-fixed-light) 22%, transparent) 0 4%, transparent 5%),
+      radial-gradient(circle at 64% 66%, color-mix(in oklch, var(--codex-fixed-dark) 20%, transparent) 0 12%, transparent 13%),
+      linear-gradient(145deg, var(--degel-moon-light), var(--degel-moon-mid) 60%, var(--degel-moon-dark));
+  }
+
+  .degel-system-object--belt {
+    width: calc(var(--object-size) * 1%);
+  }
+
+  .degel-system-object--belt .degel-system-object__art {
+    aspect-ratio: 5 / 1;
+    border: 0;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 6% 55%, color-mix(in oklch, var(--degel-rock-light) 55%, var(--degel-rock-mid)) 0 .55%, transparent .7%),
+      radial-gradient(circle at 16% 34%, var(--degel-rock-dark) 0 .7%, transparent .85%),
+      radial-gradient(circle at 26% 62%, var(--degel-rock-light) 0 .45%, transparent .62%),
+      radial-gradient(circle at 38% 44%, var(--degel-rock-mid) 0 .75%, transparent .9%),
+      radial-gradient(circle at 52% 58%, color-mix(in oklch, var(--degel-rock-light) 72%, var(--degel-rock-mid)) 0 .62%, transparent .78%),
+      radial-gradient(circle at 66% 38%, var(--degel-rock-dark) 0 .52%, transparent .67%),
+      radial-gradient(circle at 78% 61%, color-mix(in oklch, var(--degel-rock-light) 65%, var(--degel-rock-mid)) 0 .7%, transparent .86%),
+      radial-gradient(circle at 91% 43%, var(--degel-rock-mid) 0 .55%, transparent .7%);
+    box-shadow: none;
+  }
+
+  .degel-system-object__annotation {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + .5rem);
+    display: flex;
+    align-items: flex-end;
+    min-width: clamp(10rem, 17vw, 25rem);
+    transform: translateY(-50%);
+  }
+
+  .degel-system-object--label-left .degel-system-object__annotation {
+    right: calc(100% + .5rem);
+    left: auto;
+    flex-direction: row-reverse;
+    text-align: end;
+  }
+
+  .degel-system-object--label-left .degel-system-object__leader {
+    transform: scaleX(-1);
+  }
+
+  .degel-system-object__leader {
+    flex: 0 0 clamp(2.5rem, 5vw, 8rem);
+    width: clamp(2.5rem, 5vw, 8rem);
+    height: 1.25rem;
+    overflow: visible;
+  }
+
+  .degel-system-object__leader path {
+    fill: none;
+    stroke: var(--degel-map-label);
+    stroke-width: 1;
+  }
+
+  .degel-system-object__label {
+    display: grid;
+    gap: .15rem;
+    padding: .35rem .45rem;
+    background: color-mix(in oklch, var(--degel-map-background) 78%, transparent);
+    text-shadow: 0 2px 8px color-mix(in oklch, var(--codex-shadow-color) 90%, transparent);
+  }
+
+  .degel-system-object__label strong {
+    color: var(--degel-map-label);
+    font-family: var(--vc-font-display);
+    font-size: clamp(.9rem, 1.15vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: .035em;
+  }
+
+  .degel-system-object__label > span {
+    color: var(--degel-map-muted);
+    font-family: var(--vc-font-ui);
+    font-size: clamp(.62rem, .72vw, .86rem);
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .degel-system-object--star .degel-system-object__annotation {
+    top: 70%;
+    right: 7%;
+    left: auto;
+    min-width: min(20rem, 36%);
+  }
+
+  .degel-system-object--belt .degel-system-object__annotation {
+    top: 40%;
+    right: 3%;
+    left: auto;
+    min-width: min(22rem, 38%);
+  }
+
+  .degel-system-object:hover .degel-system-object__art {
+    filter: brightness(1.12) contrast(1.03);
+    transform: scale(1.015);
+  }
+
+  .degel-system-object:hover .degel-system-object__label {
+    color: var(--sl-color-white);
+    background: color-mix(in oklch, var(--codex-accent) 16%, transparent);
+  }
+
+  .degel-system-object:focus-visible {
+    outline: none;
+  }
+
+  .degel-system-object:focus-visible .degel-system-object__art {
+    outline: 3px solid var(--sl-color-accent-high);
+    outline-offset: 5px;
+  }
+
+  .degel-system-object:focus-visible .degel-system-object__label {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 2px;
+    background: color-mix(in oklch, var(--codex-accent) 20%, transparent);
+  }
+
+  .degel-system-map__scale-note {
+    position: absolute;
+    z-index: 2;
+    inset-inline-end: clamp(.75rem, 2vw, 3rem);
+    inset-block-end: clamp(.75rem, 2vw, 3rem);
+    margin: 0;
+    color: var(--degel-map-muted);
+    font-family: var(--vc-font-ui);
+    font-size: clamp(.58rem, .65vw, .8rem);
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-align: end;
+  }
+
+  .degel-system-list-view {
+    width: min(100%, 72rem);
+    margin-inline: auto;
+  }
+
+  .degel-system-article-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .degel-system-article-list li {
+    min-width: 0;
+  }
+
+  .degel-system-article-list a {
+    display: grid;
+    gap: .65rem;
+    height: 100%;
+    min-height: 8rem;
+    padding: 1rem;
+    border: 1px solid var(--codex-border);
+    background: var(--codex-surface-raised);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .degel-system-article-list a:hover {
+    border-color: var(--sl-color-accent-high);
+    background: color-mix(in oklch, var(--codex-accent) 10%, transparent);
+  }
+
+  .degel-system-article-list a:focus-visible {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 3px;
+  }
+
+  .degel-system-article-list__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .4rem 1rem;
+  }
+
+  .degel-system-article-list__heading strong {
+    color: var(--sl-color-white);
+    font-family: var(--vc-font-display);
+    font-size: 1.15rem;
+  }
+
+  .degel-system-article-list__heading > span {
+    color: var(--codex-accent-high);
+    font-family: var(--vc-font-ui);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .degel-system-article-list__description {
+    color: var(--sl-color-gray-3);
+    line-height: 1.55;
+  }
+
+  .degel-system-explorer__noscript {
+    width: min(100%, 48rem);
+    margin: 1rem auto 0;
+    padding: .75rem 1rem;
+    border-inline-start: 3px solid var(--sl-color-accent-high);
+    background: color-mix(in oklch, var(--codex-accent) 10%, transparent);
+  }
+
+  @media (min-width: 72rem) {
+    .main-frame > .codex-two-column-content.codex-degel-system-page {
+      max-inline-size: 256rem;
+    }
+
+    .codex-degel-system-page .codex-main-pane > main > .content-panel > .sl-container {
+      max-width: 100%;
+    }
+
+    .codex-degel-system-page .codex-page-title,
+    .codex-degel-system-page .codex-breadcrumbs {
+      width: min(100%, 48rem);
+      margin-inline: auto;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .degel-system-explorer {
+      margin-block-start: 1.5rem;
+    }
+
+    .degel-system-explorer__toolbar {
+      align-items: stretch;
+    }
+
+    .degel-system-view-switch {
+      width: 100%;
+    }
+
+    .degel-system-map {
+      min-height: 300rem;
+      aspect-ratio: auto;
+    }
+
+    .degel-system-object {
+      left: calc(var(--mobile-object-x) * 1%);
+      top: calc(var(--mobile-object-y) * 1%);
+      width: calc(var(--mobile-object-size) * 1rem);
+      min-width: 2.75rem;
+    }
+
+    .degel-system-object--belt {
+      width: min(82%, calc(var(--mobile-object-size) * 1rem));
+    }
+
+    .degel-system-object__annotation {
+      left: calc(100% + .2rem);
+      min-width: 8.5rem;
+    }
+
+    .degel-system-object--label-left .degel-system-object__annotation {
+      right: calc(100% + .2rem);
+      left: auto;
+    }
+
+    .degel-system-object__leader {
+      flex-basis: 2rem;
+      width: 2rem;
+    }
+
+    .degel-system-object__label {
+      padding: .3rem .35rem;
+    }
+
+    .degel-system-object__label strong {
+      font-size: .92rem;
+    }
+
+    .degel-system-object__label > span {
+      font-size: .58rem;
+    }
+
+    .degel-system-object--star .degel-system-object__annotation {
+      top: 66%;
+      right: 5%;
+      min-width: 8.5rem;
+    }
+
+    .degel-system-object--belt .degel-system-object__annotation {
+      top: 28%;
+      right: 0;
+      min-width: 9rem;
+    }
+
+    .degel-system-map__guide-label {
+      inset-inline-start: .75rem;
+      font-size: .58rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .degel-system-object__art {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .degel-system-map,
+    .degel-system-object__art,
+    .degel-system-article-list a,
+    .degel-system-view-switch {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .degel-system-object__leader path,
+    .degel-system-map__guides path {
+      stroke: CanvasText;
+    }
+
+    .degel-system-object__label,
+    .degel-system-view-switch button[aria-pressed='true'] {
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Celestial artwork
+   Origin: degel-system-art.css
+
+   Renders orbital artwork and celestial-object treatments.
+   -------------------------------------------------------------------------- */
+
+@layer starlight.core {
+  .degel-system-object__art:has(img) {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .degel-system-object__art:has(img) img {
+    filter: saturate(.92) contrast(1.04);
+  }
+
+  .degel-system-object--ring {
+    z-index: 2;
+    width: calc(var(--object-size) * 1%);
+  }
+
+  .degel-system-object--ring .degel-system-object__art {
+    aspect-ratio: 320 / 116;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .degel-system-object--ring .degel-system-object__art img {
+    border-radius: 0;
+    object-fit: contain;
+  }
+
+  .degel-system-object--ring .degel-system-object__annotation {
+    top: calc(100% + .35rem);
+    right: auto;
+    left: 50%;
+    align-items: center;
+    min-width: min(20rem, 80vw);
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .degel-system-object--ring .degel-system-object__leader {
+    display: none;
+  }
+
+  @media (max-width: 48rem) {
+    .degel-system-object--ring {
+      width: min(78%, calc(var(--mobile-object-size) * 1rem));
+    }
+
+    .degel-system-object--ring .degel-system-object__annotation {
+      top: calc(100% + .25rem);
+      min-width: min(10rem, 70vw);
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Full-width page integration
+   Origin: degel-system-layout.css
+
+   Breaks the explorer out of ordinary article-width geometry.
+   -------------------------------------------------------------------------- */
+
+@layer starlight.core {
+  .main-frame > .codex-two-column-content.codex-degel-system-page {
+    inline-size: 100%;
+    max-inline-size: none !important;
+    margin-inline: 0;
+  }
+
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane,
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane > main,
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane > main > .content-panel,
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane > main > .content-panel > .sl-container {
+    box-sizing: border-box;
+    inline-size: 100% !important;
+    width: 100% !important;
+    max-inline-size: none !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+  }
+
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane {
+    display: block;
+  }
+}

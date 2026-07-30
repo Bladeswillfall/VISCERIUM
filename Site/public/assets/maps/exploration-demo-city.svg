@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Demo city district map</title>
+  <desc id="desc">A non-canon schematic city map used to test nested Atlas maps.</desc>
+  <rect width="1200" height="900" fill="#202220"/>
+  <rect x="140" y="130" width="920" height="620" rx="26" fill="#4b504c" stroke="#9da49e" stroke-width="8"/>
+  <path d="M180 310 H1020 M180 520 H1020 M400 170 V710 M720 170 V710" stroke="#b9c0bb" stroke-width="20" opacity="0.55"/>
+  <circle cx="560" cy="410" r="95" fill="#2b2f2c" stroke="#d0d5d1" stroke-width="8"/>
+  <rect x="780" y="560" width="180" height="110" fill="#343936" stroke="#c1c7c3" stroke-width="7"/>
+  <text x="600" y="825" fill="#d7ddd8" font-family="system-ui, sans-serif" font-size="26" text-anchor="middle">NON-CANON NESTED MAP DEMO</text>
+</svg>

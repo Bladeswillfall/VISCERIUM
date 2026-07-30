@@ -1,0 +1,52 @@
+/*
+ * Creator UI foundation
+ * Shared spacing, typography and semantic-colour vocabulary for VISCERIUM creator surfaces.
+ */
+
+:root {
+  --vc-space-1: 4px;
+  --vc-space-2: 8px;
+  --vc-space-3: 12px;
+  --vc-space-4: 16px;
+  --vc-space-6: 24px;
+  --vc-space-8: 32px;
+
+  --vc-radius-static: 0;
+  --vc-radius-control: 4px;
+
+  --vc-border: var(--background-modifier-border);
+  --vc-surface: var(--background-primary);
+  --vc-surface-alt: var(--background-primary-alt);
+  --vc-surface-muted: var(--background-secondary);
+
+  --vc-accent: var(--interactive-accent);
+  --vc-accent-soft: color-mix(in srgb, var(--vc-accent) 14%, transparent);
+  --vc-accent-line: color-mix(in srgb, var(--vc-accent) 34%, var(--background-modifier-border));
+  --vc-activity: var(--color-green);
+
+  --vc-canon: #5ac8fa;
+  --vc-wip: #f2b84b;
+  --vc-writing: #f97316;
+  --vc-tools: #a78bfa;
+  --vc-reuse: #65d6ad;
+  --vc-private: #ef6f91;
+
+  --vc-state-warning: var(--color-yellow);
+  --vc-state-danger: var(--color-red);
+  --vc-state-success: var(--color-green);
+  --vc-state-reference: var(--color-blue);
+}
+
+/*
+ * Baseline 3.x assigns a bundled display serif to --h1-font through --h6-font.
+ * The creator vault deliberately keeps article headings on the configured body-text face.
+ * Using --font-text preserves any user-selected Obsidian text font rather than hard-coding a family.
+ */
+body {
+  --h1-font: var(--font-text);
+  --h2-font: var(--font-text);
+  --h3-font: var(--font-text);
+  --h4-font: var(--font-text);
+  --h5-font: var(--font-text);
+  --h6-font: var(--font-text);
+}

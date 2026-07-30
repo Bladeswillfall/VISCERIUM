@@ -1,0 +1,15 @@
+{
+  "defaultWidth": "100%",
+  "defaultHeight": "720px",
+  "defaultResizable": true,
+  "defaultResizeHandle": "native",
+  "storageDefault": "json",
+  "pinPlaceOpensEditor": true,
+  "preferActiveLayerInEditor": true,
+  "enableDrawing": true,
+  "enableMeasurePro": true,
+  "middleClickOpensLinkInNewTab": true,
+  "forcePopoverWithoutModKey": true,
+  "defaultScaleLikeSticker": false,
+  "showZoomButtonsHud": true
+}

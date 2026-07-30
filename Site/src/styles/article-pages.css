@@ -1,0 +1,493 @@
+/* ==========================================================================
+   Long-form article presentation
+
+   Consolidated from article-editorial.css, content-media.css. Section order is intentional:
+   later sections may refine or override earlier ownership layers. Keep the
+   provenance comments when moving rules so cascade-sensitive behaviour remains
+   understandable in isolation.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Editorial foundation
+   Origin: article-editorial.css
+
+   Defines prose rhythm, headings, reference sidebars and the TOC.
+   -------------------------------------------------------------------------- */
+
+@layer starlight.core {
+  /*
+    Shared long-form article presentation.
+    Keep authoring semantic: Markdown headings, lists, titleIcon/headerImage/image,
+    and sidebar metadata remain the source of truth. This layer only composes them.
+  */
+  body:not(:has(.home-gateway)) {
+    --vc-reading-text: color-mix(in oklch, var(--sl-color-text) 86%, var(--sl-color-white) 14%);
+    --vc-editorial-rule: color-mix(in oklch, var(--sl-color-accent-high) 34%, transparent);
+    --vc-editorial-rule-soft: color-mix(in oklch, var(--sl-color-accent-high) 18%, transparent);
+  }
+
+  /* Keep the article readable, but move away from the over-spaced documentation rhythm. */
+  body:not(:has(.home-gateway)) .sl-markdown-content {
+    line-height: 1.62;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content :where(p, li, dd) {
+    color: var(--vc-reading-text);
+  }
+
+  /*
+    Starlight applies margin-top: var(--sl-content-gap-y) to ordinary flow content.
+    Paragraphs opt out so headings can sit directly against their following copy.
+  */
+  body:not(:has(.home-gateway)) .sl-markdown-content p {
+    margin-block-start: 0;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content > p {
+    margin-block-end: .72rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content > :where(ul, ol) {
+    margin-block: .72rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content :where(ul, ol) {
+    padding-inline-start: 1.35rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content li + li {
+    margin-top: .2rem;
+  }
+
+  /* Major article sections: icon + title + structural gradient rule. */
+  body:not(:has(.home-gateway)) .sl-markdown-content h2 {
+    display: flex;
+    align-items: center;
+    gap: .52rem;
+    margin-block: 2.75rem .68rem;
+    padding-inline-start: 0;
+    font-size: clamp(1.65rem, 2.55vw, 2.4rem);
+    line-height: 1.08;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content h2::before {
+    content: none;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content h2::after {
+    content: '';
+    display: block;
+    flex: 1 1 auto;
+    align-self: center;
+    min-inline-size: 2rem;
+    block-size: 1px;
+    height: 1px;
+    border: 0;
+    background: linear-gradient(
+      90deg,
+      var(--codex-accent-soft),
+      var(--codex-border) 25%,
+      var(--codex-border) 90%,
+      transparent
+    );
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content h2 > .codex-heading-icon {
+    margin-inline-end: 0;
+    color: var(--sl-color-accent-high);
+    font-size: .72em;
+  }
+
+  /* Structural subsection. */
+  body:not(:has(.home-gateway)) .sl-markdown-content h3 {
+    margin-block: 1.9rem 0;
+    padding-block-end: 0;
+    font-size: 1rem;
+    letter-spacing: .09em;
+    line-height: 1.3;
+  }
+
+  /* Editorial/named subsection: seasons, people, named places, etc. */
+  body:not(:has(.home-gateway)) .sl-markdown-content h4 {
+    margin-block: 1.45rem 0;
+    padding-block-end: 0;
+    font-size: 1.05rem;
+    font-style: italic;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  /* H2 keeps a small deliberate lead-in; H3/H4 paragraphs remain gapless. */
+  body:not(:has(.home-gateway)) .sl-markdown-content h2 + :where(p, ul, ol) {
+    margin-block-start: .42rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content :is(h3, h4) + p {
+    margin-block-start: 0;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content :is(h3, h4) + :where(ul, ol) {
+    margin-block-start: .42rem;
+  }
+
+  /* The page identity sits closer to the hero and stays quieter than section content. */
+  body:not(:has(.home-gateway)) h1#_top {
+    margin-block-end: .3rem;
+    font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+  }
+
+  body:not(:has(.home-gateway)) .codex-header-figure + h1#_top {
+    margin-top: -2.45rem;
+  }
+
+  body:not(:has(.home-gateway)) .codex-title-pronunciation {
+    opacity: .78;
+  }
+
+  /*
+    Right sidebar = reference material, not a second article introduction.
+    Artwork remains the visual anchor; the metadata begins after one restrained rule.
+  */
+  body:not(:has(.home-gateway)) .codex-sidebar-card {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-artwork {
+    margin: 0 0 .65rem;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-image-link {
+    width: 100%;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-image {
+    display: block;
+    width: 100%;
+    max-height: 17rem;
+    margin-inline: auto;
+    object-fit: contain;
+    background: transparent;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
+    margin-top: .35rem;
+    padding-inline: .1rem;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-art-caption :where(p) {
+    margin: 0;
+    color: var(--sl-color-gray-3);
+    font-size: .68rem;
+    line-height: 1.35;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-art-title {
+    color: var(--sl-color-gray-2) !important;
+    font-weight: 600;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-body {
+    padding-top: .62rem;
+    border-block-start: 1px solid var(--vc-editorial-rule-soft);
+  }
+
+  /* The article title and description already exist in the main column. */
+  body:not(:has(.home-gateway)) .codex-sidebar-body > :is(.codex-sidebar-kicker, h2, .codex-sidebar-description) {
+    display: none;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-meta {
+    margin-top: 0;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-meta::before {
+    content: 'Reference';
+    display: block;
+    margin: 0 -.35rem .35rem;
+    padding: .24rem .35rem;
+    background: linear-gradient(90deg, color-mix(in oklch, var(--sl-color-accent-high) 6%, transparent), transparent 78%);
+    color: var(--sl-color-accent-high);
+    font-family: var(--vc-font-ui);
+    font-size: .67rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-meta > div {
+    padding-block: .5rem;
+    border-block-start: 1px solid var(--vc-editorial-rule-soft);
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-meta > div:first-of-type {
+    border-block-start: 0;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-meta dt {
+    margin-bottom: .14rem;
+    color: var(--sl-color-gray-3);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  body:not(:has(.home-gateway)) .codex-sidebar-meta dd {
+    color: var(--sl-color-gray-2);
+    font-size: .75rem;
+    line-height: 1.45;
+  }
+
+  /* TOC stays quiet until it needs to tell the reader where they are. */
+  body:not(:has(.home-gateway)) .right-sidebar-panel :is(starlight-toc, nav[aria-labelledby='starlight__on-this-page']) a {
+    border-inline-start: 1px solid transparent;
+    transition: color .12s ease, border-color .12s ease, background-color .12s ease;
+  }
+
+  body:not(:has(.home-gateway)) .right-sidebar-panel :is(starlight-toc, nav[aria-labelledby='starlight__on-this-page']) a:is([aria-current='true'], [aria-current='page']) {
+    border-inline-start-color: var(--sl-color-accent-high);
+    background: linear-gradient(90deg, color-mix(in oklch, var(--sl-color-accent-high) 8%, transparent), transparent 70%);
+    color: var(--sl-color-white);
+  }
+
+  body:not(:has(.home-gateway)) #starlight__on-this-page {
+    margin-inline: -.35rem;
+    padding: .24rem .35rem;
+    background: linear-gradient(90deg, color-mix(in oklch, var(--sl-color-accent-high) 6%, transparent), transparent 78%);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 48rem) {
+    body:not(:has(.home-gateway)) .sl-markdown-content h2 {
+      gap: .42rem;
+      margin-block-start: 2.3rem;
+      font-size: clamp(1.5rem, 7vw, 2rem);
+    }
+
+    body:not(:has(.home-gateway)) .sl-markdown-content h2::after {
+      min-inline-size: 1rem;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Cascade bridge and media
+   Origin: content-media.css
+
+   Applies late article refinements and safe media behaviour.
+   -------------------------------------------------------------------------- */
+
+/*
+  Article typography cascade bridge.
+  typography.css is intentionally unlayered and Starlight's content-flow styles are layered;
+  article-editorial.css currently lives in the Starlight layer. These unlayered rules are the
+  final presentation contract for ordinary long-form articles, loaded after typography.css.
+*/
+body:not(:has(.home-gateway)) .sl-markdown-content p {
+  margin-block: 0 .72rem;
+}
+
+/* A restrained geometric marker gives unordered reference lists a Codex identity without ornament. */
+body:not(:has(.home-gateway)) .sl-markdown-content ul > li::marker {
+  content: '◆  ';
+  color: var(--sl-color-accent-high);
+  font-size: .58em;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content ul ul > li::marker {
+  content: '◇  ';
+}
+
+/* Starlight wraps Markdown headings; section spacing belongs to the wrapper, not the heading. */
+body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
+  margin-block: 2.75rem .42rem;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h3 {
+  margin-block: 1.9rem 0;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h4 {
+  margin-block: 1.45rem 0;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2 {
+  display: flex;
+  align-items: center;
+  gap: .52rem;
+  margin: 0;
+  margin-bottom: 1rem;
+  padding-inline-start: 0;
+  border: 0;
+  font-size: clamp(1.65rem, 2.55vw, 2.4rem);
+  line-height: 1.08;
+}
+
+/*
+  The negative H2 tuck is an article-only editorial treatment. Structural pages such as
+  era homepages, Start Here, category indexes, continuity hubs and calendar/exploration
+  pages need ordinary positive separation because their headings introduce composed UI.
+*/
+body:has(.codex-page-classifier--article) .sl-markdown-content h2 {
+  margin-bottom: -1.5rem;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2::before {
+  content: none;
+  display: none;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2::after {
+  content: '';
+  display: block;
+  flex: 1 1 auto;
+  align-self: center;
+  min-inline-size: 2rem;
+  block-size: 1px;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    var(--codex-accent-soft),
+    var(--codex-border) 25%,
+    var(--codex-border) 90%,
+    transparent
+  );
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2 > .codex-heading-icon {
+  margin-inline-end: 0;
+  color: var(--sl-color-accent-high);
+  font-size: .8em;
+}
+
+/* Structural subsection: compact, tracked and clearly subordinate to H2. */
+body:not(:has(.home-gateway)) .sl-markdown-content h3 {
+  color: var(--era-heading-accent, var(--sl-color-accent-high));
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin: 0;
+  padding-block-end: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h4 {
+  margin: 0;
+  padding-block-end: 0;
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > :is(.sl-heading-wrapper.level-h3, .sl-heading-wrapper.level-h4) + p {
+  margin-block-start: 0;
+}
+
+/*
+  Plugin/generated pages can render headings directly inside .sl-markdown-content instead of using
+  Starlight's .sl-heading-wrapper geometry. They keep the Codex visual hierarchy and accent colours,
+  but always retain positive flow spacing.
+*/
+body:not(:has(.home-gateway)) .sl-markdown-content > h2 {
+  margin-block: 2.75rem .68rem;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > h3 {
+  margin-block: 1rem .42rem;
+  color: var(--era-heading-accent, var(--sl-color-accent-high));
+}
+
+/* Sidebar artwork should read as a free-standing figure rather than a card-within-a-card. */
+body:not(:has(.home-gateway)) .codex-sidebar-artwork {
+  border-block-end: 0;
+}
+
+body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
+  margin-top: .35rem;
+  padding: .18rem .1rem 0;
+  border: 0;
+  background: transparent;
+}
+
+@media (max-width: 48rem) {
+  /*
+    Mobile article composition deliberately starts higher beneath Starlight's compact toolbar.
+    Only hero-bearing articles opt into the pull-up; utility/plugin pages retain normal flow.
+    Keep the prose inset, but let the cinematic page-title artwork bleed to the viewport edges.
+  */
+  body:not(:has(.home-gateway)):has(.content-panel > .sl-container > .codex-header-figure) .sl-markdown-content {
+    margin-top: -4rem;
+  }
+
+  body:not(:has(.home-gateway)) .content-panel > .sl-container > .codex-header-figure {
+    width: 100vw;
+    max-width: none;
+    margin-inline-start: calc(50% - 50vw);
+    margin-inline-end: calc(50% - 50vw);
+  }
+
+  body:not(:has(.home-gateway)) .codex-universal-badge {
+    font-size: .5rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
+    margin-block-start: 2.3rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content h2 {
+    gap: .42rem;
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content h2::after {
+    min-inline-size: 1rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content > h2 {
+    margin-block: 2.3rem .68rem;
+  }
+}
+
+/* Generic Markdown media safety.
+   Keeps images from escaping the article lane when demo/content pages use remote images
+   or Obsidian-resolved assets. */
+.sl-markdown-content img,
+.sl-markdown-content picture,
+.sl-markdown-content video,
+.sl-markdown-content canvas,
+.sl-markdown-content svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.sl-markdown-content img {
+  margin-block: 1rem;
+  border-radius: var(--codex-radius);
+}
+
+.sl-markdown-content figure {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.codex-header-image {
+  display: block;
+  width: 100%;
+  max-height: 18rem;
+  margin: 0;
+  object-fit: contain;
+  border: 0;
+  border-radius: var(--codex-radius);
+  box-shadow: none;
+}
+
+.codex-header-image-artwork {
+  max-height: min(70vh, 48rem);
+  background: color-mix(in oklch, var(--codex-fixed-dark) 22%, transparent);
+}

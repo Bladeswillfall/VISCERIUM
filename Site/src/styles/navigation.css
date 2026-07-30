@@ -1,0 +1,327 @@
+@layer starlight.core {
+  /* Shared page, heading, and navigation icon rendering. */
+  .codex-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 1em;
+    height: 1em;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+    line-height: 1;
+    vertical-align: -0.06em;
+  }
+
+  .codex-icon > i {
+    display: block;
+    width: 1em;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .codex-local-icon {
+    background-color: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+
+  .codex-page-title {
+    display: flex;
+    align-items: center;
+    gap: .42em;
+  }
+
+  .codex-title-icon {
+    color: var(--sl-color-accent-high);
+    font-size: .78em;
+  }
+
+  .codex-breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem;
+    margin-block-start: .75rem;
+    padding-block-start: .75rem;
+    border-block-start: 1px solid var(--codex-border);
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+  }
+
+  .codex-breadcrumb-item {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: .28em;
+  }
+
+  .codex-breadcrumb-icon {
+    font-size: .9em;
+    opacity: .82;
+  }
+
+  .codex-breadcrumbs a {
+    color: var(--codex-accent-high);
+    text-decoration: none;
+  }
+
+  .codex-breadcrumbs a:hover {
+    color: var(--sl-color-white);
+    text-decoration: underline;
+  }
+
+  .sl-markdown-content :is(h1, h2, h3, h4, h5, h6) > .codex-heading-icon,
+  .content-panel :is(h1, h2, h3, h4, h5, h6) > .codex-heading-icon {
+    margin-inline-end: .42em;
+    color: var(--sl-color-accent-high);
+    font-size: .8em;
+    vertical-align: .02em;
+  }
+
+  .sl-markdown-content :is(h3, h4, h5, h6) > .codex-heading-icon,
+  .content-panel :is(h3, h4, h5, h6) > .codex-heading-icon {
+    color: var(--sl-color-gray-3);
+    font-size: .82em;
+  }
+
+  /* Left navigation presentation. */
+  .sidebar {
+    border-inline-end-color: var(--codex-border);
+    background: var(--sl-color-bg-sidebar);
+  }
+
+  .sidebar-pane,
+  .sidebar-content {
+    background: transparent;
+  }
+
+  .sidebar-content {
+    scrollbar-color: color-mix(in oklch, var(--codex-accent) 28%, transparent) transparent;
+  }
+
+  .codex-sidebar-layout {
+    display: grid;
+    gap: 1rem;
+    min-height: 100%;
+  }
+
+  .codex-sidebar-main,
+  .codex-changelog-sidebar {
+    min-width: 0;
+  }
+
+  .codex-changelog-sidebar {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--codex-border);
+  }
+
+  .sidebar-content .top-level {
+    display: grid;
+    gap: .16rem;
+  }
+
+  .sidebar-content a,
+  .sidebar-content summary {
+    border-radius: .7rem;
+  }
+
+  .sidebar-content a:hover,
+  .sidebar-content summary:hover,
+  .sidebar-content .active > a,
+  .sidebar-content a[aria-current='page'] {
+    background: color-mix(in oklch, var(--codex-accent) 10%, transparent);
+    color: var(--sl-color-white);
+    text-decoration: none;
+  }
+
+  .sidebar-content a[aria-current='page'],
+  .sidebar-content .active > a {
+    box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
+  }
+
+  .sidebar-content details[open] > summary .caret {
+    transform: rotate(90deg);
+  }
+
+  .sidebar-content .group-label,
+  .sidebar-content .flex-link,
+  .sidebar-content .individual {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .sidebar-content .large {
+    min-width: 0;
+  }
+
+  .sidebar-content .caret {
+    margin-inline-start: auto;
+    color: var(--sl-color-gray-4);
+    transition: transform .16s ease, color .16s ease;
+  }
+
+  .sidebar-content .codex-icon,
+  .local-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    opacity: .72;
+  }
+
+  .local-icon {
+    background-color: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+
+  .has-icon > a .codex-icon,
+  .has-icon > details > summary .codex-icon,
+  .has-icon > a .local-icon,
+  .has-icon > details > summary .local-icon {
+    color: var(--sl-color-accent-high);
+  }
+
+  .codex-sidebar-toggle {
+    position: fixed;
+    z-index: 1000;
+    inset-block-start: calc(var(--sl-nav-height, 3.5rem) + .75rem);
+    inset-inline-start: calc(var(--codex-sidebar-overlay-width, 18rem) + .75rem);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--codex-accent-soft);
+    border-radius: 999px;
+    background: var(--codex-sidebar-toggle-bg);
+    color: var(--codex-nav-text);
+    box-shadow: 0 .75rem 1.5rem color-mix(in oklch, var(--codex-shadow-color) 28%, transparent);
+    cursor: pointer;
+    transition:
+      inset-inline-start .2s ease,
+      background-color .2s ease,
+      color .2s ease,
+      transform .2s ease;
+  }
+
+  .codex-sidebar-toggle:hover {
+    color: var(--codex-nav-text);
+    background: var(--codex-nav-hover);
+  }
+
+  .codex-sidebar-toggle:focus-visible {
+    outline: 2px solid var(--codex-nav-text);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sidebar-content a:hover .codex-icon,
+    .sidebar-content summary:hover .codex-icon {
+      transform: translateY(-1px);
+    }
+  }
+}
+
+/*
+  The overlay state is intentionally unlayered. Starlight's sidebar pane is
+  component-scoped inside its own cascade layer; keeping these critical layout
+  declarations outside a layer ensures the Codex state wins without relying on
+  brittle selector or stylesheet ordering.
+*/
+html[data-codex-desktop-sidebar] {
+  --codex-sidebar-overlay-width: 18rem;
+  --sl-sidebar-width: 0rem;
+}
+
+html[data-codex-desktop-sidebar] .sidebar > starlight-menu-button {
+  display: none;
+}
+
+html[data-codex-desktop-sidebar] #starlight__sidebar {
+  --sl-sidebar-width: var(--codex-sidebar-overlay-width);
+  position: fixed;
+  z-index: 60;
+  visibility: visible;
+  inset-block-start: var(--sl-nav-height, 3.5rem);
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: var(--codex-sidebar-overlay-width);
+  inline-size: var(--codex-sidebar-overlay-width);
+  max-inline-size: calc(100vw - 3.75rem);
+  overflow-y: auto;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 1rem 0 2.5rem color-mix(in oklch, var(--codex-shadow-color) 32%, transparent);
+  transition:
+    transform .2s ease,
+    opacity .2s ease,
+    visibility 0s linear 0s,
+    box-shadow .2s ease;
+}
+
+/* Keep the document outside the open rail's hit area. */
+html[data-codex-desktop-sidebar]:not(.codex-sidebar-collapsed) .main-frame {
+  box-sizing: border-box;
+  padding-inline-start: var(--codex-sidebar-overlay-width);
+}
+
+html[data-codex-desktop-sidebar].codex-sidebar-collapsed #starlight__sidebar {
+  visibility: hidden;
+  transform: translateX(-110%);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: none;
+  transition-delay: 0s, 0s, .2s, 0s;
+}
+
+html[data-codex-desktop-sidebar]:not(.codex-sidebar-collapsed) .codex-sidebar-toggle {
+  inset-inline-start: calc(var(--codex-sidebar-overlay-width) + .75rem);
+}
+
+html[data-codex-desktop-sidebar].codex-sidebar-collapsed .codex-sidebar-toggle {
+  inset-inline-start: .75rem;
+}
+
+html:not([data-codex-desktop-sidebar]) .codex-sidebar-toggle {
+  display: none;
+}
+
+html[data-codex-desktop-sidebar] .right-sidebar-panel .sl-container,
+html[data-codex-desktop-sidebar] .codex-page-sidebar .sl-container {
+  inline-size: 100%;
+  max-inline-size: none;
+}
+
+@media (min-width: 800px) {
+  :root {
+    --sl-mobile-toc-height: 0rem;
+  }
+
+  mobile-starlight-toc,
+  #starlight__mobile-toc {
+    block-size: 0 !important;
+    min-block-size: 0 !important;
+    overflow: hidden !important;
+    border: 0 !important;
+  }
+
+  #starlight__on-this-page--mobile {
+    visibility: hidden !important;
+    block-size: 0 !important;
+    min-block-size: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  #starlight__on-this-page--mobile ~ .dropdown {
+    display: none !important;
+  }
+}

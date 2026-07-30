@@ -1,0 +1,271 @@
+@layer starlight.core {
+  .codex-surface {
+    border: 1px solid var(--codex-border);
+    border-radius: var(--codex-radius);
+    background: var(--codex-surface-raised);
+  }
+
+  .codex-surface > :first-child,
+  .codex-warning > :first-child {
+    margin-top: 0;
+  }
+
+  .codex-surface > :last-child,
+  .codex-warning > :last-child {
+    margin-bottom: 0;
+  }
+
+  .codex-frame {
+    border: 1px solid var(--codex-border);
+    border-radius: var(--codex-radius);
+    background: var(--codex-surface);
+  }
+
+  .codex-kicker {
+    margin: 0 0 .35rem;
+    color: var(--sl-color-accent-high);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .codex-warning {
+    border: 1px solid color-mix(in oklch, var(--codex-warning) 45%, transparent);
+    border-inline-start: 4px solid var(--codex-warning);
+    border-radius: var(--codex-radius);
+    padding: .75rem 1rem;
+    background: color-mix(in oklch, var(--codex-warning) 10%, transparent);
+  }
+
+  .codex-link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    min-height: 2.25rem;
+    padding: .45rem .8rem;
+    border: 1px solid var(--codex-border);
+    border-radius: 999px;
+    background: var(--codex-surface);
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .codex-link-button:hover {
+    border-color: color-mix(in oklch, var(--codex-accent) 36%, transparent);
+    background: color-mix(in oklch, var(--codex-accent) 14%, transparent);
+    color: var(--sl-color-white);
+    text-decoration: none;
+  }
+
+  .codex-link-button:focus-visible,
+  .codex-frame:focus-within {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 3px;
+  }
+
+  /* Layout utilities generated from compact authoring tags in Vault/Lore. */
+  .cx-cols,
+  .cx-row {
+    --cx-gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--cx-gap);
+    margin-block: 1.5rem;
+  }
+
+  .cx-col,
+  .cx-card {
+    min-width: 0;
+  }
+
+  .cx-cols > .cx-col {
+    margin-block: 0 !important;
+  }
+
+  .cx-compact { margin-block: .75rem; }
+  .cx-bleed { width: 100%; max-width: none; }
+  .cx-center { margin-inline: auto; }
+  .cx-align-start { align-items: start; }
+  .cx-align-center { align-items: center; }
+  .cx-align-end { align-items: end; }
+  .cx-align-stretch { align-items: stretch; }
+  .cx-justify-start { justify-items: start; }
+  .cx-justify-center { justify-items: center; }
+  .cx-justify-end { justify-items: end; }
+  .cx-justify-between { justify-content: space-between; }
+  .cx-justify-around { justify-content: space-around; }
+  .cx-justify-evenly { justify-content: space-evenly; }
+
+  .cx-card {
+    padding: 1rem;
+    border: 1px solid var(--codex-border);
+    border-radius: .5rem;
+    background: var(--codex-surface-raised-color);
+  }
+
+  :is(.cx-card, .cx-col) > :first-child {
+    margin-top: 0;
+  }
+
+  :is(.cx-card, .cx-col) > :last-child {
+    margin-bottom: 0;
+  }
+
+  .cx-card-compact { padding: .75rem; }
+  .cx-card-muted { background: var(--codex-surface); }
+  .cx-card-accent { border-color: var(--sl-color-accent); }
+  .cx-card-warning { border-color: color-mix(in oklch, var(--codex-warning) 45%, transparent); }
+  .cx-card-danger { border-color: color-mix(in oklch, var(--codex-danger) 45%, transparent); }
+  .cx-card-success { border-color: color-mix(in oklch, var(--codex-success) 45%, transparent); }
+
+  @media (min-width: 36rem) {
+    .cx-cols {
+      grid-template-columns: var(--cx-columns, repeat(auto-fit, minmax(min(16rem, 100%), 1fr)));
+    }
+
+    .cx-row { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+    .cx-row > .cx-col {
+      grid-column: span var(--cx-sm-span, var(--cx-span, 12));
+      order: var(--cx-sm-order, var(--cx-order, initial));
+      align-self: var(--cx-self, auto);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .cx-row > .cx-col {
+      grid-column: span var(--cx-md-span, var(--cx-sm-span, var(--cx-span, 12)));
+      order: var(--cx-md-order, var(--cx-sm-order, var(--cx-order, initial)));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .cx-row > .cx-col {
+      grid-column: span var(--cx-lg-span, var(--cx-md-span, var(--cx-sm-span, var(--cx-span, 12))));
+      order: var(--cx-lg-order, var(--cx-md-order, var(--cx-sm-order, var(--cx-order, initial))));
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .cx-row > .cx-col {
+      grid-column: span var(--cx-xl-span, var(--cx-lg-span, var(--cx-md-span, var(--cx-sm-span, var(--cx-span, 12)))));
+      order: var(--cx-xl-order, var(--cx-lg-order, var(--cx-md-order, var(--cx-sm-order, var(--cx-order, initial)))));
+    }
+  }
+
+  /*
+    Temporary borderless presentation pass. Keep authored article components and
+    data-visualisation marks intact; only flatten page chrome, controls, wrappers,
+    section dividers and feature surfaces. The bespoke landing page is excluded.
+  */
+  body:not(:has(.home-gateway)) :is(
+    header.header,
+    .codex-header,
+    .content-panel,
+    .codex-breadcrumbs,
+    #starlight__sidebar,
+    .sidebar,
+    .sidebar-pane,
+    .sidebar-content,
+    .codex-changelog-sidebar,
+    .sidebar .ion-expandable-group,
+    .sidebar .ion-expandable-group > summary,
+    .sidebar ul ul li,
+    .right-sidebar,
+    .right-sidebar-panel,
+    .codex-page-sidebar,
+    .codex-site-footer,
+    .ion-codex-footer,
+    .codex-sidebar-card,
+    .codex-sidebar-section,
+    .codex-header-image,
+    .codex-surface,
+    .codex-frame,
+    .codex-link-button,
+    .codex-sidebar-toggle,
+    .social-icons a,
+    .world-map,
+    .codex-map,
+    .map-panel,
+    .map-frame,
+    .codex-image-panel,
+    .map-card,
+    .codex-map-card,
+    .image-card,
+    .codex-gallery-card,
+    .calendar-module,
+    .calendar-module__facts,
+    .calendar-month,
+    .calendar-day,
+    .calendar-legend,
+    .calendar-date-badge,
+    .calendar-season,
+    .calendar-observance,
+    .support-hero,
+    .support-section,
+    .support-note,
+    .support-button,
+    .category-index,
+    .category-card,
+    .telescope__modal,
+    .telescope__close-button,
+    .telescope__tab,
+    .telescope__search-input,
+    .telescope__pin-button,
+    .telescope__tag,
+    .telescope__clear-btn,
+    .telescope__modal kbd,
+    dialog,
+    button[data-open-modal],
+    button[data-open-modal] > kbd,
+    .pagefind-ui__search-input,
+    .pagefind-ui__search-clear,
+    .pagefind-ui__button,
+    .pagefind-ui__result-title,
+    .pagefind-ui__result-nested,
+    .pagefind-ui__result-tag,
+    .pagefind-ui__filter-checkbox,
+    .sl-markdown-content h2
+  ) {
+    border: 0 !important;
+  }
+
+  /* Restore comfortable separation below section headings on normal content pages. */
+  body:not(:has(.home-gateway)) .sl-markdown-content h2 {
+    margin-bottom: 1rem;
+  }
+
+  /* The first calendar month should not sit flush against the content above it. */
+  section.calendar-month:nth-child(1) {
+    margin-top: var(--sl-content-gap-y);
+  }
+
+  /* Calendar ornament rims are decorative; colour and fill still carry state. */
+  body:not(:has(.home-gateway)) :is(.calendar-day--holiday::after) {
+    border: 0 !important;
+  }
+
+  @media (forced-colors: active) {
+    body:not(:has(.home-gateway)) :is(
+      .codex-surface,
+      .codex-sidebar-card,
+      .codex-sidebar-section,
+      .calendar-module,
+      .calendar-month,
+      .calendar-day,
+      .support-section,
+      .world-map,
+      .codex-map,
+      button,
+      input,
+      select,
+      textarea
+    ) {
+      border: 1px solid CanvasText !important;
+    }
+  }
+}

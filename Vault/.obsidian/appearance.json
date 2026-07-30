@@ -1,0 +1,31 @@
+{
+  "theme": "obsidian",
+  "cssTheme": "Baseline",
+  "enabledCssSnippets": [
+    "Bases",
+    "Callout styling",
+    "Checkbox styling",
+    "Code block styling",
+    "Compact properties",
+    "Compact tabs",
+    "Creator UI foundation",
+    "Embed styling",
+    "File explorer",
+    "Home dashboard",
+    "Horizontal rules",
+    "Hover previews",
+    "Image styling",
+    "Link styling",
+    "Outline panel",
+    "Scrollbars",
+    "Search results",
+    "Table styling",
+    "Timeline styling",
+    "World Anvil Import triage",
+    "Heading hierarchy",
+    "Tag styling"
+  ],
+  "accentColor": "#b1a98c",
+  "showViewHeader": true,
+  "showRibbon": true
+}
