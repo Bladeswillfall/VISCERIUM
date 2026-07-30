@@ -1,0 +1,54 @@
+@layer starlight.core {
+  .degel-system-object__art:has(img) {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .degel-system-object__art:has(img) img {
+    filter: saturate(.92) contrast(1.04);
+  }
+
+  .degel-system-object--ring {
+    z-index: 2;
+    width: calc(var(--object-size) * 1%);
+  }
+
+  .degel-system-object--ring .degel-system-object__art {
+    aspect-ratio: 320 / 116;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .degel-system-object--ring .degel-system-object__art img {
+    border-radius: 0;
+    object-fit: contain;
+  }
+
+  .degel-system-object--ring .degel-system-object__annotation {
+    top: calc(100% + .35rem);
+    right: auto;
+    left: 50%;
+    align-items: center;
+    min-width: min(20rem, 80vw);
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .degel-system-object--ring .degel-system-object__leader {
+    display: none;
+  }
+
+  @media (max-width: 48rem) {
+    .degel-system-object--ring {
+      width: min(78%, calc(var(--mobile-object-size) * 1rem));
+    }
+
+    .degel-system-object--ring .degel-system-object__annotation {
+      top: calc(100% + .25rem);
+      min-width: min(10rem, 70vw);
+    }
+  }
+}

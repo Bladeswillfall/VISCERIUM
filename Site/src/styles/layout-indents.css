@@ -1,0 +1,41 @@
+/* VISCERIUM layout indents authored in Obsidian as transparent vc-indent callouts. */
+
+.sl-markdown-content blockquote:has(.vc-layout-indent-marker) {
+  margin-block: .75em;
+  margin-inline: 2.25rem 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.sl-markdown-content blockquote:has(.vc-layout-indent-marker)::before,
+.sl-markdown-content blockquote:has(.vc-layout-indent-marker)::after {
+  content: none;
+}
+
+/*
+ * The hidden marker can be emitted either inside the callout-label paragraph or
+ * as its own sibling node by the MDX/Markdown renderer. In both shapes the
+ * first paragraph is authoring scaffold (`[!vc-indent]`), never article copy.
+ */
+.sl-markdown-content blockquote:has(.vc-layout-indent-marker) > p:first-child {
+  display: none;
+}
+
+.sl-markdown-content blockquote:has(.vc-layout-indent-marker) > .vc-layout-indent-marker {
+  display: none;
+}
+
+.sl-markdown-content blockquote:has(.vc-layout-indent-marker) > :first-child:not(p) {
+  margin-top: 0;
+}
+
+.sl-markdown-content blockquote:has(.vc-layout-indent-marker) > :last-child {
+  margin-bottom: 0;
+}

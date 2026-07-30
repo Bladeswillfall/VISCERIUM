@@ -1,0 +1,26 @@
+/*
+ * Checkbox styling
+ * Styles standard Markdown task checkboxes only; no custom task syntax.
+ */
+
+.markdown-rendered input[type="checkbox"],
+.markdown-source-view.mod-cm6 input[type="checkbox"] {
+  width: 1.05em;
+  height: 1.05em;
+  margin-inline-end: 0.42em;
+  accent-color: var(--interactive-accent);
+}
+
+.markdown-rendered .task-list-item-checkbox:checked {
+  filter: saturate(0.9);
+}
+
+.markdown-rendered .task-list-item.is-checked {
+  color: var(--text-muted);
+}
+
+.markdown-rendered .task-list-item.is-checked > p,
+.markdown-rendered .task-list-item.is-checked > span {
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--text-faint);
+}

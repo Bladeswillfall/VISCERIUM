@@ -1,0 +1,317 @@
+/* Start Here interaction pass.
+   Loaded after visual polish so motion can enhance the page without changing its palette. */
+
+.start-here-primer {
+  --start-rail-bulge: clamp(2rem, 3.2vw, 3.8rem);
+}
+
+/* The straight reading rail now bends toward each breadcrumb question, then returns
+   to its original track. This follows the useful part of the referenced draw-on-scroll
+   demo without turning the rail into a second navigation system. */
+.start-here-primer > section.start-breadcrumb::before {
+  left: var(--start-rail-x);
+  width: calc(var(--start-rail-bulge) + .4rem);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--start-rail-color) 72%, transparent),
+    var(--start-rail-color) 18%,
+    color-mix(in oklch, var(--start-node-accent) 74%, var(--start-rail-color)) 50%,
+    var(--start-rail-color) 82%,
+    color-mix(in oklch, var(--start-rail-color) 72%, transparent)
+  );
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 240' preserveAspectRatio='none'%3E%3Cpath d='M 2 0 C 2 58 70 62 70 120 C 70 178 2 182 2 240' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 240' preserveAspectRatio='none'%3E%3Cpath d='M 2 0 C 2 58 70 62 70 120 C 70 178 2 182 2 240' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  transform-origin: left center;
+  transition: scale .22s ease, filter .22s ease;
+}
+
+/* Put the question node on the crest of the bend rather than leaving it behind on
+   the original straight track, and reserve enough space that it never collides with
+   the breadcrumb number or question copy. */
+.start-here-primer > section.start-breadcrumb::after {
+  left: calc(var(--start-rail-x) + var(--start-rail-bulge));
+}
+
+.start-here-primer > section.start-breadcrumb .start-breadcrumb__inner {
+  padding-inline-start: max(
+    var(--start-gutter),
+    calc(var(--start-rail-x) + var(--start-rail-bulge) + 1.35rem)
+  );
+}
+
+.start-here-primer > section.start-breadcrumb:has(.start-choice:hover)::before,
+.start-here-primer > section.start-breadcrumb:has(.start-choice:focus-visible)::before,
+.start-here-primer > section.start-breadcrumb:has(.start-choice.is-selected)::before {
+  scale: 1.075 1;
+  filter: drop-shadow(0 0 .45rem color-mix(in oklch, var(--start-node-accent) 34%, transparent));
+}
+
+/* Progressive enhancement: where scroll-driven animation is supported, the bend
+   grows out of the straight rail as the question enters the reading window. */
+@keyframes start-rail-bulge-in {
+  0% {
+    opacity: .58;
+    transform: scaleX(.08);
+  }
+  72% {
+    opacity: 1;
+    transform: scaleX(1.07);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes start-rail-node-arrive {
+  0% { opacity: .2; }
+  68% { opacity: .78; }
+  100% { opacity: 1; }
+}
+
+@supports (animation-timeline: view()) {
+  .start-here-primer > section.start-breadcrumb::before {
+    animation-name: start-rail-bulge-in;
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view(block);
+    animation-range: entry 6% cover 42%;
+  }
+
+  .start-here-primer > section.start-breadcrumb::after {
+    animation-name: start-rail-node-arrive;
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view(block);
+    animation-range: entry 18% cover 44%;
+  }
+}
+
+/* Inline editorial links get a deliberate underline sweep and a separate arrow
+   movement. The previous treatment only changed the gap, which was easy to miss. */
+.start-here-primer .start-inline-link,
+.start-here-primer .start-scroll-link {
+  position: relative;
+  isolation: isolate;
+  padding-block: .18rem .28rem;
+  transform: translateY(0);
+  transition:
+    gap .18s ease,
+    transform .18s ease,
+    text-shadow .18s ease;
+}
+
+.start-here-primer .start-inline-link::after,
+.start-here-primer .start-scroll-link::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -1;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    currentColor,
+    color-mix(in oklch, currentColor 42%, transparent)
+  );
+  transform: scaleX(.2);
+  transform-origin: left center;
+  opacity: .58;
+  transition: transform .2s ease, opacity .2s ease, height .2s ease;
+}
+
+.start-here-primer .start-inline-link > span,
+.start-here-primer .start-scroll-link > span {
+  display: inline-block;
+  transition: transform .2s cubic-bezier(.2, .75, .25, 1.2);
+}
+
+.start-here-primer .start-inline-link:hover,
+.start-here-primer .start-inline-link:focus-visible,
+.start-here-primer .start-scroll-link:hover,
+.start-here-primer .start-scroll-link:focus-visible {
+  gap: .78rem;
+  transform: translateY(-.08rem);
+  text-shadow: 0 0 .8rem color-mix(in oklch, currentColor 24%, transparent);
+}
+
+.start-here-primer .start-inline-link:hover::after,
+.start-here-primer .start-inline-link:focus-visible::after,
+.start-here-primer .start-scroll-link:hover::after,
+.start-here-primer .start-scroll-link:focus-visible::after {
+  height: 3px;
+  opacity: .9;
+  transform: scaleX(1);
+}
+
+.start-here-primer .start-inline-link:hover > span,
+.start-here-primer .start-inline-link:focus-visible > span {
+  transform: translateX(.32rem);
+}
+
+.start-here-primer .start-scroll-link:hover > span,
+.start-here-primer .start-scroll-link:focus-visible > span {
+  transform: translateY(.2rem);
+}
+
+.start-here-primer .start-inline-link:focus-visible,
+.start-here-primer .start-scroll-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: .35rem;
+  border-radius: .15rem;
+}
+
+/* Era bands are links too. Give the image, label and call-to-action a coordinated
+   response so the entire band feels clickable rather than only its final line. */
+.start-here-primer .start-map-mark {
+  transition: scale .35s cubic-bezier(.2, .72, .22, 1), opacity .25s ease, filter .25s ease;
+}
+
+.start-here-primer .start-era-band__action {
+  display: inline-block;
+  width: fit-content;
+  transition: transform .2s ease, letter-spacing .2s ease, color .2s ease;
+}
+
+.start-here-primer .start-era-band:hover .start-map-mark,
+.start-here-primer .start-era-band:focus-visible .start-map-mark {
+  scale: 1.025;
+  opacity: .94;
+}
+
+.start-here-primer .start-era-band:hover .start-era-band__action,
+.start-here-primer .start-era-band:focus-visible .start-era-band__action {
+  transform: translateX(.35rem);
+  letter-spacing: .19em;
+}
+
+.start-here-primer .start-era-band:focus-visible {
+  outline: 2px solid var(--era-accent);
+  outline-offset: -2px;
+}
+
+/* Route cards should feel like doors rather than static result boxes. */
+.start-here-primer .start-route-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color .18s ease,
+    translate .18s ease,
+    box-shadow .18s ease,
+    background-color .18s ease;
+}
+
+.start-here-primer .start-route-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--start-accent), color-mix(in oklch, var(--start-accent) 28%, transparent));
+  transform: scaleX(.16);
+  transform-origin: left center;
+  transition: transform .22s ease;
+}
+
+.start-here-primer .start-route-card em {
+  display: inline-block;
+  width: fit-content;
+  transition: transform .2s ease, letter-spacing .2s ease;
+}
+
+.start-here-primer .start-route-card:hover,
+.start-here-primer .start-route-card:focus-visible {
+  translate: 0 -.24rem;
+  border-color: var(--start-accent);
+  box-shadow: 0 .8rem 2rem color-mix(in oklch, var(--codex-shadow-color) 18%, transparent);
+}
+
+.start-here-primer .start-route-card:hover::before,
+.start-here-primer .start-route-card:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.start-here-primer .start-route-card:hover em,
+.start-here-primer .start-route-card:focus-visible em {
+  transform: translateX(.32rem);
+  letter-spacing: .13em;
+}
+
+.start-here-primer .start-route-card:focus-visible {
+  outline: 2px solid var(--start-accent);
+  outline-offset: 3px;
+}
+
+/* The small fallback links at the end get the same sweep language, scaled down. */
+.start-here-primer .start-route__fallback a {
+  position: relative;
+  text-decoration: none !important;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: left 100%;
+  background-size: 24% 1px;
+  transition: background-size .2s ease, color .2s ease, transform .2s ease;
+}
+
+.start-here-primer .start-route__fallback a:hover,
+.start-here-primer .start-route__fallback a:focus-visible {
+  background-size: 100% 2px;
+  transform: translateY(-.05rem);
+}
+
+.start-here-primer .start-route__fallback a:focus-visible {
+  outline: 2px solid var(--start-accent);
+  outline-offset: .25rem;
+}
+
+@media (max-width: 48rem) {
+  .start-here-primer {
+    --start-rail-bulge: 1.65rem;
+  }
+
+  .start-here-primer > section.start-breadcrumb::before {
+    width: calc(var(--start-rail-bulge) + .24rem);
+  }
+
+  .start-here-primer > section.start-breadcrumb .start-breadcrumb__inner {
+    padding-inline-start: max(
+      var(--start-gutter),
+      calc(var(--start-rail-x) + var(--start-rail-bulge) + 1rem)
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-here-primer > section.start-breadcrumb::before,
+  .start-here-primer > section.start-breadcrumb::after {
+    animation: none !important;
+  }
+
+  .start-here-primer > section.start-breadcrumb::before {
+    transform: none !important;
+    scale: 1 !important;
+    transition: none !important;
+  }
+
+  .start-here-primer .start-inline-link,
+  .start-here-primer .start-scroll-link,
+  .start-here-primer .start-inline-link::after,
+  .start-here-primer .start-scroll-link::after,
+  .start-here-primer .start-inline-link > span,
+  .start-here-primer .start-scroll-link > span,
+  .start-here-primer .start-map-mark,
+  .start-here-primer .start-era-band__action,
+  .start-here-primer .start-route-card,
+  .start-here-primer .start-route-card::before,
+  .start-here-primer .start-route-card em,
+  .start-here-primer .start-route__fallback a {
+    transition: none !important;
+  }
+}

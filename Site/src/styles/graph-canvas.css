@@ -1,0 +1,78 @@
+/*
+ * The World Graph is a visual workspace rather than a reading-width article.
+ * Let its graph panel use the shell's available viewport width while preserving
+ * the desktop sidebar-aware gutters. Scope this to the graph page only.
+ */
+.main-frame:has(.world-graph) main > .content-panel:has(.world-graph) {
+  padding: 0 !important;
+}
+
+.main-frame:has(.world-graph) main > .content-panel:has(.world-graph) > .sl-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+
+@media (min-width: 72rem) {
+  .main-frame:has(.world-graph) > .codex-two-column-content {
+    max-inline-size: none !important;
+  }
+
+  .main-frame:has(.world-graph)
+    > .codex-two-column-content
+    > .codex-main-pane
+    > main
+    > .content-panel:has(.world-graph) {
+    width: min(94vw, 100%);
+    max-width: none;
+  }
+}
+
+/*
+ * starlight-site-graph defines several canvas colours directly on its component.
+ * Apply the RGB-safe adapter at the same scope after the plugin stylesheet so
+ * Pixi/chroma receives concrete, parseable values rather than OKLCH tokens.
+ */
+.slsg-graph-component,
+graph-component {
+  --slsg-color-accent: rgb(var(--vc-graph-accent-rgb));
+  --slsg-color-muted: rgb(var(--vc-graph-node-muted-rgb));
+  --slsg-text-color: rgb(var(--vc-graph-text-rgb));
+  --slsg-text-color-accent: rgb(var(--vc-graph-accent-strong-rgb));
+
+  --slsg-graph-minimized-bg-color: rgb(var(--vc-graph-bg-rgb));
+  --slsg-graph-maximized-bg-color: rgb(var(--vc-graph-bg-max-rgb));
+  --slsg-graph-outline-color: rgb(var(--vc-graph-outline-rgb));
+  --slsg-graph-action-color: rgb(var(--vc-graph-text-muted-rgb));
+  --slsg-graph-action-color-hover: rgb(var(--vc-graph-text-rgb));
+  --slsg-graph-action-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
+  --slsg-context-menu-border-color: rgb(var(--vc-graph-outline-rgb));
+  --slsg-context-menu-bg-color: rgb(var(--vc-graph-bg-max-rgb));
+  --slsg-context-menu-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
+
+  --slsg-node-color: rgb(var(--vc-graph-node-rgb));
+  --slsg-node-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
+  --slsg-node-color-adjacent: rgb(var(--vc-graph-accent-rgb));
+  --slsg-node-color-muted: rgb(var(--vc-graph-node-muted-rgb));
+  --slsg-node-color-current: rgb(var(--vc-graph-current-rgb));
+  --slsg-node-color-visited: rgb(var(--vc-graph-visited-rgb));
+  --slsg-node-color-unresolved: rgb(var(--vc-graph-unresolved-rgb));
+  --slsg-node-color-external: rgb(var(--vc-graph-external-rgb));
+  --slsg-node-color-tag: rgb(var(--vc-graph-tag-rgb));
+  --slsg-node-color-1: rgb(var(--vc-graph-group-1-rgb));
+  --slsg-node-color-2: rgb(var(--vc-graph-group-2-rgb));
+  --slsg-node-color-3: rgb(var(--vc-graph-group-3-rgb));
+  --slsg-node-color-4: rgb(var(--vc-graph-group-4-rgb));
+  --slsg-node-color-5: rgb(var(--vc-graph-group-5-rgb));
+  --slsg-node-color-6: rgb(var(--vc-graph-group-6-rgb));
+  --slsg-node-color-7: rgb(var(--vc-graph-group-7-rgb));
+  --slsg-node-color-8: rgb(var(--vc-graph-group-8-rgb));
+  --slsg-node-color-9: rgb(var(--vc-graph-group-9-rgb));
+
+  --slsg-link-color: rgb(var(--vc-graph-link-rgb));
+  --slsg-link-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
+  --slsg-link-color-muted: rgb(var(--vc-graph-link-muted-rgb));
+  --slsg-label-color: rgb(var(--vc-graph-text-rgb));
+  --slsg-label-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
+  --slsg-label-color-muted: rgb(var(--vc-graph-text-muted-rgb));
+}

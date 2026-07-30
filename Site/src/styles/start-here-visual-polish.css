@@ -1,0 +1,276 @@
+/* Start Here: final visual polish for the editorial primer.
+   Loaded after the core layout/light pass so these rules can stay page-specific. */
+
+/* A continuous reading rail runs down the editorial body. Each breadcrumb question
+   gets a node on the rail, echoing a timeline without pretending these are events. */
+.start-here-primer {
+  --start-rail-x: clamp(.7rem, 1.85vw, 2.25rem);
+  --start-rail-color: color-mix(in oklch, var(--start-accent) 44%, var(--start-line));
+}
+
+.start-here-primer > section:not(.start-hero) {
+  position: relative;
+}
+
+.start-here-primer > section:not(.start-hero)::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  left: var(--start-rail-x);
+  z-index: 8;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--start-rail-color) 62%, transparent),
+    var(--start-rail-color) 14%,
+    var(--start-rail-color) 86%,
+    color-mix(in oklch, var(--start-rail-color) 62%, transparent)
+  );
+  pointer-events: none;
+}
+
+.start-breadcrumb {
+  --start-node-accent: var(--start-accent);
+}
+
+.start-breadcrumb--quiet {
+  --start-node-accent: var(--vc-event-cultural);
+}
+
+.start-breadcrumb--last {
+  --start-node-accent: var(--vc-event-resonance);
+}
+
+.start-breadcrumb::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--start-rail-x);
+  z-index: 9;
+  width: 1rem;
+  aspect-ratio: 1;
+  border: 2px solid var(--start-node-accent);
+  border-radius: 50%;
+  background: var(--start-bg);
+  box-shadow:
+    0 0 0 .28rem color-mix(in oklch, var(--start-bg) 82%, transparent),
+    0 0 1.1rem color-mix(in oklch, var(--start-node-accent) 28%, transparent);
+  transform: translate(-50%, -50%);
+  transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+  pointer-events: none;
+}
+
+.start-breadcrumb:has(.start-choice:hover)::after,
+.start-breadcrumb:has(.start-choice:focus-visible)::after,
+.start-breadcrumb:has(.start-choice.is-selected)::after {
+  background: color-mix(in oklch, var(--start-node-accent) 22%, var(--start-bg));
+  box-shadow:
+    0 0 0 .32rem color-mix(in oklch, var(--start-bg) 86%, transparent),
+    0 0 1.45rem color-mix(in oklch, var(--start-node-accent) 44%, transparent);
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+/* The culture chapter is intentionally cinematic in both themes. Keep its copy
+   explicitly light so global/light-mode heading aliases can never turn it dark. */
+.start-here-primer .start-culture__copy h2,
+.start-here-primer .start-culture__copy .start-lead {
+  color: var(--home-text-fixed) !important;
+}
+
+.start-here-primer .start-culture__copy p:not(.start-eyebrow) {
+  color: color-mix(in oklch, var(--home-text-fixed) 82%, var(--home-text-soft-fixed)) !important;
+}
+
+.start-here-primer .start-culture__copy .start-eyebrow {
+  color: var(--era-e2-base) !important;
+}
+
+/* Light mode should retain the same chapter identities as dark mode rather than
+   collapsing into one beige sheet. The tints stay deliberately low-chroma so the
+   page still feels like the Codex, not a dashboard. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-here-primer {
+  --start-rail-color: color-mix(in oklch, var(--codex-palette-deep) 58%, transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-timeline {
+  background:
+    radial-gradient(circle at 8% 12%, color-mix(in oklch, var(--era-e1-base) 12%, transparent), transparent 27rem),
+    radial-gradient(circle at 92% 30%, color-mix(in oklch, var(--era-e3-base) 11%, transparent), transparent 30rem),
+    radial-gradient(circle at 20% 78%, color-mix(in oklch, var(--era-e2-base) 10%, transparent), transparent 28rem),
+    radial-gradient(circle at 86% 92%, color-mix(in oklch, var(--era-e4-base) 11%, transparent), transparent 28rem),
+    var(--start-bg);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel {
+  background-color: color-mix(in oklch, var(--era-e1-base) 9%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--smog {
+  background-color: color-mix(in oklch, var(--era-e2-base) 10%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--nearsight {
+  background-color: color-mix(in oklch, var(--era-e3-base) 11%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy {
+  background-color: color-mix(in oklch, var(--era-e4-base) 10%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__map {
+  background:
+    linear-gradient(90deg, color-mix(in oklch, var(--era-map-source) 22%, transparent), transparent 72%),
+    linear-gradient(90deg, color-mix(in oklch, var(--era-map-source) 18%, var(--start-bg)), transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
+  background:
+    linear-gradient(90deg, color-mix(in oklch, var(--era-map-source) 13%, var(--start-bg)), color-mix(in oklch, var(--start-bg) 88%, transparent) 46%, var(--start-bg));
+}
+
+@media (min-width: 62.01rem) {
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:nth-child(even) .start-era-band__map {
+    background:
+      linear-gradient(270deg, color-mix(in oklch, var(--era-map-source) 22%, transparent), transparent 72%),
+      linear-gradient(270deg, color-mix(in oklch, var(--era-map-source) 18%, var(--start-bg)), transparent);
+  }
+
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:nth-child(even) .start-era-band__copy {
+    background:
+      linear-gradient(270deg, color-mix(in oklch, var(--era-map-source) 13%, var(--start-bg)), color-mix(in oklch, var(--start-bg) 88%, transparent) 46%, var(--start-bg));
+  }
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-place {
+  --start-bg: color-mix(in oklch, var(--vc-event-environmental) 12%, var(--codex-page-bg));
+  background: var(--start-bg);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-wyrd {
+  --start-bg: color-mix(in oklch, var(--vc-event-resonance) 10%, var(--codex-page-bg));
+  background:
+    radial-gradient(circle at 62% 44%, color-mix(in oklch, var(--vc-event-resonance) 26%, transparent), transparent 30rem),
+    var(--start-bg);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-story-scale {
+  background:
+    linear-gradient(120deg, color-mix(in oklch, var(--vc-event-political) 12%, var(--codex-page-bg)), color-mix(in oklch, var(--vc-event-exploration) 9%, var(--codex-page-bg)));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route {
+  background:
+    radial-gradient(circle at 82% 18%, color-mix(in oklch, var(--vc-event-exploration) 12%, transparent), transparent 24rem),
+    radial-gradient(circle at 14% 86%, color-mix(in oklch, var(--vc-event-resonance) 9%, transparent), transparent 26rem);
+}
+
+/* Give the three reading pauses their own colour character. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb:not(.start-breadcrumb--quiet):not(.start-breadcrumb--last) {
+  background:
+    linear-gradient(110deg,
+      color-mix(in oklch, var(--era-e1-base) 10%, var(--codex-page-bg)),
+      color-mix(in oklch, var(--era-e2-base) 9%, var(--codex-page-bg)) 34%,
+      color-mix(in oklch, var(--era-e3-base) 9%, var(--codex-page-bg)) 66%,
+      color-mix(in oklch, var(--era-e4-base) 10%, var(--codex-page-bg)));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb--quiet {
+  background:
+    linear-gradient(110deg,
+      color-mix(in oklch, var(--vc-event-cultural) 12%, var(--codex-page-bg)),
+      color-mix(in oklch, var(--vc-event-environmental) 10%, var(--codex-page-bg)));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb--last {
+  background:
+    linear-gradient(110deg,
+      color-mix(in oklch, var(--vc-event-resonance) 13%, var(--codex-page-bg)),
+      color-mix(in oklch, var(--vc-event-exploration) 10%, var(--codex-page-bg)));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb::after {
+  background: var(--codex-palette-light);
+  box-shadow:
+    0 0 0 .3rem color-mix(in oklch, var(--codex-palette-light) 90%, transparent),
+    0 0 1.15rem color-mix(in oklch, var(--start-node-accent) 36%, transparent);
+}
+
+/* World and thread choices get the same readable colour-coding already used by
+   the era choices. The accent lives in border, heading and a shallow surface wash. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='world'] .start-choice,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='thread'] .start-choice {
+  border-color: color-mix(in oklch, var(--choice-accent) 58%, var(--codex-border));
+  background-image:
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 13%, var(--codex-palette-light)), color-mix(in oklch, var(--codex-palette-light) 72%, var(--start-bg)) 62%);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='world'] .start-choice strong,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='thread'] .start-choice strong {
+  color: color-mix(in oklch, var(--choice-accent) 38%, var(--codex-palette-ink));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='world'] .start-choice.is-selected,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='thread'] .start-choice.is-selected {
+  border-color: color-mix(in oklch, var(--choice-accent) 58%, var(--codex-palette-ink));
+  background-color: color-mix(in oklch, var(--choice-accent) 17%, var(--codex-palette-light)) !important;
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='world'] [data-value='culture'] {
+  --choice-accent: var(--vc-event-cultural);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='world'] [data-value='danger'] {
+  --choice-accent: var(--vc-event-disaster);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='world'] [data-value='inheritance'] {
+  --choice-accent: var(--vc-event-political);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='thread'] [data-value='resonance'] {
+  --choice-accent: var(--vc-event-resonance);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='thread'] [data-value='incursion'] {
+  --choice-accent: var(--vc-event-myrkild);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='thread'] [data-value='world'] {
+  --choice-accent: var(--vc-event-environmental);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='thread'] [data-value='history'] {
+  --choice-accent: var(--vc-event-political);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card:nth-child(1) {
+  border-top-color: color-mix(in oklch, var(--era-e1-base) 64%, var(--codex-border));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card:nth-child(2) {
+  border-top-color: color-mix(in oklch, var(--era-e3-base) 64%, var(--codex-border));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card:nth-child(3) {
+  border-top-color: color-mix(in oklch, var(--era-e4-base) 64%, var(--codex-border));
+}
+
+@media (max-width: 48rem) {
+  .start-here-primer {
+    --start-rail-x: .58rem;
+  }
+
+  .start-here-primer > section:not(.start-hero)::before {
+    width: 1px;
+  }
+
+  .start-breadcrumb::after {
+    width: .78rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-breadcrumb::after {
+    transition: none;
+  }
+}

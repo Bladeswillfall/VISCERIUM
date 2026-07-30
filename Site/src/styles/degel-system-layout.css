@@ -1,0 +1,25 @@
+@import './degel-system-art.css';
+
+@layer starlight.core {
+  .main-frame > .codex-two-column-content.codex-degel-system-page {
+    inline-size: 100%;
+    max-inline-size: none !important;
+    margin-inline: 0;
+  }
+
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane,
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane > main,
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane > main > .content-panel,
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane > main > .content-panel > .sl-container {
+    box-sizing: border-box;
+    inline-size: 100% !important;
+    width: 100% !important;
+    max-inline-size: none !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+  }
+
+  .main-frame > .codex-two-column-content.codex-degel-system-page > .codex-main-pane {
+    display: block;
+  }
+}

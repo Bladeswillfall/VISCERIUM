@@ -1,0 +1,7 @@
+/*
+ * Auto-mode Giscus theme.
+ * Follow the OS preference while keeping the same stock Giscus noborder family
+ * in both directions: noborder_light for light, noborder_dark for dark.
+ */
+@import url('https://giscus.app/themes/noborder_light.css') screen and (prefers-color-scheme: light);
+@import url('https://giscus.app/themes/noborder_dark.css') screen and (prefers-color-scheme: dark);

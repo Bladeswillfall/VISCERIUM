@@ -1,0 +1,34 @@
+/* Start Here typography and heading-ornament finishing pass.
+   Keep these overrides isolated to the editorial gateway. */
+
+/* The scale-of-story statement should support the heading rather than becoming a
+   second display headline. Keep it at the requested fixed 1.55rem size. */
+.main-frame:has(.start-here-primer) .start-story-scale__statement {
+  font-size: clamp(1.55rem, 1.1rem + 1.6vw, 1.55rem);
+}
+
+/* Codex headings inherit a trailing rule, but on this wide bespoke canvas that rule
+   can end up looking like a detached dash at the far edge. Make it an inline ornament
+   so it begins immediately after the final word of the title, and give it enough
+   length to read as a deliberate divider rather than punctuation. */
+.main-frame:has(.start-here-primer) .start-here-primer h2::after {
+  content: '' !important;
+  position: static !important;
+  inset: auto !important;
+  display: inline-block !important;
+  inline-size: clamp(4rem, 7vw, 7rem) !important;
+  block-size: 1px !important;
+  margin: 0 0 .15em clamp(.4rem, .65vw, .7rem) !important;
+  border: 0 !important;
+  background: currentColor !important;
+  opacity: .32;
+  transform: none !important;
+  vertical-align: middle;
+}
+
+@media (max-width: 48rem) {
+  .main-frame:has(.start-here-primer) .start-here-primer h2::after {
+    inline-size: clamp(2.75rem, 14vw, 4.5rem) !important;
+    margin-inline-start: .4rem !important;
+  }
+}

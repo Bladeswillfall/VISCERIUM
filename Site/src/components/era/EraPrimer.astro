@@ -1,0 +1,162 @@
+---
+import '../../styles/era-primer.css';
+import '../../styles/era-primer-mobile.css';
+import '../../styles/era-primer-editorial.css';
+import { getEraPrimer } from '../../data/era-primers.mjs';
+
+const { eraId } = Astro.props;
+const primer = getEraPrimer(eraId);
+if (!primer) throw new Error(`No era primer data is registered for "${eraId}".`);
+
+const placeholderSigil = '/assets/images/era-placeholder-sigil.webp';
+const sectionId = (suffix) => `${primer.id}-primer-${suffix}`;
+const worldParagraphs = Array.isArray(primer.worldNow.body)
+  ? primer.worldNow.body
+  : [primer.worldNow.body];
+---
+
+<div class={`era-primer era-primer--${primer.id} not-content`} data-era-primer={primer.id}>
+  <section class="era-primer__hero" aria-labelledby={sectionId('hero-title')}>
+    <p class="era-primer__eyebrow">{primer.number} · {primer.title}</p>
+    <h2 id={sectionId('hero-title')}>{primer.tagline}</h2>
+    <p class="era-primer__lead">{primer.lead}</p>
+
+    <div class="era-primer__traits" aria-label={`${primer.title} at a glance`}>
+      {primer.traits.map((trait) => (
+        <span
+          class="era-primer__trait era-primer__tip"
+          tabindex="0"
+          data-tip={trait.tip}
+          aria-label={`${trait.label}: ${trait.tip}`}
+        >
+          {trait.label}
+        </span>
+      ))}
+    </div>
+
+    <nav class="era-primer__jump" aria-label={`${primer.title} primer sections`}>
+      <a href={`#${sectionId('world')}`}>World now</a>
+      <a href={`#${sectionId('essentials')}`}>Need to know</a>
+      <a href={`#${sectionId('powers')}`}>Powers</a>
+      <a href={`#${sectionId('knowledge')}`}>What people know</a>
+    </nav>
+  </section>
+
+  <section class="era-primer__world" id={sectionId('world')} aria-labelledby={sectionId('world-title')}>
+    <a class="era-primer__map" href={primer.map.href} aria-label={`${primer.map.action}: ${primer.map.label}`}>
+      <img src={primer.map.src} alt={primer.map.alt} loading="lazy" />
+      <span class="era-primer__map-vignette" aria-hidden="true"></span>
+      <span class="era-primer__map-label">
+        <small>{primer.map.eyebrow}</small>
+        <strong>{primer.map.label}</strong>
+      </span>
+      <span class="era-primer__map-action">{primer.map.action} <span aria-hidden="true">→</span></span>
+    </a>
+
+    <div class="era-primer__world-copy">
+      <p class="era-primer__eyebrow">{primer.worldNow.eyebrow}</p>
+      <h3 id={sectionId('world-title')}>{primer.worldNow.title}</h3>
+      {worldParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+
+      <div class="era-primer__terms" aria-label={`${primer.title} quick terms`}>
+        {primer.terms.map((term) => term.href ? (
+          <a
+            class="era-primer__term era-primer__tip"
+            href={term.href}
+            data-tip={term.tip}
+            aria-label={`${term.label}: ${term.tip}`}
+          >
+            {term.label}
+          </a>
+        ) : (
+          <span
+            class="era-primer__term era-primer__tip"
+            tabindex="0"
+            data-tip={term.tip}
+            aria-label={`${term.label}: ${term.tip}`}
+          >
+            {term.label}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="era-primer__section" id={sectionId('essentials')} aria-labelledby={sectionId('essentials-title')}>
+    <header class="era-primer__section-head">
+      <p class="era-primer__eyebrow">Primer</p>
+      <h3 id={sectionId('essentials-title')}>What you need to know</h3>
+      <p>Enough context to enter the era without front-loading the encyclopaedia.</p>
+    </header>
+
+    <div class="era-primer__essentials">
+      {primer.essentials.map((item) => (
+        <article class="era-primer__essential">
+          <p class="era-primer__eyebrow">{item.eyebrow}</p>
+          <h4>{item.title}</h4>
+          <p>{item.body}</p>
+          {item.link && (
+            <a class="era-primer__inline-link" href={item.link.href}>
+              {item.link.label} <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="era-primer__section" id={sectionId('powers')} aria-labelledby={sectionId('powers-title')}>
+    <header class="era-primer__section-head era-primer__section-head--row">
+      <div>
+        <p class="era-primer__eyebrow">Powers of the age</p>
+        <h3 id={sectionId('powers-title')}>The banners that shape {primer.title}</h3>
+      </div>
+      <p>{primer.powersIntro ?? 'Major powers only. The full index remains below the timeline.'}</p>
+    </header>
+
+    <div class="era-primer__powers">
+      {primer.powers.map((power) => (
+        <article class="era-primer__power">
+          <img src={power.sigil ?? placeholderSigil} alt="" loading="lazy" aria-hidden="true" />
+          <div>
+            <h4>
+              {power.href
+                ? <a href={power.href}>{power.title}</a>
+                : power.title}
+            </h4>
+            <p>{power.summary}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="era-primer__knowledge" id={sectionId('knowledge')} aria-labelledby={sectionId('knowledge-title')}>
+    <div class="era-primer__knowledge-intro">
+      <p class="era-primer__eyebrow">What people know</p>
+      <h3 id={sectionId('knowledge-title')}>The world is understood from inside the century.</h3>
+      <p>{primer.title} does not inherit the explanations of later eras. A warning can be useful even when the story built around it is wrong.</p>
+    </div>
+
+    <dl class="era-primer__knowledge-grid">
+      {primer.knowledge.map((item) => (
+        <div>
+          <dt>{item.label}</dt>
+          <dd>{item.body}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="era-primer__record" aria-labelledby={sectionId('record-title')}>
+    <div>
+      <p class="era-primer__eyebrow">{primer.record.eyebrow}</p>
+      <h3 id={sectionId('record-title')}>{primer.record.title}</h3>
+      <p>{primer.record.body}</p>
+    </div>
+    <nav class="era-primer__record-links" aria-label={`${primer.title} timeline links`}>
+      <a href={primer.record.eventsHref}>Browse {primer.title} events <span aria-hidden="true">→</span></a>
+      <a href={primer.record.nextEraHref}>{primer.record.nextEraLabel} <span aria-hidden="true">→</span></a>
+    </nav>
+  </section>
+</div>

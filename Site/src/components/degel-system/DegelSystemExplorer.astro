@@ -1,0 +1,263 @@
+---
+import { getCollection } from 'astro:content';
+import degelSystemMap from '../../data/degel-system-map.mjs';
+import '../../styles/degel-system.css';
+import '../../styles/degel-system-layout.css';
+
+const publishedEntries = await getCollection('docs', ({ data }) => (
+  data.status === 'published'
+  && data.type !== 'category'
+));
+
+const entriesBySlug = new Map(
+  publishedEntries
+    .filter(({ data }) => typeof data.slug === 'string')
+    .map((entry) => [entry.data.slug.replace(/^\/+|\/+$/g, ''), entry]),
+);
+
+const objects = degelSystemMap.objects
+  .map((placement) => {
+    const entry = entriesBySlug.get(placement.slug);
+    if (!entry) return null;
+    return {
+      ...placement,
+      title: entry.data.title,
+      description: entry.data.description ?? '',
+      href: `/${placement.slug}/`,
+    };
+  })
+  .filter(Boolean);
+
+function placementStyle(object) {
+  return [
+    `--object-x:${object.x}`,
+    `--object-y:${object.y}`,
+    `--object-size:${object.size}`,
+    `--mobile-object-x:${object.mobileX ?? object.x}`,
+    `--mobile-object-y:${object.mobileY ?? object.y}`,
+    `--mobile-object-size:${object.mobileSize ?? 7}`,
+  ].join(';');
+}
+
+function objectId(slug) {
+  return `degel-object-${slug.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`;
+}
+---
+
+<section class="degel-system-explorer" data-degel-system-explorer aria-labelledby="degel-system-explorer-heading">
+  <div class="degel-system-explorer__intro">
+    <p class="degel-system-explorer__kicker">Interactive system chart</p>
+    <h2 id="degel-system-explorer-heading">Navigate the Degel System</h2>
+    <p>
+      Select a celestial body to open its Codex article. The chart is a responsive prototype built on a
+      4096-pixel-wide design grid; current orbital positions and placeholder appearances are not to scale.
+    </p>
+  </div>
+
+  <div class="degel-system-explorer__toolbar">
+    <div class="degel-system-view-switch" role="group" aria-label="Choose how to browse the Degel System">
+      <button
+        type="button"
+        data-degel-view-button="map"
+        aria-controls="degel-system-map-view"
+        aria-pressed="true"
+      >
+        Visual map
+      </button>
+      <button
+        type="button"
+        data-degel-view-button="list"
+        aria-controls="degel-system-list-view"
+        aria-pressed="false"
+      >
+        Article list
+      </button>
+    </div>
+    <p class="degel-system-explorer__hint">
+      The article list contains the same destinations without the large visual chart.
+    </p>
+    <p class="codex-sr-only" aria-live="polite" data-degel-view-status></p>
+  </div>
+
+  <div class="degel-system-explorer__views">
+    <section
+      id="degel-system-map-view"
+      class="degel-system-map-view"
+      data-degel-view-panel="map"
+      aria-labelledby="degel-system-map-heading"
+      aria-describedby="degel-system-map-description"
+    >
+      <div class="degel-system-view-heading">
+        <h3 id="degel-system-map-heading">Visual system map</h3>
+        <p id="degel-system-map-description">
+          Objects are presented in reading order from the system's star outward. Labels and celestial bodies are both clickable.
+        </p>
+      </div>
+
+      <div
+        class="degel-system-map"
+        role="region"
+        aria-label="Interactive vertical map of the Degel System"
+        style={`--degel-map-ratio:${degelSystemMap.width}/${degelSystemMap.height}`}
+      >
+        <svg class="degel-system-map__guides" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          {degelSystemMap.guides.map((guide) => (
+            <path d={`M -12 ${guide.y} Q 50 ${guide.y + 4.5} 112 ${guide.y}`} vector-effect="non-scaling-stroke" />
+          ))}
+        </svg>
+
+        {degelSystemMap.guides.map((guide) => (
+          <span class="degel-system-map__guide-label" style={`--guide-y:${guide.y}`}>{guide.label}</span>
+        ))}
+
+        {objects.map((object) => {
+          const id = objectId(object.slug);
+          return (
+            <a
+              id={id}
+              class:list={[
+                'degel-system-object',
+                `degel-system-object--${object.visual}`,
+                `degel-system-object--label-${object.labelSide}`,
+              ]}
+              href={object.href}
+              style={placementStyle(object)}
+            >
+              <span class="degel-system-object__art" aria-hidden="true">
+                {object.image ? (
+                  <img src={object.image} alt="" loading="lazy" decoding="async" fetchpriority="low" />
+                ) : (
+                  <span class="degel-system-object__placeholder"></span>
+                )}
+              </span>
+
+              <span class="degel-system-object__annotation">
+                <svg class="degel-system-object__leader" viewBox="0 0 96 16" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d="M 2 8 H 74 L 94 2" vector-effect="non-scaling-stroke" />
+                </svg>
+                <span class="degel-system-object__label">
+                  <strong>{object.title}</strong>
+                  <span>{object.kind}</span>
+                </span>
+              </span>
+              {object.description && <span class="codex-sr-only">. {object.description}</span>}
+            </a>
+          );
+        })}
+
+        <p class="degel-system-map__scale-note" aria-hidden="true">
+          PROVISIONAL NAVIGATIONAL PLATE · NOT TO SCALE
+        </p>
+      </div>
+    </section>
+
+    <section
+      id="degel-system-list-view"
+      class="degel-system-list-view"
+      data-degel-view-panel="list"
+      aria-labelledby="degel-system-list-heading"
+    >
+      <div class="degel-system-view-heading">
+        <h3 id="degel-system-list-heading">Degel System articles</h3>
+        <p>Browse the same mapped destinations as a lightweight semantic list.</p>
+      </div>
+
+      <ul class="degel-system-article-list">
+        {objects.map((object) => (
+          <li>
+            <a href={object.href}>
+              <span class="degel-system-article-list__heading">
+                <strong>{object.title}</strong>
+                <span>{object.kind}</span>
+              </span>
+              {object.description && <span class="degel-system-article-list__description">{object.description}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  <noscript>
+    <p class="degel-system-explorer__noscript">
+      JavaScript is unavailable, so both the visual map and article list are shown.
+    </p>
+  </noscript>
+
+  <script is:inline>
+    (() => {
+      const root = document.currentScript?.closest('[data-degel-system-explorer]');
+      if (!root) return;
+
+      const buttons = [...root.querySelectorAll('[data-degel-view-button]')];
+      const panels = [...root.querySelectorAll('[data-degel-view-panel]')];
+      const status = root.querySelector('[data-degel-view-status]');
+      const allowedViews = new Set(['map', 'list']);
+      const requestedView = new URL(window.location.href).searchParams.get('view');
+      let storedView;
+
+      try {
+        storedView = window.localStorage.getItem('viscerium-degel-system-view');
+      } catch {
+        storedView = undefined;
+      }
+
+      const reducedData = window.matchMedia?.('(prefers-reduced-data: reduce)').matches === true;
+      const initialView = allowedViews.has(requestedView)
+        ? requestedView
+        : allowedViews.has(storedView)
+          ? storedView
+          : reducedData
+            ? 'list'
+            : 'map';
+
+      function setView(view, { announce = false, persist = false, updateUrl = false } = {}) {
+        if (!allowedViews.has(view)) return;
+
+        for (const panel of panels) {
+          panel.hidden = panel.dataset.degelViewPanel !== view;
+        }
+
+        for (const button of buttons) {
+          button.setAttribute('aria-pressed', String(button.dataset.degelViewButton === view));
+        }
+
+        root.dataset.degelCurrentView = view;
+
+        if (persist) {
+          try {
+            window.localStorage.setItem('viscerium-degel-system-view', view);
+          } catch {
+            // Browsing preferences remain optional when storage is unavailable.
+          }
+        }
+
+        if (updateUrl) {
+          const url = new URL(window.location.href);
+          if (view === 'map') url.searchParams.delete('view');
+          else url.searchParams.set('view', view);
+          window.history.replaceState({}, '', url);
+        }
+
+        if (announce && status) {
+          status.textContent = view === 'map'
+            ? 'Visual Degel System map shown.'
+            : 'Degel System article list shown.';
+        }
+      }
+
+      root.dataset.degelEnhanced = 'true';
+      setView(initialView);
+
+      for (const button of buttons) {
+        button.addEventListener('click', () => {
+          setView(button.dataset.degelViewButton, {
+            announce: true,
+            persist: true,
+            updateUrl: true,
+          });
+        });
+      }
+    })();
+  </script>
+</section>

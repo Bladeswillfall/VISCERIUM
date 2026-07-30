@@ -1,0 +1,27 @@
+/*
+ * Scrollbars
+ * Uses slim, theme-aware scrollbars throughout Obsidian.
+ */
+
+:root {
+  --scrollbar-size: 7px;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-faint) 58%, transparent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--text-muted) 78%, transparent);
+}

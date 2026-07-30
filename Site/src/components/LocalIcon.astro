@@ -1,0 +1,9 @@
+---
+import CodexIcon from './CodexIcon.astro';
+
+const { name } = Astro.props;
+const rawName = typeof name === 'string' ? name.trim() : '';
+const spec = rawName.replace(/^icon:/i, '').trim();
+---
+
+<CodexIcon spec={spec} />

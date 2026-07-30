@@ -1,0 +1,9 @@
+{
+  "id": "viscerium-timelines",
+  "name": "VISCERIUM Timelines",
+  "version": "1.2.0",
+  "minAppVersion": "1.5.0",
+  "description": "Renders canonical VISCERIUM timelines and private StoryLine projects through the shared calendar and Chronos renderer.",
+  "author": "Bladeswillfall",
+  "isDesktopOnly": false
+}

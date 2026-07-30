@@ -1,0 +1,22 @@
+/*
+ * Hover previews
+ * Gives page-preview popovers a readable size and calmer frame.
+ */
+
+.popover.hover-popover {
+  width: min(42rem, calc(100vw - 2rem));
+  max-height: min(72vh, 44rem);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-s);
+  overflow: hidden;
+}
+
+.popover.hover-popover .markdown-preview-view {
+  padding: 1.1rem 1.25rem;
+}
+
+.popover.hover-popover .markdown-preview-sizer {
+  max-width: 100%;
+  margin-inline: auto;
+}

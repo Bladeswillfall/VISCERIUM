@@ -1,0 +1,22 @@
+/*
+ * Horizontal rules
+ * Uses a subtle centered divider instead of a heavy full-width line.
+ */
+
+.markdown-rendered hr {
+  height: 1px;
+  margin: 2.25em auto;
+  border: 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--background-modifier-border) 18%,
+    var(--text-faint) 50%,
+    var(--background-modifier-border) 82%,
+    transparent
+  );
+}
+
+.cm-s-obsidian .HyperMD-hr {
+  color: var(--text-faint);
+}

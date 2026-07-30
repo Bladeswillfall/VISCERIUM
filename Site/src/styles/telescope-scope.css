@@ -1,0 +1,18 @@
+@layer ion {
+  .telescope__scope {
+    margin: -.1rem 1rem .55rem;
+    color: var(--sl-color-gray-3);
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+
+  :root[data-era-context='CITADEL'] #telescope-dialog .telescope__scope,
+  :root[data-era-context='SMOG'] #telescope-dialog .telescope__scope,
+  :root[data-era-context='NEARSIGHT'] #telescope-dialog .telescope__scope,
+  :root[data-era-context='ENTROPY'] #telescope-dialog .telescope__scope {
+    color: var(--era-link, var(--sl-color-accent-high));
+  }
+}

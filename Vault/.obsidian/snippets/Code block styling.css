@@ -1,0 +1,30 @@
+/*
+ * Code block styling
+ * Code remains distinct, but static code surfaces are square.
+ */
+
+.markdown-rendered code,
+.cm-s-obsidian span.cm-inline-code {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 0;
+  padding: 0.08em 0.28em;
+  background: var(--background-secondary);
+}
+
+.markdown-rendered pre {
+  margin-block: 1.05em;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 0;
+  background: var(--background-secondary);
+  box-shadow: none;
+}
+
+.markdown-rendered pre code {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.markdown-rendered pre::-webkit-scrollbar {
+  height: 6px;
+}

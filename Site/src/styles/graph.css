@@ -1,0 +1,304 @@
+@layer starlight.core {
+  .right-sidebar,
+  .right-sidebar-panel,
+  .codex-page-sidebar {
+    min-width: 0;
+  }
+
+  .right-sidebar-panel .sl-container,
+  .right-sidebar .sl-container {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .codex-sidebar-card,
+  .codex-sidebar-section {
+    border: 1px solid var(--codex-border);
+    border-radius: 0 !important;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklch, var(--codex-fixed-light) 3.5%, transparent),
+        color-mix(in oklch, var(--codex-fixed-light) 1.2%, transparent)
+      ),
+      var(--codex-bg-soft);
+    box-shadow: 0 .65rem 1.4rem color-mix(in oklch, var(--codex-shadow-color) 16%, transparent);
+  }
+
+  .codex-sidebar-section {
+    padding: .95rem;
+  }
+
+  .codex-sidebar-card {
+    overflow: hidden;
+  }
+
+  .codex-sidebar-artwork {
+    border-block-end: 1px solid var(--codex-border);
+  }
+
+  .codex-sidebar-image-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .codex-sidebar-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .codex-sidebar-image-link .codex-sidebar-image {
+    transition: filter .2s ease, transform .2s ease;
+  }
+
+  .codex-sidebar-image-link:hover .codex-sidebar-image,
+  .codex-sidebar-image-link:focus-visible .codex-sidebar-image {
+    filter: brightness(1.08);
+    transform: scale(1.01);
+  }
+
+  .codex-sidebar-art-caption {
+    padding: .65rem .85rem .75rem;
+    border-block-start: 1px solid var(--codex-border);
+    background: var(--codex-surface);
+  }
+
+  .codex-sidebar-art-title {
+    margin: 0;
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-sm);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .codex-sidebar-art-artist {
+    margin: .2rem 0 0;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+    line-height: 1.35;
+  }
+
+  .codex-sidebar-body {
+    padding: 1rem;
+  }
+
+  .codex-sidebar-body > :first-child,
+  .codex-sidebar-section > :first-child {
+    margin-top: 0;
+  }
+
+  .codex-sidebar-body > :last-child,
+  .codex-sidebar-section > :last-child {
+    margin-bottom: 0;
+  }
+
+  .codex-sidebar-kicker,
+  .codex-sidebar-section > h2 {
+    color: var(--sl-color-accent-high);
+    font-family: var(--vc-font-ui);
+    font-size: var(--sl-text-xs);
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .codex-sidebar-kicker {
+    margin: 0 0 .35rem;
+  }
+
+  .codex-sidebar-card h2,
+  .codex-sidebar-section h2 {
+    margin: 0 0 .65rem;
+    color: var(--sl-color-white);
+  }
+
+  .codex-sidebar-card h2 {
+    font-family: var(--vc-font-display);
+    font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+    line-height: 1.05;
+  }
+
+  .codex-sidebar-description {
+    margin: 0 0 .9rem;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    line-height: 1.55;
+  }
+
+  .codex-sidebar-meta {
+    display: grid;
+    gap: .55rem;
+    margin: 0;
+  }
+
+  .codex-sidebar-meta div {
+    display: grid;
+    gap: .15rem;
+    padding-block-start: .55rem;
+    border-block-start: 1px solid color-mix(in oklch, var(--codex-accent) 14%, transparent);
+  }
+
+  .codex-sidebar-meta div:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .codex-sidebar-meta dt {
+    color: var(--sl-color-gray-3);
+    font-family: var(--vc-font-ui);
+    font-size: var(--sl-text-xs);
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+
+  .codex-sidebar-meta dd {
+    margin: 0;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+  }
+
+  .right-sidebar nav,
+  starlight-toc nav {
+    padding: .8rem;
+  }
+
+  .right-sidebar nav h2,
+  starlight-toc nav h2 {
+    color: var(--sl-color-accent-high);
+    font-family: var(--vc-font-ui);
+    font-size: var(--sl-text-xs);
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .right-sidebar nav a,
+  starlight-toc nav a {
+    border-radius: 0 !important;
+    color: var(--sl-color-gray-3);
+    text-decoration: none;
+  }
+
+  .right-sidebar nav a:hover,
+  starlight-toc nav a:hover,
+  .right-sidebar nav a[aria-current='true'],
+  starlight-toc nav a[aria-current='true'] {
+    background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
+    color: var(--sl-color-white);
+  }
+
+  .world-graph .slsg-graph-component {
+    --slsg-graph-width: 100%;
+    --slsg-graph-height: min(70vh, 48rem);
+  }
+}
+
+/*
+ * Canvas graph colours must resolve to RGB. The progressive colour transform
+ * intentionally cannot rewrite rgb(var(...)), which prevents Pixi/chroma from
+ * receiving OKLCH or color-mix tokens and silently falling back to black.
+ *
+ * Keep these rules unlayered: unlayered author styles outrank the plugin's
+ * `sitegraph` layer even though graph.css is registered before the plugin CSS.
+ */
+:root,
+:root[data-theme='dark'] {
+  --vc-graph-bg-rgb: 16, 16, 16;
+  --vc-graph-bg-max-rgb: 25, 24, 22;
+  --vc-graph-outline-rgb: 72, 65, 55;
+  --vc-graph-text-rgb: 214, 207, 190;
+  --vc-graph-text-muted-rgb: 152, 145, 132;
+  --vc-graph-accent-rgb: 240, 195, 106;
+  --vc-graph-accent-strong-rgb: 255, 209, 102;
+  --vc-graph-node-rgb: 208, 201, 185;
+  --vc-graph-node-muted-rgb: 66, 63, 58;
+  --vc-graph-current-rgb: 126, 226, 168;
+  --vc-graph-visited-rgb: 240, 195, 106;
+  --vc-graph-unresolved-rgb: 255, 138, 154;
+  --vc-graph-external-rgb: 128, 216, 255;
+  --vc-graph-tag-rgb: 216, 167, 255;
+  --vc-graph-link-rgb: 105, 99, 88;
+  --vc-graph-link-muted-rgb: 52, 50, 46;
+  --vc-graph-group-1-rgb: 224, 90, 90;
+  --vc-graph-group-2-rgb: 216, 168, 75;
+  --vc-graph-group-3-rgb: 209, 196, 92;
+  --vc-graph-group-4-rgb: 102, 181, 140;
+  --vc-graph-group-5-rgb: 79, 169, 184;
+  --vc-graph-group-6-rgb: 89, 121, 200;
+  --vc-graph-group-7-rgb: 108, 109, 187;
+  --vc-graph-group-8-rgb: 138, 101, 214;
+  --vc-graph-group-9-rgb: 187, 95, 168;
+
+  --slsg-color-accent: rgb(var(--vc-graph-accent-rgb));
+  --slsg-color-muted: rgb(var(--vc-graph-node-muted-rgb));
+  --slsg-text-color: rgb(var(--vc-graph-text-rgb));
+  --slsg-text-color-accent: rgb(var(--vc-graph-accent-strong-rgb));
+
+  --slsg-graph-minimized-bg-color: rgb(var(--vc-graph-bg-rgb));
+  --slsg-graph-maximized-bg-color: rgb(var(--vc-graph-bg-max-rgb));
+  --slsg-graph-outline-color: rgb(var(--vc-graph-outline-rgb));
+  --slsg-graph-action-color: rgb(var(--vc-graph-text-muted-rgb));
+  --slsg-graph-action-color-hover: rgb(var(--vc-graph-text-rgb));
+  --slsg-graph-action-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
+  --slsg-context-menu-border-color: rgb(var(--vc-graph-outline-rgb));
+  --slsg-context-menu-bg-color: rgb(var(--vc-graph-bg-max-rgb));
+  --slsg-context-menu-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
+
+  --slsg-node-color: rgb(var(--vc-graph-node-rgb));
+  --slsg-node-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
+  --slsg-node-color-adjacent: rgb(var(--vc-graph-accent-rgb));
+  --slsg-node-color-muted: rgb(var(--vc-graph-node-muted-rgb));
+  --slsg-node-color-current: rgb(var(--vc-graph-current-rgb));
+  --slsg-node-color-visited: rgb(var(--vc-graph-visited-rgb));
+  --slsg-node-color-unresolved: rgb(var(--vc-graph-unresolved-rgb));
+  --slsg-node-color-external: rgb(var(--vc-graph-external-rgb));
+  --slsg-node-color-tag: rgb(var(--vc-graph-tag-rgb));
+  --slsg-node-color-1: rgb(var(--vc-graph-group-1-rgb));
+  --slsg-node-color-2: rgb(var(--vc-graph-group-2-rgb));
+  --slsg-node-color-3: rgb(var(--vc-graph-group-3-rgb));
+  --slsg-node-color-4: rgb(var(--vc-graph-group-4-rgb));
+  --slsg-node-color-5: rgb(var(--vc-graph-group-5-rgb));
+  --slsg-node-color-6: rgb(var(--vc-graph-group-6-rgb));
+  --slsg-node-color-7: rgb(var(--vc-graph-group-7-rgb));
+  --slsg-node-color-8: rgb(var(--vc-graph-group-8-rgb));
+  --slsg-node-color-9: rgb(var(--vc-graph-group-9-rgb));
+
+  --slsg-link-color: rgb(var(--vc-graph-link-rgb));
+  --slsg-link-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
+  --slsg-link-color-muted: rgb(var(--vc-graph-link-muted-rgb));
+  --slsg-label-color: rgb(var(--vc-graph-text-rgb));
+  --slsg-label-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
+  --slsg-label-color-muted: rgb(var(--vc-graph-text-muted-rgb));
+}
+
+:root[data-theme='light'] {
+  --vc-graph-bg-rgb: 242, 237, 227;
+  --vc-graph-bg-max-rgb: 230, 223, 208;
+  --vc-graph-outline-rgb: 136, 128, 112;
+  --vc-graph-text-rgb: 28, 26, 22;
+  --vc-graph-text-muted-rgb: 86, 80, 70;
+  --vc-graph-accent-rgb: 72, 65, 55;
+  --vc-graph-accent-strong-rgb: 16, 16, 16;
+  --vc-graph-node-rgb: 79, 74, 66;
+  --vc-graph-node-muted-rgb: 196, 187, 170;
+  --vc-graph-current-rgb: 45, 125, 74;
+  --vc-graph-visited-rgb: 154, 107, 23;
+  --vc-graph-unresolved-rgb: 169, 45, 68;
+  --vc-graph-external-rgb: 23, 100, 122;
+  --vc-graph-tag-rgb: 105, 58, 145;
+  --vc-graph-link-rgb: 139, 130, 116;
+  --vc-graph-link-muted-rgb: 202, 194, 179;
+  --vc-graph-group-1-rgb: 177, 55, 55;
+  --vc-graph-group-2-rgb: 166, 110, 31;
+  --vc-graph-group-3-rgb: 142, 128, 33;
+  --vc-graph-group-4-rgb: 48, 126, 82;
+  --vc-graph-group-5-rgb: 30, 120, 137;
+  --vc-graph-group-6-rgb: 54, 84, 157;
+  --vc-graph-group-7-rgb: 78, 72, 151;
+  --vc-graph-group-8-rgb: 105, 58, 173;
+  --vc-graph-group-9-rgb: 146, 55, 128;
+}

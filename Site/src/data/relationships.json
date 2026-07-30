@@ -1,0 +1,154 @@
+{
+  "nodes": [
+    {
+      "id": "demo/demo-concord",
+      "title": "Demo Concord",
+      "description": "NON-CANON faction used to exercise reciprocal diplomacy and directed command relationships.",
+      "type": "faction",
+      "era": "CITADEL",
+      "icon": "faction",
+      "page": "/demo/demo-concord/"
+    },
+    {
+      "id": "demo/demo-directorate",
+      "title": "Demo Directorate",
+      "description": "NON-CANON faction used as the opposing node in the relationship explorer demo.",
+      "type": "faction",
+      "era": "CITADEL",
+      "icon": "faction",
+      "page": "/demo/demo-directorate/"
+    },
+    {
+      "id": "demo/demo-frontier-fort",
+      "title": "Demo Frontier Fort",
+      "description": "NON-CANON military marker used to verify Atlas marker taxonomy and layer filtering.",
+      "type": "location",
+      "era": "CITADEL",
+      "icon": "location",
+      "page": "/demo/demo-frontier-fort/"
+    },
+    {
+      "id": "demo/demo-league",
+      "title": "Demo League",
+      "description": "NON-CANON faction used to verify reciprocal relationship deduplication and cross-link navigation.",
+      "type": "faction",
+      "era": "CITADEL",
+      "icon": "faction",
+      "page": "/demo/demo-league/"
+    },
+    {
+      "id": "demo/demo-marshal",
+      "title": "Demo Marshal",
+      "description": "NON-CANON character used to verify directed membership and command edges in hierarchy layout.",
+      "type": "character",
+      "era": "CITADEL",
+      "icon": "character",
+      "page": "/demo/demo-marshal/"
+    },
+    {
+      "id": "demo/demo-trade-port",
+      "title": "Demo Trade Port",
+      "description": "NON-CANON port marker used to verify infrastructure and trade layers.",
+      "type": "location",
+      "era": "CITADEL",
+      "icon": "location",
+      "page": "/demo/demo-trade-port/"
+    }
+  ],
+  "edges": [
+    {
+      "id": "rel-1",
+      "source": "demo/demo-concord",
+      "target": "demo/demo-league",
+      "type": "allies",
+      "label": "Allies",
+      "directed": false,
+      "since": 100,
+      "description": "A deliberately simple mutual alliance for graph testing."
+    },
+    {
+      "id": "rel-6",
+      "source": "demo/demo-marshal",
+      "target": "demo/demo-frontier-fort",
+      "type": "commands",
+      "label": "Commands",
+      "directed": true,
+      "since": 130,
+      "description": "Directed command edge from character to location."
+    },
+    {
+      "id": "rel-4",
+      "source": "demo/demo-frontier-fort",
+      "target": "demo/demo-concord",
+      "type": "controlled-by",
+      "label": "Controlled By",
+      "directed": false,
+      "description": ""
+    },
+    {
+      "id": "rel-7",
+      "source": "demo/demo-trade-port",
+      "target": "demo/demo-league",
+      "type": "controlled-by",
+      "label": "Controlled By",
+      "directed": false,
+      "description": ""
+    },
+    {
+      "id": "rel-5",
+      "source": "demo/demo-marshal",
+      "target": "demo/demo-concord",
+      "type": "member-of",
+      "label": "Member Of",
+      "directed": true,
+      "description": "Directed membership edge for hierarchy testing."
+    },
+    {
+      "id": "rel-2",
+      "source": "demo/demo-concord",
+      "target": "demo/demo-directorate",
+      "type": "rivals",
+      "label": "Rivals",
+      "directed": false,
+      "since": 120,
+      "era": "CITADEL",
+      "description": "A non-canon rivalry used to verify edge filtering and metadata."
+    },
+    {
+      "id": "rel-3",
+      "source": "demo/demo-directorate",
+      "target": "demo/demo-league",
+      "type": "rivals",
+      "label": "Rivals",
+      "directed": false,
+      "description": ""
+    }
+  ],
+  "relationTypes": [
+    {
+      "id": "allies",
+      "label": "Allies",
+      "count": 1
+    },
+    {
+      "id": "commands",
+      "label": "Commands",
+      "count": 1
+    },
+    {
+      "id": "controlled-by",
+      "label": "Controlled By",
+      "count": 2
+    },
+    {
+      "id": "member-of",
+      "label": "Member Of",
+      "count": 1
+    },
+    {
+      "id": "rivals",
+      "label": "Rivals",
+      "count": 2
+    }
+  ]
+}

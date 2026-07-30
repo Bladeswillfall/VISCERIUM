@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import HomeGateway from '../components/home/HomeGateway.astro';
+import timelineManifest from '../data/timelines/manifest.json';
+import '../styles/homepage-base.css';
+import '../styles/homepage-content.css';
+import '../styles/homepage-responsive.css';
+
+const canonEntries = await getCollection('docs', ({ data }) => (
+  data.status === 'published'
+  && data.type !== 'category'
+));
+const globalTimelines = timelineManifest.timelines.filter(({ id }) => id === 'super');
+const homepageStats = {
+  canonEntryCount: canonEntries.length,
+  mappedEventCount: globalTimelines.reduce((total, timeline) => total + timeline.eventCount, 0),
+  unbrokenTimelineCount: globalTimelines.length,
+};
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'VISCERIUM Codex',
+    description: 'One timeline, four eras, infinite stories. Enter the public worldbuilding codex for VISCERIUM.',
+    template: 'splash',
+    pagefind: false,
+    giscus: false,
+  }}
+  hasSidebar={true}
+>
+  <HomeGateway {...homepageStats} />
+</StarlightPage>
+
+<style is:global>
+  .main-frame:has(.home-gateway) {
+    max-inline-size: none !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  html[data-codex-desktop-sidebar]:not(.codex-sidebar-collapsed) .main-frame:has(.home-gateway) {
+    padding-inline-start: var(--codex-sidebar-overlay-width) !important;
+  }
+
+  .main-frame:has(.home-gateway) > .codex-two-column-content {
+    inline-size: 100% !important;
+    max-inline-size: none !important;
+    margin-inline: 0 !important;
+  }
+
+  main:has(.home-gateway) .sl-markdown-content {
+    padding: 0 !important;
+  }
+
+  @media (min-width: 68.76rem) {
+    .home-hero {
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+    }
+
+    .home-era-gateway {
+      min-height: clamp(44rem, calc(100svh - var(--sl-nav-height)), 80rem);
+    }
+  }
+</style>

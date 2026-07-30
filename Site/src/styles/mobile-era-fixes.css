@@ -1,0 +1,67 @@
+/*
+ * Mobile-only collision guards for the persistent era controls.
+ *
+ * Keep these rules unlayered: Starlight's header/menu controls are component-scoped
+ * and the Codex shell needs deterministic geometry rather than relying on cascade
+ * order inside the theme layers.
+ */
+html[data-codex-mobile-header] .codex-header-search button[data-open-modal] {
+  width: max-content !important;
+  min-width: max-content !important;
+  max-width: none !important;
+  padding-inline: .35rem !important;
+  overflow: visible;
+}
+
+html[data-codex-mobile-header] .codex-header-search button[data-open-modal] > kbd {
+  display: none !important;
+}
+
+html[data-codex-mobile-header] .codex-header-controls {
+  min-width: max-content;
+  gap: .55rem;
+  overflow: visible;
+}
+
+html[data-codex-mobile-header] .codex-header-controls > * {
+  flex: 0 0 auto;
+}
+
+html[data-codex-mobile-header] .codex-era-context-control {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  max-width: 2.5rem;
+  margin-inline-end: 0;
+  overflow: visible;
+}
+
+html[data-codex-mobile-header] .codex-era-context-exit,
+html[data-codex-mobile-header] .codex-theme-control {
+  position: relative;
+}
+
+html[data-codex-mobile-header] .codex-era-context-exit {
+  z-index: 2;
+}
+
+html[data-codex-mobile-header] .codex-theme-control {
+  z-index: 1;
+}
+
+/*
+ * The mobile drawer's own close bubble occupies the upper-right corner. Reserve
+ * that lane so the scoped "Exit · All eras" action is always fully visible and
+ * remains the element receiving pointer input at its centre.
+ */
+html[data-codex-mobile-header] .codex-sidebar-era-toolbar {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  padding-inline-end: 4.25rem;
+}
+
+html[data-codex-mobile-header] .codex-sidebar-era-toolbar a {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  white-space: nowrap;
+}

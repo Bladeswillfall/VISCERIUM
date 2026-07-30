@@ -1,0 +1,29 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import maps from '../../data/maps.json';
+
+const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeCompare(String(b.title ?? '')));
+---
+
+<StarlightPage frontmatter={{ title: 'Atlas', description: 'Interactive maps of VISCERIUM and the places recorded within them.' }}>
+  <section class="atlas-index">
+    <p class="atlas__eyebrow">Explore VISCERIUM</p>
+    <h1>Atlas</h1>
+    <p>Browse published maps, then use their layers, marker search and nested maps to move from world-scale geography into local detail.</p>
+
+    {entries.length ? (
+      <div class="codex-map-grid">
+        {entries.map((map) => (
+          <article class="codex-map-card">
+            {map.image && <img src={map.image} alt="" loading="lazy" />}
+            <div class="codex-map-card__body">
+              <h2><a href={`/maps/${encodeURIComponent(map.id)}/`}>{map.title}</a></h2>
+              {map.description && <p>{map.description}</p>}
+              <p class="atlas-index__meta">{map.markers?.length ?? 0} published marker{map.markers?.length === 1 ? '' : 's'}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : <p class="codex-warning">No published maps are available yet.</p>}
+  </section>
+</StarlightPage>

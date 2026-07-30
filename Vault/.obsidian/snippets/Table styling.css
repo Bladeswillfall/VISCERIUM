@@ -1,0 +1,45 @@
+/*
+ * Table styling
+ * Clear hierarchy with square static surfaces and compact cells.
+ */
+
+.markdown-rendered table {
+  width: 100%;
+  margin-block: 0.9rem 1.15rem;
+  border: 1px solid var(--background-modifier-border);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.markdown-rendered th,
+.markdown-rendered td {
+  padding: 0.45rem 0.6rem;
+  border-right: 1px solid var(--background-modifier-border);
+  border-bottom: 1px solid var(--background-modifier-border);
+  vertical-align: top;
+}
+
+.markdown-rendered th:last-child,
+.markdown-rendered td:last-child {
+  border-right: 0;
+}
+
+.markdown-rendered tr:last-child td {
+  border-bottom: 0;
+}
+
+.markdown-rendered th {
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  font-size: 0.76em;
+  font-weight: 750;
+  letter-spacing: 0.045em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.markdown-rendered tbody tr:hover td {
+  background: var(--background-modifier-hover);
+}

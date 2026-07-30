@@ -1,0 +1,193 @@
+/* Start Here-only finishing pass for light mode and landing-page chrome.
+   This file is imported only by the Start Here MDX route. */
+
+/* This page is an editorial gateway, not a discussion/article endpoint. */
+body:has(.start-here-primer) .codex-contributors,
+body:has(.start-here-primer) .codex-webmentions,
+body:has(.start-here-primer) giscus-comments,
+body:has(.start-here-primer) .giscus,
+body:has(.start-here-primer) iframe.giscus-frame {
+  display: none !important;
+}
+
+/* The light-mode mock treats the timeline as warm paper, while keeping the hero,
+   culture and threat chapters deliberately cinematic/dark. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-hero__veil {
+  background:
+    radial-gradient(circle at 50% 42%, transparent 0 16rem, color-mix(in oklch, var(--start-void) 35%, transparent) 48rem),
+    linear-gradient(0deg, var(--start-bg), transparent 13rem);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-timeline {
+  background: var(--start-bg);
+}
+
+/* Do not rely on Starlight's semantic white/gray aliases here: the Timeline is
+   intentionally a light-paper chapter, so give its editorial copy explicit dark
+   Codex tokens with comfortable AA contrast. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-timeline .start-section__intro {
+  --start-text: var(--codex-palette-ink);
+  --start-body: var(--codex-text-body);
+  --start-accent: var(--codex-palette-deep);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-sequence {
+  border-color: var(--start-line);
+}
+
+/* Separate the decorative era colour from the accessible ink. The former supplies
+   the wash; the latter is pulled toward Codex ink so the maps and small labels do
+   not disappear into the warm paper. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band {
+  --era-map-source: var(--vc-event-unknown);
+  --era-map: color-mix(in oklch, var(--era-map-source) 34%, var(--codex-palette-ink));
+  --era-accent: color-mix(in oklch, var(--era-map-source) 24%, var(--codex-palette-ink));
+  border-color: var(--start-line);
+  background: var(--start-bg);
+  color: var(--codex-text-body) !important;
+}
+
+/* Reuse the Codex illustration palette to retain the historical colour coding
+   from the reviewed mock, but feed those hues through the accessible ink above. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel {
+  --era-map-source: color-mix(in oklch, var(--vc-event-military) 58%, var(--era-e2-base));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--smog {
+  --era-map-source: var(--vc-event-economic);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--nearsight {
+  --era-map-source: var(--vc-event-disaster);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy {
+  --era-map-source: var(--vc-event-technology);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__map {
+  background:
+    linear-gradient(90deg, color-mix(in oklch, var(--era-map-source) 12%, var(--start-bg)), var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
+  background:
+    linear-gradient(90deg, color-mix(in oklch, var(--start-bg) 72%, transparent), var(--start-bg) 22%);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark {
+  opacity: 1;
+  filter: none;
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark path,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel .start-map-mark path {
+  fill: var(--era-map);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy strong,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__number,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__action {
+  color: var(--era-accent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy p {
+  color: var(--codex-text-body);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:hover .start-era-band__action,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:focus-visible .start-era-band__action {
+  color: var(--codex-palette-oled);
+}
+
+@media (min-width: 62.01rem) {
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:nth-child(even) .start-era-band__map {
+    background:
+      linear-gradient(270deg, color-mix(in oklch, var(--era-map-source) 12%, var(--start-bg)), var(--start-bg));
+  }
+
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:nth-child(even) .start-era-band__copy {
+    background:
+      linear-gradient(270deg, color-mix(in oklch, var(--start-bg) 72%, transparent), var(--start-bg) 22%);
+  }
+}
+
+/* Keep the choice pauses visually prominent on light paper without making them
+   feel like detached white app cards. Use an opaque base colour for the actual
+   contrast surface; era-specific gradients below are decorative overlays only. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb {
+  background: color-mix(in oklch, var(--codex-palette-light) 52%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb--quiet {
+  background: color-mix(in oklch, var(--codex-palette-light) 30%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice {
+  background-color: color-mix(in oklch, var(--codex-palette-light) 70%, var(--start-bg)) !important;
+  color: var(--codex-text-body);
+  box-shadow:
+    0 .25rem .8rem color-mix(in oklch, var(--codex-palette-oled) 6%, transparent),
+    inset 0 0 0 1px color-mix(in oklch, var(--codex-palette-deep) 10%, transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice span,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card p,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route__empty,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route__fallback span {
+  color: var(--codex-palette-deep);
+}
+
+/* The four era gateways keep their own colour identity in light mode. This is
+   deliberately more specific than the shared light-card treatment above. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice {
+  border-color: color-mix(in oklch, var(--choice-accent) 62%, var(--codex-border));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice strong {
+  color: color-mix(in oklch, var(--choice-accent) 38%, var(--codex-palette-ink));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='citadel'] {
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 1.05rem, color-mix(in oklch, var(--choice-accent) 11%, transparent) 1.08rem 1.12rem),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 9%, var(--codex-palette-light)), color-mix(in oklch, var(--codex-palette-light) 70%, var(--start-bg)) 62%);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='smog'] {
+  background-image:
+    linear-gradient(120deg, transparent 0 42%, color-mix(in oklch, var(--choice-accent) 12%, transparent) 43% 47%, transparent 48% 100%),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 9%, var(--codex-palette-light)), color-mix(in oklch, var(--codex-palette-light) 70%, var(--start-bg)) 62%);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='nearsight'] {
+  background-image:
+    linear-gradient(color-mix(in oklch, var(--choice-accent) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--choice-accent) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 9%, var(--codex-palette-light)), color-mix(in oklch, var(--codex-palette-light) 70%, var(--start-bg)) 62%);
+  background-size: 1.35rem 1.35rem, 1.35rem 1.35rem, auto;
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='entropy'] {
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 .42rem, color-mix(in oklch, var(--choice-accent) 11%, transparent) .44rem .48rem),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 9%, var(--codex-palette-light)), color-mix(in oklch, var(--codex-palette-light) 70%, var(--start-bg)) 62%);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice:hover,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice:focus-visible {
+  background-color: color-mix(in oklch, var(--codex-palette-light) 84%, var(--start-bg)) !important;
+}
+
+/* Let the Resonance and personal-story chapters sit cleanly on paper. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-wyrd__grid > div:last-child {
+  background: color-mix(in oklch, var(--codex-palette-light) 62%, transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-story-scale {
+  background: color-mix(in oklch, var(--codex-palette-light) 24%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card {
+  background: color-mix(in oklch, var(--codex-palette-light) 58%, var(--start-bg));
+}

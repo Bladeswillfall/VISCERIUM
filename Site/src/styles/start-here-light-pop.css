@@ -1,0 +1,172 @@
+/* Start Here light-mode colour pass.
+   This deliberately restores the era/link chroma that dark mode already carries,
+   while pulling small text toward Codex ink so contrast remains comfortable. */
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band {
+  --era-map-source: var(--vc-event-unknown);
+  --era-map: color-mix(in oklch, var(--era-map-source) 40%, var(--codex-palette-ink));
+  --era-heading: color-mix(in oklch, var(--era-map-source) 48%, var(--codex-palette-ink));
+  --era-ui: color-mix(in oklch, var(--era-map-source) 34%, var(--codex-palette-ink));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel {
+  --era-map-source: var(--era-e1-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--smog {
+  --era-map-source: var(--era-e2-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--nearsight {
+  --era-map-source: var(--era-e3-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy {
+  --era-map-source: var(--era-e4-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark path,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel .start-map-mark path {
+  fill: var(--era-map);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy strong {
+  color: var(--era-heading);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__number,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__action {
+  color: var(--era-ui);
+}
+
+/* Keep the era panels on the neutral Codex light surface. Colour belongs to the
+   map, headings and actions rather than a full-panel tint; this mirrors the stronger
+   hierarchy of the dark composition without making light mode muddy. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__map,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
+  background: var(--codex-bg);
+}
+
+/* Keep the action colourful on hover instead of collapsing to generic black. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:hover .start-era-band__action,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:focus-visible .start-era-band__action {
+  color: var(--era-heading);
+  text-shadow: 0 0 .7rem color-mix(in oklch, var(--era-map-source) 28%, transparent);
+}
+
+/* The four era-choice buttons should read as the same four colour families. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='citadel'] {
+  --choice-accent: var(--era-e1-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='smog'] {
+  --choice-accent: var(--era-e2-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='nearsight'] {
+  --choice-accent: var(--era-e3-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='entropy'] {
+  --choice-accent: var(--era-e4-base);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice {
+  border-color: color-mix(in oklch, var(--choice-accent) 66%, var(--codex-palette-deep));
+  box-shadow:
+    inset 0 .2rem 0 color-mix(in oklch, var(--choice-accent) 72%, transparent),
+    0 .25rem .8rem color-mix(in oklch, var(--codex-palette-oled) 6%, transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice strong {
+  color: color-mix(in oklch, var(--choice-accent) 42%, var(--codex-palette-ink));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice:hover,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice:focus-visible,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice.is-selected {
+  border-color: color-mix(in oklch, var(--choice-accent) 54%, var(--codex-palette-ink));
+  background-color: color-mix(in oklch, var(--choice-accent) 16%, var(--codex-palette-light)) !important;
+}
+
+/* Inline links: give each editorial chapter its own visible hue instead of the same
+   neutral brown. The interaction file supplies the underline sweep and arrow motion. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link {
+  --start-link-hue: var(--vc-event-exploration);
+  --start-link-color: color-mix(in oklch, var(--start-link-hue) 38%, var(--codex-palette-ink));
+  color: var(--start-link-color) !important;
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-place .start-inline-link {
+  --start-link-hue: var(--vc-event-environmental);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-wyrd .start-inline-link {
+  --start-link-hue: var(--vc-event-resonance);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:hover,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:focus-visible {
+  color: color-mix(in oklch, var(--start-link-hue) 50%, var(--codex-palette-ink)) !important;
+  text-shadow: 0 0 .7rem color-mix(in oklch, var(--start-link-hue) 20%, transparent);
+}
+
+/* Route cards and fixed-route links need colour at rest, not only when hovered. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card {
+  --start-accent: color-mix(in oklch, var(--vc-event-exploration) 42%, var(--codex-palette-ink));
+  border-top-color: color-mix(in oklch, var(--vc-event-exploration) 64%, var(--codex-palette-deep));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card > span,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card em {
+  color: var(--start-accent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route__fallback a {
+  --fallback-link-hue: var(--vc-event-exploration);
+  color: color-mix(in oklch, var(--fallback-link-hue) 38%, var(--codex-palette-ink)) !important;
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route__fallback a:nth-of-type(2) {
+  --fallback-link-hue: var(--vc-event-political);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route__fallback a:nth-of-type(3) {
+  --fallback-link-hue: var(--vc-event-resonance);
+}
+
+/* Page-local light-mode ink softening. Keep the dark cinematic chapters untouched,
+   but render neutral typography as a softer translucent ink over paper surfaces. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-here-primer {
+  --start-light-ink-85: color-mix(in srgb, var(--codex-palette-ink) 85%, transparent);
+  --start-light-body-85: color-mix(in srgb, var(--codex-text-body) 85%, transparent);
+  --start-light-deep-85: color-mix(in srgb, var(--codex-palette-deep) 85%, transparent);
+  --start-text: var(--start-light-ink-85);
+  --start-body: var(--start-light-body-85);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-timeline .start-section__intro {
+  --start-text: var(--start-light-ink-85);
+  --start-body: var(--start-light-body-85);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band {
+  color: var(--start-light-body-85) !important;
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy p {
+  color: var(--start-light-body-85);
+}
+
+/* Secondary choice and empty-state copy need a stronger neutral because tinted
+   light surfaces reduce the softened deep-ink treatment below AA contrast. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice span,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route__empty {
+  color: var(--codex-palette-ink);
+}
+
+/* Other secondary neutral UI copy can keep the softer deep-ink treatment. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card p,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route__fallback span {
+  color: var(--start-light-deep-85);
+}

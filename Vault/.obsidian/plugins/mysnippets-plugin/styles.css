@@ -1,0 +1,63 @@
+/*
+ * MySnippets compatibility styles.
+ * Based on MySnippets by Chetachi / Moyf compatibility fork.
+ * MPL-2.0: https://mozilla.org/MPL/2.0/
+ */
+
+.ms-css-editor {
+  width: 100%;
+  min-height: 18rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.65rem;
+  overflow-x: auto;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s, 6px);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-family: var(--font-monospace);
+  font-size: var(--font-ui-small);
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.MiniSettings-statusbar-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.menu.MySnippets-statusbar-menu {
+  width: min(24rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+}
+
+.MySnippets-statusbar-menu .menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.MySnippets-statusbar-menu .menu-item-title {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.MySnippets-statusbar-menu .checkbox-container {
+  flex: 0 0 auto;
+  margin-left: 0.5rem;
+}
+
+.MySnippets-statusbar-menu .MS-OpenSnippet {
+  flex: 0 0 auto;
+  margin-left: 0.4rem;
+  padding: 0.2rem 0.45rem;
+}
+
+.MySnippets-statusbar-menu .MS-OpenSnippet svg {
+  width: 1rem;
+  height: 1rem;
+}

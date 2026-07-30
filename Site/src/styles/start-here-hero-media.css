@@ -1,0 +1,176 @@
+/* Start Here hero image treatment.
+   Keep the 2500x500 source near native scale, subordinate the white mark to the
+   page title, and let the hero dissolve into the Timeline instead of ending as a box. */
+
+.start-here-primer .start-hero {
+  min-height: clamp(38rem, calc(72svh - var(--sl-nav-height)), 44rem);
+  /* The core Start Here stylesheet also declares the banner as a background image.
+     Kill that copy explicitly: otherwise it sits behind the dimmed layers below and
+     makes the white VISCERIUM mark look much brighter than the intended watermark. */
+  background: var(--start-void) !important;
+}
+
+/* Start Here hides the ordinary article masthead, but its zero-sized SVG carries the
+   same filter definitions used by normal article headers. Keep those definitions in
+   the render tree so url('#codex-header-bottom-fade') can actually resolve. */
+.main-frame:has(.start-here-primer)
+  .content-panel > .sl-container > .codex-header-fade-filter {
+  display: block !important;
+  position: fixed;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Base image: never wider than its 2500px source and never taller than its 500px
+   source. The image is deliberately a watermark now; the page title is the focal mark. */
+.start-here-primer .start-hero::before,
+.start-here-primer .start-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 50%;
+  width: min(100%, 156.25rem);
+  height: clamp(22rem, 26vw, 31.25rem);
+  transform: translateX(-50%);
+  background: url('/assets/images/viscerium-banner.webp') center / cover no-repeat;
+  pointer-events: none;
+}
+
+.start-here-primer .start-hero::before {
+  z-index: -3;
+  opacity: .52;
+  filter: brightness(.52) contrast(.9);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    var(--home-text-fixed) 0%,
+    var(--home-text-fixed) 44%,
+    color-mix(in srgb, var(--home-text-fixed) 94%, transparent) 54%,
+    color-mix(in srgb, var(--home-text-fixed) 80%, transparent) 64%,
+    color-mix(in srgb, var(--home-text-fixed) 60%, transparent) 73%,
+    color-mix(in srgb, var(--home-text-fixed) 38%, transparent) 82%,
+    color-mix(in srgb, var(--home-text-fixed) 18%, transparent) 90%,
+    color-mix(in srgb, var(--home-text-fixed) 6%, transparent) 96%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    var(--home-text-fixed) 0%,
+    var(--home-text-fixed) 44%,
+    color-mix(in srgb, var(--home-text-fixed) 94%, transparent) 54%,
+    color-mix(in srgb, var(--home-text-fixed) 80%, transparent) 64%,
+    color-mix(in srgb, var(--home-text-fixed) 60%, transparent) 73%,
+    color-mix(in srgb, var(--home-text-fixed) 38%, transparent) 82%,
+    color-mix(in srgb, var(--home-text-fixed) 18%, transparent) 90%,
+    color-mix(in srgb, var(--home-text-fixed) 6%, transparent) 96%,
+    transparent 100%
+  );
+}
+
+/* This second copy is only the textured lower edge. The regular article-header SVG
+   filter supplies the turbulence/displacement/blur language. */
+.start-here-primer .start-hero::after {
+  z-index: -2;
+  opacity: .5;
+  filter: brightness(.48) contrast(.9) url('#codex-header-bottom-fade');
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 34%,
+    color-mix(in srgb, var(--home-text-fixed) 16%, transparent) 44%,
+    color-mix(in srgb, var(--home-text-fixed) 58%, transparent) 56%,
+    var(--home-text-fixed) 68%,
+    var(--home-text-fixed) 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 34%,
+    color-mix(in srgb, var(--home-text-fixed) 16%, transparent) 44%,
+    color-mix(in srgb, var(--home-text-fixed) 58%, transparent) 56%,
+    var(--home-text-fixed) 68%,
+    var(--home-text-fixed) 90%,
+    transparent 100%
+  );
+}
+
+/* The veil now only vignettes/dims the artwork. The old light-mode rule used a smooth
+   bottom gradient to the page colour, which is exactly what produced the grey band and
+   visible horizontal hand-off in the screenshots. The cross-section dissolve below
+   owns that transition instead. */
+.start-here-primer .start-hero__veil,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-hero__veil {
+  z-index: -1;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--start-void) 18%, transparent),
+      color-mix(in oklch, var(--start-void) 34%, transparent)
+    ),
+    radial-gradient(
+      circle at 50% 38%,
+      color-mix(in oklch, var(--start-void) 12%, transparent) 0 13rem,
+      color-mix(in oklch, var(--start-void) 48%, transparent) 48rem
+    );
+}
+
+/* Bridge the section boundary itself. This is intentionally attached to the Timeline,
+   not the hero: a later sibling can paint back over the end of the hero, so the two
+   sections genuinely overlap instead of meeting on one exact horizontal pixel.
+
+   The source strip is alpha-faded downward and passed through the same article-header
+   grain filter. Flipping it vertically turns that into an irregular upward dissolve:
+   transparent/grainy in the hero, fully Timeline-coloured at the actual section edge. */
+.start-here-primer .start-timeline::after {
+  content: '';
+  position: absolute;
+  inset: -12rem 0 auto;
+  z-index: 7;
+  height: 12rem;
+  background: var(--start-void);
+  pointer-events: none;
+  transform: scaleY(-1);
+  transform-origin: center;
+  filter: url('#codex-header-bottom-fade');
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    var(--home-text-fixed) 0%,
+    var(--home-text-fixed) 20%,
+    color-mix(in srgb, var(--home-text-fixed) 90%, transparent) 34%,
+    color-mix(in srgb, var(--home-text-fixed) 70%, transparent) 49%,
+    color-mix(in srgb, var(--home-text-fixed) 46%, transparent) 64%,
+    color-mix(in srgb, var(--home-text-fixed) 23%, transparent) 78%,
+    color-mix(in srgb, var(--home-text-fixed) 8%, transparent) 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    var(--home-text-fixed) 0%,
+    var(--home-text-fixed) 20%,
+    color-mix(in srgb, var(--home-text-fixed) 90%, transparent) 34%,
+    color-mix(in srgb, var(--home-text-fixed) 70%, transparent) 49%,
+    color-mix(in srgb, var(--home-text-fixed) 46%, transparent) 64%,
+    color-mix(in srgb, var(--home-text-fixed) 23%, transparent) 78%,
+    color-mix(in srgb, var(--home-text-fixed) 8%, transparent) 90%,
+    transparent 100%
+  );
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-timeline::after {
+  background: var(--start-bg);
+}
+
+@media (max-width: 48rem) {
+  .start-here-primer .start-hero {
+    min-height: clamp(36rem, calc(78svh - var(--sl-nav-height)), 41rem);
+  }
+
+  .start-here-primer .start-hero::before,
+  .start-here-primer .start-hero::after {
+    height: clamp(20rem, 52vw, 26rem);
+  }
+
+  .start-here-primer .start-timeline::after {
+    inset-block-start: -8rem;
+    height: 8rem;
+  }
+}

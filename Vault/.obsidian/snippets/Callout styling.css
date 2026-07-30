@@ -1,0 +1,30 @@
+/*
+ * Callout styling
+ * Callout colour communicates admonition type; the static container stays square.
+ */
+
+.callout {
+  margin-block: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, rgb(var(--callout-color)) 28%, var(--background-modifier-border));
+  border-left-width: 3px;
+  border-radius: 0;
+  background: color-mix(in srgb, rgb(var(--callout-color)) 5%, var(--background-primary));
+  box-shadow: none;
+}
+
+.callout-title {
+  align-items: center;
+  gap: 0.4rem;
+  padding-block: 0.08rem;
+  font-size: 0.88em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.callout-content {
+  padding-top: 0.2rem;
+}
+
+.callout-content > :last-child {
+  margin-bottom: 0;
+}

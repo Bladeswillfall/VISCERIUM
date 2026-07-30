@@ -1,0 +1,21 @@
+/*
+ * Native calendar boundaries live in vis-timeline's vertical background panel.
+ * The centre viewport stays transparent so those lines remain visible, while
+ * background era bands and foreground event items preserve Chronos's stacking.
+ */
+.vc-timeline-app .vc-timeline-canvas .vis-itemset > .vis-background {
+  z-index: 0 !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-itemset > .vis-foreground {
+  z-index: 2 !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-foreground .vis-item.vc-timeline-item {
+  z-index: 3 !important;
+  isolation: isolate;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-foreground .vis-item.vc-timeline-item.vis-selected {
+  z-index: 5 !important;
+}

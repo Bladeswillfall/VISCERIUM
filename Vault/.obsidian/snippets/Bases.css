@@ -1,0 +1,83 @@
+/*
+ * Bases
+ * One owner for compact card browsing and dense table editing.
+ */
+
+.bases-view {
+  --bases-cards-background: var(--background-secondary);
+  --bases-cards-cover-background: var(--background-primary-alt);
+  --bases-cards-border: 1px solid var(--background-modifier-border);
+  --bases-cards-shadow: none;
+  --bases-cards-shadow-hover: none;
+}
+
+/* Cards are interactive selection surfaces, so they retain the small control radius. */
+.bases-cards-group {
+  gap: 0.65rem;
+  padding: 0.35rem 0.2rem 0.9rem;
+}
+
+.bases-cards-item {
+  border-radius: var(--vc-radius-control, 4px);
+  overflow: hidden;
+  box-shadow: none;
+  transition: border-color 100ms ease, background-color 100ms ease;
+}
+
+.bases-cards-item:hover {
+  transform: none;
+  border-color: color-mix(in srgb, var(--interactive-accent) 55%, var(--background-modifier-border));
+}
+
+.bases-cards-cover { background: var(--bases-cards-cover-background); }
+.bases-cards-property { padding-inline: 0.6rem; }
+.bases-cards-property.mod-title {
+  padding-top: 0.55rem;
+  font-size: 0.98em;
+  font-weight: 750;
+  line-height: 1.2;
+}
+.bases-cards-property:not(.mod-title) {
+  color: var(--text-muted);
+  font-size: 0.84em;
+}
+.bases-cards-label {
+  color: var(--text-faint);
+  font-size: 0.66em;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Tables are static comparison/editing shells and stay square. */
+.bases-view[data-view-type="table"] .bases-table {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.bases-view[data-view-type="table"] .bases-thead { background: var(--background-secondary); }
+
+.bases-view[data-view-type="table"] .bases-th,
+.bases-view[data-view-type="table"] .bases-td {
+  min-height: 1.75rem;
+  box-shadow: inset -1px -1px 0 var(--background-modifier-border);
+}
+
+.bases-view[data-view-type="table"] .bases-th .bases-table-cell {
+  color: var(--text-muted);
+  font-size: 0.72em;
+  font-weight: 750;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.bases-view[data-view-type="table"] .bases-td .bases-table-cell {
+  padding-block: 0.24rem;
+  font-size: 0.87em;
+}
+
+.bases-view[data-view-type="table"] .bases-tr:hover .bases-td {
+  background: var(--background-modifier-hover);
+}

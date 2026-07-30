@@ -1,0 +1,44 @@
+name: Content correction
+description: Suggest a lore, consistency, wording, or article-level correction.
+title: "[Content]: "
+labels:
+  - content
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for public content corrections. For private, sensitive, or rights-related messages, use the contact page.
+  - type: input
+    id: page
+    attributes:
+      label: Page or article
+      description: Which article or page does this affect?
+      placeholder: https://www.viscerium.co.uk/...
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: What should be corrected?
+      description: Explain the issue or inconsistency.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested change
+      description: Add proposed wording or context if you have it.
+    validations:
+      required: false
+  - type: dropdown
+    id: correction_type
+    attributes:
+      label: Correction type
+      options:
+        - Lore consistency
+        - Wording / clarity
+        - Missing context
+        - Image / credit / source note
+        - Other
+    validations:
+      required: true

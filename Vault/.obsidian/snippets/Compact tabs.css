@@ -1,0 +1,28 @@
+/*
+ * Compact tabs
+ * Reduces tab-bar height and padding without changing tab behaviour.
+ */
+
+.workspace-tab-header-container {
+  min-height: 34px;
+}
+
+.workspace-tab-header {
+  min-width: 0;
+  max-width: 220px;
+}
+
+.workspace-tab-header-inner {
+  gap: 0.35rem;
+  padding-inline: 0.55rem;
+}
+
+.workspace-tab-header-inner-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-tab-header-inner-icon {
+  flex: 0 0 auto;
+}

@@ -1,0 +1,382 @@
+/* Full-width VISCERIUM landing page. The existing Starlight header and footer remain in control. */
+main:has(.home-gateway) {
+  min-width: 0;
+  padding: 0 !important;
+  overflow: clip;
+}
+
+main:has(.home-gateway) > .content-panel:first-of-type {
+  display: none;
+}
+
+main:has(.home-gateway) > .content-panel:last-of-type {
+  padding: 0;
+  border-block-start: 0;
+}
+
+main:has(.home-gateway) > .content-panel:last-of-type > .sl-container {
+  max-width: none;
+  margin-inline: 0;
+}
+
+main:has(.home-gateway) .sl-markdown-content {
+  max-width: none;
+}
+
+main:has(.home-gateway) .sl-container > .home-gateway + * {
+  margin-block-start: 0;
+}
+
+.home-gateway {
+  --home-bg: var(--sl-color-bg);
+  --home-surface: var(--codex-surface-raised-color);
+  --home-surface-soft: color-mix(in oklch, var(--codex-surface-raised-color) 82%, var(--sl-color-bg));
+  --home-text: var(--sl-color-white);
+  --home-text-soft: var(--sl-color-gray-2);
+  --home-muted: var(--sl-color-gray-3);
+  --home-line: var(--sl-color-hairline-light);
+  --home-gold: var(--sl-color-accent-high);
+  --home-gold-low: var(--sl-color-accent-low);
+  --home-focus: var(--sl-color-white);
+  --home-content-max: 120rem;
+  --home-reading-max: 72rem;
+  --home-gutter: clamp(1rem, 3vw, 6rem);
+  --home-shadow: 0 1.5rem 5rem color-mix(in oklch, var(--codex-shadow-color) 38%, transparent);
+  --home-step--1: clamp(.79rem, .74rem + .18vw, .92rem);
+  --home-step-0: clamp(1rem, .94rem + .22vw, 1.16rem);
+  --home-step-1: clamp(1.22rem, 1.08rem + .52vw, 1.62rem);
+  --home-step-2: clamp(1.55rem, 1.25rem + 1vw, 2.35rem);
+  --home-step-3: clamp(2.1rem, 1.55rem + 2vw, 3.9rem);
+  --home-step-4: clamp(3rem, 1.9rem + 4vw, 6.7rem);
+  --home-step-5: clamp(4.1rem, 2rem + 7vw, 10rem);
+  min-width: 0;
+  margin: 0;
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 50% -15%, color-mix(in oklch, var(--home-gold) 14%, transparent), transparent 32rem),
+    var(--home-bg);
+  color: var(--home-text);
+  font-family: var(--vc-font-ui);
+  line-height: 1.5;
+}
+
+.home-gateway *,
+.home-gateway *::before,
+.home-gateway *::after {
+  box-sizing: border-box;
+}
+
+.home-gateway img,
+.home-gateway svg {
+  display: block;
+  max-width: 100%;
+}
+
+.home-gateway :where(a) {
+  color: inherit;
+  text-decoration-thickness: .08em;
+  text-underline-offset: .2em;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.home-gateway p,
+.home-gateway h1,
+.home-gateway h2,
+.home-gateway h3 {
+  overflow-wrap: anywhere;
+}
+
+.home-gateway h1,
+.home-gateway h2,
+.home-gateway h3 {
+  text-wrap: balance;
+}
+
+.home-gateway p {
+  text-wrap: pretty;
+}
+
+.home-gateway section {
+  scroll-margin-top: calc(var(--sl-nav-height) + 1rem);
+}
+
+.home-gateway :focus-visible {
+  outline: .2rem solid var(--home-focus);
+  outline-offset: .25rem;
+}
+
+.home-hero {
+  --home-gold: var(--home-text-fixed);
+  --home-gold-low: var(--home-line-fixed);
+  --home-focus: var(--home-text-fixed);
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 150rem);
+  margin-inline: auto;
+  background: var(--home-void);
+}
+
+.home-hero__copy {
+  position: absolute;
+  z-index: 20;
+  inset-block-start: 36%;
+  inset-inline-start: 50%;
+  width: min(82rem, calc(100% - 3rem));
+  translate: -50% -50%;
+  text-align: center;
+  pointer-events: none;
+  filter: drop-shadow(0 .75rem 2.4rem var(--codex-shadow-color));
+}
+
+.home-hero__copy > * {
+  pointer-events: auto;
+}
+
+.home-eyebrow {
+  margin: 0 0 .8rem;
+  color: var(--home-gold);
+  font-family: var(--vc-font-ui);
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+.home-hero h1 {
+  margin: 0;
+  color: var(--home-text-fixed);
+  font-family: var(--vc-font-display);
+  font-size: var(--home-step-5);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: .78;
+  white-space: nowrap;
+}
+
+.home-hero__deck {
+  margin: clamp(1rem, 2.4vw, 1.8rem) auto 0;
+  color: var(--home-text-soft-fixed);
+  font-family: var(--vc-font-body);
+  font-size: var(--home-step-1);
+  line-height: 1.35;
+}
+
+.home-actions {
+  margin-block-start: clamp(1rem, 2.4vw, 1.8rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .65rem;
+}
+
+.home-button {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .72rem 1.1rem;
+  border: 1px solid var(--home-gold);
+  background: var(--home-gold);
+  color: var(--sl-color-black);
+  font-family: var(--vc-font-ui);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.home-button--secondary {
+  background: color-mix(in oklch, var(--home-void) 76%, transparent);
+  color: var(--home-text-fixed);
+}
+
+.home-hero .home-button {
+  color: var(--codex-fixed-dark);
+}
+
+.home-hero .home-button--secondary {
+  color: var(--home-text-fixed);
+}
+
+.home-button:hover,
+.home-button:focus-visible {
+  filter: brightness(1.08);
+}
+
+.home-era-gateway {
+  container-type: inline-size;
+  min-height: clamp(44rem, calc(100svh - var(--sl-nav-height)), 90rem);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+  overflow: hidden;
+}
+
+.home-era-gateway > li {
+  min-width: 0;
+  display: flex;
+  flex: 1 1 25%;
+  transition: flex-grow .5s cubic-bezier(.2, .75, .2, 1), filter .35s ease;
+}
+
+.home-era-card {
+  --home-era-accent: var(--home-gold);
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1rem, 2vw, 2.4rem);
+  border-inline-end: 1px solid color-mix(in oklch, var(--codex-fixed-light) 13%, transparent);
+  color: var(--home-text-fixed);
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.home-era-gateway > li:last-child .home-era-card {
+  border-inline-end: 0;
+}
+
+.home-era-card::before,
+.home-era-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.home-era-card::before {
+  scale: 1.03;
+  transition: scale .75s ease, filter .4s ease;
+}
+
+.home-era-card::after {
+  z-index: -1;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--home-void) 58%, transparent) 0%,
+      color-mix(in oklch, var(--home-void) 12%, transparent) 30%,
+      color-mix(in oklch, var(--home-void) 42%, transparent) 58%,
+      color-mix(in oklch, var(--home-void) 97%, transparent) 100%
+    ),
+    linear-gradient(90deg, color-mix(in oklch, var(--codex-fixed-dark) 18%, transparent), transparent 55%);
+}
+
+.home-era-card--citadel {
+  --home-era-accent: var(--home-era-citadel);
+}
+
+.home-era-card--citadel::before {
+  background:
+    radial-gradient(circle at 56% 29%, color-mix(in oklch, var(--home-era-citadel) 48%, transparent), transparent 19%),
+    linear-gradient(
+      25deg,
+      color-mix(in oklch, var(--home-void) 88%, var(--home-era-citadel)),
+      color-mix(in oklch, var(--home-void) 62%, var(--home-era-citadel)) 54%,
+      var(--home-void)
+    ),
+    repeating-linear-gradient(57deg, transparent 0 1rem, color-mix(in oklch, var(--codex-fixed-light) 4.5%, transparent) 1.05rem 1.1rem);
+}
+
+.home-era-card--smog {
+  --home-era-accent: var(--home-era-smog);
+}
+
+.home-era-card--smog::before {
+  background:
+    radial-gradient(circle at 48% 30%, color-mix(in oklch, var(--home-era-smog) 42%, transparent), transparent 22%),
+    linear-gradient(
+      145deg,
+      var(--home-void),
+      color-mix(in oklch, var(--home-void) 62%, var(--home-era-smog)) 68%,
+      color-mix(in oklch, var(--home-void) 94%, var(--home-era-smog))
+    ),
+    repeating-linear-gradient(91deg, transparent 0 2rem, color-mix(in oklch, var(--codex-fixed-light) 2.5%, transparent) 2.05rem 2.12rem);
+}
+
+.home-era-card--nearsight {
+  --home-era-accent: var(--home-era-nearsight);
+}
+
+.home-era-card--nearsight::before {
+  background:
+    radial-gradient(circle at 55% 32%, color-mix(in oklch, var(--home-era-nearsight) 38%, transparent), transparent 22%),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in oklch, var(--home-void) 91%, var(--home-era-nearsight)) 0 .25rem,
+      color-mix(in oklch, var(--home-void) 82%, var(--home-era-nearsight)) .31rem .68rem
+    ),
+    linear-gradient(150deg, var(--home-void), color-mix(in oklch, var(--home-void) 70%, var(--home-era-nearsight)));
+}
+
+.home-era-card--entropy {
+  --home-era-accent: var(--home-era-entropy);
+}
+
+.home-era-card--entropy::before {
+  background:
+    radial-gradient(circle at 55% 32%, color-mix(in oklch, var(--home-era-entropy) 45%, transparent), transparent 23%),
+    radial-gradient(circle at 23% 22%, var(--codex-fixed-light) 0 .05rem, transparent .09rem),
+    radial-gradient(circle at 80% 70%, var(--home-star-warm) 0 .055rem, transparent .1rem),
+    radial-gradient(circle at 67% 18%, var(--codex-fixed-light) 0 .04rem, transparent .08rem),
+    linear-gradient(150deg, var(--home-void), color-mix(in oklch, var(--home-void) 68%, var(--home-era-entropy)));
+}
+
+.home-era-card__content {
+  width: min(100%, 29rem);
+  text-shadow: 0 .2rem 1.3rem var(--codex-shadow-color);
+}
+
+.home-era-card__number,
+.home-era-card__tags,
+.home-era-card__action {
+  font-family: var(--vc-font-ui);
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.home-era-card__number {
+  color: var(--home-era-accent);
+}
+
+.home-era-card h2 {
+  margin: .45rem 0 .65rem;
+  color: var(--home-text-fixed);
+  font-family: var(--vc-font-display);
+  font-size: clamp(1.8rem, 3.4cqi, var(--home-step-3));
+  letter-spacing: 0;
+  line-height: .9;
+}
+
+.home-era-card__tags {
+  margin: 0 0 .85rem;
+  color: var(--home-text-soft-fixed);
+  line-height: 1.45;
+}
+
+.home-era-card__description {
+  margin: 0;
+  color: var(--home-muted-fixed);
+  font-size: var(--home-step--1);
+  line-height: 1.62;
+}
+
+.home-era-card__action {
+  min-height: 2.75rem;
+  margin-block-start: .8rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--home-era-accent);
+}
+
+.home-era-card__action::after {
+  content: ' →';
+  margin-inline-start: .4rem;
+}

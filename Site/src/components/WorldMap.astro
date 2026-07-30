@@ -1,0 +1,534 @@
+---
+const { map } = Astro.props;
+const payload = JSON.stringify(map ?? {}).replace(/</g, '\\u003c');
+const positionedMarkers = map?.markers?.filter((marker) => Number.isFinite(marker.x) && Number.isFinite(marker.y)) ?? [];
+const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-').toLowerCase()}`;
+---
+
+{map ? (
+  <section class="atlas" data-atlas>
+    <header class="atlas__header">
+      <div>
+        <p class="atlas__eyebrow">VISCERIUM Atlas</p>
+        <h1>{map.title}</h1>
+        {map.description && <p>{map.description}</p>}
+      </div>
+      {map.page && <a class="atlas__article-link" href={map.page}>Read map notes</a>}
+    </header>
+
+    {map.image ? (
+      <>
+        <div class="atlas__toolbar" aria-label="Atlas controls">
+          <div class="atlas-search" data-atlas-search-shell>
+            <label for={`${atlasId}-search`}>Find a place</label>
+            <input
+              id={`${atlasId}-search`}
+              type="search"
+              placeholder="Search markers, regions, factions…"
+              autocomplete="off"
+              data-atlas-search
+            />
+            <div class="atlas-search__results" data-atlas-search-results hidden></div>
+          </div>
+          <button type="button" class="atlas__reset" data-atlas-reset>Reset view</button>
+        </div>
+
+        <div class="atlas__frame">
+          <div
+            class="atlas__canvas"
+            data-atlas-canvas
+            role="application"
+            aria-label={`Interactive map of ${map.title}`}
+          ></div>
+
+          <div class="exploration-surface-controls atlas__surface-controls" aria-label="Mobile Atlas controls">
+            <button
+              type="button"
+              class="exploration-control"
+              popovertarget={`${atlasId}-mobile-search`}
+              aria-label="Search map"
+            >
+              <span aria-hidden="true">⌕</span>
+              <span>Search</span>
+            </button>
+            <button type="button" class="exploration-control" data-atlas-reset aria-label="Reset map view">
+              <span aria-hidden="true">↺</span>
+              <span>Reset</span>
+            </button>
+            <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label="Enter focus mode">
+              <span aria-hidden="true">⛶</span>
+              <span data-exploration-focus-label>Focus</span>
+            </button>
+          </div>
+        </div>
+
+        <div id={`${atlasId}-mobile-search`} class="exploration-popover atlas__mobile-search" popover>
+          <div class="exploration-popover__header">
+            <strong>Find a place</strong>
+            <button type="button" class="exploration-popover__close" popovertarget={`${atlasId}-mobile-search`} popovertargetaction="hide" aria-label="Close search">×</button>
+          </div>
+          <div class="atlas-search" data-atlas-search-shell>
+            <label for={`${atlasId}-mobile-search-input`}>Search map</label>
+            <input
+              id={`${atlasId}-mobile-search-input`}
+              type="search"
+              placeholder="Search markers, regions, factions…"
+              autocomplete="off"
+              data-atlas-search
+            />
+            <div class="atlas-search__results" data-atlas-search-results hidden></div>
+          </div>
+        </div>
+
+        <dialog class="exploration-sheet atlas__inspector" data-atlas-inspector aria-label="Map location details">
+          <div class="exploration-sheet__handle" aria-hidden="true"></div>
+          <div class="exploration-sheet__header">
+            <span class="atlas__eyebrow">Map location</span>
+            <button type="button" class="exploration-sheet__close" data-exploration-dialog-close aria-label="Close location details">×</button>
+          </div>
+          <div data-atlas-inspector-content></div>
+        </dialog>
+
+        <script type="application/json" data-atlas-payload set:html={payload}></script>
+      </>
+    ) : (
+      <p class="codex-warning">No map image configured yet. Markers are listed below.</p>
+    )}
+
+    <details class="atlas__marker-index">
+      <summary>Marker index ({map.markers?.length ?? 0})</summary>
+      {map.markers?.length ? (
+        <ul>
+          {map.markers.map((marker) => (
+            <li>
+              <a href={marker.page}>{marker.title}</a>
+              {marker.description ? <> — {marker.description}</> : null}
+              {!Number.isFinite(marker.x) || !Number.isFinite(marker.y) ? <span> (not positioned)</span> : null}
+            </li>
+          ))}
+        </ul>
+      ) : <p>No markers have been placed on this map yet.</p>}
+    </details>
+
+    {map.image && positionedMarkers.length === 0 && (
+      <p class="atlas__empty-note">The map is interactive, but no positioned markers have been published yet.</p>
+    )}
+  </section>
+) : <p class="codex-warning">Map not found.</p>}
+
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+  import 'leaflet.control.layers.tree';
+  import 'leaflet.control.layers.tree/L.Control.Layers.Tree.css';
+  import Fuse from 'fuse.js';
+  import {
+    bindExplorationDialog,
+    bindExplorationFocus,
+    closeContainingPopover,
+    explorationMobileQuery,
+    showExplorationDialog,
+  } from '../lib/exploration-ui.mjs';
+
+  const markerGlyphs = {
+    capital: '◆',
+    city: '●',
+    settlement: '●',
+    town: '●',
+    village: '•',
+    location: '•',
+    map: '▣',
+    fortification: '▲',
+    military: '▲',
+    battlefield: '✦',
+    ruin: '◇',
+    rift: '✹',
+    myrkild: '✹',
+    naranor: '⬡',
+    anomaly: '⬡',
+    port: '◆',
+    infrastructure: '■',
+    natural: '△',
+  };
+
+  function cleanClass(value) {
+    return String(value ?? 'location').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
+  }
+
+  function prettify(value) {
+    return String(value ?? '')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\b\w/g, (character) => character.toUpperCase());
+  }
+
+  function normaliseLayers(marker) {
+    const layers = Array.isArray(marker.layers)
+      ? marker.layers
+      : Array.isArray(marker.layer)
+        ? marker.layer
+        : marker.layer
+          ? [marker.layer]
+          : [];
+    return layers.map((layer) => String(layer).trim()).filter(Boolean);
+  }
+
+  function layerParts(value) {
+    return String(value).split(/[/:>]+/).map((part) => part.trim()).filter(Boolean);
+  }
+
+  function buildLayerTree(layerGroups) {
+    const root = { children: new Map(), layer: null };
+
+    for (const [name, layer] of layerGroups) {
+      const parts = layerParts(name);
+      let node = root;
+      for (const part of parts.length ? parts : ['locations']) {
+        if (!node.children.has(part)) node.children.set(part, { children: new Map(), layer: null });
+        node = node.children.get(part);
+      }
+      node.layer = layer;
+    }
+
+    const convert = (label, node) => {
+      const children = [...node.children.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([childLabel, child]) => convert(childLabel, child));
+      if (node.layer && children.length === 0) return { label: prettify(label), layer: node.layer };
+      if (node.layer) children.unshift({ label: 'All', layer: node.layer });
+      return { label: prettify(label), children };
+    };
+
+    return {
+      label: 'Layers',
+      children: [...root.children.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([label, node]) => convert(label, node)),
+    };
+  }
+
+  function createMarkerDetails(marker) {
+    const article = document.createElement('article');
+    article.className = 'atlas-popup';
+
+    const title = document.createElement('h3');
+    title.textContent = marker.title || 'Untitled location';
+    article.append(title);
+
+    const metadata = [marker.type, marker.region, marker.faction, marker.era]
+      .flatMap((value) => Array.isArray(value) ? value : [value])
+      .filter(Boolean)
+      .map((value) => prettify(value));
+    if (metadata.length) {
+      const meta = document.createElement('p');
+      meta.className = 'atlas-popup__meta';
+      meta.textContent = [...new Set(metadata)].join(' · ');
+      article.append(meta);
+    }
+
+    if (marker.description) {
+      const description = document.createElement('p');
+      description.textContent = marker.description;
+      article.append(description);
+    }
+
+    if (marker.page) {
+      const link = document.createElement('a');
+      link.href = marker.page;
+      link.textContent = marker.childMapId ? 'Open nested map →' : 'Open article →';
+      article.append(link);
+    }
+
+    return article;
+  }
+
+  function readImageDimensions(src, width, height) {
+    if (Number.isFinite(width) && Number.isFinite(height) && width > 0 && height > 0) {
+      return Promise.resolve({ width, height });
+    }
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve({
+        width: Number.isFinite(width) && width > 0 ? width : image.naturalWidth || 1000,
+        height: Number.isFinite(height) && height > 0 ? height : image.naturalHeight || 1000,
+      });
+      image.onerror = () => resolve({ width: width || 1000, height: height || 1000 });
+      image.src = src;
+    });
+  }
+
+  function widthFitZoom(canvas, imageWidth, horizontalGutter) {
+    const viewportWidth = canvas.getBoundingClientRect().width || canvas.clientWidth || imageWidth;
+    const usableWidth = Math.max(1, viewportWidth - (horizontalGutter * 2));
+    return Math.log2(usableWidth / imageWidth);
+  }
+
+  async function initialiseAtlas(root) {
+    if (root.dataset.atlasReady) return;
+    root.dataset.atlasReady = 'loading';
+
+    const canvas = root.querySelector('[data-atlas-canvas]');
+    const payloadElement = root.querySelector('[data-atlas-payload]');
+    const inspector = root.querySelector('[data-atlas-inspector]');
+    const inspectorContent = root.querySelector('[data-atlas-inspector-content]');
+    if (!canvas || !payloadElement) {
+      root.dataset.atlasReady = 'error';
+      return;
+    }
+
+    let data;
+    try {
+      data = JSON.parse(payloadElement.textContent || '{}');
+    } catch {
+      root.dataset.atlasReady = 'error';
+      return;
+    }
+
+    const mobileQuery = explorationMobileQuery();
+    bindExplorationDialog(inspector);
+
+    const dimensions = await readImageDimensions(data.image, Number(data.width), Number(data.height));
+    const width = dimensions.width;
+    const height = dimensions.height;
+    const bounds = L.latLngBounds([0, 0], [height, width]);
+    const horizontalGutter = mobileQuery.matches ? 16 : 24;
+
+    const atlas = L.map(canvas, {
+      crs: L.CRS.Simple,
+      attributionControl: false,
+      zoomControl: true,
+      zoomSnap: 0,
+      zoomDelta: 0.5,
+      minZoom: -8,
+      maxZoom: 8,
+      maxBounds: bounds.pad(0.15),
+      maxBoundsViscosity: 0.9,
+    });
+
+    L.imageOverlay(data.image, bounds, {
+      interactive: false,
+      alt: data.title || 'VISCERIUM map',
+    }).addTo(atlas);
+
+    const widthFittedZoom = widthFitZoom(canvas, width, horizontalGutter);
+    atlas.setMinZoom(Number.isFinite(data.minZoom) ? data.minZoom : widthFittedZoom - 1);
+    atlas.setMaxZoom(Number.isFinite(data.maxZoom) ? data.maxZoom : Math.max(widthFittedZoom + 5, 4));
+
+    const defaultViewZoom = () => {
+      const preferredZoom = Number.isFinite(data.defaultZoom)
+        ? data.defaultZoom
+        : widthFitZoom(canvas, width, mobileQuery.matches ? 16 : 24);
+      return Math.max(atlas.getMinZoom(), Math.min(preferredZoom, atlas.getMaxZoom()));
+    };
+
+    const setDefaultView = ({ animate = false } = {}) => {
+      atlas.setView(bounds.getCenter(), defaultViewZoom(), { animate });
+    };
+
+    setDefaultView();
+    const fittedZoom = atlas.getZoom();
+
+    const validMarkers = (data.markers || []).filter((marker) => Number.isFinite(marker.x) && Number.isFinite(marker.y));
+    const layerGroups = new Map();
+    const markerRecords = [];
+
+    const getLayerGroup = (name) => {
+      const layerName = name || 'locations';
+      if (!layerGroups.has(layerName)) {
+        const group = L.layerGroup().addTo(atlas);
+        layerGroups.set(layerName, group);
+      }
+      return layerGroups.get(layerName);
+    };
+
+    const openInspector = (marker) => {
+      if (!inspector || !inspectorContent) return;
+      inspectorContent.replaceChildren(createMarkerDetails(marker));
+      showExplorationDialog(inspector);
+    };
+
+    for (const marker of validMarkers) {
+      const layers = normaliseLayers(marker);
+      const primaryLayer = layers[0] || 'locations';
+      const group = getLayerGroup(primaryLayer);
+      const markerKind = cleanClass(marker.marker || marker.type || 'location');
+      const glyph = markerGlyphs[markerKind] || markerGlyphs.location;
+      const latLng = L.latLng(
+        height - (Number(marker.y) / 100) * height,
+        (Number(marker.x) / 100) * width,
+      );
+
+      const icon = L.divIcon({
+        className: `atlas-marker atlas-marker--${markerKind}`,
+        html: `<span class="atlas-marker__core" aria-hidden="true">${glyph}</span>`,
+        iconSize: [22, 22],
+        iconAnchor: [11, 11],
+        popupAnchor: [0, -12],
+      });
+
+      const leafletMarker = L.marker(latLng, {
+        icon,
+        title: marker.title || '',
+        alt: marker.title || 'Map marker',
+        keyboard: true,
+      });
+      leafletMarker.bindTooltip(marker.title || '', {
+        direction: 'top',
+        offset: [0, -10],
+        opacity: 0.96,
+      });
+      leafletMarker.bindPopup(createMarkerDetails(marker), {
+        className: 'atlas-leaflet-popup',
+        maxWidth: 320,
+      });
+      leafletMarker.on('click', () => {
+        if (!mobileQuery.matches) return;
+        leafletMarker.closePopup();
+        openInspector(marker);
+      });
+      group.addLayer(leafletMarker);
+      markerRecords.push({ marker, leafletMarker, group, latLng, layers });
+    }
+
+    if (layerGroups.size > 0) {
+      const overlayTree = buildLayerTree(layerGroups);
+      const layerOptions = {
+        collapsed: mobileQuery.matches,
+        position: 'topright',
+      };
+      if (L.control.layers?.tree) L.control.layers.tree(null, overlayTree, layerOptions).addTo(atlas);
+      else L.control.layers(null, Object.fromEntries(layerGroups), layerOptions).addTo(atlas);
+    }
+
+    const withinZoom = (record, zoom) => {
+      if (Number.isFinite(record.marker.minZoom) && zoom < record.marker.minZoom) return false;
+      if (Number.isFinite(record.marker.maxZoom) && zoom > record.marker.maxZoom) return false;
+      return true;
+    };
+
+    const applyZoomVisibility = () => {
+      const zoom = atlas.getZoom();
+      for (const record of markerRecords) {
+        const visible = withinZoom(record, zoom);
+        const present = record.group.hasLayer(record.leafletMarker);
+        if (visible && !present) record.group.addLayer(record.leafletMarker);
+        if (!visible && present) record.group.removeLayer(record.leafletMarker);
+      }
+    };
+    atlas.on('zoomend', applyZoomVisibility);
+    applyZoomVisibility();
+
+    const focusRecord = (record) => {
+      let targetZoom = atlas.getZoom();
+      if (Number.isFinite(record.marker.minZoom)) targetZoom = Math.max(targetZoom, record.marker.minZoom);
+      if (Number.isFinite(record.marker.maxZoom)) targetZoom = Math.min(targetZoom, record.marker.maxZoom);
+      targetZoom = Math.max(targetZoom, fittedZoom + 1);
+      targetZoom = Math.min(targetZoom, atlas.getMaxZoom());
+      if (!atlas.hasLayer(record.group)) record.group.addTo(atlas);
+      atlas.setView(record.latLng, targetZoom, { animate: true });
+      if (!record.group.hasLayer(record.leafletMarker)) record.group.addLayer(record.leafletMarker);
+      if (mobileQuery.matches) openInspector(record.marker);
+      else record.leafletMarker.openPopup();
+    };
+
+    const fuse = new Fuse(markerRecords.map((record, index) => ({
+      index,
+      title: record.marker.title,
+      description: record.marker.description,
+      type: record.marker.type,
+      era: Array.isArray(record.marker.era) ? record.marker.era.join(' ') : record.marker.era,
+      faction: Array.isArray(record.marker.faction) ? record.marker.faction.join(' ') : record.marker.faction,
+      region: record.marker.region,
+      layers: record.layers.join(' '),
+    })), {
+      threshold: 0.35,
+      ignoreLocation: true,
+      keys: [
+        { name: 'title', weight: 3 },
+        { name: 'region', weight: 1.5 },
+        { name: 'faction', weight: 1.25 },
+        'description',
+        'type',
+        'era',
+        'layers',
+      ],
+    });
+
+    const bindSearch = (searchShell) => {
+      const searchInput = searchShell.querySelector('[data-atlas-search]');
+      const searchResults = searchShell.querySelector('[data-atlas-search-results]');
+      if (!searchInput || !searchResults || searchInput.dataset.atlasSearchBound === 'true') return;
+      searchInput.dataset.atlasSearchBound = 'true';
+
+      const hideResults = () => {
+        searchResults.hidden = true;
+        searchResults.replaceChildren();
+      };
+
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim();
+        if (!query) {
+          hideResults();
+          return;
+        }
+        const matches = fuse.search(query, { limit: 8 });
+        searchResults.replaceChildren();
+        if (!matches.length) {
+          const empty = document.createElement('p');
+          empty.className = 'atlas-search__empty';
+          empty.textContent = 'No matching markers.';
+          searchResults.append(empty);
+        } else {
+          for (const match of matches) {
+            const record = markerRecords[match.item.index];
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'atlas-search__result';
+            const title = document.createElement('strong');
+            title.textContent = record.marker.title || 'Untitled marker';
+            const meta = document.createElement('span');
+            meta.textContent = [record.marker.type, record.marker.region, record.marker.faction]
+              .flatMap((value) => Array.isArray(value) ? value : [value])
+              .filter(Boolean)
+              .map(prettify)
+              .join(' · ');
+            button.append(title, meta);
+            button.addEventListener('click', () => {
+              focusRecord(record);
+              hideResults();
+              closeContainingPopover(button);
+            });
+            searchResults.append(button);
+          }
+        }
+        searchResults.hidden = false;
+      });
+      searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') hideResults();
+      });
+    };
+
+    root.querySelectorAll('[data-atlas-search-shell]').forEach(bindSearch);
+
+    const resetAtlas = () => {
+      setDefaultView({ animate: true });
+      root.querySelectorAll('[data-atlas-search]').forEach((input) => { input.value = ''; });
+      root.querySelectorAll('[data-atlas-search-results]').forEach((results) => {
+        results.hidden = true;
+        results.replaceChildren();
+      });
+    };
+    root.querySelectorAll('[data-atlas-reset]').forEach((button) => button.addEventListener('click', resetAtlas));
+
+    bindExplorationFocus(root, () => requestAnimationFrame(() => atlas.invalidateSize({ pan: false })));
+    const observer = new ResizeObserver(() => atlas.invalidateSize({ pan: false }));
+    observer.observe(canvas);
+    root.dataset.atlasReady = 'true';
+  }
+
+  function bootAtlases() {
+    document.querySelectorAll('[data-atlas]').forEach((root) => initialiseAtlas(root));
+  }
+
+  bootAtlases();
+  document.addEventListener('astro:page-load', bootAtlases);
+</script>

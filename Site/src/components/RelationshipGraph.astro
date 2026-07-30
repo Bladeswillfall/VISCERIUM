@@ -1,0 +1,573 @@
+---
+const { graph } = Astro.props;
+const payload = JSON.stringify(graph ?? { nodes: [], edges: [], relationTypes: [] }).replace(/</g, '\\u003c');
+const hasGraph = (graph?.nodes?.length ?? 0) > 0 && (graph?.edges?.length ?? 0) > 0;
+const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
+---
+
+<section class="relationship-explorer" data-relationship-explorer>
+  {hasGraph ? (
+    <>
+      <div class="relationship-explorer__toolbar" aria-label="Relationship graph controls">
+        <div class="relationship-search" data-relationship-search-shell>
+          <label for="relationship-search">Find an entity</label>
+          <input id="relationship-search" type="search" autocomplete="off" placeholder="Search people, factions, places…" data-relationship-search />
+          <div class="relationship-search__results" data-relationship-search-results hidden></div>
+        </div>
+
+        <label class="relationship-control">
+          <span>Relationship</span>
+          <select data-relationship-filter>
+            <option value="">All relationships</option>
+            {graph.relationTypes?.map((relation) => (
+              <option value={relation.id}>{relation.label} ({relation.count})</option>
+            ))}
+          </select>
+        </label>
+
+        <label class="relationship-control">
+          <span>Layout</span>
+          <select data-relationship-layout>
+            <option value="cose">Network</option>
+            <option value="dagre">Hierarchy</option>
+          </select>
+        </label>
+
+        <button type="button" class="relationship-explorer__reset" data-relationship-reset>Reset</button>
+      </div>
+
+      <div class="relationship-explorer__frame">
+        <div class="relationship-explorer__canvas" data-relationship-canvas role="application" aria-label="Interactive VISCERIUM relationship graph"></div>
+
+        <div class="relationship-explorer__list" data-relationship-list hidden aria-label="Relationship list">
+          <div class="relationship-list__header">
+            <p class="atlas__eyebrow">Structured relationships</p>
+            <p>Browse the same explicit relationship data without navigating the graph canvas.</p>
+          </div>
+          <ul>
+            {(graph.edges ?? []).map((edge) => {
+              const source = nodeById.get(edge.source);
+              const target = nodeById.get(edge.target);
+              return (
+                <li class="relationship-list__item">
+                  <button type="button" data-relationship-list-node={source?.id}>{source?.title ?? edge.source}</button>
+                  <span class="relationship-list__relation">
+                    <strong>{edge.label ?? edge.type}</strong>
+                    <span aria-hidden="true">{edge.directed ? '→' : '↔'}</span>
+                  </span>
+                  <button type="button" data-relationship-list-node={target?.id}>{target?.title ?? edge.target}</button>
+                  {edge.description && <p>{edge.description}</p>}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <aside class="relationship-explorer__details" data-relationship-details aria-live="polite">
+          <p class="relationship-explorer__details-hint">Select an entity or relationship to inspect it.</p>
+        </aside>
+
+        <div class="exploration-surface-controls relationship-explorer__mobile-controls" aria-label="Mobile relationship controls">
+          <button type="button" class="exploration-control" popovertarget="relationship-mobile-search" aria-label="Search relationships">
+            <span aria-hidden="true">⌕</span><span>Search</span>
+          </button>
+          <button type="button" class="exploration-control" popovertarget="relationship-mobile-filters" aria-label="Filter relationships">
+            <span aria-hidden="true">☷</span><span>Filters</span>
+          </button>
+          <button type="button" class="exploration-control" data-relationship-view-toggle aria-pressed="false" aria-label="Show relationship list">
+            <span aria-hidden="true">≡</span><span data-relationship-view-label>List</span>
+          </button>
+          <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label="Enter focus mode">
+            <span aria-hidden="true">⛶</span><span data-exploration-focus-label>Focus</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="relationship-mobile-search" class="exploration-popover relationship-explorer__mobile-search" popover>
+        <div class="exploration-popover__header">
+          <strong>Find an entity</strong>
+          <button type="button" class="exploration-popover__close" popovertarget="relationship-mobile-search" popovertargetaction="hide" aria-label="Close search">×</button>
+        </div>
+        <div class="relationship-search" data-relationship-search-shell>
+          <label for="relationship-mobile-search-input">Search relationships</label>
+          <input id="relationship-mobile-search-input" type="search" autocomplete="off" placeholder="Search people, factions, places…" data-relationship-search />
+          <div class="relationship-search__results" data-relationship-search-results hidden></div>
+        </div>
+      </div>
+
+      <div id="relationship-mobile-filters" class="exploration-popover relationship-explorer__mobile-filters" popover>
+        <div class="exploration-popover__header">
+          <strong>Graph controls</strong>
+          <button type="button" class="exploration-popover__close" popovertarget="relationship-mobile-filters" popovertargetaction="hide" aria-label="Close filters">×</button>
+        </div>
+        <label class="relationship-control">
+          <span>Relationship</span>
+          <select data-relationship-filter>
+            <option value="">All relationships</option>
+            {graph.relationTypes?.map((relation) => (
+              <option value={relation.id}>{relation.label} ({relation.count})</option>
+            ))}
+          </select>
+        </label>
+        <label class="relationship-control">
+          <span>Layout</span>
+          <select data-relationship-layout>
+            <option value="cose">Network</option>
+            <option value="dagre">Hierarchy</option>
+          </select>
+        </label>
+        <button type="button" class="relationship-explorer__reset" data-relationship-reset>Reset graph</button>
+      </div>
+
+      <dialog class="exploration-sheet relationship-explorer__mobile-inspector" data-relationship-inspector aria-label="Relationship details">
+        <div class="exploration-sheet__handle" aria-hidden="true"></div>
+        <div class="exploration-sheet__header">
+          <span class="atlas__eyebrow">Inspector</span>
+          <button type="button" class="exploration-sheet__close" data-exploration-dialog-close aria-label="Close relationship details">×</button>
+        </div>
+        <div data-relationship-inspector-content></div>
+      </dialog>
+
+      <script type="application/json" data-relationship-payload set:html={payload}></script>
+    </>
+  ) : (
+    <div class="relationship-explorer__empty">
+      <h2>No structured relationships published yet</h2>
+      <p>The explorer only uses explicit <code>relationships:</code> frontmatter, so generic backlinks do not turn this view into graph spaghetti. Add meaningful relationships to published character, faction or location notes and they will appear here automatically.</p>
+    </div>
+  )}
+</section>
+
+<script>
+  import cytoscape from 'cytoscape';
+  import dagre from 'cytoscape-dagre';
+  import Fuse from 'fuse.js';
+  import {
+    bindExplorationDialog,
+    bindExplorationFocus,
+    closeContainingPopover,
+    explorationMobileQuery,
+    showExplorationDialog,
+  } from '../lib/exploration-ui.mjs';
+
+  cytoscape.use(dagre);
+
+  function pretty(value) {
+    return String(value ?? '')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\b\w/g, (character) => character.toUpperCase());
+  }
+
+  function resolvedCssColor(root, name, fallback) {
+    const probe = document.createElement('span');
+    probe.style.position = 'absolute';
+    probe.style.visibility = 'hidden';
+    probe.style.pointerEvents = 'none';
+    probe.style.color = `var(${name}, ${fallback})`;
+    root.append(probe);
+    const resolved = getComputedStyle(probe).color || fallback;
+    probe.remove();
+    return resolved;
+  }
+
+  function appendMetadata(container, values) {
+    const metadata = values
+      .flatMap((value) => Array.isArray(value) ? value : [value])
+      .filter(Boolean)
+      .map(pretty);
+    if (!metadata.length) return;
+    const line = document.createElement('p');
+    line.className = 'relationship-explorer__details-meta';
+    line.textContent = [...new Set(metadata)].join(' · ');
+    container.append(line);
+  }
+
+  function initialiseRelationshipExplorer(root) {
+    if (root.dataset.relationshipReady) return;
+    const canvas = root.querySelector('[data-relationship-canvas]');
+    const list = root.querySelector('[data-relationship-list]');
+    const payloadElement = root.querySelector('[data-relationship-payload]');
+    if (!canvas || !payloadElement) return;
+    root.dataset.relationshipReady = 'true';
+
+    let graph;
+    try {
+      graph = JSON.parse(payloadElement.textContent || '{}');
+    } catch {
+      return;
+    }
+
+    const mobileQuery = explorationMobileQuery();
+    const details = root.querySelector('[data-relationship-details]');
+    const inspector = root.querySelector('[data-relationship-inspector]');
+    const inspectorContent = root.querySelector('[data-relationship-inspector-content]');
+    bindExplorationDialog(inspector);
+
+    const accent = resolvedCssColor(root, '--codex-accent', '#b59058');
+    const surface = resolvedCssColor(root, '--relationship-node-bg', '#1d1d1d');
+    const text = resolvedCssColor(root, '--relationship-node-text', '#f5f5f5');
+    const isLightTheme = document.documentElement.dataset.theme === 'light';
+    const muted = isLightTheme ? '#292824' : '#c8c5bd';
+    const border = resolvedCssColor(root, '--relationship-edge', '#62605a');
+    const canvasBackground = resolvedCssColor(root, '--relationship-canvas', '#111111');
+
+    const elements = [
+      ...(graph.nodes || []).map((node) => ({
+        group: 'nodes',
+        data: { ...node, label: node.title },
+      })),
+      ...(graph.edges || []).map((edge) => ({
+        group: 'edges',
+        classes: edge.directed ? 'directed' : '',
+        data: { ...edge, directed: edge.directed ? 1 : 0 },
+      })),
+    ];
+
+    const cy = cytoscape({
+      container: canvas,
+      elements,
+      wheelSensitivity: 0.22,
+      minZoom: 0.15,
+      maxZoom: 3.5,
+      boxSelectionEnabled: false,
+      autounselectify: false,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            shape: 'round-rectangle',
+            'background-color': surface,
+            'border-color': border,
+            'border-width': 1.35,
+            color: text,
+            label: 'data(label)',
+            'font-family': 'IBM Plex Sans, system-ui, sans-serif',
+            'font-size': 10.5,
+            'font-weight': 600,
+            'text-valign': 'center',
+            'text-halign': 'center',
+            'text-wrap': 'wrap',
+            'text-max-width': 126,
+            width: 112,
+            height: 38,
+            padding: 9,
+            'overlay-opacity': 0,
+          },
+        },
+        {
+          selector: 'node[type = "character"]',
+          style: {
+            shape: 'ellipse',
+            width: 82,
+            height: 82,
+            padding: 6,
+            'font-size': 9.5,
+            'text-max-width': 66,
+            'text-wrap': 'wrap',
+          },
+        },
+        { selector: 'node[type = "location"]', style: { 'border-style': 'dashed' } },
+        {
+          selector: 'node:selected',
+          style: {
+            'background-color': accent,
+            'border-color': text,
+            'border-width': 2,
+            color: canvasBackground,
+          },
+        },
+        {
+          selector: 'edge',
+          style: {
+            width: 1.05,
+            'line-color': border,
+            'line-opacity': 0.56,
+            'curve-style': 'bezier',
+            opacity: 1,
+            label: 'data(label)',
+            color: muted,
+            'text-opacity': 1,
+            'font-family': 'IBM Plex Sans, system-ui, sans-serif',
+            'font-size': 8.5,
+            'font-weight': 400,
+            'min-zoomed-font-size': 6.5,
+            'text-outline-color': canvasBackground,
+            'text-outline-width': 0.22,
+            'text-outline-opacity': 0.75,
+            'text-rotation': 'none',
+            'text-margin-y': -11,
+          },
+        },
+        {
+          selector: 'edge.directed',
+          style: {
+            'target-arrow-shape': 'triangle',
+            'target-arrow-color': border,
+            'arrow-scale': 0.62,
+          },
+        },
+        {
+          selector: 'edge:selected',
+          style: {
+            width: 2.1,
+            'line-color': accent,
+            'line-opacity': 1,
+            'target-arrow-color': accent,
+            color: text,
+            'font-size': 9.5,
+            'font-weight': 500,
+            'text-outline-color': canvasBackground,
+            opacity: 1,
+          },
+        },
+      ],
+      layout: {
+        name: 'cose',
+        animate: false,
+        padding: 72,
+        nodeRepulsion: 16500,
+        idealEdgeLength: 210,
+        edgeElasticity: 80,
+        gravity: 0.24,
+        componentSpacing: 140,
+      },
+    });
+
+    const buildNodeDetails = (node) => {
+      const container = document.createElement('div');
+      const data = node.data();
+      const title = document.createElement('h2');
+      title.textContent = data.title || data.label || 'Entity';
+      container.append(title);
+      appendMetadata(container, [data.type, data.era]);
+      if (data.description) {
+        const description = document.createElement('p');
+        description.textContent = data.description;
+        container.append(description);
+      }
+      if (data.page) {
+        const link = document.createElement('a');
+        link.href = data.page;
+        link.textContent = 'Open article →';
+        container.append(link);
+      }
+      return container;
+    };
+
+    const buildEdgeDetails = (edge) => {
+      const container = document.createElement('div');
+      const data = edge.data();
+      const title = document.createElement('h2');
+      title.textContent = data.label || pretty(data.type) || 'Relationship';
+      container.append(title);
+      const path = document.createElement('p');
+      path.className = 'relationship-explorer__details-path';
+      path.textContent = `${edge.source().data('title')} ${data.directed ? '→' : '↔'} ${edge.target().data('title')}`;
+      container.append(path);
+      appendMetadata(container, [data.era, data.since ? `Since ${data.since}` : '', data.until ? `Until ${data.until}` : '']);
+      if (data.description) {
+        const description = document.createElement('p');
+        description.textContent = data.description;
+        container.append(description);
+      }
+      return container;
+    };
+
+    const showDetails = (content) => {
+      if (details) details.replaceChildren(content.cloneNode(true));
+      if (mobileQuery.matches && inspector && inspectorContent) {
+        inspectorContent.replaceChildren(content);
+        showExplorationDialog(inspector);
+      }
+    };
+
+    const renderNodeDetails = (node) => showDetails(buildNodeDetails(node));
+    const renderEdgeDetails = (edge) => showDetails(buildEdgeDetails(edge));
+
+    cy.on('tap', 'node', (event) => renderNodeDetails(event.target));
+    cy.on('tap', 'edge', (event) => renderEdgeDetails(event.target));
+
+    const relationFilters = [...root.querySelectorAll('[data-relationship-filter]')];
+    const layoutSelects = [...root.querySelectorAll('[data-relationship-layout]')];
+
+    const syncControls = (controls, value, source) => {
+      controls.forEach((control) => {
+        if (control !== source) control.value = value;
+      });
+    };
+
+    const currentLayout = () => layoutSelects[0]?.value === 'dagre' ? 'dagre' : 'cose';
+    const currentRelation = () => relationFilters[0]?.value || '';
+
+    const runLayout = () => {
+      const name = currentLayout();
+      const options = name === 'dagre'
+        ? { name: 'dagre', rankDir: 'LR', rankSep: 145, nodeSep: 86, edgeSep: 38, padding: 72, animate: false }
+        : { name: 'cose', animate: false, padding: 72, nodeRepulsion: 16500, idealEdgeLength: 210, edgeElasticity: 80, gravity: 0.24, componentSpacing: 140 };
+      cy.elements(':visible').layout(options).run();
+      cy.fit(cy.elements(':visible'), 78);
+    };
+
+    const applyRelationFilter = () => {
+      const relation = currentRelation();
+      cy.batch(() => {
+        cy.elements().style('display', 'element');
+        if (!relation) return;
+        cy.edges().forEach((edge) => {
+          edge.style('display', edge.data('type') === relation ? 'element' : 'none');
+        });
+        cy.nodes().forEach((node) => {
+          const hasVisibleEdge = node.connectedEdges().some((edge) => edge.style('display') !== 'none');
+          node.style('display', hasVisibleEdge ? 'element' : 'none');
+        });
+      });
+      runLayout();
+    };
+
+    relationFilters.forEach((control) => control.addEventListener('change', () => {
+      syncControls(relationFilters, control.value, control);
+      applyRelationFilter();
+    }));
+    layoutSelects.forEach((control) => control.addEventListener('change', () => {
+      syncControls(layoutSelects, control.value, control);
+      runLayout();
+    }));
+
+    const searchableNodes = (graph.nodes || []).map((node) => ({
+      ...node,
+      eraText: Array.isArray(node.era) ? node.era.join(' ') : node.era,
+    }));
+    const fuse = new Fuse(searchableNodes, {
+      threshold: 0.34,
+      ignoreLocation: true,
+      keys: [
+        { name: 'title', weight: 3 },
+        { name: 'type', weight: 1.4 },
+        'description',
+        'eraText',
+      ],
+    });
+
+    const setViewMode = (mode) => {
+      const listMode = mode === 'list';
+      canvas.hidden = listMode;
+      if (list) list.hidden = !listMode;
+      root.querySelectorAll('[data-relationship-view-toggle]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(listMode));
+        button.setAttribute('aria-label', listMode ? 'Show relationship graph' : 'Show relationship list');
+        const label = button.querySelector('[data-relationship-view-label]');
+        if (label) label.textContent = listMode ? 'Graph' : 'List';
+      });
+      if (!listMode) requestAnimationFrame(() => {
+        cy.resize();
+        cy.fit(cy.elements(':visible'), 78);
+      });
+    };
+
+    const focusNode = (nodeId) => {
+      setViewMode('graph');
+      const node = cy.$id(nodeId);
+      if (!node.length) return;
+      if (node.style('display') === 'none') {
+        relationFilters.forEach((control) => { control.value = ''; });
+        applyRelationFilter();
+      }
+      cy.elements().unselect();
+      node.select();
+      cy.animate({
+        center: { eles: node },
+        zoom: Math.max(cy.zoom(), 1.15),
+        duration: 280,
+      });
+      renderNodeDetails(node);
+    };
+
+    const bindSearch = (searchShell) => {
+      const searchInput = searchShell.querySelector('[data-relationship-search]');
+      const searchResults = searchShell.querySelector('[data-relationship-search-results]');
+      if (!searchInput || !searchResults || searchInput.dataset.relationshipSearchBound === 'true') return;
+      searchInput.dataset.relationshipSearchBound = 'true';
+
+      const hideResults = () => {
+        searchResults.hidden = true;
+        searchResults.replaceChildren();
+      };
+
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim();
+        if (!query) {
+          hideResults();
+          return;
+        }
+        const matches = fuse.search(query, { limit: 8 });
+        searchResults.replaceChildren();
+        if (!matches.length) {
+          const empty = document.createElement('p');
+          empty.className = 'relationship-search__empty';
+          empty.textContent = 'No matching entities.';
+          searchResults.append(empty);
+        } else {
+          for (const match of matches) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'relationship-search__result';
+            const title = document.createElement('strong');
+            title.textContent = match.item.title;
+            const meta = document.createElement('span');
+            meta.textContent = [match.item.type, match.item.eraText].filter(Boolean).map(pretty).join(' · ');
+            button.append(title, meta);
+            button.addEventListener('click', () => {
+              focusNode(match.item.id);
+              hideResults();
+              closeContainingPopover(button);
+            });
+            searchResults.append(button);
+          }
+        }
+        searchResults.hidden = false;
+      });
+      searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') hideResults();
+      });
+    };
+
+    root.querySelectorAll('[data-relationship-search-shell]').forEach(bindSearch);
+    root.querySelectorAll('[data-relationship-list-node]').forEach((button) => {
+      button.addEventListener('click', () => focusNode(button.dataset.relationshipListNode));
+    });
+    root.querySelectorAll('[data-relationship-view-toggle]').forEach((button) => {
+      button.addEventListener('click', () => setViewMode(canvas.hidden ? 'graph' : 'list'));
+    });
+
+    const resetExplorer = () => {
+      relationFilters.forEach((control) => { control.value = ''; });
+      layoutSelects.forEach((control) => { control.value = 'cose'; });
+      root.querySelectorAll('[data-relationship-search]').forEach((input) => { input.value = ''; });
+      root.querySelectorAll('[data-relationship-search-results]').forEach((results) => {
+        results.hidden = true;
+        results.replaceChildren();
+      });
+      cy.elements().style('display', 'element').unselect();
+      setViewMode('graph');
+      runLayout();
+      if (details) details.innerHTML = '<p class="relationship-explorer__details-hint">Select an entity or relationship to inspect it.</p>';
+      if (inspector?.open) inspector.close();
+    };
+    root.querySelectorAll('[data-relationship-reset]').forEach((button) => button.addEventListener('click', resetExplorer));
+
+    bindExplorationFocus(root, () => requestAnimationFrame(() => {
+      cy.resize();
+      if (!canvas.hidden) cy.fit(cy.elements(':visible'), 78);
+    }));
+
+    const observer = new ResizeObserver(() => cy.resize());
+    observer.observe(canvas);
+  }
+
+  function bootRelationshipExplorers() {
+    document.querySelectorAll('[data-relationship-explorer]').forEach((root) => initialiseRelationshipExplorer(root));
+  }
+
+  bootRelationshipExplorers();
+  document.addEventListener('astro:page-load', bootRelationshipExplorers);
+</script>

@@ -1,0 +1,91 @@
+/*
+ * Container-aware toolbar layout. The toolbar can be much narrower than the
+ * browser viewport when Starlight's navigation sidebar is open, so these
+ * breakpoints respond to a toolbar-only wrapper rather than the page.
+ */
+
+.vc-timeline-toolbar-container {
+  container-name: vc-timeline-toolbar;
+  container-type: inline-size;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+.vc-timeline-toolbar-enhanced .vc-timeline-actions,
+.vc-timeline-toolbar-enhanced .vc-timeline-action-group,
+.vc-timeline-toolbar-enhanced .vc-timeline-action-row {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+@container vc-timeline-toolbar (max-width: 1440px) {
+  .vc-timeline-toolbar.vc-timeline-toolbar-enhanced {
+    grid-template-columns: minmax(10rem, .72fr) minmax(17rem, 1.4fr) minmax(10rem, .75fr);
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-actions {
+    grid-column: 1 / -1;
+    width: 100%;
+    flex-wrap: wrap;
+    padding-block-start: .2rem;
+  }
+}
+
+@container vc-timeline-toolbar (max-width: 832px) {
+  .vc-timeline-toolbar.vc-timeline-toolbar-enhanced {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-search {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-group {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-group.is-view {
+    grid-column: 1 / -1;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-row,
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-row .vc-timeline-command {
+    width: 100%;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-row .vc-timeline-command {
+    flex: 1 1 0;
+  }
+}
+
+@container vc-timeline-toolbar (max-width: 608px) {
+  .vc-timeline-toolbar.vc-timeline-toolbar-enhanced {
+    grid-template-columns: minmax(0, 1fr);
+    padding: .65rem;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-search,
+  .vc-timeline-toolbar-enhanced .vc-timeline-actions {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-group.is-view {
+    grid-column: auto;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-field-hint {
+    display: none;
+  }
+}

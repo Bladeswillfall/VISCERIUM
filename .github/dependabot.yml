@@ -1,0 +1,42 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /Site
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      astro:
+        patterns:
+          - astro
+          - '@astrojs/*'
+          - '@astrojs/starlight'
+      starlight-plugins:
+        patterns:
+          - 'starlight-*'
+      timeline-runtime:
+        patterns:
+          - 'chronos-timeline-md'
+          - 'vis-*'
+          - 'moment'
+          - 'uuid'
+
+  - package-ecosystem: npm
+    directory: /Tools/obsidian-viscerium-timelines
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      timeline-runtime:
+        patterns:
+          - 'chronos-timeline-md'
+          - 'vis-*'
+          - 'moment'
+          - 'uuid'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

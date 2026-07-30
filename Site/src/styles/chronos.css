@@ -1,0 +1,61 @@
+@import './chronos-native.css';
+
+/* Host-only framing for Chronos. Item, group, period and control styling remains native. */
+
+.vc-chronos-embed,
+.vc-chronos-core {
+  position: relative;
+  min-width: 0;
+}
+
+.vc-chronos-embed {
+  margin-block: 1.5rem;
+}
+
+.vc-chronos-embed-canvas {
+  position: relative;
+  min-height: 20rem;
+  touch-action: pan-y pinch-zoom;
+}
+
+.vc-chronos-source-fallback {
+  padding: .8rem;
+  color: var(--chronos-text-muted);
+}
+
+.vc-chronos-source-fallback > :first-child {
+  margin-top: 0;
+}
+
+.vc-chronos-source-fallback pre {
+  max-height: 20rem;
+  overflow: auto;
+}
+
+.vc-chronos-credit {
+  margin-inline-start: auto;
+  color: var(--sl-color-gray-4);
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 40rem) {
+  .vc-chronos-embed {
+    margin-inline: calc(var(--sl-content-pad-x, 1rem) * -.35);
+  }
+
+  .vc-chronos-embed-canvas {
+    min-height: 16rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-chronos-core *,
+  .vc-chronos-embed * {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

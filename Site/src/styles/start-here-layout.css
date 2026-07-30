@@ -1,0 +1,340 @@
+/* Start Here is an editorial gateway, not a reference article.
+   Remove the desktop article rail at the shell level and let the primer own the
+   content canvas. Internal Start Here sections decide their own readable widths. */
+
+/* The reviewed Start Here composition is edge-to-edge beneath the global nav.
+   Keep these shell resets strictly scoped to this page. */
+.main-frame:has(.start-here-primer) {
+  padding-top: 0 !important;
+  padding-inline: 0 !important;
+}
+
+/* Start Here replaces the ordinary first article panel with its own bespoke hero. */
+.main-frame:has(.start-here-primer) div.content-panel:nth-child(1) {
+  display: none !important;
+}
+
+.main-frame:has(.start-here-primer) > .codex-two-column-content {
+  inline-size: 100% !important;
+  max-inline-size: none !important;
+  margin-inline: 0 !important;
+}
+
+.main-frame:has(.start-here-primer)
+  > .codex-two-column-content
+  > .codex-main-pane {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  column-gap: 0 !important;
+  row-gap: 0 !important;
+  inline-size: 100% !important;
+  max-inline-size: none !important;
+  margin-inline: 0 !important;
+}
+
+.main-frame:has(.start-here-primer)
+  > .codex-two-column-content
+  > .codex-main-pane
+  > main {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  inline-size: 100% !important;
+  max-inline-size: none !important;
+  min-inline-size: 0;
+  margin-inline: 0 !important;
+  padding: 0 !important;
+}
+
+.main-frame:has(.start-here-primer) main > .content-panel,
+.main-frame:has(.start-here-primer) main > .content-panel > .sl-container,
+.main-frame:has(.start-here-primer) .sl-markdown-content,
+.main-frame:has(.start-here-primer) .start-here-primer {
+  inline-size: 100% !important;
+  max-inline-size: none !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+}
+
+/* Start Here supplies its own title, hero and navigation context. The ordinary
+   article masthead duplicates that information and creates a dead page before
+   the actual introduction begins. */
+.main-frame:has(.start-here-primer) main > .content-panel,
+.main-frame:has(.start-here-primer) .content-panel > .sl-container,
+.main-frame:has(.start-here-primer) .sl-markdown-content {
+  padding-block-start: 0 !important;
+}
+
+.main-frame:has(.start-here-primer) .sl-markdown-content {
+  margin-block-start: 0 !important;
+}
+
+.main-frame:has(.start-here-primer) .content-panel > .sl-container > .codex-header-fade-filter,
+.main-frame:has(.start-here-primer) .content-panel > .sl-container > .codex-header-figure,
+.main-frame:has(.start-here-primer) .content-panel > .sl-container > h1#_top,
+.main-frame:has(.start-here-primer) .content-panel > .sl-container > .codex-breadcrumbs {
+  display: none !important;
+}
+
+/* Starlight's generic content-flow rule adds a top gap between almost every
+   adjacent block. The bespoke primer owns its own rhythm, so neutralise that
+   generic gap only inside Start Here. */
+.main-frame:has(.start-here-primer) .sl-markdown-content
+  :not(a, strong, em, del, span, input, code, br)
+  + :not(a, strong, em, del, span, input, code, br, :where(.not-content *)),
+.main-frame:has(.start-here-primer) .sl-markdown-content
+  :not(a, strong, em, del, span, input, code, br)
+  + :is(astro-island, astro-slot)
+  > :not(a, strong, em, del, span, input, code, br, :where(.not-content *)):first-child {
+  margin-top: 0 !important;
+}
+
+/* Keep the normal compact mobile "On this page" affordance. Only the permanent
+   desktop reference/TOC rail is inappropriate for this editorial gateway. */
+@media (min-width: 72rem) {
+  .main-frame:has(.start-here-primer)
+    > .codex-two-column-content
+    > .codex-main-pane
+    > .right-sidebar-container {
+    display: none !important;
+  }
+}
+
+/* Editorial choices should read as a deliberate row, not resize according to
+   whichever label happens to wrap onto another line. */
+.start-here-primer .start-choice-row {
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+}
+
+.start-here-primer .start-choice {
+  block-size: 100%;
+  align-self: stretch;
+  position: relative;
+  overflow: hidden;
+  border-radius: .7rem;
+}
+
+.start-here-primer .start-route-card {
+  border-radius: .7rem;
+}
+
+/* Give each breadcrumb pause enough presence to catch the reader's eye before
+   the next editorial chapter, without turning the buttons themselves into huge cards. */
+.main-frame:has(.start-here-primer) .start-breadcrumb__inner {
+  padding-block: clamp(4rem, 7vw, 5.5rem);
+}
+
+/* Match the tighter editorial rhythm from the reviewed browser pass. The first
+   version was treating every chapter like a hero section, which made the page
+   feel much longer and emptier than the material justified. */
+.main-frame:has(.start-here-primer) .start-here-primer h2 {
+  margin-bottom: 1rem !important;
+  font-size: clamp(2rem, 1.55rem + 1.45vw, 3.35rem);
+  line-height: 1.02;
+}
+
+.start-here-primer .start-lead {
+  font-size: clamp(1.05rem, 1rem + .22vw, 1.24rem);
+  line-height: 1.52;
+}
+
+.start-here-primer .start-section__intro {
+  padding-block: clamp(3.25rem, 5vw, 5.25rem) clamp(1.75rem, 3vw, 2.8rem);
+}
+
+.start-here-primer .start-place {
+  min-height: clamp(34rem, 54vw, 48rem);
+}
+
+.start-here-primer .start-place__copy {
+  padding-block: clamp(4rem, 7vw, 7rem);
+}
+
+.start-here-primer .start-culture {
+  min-height: clamp(29rem, 42vw, 40rem);
+}
+
+.start-here-primer .start-culture__copy {
+  padding-block: clamp(4rem, 6vw, 6.5rem);
+}
+
+.start-here-primer .start-threat-beat {
+  min-height: clamp(30rem, 42vw, 40rem);
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.start-here-primer .start-threat-beat__copy h3 {
+  font-size: clamp(2rem, 1.55rem + 1.65vw, 3.5rem);
+}
+
+.start-here-primer .start-wyrd {
+  padding-block: clamp(5rem, 8vw, 8.5rem);
+}
+
+.start-here-primer .start-wyrd__stone {
+  display: none !important;
+}
+
+.start-here-primer .start-wyrd__grid {
+  margin-top: clamp(2rem, 4.5vw, 4.5rem);
+}
+
+.start-here-primer .start-story-scale__inner {
+  padding-block: clamp(4.5rem, 7vw, 7.5rem);
+}
+
+.start-here-primer .start-route {
+  padding-block: clamp(4.5rem, 7vw, 7.5rem) clamp(5rem, 8vw, 8rem);
+}
+
+/* Let the era sequence bleed to the full viewport width on this page only. */
+.main-frame:has(.start-here-primer) .start-era-band {
+  width: 100vw;
+}
+
+/* The era sequence should pull the eye across the page instead of making four
+   near-identical left-image/right-copy rows. Keep the alternation desktop-only;
+   smaller layouts intentionally collapse into the existing cinematic overlay. */
+@media (min-width: 62.01rem) {
+  .start-here-primer .start-era-band:nth-child(even) {
+    grid-template-columns: minmax(21rem, .7fr) minmax(0, 1.3fr);
+  }
+
+  .start-here-primer .start-era-band:nth-child(even) .start-era-band__map {
+    grid-column: 2;
+    grid-row: 1;
+    background: linear-gradient(270deg, color-mix(in oklch, var(--era-accent) 8%, var(--start-void)), var(--start-void));
+  }
+
+  .start-here-primer .start-era-band:nth-child(even) .start-era-band__copy {
+    grid-column: 1;
+    grid-row: 1;
+    background: linear-gradient(270deg, color-mix(in oklch, var(--start-void) 75%, transparent), var(--start-void) 18%);
+  }
+}
+
+/* The four era choices are gateways into four visual languages, not four generic
+   form controls. Share the geometry, then let colour and surface treatment do
+   the differentiating. */
+.start-here-primer [data-breadcrumb-group='era'] .start-choice {
+  --choice-accent: var(--start-accent);
+  border-color: color-mix(in oklch, var(--choice-accent) 34%, var(--start-line));
+  box-shadow: inset 0 .18rem 0 color-mix(in oklch, var(--choice-accent) 58%, transparent);
+}
+
+.start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='citadel'] {
+  --choice-accent: var(--era-e1-base);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 1.05rem, color-mix(in oklch, var(--choice-accent) 8%, transparent) 1.08rem 1.12rem),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 10%, var(--start-bg)), var(--start-bg) 62%);
+}
+
+.start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='smog'] {
+  --choice-accent: var(--era-e2-base);
+  background:
+    linear-gradient(120deg, transparent 0 42%, color-mix(in oklch, var(--choice-accent) 10%, transparent) 43% 47%, transparent 48% 100%),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 10%, var(--start-bg)), var(--start-bg) 62%);
+}
+
+.start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='nearsight'] {
+  --choice-accent: var(--era-e3-base);
+  background:
+    linear-gradient(color-mix(in oklch, var(--choice-accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--choice-accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 10%, var(--start-bg)), var(--start-bg) 62%);
+  background-size: 1.35rem 1.35rem, 1.35rem 1.35rem, auto;
+}
+
+.start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='entropy'] {
+  --choice-accent: var(--era-e4-base);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 .42rem, color-mix(in oklch, var(--choice-accent) 9%, transparent) .44rem .48rem),
+    linear-gradient(135deg, color-mix(in oklch, var(--choice-accent) 10%, var(--start-bg)), var(--start-bg) 62%);
+}
+
+.start-here-primer [data-breadcrumb-group='era'] .start-choice strong {
+  color: color-mix(in oklch, var(--choice-accent) 68%, var(--start-text));
+}
+
+.start-here-primer [data-breadcrumb-group='era'] .start-choice:hover,
+.start-here-primer [data-breadcrumb-group='era'] .start-choice:focus-visible,
+.start-here-primer [data-breadcrumb-group='era'] .start-choice.is-selected {
+  border-color: var(--choice-accent);
+  box-shadow:
+    inset 0 .2rem 0 var(--choice-accent),
+    0 0 0 1px color-mix(in oklch, var(--choice-accent) 20%, transparent);
+}
+
+/* Light mode keeps the cinematic chapters deliberately dark, but the surrounding
+   editorial material should read like warm paper rather than dark-mode CSS laid
+   over a pale canvas. Use existing Codex theme tokens so this stays in palette. */
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-hero__veil {
+  background:
+    radial-gradient(circle at 50% 42%, transparent 0 16rem, color-mix(in oklch, var(--start-void) 35%, transparent) 48rem),
+    linear-gradient(0deg, var(--start-void), transparent 13rem);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb {
+  border-color: var(--codex-border);
+  background: color-mix(in oklch, var(--start-surface) 82%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb--quiet {
+  background: color-mix(in oklch, var(--start-surface) 35%, var(--start-bg));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice {
+  border-color: var(--codex-border);
+  background: color-mix(in oklch, var(--start-surface) 88%, var(--start-bg));
+  box-shadow: 0 .45rem 1.25rem color-mix(in oklch, var(--codex-palette-oled) 8%, transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice span {
+  color: color-mix(in oklch, var(--start-body) 72%, transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='citadel'] {
+  --choice-accent: var(--era-e1-accent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='smog'] {
+  --choice-accent: var(--era-e2-accent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='nearsight'] {
+  --choice-accent: var(--era-e3-accent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='entropy'] {
+  --choice-accent: var(--era-e4-accent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice.is-selected {
+  background: color-mix(in oklch, var(--start-accent) 10%, var(--start-surface));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice.is-selected {
+  background-color: color-mix(in oklch, var(--choice-accent) 10%, var(--start-surface));
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-wyrd__grid > div:last-child {
+  border: 1px solid var(--start-line);
+  border-radius: .7rem;
+  background: color-mix(in oklch, var(--start-surface) 90%, transparent);
+  box-shadow: 0 .75rem 2rem color-mix(in oklch, var(--codex-palette-oled) 7%, transparent);
+}
+
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card {
+  border-color: var(--codex-border);
+  box-shadow: 0 .55rem 1.5rem color-mix(in oklch, var(--codex-palette-oled) 7%, transparent);
+}
+
+@media (max-width: 48rem) {
+  .start-here-primer h2 {
+    font-size: clamp(1.75rem, 7vw, 2.35rem);
+  }
+
+  .main-frame:has(.start-here-primer) .start-breadcrumb__inner {
+    padding-block: 3.5rem;
+  }
+}

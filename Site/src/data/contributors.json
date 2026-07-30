@@ -1,0 +1,16 @@
+{
+  "collapsedLimit": 7,
+  "defaultContributors": [
+    {
+      "id": "fall",
+      "role": "Author"
+    }
+  ],
+  "profiles": {
+    "fall": {
+      "name": "Fall",
+      "github": "Bladeswillfall",
+      "avatar": "fall.webp"
+    }
+  }
+}

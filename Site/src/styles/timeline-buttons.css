@@ -1,0 +1,12 @@
+/*
+ * Shared affordance for timeline actions. This only changes native timeline
+ * buttons; date fields, event cards and Chronos geometry remain untouched.
+ */
+
+.vc-timeline-app {
+  --vc-timeline-button-radius: .55rem;
+}
+
+.vc-timeline-app button {
+  border-radius: var(--vc-timeline-button-radius);
+}

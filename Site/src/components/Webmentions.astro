@@ -1,0 +1,58 @@
+---
+import siteConfig from '../../site.config.mjs';
+
+const config = siteConfig.webmentions;
+const enabled = Boolean(config?.enabled && config.apiEndpoint);
+---
+
+{enabled && (
+  <codex-webmentions
+    class="codex-webmentions"
+    data-api={config.apiEndpoint}
+    data-limit={config.maxMentions}
+  >
+    <details open>
+      <summary>Across the wider web</summary>
+      <p data-state role="status">Loading responses...</p>
+      <div class="codex-webmention-list" data-list></div>
+    </details>
+  </codex-webmentions>
+)}
+
+<style>
+  .codex-webmentions {
+    display: block;
+    margin-block: 2rem;
+    border-block-start: 1px solid var(--sl-color-hairline-light);
+    padding-block-start: 1rem;
+  }
+
+  summary {
+    cursor: pointer;
+    color: var(--sl-color-white);
+    font-weight: 700;
+  }
+
+  [data-state] {
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+  }
+
+  .codex-webmention-list {
+    display: grid;
+    gap: .75rem;
+  }
+
+  article {
+    padding-block: .75rem;
+    border-block-start: 1px solid var(--sl-color-hairline-light);
+  }
+
+  article p {
+    margin-block: 0 .4rem;
+  }
+
+  article a {
+    overflow-wrap: anywhere;
+  }
+</style>

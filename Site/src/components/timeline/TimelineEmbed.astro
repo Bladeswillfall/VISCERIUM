@@ -1,0 +1,31 @@
+---
+import TimelineApp from './TimelineApp.astro';
+
+const {
+  timelineId,
+  defaultCalendar,
+  laneMode = 'unified',
+  showFilters = true,
+  showMinimap = true,
+  showLegend = true,
+  compact = false,
+} = Astro.props;
+
+const datasets = import.meta.glob('../../data/timelines/{super,citadel,smog,nearsight,entropy}.json', {
+  eager: true,
+  import: 'default',
+});
+const dataset = datasets[`../../data/timelines/${timelineId}.json`];
+---
+
+{dataset ? (
+  <TimelineApp
+    dataset={dataset}
+    defaultCalendar={defaultCalendar ?? dataset.defaultCalendar}
+    laneMode={laneMode}
+    showFilters={showFilters}
+    showMinimap={showMinimap}
+    showLegend={showLegend}
+    compact={compact}
+  />
+) : <p class="codex-warning">Unknown timeline: <code>{timelineId}</code>.</p>}

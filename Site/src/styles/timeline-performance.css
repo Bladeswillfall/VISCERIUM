@@ -1,0 +1,70 @@
+.vc-timeline-list-more {
+  display: flex !important;
+  width: 100%;
+  min-height: 3rem !important;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  margin-block-start: .7rem;
+  border: 1px solid var(--vc-timeline-border-strong) !important;
+  background: color-mix(in oklch, var(--vc-timeline-accent) 8%, var(--vc-timeline-surface-deep)) !important;
+  text-align: center !important;
+}
+
+.vc-timeline-list-more span {
+  color: var(--vc-timeline-muted);
+  font-size: .72rem;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-1 {
+  width: 2px !important;
+  opacity: .38;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-2 {
+  width: 3px !important;
+  opacity: .56;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-3 {
+  width: 4px !important;
+  opacity: .76;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-4 {
+  width: 5px !important;
+  opacity: 1;
+}
+
+/*
+ * Canonical timeline pages opt out of Starlight's right-sidebar layout in the
+ * page component itself. These rules only release the remaining content-width
+ * constraints; they do not hide or reposition sidebar DOM.
+ */
+.codex-two-column-content.codex-timeline-page {
+  --sl-content-width: 100%;
+  max-inline-size: none;
+}
+
+.codex-two-column-content.codex-timeline-page > .codex-main-pane,
+.codex-two-column-content.codex-timeline-page > .codex-main-pane > main,
+.codex-two-column-content.codex-timeline-page > .codex-main-pane > main > .content-panel,
+.codex-two-column-content.codex-timeline-page > .codex-main-pane > main > .content-panel > .sl-container {
+  inline-size: 100%;
+  max-inline-size: none;
+  min-inline-size: 0;
+}
+
+@media (min-width: 72rem) {
+  .main-frame > .codex-two-column-content.codex-timeline-page {
+    max-inline-size: none;
+  }
+
+  .main-frame > .codex-two-column-content.codex-timeline-page > .codex-main-pane {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .main-frame > .codex-two-column-content.codex-timeline-page > .codex-main-pane > main > .content-panel > .sl-container {
+    max-width: none;
+  }
+}

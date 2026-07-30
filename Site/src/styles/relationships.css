@@ -1,0 +1,267 @@
+/* Structured relationship explorer. Cytoscape renders the graph to canvas; the surrounding controls remain native DOM. */
+.relationship-page {
+  width: 100%;
+}
+
+.relationship-page > p:not(.atlas__eyebrow) {
+  max-width: 78ch;
+}
+
+.relationship-explorer {
+  --relationship-canvas: color-mix(in oklch, var(--codex-page-bg) 88%, var(--codex-surface-raised));
+  --relationship-node-bg: color-mix(in oklch, var(--codex-surface-raised) 86%, var(--codex-page-bg));
+  --relationship-node-text: var(--sl-color-white);
+  --relationship-edge: color-mix(in oklch, var(--codex-border-strong) 78%, var(--codex-border));
+  --relationship-edge-label: var(--sl-color-gray-2);
+  --relationship-label-bg: var(--relationship-canvas);
+  --relationship-inspector: color-mix(in oklch, var(--codex-surface-raised) 96%, transparent);
+  margin-top: 1.25rem;
+}
+
+:root[data-theme='light'] .relationship-explorer {
+  --relationship-canvas: color-mix(in oklch, var(--codex-page-bg) 84%, var(--codex-fixed-light));
+  --relationship-node-bg: color-mix(in oklch, var(--codex-surface-raised) 92%, var(--codex-fixed-light));
+  --relationship-node-text: var(--codex-text-body);
+  --relationship-edge: color-mix(in oklch, var(--codex-border) 74%, transparent);
+  --relationship-edge-label: var(--codex-text-body);
+  --relationship-label-bg: var(--relationship-canvas);
+  --relationship-inspector: color-mix(in oklch, var(--codex-surface-raised) 92%, var(--codex-fixed-light));
+}
+
+.relationship-explorer__toolbar {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) minmax(11rem, 14rem) minmax(9rem, 12rem) auto;
+  align-items: end;
+  gap: .7rem;
+  margin-bottom: .75rem;
+}
+
+.relationship-search {
+  position: relative;
+}
+
+.relationship-search label,
+.relationship-control > span {
+  display: block;
+  margin-bottom: .25rem;
+  color: var(--sl-color-gray-2);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+  font-weight: 650;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.relationship-search input,
+.relationship-control select,
+.relationship-explorer__reset {
+  width: 100%;
+  min-height: 2.7rem;
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius);
+  padding: .58rem .72rem;
+  background: var(--codex-surface-raised);
+  color: var(--sl-color-white);
+  font-family: var(--vc-font-ui);
+}
+
+.relationship-explorer__reset {
+  width: auto;
+  cursor: pointer;
+}
+
+.relationship-search input:focus,
+.relationship-control select:focus,
+.relationship-explorer__reset:focus-visible {
+  border-color: var(--codex-accent);
+  outline: 2px solid color-mix(in oklch, var(--codex-accent) 38%, transparent);
+  outline-offset: 1px;
+}
+
+.relationship-search__results {
+  position: absolute;
+  inset: calc(100% + .35rem) 0 auto 0;
+  z-index: var(--codex-z-control);
+  overflow: auto;
+  max-height: min(24rem, 55vh);
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius);
+  background: var(--codex-surface-raised);
+  box-shadow: 0 .8rem 2rem color-mix(in oklch, var(--codex-shadow-color) 45%, transparent);
+}
+
+.relationship-search__result {
+  display: grid;
+  width: 100%;
+  gap: .12rem;
+  border: 0;
+  border-bottom: 1px solid var(--codex-border);
+  padding: .7rem .8rem;
+  background: transparent;
+  color: var(--sl-color-white);
+  text-align: left;
+  cursor: pointer;
+}
+
+.relationship-search__result:last-child {
+  border-bottom: 0;
+}
+
+.relationship-search__result:hover,
+.relationship-search__result:focus-visible {
+  background: var(--codex-bg-soft);
+}
+
+.relationship-search__result span,
+.relationship-search__empty {
+  color: var(--sl-color-gray-3);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+}
+
+.relationship-search__empty {
+  margin: 0;
+  padding: .8rem;
+}
+
+.relationship-explorer__frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 23rem);
+  min-height: clamp(42rem, calc(100dvh - 16rem), 64rem);
+  overflow: hidden;
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius-lg);
+  background: var(--relationship-canvas);
+}
+
+.relationship-explorer__canvas {
+  min-width: 0;
+  min-height: clamp(42rem, calc(100dvh - 16rem), 64rem);
+  background:
+    linear-gradient(color-mix(in oklch, var(--codex-border) 18%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--codex-border) 18%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 50% 42%, color-mix(in oklch, var(--codex-accent) 7%, transparent), transparent 52%),
+    var(--relationship-canvas);
+  background-size: 2.5rem 2.5rem, 2.5rem 2.5rem, auto, auto;
+}
+
+.relationship-explorer__details {
+  overflow: auto;
+  max-height: min(76vh, 64rem);
+  border-left: 1px solid var(--codex-border);
+  padding: 1.15rem;
+  background: var(--relationship-inspector);
+}
+
+.relationship-explorer__details::before {
+  display: block;
+  margin-bottom: .85rem;
+  color: var(--codex-accent);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  content: 'Inspector';
+}
+
+.relationship-explorer__details h2 {
+  margin: 0 0 .35rem;
+  font-size: 1.25rem;
+}
+
+.relationship-explorer__details p {
+  color: var(--sl-color-gray-2);
+}
+
+.relationship-explorer__details a {
+  display: inline-block;
+  margin-top: .35rem;
+  border-bottom: 1px solid color-mix(in oklch, var(--codex-accent) 55%, transparent);
+  color: var(--codex-accent-high);
+  font-family: var(--vc-font-ui);
+  text-decoration: none;
+}
+
+.relationship-explorer__details-meta {
+  margin-top: .2rem;
+  color: var(--sl-color-gray-3) !important;
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.relationship-explorer__details-path {
+  margin-block: .8rem;
+  border-left: 2px solid var(--codex-accent);
+  padding-left: .75rem;
+  color: var(--sl-color-white) !important;
+  font-family: var(--vc-font-ui);
+  font-weight: 650;
+}
+
+.relationship-explorer__details-hint {
+  margin-top: 0;
+  color: var(--sl-color-gray-3) !important;
+  font-size: var(--sl-text-sm);
+}
+
+.relationship-explorer__empty {
+  border: 1px dashed var(--codex-border);
+  border-radius: var(--codex-radius-lg);
+  padding: 1.1rem 1.2rem;
+  background: var(--codex-surface-raised);
+}
+
+.relationship-explorer__empty h2 {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 70rem) {
+  .relationship-explorer__frame {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
+  }
+}
+
+@media (max-width: 60rem) {
+  .relationship-explorer__toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .relationship-search {
+    grid-column: 1 / -1;
+  }
+
+  .relationship-explorer__reset {
+    width: 100%;
+  }
+
+  .relationship-explorer__frame {
+    grid-template-columns: 1fr;
+  }
+
+  .relationship-explorer__details {
+    max-height: none;
+    border-top: 1px solid var(--codex-border);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 40rem) {
+  .relationship-explorer__toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .relationship-search {
+    grid-column: auto;
+  }
+
+  .relationship-explorer__canvas,
+  .relationship-explorer__frame {
+    min-height: 32rem;
+  }
+}

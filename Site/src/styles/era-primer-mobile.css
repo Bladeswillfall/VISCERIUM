@@ -1,0 +1,15 @@
+/* Mobile primer tooltips become viewport-bound callouts so hidden pseudo-elements cannot widen the page. */
+@media (max-width: 42rem) {
+  .era-primer__tip::after {
+    position: fixed;
+    inset: auto 1rem 1rem;
+    width: auto;
+    max-width: none;
+    transform: translateY(.35rem);
+  }
+
+  .era-primer__tip:hover::after,
+  .era-primer__tip:focus-visible::after {
+    transform: translateY(0);
+  }
+}

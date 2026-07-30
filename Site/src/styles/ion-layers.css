@@ -1,0 +1,74 @@
+@import './storyteller-view.css';
+
+@layer starlight, ion;
+
+/*
+ * Site-level stacking hierarchy.
+ *
+ * The final navigation rail now lives at PageFrame level, so page/component
+ * stacking can remain local without asking an article-column descendant to
+ * behave like a viewport-wide underlay.
+ */
+:root {
+  --codex-z-underlay: -1;
+  --codex-z-page: 0;
+  --codex-z-surface: 1;
+  --codex-z-elevated-surface: 2;
+  --codex-z-navigation: 60;
+  --codex-z-control: 1000;
+  --codex-z-grain: 999999;
+}
+
+@layer ion {
+  /* Keep local application/timeline stacking contained to the page shell. */
+  .codex-two-column-content {
+    position: relative;
+    isolation: isolate;
+    z-index: var(--codex-z-page);
+  }
+
+  body:not(:has(.home-gateway)) .codex-main-pane > main > .content-panel {
+    position: relative;
+    z-index: var(--codex-z-surface);
+    background-color: var(--codex-page-bg);
+  }
+
+  /* Sticky page sidebars sit above local article/application surfaces. */
+  body:not(:has(.home-gateway)) .codex-main-pane > .right-sidebar-container {
+    position: relative;
+    z-index: var(--codex-z-elevated-surface);
+    background-color: var(--codex-page-bg);
+  }
+
+  .codex-page-deck {
+    z-index: var(--codex-z-surface);
+  }
+
+  .ion-codex-footer {
+    z-index: var(--codex-z-underlay);
+    margin-top: -20px !important;
+  }
+
+  header.header {
+    z-index: var(--codex-z-navigation);
+  }
+}
+
+/*
+ * These elements are authored by component/plugin styles outside the Codex
+ * cascade layers. Keep their site-level stack positions pinned to the shared
+ * hierarchy so a later local stylesheet cannot accidentally reorder them.
+ */
+html[data-codex-desktop-sidebar] #starlight__sidebar {
+  z-index: var(--codex-z-navigation) !important;
+}
+
+.codex-sidebar-toggle,
+#scroll-to-top-button {
+  z-index: var(--codex-z-control) !important;
+}
+
+/* Film grain has been restored to its pre-background-stack behaviour. */
+body::before {
+  z-index: var(--codex-z-grain) !important;
+}

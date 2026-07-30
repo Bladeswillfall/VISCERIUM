@@ -1,0 +1,42 @@
+---
+import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
+import '../../styles/chronos.css';
+import '../../styles/timeline-loading.css';
+import '../../styles/timeline-performance.css';
+import '../../styles/timeline-pages.css';
+import '../../styles/timeline-stacking.css';
+import '../../styles/timeline-viewport.css';
+import '../../styles/chronos-calendar-axis.css';
+import { formatAbsoluteDay } from '../../lib/calendar/runtime.mjs';
+import TimelineIsland from './TimelineIsland';
+
+const {
+  dataset,
+  defaultCalendar = dataset?.defaultCalendar,
+  laneMode = 'unified',
+  showFilters = true,
+  showMinimap = true,
+  showLegend = true,
+  compact = false,
+} = Astro.props;
+
+const options = { defaultCalendar, laneMode, showFilters, showMinimap, showLegend, compact };
+const fallbackEvents = dataset?.events.map((event) => ({
+  id: event.id,
+  date: event.absoluteEndDay === undefined
+    ? formatAbsoluteDay(event.absoluteStartDay, defaultCalendar, event.precision)
+    : `${formatAbsoluteDay(event.absoluteStartDay, defaultCalendar, event.precision)} — ${formatAbsoluteDay(event.absoluteEndDay, defaultCalendar, event.endPrecision ?? event.precision)}`,
+  title: event.title,
+  description: event.description,
+  href: event.href,
+})) ?? [];
+---
+
+{dataset ? (
+  <TimelineIsland
+    client:load
+    dataset={dataset}
+    options={options}
+    fallbackEvents={fallbackEvents}
+  />
+) : <p class="codex-warning">Timeline data is unavailable.</p>}

@@ -1,0 +1,21 @@
+---
+import { parseIconSpec } from '../lib/icon-spec.mjs';
+
+interface Props {
+  spec?: string | null;
+  class?: string;
+}
+
+const { spec, class: className } = Astro.props;
+const icon = parseIconSpec(spec);
+const classes = ['codex-icon', className].filter(Boolean);
+const localIconPath = icon?.provider === 'local' ? `/icons/${icon.name}.svg` : undefined;
+---
+
+{icon?.provider === 'local' && (
+  <span
+    class:list={[...classes, 'codex-local-icon']}
+    aria-hidden="true"
+    style={`--icon: url('${localIconPath}')`}
+  ></span>
+)}

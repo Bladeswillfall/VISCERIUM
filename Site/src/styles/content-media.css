@@ -1,0 +1,214 @@
+@import './article-editorial.css';
+
+/*
+  Article typography cascade bridge.
+  typography.css is intentionally unlayered and Starlight's content-flow styles are layered;
+  article-editorial.css currently lives in the Starlight layer. These unlayered rules are the
+  final presentation contract for ordinary long-form articles, loaded after typography.css.
+*/
+body:not(:has(.home-gateway)) .sl-markdown-content p {
+  margin-block: 0 .72rem;
+}
+
+/* A restrained geometric marker gives unordered reference lists a Codex identity without ornament. */
+body:not(:has(.home-gateway)) .sl-markdown-content ul > li::marker {
+  content: '◆  ';
+  color: var(--sl-color-accent-high);
+  font-size: .58em;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content ul ul > li::marker {
+  content: '◇  ';
+}
+
+/* Starlight wraps Markdown headings; section spacing belongs to the wrapper, not the heading. */
+body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
+  margin-block: 2.75rem .42rem;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h3 {
+  margin-block: 1.9rem 0;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h4 {
+  margin-block: 1.45rem 0;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2 {
+  display: flex;
+  align-items: center;
+  gap: .52rem;
+  margin: 0;
+  margin-bottom: 1rem;
+  padding-inline-start: 0;
+  border: 0;
+  font-size: clamp(1.65rem, 2.55vw, 2.4rem);
+  line-height: 1.08;
+}
+
+/*
+  The negative H2 tuck is an article-only editorial treatment. Structural pages such as
+  era homepages, Start Here, category indexes, continuity hubs and calendar/exploration
+  pages need ordinary positive separation because their headings introduce composed UI.
+*/
+body:has(.codex-page-classifier--article) .sl-markdown-content h2 {
+  margin-bottom: -1.5rem;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2::before {
+  content: none;
+  display: none;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2::after {
+  content: '';
+  display: block;
+  flex: 1 1 auto;
+  align-self: center;
+  min-inline-size: 2rem;
+  block-size: 1px;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    var(--codex-accent-soft),
+    var(--codex-border) 25%,
+    var(--codex-border) 90%,
+    transparent
+  );
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h2 > .codex-heading-icon {
+  margin-inline-end: 0;
+  color: var(--sl-color-accent-high);
+  font-size: .8em;
+}
+
+/* Structural subsection: compact, tracked and clearly subordinate to H2. */
+body:not(:has(.home-gateway)) .sl-markdown-content h3 {
+  color: var(--era-heading-accent, var(--sl-color-accent-high));
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin: 0;
+  padding-block-end: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content h4 {
+  margin: 0;
+  padding-block-end: 0;
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > :is(.sl-heading-wrapper.level-h3, .sl-heading-wrapper.level-h4) + p {
+  margin-block-start: 0;
+}
+
+/*
+  Plugin/generated pages can render headings directly inside .sl-markdown-content instead of using
+  Starlight's .sl-heading-wrapper geometry. They keep the Codex visual hierarchy and accent colours,
+  but always retain positive flow spacing.
+*/
+body:not(:has(.home-gateway)) .sl-markdown-content > h2 {
+  margin-block: 2.75rem .68rem;
+}
+
+body:not(:has(.home-gateway)) .sl-markdown-content > h3 {
+  margin-block: 1rem .42rem;
+  color: var(--era-heading-accent, var(--sl-color-accent-high));
+}
+
+/* Sidebar artwork should read as a free-standing figure rather than a card-within-a-card. */
+body:not(:has(.home-gateway)) .codex-sidebar-artwork {
+  border-block-end: 0;
+}
+
+body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
+  margin-top: .35rem;
+  padding: .18rem .1rem 0;
+  border: 0;
+  background: transparent;
+}
+
+@media (max-width: 48rem) {
+  /*
+    Mobile article composition deliberately starts higher beneath Starlight's compact toolbar.
+    Only hero-bearing articles opt into the pull-up; utility/plugin pages retain normal flow.
+    Keep the prose inset, but let the cinematic page-title artwork bleed to the viewport edges.
+  */
+  body:not(:has(.home-gateway)):has(.content-panel > .sl-container > .codex-header-figure) .sl-markdown-content {
+    margin-top: -4rem;
+  }
+
+  body:not(:has(.home-gateway)) .content-panel > .sl-container > .codex-header-figure {
+    width: 100vw;
+    max-width: none;
+    margin-inline-start: calc(50% - 50vw);
+    margin-inline-end: calc(50% - 50vw);
+  }
+
+  body:not(:has(.home-gateway)) .codex-universal-badge {
+    font-size: .5rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
+    margin-block-start: 2.3rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content h2 {
+    gap: .42rem;
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content h2::after {
+    min-inline-size: 1rem;
+  }
+
+  body:not(:has(.home-gateway)) .sl-markdown-content > h2 {
+    margin-block: 2.3rem .68rem;
+  }
+}
+
+/* Generic Markdown media safety.
+   Keeps images from escaping the article lane when demo/content pages use remote images
+   or Obsidian-resolved assets. */
+.sl-markdown-content img,
+.sl-markdown-content picture,
+.sl-markdown-content video,
+.sl-markdown-content canvas,
+.sl-markdown-content svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.sl-markdown-content img {
+  margin-block: 1rem;
+  border-radius: var(--codex-radius);
+}
+
+.sl-markdown-content figure {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.codex-header-image {
+  display: block;
+  width: 100%;
+  max-height: 18rem;
+  margin: 0;
+  object-fit: contain;
+  border: 0;
+  border-radius: var(--codex-radius);
+  box-shadow: none;
+}
+
+.codex-header-image-artwork {
+  max-height: min(70vh, 48rem);
+  background: color-mix(in oklch, var(--codex-fixed-dark) 22%, transparent);
+}

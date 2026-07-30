@@ -1,0 +1,183 @@
+@layer ion {
+  .codex-era-context-control {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    margin-inline-end: .4rem;
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+  }
+
+  .codex-era-context-control[hidden] { display: none !important; }
+
+  .codex-era-context-current,
+  .codex-era-context-exit,
+  .codex-continuity-chip,
+  .codex-universal-badge {
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: 999px;
+    padding: .22rem .58rem;
+    text-decoration: none;
+  }
+
+  .codex-era-context-current {
+    color: var(--era-link, var(--sl-color-accent-high));
+    background: color-mix(in oklch, var(--era-link, var(--sl-color-accent-high)) 10%, transparent);
+    font-weight: 700;
+  }
+
+  .codex-era-context-exit {
+    color: var(--sl-color-gray-2);
+    background: transparent;
+  }
+
+  .codex-era-context-exit-icon { display: none; }
+
+  .codex-era-context-exit:hover,
+  .codex-era-context-exit:focus-visible { color: var(--sl-color-white); }
+
+  .codex-continuity-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+    margin-block: .7rem 1.15rem;
+  }
+
+  .codex-continuity-switcher__label {
+    margin-inline-end: .15rem;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .codex-continuity-chip {
+    color: var(--sl-color-gray-2);
+    background: var(--sl-color-bg-nav);
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+  }
+
+  .codex-continuity-chip:hover,
+  .codex-continuity-chip:focus-visible { color: var(--sl-color-white); }
+
+  .codex-continuity-chip.unavailable {
+    color: var(--sl-color-gray-4);
+    background: transparent;
+    border-style: dashed;
+    cursor: not-allowed;
+    opacity: .65;
+  }
+
+  .codex-continuity-chip.active {
+    border-color: var(--era-link, var(--sl-color-accent-high));
+    color: var(--era-link, var(--sl-color-accent-high));
+    font-weight: 700;
+  }
+
+  .codex-universal-badge {
+    display: inline-flex;
+    width: max-content;
+    margin-block: .65rem 1rem;
+    border: 1px solid var(--codex-border-strong);
+    border-radius: 0;
+    color: var(--sl-color-gray-2);
+    background: var(--sl-color-bg-nav);
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  /*
+   * Navigation stays deliberately black in both themes, but the Universal badge
+   * lives in editorial content. In light mode treat it as quiet taxonomy rather
+   * than inheriting the fixed-navigation surface.
+   */
+  :root[data-theme='light'] .codex-universal-badge {
+    border-color: color-mix(in oklch, var(--codex-palette-deep) 68%, transparent);
+    color: var(--codex-palette-ink);
+    background: color-mix(in oklch, var(--codex-palette-light) 58%, transparent);
+  }
+
+  .codex-sidebar-era-scope { display: none; }
+  :root[data-era-context='CITADEL'] .codex-sidebar-global,
+  :root[data-era-context='SMOG'] .codex-sidebar-global,
+  :root[data-era-context='NEARSIGHT'] .codex-sidebar-global,
+  :root[data-era-context='ENTROPY'] .codex-sidebar-global { display: none; }
+
+  :root[data-era-context='CITADEL'] .codex-sidebar-era-scope[data-era-sidebar='CITADEL'],
+  :root[data-era-context='SMOG'] .codex-sidebar-era-scope[data-era-sidebar='SMOG'],
+  :root[data-era-context='NEARSIGHT'] .codex-sidebar-era-scope[data-era-sidebar='NEARSIGHT'],
+  :root[data-era-context='ENTROPY'] .codex-sidebar-era-scope[data-era-sidebar='ENTROPY'] { display: block; }
+
+  .codex-sidebar-era-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin: 0 .35rem .75rem;
+    padding-block-end: .7rem;
+    border-bottom: 1px solid var(--sl-color-hairline-light);
+  }
+
+  .codex-sidebar-era-toolbar strong {
+    color: var(--era-link, var(--sl-color-accent-high));
+    letter-spacing: .06em;
+  }
+
+  .codex-sidebar-era-toolbar a {
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+  }
+
+  :root[data-era-context='CITADEL'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e1-accent);
+    --era-link-hover: var(--era-e1-accent-high);
+    --era-heading-accent: var(--era-e1-heading);
+    --era-icon-accent: var(--era-e1-accent);
+  }
+  :root[data-era-context='SMOG'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e2-accent);
+    --era-link-hover: var(--era-e2-accent-high);
+    --era-heading-accent: var(--era-e2-heading);
+    --era-icon-accent: var(--era-e2-accent);
+  }
+  :root[data-era-context='NEARSIGHT'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e3-accent);
+    --era-link-hover: var(--era-e3-accent-high);
+    --era-heading-accent: var(--era-e3-heading);
+    --era-icon-accent: var(--era-e3-accent);
+  }
+  :root[data-era-context='ENTROPY'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e4-accent);
+    --era-link-hover: var(--era-e4-accent-high);
+    --era-heading-accent: var(--era-e4-heading);
+    --era-icon-accent: var(--era-e4-accent);
+  }
+
+  @media (max-width: 44rem) {
+    .codex-era-context-control {
+      gap: .3rem;
+      margin-inline-end: 0;
+    }
+    .codex-era-context-current { display: none; }
+    .codex-era-context-exit {
+      display: inline-grid;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex: 0 0 2.5rem;
+      place-items: center;
+      padding: 0;
+    }
+    .codex-era-context-exit-icon {
+      display: block;
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+    .codex-era-context-exit [data-era-exit-label] { display: none; }
+  }
+}

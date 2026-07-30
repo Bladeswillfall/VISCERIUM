@@ -1,0 +1,87 @@
+/*
+ * Exact VISCERIUM calendar boundaries are implemented as native vis-timeline
+ * CustomTime components. The bars and their labels are therefore repositioned
+ * in the same redraw as event items instead of following from a separate
+ * requestAnimationFrame overlay.
+ */
+
+.vc-timeline-app .vc-timeline-canvas .vis-time-axis {
+  display: block !important;
+  font-family: var(--vc-font-ui, ui-sans-serif, system-ui);
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-bottom {
+  z-index: 1;
+  min-height: 2.5rem;
+  border-top: 1px solid var(--vc-timeline-border-strong) !important;
+  background: transparent !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-time-axis .vis-text {
+  visibility: hidden !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-grid.vis-vertical {
+  border-color: transparent !important;
+}
+
+/* CustomTime bars live in vis-timeline's vertical background panel. The centre
+ * viewport must remain transparent so those native bars can be seen through it;
+ * era bands and event items still paint in their normal layers above the canvas
+ * background. */
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-background.vis-vertical {
+  z-index: 2;
+  overflow: visible !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center > .vis-content,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center .vis-itemset {
+  background: transparent !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-left,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-right {
+  z-index: 3;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time[data-vc-calendar-kind] {
+  width: 0 !important;
+  border-inline-start: 1px solid transparent;
+  background: transparent !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time[data-vc-calendar-kind="secondary"] {
+  border-color: color-mix(in oklch, var(--vc-timeline-border) 55%, transparent);
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time[data-vc-calendar-kind="primary"] {
+  border-color: color-mix(in oklch, var(--vc-timeline-border-strong) 82%, transparent);
+}
+
+.vc-timeline-app .vc-timeline-canvas .vc-calendar-time-label {
+  position: absolute;
+  top: var(--vc-calendar-label-top, calc(100% - 3.4rem));
+  left: 0;
+  z-index: 6;
+  max-width: 12rem;
+  translate: -50% 0;
+  color: var(--vc-timeline-muted);
+  font: 800 .68rem/1.15 var(--vc-font-ui, ui-sans-serif, system-ui);
+  letter-spacing: .04em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Chronos-authored markers remain distinct and retain their own styling. */
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time:not([data-vc-calendar-kind]) {
+  z-index: 2;
+}
+
+/* The overview remains intentionally label-free; it is a density navigator. */
+.vc-timeline-app .vc-timeline-minimap .vis-time-axis {
+  display: none !important;
+}

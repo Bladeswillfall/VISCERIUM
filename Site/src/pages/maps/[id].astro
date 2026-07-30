@@ -1,0 +1,8 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import WorldMap from '../../components/WorldMap.astro';
+import maps from '../../data/maps.json';
+export function getStaticPaths() { return Object.keys(maps).map((id) => ({ params: { id } })); }
+const map = maps[Astro.params.id];
+---
+<StarlightPage frontmatter={{ title: map?.title ?? 'Map', description: map?.description ?? 'Interactive map.', explorationPage: true, tableOfContents: false, giscus: false }}><WorldMap map={map} /></StarlightPage>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VISCERIUM Architecture</title>
+<style>
+:root{--bg:#090a0c;--panel:#111419;--panel2:#171b21;--line:#303640;--text:#edf0f3;--muted:#a7afb9;--accent:#cba05d;--creator:#9b86ca;--canon:#d05550;--build:#d38959;--shared:#6facc2;--web:#70af88;--quality:#a7aeb8}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}.shell{max-width:1400px;margin:auto;padding:24px}.hero{padding:18px 0 24px;border-bottom:1px solid var(--line)}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800}h1,h2,h3{line-height:1.15}h1{font-size:clamp(36px,6vw,64px);margin:.18em 0}.lede{max-width:920px;color:#c9cfd6;font-size:17px}.meta{margin-top:12px;color:var(--muted);font:12px ui-monospace,monospace}.tabs{position:sticky;top:0;z-index:10;display:flex;gap:8px;flex-wrap:wrap;padding:12px 0;background:#090a0cf2;border-bottom:1px solid var(--line)}button{border:1px solid #3a414c;border-radius:999px;background:#15181d;color:var(--text);padding:8px 13px;cursor:pointer}button.active{border-color:var(--accent);background:#211b13}.view{display:none;padding:24px 0}.view.active{display:block}.callout,.card,.program,.workflow{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:16px}.callout{border-left:4px solid var(--accent);margin-bottom:18px}.map{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;align-items:stretch}.stage{position:relative;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px;min-height:150px}.stage:not(:last-child)::after{content:'→';position:absolute;right:-16px;top:50%;transform:translateY(-50%);z-index:2;color:var(--accent);font-size:22px;font-weight:800}.stage.creator{border-top:4px solid var(--creator)}.stage.canon{border-top:4px solid var(--canon)}.stage.build{border-top:4px solid var(--build)}.stage.shared{border-top:4px solid var(--shared)}.stage.web{border-top:4px solid var(--web)}.stage.quality{border-top:4px solid var(--quality)}.stage h3{margin:.15rem 0 .5rem}.stage ul,.card ul{padding-left:1.15rem;margin:.5rem 0}.small{font-size:13px;color:var(--muted)}.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}.programs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.program h3{margin:.1rem 0 .35rem}.program .tag{display:inline-block;border:1px solid #3b424c;border-radius:999px;padding:2px 7px;margin-bottom:8px;color:#d5dbe1;font-size:11px}.program p{margin:.4rem 0}.workflows{display:grid;grid-template-columns:280px minmax(0,1fr);gap:14px}.workflow-list button{display:block;width:100%;text-align:left;margin:0 0 8px;border-radius:8px}.workflow{min-height:420px}.workflow ol{padding-left:1.3rem}.workflow li{margin:.5rem 0}.route-table{width:100%;border-collapse:collapse}.route-table th,.route-table td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}.route-table th{color:var(--accent)}code{background:#1d1b17;color:#edcf9a;padding:2px 5px;border-radius:4px}.footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;color:var(--muted)}@media(max-width:1100px){.map{grid-template-columns:repeat(2,minmax(0,1fr))}.stage:not(:last-child)::after{display:none}.programs{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:720px){.shell{padding:14px}.map,.programs,.rules,.workflows{grid-template-columns:1fr}.tabs{position:relative}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="hero">
+<div class="eyebrow">VISCERIUM · SYSTEM AND WORKFLOW ARCHITECTURE</div>
+<h1>Codex system map</h1>
+<p class="lede">This page shows where VISCERIUM data starts, which program handles it, and which outputs are generated.</p>
+<p class="meta">Repository: Bladeswillfall/VISCERIUM · architecture update: 2026-07-30 · source state: Initial release working tree · machine handoff: viscerium-architecture.json</p>
+</header>
+<nav class="tabs" aria-label="Architecture views">
+<button class="active" data-view="system">System map</button>
+<button data-view="programs">Programs and plugins</button>
+<button data-view="workflows">Workflows</button>
+<button data-view="routing">Change routing</button>
+</nav>
+<section id="system" class="view active">
+<div class="callout"><strong>Core rule:</strong> Markdown and YAML notes are authoritative. Bases, generated data, and the website are projections.</div>
+<div class="map" aria-label="VISCERIUM system flow">
+<div class="stage creator"><div class="eyebrow">1 · CREATE</div><h3>Obsidian</h3><ul><li>Home</li><li>Templater</li><li>Creator Tools</li><li>Bases / Dataview</li><li>StoryLine</li></ul></div>
+<div class="stage canon"><div class="eyebrow">2 · STORE</div><h3>Vault source</h3><ul><li><code>Drafts/</code></li><li><code>Lore/</code></li><li><code>Assets/</code></li><li><code>Stories/</code></li></ul><p class="small">Only published Lore can become public Codex content.</p></div>
+<div class="stage build"><div class="eyebrow">3 · CHECK</div><h3>Node pipeline</h3><ul><li>Vault Doctor</li><li>publication validation</li><li>asset validation</li><li>continuity checks</li></ul></div>
+<div class="stage shared"><div class="eyebrow">4 · COMPILE</div><h3>Generators</h3><ul><li>links</li><li>era hubs</li><li>maps</li><li>timelines</li><li>relationships</li><li>search scope</li></ul></div>
+<div class="stage web"><div class="eyebrow">5 · BUILD</div><h3>Astro + Starlight</h3><ul><li>articles</li><li>Telescope</li><li>Atlas</li><li>graphs</li><li>timelines</li></ul></div>
+<div class="stage quality"><div class="eyebrow">6 · TEST</div><h3>GitHub Actions</h3><ul><li>unit tests</li><li>build</li><li>plugin build</li><li>browser checks</li></ul></div>
+<div class="stage web"><div class="eyebrow">7 · SERVE</div><h3>Cloudflare Pages</h3><p>Serves the static files from <code>Site/dist/</code>.</p></div>
+</div>
+<div class="rules">
+<div class="card"><h2>Authoritative sources</h2><ul><li>Creator facts: Markdown/YAML in <code>Vault/</code>.</li><li>Public canon: <code>Vault/Lore/</code>.</li><li>Private stories: <code>Vault/Stories/</code>.</li><li>Source media: <code>Vault/Assets/</code>.</li><li>Timeline plugin source: <code>Tools/obsidian-viscerium-timelines/</code>.</li></ul></div>
+<div class="card"><h2>Generated outputs</h2><ul><li><code>Site/src/content/docs/</code></li><li>map, timeline, relationship, and search data</li><li>continuity hubs and era tag pages</li><li><code>Site/dist/</code></li><li>compiled Obsidian timeline plugin bundles</li></ul><p><strong>Do not hand-edit generated output.</strong></p></div>
+</div>
+</section>
+<section id="programs" class="view">
+<div class="callout">Use the official program name in instructions. Do not invent a synonym for the same tool.</div>
+<div class="programs" id="program-grid"></div>
+</section>
+<section id="workflows" class="view">
+<div class="workflows"><div class="workflow-list" id="workflow-list"></div><article class="workflow" id="workflow-detail"></article></div>
+</section>
+<section id="routing" class="view">
+<div class="callout">Start from the authoritative source. Do not start from a generated file.</div>
+<table class="route-table"><thead><tr><th>Change</th><th>Start here</th><th>Do not do this</th></tr></thead><tbody id="route-body"></tbody></table>
+</section>
+<p class="footer">Human guide: <code>Architecture/README.md</code>. Machine handoff: <code>Architecture/viscerium-architecture.json</code>. Writing standard: <code>Vault/System/SOPs/Documentation Writing Standard.md</code>.</p>
+</div>
+<script>
+const programs=[
+['Obsidian','creator','Edit Markdown/YAML source notes and assets.','Obsidian is the editor, not a second lore database.'],
+['Bases','creator','Show card and table views of note properties.','The source data stays in the notes.'],
+['Templater','creator','Run guided creation and edit workflows.','Use creator-facing templates, not _Internals directly.'],
+['Dataview','creator','Build live dashboard lists from vault notes.','Dashboard output is not canonical data.'],
+['VISCERIUM Creator Tools','creator','Set controlled eras, continuity IDs, and era editions.','Use the commands instead of arbitrary era strings.'],
+['StoryLine','private writing','Manage private story projects, scenes, and storyDate.','Do not scan Stories as public canon.'],
+['VISCERIUM Timelines','creator','Render canonical and read-only StoryLine timelines in Obsidian.','Edit the Tools source before the generated runtime bundle.'],
+['Chronos','creator','Render note-local timeline blocks.','Chronos presentation does not replace canonical chronology.'],
+['Breadcrumbs','creator','Help local hierarchy and navigation.','The public relationship explorer does not use its database.'],
+['Image Converter','creator','Convert raster artwork to WebP.','Use SVG only for genuine vector media.'],
+['Obsidian Git','repository','Expose Git actions inside Obsidian.','Git remains the version-control source of truth.'],
+['Git + GitHub','repository','Track changes, host branches, pull requests, and CI.','Check status before pull; merge after required checks pass.'],
+['Node.js + npm','build','Run validators, generators, tests, and local servers.','Node 24 is the supported CI runtime.'],
+['Astro','web','Build the static public Codex.','Input is generated public content and data.'],
+['Starlight','web','Provide the documentation site shell and content framework.','Keep public source facts outside the site shell.'],
+['Telescope','web','Provide Fuse.js fuzzy search.','VISCERIUM scopes search by era. Pagefind is disabled.'],
+['Cloudflare Pages','deploy','Host Site/dist as the production site.','The current Codex needs no private application server.']
+];
+const workflows={
+'World Anvil transfer':['Open the World Anvil Import Base.','Start in Needs attention.','Resolve current-note and duplicate-title conflicts.','Resolve the final Codex type.','Resolve continuity and missing era values.','Review meaningful semantic relationships.','Repair only certain legacy links.','Resolve lawful artwork after structure is stable.','Review destination and publication status last.'],
+'Create a Story Entity':['Open Home.','Select Create Story Entity.','Select the entity type.','Complete the guided Templater prompts.','Edit the draft under Drafts/Databases/<Type>.','Browse it through the relevant Base.','Run Vault Doctor after broad structural changes.','Move it to Lore only after a deliberate publication decision.'],
+'Create an era edition':['Open the established historical note.','Set a stable entity_id with Creator Tools.','Set one scalar historical era.','Run Create era edition from current note.','Select the target historical era.','Edit the new draft independently.','Publish it under the matching Lore/Eras/<ERA> path.','Let the build generate the all-era entity hub.'],
+'Publish Lore':['Author or revise the source note in Vault/Lore.','Set status: published only for public canon.','Run npm run doctor:vault from Site.','Run npm run build.','Fix errors at the source.','Let the pipeline regenerate public content and data.','Let Astro create Site/dist.','Let Cloudflare Pages serve the static output.'],
+'Public build':['Scan Vault/Lore.','Validate published notes and assets.','Compile continuity and contextual links.','Synchronise published notes into generated site content.','Transform supported Obsidian syntax.','Generate continuity hubs and era tag pages.','Generate timelines, maps, and relationships.','Generate Telescope search-scope metadata.','Validate generated output.','Build Astro and Starlight.'],
+'Canonical timeline':['Author calendarDate in canonical Lore.','Convert the source date to an absolute world-day.','Validate chronology and era membership.','Generate the super timeline and four era datasets.','Load a generated dataset in the public route.','Render the static fallback and interactive timeline.'],
+'StoryLine timeline':['Keep private scenes under Vault/Stories.','Let StoryLine own storyDate.','Open the StoryLine project timeline with VISCERIUM Timelines.','Convert storyDate in memory with the shared calendar model.','Display the read-only scene timeline.','Do not write canonical calendarDate into scenes.'],
+'Public search':['Let Telescope load the page catalogue.','Read the active VISCERIUM era context.','Filter to the active era plus Universal.','Collapse era editions to entity hubs in All Eras mode.','Rebuild Telescope’s Fuse.js index.','Show the active search scope.'],
+'Git and CI':['Check git status.','Synchronize remote changes safely.','Make a focused source change.','Run relevant local checks.','Push a feature branch.','Open a pull request.','Let GitHub Actions run the full checks.','Fix failures before merge.','Merge after required checks pass.']
+};
+const routes=[
+['Creator property or schema','Vault/System/SOPs/Schema Change SOP.md','Do not add a field to one workflow only.'],
+['World Anvil migration','World Anvil Migration Review + apply-worldanvil-base-triage.mjs','Do not let migration scripts invent canon.'],
+['Era or continuity','Era Edition Workflow SOP + Site/src/lib/era-context.mjs','Do not silently cross historical eras.'],
+['Public search','Site/src/scripts/telescope-scope.js + astro.config.mjs','Do not re-enable Pagefind as a second provider.'],
+['Public content transform','Site/scripts/sync-public-notes.mjs + build-content.mjs','Do not hand-edit Site/src/content/docs.'],
+['Timeline or calendar logic','Site/src/lib/timeline + Site/src/lib/calendar','Do not duplicate calendar arithmetic in UI code.'],
+['StoryLine integration','StoryLine Integration.md + Tools/obsidian-viscerium-timelines','Do not scan Stories as canon.'],
+['Map behaviour','Atlas Authoring SOP + generate-map-data.mjs + WorldMap.astro','Do not hand-edit maps.json.'],
+['Relationship behaviour','Relationship Authoring SOP + generate-relationship-data.mjs','Do not turn every wikilink into a relationship.'],
+['Creator UX','Vault/Home.md + Creator Command Reference + Vault/.obsidian','Do not assume local plugin permissions are Git-controlled.'],
+['Deployment','site.config.mjs + astro.config.mjs','Do not put private secrets in static client code.']
+];
+const grid=document.getElementById('program-grid');programs.forEach(([name,scope,purpose,rule])=>{const x=document.createElement('article');x.className='program';x.innerHTML=`<span class="tag">${scope}</span><h3>${name}</h3><p>${purpose}</p><p class="small"><strong>Rule:</strong> ${rule}</p>`;grid.appendChild(x)});
+const list=document.getElementById('workflow-list'),detail=document.getElementById('workflow-detail');function showWorkflow(name){document.querySelectorAll('#workflow-list button').forEach(b=>b.classList.toggle('active',b.textContent===name));detail.innerHTML=`<div class="eyebrow">WORKFLOW</div><h2>${name}</h2><ol>${workflows[name].map(s=>`<li>${s}</li>`).join('')}</ol>`}Object.keys(workflows).forEach((name,i)=>{const b=document.createElement('button');b.textContent=name;b.onclick=()=>showWorkflow(name);list.appendChild(b);if(i===0)showWorkflow(name)});
+const tbody=document.getElementById('route-body');routes.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${r[0]}</strong></td><td><code>${r[1]}</code></td><td>${r[2]}</td>`;tbody.appendChild(tr)});
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===b.dataset.view))}));
+</script>
+</body>
+</html>

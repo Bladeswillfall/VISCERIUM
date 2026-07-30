@@ -1,0 +1,66 @@
+/* Era primer editorial pass: informational groups should read as reference matter, not tappable cards. */
+
+/* Era landing pages use calendar bounds to drive chronology, but that range is not an event date. */
+body:has(.era-primer) .calendar-date-badge {
+  display: none;
+}
+
+.era-primer__hero,
+.era-primer__map,
+.era-primer__essential,
+.era-primer__power {
+  border-radius: 0;
+}
+
+/* Preserve the full 2:1 era artwork rather than cropping it into a generic map panel. */
+.era-primer__map {
+  min-height: 0;
+  aspect-ratio: 2 / 1;
+  align-self: center;
+}
+
+.era-primer__map img {
+  object-fit: cover;
+}
+
+/* These are reading blocks. A ruled editorial treatment makes that distinction clear. */
+.era-primer__essentials,
+.era-primer__powers {
+  column-gap: clamp(1rem, 2.4vw, 1.75rem);
+  row-gap: 1.35rem;
+}
+
+.era-primer__essential,
+.era-primer__power {
+  padding: 1.15rem 0 0;
+  border: 0;
+  border-top: 1px solid color-mix(in oklch, var(--era-primer-accent) 30%, var(--era-primer-line));
+  background: transparent;
+  box-shadow: none;
+}
+
+.era-primer__essential {
+  padding-inline-end: clamp(.2rem, 1vw, .8rem);
+}
+
+.era-primer__power {
+  padding-inline-end: clamp(.2rem, 1vw, .8rem);
+}
+
+/* The hero remains a framing panel, but its square silhouette now reads as page architecture rather than UI. */
+.era-primer__hero {
+  box-shadow: inset 0 .18rem 0 color-mix(in oklch, var(--era-primer-accent) 52%, transparent);
+}
+
+@media (max-width: 60rem) {
+  .era-primer__map {
+    width: 100%;
+  }
+}
+
+@media (max-width: 42rem) {
+  .era-primer__essential,
+  .era-primer__power {
+    padding-top: 1rem;
+  }
+}

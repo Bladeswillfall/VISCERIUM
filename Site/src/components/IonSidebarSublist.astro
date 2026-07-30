@@ -1,0 +1,240 @@
+---
+import { Badge } from '@astrojs/starlight/components';
+import { parseIconLabel } from '../lib/icon-spec.mjs';
+import LocalIcon from './LocalIcon.astro';
+
+interface Props {
+  sublist: any[];
+  nested?: boolean;
+}
+
+const { sublist, nested = false } = Astro.props;
+---
+
+<ul class:list={{ 'top-level': !nested }}>
+  {sublist.map((entry) => {
+    const { icon, label } = parseIconLabel(entry.label);
+    const { class: entryClass, ...attrs } = entry.attrs ?? {};
+
+    return (
+      <li class:list={{ active: entry.type === 'link' && entry.isCurrent, 'has-icon': icon }}>
+        {entry.type === 'link' ? (
+          <a
+            href={entry.href}
+            aria-current={entry.isCurrent ? 'page' : undefined}
+            class:list={['flex-link', { individual: !nested }, entryClass]}
+            {...attrs}
+          >
+            {icon && <LocalIcon name={icon} />}
+            <span>{label}</span>
+            {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
+          </a>
+        ) : (
+          <details
+            class="ion-expandable-group"
+            open={!entry.collapsed || entry.entries?.some((item: any) => item.isCurrent)}
+          >
+            <summary>
+              <span class="group-label">
+                {icon && <LocalIcon name={icon} />}
+                <span class="large">{label}</span>
+                {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
+                <span class="caret" aria-hidden="true">›</span>
+              </span>
+            </summary>
+            <Astro.self sublist={entry.entries} nested />
+          </details>
+        )}
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  @layer starlight.core {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--sl-color-gray-2);
+    }
+
+    li {
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    /*
+      Keep descendants compact and shallow. The sidebar is a reference tree rather
+      than a list of large navigation buttons, so each nesting level only needs a
+      small horizontal shift to remain legible.
+    */
+    ul ul {
+      margin-inline-start: .8rem;
+      padding-inline-start: 0;
+    }
+
+    /*
+      True top-level entries act as chapter dividers. This is deliberately limited
+      to the root of each rendered sidebar list so deeper folders retain the dense
+      tree treatment instead of turning into a stack of headings.
+    */
+    .top-level > li {
+      margin-block-start: .35rem;
+      padding-block-start: .35rem;
+      border-block-start: 1px solid color-mix(in oklch, var(--codex-border) 72%, transparent);
+    }
+
+    .top-level > li:first-child {
+      margin-block-start: 0;
+      padding-block-start: 0;
+      border-block-start: 0;
+    }
+
+    summary,
+    a {
+      padding: .12rem .3rem;
+      border-radius: .25rem;
+      color: inherit;
+      line-height: 1.25;
+    }
+
+    summary {
+      display: block;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    summary::marker,
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible,
+    summary:hover,
+    summary:focus-visible {
+      background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
+      color: var(--sl-color-white);
+    }
+
+    .group-label,
+    .flex-link {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: .35rem;
+    }
+
+    .group-label {
+      width: 100%;
+    }
+
+    .large {
+      font-size: .78rem;
+      font-weight: 600;
+    }
+
+    .individual,
+    a {
+      font-size: .76rem;
+    }
+
+    .top-level > li > details > summary,
+    .top-level > li > a {
+      padding-block: .1rem .22rem;
+      background: transparent;
+      color: var(--sl-color-gray-3);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .top-level > li > details > summary .large {
+      color: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+    }
+
+    .top-level > li > details > summary:hover,
+    .top-level > li > details > summary:focus-visible,
+    .top-level > li > a:hover,
+    .top-level > li > a:focus-visible {
+      background: transparent;
+      color: var(--sl-color-white);
+    }
+
+    .caret {
+      flex-shrink: 0;
+      margin-inline-start: auto;
+      opacity: .72;
+      transition: transform .16s ease;
+    }
+
+    details[open] > summary .caret {
+      transform: rotate(90deg);
+    }
+
+    :global([dir='rtl']) .caret {
+      transform: rotate(180deg);
+    }
+
+    :global([dir='rtl']) details[open] > summary .caret {
+      transform: rotate(90deg);
+    }
+
+    [aria-current='page'] {
+      background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
+      box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
+      color: var(--sl-color-accent-high);
+      font-weight: 650;
+    }
+
+    /*
+      navigation.css provides broad sidebar defaults. Keep this component's denser
+      treatment authoritative without increasing selector complexity everywhere
+      above, and keep the change isolated from non-sidebar navigation controls.
+    */
+    :global(.sidebar-content) .top-level {
+      display: block;
+      gap: 0;
+    }
+
+    :global(.sidebar-content) .group-label,
+    :global(.sidebar-content) .flex-link,
+    :global(.sidebar-content) .individual {
+      gap: .35rem;
+    }
+
+    :global(.sidebar-content) a,
+    :global(.sidebar-content) summary {
+      border-radius: .25rem;
+    }
+
+    :global(.sidebar-content) a:hover,
+    :global(.sidebar-content) a:focus-visible,
+    :global(.sidebar-content) summary:hover,
+    :global(.sidebar-content) summary:focus-visible {
+      background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
+    }
+
+    :global(.sidebar-content) a[aria-current='page'],
+    :global(.sidebar-content) .active > a {
+      background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
+      box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
+    }
+
+    :global(.sidebar-content) .codex-icon {
+      width: .875rem;
+      height: .875rem;
+    }
+  }
+</style>

@@ -1,0 +1,192 @@
+/* Shared Chronos presentation plus route-level full-width timeline-page geometry. */
+
+/* Dedicated /timelines/* routes use the full content width, but retain the left navigation overlay. */
+.main-frame:has(> .codex-timeline-page) {
+  box-sizing: border-box;
+  grid-column: 1 / -1 !important;
+  inline-size: 100%;
+  max-inline-size: none;
+  margin-inline: 0;
+  padding-inline: clamp(1rem, 2.4vw, 3rem);
+}
+
+.main-frame > .codex-timeline-page,
+.main-frame > .codex-timeline-page > .codex-main-pane,
+.main-frame > .codex-timeline-page > .codex-main-pane > main,
+.main-frame > .codex-timeline-page > .codex-main-pane > main > .content-panel,
+.main-frame > .codex-timeline-page > .codex-main-pane > main > .content-panel > .sl-container,
+.main-frame > .codex-timeline-page .sl-markdown-content {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: none !important;
+  margin-inline: 0;
+}
+
+.main-frame > .codex-timeline-page .sl-markdown-content {
+  padding-inline: 0;
+}
+
+/* Every TimelineApp instance receives the same palette and Chronos-led presentation. */
+.vc-timeline-shell,
+.vc-timeline-app {
+  --vc-year-line: color-mix(in oklch, var(--sl-color-gray-4) 22%, transparent);
+  --vc-year-line-decade: color-mix(in oklch, var(--sl-color-gray-3) 36%, transparent);
+  --vc-year-line-century: color-mix(in oklch, var(--sl-color-gray-2) 52%, transparent);
+}
+
+/* The application itself is not a card. Its controls and visual modules provide structure. */
+.vc-timeline-app {
+  margin-block: 1.5rem;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.vc-timeline-app .vc-timeline-toolbar,
+.vc-timeline-app .vc-timeline-filters,
+.vc-timeline-app .vc-era-action,
+.vc-timeline-app .vc-timeline-stage,
+.vc-timeline-app .vc-timeline-minimap-wrap,
+.vc-timeline-app .vc-timeline-list li,
+.vc-timeline-app .vc-timeline-details {
+  border: 0;
+  outline: 1px solid var(--vc-timeline-border);
+  outline-offset: -1px;
+}
+
+.vc-timeline-app .vc-timeline-details {
+  outline-color: var(--vc-timeline-accent);
+}
+
+.vc-timeline-app .vc-timeline-toolbar,
+.vc-timeline-app .vc-timeline-filters,
+.vc-timeline-app .vc-timeline-minimap-wrap {
+  background: color-mix(in oklch, var(--vc-timeline-surface-deep) 82%, transparent);
+}
+
+.vc-timeline-app .vc-timeline-stage {
+  background: transparent;
+}
+
+.vc-timeline-app .vc-timeline-minimap {
+  border-top: 0;
+}
+
+/* Native vis-timeline divisions are adaptive and may skip years. The explicit
+   SVG layer below is the sole vertical chronology grid in the main canvas. */
+.vc-timeline-app .vc-timeline-canvas .vis-grid.vis-vertical {
+  border-inline-start-color: transparent !important;
+  border-inline-end-color: transparent !important;
+}
+
+.vc-timeline-app .vc-timeline-year-grid {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  margin: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.vc-timeline-app .vc-timeline-year-grid path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  shape-rendering: crispEdges;
+}
+
+.vc-timeline-app .vc-year-grid-annual {
+  stroke: var(--vc-year-line);
+  stroke-width: .75;
+}
+
+.vc-timeline-app .vc-year-grid-decade {
+  stroke: var(--vc-year-line-decade);
+  stroke-width: 1;
+}
+
+.vc-timeline-app .vc-year-grid-century {
+  stroke: var(--vc-year-line-century);
+  stroke-width: 1.25;
+}
+
+/* Category palette. Inline colours supplied by Chronos are intentionally replaced,
+   while its native event, range, point and period geometry remains intact. */
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item {
+  --vc-event-fill: var(--vc-event-unknown);
+  --vc-event-outline: color-mix(in oklch, var(--vc-event-fill) 62%, var(--vc-event-ink));
+  box-shadow: none !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-technology { --vc-event-fill: var(--vc-event-technology); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-military { --vc-event-fill: var(--vc-event-military); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-political { --vc-event-fill: var(--vc-event-political); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-cultural { --vc-event-fill: var(--vc-event-cultural); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-religious { --vc-event-fill: var(--vc-event-religious); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-economic { --vc-event-fill: var(--vc-event-economic); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-scientific { --vc-event-fill: var(--vc-event-scientific); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-disaster { --vc-event-fill: var(--vc-event-disaster); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-resonance { --vc-event-fill: var(--vc-event-resonance); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-myrkild { --vc-event-fill: var(--vc-event-myrkild); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-naranor { --vc-event-fill: var(--vc-event-naranor); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-exploration { --vc-event-fill: var(--vc-event-exploration); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-social { --vc-event-fill: var(--vc-event-social); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-environmental { --vc-event-fill: var(--vc-event-environmental); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-unknown { --vc-event-fill: var(--vc-event-unknown); }
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item:is(.vis-box, .vis-range) {
+  border-color: var(--vc-event-outline) !important;
+  background-color: var(--vc-event-fill) !important;
+  color: var(--vc-event-ink) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item:is(.vis-box, .vis-range) .vis-item-content,
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item:is(.vis-box, .vis-range) a {
+  color: var(--vc-event-ink) !important;
+}
+
+/* Milestones remain native Chronos points rather than being converted into boxes. */
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-point {
+  border-color: transparent !important;
+  background: transparent !important;
+  color: var(--vc-event-fill) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-point .vis-dot {
+  border-color: var(--vc-event-outline) !important;
+  background-color: var(--vc-event-fill) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-point .vis-item-content {
+  border: 1px solid var(--vc-event-outline);
+  background: var(--vc-event-fill);
+  color: var(--vc-event-ink) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-selected {
+  outline: 2px solid var(--sl-color-white);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--vc-timeline-accent) 30%, transparent) !important;
+}
+
+@media (max-width: 38rem) {
+  .main-frame:has(> .codex-timeline-page) {
+    padding-inline: .75rem;
+  }
+
+  .codex-timeline-page .vc-timeline-app {
+    margin-inline: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item {
+    forced-color-adjust: auto;
+  }
+
+  .vc-timeline-app .vc-timeline-year-grid path {
+    stroke: CanvasText;
+  }
+}

@@ -1,0 +1,193 @@
+/*
+ * The Chronicle lives inside Starlight article prose, whose summary/button rules
+ * are intentionally broad. Reassert only the Chronicle's own row geometry here.
+ */
+
+.vc-timeline-list {
+  container-name: vc-chronicle-list;
+  container-type: inline-size;
+}
+
+/*
+ * Article heading rhythm deliberately removes generic h2 bottom margin. Restore
+ * only a small Chronicle masthead gap so its short description stays legible.
+ */
+.sl-markdown-content .vc-timeline-app .vc-timeline-list .vc-chronicle-masthead h2 {
+  margin-bottom: .1em;
+}
+
+.vc-timeline-list .vc-chronicle-entry > summary {
+  display: grid !important;
+  grid-template-columns: minmax(8.5rem, 11rem) 2.3rem minmax(0, 1fr) max-content !important;
+  list-style: none !important;
+}
+
+.vc-timeline-list .vc-chronicle-entry > summary::marker,
+.vc-timeline-list .vc-chronicle-entry > summary::-webkit-details-marker {
+  display: none !important;
+  content: '';
+}
+
+.vc-timeline-list .vc-chronicle-date {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  width: auto;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.vc-timeline-list .vc-chronicle-marker {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.vc-timeline-list .vc-chronicle-summary-copy {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.vc-timeline-list .vc-chronicle-disclosure {
+  grid-column: 4;
+  grid-row: 1;
+  align-self: start;
+}
+
+.vc-timeline-app .vc-timeline-list .vc-chronicle-actions button {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  min-height: 2.45rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: .65rem .8rem;
+  text-align: center;
+}
+
+/*
+ * The Chronicle can be much narrower than the browser viewport because it sits
+ * inside Starlight's article shell. Respond to the reading panel itself before
+ * the desktop columns begin squeezing titles into word-wide strips.
+ */
+@container vc-chronicle-list (max-width: 800px) {
+  .vc-timeline-list .vc-chronicle-masthead,
+  .vc-timeline-list .vc-chronicle-chapter-header {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .75rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-count {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .vc-timeline-list .vc-chronicle-chapter-header {
+    position: relative;
+    top: auto;
+  }
+
+  .vc-timeline-list .vc-chronicle-chapter-header a {
+    justify-self: start;
+  }
+
+  .vc-timeline-list .vc-chronicle-records::before {
+    left: 1.8rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-entry > summary {
+    grid-template-columns: 2.1rem minmax(0, 1fr) max-content !important;
+    padding: .85rem clamp(.65rem, 2.4vw, .9rem);
+  }
+
+  .vc-timeline-list .vc-chronicle-date {
+    position: static;
+    grid-column: 2 / -1;
+    grid-row: 1;
+    padding: 0 .65rem .3rem;
+    text-align: left;
+  }
+
+  .vc-timeline-list .vc-chronicle-marker {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .vc-timeline-list .vc-chronicle-summary-copy {
+    grid-column: 2;
+    grid-row: 2;
+    padding-inline: .65rem .35rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-title,
+  .vc-timeline-list .vc-chronicle-excerpt {
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  .vc-timeline-list .vc-chronicle-disclosure {
+    grid-column: 3;
+    grid-row: 2;
+    min-width: 1.5rem;
+    font-size: 0;
+  }
+
+  .vc-timeline-list .vc-chronicle-disclosure::before {
+    font-size: 1rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-dossier {
+    margin: 0 .75rem .85rem 2.8rem;
+    padding: .85rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-dossier dl {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container vc-chronicle-list (max-width: 560px) {
+  .vc-timeline-list .vc-chronicle-masthead {
+    padding: .9rem .8rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-chapter-header {
+    padding: .8rem .75rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-chapter-header a {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .vc-timeline-list .vc-chronicle-records::before {
+    left: 1.45rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-entry > summary {
+    grid-template-columns: 1.8rem minmax(0, 1fr) max-content !important;
+    padding: .75rem .45rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-date {
+    padding: 0 .55rem .3rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-summary-copy {
+    padding-inline: .55rem .25rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-disclosure {
+    min-width: 1.25rem;
+  }
+
+  .vc-timeline-list .vc-chronicle-dossier {
+    margin: 0 .45rem .75rem 2.35rem;
+    padding: .75rem;
+  }
+
+  .vc-timeline-app .vc-timeline-list .vc-chronicle-actions button {
+    width: 100%;
+  }
+}

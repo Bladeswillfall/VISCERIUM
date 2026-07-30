@@ -1,0 +1,322 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import process from 'node:process';
+import { isMainModule } from './script-entry.mjs';
+
+const DEFAULT_VAULT = path.resolve(process.cwd(), '../Vault');
+const BASE_REL = 'System/Bases/World Anvil Import.base';
+
+const TIER_1_TITLES = [
+  'About VISCERIUM',
+  'Introduction to VISCERIUM',
+  'ERAS',
+  'CITADEL',
+  'SMOG',
+  'NEARSIGHT',
+  'ENTROPY',
+  'Degel',
+  'Errack',
+  'Resonance',
+  'Myrkild',
+  'Naranor',
+];
+
+const TIER_2_TITLES = [
+  'Okse Dominion',
+  'Krass Dominion',
+  'Kingdom of Askalia',
+  'Republic of Askalia',
+  'Kingdom of Satol',
+  'Aquillan Seas Trade Union',
+  'Trans-Continental Socialist Confederation',
+  'Imperium Coalition',
+  '7 Zeniths of Virtue',
+  'The Sevenfold Blight',
+  'The Endless war',
+  'Galdyr  Galdrvyr',
+  'Abberath',
+  'The Hollowed',
+  'Rifts, Hellmouths of the Myrkild',
+  'Cavea stations',
+  'Pathfinder',
+  'Juggernauts',
+  'GARMIR',
+  'AESIR Mk.II',
+  'The Vodr',
+  'Dr.Adrastus Delroy',
+  'Evaxi, Nadir of Envy',
+  'Hennan, Nadir of Sloth',
+  'Xateal, Nadir of Greed',
+  'Krathan, Nadir of Wrath',
+  'Sletair, Nadir of Lust',
+  'Boleth, Nadir of Gluttony',
+  'Vanaer, Nadir of Pride',
+  'Toriel, Zenith of Charity',
+  'Ephemera, Zenith of Temperance',
+  'Alisian, Zenith of Humility',
+  'Jurel, Zenith of Chastity',
+  'Azelain, Zenith of Patience',
+  'Mithael, Zenith of Kindness',
+  'Sorath, Zenith of Diligence',
+];
+
+const TIER_3_SOURCE_TYPES = [
+  'Condition',
+  'Ethnicity',
+  'Formation',
+  'Law',
+  'Material',
+  'MilitaryConflict',
+  'Organization',
+  'Plot',
+  'Profession',
+  'Species',
+  'Technology',
+];
+
+function basesList(values) {
+  return `[${values.map((value) => JSON.stringify(value)).join(', ')}]`;
+}
+
+export function worldAnvilTriageBase() {
+  const tier1Titles = basesList(TIER_1_TITLES);
+  const tier2Titles = basesList(TIER_2_TITLES);
+  const tier3SourceTypes = basesList(TIER_3_SOURCE_TYPES);
+
+  return `filters:
+  and:
+    - file.inFolder("Drafts/WorldAnvil Import")
+    - import_source == "worldanvil"
+
+formulas:
+  issues: 'list(import_issues).filter(value != null)'
+  era_count: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))'
+  issue_count: 'formula.issues.length + if(formula.era_count > 1, 1, 0)'
+  type_display: 'if(type.isEmpty(), html("<span class=\\"wa-missing\\">⚠ Missing type</span>"), type)'
+  era_display: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), html("<span class=\\"wa-missing\\">⚠ Missing era</span>"), era))'
+  tier1_titles: '${tier1Titles}'
+  tier2_titles: '${tier2Titles}'
+  tier3_source_types: '${tier3SourceTypes}'
+  priority_rank: 'if(formula.tier1_titles.contains(title), 1, if(formula.tier2_titles.contains(title), 2, if(formula.tier3_source_types.contains(import_source_type), 3, 4)))'
+  priority_tier: 'if(formula.priority_rank == 1, html("<span class=\\"wa-tier wa-tier--1\\">Tier 1 · Setting spine</span>"), if(formula.priority_rank == 2, html("<span class=\\"wa-tier wa-tier--2\\">Tier 2 · Era anchor</span>"), if(formula.priority_rank == 3, html("<span class=\\"wa-tier wa-tier--3\\">Tier 3 · Connective depth</span>"), html("<span class=\\"wa-tier wa-tier--4\\">Tier 4 · Defer</span>"))))'
+  priority_reason: 'if(formula.priority_rank == 1, html("<span class=\\"wa-priority-reason\\">Explains or unlocks VISCERIUM as a whole. Review before expanding the archive.</span>"), if(formula.priority_rank == 2, html("<span class=\\"wa-priority-reason\\">Major era, faction, threat, or through-line anchor. Build the vertical slices next.</span>"), if(formula.priority_rank == 3, html("<span class=\\"wa-priority-reason\\">Useful connective world depth. Review after the spine and anchors are coherent.</span>"), html("<span class=\\"wa-priority-reason\\">Peripheral, narrow, or indulgent material. Defer unless it blocks a higher-tier note.</span>"))))'
+  next_action: 'if(formula.issues.contains("existing-codex-match"), html("<span class=\\"wa-action wa-action--conflict\\">1. Compare with current Codex note</span>"), if(formula.issues.contains("duplicate-title"), html("<span class=\\"wa-action wa-action--conflict\\">1. Decide whether duplicate titles are the same subject</span>"), if(formula.issues.containsAny("needs-type-review", "legacy-type-review"), html("<span class=\\"wa-action wa-action--type\\">1. Choose the final Codex type</span>"), if(formula.era_count > 1, html("<span class=\\"wa-action wa-action--edition\\">1. Decide continuity and create era editions</span>"), if(formula.issues.contains("needs-era"), html("<span class=\\"wa-action wa-action--era\\">1. Set the era with Creator Tools</span>"), if(formula.issues.contains("relationship-review"), html("<span class=\\"wa-action wa-action--relationship\\">1. Decide which relationships matter</span>"), if(formula.issues.contains("unresolved-legacy-links"), html("<span class=\\"wa-action wa-action--links\\">1. Replace only links with a certain target</span>"), if(formula.issues.contains("missing-inline-assets"), html("<span class=\\"wa-action wa-action--assets\\">1. Find, replace, or remove legacy artwork</span>"), if(formula.issues.isEmpty(), html("<span class=\\"wa-action wa-action--ready\\">✓ Review destination and publication status</span>"), html("<span class=\\"wa-action wa-action--review\\">1. Open the note and read its Import review tasks</span>"))))))))))'
+  action_steps: 'if(formula.issues.contains("existing-codex-match"), html("<span class=\\"wa-guidance\\">Open note → open current same-title note → keep current Codex note authoritative.</span>"), if(formula.issues.contains("duplicate-title"), html("<span class=\\"wa-guidance\\">Open both notes → decide same subject or different subjects → merge or disambiguate.</span>"), if(formula.issues.containsAny("needs-type-review", "legacy-type-review"), html("<span class=\\"wa-guidance\\">Open note → read content → edit the type property. Do not invent a new shared type casually.</span>"), if(formula.era_count > 1, html("<span class=\\"wa-guidance\\">Open note → set continuity ID → set first era → use Create era edition for each additional era.</span>"), if(formula.issues.contains("needs-era"), html("<span class=\\"wa-guidance\\">Open note → Ctrl/Cmd+P → Set controlled era / Universal scope → choose one controlled value.</span>"), if(formula.issues.contains("relationship-review"), html("<span class=\\"wa-guidance\\">Open note → keep incidental links in prose → add relationships only when the relationship itself matters.</span>"), if(formula.issues.contains("unresolved-legacy-links"), html("<span class=\\"wa-guidance\\">Open note → find old World Anvil link → search vault → replace only when the target is certain.</span>"), if(formula.issues.contains("missing-inline-assets"), html("<span class=\\"wa-guidance\\">Open note → find legacy asset reference → add lawful WebP artwork or remove the reference.</span>"), if(formula.issues.isEmpty(), html("<span class=\\"wa-guidance\\">Open note → confirm title, type, era, continuity, folder, and status before you move it.</span>"), html("<span class=\\"wa-guidance\\">Open note → read the Import review section → resolve the first unchecked migration task.</span>"))))))))))'
+
+properties:
+  title:
+    displayName: Article
+  formula.priority_tier:
+    displayName: Editorial tier
+  formula.priority_reason:
+    displayName: Why this tier
+  formula.priority_rank:
+    displayName: Tier rank
+  formula.type_display:
+    displayName: Type
+  formula.era_display:
+    displayName: Era
+  formula.next_action:
+    displayName: Next action
+  formula.action_steps:
+    displayName: How to do it
+  formula.issue_count:
+    displayName: Open issues
+  formula.era_count:
+    displayName: Era count
+  entity_id:
+    displayName: Continuity ID
+  type:
+    displayName: Codex type
+  import_source_type:
+    displayName: World Anvil type
+  era:
+    displayName: Era (single)
+  eras:
+    displayName: Eras (multi)
+  tags:
+    displayName: Tags
+  import_issues:
+    displayName: Migration issues
+  development_level:
+    displayName: Development
+  file.mtime:
+    displayName: Modified
+
+views:
+  - type: cards
+    name: Review first
+    order: [title, formula.priority_tier, formula.priority_reason, formula.type_display, formula.era_display, formula.next_action, formula.action_steps]
+    sort:
+      - property: formula.priority_rank
+        direction: ASC
+      - property: formula.issue_count
+        direction: DESC
+      - property: title
+        direction: ASC
+    cardSize: 300
+
+  - type: cards
+    name: Tier 1 — setting spine
+    filters:
+      and:
+        - formula.priority_rank == 1
+    order: [title, formula.priority_tier, formula.priority_reason, formula.type_display, formula.era_display, formula.next_action]
+    sort:
+      - property: title
+        direction: ASC
+    cardSize: 300
+
+  - type: cards
+    name: Tier 2 — era anchors
+    filters:
+      and:
+        - formula.priority_rank == 2
+    order: [title, formula.priority_tier, formula.priority_reason, formula.type_display, formula.era_display, formula.next_action]
+    sort:
+      - property: title
+        direction: ASC
+    cardSize: 300
+
+  - type: table
+    name: Tier 3 — connective depth
+    filters:
+      and:
+        - formula.priority_rank == 3
+    order: [title, formula.priority_tier, formula.priority_reason, type, import_source_type, era, eras, import_issues]
+    sort:
+      - property: title
+        direction: ASC
+
+  - type: table
+    name: Tier 4 — defer
+    filters:
+      and:
+        - formula.priority_rank == 4
+    order: [title, formula.priority_tier, formula.priority_reason, type, import_source_type, era, eras, import_issues]
+    sort:
+      - property: title
+        direction: ASC
+
+  - type: cards
+    name: Needs attention
+    filters:
+      and:
+        - formula.issue_count > 0
+    order: [title, formula.priority_tier, formula.type_display, formula.era_display, formula.next_action, formula.action_steps]
+    sort:
+      - property: formula.priority_rank
+        direction: ASC
+      - property: formula.issue_count
+        direction: DESC
+      - property: title
+        direction: ASC
+    cardSize: 285
+
+  - type: table
+    name: Existing matches
+    filters:
+      and:
+        - formula.issues.contains("existing-codex-match")
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
+
+  - type: table
+    name: Duplicate titles
+    filters:
+      and:
+        - formula.issues.contains("duplicate-title")
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, import_source_type, era, eras, import_issues]
+
+  - type: table
+    name: Type decisions
+    filters:
+      or:
+        - formula.issues.contains("needs-type-review")
+        - formula.issues.contains("legacy-type-review")
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, import_source_type, type, era, eras, import_issues]
+
+  - type: table
+    name: Era editions
+    filters:
+      and:
+        - formula.era_count > 1
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, eras, entity_id, import_issues]
+    sort:
+      - property: formula.priority_rank
+        direction: ASC
+      - property: title
+        direction: ASC
+
+  - type: table
+    name: Missing era
+    filters:
+      and:
+        - formula.era_count == 0
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, import_source_type, era, eras, import_issues]
+    sort:
+      - property: formula.priority_rank
+        direction: ASC
+      - property: title
+        direction: ASC
+
+  - type: table
+    name: Relationship review
+    filters:
+      and:
+        - formula.issues.contains("relationship-review")
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
+
+  - type: table
+    name: Unresolved links
+    filters:
+      and:
+        - formula.issues.contains("unresolved-legacy-links")
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
+
+  - type: table
+    name: Artwork
+    filters:
+      and:
+        - formula.issues.contains("missing-inline-assets")
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
+
+  - type: cards
+    name: Ready to file
+    filters:
+      and:
+        - formula.issue_count == 0
+    order: [title, formula.priority_tier, formula.type_display, formula.era_display, formula.next_action, formula.action_steps]
+    sort:
+      - property: formula.priority_rank
+        direction: ASC
+      - property: title
+        direction: ASC
+    cardSize: 285
+
+  - type: table
+    name: All imports
+    order: [title, formula.priority_tier, formula.priority_reason, type, import_source_type, era, eras, entity_id, tags, import_issues, file.mtime]
+    sort:
+      - property: formula.priority_rank
+        direction: ASC
+      - property: title
+        direction: ASC
+`;
+}
+
+export async function applyWorldAnvilTriageBase(vault = DEFAULT_VAULT) {
+  const target = path.join(vault, BASE_REL);
+  await fs.mkdir(path.dirname(target), { recursive: true });
+  await fs.writeFile(target, worldAnvilTriageBase(), 'utf8');
+  return target;
+}
+
+if (isMainModule(import.meta.url)) {
+  try {
+    const target = await applyWorldAnvilTriageBase();
+    console.log(`Applied World Anvil triage Base: ${target}`);
+  } catch (error) {
+    console.error(error?.stack ?? error);
+    process.exitCode = 1;
+  }
+}

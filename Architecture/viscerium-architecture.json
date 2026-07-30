@@ -1,0 +1,445 @@
+{
+  "schema_version": "2.0.0",
+  "kind": "application_architecture_agent_handoff",
+  "project": "VISCERIUM",
+  "documentation_style": {
+    "name": "VISCERIUM ASD-STE100-based house style",
+    "reference": "ASD-STE100 Issue 9, 15 January 2025",
+    "guide": "Vault/System/SOPs/Documentation Writing Standard.md",
+    "formal_compliance_claim": false
+  },
+  "snapshot": {
+    "repository": "Bladeswillfall/VISCERIUM",
+    "branch": "main",
+    "source_state": "Validated replacement working tree for the Initial release root commit",
+    "date": "2026-07-30",
+    "scope": "Architecture reflects the intended initial state of the VISCERIUM replacement repository."
+  },
+  "summary": "Obsidian is the creator workspace. Markdown and YAML notes are authoritative. Node scripts validate and compile public Lore. Astro and Starlight build the static Codex. Generated views never replace the source notes.",
+  "source_of_truth": {
+    "creator_notes": "Vault/Drafts and other non-generated creator Markdown",
+    "public_canon": "Vault/Lore notes with status: published",
+    "source_assets": "Vault/Assets",
+    "private_stories": "Vault/Stories",
+    "era_and_continuity_rules": "Vault/System/SOPs/Era Edition Workflow SOP.md and Site/src/lib/era-context.mjs",
+    "calendar_definitions": "Site/src/data/calendars",
+    "calendar_runtime": "Site/src/lib/calendar",
+    "timeline_domain_logic": "Site/src/lib/timeline",
+    "obsidian_timeline_plugin": "Tools/obsidian-viscerium-timelines",
+    "worldanvil_migration_guide": "Vault/Drafts/Inbox/World Anvil Migration Review.md"
+  },
+  "generated_artifacts": [
+    "Site/src/content/docs",
+    "Site/src/data/timelines/*.json",
+    "Site/src/data/maps.json",
+    "generated relationship data",
+    "generated Telescope search-scope metadata",
+    "generated continuity hubs and era tag pages",
+    "Site/dist",
+    "Tools/obsidian-viscerium-timelines/dist",
+    "Vault/.obsidian/plugins/viscerium-timelines runtime bundle"
+  ],
+  "programs": [
+    {
+      "name": "Obsidian",
+      "scope": "creator",
+      "purpose": "Edit the VISCERIUM vault and its Markdown/YAML source notes.",
+      "writes": ["Vault Markdown", "YAML properties", "Vault assets", "local workspace/plugin state"],
+      "rule": "Obsidian is the editor. It is not a second lore database."
+    },
+    {
+      "name": "Obsidian Bases",
+      "scope": "creator",
+      "purpose": "Show filtered card and table views of note properties.",
+      "writes": ["note properties when a creator edits a Base cell"],
+      "rule": "The Markdown note remains the database of record."
+    },
+    {
+      "name": "Templater",
+      "scope": "creator",
+      "purpose": "Run guided creation and edit workflows.",
+      "source": "Vault/Templates",
+      "rule": "Use creator-facing templates. Do not run internal templates directly."
+    },
+    {
+      "name": "Dataview",
+      "scope": "creator",
+      "purpose": "Build live dashboard lists from vault notes.",
+      "rule": "Dataview reads source notes. Dashboard output is not canonical data."
+    },
+    {
+      "name": "VISCERIUM Creator Tools",
+      "scope": "creator",
+      "purpose": "Set controlled era values, continuity IDs, and independent era editions.",
+      "source": "Vault/.obsidian/plugins/viscerium-creator-tools",
+      "rule": "Use the controlled commands instead of arbitrary era text."
+    },
+    {
+      "name": "StoryLine",
+      "scope": "private-writing",
+      "purpose": "Manage private writing projects, scenes, sequence, and storyDate.",
+      "source": "Vault/Stories and Vault/.obsidian/plugins/storyline/data.json",
+      "rule": "Do not scan StoryLine scenes as public canon."
+    },
+    {
+      "name": "VISCERIUM Timelines",
+      "scope": "creator",
+      "purpose": "Render canonical timelines and read-only StoryLine timelines inside Obsidian.",
+      "source": "Tools/obsidian-viscerium-timelines",
+      "runtime": "Vault/.obsidian/plugins/viscerium-timelines",
+      "rule": "Edit the Tools source first. Treat the Vault runtime as generated."
+    },
+    {
+      "name": "Chronos",
+      "scope": "creator",
+      "purpose": "Render note-local Chronos timeline blocks.",
+      "rule": "Chronos blocks are presentation data. They do not replace canonical event chronology."
+    },
+    {
+      "name": "Breadcrumbs",
+      "scope": "creator",
+      "purpose": "Help local creator hierarchy and navigation.",
+      "rule": "The public relationship explorer does not use Breadcrumbs plugin data."
+    },
+    {
+      "name": "Image Converter",
+      "scope": "creator",
+      "purpose": "Convert raster artwork to the repository WebP format.",
+      "rule": "Store raster repository artwork as WebP. Use SVG only for genuine vector media."
+    },
+    {
+      "name": "Obsidian Git",
+      "scope": "creator",
+      "purpose": "Expose Git synchronization actions inside Obsidian.",
+      "rule": "Git remains the version-control source of truth."
+    },
+    {
+      "name": "Git",
+      "scope": "repository",
+      "purpose": "Track versions and synchronize repository branches.",
+      "rule": "Check git status before a pull when local edits exist."
+    },
+    {
+      "name": "GitHub",
+      "scope": "repository",
+      "purpose": "Host the repository, pull requests, and GitHub Actions.",
+      "rule": "Use pull-request checks before merge."
+    },
+    {
+      "name": "Node.js and npm",
+      "scope": "build",
+      "purpose": "Run validators, generators, tests, and local development commands.",
+      "version_rule": "Node 24 is the supported CI runtime."
+    },
+    {
+      "name": "Astro",
+      "scope": "web",
+      "purpose": "Build the static public Codex from generated content and data.",
+      "output": "Site/dist"
+    },
+    {
+      "name": "Starlight",
+      "scope": "web",
+      "purpose": "Provide the documentation-site shell, content schema, navigation, and article framework."
+    },
+    {
+      "name": "Telescope",
+      "scope": "web",
+      "purpose": "Provide fuzzy public search with Fuse.js.",
+      "integration": "Site/src/scripts/telescope-scope.js",
+      "rule": "VISCERIUM scopes Telescope to the active era plus Universal. Pagefind is disabled."
+    },
+    {
+      "name": "Cloudflare Pages",
+      "scope": "deploy",
+      "purpose": "Host the static production output from Site/dist.",
+      "rule": "The current Codex does not require a private application server."
+    }
+  ],
+  "zones": [
+    {
+      "id": "authoring",
+      "label": "Obsidian authoring",
+      "paths": ["Vault/Home.md", "Vault/Drafts", "Vault/System", "Vault/Templates", "Vault/.obsidian"],
+      "responsibilities": ["creator dashboard", "guided templates", "Bases and Dataview", "creator SOPs", "World Anvil migration"],
+      "rule": "Store creator facts in notes. Treat dashboards and Bases as views."
+    },
+    {
+      "id": "stories",
+      "label": "Private StoryLine workspace",
+      "paths": ["Vault/Stories", "Vault/.obsidian/plugins/storyline/data.json"],
+      "responsibilities": ["scene prose", "sequence", "point of view", "storyDate"],
+      "rule": "Keep this boundary private. Do not publish or scan it as canon."
+    },
+    {
+      "id": "canon",
+      "label": "Canonical Lore and assets",
+      "paths": ["Vault/Lore", "Vault/Assets"],
+      "responsibilities": ["public source notes", "canonical event metadata", "source media", "era editions"],
+      "rule": "Only published notes under Lore can become public Codex content."
+    },
+    {
+      "id": "pipeline",
+      "label": "Content and build pipeline",
+      "paths": ["Site/scripts"],
+      "responsibilities": ["scan", "validate", "sync", "contextual links", "continuity hubs", "maps", "timelines", "relationships", "search metadata"],
+      "rule": "Use Site/scripts/build-content.mjs as the main orchestration point."
+    },
+    {
+      "id": "shared",
+      "label": "Shared era, calendar, and timeline logic",
+      "paths": ["Site/src/lib/era-context.mjs", "Site/src/data/calendars", "Site/src/lib/calendar", "Site/src/lib/timeline"],
+      "responsibilities": ["era control", "continuity resolution", "fictional calendars", "absolute world-day conversion", "timeline validation", "StoryLine adapter"],
+      "rule": "Reuse shared domain logic. Do not duplicate it in UI code."
+    },
+    {
+      "id": "web",
+      "label": "Astro and Starlight web runtime",
+      "paths": ["Site/src/content.config.ts", "Site/astro.config.mjs", "Site/site.config.mjs", "Site/sidebar.mjs", "Site/src/components", "Site/src/pages", "Site/src/styles", "Site/src/scripts"],
+      "responsibilities": ["content schema", "article UI", "era context", "Telescope search", "maps", "timelines", "graphs", "tags", "feeds"],
+      "rule": "Keep private secrets out of the static client."
+    },
+    {
+      "id": "plugin",
+      "label": "First-party Obsidian runtime",
+      "paths": ["Tools/obsidian-viscerium-timelines", "Vault/.obsidian/plugins/viscerium-timelines", "Vault/.obsidian/plugins/viscerium-creator-tools"],
+      "responsibilities": ["timeline rendering", "StoryLine timeline", "controlled era authoring", "era edition creation"],
+      "rule": "Use maintained source for compiled plugins. Keep creator-tool behaviour aligned with SOPs."
+    },
+    {
+      "id": "quality",
+      "label": "Tests and GitHub Actions",
+      "paths": ["Site/tests", ".github/workflows/checks.yml"],
+      "responsibilities": ["Vault Doctor", "unit tests", "timeline benchmark", "production build", "plugin build", "Playwright browser checks"],
+      "rule": "Fix objective failures before merge."
+    },
+    {
+      "id": "deploy",
+      "label": "Static deployment",
+      "paths": ["Site/dist"],
+      "responsibilities": ["Cloudflare Pages production output"],
+      "rule": "Build from Site and deploy dist."
+    }
+  ],
+  "pipelines": {
+    "worldanvil_migration": [
+      "Open Vault/System/Bases/World Anvil Import.base.",
+      "Start in Needs attention.",
+      "Resolve existing-note and duplicate-title identity conflicts.",
+      "Resolve final Codex type decisions.",
+      "Resolve multi-era continuity and missing era decisions.",
+      "Review meaningful relationships.",
+      "Repair only certain legacy links.",
+      "Resolve lawful artwork after structure is stable.",
+      "Review destination and publication status last."
+    ],
+    "story_entity_authoring": [
+      "Start from Vault/Home.md or the Templater command.",
+      "Create the draft under Vault/Drafts/Databases/<Type>.",
+      "Edit the Markdown note and its properties.",
+      "Browse through Obsidian Bases.",
+      "Run Vault Doctor after broad structural edits.",
+      "Move the note to Lore only after a deliberate publication decision."
+    ],
+    "era_edition_authoring": [
+      "Set a stable entity_id on the first historical note.",
+      "Set one scalar historical era.",
+      "Create another edition with VISCERIUM Creator Tools.",
+      "Edit the new draft independently.",
+      "Publish under the matching Lore/Eras/<ERA> path.",
+      "Generate the all-era entity hub from shared entity_id values."
+    ],
+    "public_build": [
+      "Scan Vault/Lore.",
+      "Validate published Lore and source assets.",
+      "Compile era continuity and contextual links.",
+      "Synchronise published notes to generated site content.",
+      "Transform supported Obsidian syntax.",
+      "Generate continuity hubs and era tag pages.",
+      "Generate timelines, maps, and relationships.",
+      "Generate Telescope search-scope metadata.",
+      "Validate generated content.",
+      "Build the Astro and Starlight site.",
+      "Emit Site/dist for Cloudflare Pages."
+    ],
+    "canonical_timeline": [
+      "Author calendarDate and optional calendarEndDate in canonical Lore.",
+      "Convert the source date to an absolute world-day.",
+      "Validate chronology and era membership.",
+      "Generate the super timeline and four historical era datasets.",
+      "Load one dataset in the public timeline route.",
+      "Render the static fallback and interactive timeline."
+    ],
+    "storyline_timeline": [
+      "Keep StoryLine projects under Vault/Stories.",
+      "Let StoryLine own storyDate.",
+      "Resolve the active StoryLine project in VISCERIUM Timelines.",
+      "Convert storyDate in memory with the shared calendar model.",
+      "Open a read-only timeline that links back to scene notes.",
+      "Do not write canonical calendarDate into StoryLine scenes."
+    ],
+    "map_authoring": [
+      "Author map and marker data in source notes.",
+      "Keep source map images under Vault/Assets/Maps.",
+      "Generate Site/src/data/maps.json.",
+      "Render generated data in the public Atlas."
+    ],
+    "relationship_authoring": [
+      "Author meaningful relationships in note frontmatter.",
+      "Keep incidental references in prose or related.",
+      "Resolve targets with era-aware build logic.",
+      "Generate the public relationship data.",
+      "Render global or era-scoped relationship explorers."
+    ],
+    "public_search": [
+      "Let Telescope load the Starlight page catalogue.",
+      "Read the active VISCERIUM era context.",
+      "Filter Telescope to the active era plus Universal.",
+      "Collapse continuity editions to entity hubs in All Eras mode.",
+      "Rebuild the Telescope Fuse.js index.",
+      "Display the active search scope."
+    ],
+    "git_and_ci": [
+      "Check local Git status.",
+      "Synchronize remote changes safely.",
+      "Make a focused source change.",
+      "Run relevant local checks.",
+      "Push a feature branch and open a pull request.",
+      "Run Vault Doctor, unit tests, benchmarks, production build, plugin build, and browser checks in GitHub Actions.",
+      "Merge only after required checks pass."
+    ]
+  },
+  "invariants": [
+    "Only Vault/Lore can become public Codex content.",
+    "Do not hand-edit Site/src/content/docs.",
+    "Do not author canonical events, maps, or relationships in generated Site/src/data files.",
+    "Obsidian Bases are views over Markdown/YAML notes.",
+    "StoryLine storyDate and canonical calendarDate serve different scopes.",
+    "calendarDate is the canonical event start date.",
+    "Public routes derive from Vault/Lore paths. Do not author slug frontmatter on published source notes.",
+    "Historical continuity editions use one scalar era and a stable entity_id.",
+    "Universal is a scope, not a fifth chronological era.",
+    "VISCERIUM never silently resolves a conceptual link into a different historical era.",
+    "Telescope is the public search provider. Pagefind is disabled.",
+    "Raster repository artwork must be WebP. Use SVG only for genuine vector media.",
+    "Tools/obsidian-viscerium-timelines is the timeline plugin implementation source.",
+    "Schema changes must stay synchronized across affected templates, Bases, validators, public schema, tests, and documentation.",
+    "The public Codex is static. Do not put private server secrets in client code."
+  ],
+  "feature_routing": [
+    {
+      "feature": "creator field or schema",
+      "start": ["Vault/System/SOPs/Schema Change SOP.md"],
+      "usually_touch": ["creator templates", "relevant Bases", "Vault Doctor", "public content schema when required", "creator documentation"],
+      "tests": ["Site/tests/vault-templates.test.mjs", "Site/tests/vault-doctor.test.mjs", "npm test"]
+    },
+    {
+      "feature": "World Anvil migration workflow",
+      "start": ["Vault/Drafts/Inbox/World Anvil Migration Review.md", "Site/scripts/apply-worldanvil-base-triage.mjs"],
+      "usually_touch": ["World Anvil Import.base", "triage CSS", "migration tests"],
+      "tests": ["Site/tests/worldanvil-base-triage.test.mjs", "npm run doctor:vault"]
+    },
+    {
+      "feature": "era or continuity behaviour",
+      "start": ["Vault/System/SOPs/Era Edition Workflow SOP.md", "Site/src/lib/era-context.mjs"],
+      "usually_touch": ["creator tools", "validators", "continuity generator", "contextual link resolver", "era UI"],
+      "tests": ["era-context tests", "continuity tests", "browser era-context tests", "npm run build"]
+    },
+    {
+      "feature": "public search",
+      "start": ["Site/src/scripts/telescope-scope.js", "Site/astro.config.mjs"],
+      "never": ["re-enable Pagefind as a second search provider"],
+      "tests": ["telescope scope unit tests", "Telescope contract test", "browser era search test"]
+    },
+    {
+      "feature": "public content transform",
+      "start": ["Site/scripts/sync-public-notes.mjs", "Site/scripts/build-content.mjs"],
+      "never": ["hand-edit Site/src/content/docs"],
+      "tests": ["content manifest and formatting tests", "npm run build"]
+    },
+    {
+      "feature": "canonical timeline or event behaviour",
+      "start": ["Site/TIMELINES.md", "Site/src/lib/timeline/compiler.mjs", "Site/src/lib/calendar/runtime.mjs"],
+      "never": ["create duplicate chronology fields", "duplicate calendar arithmetic in UI code"],
+      "tests": ["timeline and calendar tests", "npm run benchmark:timelines", "npm run build"]
+    },
+    {
+      "feature": "StoryLine integration",
+      "start": ["Vault/System/StoryLine Integration.md", "Site/src/lib/timeline/storyline-adapter.mjs", "Tools/obsidian-viscerium-timelines"],
+      "never": ["scan Stories as canon", "write duplicate calendarDate into scenes"],
+      "tests": ["StoryLine tests", "plugin npm run build"]
+    },
+    {
+      "feature": "map behaviour",
+      "start": ["Vault/System/SOPs/Atlas Authoring SOP.md", "Site/scripts/generate-map-data.mjs", "Site/src/components/WorldMap.astro"],
+      "never": ["hand-edit Site/src/data/maps.json"],
+      "tests": ["npm run build", "browser tests when interaction changes"]
+    },
+    {
+      "feature": "relationship behaviour",
+      "start": ["Vault/System/SOPs/Relationship Authoring SOP.md", "Site/scripts/generate-relationship-data.mjs"],
+      "never": ["treat every wikilink as a semantic relationship"],
+      "tests": ["relationship generator tests", "npm run build"]
+    },
+    {
+      "feature": "Obsidian creator UX",
+      "start": ["Vault/Home.md", "Vault/System/SOPs/Creator Command Reference.md", "Vault/.obsidian"],
+      "never": ["assume device-local Templater permissions are Git-controlled"],
+      "tests": ["vault homepage tests", "vault template tests", "npm run doctor:vault"]
+    },
+    {
+      "feature": "deployment",
+      "start": ["Site/site.config.mjs", "Site/astro.config.mjs"],
+      "never": ["commit private secrets into static client code"],
+      "tests": ["site config tests", "deployment tests", "npm run build"]
+    }
+  ],
+  "commands": {
+    "site": {
+      "npm run doctor:vault": "Check creator structure and image policy.",
+      "npm run validate:vault": "Check publication-facing Lore requirements.",
+      "npm run validate:timelines": "Validate canonical timeline metadata.",
+      "npm run sync": "Regenerate the public content projection.",
+      "npm run generate:maps": "Regenerate map data.",
+      "npm run generate:timelines": "Regenerate canonical timeline datasets.",
+      "npm run dev": "Build development content and start Astro.",
+      "npm run test:unit": "Run Node unit and regression tests.",
+      "npm run benchmark:timelines": "Run the timeline compiler benchmark.",
+      "npm run build": "Run the production content pipeline and Astro build.",
+      "npm test": "Run Vault Doctor, unit tests, and the production build.",
+      "npm run preview": "Serve the existing production build."
+    },
+    "timeline_plugin": {
+      "cwd": "Tools/obsidian-viscerium-timelines",
+      "npm run build": "Create the production plugin bundle.",
+      "npm run dev": "Create the development plugin bundle."
+    }
+  },
+  "evidence": [
+    "Architecture/README.md",
+    "README.md",
+    "Site/package.json",
+    "Site/scripts/build-content.mjs",
+    "Site/scripts/content-manifest.mjs",
+    "Site/scripts/sync-public-notes.mjs",
+    "Site/scripts/generate-continuity-pages.mjs",
+    "Site/scripts/generate-era-tag-pages.mjs",
+    "Site/scripts/generate-timeline-data.mjs",
+    "Site/scripts/generate-map-data.mjs",
+    "Site/scripts/generate-relationship-data.mjs",
+    "Site/scripts/vault-doctor.mjs",
+    "Site/src/lib/era-context.mjs",
+    "Site/src/scripts/telescope-scope.js",
+    "Site/src/content.config.ts",
+    "Site/astro.config.mjs",
+    "Vault/Home.md",
+    "Vault/Drafts/Inbox/World Anvil Migration Review.md",
+    "Vault/System/SOPs/Documentation Writing Standard.md",
+    "Vault/System/SOPs/Creator Command Reference.md",
+    "Vault/System/SOPs/Era Edition Workflow SOP.md",
+    "Vault/System/SOPs/Schema Change SOP.md",
+    "Vault/System/StoryLine Integration.md",
+    "Tools/obsidian-viscerium-timelines/README.md",
+    ".github/workflows/checks.yml"
+  ]
+}

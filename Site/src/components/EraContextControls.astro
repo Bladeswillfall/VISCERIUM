@@ -1,0 +1,23 @@
+---
+import { eraFromPath, normaliseEra } from '../lib/era-context.mjs';
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+const slug = String(entry.slug ?? starlightRoute.entry.id ?? '').replace(/\.(md|mdx)$/i, '');
+const rawEra = Array.isArray(entry.era) ? entry.era[0] : entry.era;
+const pageEra = normaliseEra(rawEra) ?? eraFromPath(slug) ?? '';
+---
+
+<div class="codex-era-context-control" data-era-context-control data-page-era={pageEra} hidden>
+  <a class="codex-era-context-current" data-era-home href="/">
+    <span data-era-context-label></span>
+  </a>
+  <a
+    class="codex-era-context-exit"
+    href="/"
+    data-era-exit
+    aria-label="Exit current era and show all eras"
+  >
+    <span class="codex-era-context-exit-icon" aria-hidden="true">×</span>
+    <span data-era-exit-label>All eras</span>
+  </a>
+</div>

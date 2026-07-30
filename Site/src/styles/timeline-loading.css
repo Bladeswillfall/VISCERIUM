@@ -1,0 +1,163 @@
+.vc-timeline-skeleton {
+  display: grid;
+  gap: .8rem;
+  margin-block: 1.5rem;
+  padding: clamp(.65rem, 2vw, 1.15rem);
+  overflow: hidden;
+  border: 1px solid var(--vc-timeline-border);
+  border-radius: var(--codex-radius, .25rem);
+  background:
+    linear-gradient(135deg, color-mix(in oklch, var(--vc-timeline-accent) 5%, transparent), transparent 32%),
+    repeating-linear-gradient(0deg, transparent 0 31px, color-mix(in oklch, var(--vc-timeline-border) 20%, transparent) 32px),
+    var(--vc-timeline-surface-deep);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--codex-fixed-light) 4%, transparent), 0 1rem 3rem color-mix(in oklch, var(--codex-fixed-dark) 25%, transparent);
+}
+
+.vc-timeline-skeleton[hidden] {
+  display: none;
+}
+
+.vc-timeline-skeleton-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  padding: .65rem;
+  border: 1px solid var(--vc-timeline-border);
+  background: color-mix(in oklch, var(--vc-timeline-surface) 92%, transparent);
+}
+
+.vc-timeline-skeleton-field,
+.vc-timeline-skeleton-actions,
+.vc-timeline-skeleton-eras span,
+.vc-timeline-skeleton-axis,
+.vc-timeline-skeleton-events span,
+.vc-timeline-skeleton-minimap {
+  display: block;
+  overflow: hidden;
+  background: color-mix(in oklch, var(--vc-timeline-surface) 84%, var(--vc-timeline-border));
+}
+
+.vc-timeline-skeleton-field,
+.vc-timeline-skeleton-actions {
+  min-height: 2.6rem;
+  border: 1px solid var(--vc-timeline-border-strong);
+}
+
+.vc-timeline-skeleton-field {
+  flex: 0 1 12rem;
+}
+
+.vc-timeline-skeleton-field.is-wide {
+  flex: 1 1 16rem;
+}
+
+.vc-timeline-skeleton-actions {
+  flex: 1 1 24rem;
+}
+
+.vc-timeline-skeleton-eras {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .35rem;
+}
+
+.vc-timeline-skeleton-eras span {
+  min-height: 2.6rem;
+  border: 1px solid var(--vc-timeline-border);
+}
+
+.vc-timeline-skeleton-stage {
+  min-height: 34rem;
+  border: 1px solid var(--vc-timeline-border);
+  background: color-mix(in oklch, var(--vc-timeline-surface-deep) 94%, transparent);
+}
+
+.vc-timeline-skeleton.is-compact .vc-timeline-skeleton-stage {
+  min-height: 28rem;
+}
+
+.vc-timeline-skeleton-axis {
+  height: 3.1rem;
+  border-bottom: 1px solid var(--vc-timeline-border-strong);
+}
+
+.vc-timeline-skeleton-events {
+  position: relative;
+  min-height: calc(100% - 3.1rem);
+}
+
+.vc-timeline-skeleton-events span {
+  position: absolute;
+  height: 2.1rem;
+  border: 1px solid var(--vc-timeline-border-strong);
+}
+
+.vc-timeline-skeleton-events span:nth-child(1) { top: 12%; left: 7%; width: 20%; }
+.vc-timeline-skeleton-events span:nth-child(2) { top: 26%; left: 31%; width: 15%; }
+.vc-timeline-skeleton-events span:nth-child(3) { top: 43%; left: 51%; width: 24%; }
+.vc-timeline-skeleton-events span:nth-child(4) { top: 58%; left: 18%; width: 18%; }
+.vc-timeline-skeleton-events span:nth-child(5) { top: 72%; left: 66%; width: 21%; }
+.vc-timeline-skeleton-events span:nth-child(6) { top: 84%; left: 40%; width: 13%; }
+
+.vc-timeline-skeleton-minimap {
+  min-height: 8rem;
+  border: 1px solid var(--vc-timeline-border);
+}
+
+.vc-timeline-skeleton-field::after,
+.vc-timeline-skeleton-actions::after,
+.vc-timeline-skeleton-eras span::after,
+.vc-timeline-skeleton-axis::after,
+.vc-timeline-skeleton-events span::after,
+.vc-timeline-skeleton-minimap::after {
+  content: '';
+  display: block;
+  width: 45%;
+  height: 100%;
+  translate: -140% 0;
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--vc-timeline-ink) 8%, transparent), transparent);
+  animation: vc-timeline-skeleton-sweep 1.35s ease-in-out infinite;
+}
+
+@keyframes vc-timeline-skeleton-sweep {
+  to { translate: 320% 0; }
+}
+
+@media (max-width: 52rem) {
+  .vc-timeline-skeleton-eras {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 38rem) {
+  .vc-timeline-skeleton {
+    margin-inline: calc(50% - 50vw);
+    padding: .45rem;
+    border-inline: 0;
+  }
+
+  .vc-timeline-skeleton-toolbar,
+  .vc-timeline-skeleton-eras {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .vc-timeline-skeleton-stage {
+    min-height: 24rem;
+  }
+
+  .vc-timeline-skeleton-minimap {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-timeline-skeleton-field::after,
+  .vc-timeline-skeleton-actions::after,
+  .vc-timeline-skeleton-eras span::after,
+  .vc-timeline-skeleton-axis::after,
+  .vc-timeline-skeleton-events span::after,
+  .vc-timeline-skeleton-minimap::after {
+    animation: none;
+  }
+}

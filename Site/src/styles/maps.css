@@ -1,0 +1,451 @@
+@layer starlight.core {
+  .codex-map,
+  .map-panel,
+  .map-frame,
+  .codex-image-panel {
+    margin-block: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--codex-border);
+    border-radius: var(--codex-radius-lg);
+    background: var(--codex-surface-raised);
+  }
+
+  .codex-map img,
+  .map-panel img,
+  .map-frame img,
+  .codex-image-panel img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .codex-map figcaption,
+  .map-panel figcaption,
+  .map-frame figcaption,
+  .codex-image-panel figcaption {
+    margin: 0;
+    padding: .75rem .95rem;
+    border-top: 1px solid var(--codex-border);
+    color: var(--sl-color-gray-3);
+    font-family: var(--vc-font-ui);
+    font-size: var(--sl-text-sm);
+    background: color-mix(in oklch, var(--codex-shadow-color) 15%, transparent);
+  }
+
+  .map-grid,
+  .codex-map-grid,
+  .image-grid,
+  .codex-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+
+  .map-card,
+  .codex-map-card,
+  .image-card,
+  .codex-gallery-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--codex-border);
+    border-radius: var(--codex-radius);
+    background: var(--codex-surface-raised);
+  }
+
+  .map-card__body,
+  .codex-map-card__body,
+  .image-card__body,
+  .codex-gallery-card__body {
+    padding: .95rem;
+  }
+
+  .map-card h3,
+  .codex-map-card h3,
+  .image-card h3,
+  .codex-gallery-card h3 {
+    margin-top: 0;
+    color: var(--sl-color-white);
+  }
+
+  .map-card p,
+  .codex-map-card p,
+  .image-card p,
+  .codex-gallery-card p {
+    color: var(--sl-color-gray-2);
+  }
+
+  .map-card > :last-child,
+  .codex-map-card > :last-child,
+  .image-card > :last-child,
+  .codex-gallery-card > :last-child,
+  .map-card__body > :last-child,
+  .codex-map-card__body > :last-child,
+  .image-card__body > :last-child,
+  .codex-gallery-card__body > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+/*
+ * The Atlas is an application surface rather than article prose. Keep these
+ * rules outside the Starlight layer so they can reliably skin Leaflet's own
+ * unlayered plugin CSS without resorting to !important everywhere.
+ */
+.atlas {
+  margin-block: 1rem 2rem;
+}
+
+.atlas__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.atlas__header h1 {
+  margin-top: .15rem;
+}
+
+.atlas__header p:last-child {
+  max-width: 72ch;
+  margin-bottom: 0;
+}
+
+.atlas__eyebrow {
+  margin: 0;
+  color: var(--codex-accent);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.atlas__article-link,
+.atlas__reset {
+  flex: none;
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius);
+  padding: .55rem .8rem;
+  background: var(--codex-surface-raised);
+  color: var(--sl-color-white);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-sm);
+  text-decoration: none;
+}
+
+.atlas__reset {
+  cursor: pointer;
+}
+
+.atlas__article-link:hover,
+.atlas__reset:hover {
+  border-color: var(--codex-accent);
+}
+
+.atlas__toolbar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+.atlas-search {
+  position: relative;
+  flex: 1 1 24rem;
+  max-width: 34rem;
+}
+
+.atlas-search label {
+  display: block;
+  margin-bottom: .25rem;
+  color: var(--sl-color-gray-2);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+  font-weight: 650;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.atlas-search input {
+  width: 100%;
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius);
+  padding: .65rem .75rem;
+  background: var(--codex-surface-raised);
+  color: var(--sl-color-white);
+  font: inherit;
+}
+
+.atlas-search input:focus {
+  border-color: var(--codex-accent);
+  outline: 2px solid color-mix(in oklch, var(--codex-accent) 38%, transparent);
+  outline-offset: 1px;
+}
+
+.atlas-search__results {
+  position: absolute;
+  inset: calc(100% + .35rem) 0 auto 0;
+  z-index: var(--codex-z-control);
+  overflow: auto;
+  max-height: min(24rem, 55vh);
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius);
+  background: var(--codex-surface-raised);
+  box-shadow: 0 .8rem 2rem color-mix(in oklch, var(--codex-shadow-color) 45%, transparent);
+}
+
+.atlas-search__result {
+  display: grid;
+  width: 100%;
+  gap: .12rem;
+  border: 0;
+  border-bottom: 1px solid var(--codex-border);
+  padding: .7rem .8rem;
+  background: transparent;
+  color: var(--sl-color-white);
+  text-align: left;
+  cursor: pointer;
+}
+
+.atlas-search__result:last-child {
+  border-bottom: 0;
+}
+
+.atlas-search__result:hover,
+.atlas-search__result:focus-visible {
+  background: var(--codex-bg-soft);
+}
+
+.atlas-search__result span,
+.atlas-search__empty {
+  color: var(--sl-color-gray-3);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+}
+
+.atlas-search__empty {
+  margin: 0;
+  padding: .8rem;
+}
+
+.atlas__frame {
+  position: relative;
+  overflow: hidden;
+  min-height: 30rem;
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius-lg);
+  background: var(--codex-bg-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--codex-fixed-light) 4%, transparent);
+}
+
+.atlas__canvas {
+  width: 100%;
+  height: clamp(34rem, 72vh, 58rem);
+  background: var(--codex-bg-soft);
+}
+
+.atlas .leaflet-container {
+  font-family: var(--vc-font-ui);
+  background: var(--codex-bg-soft);
+}
+
+.atlas .leaflet-control-zoom a,
+.atlas .leaflet-control-layers {
+  border-color: var(--codex-border);
+  background: color-mix(in oklch, var(--codex-surface-raised) 94%, transparent);
+  color: var(--sl-color-white);
+}
+
+.atlas .leaflet-control-zoom a {
+  color: var(--sl-color-white);
+}
+
+.atlas .leaflet-control-zoom a:hover {
+  background: var(--codex-bg-soft);
+  color: var(--codex-accent);
+}
+
+.atlas .leaflet-control-layers {
+  max-width: min(20rem, 48vw);
+  max-height: min(32rem, 60vh);
+  overflow: auto;
+  border-radius: var(--codex-radius);
+  box-shadow: 0 .45rem 1.4rem color-mix(in oklch, var(--codex-shadow-color) 38%, transparent);
+}
+
+.atlas .leaflet-control-layers label,
+.atlas .leaflet-control-layers span {
+  color: var(--sl-color-gray-1);
+}
+
+.atlas .leaflet-control-layers-selector {
+  accent-color: var(--codex-accent);
+}
+
+.atlas-marker {
+  border: 0;
+  background: transparent;
+}
+
+.atlas-marker__core {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+  border: 2px solid var(--codex-fixed-light);
+  border-radius: 50%;
+  background: var(--codex-accent);
+  color: var(--codex-fixed-light);
+  font-family: var(--vc-font-ui);
+  font-size: .74rem;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 .18rem .45rem color-mix(in oklch, var(--codex-shadow-color) 58%, transparent);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.atlas-marker:hover .atlas-marker__core,
+.atlas-marker:focus .atlas-marker__core {
+  transform: scale(1.18);
+  box-shadow: 0 .25rem .8rem color-mix(in oklch, var(--codex-shadow-color) 70%, transparent);
+}
+
+.atlas-marker--capital .atlas-marker__core,
+.atlas-marker--map .atlas-marker__core,
+.atlas-marker--fortification .atlas-marker__core,
+.atlas-marker--military .atlas-marker__core,
+.atlas-marker--rift .atlas-marker__core,
+.atlas-marker--myrkild .atlas-marker__core,
+.atlas-marker--naranor .atlas-marker__core,
+.atlas-marker--anomaly .atlas-marker__core {
+  border-radius: .28rem;
+}
+
+.atlas-marker--rift .atlas-marker__core,
+.atlas-marker--myrkild .atlas-marker__core {
+  background: color-mix(in oklch, var(--codex-accent) 62%, var(--codex-shadow-color));
+}
+
+.atlas-marker--naranor .atlas-marker__core,
+.atlas-marker--anomaly .atlas-marker__core {
+  background: color-mix(in oklch, var(--codex-fixed-light) 14%, var(--codex-surface-raised));
+  color: var(--codex-accent);
+}
+
+.atlas .leaflet-tooltip {
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius);
+  background: var(--codex-surface-raised);
+  color: var(--sl-color-white);
+  box-shadow: 0 .35rem 1rem color-mix(in oklch, var(--codex-shadow-color) 45%, transparent);
+}
+
+.atlas .leaflet-tooltip-top::before {
+  border-top-color: var(--codex-border);
+}
+
+.atlas .leaflet-popup-content-wrapper,
+.atlas .leaflet-popup-tip {
+  border: 1px solid var(--codex-border);
+  background: var(--codex-surface-raised);
+  color: var(--sl-color-white);
+}
+
+.atlas .leaflet-popup-content-wrapper {
+  border-radius: var(--codex-radius);
+  box-shadow: 0 .8rem 2rem color-mix(in oklch, var(--codex-shadow-color) 55%, transparent);
+}
+
+.atlas .leaflet-popup-content {
+  margin: .85rem 1rem;
+}
+
+.atlas .leaflet-popup-close-button {
+  color: var(--sl-color-gray-2);
+}
+
+.atlas-popup h3 {
+  margin: 0 0 .2rem;
+  color: var(--sl-color-white);
+  font-size: 1rem;
+}
+
+.atlas-popup p {
+  margin-block: .4rem;
+  color: var(--sl-color-gray-2);
+  line-height: 1.45;
+}
+
+.atlas-popup__meta {
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+  letter-spacing: .03em;
+}
+
+.atlas-popup a {
+  display: inline-block;
+  margin-top: .35rem;
+  font-weight: 700;
+}
+
+.atlas__marker-index {
+  margin-top: .85rem;
+  border: 1px solid var(--codex-border);
+  border-radius: var(--codex-radius);
+  padding: .7rem .85rem;
+  background: var(--codex-surface-raised);
+}
+
+.atlas__marker-index summary {
+  font-family: var(--vc-font-ui);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.atlas__marker-index ul {
+  columns: 2 18rem;
+  margin-bottom: 0;
+}
+
+.atlas__empty-note {
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-sm);
+}
+
+@media (max-width: 44rem) {
+  .atlas__header,
+  .atlas__toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .atlas__article-link,
+  .atlas__reset,
+  .atlas-search {
+    width: 100%;
+    max-width: none;
+  }
+
+  .atlas__frame {
+    min-height: 25rem;
+  }
+
+  .atlas__canvas {
+    height: 62vh;
+    min-height: 25rem;
+  }
+
+  .atlas .leaflet-control-layers {
+    max-width: 68vw;
+    max-height: 48vh;
+  }
+
+  .atlas__marker-index ul {
+    columns: 1;
+  }
+}
