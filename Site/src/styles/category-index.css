@@ -1,0 +1,109 @@
+.codex-alpha-index {
+  column-count: 1;
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+  margin-block: 1.25rem 2.5rem;
+}
+
+.codex-alpha-index__group {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 2.25rem;
+  break-inside: avoid-column;
+  page-break-inside: avoid;
+}
+
+.codex-alpha-index__letter {
+  margin: 0 0 .75rem;
+  padding-block-end: .35rem;
+  border-block-end: 1px solid color-mix(in oklch, var(--sl-color-accent-high) 42%, var(--sl-color-hairline));
+  color: var(--sl-color-white);
+  font-family: var(--sl-font-system-mono);
+  font-size: clamp(1.6rem, 2vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1;
+}
+
+.codex-alpha-index__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.codex-alpha-index__item {
+  margin: 0;
+  padding: .3rem 0 .55rem;
+  break-inside: avoid;
+}
+
+.codex-alpha-index__item + .codex-alpha-index__item {
+  border-block-start: 1px solid color-mix(in oklch, var(--sl-color-hairline) 72%, transparent);
+}
+
+.codex-alpha-index__line {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: .55rem;
+}
+
+.codex-alpha-index__link {
+  display: inline-flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: .45rem;
+  color: var(--sl-color-accent-high);
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.codex-alpha-index__link::before {
+  content: '◇';
+  flex: 0 0 auto;
+  color: color-mix(in oklch, var(--sl-color-accent-high) 78%, var(--sl-color-white));
+  font-size: .72em;
+  transform: translateY(-.05em) rotate(45deg);
+}
+
+.codex-alpha-index__link:hover,
+.codex-alpha-index__link:focus-visible {
+  color: var(--sl-color-white);
+  text-decoration: underline;
+  text-underline-offset: .18em;
+}
+
+.codex-alpha-index__meta {
+  flex: 0 0 auto;
+  color: var(--sl-color-gray-3);
+  font-family: var(--sl-font-system-mono);
+  font-size: .68rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.codex-alpha-index__description {
+  margin: .22rem 0 0 1.2rem;
+  color: var(--sl-color-gray-3);
+  font-size: .82rem;
+  line-height: 1.45;
+}
+
+@media (min-width: 42rem) {
+  .codex-alpha-index {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 72rem) {
+  .codex-alpha-index {
+    column-count: 3;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .codex-alpha-index__link {
+    transition: color 140ms ease;
+  }
+}

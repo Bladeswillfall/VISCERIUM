@@ -1,0 +1,26 @@
+/*
+ * Outline panel
+ * Makes long document outlines denser and easier to scan.
+ */
+
+.workspace-leaf-content[data-type="outline"] .tree-item-self {
+  min-height: 28px;
+  padding-block: 3px;
+  padding-inline-end: 6px;
+  border-radius: 5px;
+}
+
+.workspace-leaf-content[data-type="outline"] .tree-item-inner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-leaf-content[data-type="outline"] .tree-item-children {
+  margin-inline-start: 8px;
+  border-inline-start: 1px solid var(--background-modifier-border);
+}
+
+.workspace-leaf-content[data-type="outline"] .tree-item-self:hover {
+  background: var(--background-modifier-hover);
+}

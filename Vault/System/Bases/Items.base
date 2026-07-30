@@ -1,0 +1,77 @@
+filters:
+  and:
+    - type == "item"
+    - '!file.inFolder("Templates")'
+formulas:
+  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
+properties:
+  title:
+    displayName: Item
+  description:
+    displayName: Identity
+  entity_id:
+    displayName: Continuity ID
+  formula.era_context:
+    displayName: Era / scope
+  item_type:
+    displayName: Type
+  origin:
+    displayName: Origin
+  locations:
+    displayName: Regions or markets
+  rarity:
+    displayName: Rarity
+  primary_use:
+    displayName: Use
+  limitations:
+    displayName: Limitations
+  availability:
+    displayName: Availability
+  common_users:
+    displayName: Common users
+  development_level:
+    displayName: Development
+  image:
+    displayName: Artwork
+views:
+  - type: cards
+    name: Item Cards
+    order:
+      - title
+      - description
+      - formula.era_context
+      - item_type
+      - origin
+      - rarity
+      - primary_use
+    sort:
+      - property: title
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: table
+    name: Database
+    order:
+      - title
+      - entity_id
+      - formula.era_context
+      - item_type
+      - origin
+      - locations
+      - rarity
+      - primary_use
+      - limitations
+      - materials
+      - construction
+      - availability
+      - common_users
+      - cultural_significance
+      - story_complication
+      - development_level
+      - status
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC

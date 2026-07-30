@@ -1,0 +1,41 @@
+{
+  "data_version": 2,
+  "command_timeout": 5,
+  "templates_folder": "Templates",
+  "templates_pairs": [],
+  "trigger_on_file_creation_mode": "folder",
+  "auto_jump_to_cursor": false,
+  "shell_path": "",
+  "user_scripts_folder": "Templates/_Scripts",
+  "folder_templates": [
+    {
+      "folder": "Drafts/Databases/Fauna",
+      "template": "Templates/Databases/New Story Entity.md"
+    },
+    {
+      "folder": "Drafts/Databases/Flora",
+      "template": "Templates/Databases/New Story Entity.md"
+    },
+    {
+      "folder": "Drafts/Databases/Fungi",
+      "template": "Templates/Databases/New Story Entity.md"
+    },
+    {
+      "folder": "Drafts/Databases/Items",
+      "template": "Templates/Databases/New Story Entity.md"
+    }
+  ],
+  "file_templates": [],
+  "syntax_highlighting": true,
+  "syntax_highlighting_mobile": true,
+  "enabled_templates_hotkeys": [
+    "Templates/Databases/New Story Entity.md",
+    "Templates/Lore/New Lore Entity.md",
+    "Templates/Databases/New Myrkild Unit.md"
+  ],
+  "startup_templates": [
+    "Templates/_Startup/Open VISCERIUM Home.md"
+  ],
+  "intellisense_render": "1",
+  "ignore_folders_on_creation": []
+}

@@ -1,0 +1,410 @@
+@layer ion {
+  /*
+    Authored colours start with an sRGB fallback. Modern browsers replace it
+    with OKLCH; P3 displays raise one shared chroma multiplier. Theme and state
+    variants derive from their base colour so palette edits propagate.
+  */
+  :root,
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+
+    /* Core palette and body text. */
+    --codex-palette-oled: #000;
+    --codex-palette-ink: #101010;
+    --codex-palette-deep: #484137;
+    --codex-palette-mid: #888070;
+    --codex-palette-page-light: #b9b4a9;
+    --codex-palette-light: #c8bfa8;
+    --codex-text-base: #a0a0a0;
+    --codex-text-body: var(--codex-text-base);
+    --codex-text-minor: var(--codex-text-base);
+
+    /* Reusable status and era bases. */
+    --codex-danger-base: #ff8a9a;
+    --codex-success-base: #7ee2a8;
+    --codex-warning-base: #ffd166;
+    --codex-info-base: #80d8ff;
+    --codex-important-base: #d8a7ff;
+    --era-e1-base: var(--codex-danger-base);
+    --era-e2-base: #f0c36a;
+    --era-e3-base: #73d9e6;
+    --era-e4-base: #c5a3ff;
+
+    /* Core surfaces and fixed navigation. */
+    --codex-fixed-light: #fff;
+    --codex-fixed-dark: var(--codex-palette-oled);
+    --codex-page-bg: var(--codex-palette-ink);
+    --codex-bg: var(--codex-palette-ink);
+    --codex-bg-soft: var(--codex-palette-oled);
+    --codex-accent: var(--codex-palette-light);
+    --codex-accent-high: var(--codex-palette-light);
+    --codex-accent-soft: #c8bfa82e;
+    --codex-surface: #48413747;
+    --codex-surface-raised-color: #211f1b;
+    --codex-surface-raised: var(--codex-surface-raised-color);
+    --codex-surface-accent: #8880701a;
+    --codex-border: var(--codex-palette-deep);
+    --codex-border-strong: var(--codex-palette-mid);
+    --codex-sidebar-toggle-bg: #000000e6;
+    --codex-shadow-color: var(--codex-fixed-dark);
+    --codex-nav-bg: var(--codex-palette-oled);
+    --codex-nav-text: var(--codex-palette-light);
+    --codex-nav-muted: var(--codex-palette-mid);
+    --codex-nav-border: var(--codex-palette-deep);
+    --codex-nav-hover: var(--codex-palette-ink);
+
+    /* High-contrast status colours. */
+    --codex-danger: var(--codex-danger-base);
+    --codex-danger-high: #ffc1d0;
+    --codex-success: var(--codex-success-base);
+    --codex-warning: var(--codex-warning-base);
+    --codex-info: var(--codex-info-base);
+    --codex-important: var(--codex-important-base);
+    --codex-red: var(--codex-danger);
+    --codex-blue: var(--codex-info);
+    --codex-green: var(--codex-success);
+
+    /* Starlight and Pagefind mappings. */
+    --sl-color-bg: var(--codex-page-bg);
+    --sl-color-bg-nav: var(--codex-nav-bg);
+    --sl-color-bg-sidebar: var(--codex-nav-bg);
+    --sl-color-bg-inline-code: #c8bfa81f;
+    --sl-color-hairline: var(--codex-palette-deep);
+    --sl-color-hairline-light: var(--codex-palette-deep);
+    --sl-color-text: var(--codex-text-body);
+    --sl-color-accent-low: var(--codex-palette-deep);
+    --sl-color-accent: var(--codex-accent);
+    --sl-color-accent-high: var(--codex-accent-high);
+    --sl-color-white: var(--codex-palette-light);
+    --sl-color-gray-1: var(--codex-palette-light);
+    --sl-color-gray-2: var(--codex-text-body);
+    --sl-color-gray-3: var(--codex-text-minor);
+    --sl-color-gray-4: var(--codex-palette-deep);
+    --sl-color-gray-5: var(--codex-palette-deep);
+    --sl-color-gray-6: var(--codex-palette-ink);
+    --sl-color-black: var(--codex-palette-oled);
+    --sl-color-red-low: #35000f;
+    --sl-color-red: var(--codex-red);
+    --sl-color-red-high: var(--codex-danger-high);
+    --sl-color-purple-low: #240b35;
+    --sl-color-purple: var(--codex-important);
+    --sl-color-purple-high: #e6d7ff;
+    --sl-border: var(--codex-palette-deep);
+    --pagefind-ui-border: var(--codex-palette-deep);
+    --pagefind-ui-primary: var(--sl-color-accent);
+
+    /* Calendar palette. */
+    --calendar-surface: var(--codex-surface);
+    --calendar-surface-soft: #48413766;
+    --calendar-border: var(--codex-border);
+    --calendar-border-strong: var(--codex-border-strong);
+    --calendar-text: var(--codex-text-body);
+    --calendar-muted: var(--codex-text-minor);
+    --calendar-winter: var(--codex-info);
+    --calendar-spring: var(--codex-warning);
+    --calendar-summer: var(--codex-success);
+    --calendar-autumn: var(--era-e2-base);
+    --calendar-leap: var(--codex-important);
+    --calendar-holiday: var(--codex-danger);
+    --calendar-marker: var(--codex-danger);
+
+    /* Era palette. */
+    --era-e1-accent: var(--era-e1-base);
+    --era-e1-accent-high: #ffc1d0;
+    --era-e1-heading: #f27f9c;
+    --era-e1-surface: #721c35;
+    --era-e2-accent: var(--era-e2-base);
+    --era-e2-accent-high: #ffe0a3;
+    --era-e2-heading: var(--era-e2-base);
+    --era-e2-surface: #665018;
+    --era-e3-accent: var(--era-e3-base);
+    --era-e3-accent-high: #b8f4fa;
+    --era-e3-heading: var(--era-e3-base);
+    --era-e3-surface: #175b64;
+    --era-e4-accent: var(--era-e4-base);
+    --era-e4-accent-high: #e6d7ff;
+    --era-e4-heading: var(--era-e4-base);
+    --era-e4-surface: #54357c;
+
+    /* Timeline event palette. */
+    --vc-event-ink: #17191b;
+    --vc-event-technology: #a8d8d2;
+    --vc-event-military: #e8b3a0;
+    --vc-event-political: #e4ca91;
+    --vc-event-cultural: #cbb7dc;
+    --vc-event-religious: #e5d7a8;
+    --vc-event-economic: #bfd39f;
+    --vc-event-scientific: #b2cae6;
+    --vc-event-disaster: #e7a19a;
+    --vc-event-resonance: #d1b0e5;
+    --vc-event-myrkild: #b2cea0;
+    --vc-event-naranor: #d9d5c8;
+    --vc-event-exploration: #a1cdd3;
+    --vc-event-social: #dcb8b4;
+    --vc-event-environmental: #b7d0a8;
+    --vc-event-unknown: #c9c4bb;
+
+    /* Homepage palette. */
+    --home-void: var(--codex-palette-oled);
+    --home-text-fixed: var(--codex-palette-light);
+    --home-text-soft-fixed: var(--codex-text-base);
+    --home-muted-fixed: var(--codex-text-base);
+    --home-line-fixed: var(--codex-palette-deep);
+    --home-era-citadel: var(--era-e1-base);
+    --home-era-smog: var(--era-e2-base);
+    --home-era-nearsight: var(--era-e3-base);
+    --home-era-entropy: var(--era-e4-base);
+    --home-star-warm: var(--codex-palette-light);
+    --home-reveal-vignette-soft: #000000f5;
+    --home-reveal-vignette-clear: #0000;
+
+    /* Degel system artwork palette. */
+    --degel-map-background: #10141d;
+    --degel-map-ink: #cdd3e0;
+    --degel-map-label: #e7ebf4;
+    --degel-star-core: #fff6bd;
+    --degel-star-mid: #f8d36e;
+    --degel-star-edge: #d98335;
+    --degel-star-ember: #813214;
+    --degel-star-glow: #f5b54c;
+    --degel-errack-dark: #4f2f2c;
+    --degel-errack-mid: #6f3e2f;
+    --degel-errack-warm: #9b5a3d;
+    --degel-errack-light: #a86e4f;
+    --degel-okse-ocean: #356d77;
+    --degel-okse-land: #4e846b;
+    --degel-okse-dryland: #a09567;
+    --degel-okse-deep: #325f75;
+    --degel-okse-coast: #4f8173;
+    --degel-moon-light: #b9b3a7;
+    --degel-moon-mid: #6d7378;
+    --degel-moon-dark: #3f4348;
+    --degel-rock-light: #b2a797;
+    --degel-rock-mid: #7d766d;
+    --degel-rock-dark: #6b6764;
+  }
+
+  :root[data-theme='light'] {
+    color-scheme: light;
+    --codex-page-bg: var(--codex-palette-page-light);
+    --codex-bg: var(--codex-palette-page-light);
+    --codex-bg-soft: var(--codex-palette-light);
+    --codex-text-body: #151515;
+    --codex-text-minor: var(--codex-text-body);
+    --codex-accent: var(--codex-palette-deep);
+    --codex-accent-high: var(--codex-palette-oled);
+    --codex-accent-soft: #4841373d;
+    --codex-surface: #c8bfa866;
+    --codex-surface-raised-color: var(--codex-palette-light);
+    --codex-surface-raised: var(--codex-surface-raised-color);
+    --codex-border: var(--codex-palette-deep);
+    --codex-border-strong: var(--codex-palette-oled);
+    --codex-sidebar-toggle-bg: #000000e6;
+    --codex-danger: #35000f;
+    --codex-danger-high: #28000b;
+    --codex-success: #00180d;
+    --codex-warning: #201400;
+    --codex-info: #001b1f;
+    --codex-important: #240b35;
+
+    --sl-color-bg: var(--codex-page-bg);
+    --sl-color-bg-nav: var(--codex-nav-bg);
+    --sl-color-bg-sidebar: var(--codex-nav-bg);
+    --sl-color-bg-inline-code: #c8bfa866;
+    --sl-color-hairline: var(--codex-palette-deep);
+    --sl-color-hairline-light: var(--codex-palette-deep);
+    --sl-color-text: var(--codex-text-body);
+    --sl-color-accent-low: var(--codex-palette-light);
+    --sl-color-accent: var(--codex-palette-ink);
+    --sl-color-accent-high: var(--codex-palette-oled);
+    --sl-color-white: var(--codex-palette-oled);
+    --sl-color-gray-1: var(--codex-palette-oled);
+    --sl-color-gray-2: var(--codex-text-body);
+    --sl-color-gray-3: var(--codex-text-minor);
+    --sl-color-gray-4: var(--codex-palette-deep);
+    --sl-color-gray-5: var(--codex-palette-deep);
+    --sl-color-gray-6: var(--codex-palette-light);
+    --sl-color-gray-7: var(--codex-palette-mid);
+    --sl-color-black: var(--codex-palette-light);
+    --sl-color-red-low: var(--codex-danger-base);
+    --sl-color-red: var(--codex-red);
+    --sl-color-red-high: var(--codex-danger-high);
+    --sl-color-purple-low: var(--codex-important-base);
+    --sl-color-purple: var(--codex-important);
+    --sl-color-purple-high: var(--codex-important);
+    --sl-border: var(--codex-palette-deep);
+    --pagefind-ui-border: var(--codex-palette-deep);
+
+    --calendar-surface: var(--codex-surface);
+    --calendar-surface-soft: var(--codex-palette-light);
+    --calendar-text: var(--codex-text-body);
+    --calendar-muted: var(--codex-text-minor);
+    --calendar-marker: var(--codex-danger);
+
+    --era-e1-accent: #35000f;
+    --era-e1-accent-high: #000;
+    --era-e1-heading: #35000f;
+    --era-e1-surface: var(--era-e1-base);
+    --era-e2-accent: #201400;
+    --era-e2-accent-high: #000;
+    --era-e2-heading: #201400;
+    --era-e2-surface: var(--era-e2-base);
+    --era-e3-accent: #001b1f;
+    --era-e3-accent-high: #000;
+    --era-e3-heading: #001b1f;
+    --era-e3-surface: var(--era-e3-base);
+    --era-e4-accent: #240b35;
+    --era-e4-accent-high: #000;
+    --era-e4-heading: #240b35;
+    --era-e4-surface: var(--era-e4-base);
+  }
+
+  @supports (color: oklch(from red l c h)) {
+    :root {
+      --codex-chroma-scale: 1;
+    }
+
+    :root,
+    :root[data-theme='dark'] {
+      /* Base colours: only these channel values need editing. */
+      --codex-palette-oled: oklch(0% 0 0);
+      --codex-palette-ink: oklch(17.3% 0 89.9);
+      --codex-palette-deep: oklch(37.9% calc(0.019 * var(--codex-chroma-scale)) 76.8);
+      --codex-palette-mid: oklch(60.2% calc(0.025 * var(--codex-chroma-scale)) 84.6);
+      --codex-palette-light: oklch(80.6% calc(0.033 * var(--codex-chroma-scale)) 89.2);
+      --codex-text-base: oklch(70.576% 0 0);
+      --codex-fixed-light: oklch(100% 0 0);
+      --codex-danger-base: oklch(76.5% calc(0.142 * var(--codex-chroma-scale)) 12.3);
+      --codex-success-base: oklch(83.6% calc(0.126 * var(--codex-chroma-scale)) 156.8);
+      --codex-warning-base: oklch(88% calc(0.135 * var(--codex-chroma-scale)) 86.1);
+      --codex-info-base: oklch(84.1% calc(0.101 * var(--codex-chroma-scale)) 228.4);
+      --codex-important-base: oklch(80.4% calc(0.131 * var(--codex-chroma-scale)) 309.2);
+      --era-e2-base: oklch(83.9% calc(0.119 * var(--codex-chroma-scale)) 82.9);
+      --era-e3-base: oklch(82.9% calc(0.097 * var(--codex-chroma-scale)) 206.3);
+      --era-e4-base: oklch(78% calc(0.132 * var(--codex-chroma-scale)) 300.4);
+
+      /* Alpha, elevation, and contrast variants derive from the bases above. */
+      --codex-accent-soft: oklch(from var(--codex-accent) l c h / 0.18);
+      --codex-surface: oklch(from var(--codex-palette-deep) l c h / 0.28);
+      --codex-surface-raised-color: color-mix(in oklch, var(--codex-page-bg) 67%, var(--codex-palette-deep));
+      --codex-surface-accent: oklch(from var(--codex-palette-mid) l c h / 0.1);
+      --codex-sidebar-toggle-bg: oklch(from var(--codex-palette-oled) l c h / 0.9);
+      --codex-danger: var(--codex-danger-base);
+      --codex-danger-high: color-mix(in oklch, var(--codex-danger-base) 55%, var(--codex-fixed-light));
+      --codex-success: var(--codex-success-base);
+      --codex-warning: var(--codex-warning-base);
+      --codex-info: var(--codex-info-base);
+      --codex-important: var(--codex-important-base);
+
+      --sl-color-bg-inline-code: oklch(from var(--codex-palette-light) l c h / 0.12);
+      --sl-color-red-low: oklch(from var(--codex-danger-base) calc(l * 0.275) calc(c * 0.6) h);
+      --sl-color-purple-low: oklch(from var(--codex-important-base) calc(l * 0.27) calc(c * 0.6) h);
+      --sl-color-purple-high: color-mix(in oklch, var(--codex-important-base) 50%, var(--codex-fixed-light));
+
+      --calendar-surface-soft: oklch(from var(--codex-palette-deep) l c h / 0.4);
+
+      --era-e1-accent: var(--era-e1-base);
+      --era-e1-accent-high: color-mix(in oklch, var(--era-e1-base) 55%, var(--codex-fixed-light));
+      --era-e1-heading: var(--era-e1-base);
+      --era-e1-surface: oklch(from var(--era-e1-base) calc(l * 0.5) calc(c * 0.72) h);
+      --era-e2-accent: var(--era-e2-base);
+      --era-e2-accent-high: color-mix(in oklch, var(--era-e2-base) 55%, var(--codex-fixed-light));
+      --era-e2-heading: var(--era-e2-base);
+      --era-e2-surface: oklch(from var(--era-e2-base) calc(l * 0.5) calc(c * 0.72) h);
+      --era-e3-accent: var(--era-e3-base);
+      --era-e3-accent-high: color-mix(in oklch, var(--era-e3-base) 55%, var(--codex-fixed-light));
+      --era-e3-heading: var(--era-e3-base);
+      --era-e3-surface: oklch(from var(--era-e3-base) calc(l * 0.5) calc(c * 0.72) h);
+      --era-e4-accent: var(--era-e4-base);
+      --era-e4-accent-high: color-mix(in oklch, var(--era-e4-base) 55%, var(--codex-fixed-light));
+      --era-e4-heading: var(--era-e4-base);
+      --era-e4-surface: oklch(from var(--era-e4-base) calc(l * 0.5) calc(c * 0.72) h);
+
+      /* Independent illustration colours share the gamut multiplier. */
+      --vc-event-ink: oklch(21.2% calc(0.005 * var(--codex-chroma-scale)) 248.1);
+      --vc-event-technology: oklch(84.7% calc(0.051 * var(--codex-chroma-scale)) 186.8);
+      --vc-event-military: oklch(81% calc(0.068 * var(--codex-chroma-scale)) 40.6);
+      --vc-event-political: oklch(84.8% calc(0.079 * var(--codex-chroma-scale)) 86.2);
+      --vc-event-cultural: oklch(80.8% calc(0.056 * var(--codex-chroma-scale)) 309.4);
+      --vc-event-religious: oklch(87.9% calc(0.063 * var(--codex-chroma-scale)) 93.4);
+      --vc-event-economic: oklch(83.9% calc(0.073 * var(--codex-chroma-scale)) 125);
+      --vc-event-scientific: oklch(83% calc(0.047 * var(--codex-chroma-scale)) 252.4);
+      --vc-event-disaster: oklch(77.5% calc(0.085 * var(--codex-chroma-scale)) 25.6);
+      --vc-event-resonance: oklch(80.3% calc(0.081 * var(--codex-chroma-scale)) 312.5);
+      --vc-event-myrkild: oklch(81.9% calc(0.07 * var(--codex-chroma-scale)) 133.3);
+      --vc-event-naranor: oklch(87.3% calc(0.018 * var(--codex-chroma-scale)) 92.7);
+      --vc-event-exploration: oklch(81.9% calc(0.047 * var(--codex-chroma-scale)) 206.6);
+      --vc-event-social: oklch(81.3% calc(0.042 * var(--codex-chroma-scale)) 25.5);
+      --vc-event-environmental: oklch(82.8% calc(0.061 * var(--codex-chroma-scale)) 133.8);
+      --vc-event-unknown: oklch(82.2% calc(0.014 * var(--codex-chroma-scale)) 82.4);
+
+      --home-reveal-vignette-soft: oklch(from var(--codex-palette-oled) l c h / 0.96);
+      --home-reveal-vignette-clear: oklch(from var(--codex-palette-oled) l c h / 0);
+
+      --degel-map-background: oklch(19.2% calc(0.019 * var(--codex-chroma-scale)) 266);
+      --degel-map-ink: oklch(86.6% calc(0.019 * var(--codex-chroma-scale)) 266);
+      --degel-map-label: oklch(94% calc(0.013 * var(--codex-chroma-scale)) 266.7);
+      --degel-star-core: oklch(96.7% calc(0.073 * var(--codex-chroma-scale)) 100.1);
+      --degel-star-mid: oklch(87.8% calc(0.127 * var(--codex-chroma-scale)) 89.5);
+      --degel-star-edge: oklch(68.9% calc(0.139 * var(--codex-chroma-scale)) 58.9);
+      --degel-star-ember: oklch(42.4% calc(0.117 * var(--codex-chroma-scale)) 39.6);
+      --degel-star-glow: oklch(81.4% calc(0.14 * var(--codex-chroma-scale)) 76.6);
+      --degel-errack-dark: oklch(34.4% calc(0.048 * var(--codex-chroma-scale)) 25.6);
+      --degel-errack-mid: oklch(42% calc(0.073 * var(--codex-chroma-scale)) 37.8);
+      --degel-errack-warm: oklch(53.6% calc(0.096 * var(--codex-chroma-scale)) 44.3);
+      --degel-errack-light: oklch(59.3% calc(0.086 * var(--codex-chroma-scale)) 48.6);
+      --degel-okse-ocean: oklch(50.1% calc(0.061 * var(--codex-chroma-scale)) 210.6);
+      --degel-okse-land: oklch(56.8% calc(0.07 * var(--codex-chroma-scale)) 163.1);
+      --degel-okse-dryland: oklch(66.8% calc(0.064 * var(--codex-chroma-scale)) 96.3);
+      --degel-okse-deep: oklch(46.3% calc(0.061 * var(--codex-chroma-scale)) 231.4);
+      --degel-okse-coast: oklch(56.3% calc(0.059 * var(--codex-chroma-scale)) 174.4);
+      --degel-moon-light: oklch(76.8% calc(0.018 * var(--codex-chroma-scale)) 84.6);
+      --degel-moon-mid: oklch(55.2% calc(0.011 * var(--codex-chroma-scale)) 243);
+      --degel-moon-dark: oklch(38.1% calc(0.01 * var(--codex-chroma-scale)) 254);
+      --degel-rock-light: oklch(73.3% calc(0.026 * var(--codex-chroma-scale)) 77.4);
+      --degel-rock-mid: oklch(56.9% calc(0.016 * var(--codex-chroma-scale)) 74.3);
+      --degel-rock-dark: oklch(51.6% calc(0.007 * var(--codex-chroma-scale)) 59.6);
+    }
+
+    :root[data-theme='light'] {
+      --codex-text-body: oklch(from var(--codex-text-base) calc(1 - l - 0.1) c h);
+      --codex-text-minor: var(--codex-text-body);
+      --codex-accent-soft: oklch(from var(--codex-palette-deep) l c h / 0.24);
+      --codex-surface: oklch(from var(--codex-palette-light) l c h / 0.4);
+      --codex-sidebar-toggle-bg: oklch(from var(--codex-palette-oled) l c h / 0.9);
+      --codex-danger: oklch(from var(--codex-danger-base) calc(l * 0.25) calc(c * 0.6) h);
+      --codex-danger-high: oklch(from var(--codex-danger) calc(l * 0.85) calc(c * 0.85) h);
+      --codex-success: oklch(from var(--codex-success-base) calc(l * 0.25) calc(c * 0.6) h);
+      --codex-warning: oklch(from var(--codex-warning-base) calc(l * 0.25) calc(c * 0.6) h);
+      --codex-info: oklch(from var(--codex-info-base) calc(l * 0.25) calc(c * 0.6) h);
+      --codex-important: oklch(from var(--codex-important-base) calc(l * 0.25) calc(c * 0.6) h);
+
+      --sl-color-bg-inline-code: oklch(from var(--codex-palette-light) l c h / 0.4);
+      --sl-color-red-low: var(--codex-danger-base);
+      --sl-color-purple-low: var(--codex-important-base);
+
+      --era-e1-accent: var(--codex-danger);
+      --era-e1-accent-high: var(--codex-palette-oled);
+      --era-e1-heading: var(--era-e1-accent);
+      --era-e1-surface: var(--era-e1-base);
+      --era-e2-accent: oklch(from var(--era-e2-base) calc(l * 0.25) calc(c * 0.6) h);
+      --era-e2-accent-high: var(--codex-palette-oled);
+      --era-e2-heading: var(--era-e2-accent);
+      --era-e2-surface: var(--era-e2-base);
+      --era-e3-accent: oklch(from var(--era-e3-base) calc(l * 0.25) calc(c * 0.6) h);
+      --era-e3-accent-high: var(--codex-palette-oled);
+      --era-e3-heading: var(--era-e3-accent);
+      --era-e3-surface: var(--era-e3-base);
+      --era-e4-accent: oklch(from var(--era-e4-base) calc(l * 0.25) calc(c * 0.6) h);
+      --era-e4-accent-high: var(--codex-palette-oled);
+      --era-e4-heading: var(--era-e4-accent);
+      --era-e4-surface: var(--era-e4-base);
+    }
+
+    @media (color-gamut: p3) {
+      :root {
+        --codex-chroma-scale: 1.15;
+      }
+    }
+  }
+}

@@ -1,0 +1,1435 @@
+/* ==========================================================================
+   Timeline application canvas
+
+   Consolidated from timelines.css, timeline-loading.css, timeline-performance.css, timeline-pages.css, timeline-stacking.css, timeline-viewport.css, chronos-calendar-axis.css. Section order is intentional:
+   later sections may refine or override earlier ownership layers. Keep the
+   provenance comments when moving rules so cascade-sensitive behaviour remains
+   understandable in isolation.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Application foundation
+   Origin: timelines.css
+
+   Defines shared timeline tokens, shell and core controls.
+   -------------------------------------------------------------------------- */
+
+/* VISCERIUM timeline application. The renderer is shared with the Obsidian plugin. */
+
+.vc-timeline-shell,
+.vc-timeline-app {
+  --vc-timeline-surface: var(--codex-surface-raised-color);
+  --vc-timeline-surface-deep: var(--codex-bg);
+  --vc-timeline-border: var(--codex-border);
+  --vc-timeline-border-strong: var(--codex-border-strong);
+  --vc-timeline-ink: var(--sl-color-white);
+  --vc-timeline-muted: var(--sl-color-gray-3);
+  --vc-timeline-accent: var(--sl-color-accent-high);
+  position: relative;
+  min-width: 0;
+}
+
+.vc-timeline-page-header {
+  margin-block: 0 1.5rem;
+  padding-block-end: 1rem;
+  border-bottom: 1px solid var(--codex-border);
+}
+
+.vc-timeline-page-header > :last-child {
+  margin-bottom: 0;
+}
+
+.timeline-kicker,
+.timeline-date,
+.vc-detail-kicker {
+  color: var(--sl-color-accent-high);
+  font-family: var(--vc-font-ui, ui-sans-serif, system-ui);
+  font-size: var(--sl-text-xs, .8rem);
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.vc-timeline-app {
+  display: grid;
+  gap: .8rem;
+  margin-block: 1.5rem;
+  padding: clamp(.65rem, 2vw, 1.15rem);
+  overflow: clip;
+  border: 1px solid var(--vc-timeline-border);
+  border-radius: var(--codex-radius, .25rem);
+  background:
+    linear-gradient(135deg, color-mix(in oklch, var(--vc-timeline-accent) 5%, transparent), transparent 32%),
+    repeating-linear-gradient(0deg, transparent 0 31px, color-mix(in oklch, var(--vc-timeline-border) 20%, transparent) 32px),
+    var(--vc-timeline-surface-deep);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--codex-fixed-light) 4%, transparent), 0 1rem 3rem color-mix(in oklch, var(--codex-shadow-color) 25%, transparent);
+}
+
+.vc-timeline-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: .65rem;
+  padding: .65rem;
+  border: 1px solid var(--vc-timeline-border);
+  background: color-mix(in oklch, var(--vc-timeline-surface) 92%, transparent);
+}
+
+.vc-timeline-field {
+  display: grid;
+  flex: 0 1 12rem;
+  gap: .25rem;
+  min-width: 8rem;
+  margin: 0;
+  color: var(--vc-timeline-muted);
+  font-family: var(--vc-font-ui, ui-sans-serif, system-ui);
+  font-size: .73rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.vc-timeline-search {
+  flex: 1 1 16rem;
+}
+
+.vc-timeline-field :is(input, select),
+.vc-timeline-app button {
+  min-height: 2.6rem;
+  border: 1px solid var(--vc-timeline-border-strong);
+  border-radius: 0;
+  color: var(--vc-timeline-ink);
+  background: var(--vc-timeline-surface-deep);
+  font: 700 .82rem/1.2 var(--vc-font-ui, ui-sans-serif, system-ui);
+}
+
+.vc-timeline-field :is(input, select) {
+  width: 100%;
+  padding: .55rem .65rem;
+}
+
+.vc-timeline-field input::placeholder {
+  color: var(--vc-timeline-muted);
+  opacity: 1;
+}
+
+.vc-timeline-app button {
+  padding: .55rem .7rem;
+  cursor: pointer;
+}
+
+.vc-timeline-app button:hover,
+.vc-timeline-app button[aria-pressed='true'] {
+  border-color: var(--vc-timeline-accent);
+  background: color-mix(in oklch, var(--vc-timeline-accent) 13%, var(--vc-timeline-surface-deep));
+}
+
+.vc-timeline-app :is(button, input, select, summary, a):focus-visible {
+  outline: 3px solid color-mix(in oklch, var(--vc-timeline-accent) 75%, var(--codex-fixed-light));
+  outline-offset: 3px;
+}
+
+.vc-timeline-actions {
+  display: flex;
+  flex: 1 1 24rem;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.vc-timeline-actions button {
+  flex: 0 0 auto;
+}
+
+.vc-timeline-filters,
+.vc-timeline-minimap-wrap {
+  border: 1px solid var(--vc-timeline-border);
+  background: color-mix(in oklch, var(--vc-timeline-surface) 88%, transparent);
+}
+
+.vc-timeline-filters > summary,
+.vc-timeline-minimap-wrap > summary {
+  padding: .7rem .85rem;
+  color: var(--vc-timeline-ink);
+  font: 800 .78rem/1.2 var(--vc-font-ui, ui-sans-serif, system-ui);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.vc-timeline-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(10rem, 1fr));
+  gap: .7rem;
+  padding: 0 .8rem .8rem;
+}
+
+.vc-timeline-filter-grid fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: .6rem;
+  border: 1px solid var(--vc-timeline-border);
+}
+
+.vc-timeline-filter-grid legend {
+  padding-inline: .25rem;
+  color: var(--vc-timeline-accent);
+  font: 800 .72rem/1.2 var(--vc-font-ui, ui-sans-serif, system-ui);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.vc-timeline-check {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin: .2rem .65rem .2rem 0;
+  color: var(--vc-timeline-ink);
+  font-size: .83rem;
+}
+
+.vc-timeline-check input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--vc-timeline-accent);
+}
+
+.vc-timeline-filter-actions {
+  display: flex;
+  align-items: end;
+}
+
+.vc-era-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .35rem;
+}
+
+.vc-era-action {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  border: 1px solid var(--vc-timeline-border);
+  background: var(--vc-timeline-surface);
+}
+
+.vc-era-action button {
+  min-width: 0;
+  border: 0;
+  text-align: left;
+}
+
+.vc-era-action a {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: .65rem;
+  border-inline-start: 1px solid var(--vc-timeline-border);
+  color: var(--vc-timeline-muted);
+  font: 700 .72rem/1 var(--vc-font-ui, ui-sans-serif, system-ui);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.vc-era-action a:hover {
+  color: var(--vc-timeline-ink);
+  background: color-mix(in oklch, var(--vc-timeline-accent) 10%, transparent);
+}
+
+.vc-timeline-stage {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--vc-timeline-border);
+  background: color-mix(in oklch, var(--vc-timeline-surface-deep) 94%, transparent);
+}
+
+.vc-timeline-axis {
+  position: relative;
+  z-index: 4;
+  height: 3.1rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--vc-timeline-border-strong);
+  background: linear-gradient(180deg, color-mix(in oklch, var(--vc-timeline-surface) 95%, transparent), var(--vc-timeline-surface-deep));
+}
+
+.vc-timeline-axis span {
+  position: absolute;
+  bottom: .55rem;
+  max-width: 10rem;
+  translate: -50% 0;
+  color: var(--vc-timeline-muted);
+  font: 800 .68rem/1.15 var(--vc-font-ui, ui-sans-serif, system-ui);
+  letter-spacing: .04em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.vc-timeline-axis span::after {
+  content: '';
+  position: absolute;
+  top: calc(100% + .35rem);
+  left: 50%;
+  width: 1px;
+  height: .7rem;
+  background: var(--vc-timeline-border-strong);
+}
+
+.vc-timeline-canvas {
+  min-height: 20rem;
+  touch-action: pan-y pinch-zoom;
+}
+
+.vc-timeline-canvas .vis-time-axis,
+.vc-timeline-minimap .vis-time-axis {
+  display: none;
+}
+
+.vc-timeline-canvas .vis-panel,
+.vc-timeline-canvas .vis-labelset,
+.vc-timeline-canvas .vis-foreground,
+.vc-timeline-minimap .vis-panel {
+  border-color: var(--vc-timeline-border) !important;
+}
+
+.vc-timeline-canvas .vis-grid.vis-vertical,
+.vc-timeline-minimap .vis-grid.vis-vertical {
+  border-color: color-mix(in oklch, var(--vc-timeline-border) 45%, transparent) !important;
+}
+
+.vc-timeline-canvas .vis-label {
+  color: var(--vc-timeline-muted);
+  border-color: var(--vc-timeline-border) !important;
+  background: var(--vc-timeline-surface-deep);
+  font: 700 .72rem/1.2 var(--vc-font-ui, ui-sans-serif, system-ui);
+  text-transform: capitalize;
+}
+
+.vc-timeline-canvas .vis-item.vc-timeline-item {
+  border: 1px solid var(--vc-timeline-border-strong);
+  border-radius: 0;
+  color: var(--vc-timeline-ink);
+  background: color-mix(in oklch, var(--vc-timeline-surface) 94%, var(--codex-fixed-dark));
+  box-shadow: 0 .25rem .7rem color-mix(in oklch, var(--codex-shadow-color) 28%, transparent);
+  font-family: var(--vc-font-ui, ui-sans-serif, system-ui);
+}
+
+.vc-timeline-canvas .vis-item.vc-timeline-item .vis-item-content {
+  display: inline-flex;
+  align-items: center;
+  gap: .38rem;
+  padding: .42rem .55rem;
+}
+
+.vc-marker {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: .58rem;
+  height: .58rem;
+  border: 2px solid currentColor;
+  rotate: 45deg;
+  background: var(--vc-timeline-surface-deep);
+}
+
+.importance-landmark {
+  --vc-item-weight: 3px;
+  font-weight: 900 !important;
+}
+
+.importance-major {
+  --vc-item-weight: 2px;
+  font-weight: 800 !important;
+}
+
+.importance-standard {
+  --vc-item-weight: 1px;
+}
+
+.vc-timeline-canvas .vis-item.importance-landmark {
+  border-width: 3px;
+  font-size: 1rem;
+}
+
+.vc-timeline-canvas .vis-item.importance-landmark .vc-marker {
+  width: .82rem;
+  height: .82rem;
+  background: currentColor;
+}
+
+.vc-timeline-canvas .vis-item.importance-major {
+  border-width: 2px;
+  font-size: .9rem;
+}
+
+.vc-timeline-canvas .vis-item.importance-minor,
+.vc-timeline-canvas .vis-item.importance-incidental {
+  color: var(--vc-timeline-muted);
+  font-size: .74rem;
+  opacity: .84;
+}
+
+.vc-timeline-canvas .vis-item.certainty-approximate {
+  border-style: dashed;
+}
+
+.vc-timeline-canvas .vis-item.certainty-disputed {
+  border-style: double;
+}
+
+.vc-timeline-canvas .vis-item.certainty-legendary {
+  border-style: dotted;
+  font-style: italic;
+}
+
+.vc-timeline-canvas .vis-item.vis-selected {
+  z-index: 5;
+  border-color: var(--vc-timeline-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--vc-timeline-accent) 24%, transparent), 0 .5rem 1.4rem color-mix(in oklch, var(--codex-shadow-color) 42%, transparent);
+}
+
+.vc-timeline-canvas .vis-item.category-technology { color: var(--vc-event-technology); }
+.vc-timeline-canvas .vis-item.category-military { color: var(--vc-event-military); }
+.vc-timeline-canvas .vis-item.category-political { color: var(--vc-event-political); }
+.vc-timeline-canvas .vis-item.category-cultural { color: var(--vc-event-cultural); }
+.vc-timeline-canvas .vis-item.category-religious { color: var(--vc-event-religious); }
+.vc-timeline-canvas .vis-item.category-economic { color: var(--vc-event-economic); }
+.vc-timeline-canvas .vis-item.category-scientific { color: var(--vc-event-scientific); }
+.vc-timeline-canvas .vis-item.category-disaster { color: var(--vc-event-disaster); }
+.vc-timeline-canvas .vis-item.category-resonance { color: var(--vc-event-resonance); }
+.vc-timeline-canvas .vis-item.category-myrkild { color: var(--vc-event-myrkild); }
+.vc-timeline-canvas .vis-item.category-naranor { color: var(--vc-event-naranor); }
+.vc-timeline-canvas .vis-item.category-exploration { color: var(--vc-event-exploration); }
+.vc-timeline-canvas .vis-item.category-social { color: var(--vc-event-social); }
+.vc-timeline-canvas .vis-item.category-environmental { color: var(--vc-event-environmental); }
+.vc-timeline-canvas .vis-item.category-unknown { color: var(--vc-timeline-muted); }
+
+.vc-timeline-canvas .vis-item.vc-era-band,
+.vc-timeline-minimap .vis-item.vc-era-band {
+  border: 0;
+  opacity: .16;
+}
+
+.vc-era-action.era-citadel,
+.vis-item.era-citadel { background-color: var(--era-e1-surface) !important; }
+.vc-era-action.era-smog,
+.vis-item.era-smog { background-color: var(--era-e2-surface) !important; }
+.vc-era-action.era-nearsight,
+.vis-item.era-nearsight { background-color: var(--era-e3-surface) !important; }
+.vc-era-action.era-entropy,
+.vis-item.era-entropy { background-color: var(--era-e4-surface) !important; }
+
+.vc-timeline-minimap {
+  min-height: 7rem;
+  border-top: 1px solid var(--vc-timeline-border);
+  background: var(--vc-timeline-surface-deep);
+  cursor: crosshair;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event {
+  width: 3px !important;
+  border: 0;
+  background: var(--vc-timeline-muted);
+}
+
+.vc-timeline-minimap .vis-item.vc-minimap-viewport {
+  border: 2px solid var(--vc-timeline-accent);
+  background: color-mix(in oklch, var(--vc-timeline-accent) 12%, transparent);
+}
+
+.vc-timeline-status {
+  min-height: 1.2rem;
+  color: var(--vc-timeline-muted);
+  font-size: .78rem;
+}
+
+.vc-timeline-details {
+  position: absolute;
+  z-index: 20;
+  top: 5rem;
+  right: 1rem;
+  width: min(25rem, calc(100% - 2rem));
+  max-height: calc(100% - 6rem);
+  padding: 1rem;
+  overflow: auto;
+  border: 1px solid var(--vc-timeline-accent);
+  background: color-mix(in oklch, var(--vc-timeline-surface-deep) 97%, transparent);
+  box-shadow: 0 1rem 4rem color-mix(in oklch, var(--codex-shadow-color) 65%, transparent);
+}
+
+.vc-timeline-details[hidden] {
+  display: none;
+}
+
+.vc-timeline-detail-close {
+  float: right;
+  min-width: 2.6rem;
+  padding: 0;
+  font-size: 1.4rem !important;
+}
+
+.vc-timeline-details h2 {
+  margin: .2rem 3rem .65rem 0;
+}
+
+.vc-timeline-details dl {
+  display: grid;
+  gap: .45rem;
+  margin-block: 1rem;
+}
+
+.vc-timeline-details dl > div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: .65rem;
+  padding-block: .35rem;
+  border-bottom: 1px solid var(--vc-timeline-border);
+}
+
+.vc-timeline-details dt {
+  color: var(--vc-timeline-muted);
+  font: 800 .7rem/1.2 var(--vc-font-ui, ui-sans-serif, system-ui);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.vc-timeline-details dd {
+  margin: 0;
+}
+
+.vc-detail-link {
+  display: inline-flex;
+  min-height: 2.6rem;
+  align-items: center;
+  padding-inline: .8rem;
+  border: 1px solid var(--vc-timeline-accent);
+  color: var(--vc-timeline-ink);
+  font: 800 .8rem/1 var(--vc-font-ui, ui-sans-serif, system-ui);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.vc-timeline-list[hidden] {
+  display: none;
+}
+
+.vc-timeline-list ol,
+.vc-timeline-fallback ol {
+  display: grid;
+  gap: .55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vc-timeline-list li,
+.vc-timeline-fallback li {
+  margin: 0;
+  border: 1px solid var(--vc-timeline-border);
+  background: var(--vc-timeline-surface);
+}
+
+.vc-timeline-list button {
+  display: grid;
+  width: 100%;
+  height: auto;
+  min-height: 4rem;
+  gap: .2rem;
+  padding: .75rem;
+  border: 0;
+  text-align: left;
+}
+
+.vc-timeline-list button span,
+.vc-timeline-list button small {
+  color: var(--vc-timeline-muted);
+}
+
+.vc-timeline-list button strong {
+  color: var(--vc-timeline-ink);
+  font-size: 1rem;
+}
+
+.vc-timeline-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem .8rem;
+  padding-block-start: .6rem;
+  border-top: 1px solid var(--vc-timeline-border);
+  color: var(--vc-timeline-muted);
+  font: 700 .72rem/1.2 var(--vc-font-ui, ui-sans-serif, system-ui);
+}
+
+.vc-timeline-legend span::before {
+  content: '';
+  display: inline-block;
+  width: .65rem;
+  height: .65rem;
+  margin-inline-end: .35rem;
+  border: var(--vc-item-weight, 1px) solid currentColor;
+  vertical-align: -.05rem;
+}
+
+.vc-timeline-legend .certainty-approximate::before { border-style: dashed; }
+.vc-timeline-legend .certainty-disputed::before { border-style: double; }
+.vc-timeline-legend .certainty-legendary::before { border-style: dotted; }
+
+.vc-timeline-fallback {
+  margin-block: 1.5rem;
+}
+
+.vc-timeline-fallback li {
+  padding: .8rem 1rem;
+}
+
+.vc-timeline-fallback h3 {
+  margin-block: .2rem;
+}
+
+.vc-timeline-index {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.vc-timeline-index-card {
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid var(--codex-border);
+  background: var(--codex-surface-raised);
+}
+
+.vc-timeline-index-card:first-child {
+  grid-column: 1 / -1;
+}
+
+.vc-timeline-index-card h2 {
+  margin-block: .25rem .55rem;
+}
+
+.vc-timeline-index-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem;
+}
+
+.vc-timeline-index-actions a {
+  font-weight: 800;
+}
+
+@media (max-width: 52rem) {
+  .vc-timeline-filter-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vc-era-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vc-timeline-details {
+    position: fixed;
+    inset: auto 0 0;
+    width: 100%;
+    max-height: 70dvh;
+    border-inline: 0;
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 38rem) {
+  .vc-timeline-app {
+    margin-inline: calc(50% - 50vw);
+    padding: .45rem;
+    border-inline: 0;
+  }
+
+  .vc-timeline-toolbar,
+  .vc-timeline-filter-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .vc-timeline-field,
+  .vc-timeline-actions {
+    width: 100%;
+  }
+
+  .vc-timeline-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vc-timeline-actions button {
+    width: 100%;
+  }
+
+  .vc-era-strip,
+  .vc-timeline-index {
+    grid-template-columns: 1fr;
+  }
+
+  .vc-timeline-index-card:first-child {
+    grid-column: auto;
+  }
+
+  .vc-timeline-axis span {
+    font-size: .6rem;
+  }
+
+  .vc-timeline-canvas {
+    min-height: 24rem;
+  }
+
+  .vc-timeline-minimap-wrap {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-timeline-app *,
+  .vc-timeline-app *::before,
+  .vc-timeline-app *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .vc-timeline-canvas .vis-item.vc-timeline-item,
+  .vc-timeline-details,
+  .vc-timeline-app button {
+    border-color: CanvasText;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Loading states
+   Origin: timeline-loading.css
+
+   Presents loading and empty timeline states.
+   -------------------------------------------------------------------------- */
+
+.vc-timeline-skeleton {
+  display: grid;
+  gap: .8rem;
+  margin-block: 1.5rem;
+  padding: clamp(.65rem, 2vw, 1.15rem);
+  overflow: hidden;
+  border: 1px solid var(--vc-timeline-border);
+  border-radius: var(--codex-radius, .25rem);
+  background:
+    linear-gradient(135deg, color-mix(in oklch, var(--vc-timeline-accent) 5%, transparent), transparent 32%),
+    repeating-linear-gradient(0deg, transparent 0 31px, color-mix(in oklch, var(--vc-timeline-border) 20%, transparent) 32px),
+    var(--vc-timeline-surface-deep);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--codex-fixed-light) 4%, transparent), 0 1rem 3rem color-mix(in oklch, var(--codex-fixed-dark) 25%, transparent);
+}
+
+.vc-timeline-skeleton[hidden] {
+  display: none;
+}
+
+.vc-timeline-skeleton-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  padding: .65rem;
+  border: 1px solid var(--vc-timeline-border);
+  background: color-mix(in oklch, var(--vc-timeline-surface) 92%, transparent);
+}
+
+.vc-timeline-skeleton-field,
+.vc-timeline-skeleton-actions,
+.vc-timeline-skeleton-eras span,
+.vc-timeline-skeleton-axis,
+.vc-timeline-skeleton-events span,
+.vc-timeline-skeleton-minimap {
+  display: block;
+  overflow: hidden;
+  background: color-mix(in oklch, var(--vc-timeline-surface) 84%, var(--vc-timeline-border));
+}
+
+.vc-timeline-skeleton-field,
+.vc-timeline-skeleton-actions {
+  min-height: 2.6rem;
+  border: 1px solid var(--vc-timeline-border-strong);
+}
+
+.vc-timeline-skeleton-field {
+  flex: 0 1 12rem;
+}
+
+.vc-timeline-skeleton-field.is-wide {
+  flex: 1 1 16rem;
+}
+
+.vc-timeline-skeleton-actions {
+  flex: 1 1 24rem;
+}
+
+.vc-timeline-skeleton-eras {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .35rem;
+}
+
+.vc-timeline-skeleton-eras span {
+  min-height: 2.6rem;
+  border: 1px solid var(--vc-timeline-border);
+}
+
+.vc-timeline-skeleton-stage {
+  min-height: 34rem;
+  border: 1px solid var(--vc-timeline-border);
+  background: color-mix(in oklch, var(--vc-timeline-surface-deep) 94%, transparent);
+}
+
+.vc-timeline-skeleton.is-compact .vc-timeline-skeleton-stage {
+  min-height: 28rem;
+}
+
+.vc-timeline-skeleton-axis {
+  height: 3.1rem;
+  border-bottom: 1px solid var(--vc-timeline-border-strong);
+}
+
+.vc-timeline-skeleton-events {
+  position: relative;
+  min-height: calc(100% - 3.1rem);
+}
+
+.vc-timeline-skeleton-events span {
+  position: absolute;
+  height: 2.1rem;
+  border: 1px solid var(--vc-timeline-border-strong);
+}
+
+.vc-timeline-skeleton-events span:nth-child(1) { top: 12%; left: 7%; width: 20%; }
+.vc-timeline-skeleton-events span:nth-child(2) { top: 26%; left: 31%; width: 15%; }
+.vc-timeline-skeleton-events span:nth-child(3) { top: 43%; left: 51%; width: 24%; }
+.vc-timeline-skeleton-events span:nth-child(4) { top: 58%; left: 18%; width: 18%; }
+.vc-timeline-skeleton-events span:nth-child(5) { top: 72%; left: 66%; width: 21%; }
+.vc-timeline-skeleton-events span:nth-child(6) { top: 84%; left: 40%; width: 13%; }
+
+.vc-timeline-skeleton-minimap {
+  min-height: 8rem;
+  border: 1px solid var(--vc-timeline-border);
+}
+
+.vc-timeline-skeleton-field::after,
+.vc-timeline-skeleton-actions::after,
+.vc-timeline-skeleton-eras span::after,
+.vc-timeline-skeleton-axis::after,
+.vc-timeline-skeleton-events span::after,
+.vc-timeline-skeleton-minimap::after {
+  content: '';
+  display: block;
+  width: 45%;
+  height: 100%;
+  translate: -140% 0;
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--vc-timeline-ink) 8%, transparent), transparent);
+  animation: vc-timeline-skeleton-sweep 1.35s ease-in-out infinite;
+}
+
+@keyframes vc-timeline-skeleton-sweep {
+  to { translate: 320% 0; }
+}
+
+@media (max-width: 52rem) {
+  .vc-timeline-skeleton-eras {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 38rem) {
+  .vc-timeline-skeleton {
+    margin-inline: calc(50% - 50vw);
+    padding: .45rem;
+    border-inline: 0;
+  }
+
+  .vc-timeline-skeleton-toolbar,
+  .vc-timeline-skeleton-eras {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .vc-timeline-skeleton-stage {
+    min-height: 24rem;
+  }
+
+  .vc-timeline-skeleton-minimap {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-timeline-skeleton-field::after,
+  .vc-timeline-skeleton-actions::after,
+  .vc-timeline-skeleton-eras span::after,
+  .vc-timeline-skeleton-axis::after,
+  .vc-timeline-skeleton-events span::after,
+  .vc-timeline-skeleton-minimap::after {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Delivery and rendering guards
+   Origin: timeline-performance.css
+
+   Contains containment and rendering-performance safeguards.
+   -------------------------------------------------------------------------- */
+
+.vc-timeline-list-more {
+  display: flex !important;
+  width: 100%;
+  min-height: 3rem !important;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  margin-block-start: .7rem;
+  border: 1px solid var(--vc-timeline-border-strong) !important;
+  background: color-mix(in oklch, var(--vc-timeline-accent) 8%, var(--vc-timeline-surface-deep)) !important;
+  text-align: center !important;
+}
+
+.vc-timeline-list-more span {
+  color: var(--vc-timeline-muted);
+  font-size: .72rem;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-1 {
+  width: 2px !important;
+  opacity: .38;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-2 {
+  width: 3px !important;
+  opacity: .56;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-3 {
+  width: 4px !important;
+  opacity: .76;
+}
+
+.vc-timeline-minimap .vis-item.vc-mini-event.density-4 {
+  width: 5px !important;
+  opacity: 1;
+}
+
+/*
+ * Canonical timeline pages opt out of Starlight's right-sidebar layout in the
+ * page component itself. These rules only release the remaining content-width
+ * constraints; they do not hide or reposition sidebar DOM.
+ */
+.codex-two-column-content.codex-timeline-page {
+  --sl-content-width: 100%;
+  max-inline-size: none;
+}
+
+.codex-two-column-content.codex-timeline-page > .codex-main-pane,
+.codex-two-column-content.codex-timeline-page > .codex-main-pane > main,
+.codex-two-column-content.codex-timeline-page > .codex-main-pane > main > .content-panel,
+.codex-two-column-content.codex-timeline-page > .codex-main-pane > main > .content-panel > .sl-container {
+  inline-size: 100%;
+  max-inline-size: none;
+  min-inline-size: 0;
+}
+
+@media (min-width: 72rem) {
+  .main-frame > .codex-two-column-content.codex-timeline-page {
+    max-inline-size: none;
+  }
+
+  .main-frame > .codex-two-column-content.codex-timeline-page > .codex-main-pane {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .main-frame > .codex-two-column-content.codex-timeline-page > .codex-main-pane > main > .content-panel > .sl-container {
+    max-width: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Route and event presentation
+   Origin: timeline-pages.css
+
+   Integrates full-width routes, year grids and event categories.
+   -------------------------------------------------------------------------- */
+
+/* Shared Chronos presentation plus route-level full-width timeline-page geometry. */
+
+/* Dedicated /timelines/* routes use the full content width, but retain the left navigation overlay. */
+.main-frame:has(> .codex-timeline-page) {
+  box-sizing: border-box;
+  grid-column: 1 / -1 !important;
+  inline-size: 100%;
+  max-inline-size: none;
+  margin-inline: 0;
+  padding-inline: clamp(1rem, 2.4vw, 3rem);
+}
+
+.main-frame > .codex-timeline-page,
+.main-frame > .codex-timeline-page > .codex-main-pane,
+.main-frame > .codex-timeline-page > .codex-main-pane > main,
+.main-frame > .codex-timeline-page > .codex-main-pane > main > .content-panel,
+.main-frame > .codex-timeline-page > .codex-main-pane > main > .content-panel > .sl-container,
+.main-frame > .codex-timeline-page .sl-markdown-content {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: none !important;
+  margin-inline: 0;
+}
+
+.main-frame > .codex-timeline-page .sl-markdown-content {
+  padding-inline: 0;
+}
+
+/* Every TimelineApp instance receives the same palette and Chronos-led presentation. */
+.vc-timeline-shell,
+.vc-timeline-app {
+  --vc-year-line: color-mix(in oklch, var(--sl-color-gray-4) 22%, transparent);
+  --vc-year-line-decade: color-mix(in oklch, var(--sl-color-gray-3) 36%, transparent);
+  --vc-year-line-century: color-mix(in oklch, var(--sl-color-gray-2) 52%, transparent);
+}
+
+/* The application itself is not a card. Its controls and visual modules provide structure. */
+.vc-timeline-app {
+  margin-block: 1.5rem;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.vc-timeline-app .vc-timeline-toolbar,
+.vc-timeline-app .vc-timeline-filters,
+.vc-timeline-app .vc-era-action,
+.vc-timeline-app .vc-timeline-stage,
+.vc-timeline-app .vc-timeline-minimap-wrap,
+.vc-timeline-app .vc-timeline-list li,
+.vc-timeline-app .vc-timeline-details {
+  border: 0;
+  outline: 1px solid var(--vc-timeline-border);
+  outline-offset: -1px;
+}
+
+.vc-timeline-app .vc-timeline-details {
+  outline-color: var(--vc-timeline-accent);
+}
+
+.vc-timeline-app .vc-timeline-toolbar,
+.vc-timeline-app .vc-timeline-filters,
+.vc-timeline-app .vc-timeline-minimap-wrap {
+  background: color-mix(in oklch, var(--vc-timeline-surface-deep) 82%, transparent);
+}
+
+.vc-timeline-app .vc-timeline-stage {
+  background: transparent;
+}
+
+.vc-timeline-app .vc-timeline-minimap {
+  border-top: 0;
+}
+
+/* Native vis-timeline divisions are adaptive and may skip years. The explicit
+   SVG layer below is the sole vertical chronology grid in the main canvas. */
+.vc-timeline-app .vc-timeline-canvas .vis-grid.vis-vertical {
+  border-inline-start-color: transparent !important;
+  border-inline-end-color: transparent !important;
+}
+
+.vc-timeline-app .vc-timeline-year-grid {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  margin: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.vc-timeline-app .vc-timeline-year-grid path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  shape-rendering: crispEdges;
+}
+
+.vc-timeline-app .vc-year-grid-annual {
+  stroke: var(--vc-year-line);
+  stroke-width: .75;
+}
+
+.vc-timeline-app .vc-year-grid-decade {
+  stroke: var(--vc-year-line-decade);
+  stroke-width: 1;
+}
+
+.vc-timeline-app .vc-year-grid-century {
+  stroke: var(--vc-year-line-century);
+  stroke-width: 1.25;
+}
+
+/* Category palette. Inline colours supplied by Chronos are intentionally replaced,
+   while its native event, range, point and period geometry remains intact. */
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item {
+  --vc-event-fill: var(--vc-event-unknown);
+  --vc-event-outline: color-mix(in oklch, var(--vc-event-fill) 62%, var(--vc-event-ink));
+  box-shadow: none !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-technology { --vc-event-fill: var(--vc-event-technology); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-military { --vc-event-fill: var(--vc-event-military); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-political { --vc-event-fill: var(--vc-event-political); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-cultural { --vc-event-fill: var(--vc-event-cultural); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-religious { --vc-event-fill: var(--vc-event-religious); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-economic { --vc-event-fill: var(--vc-event-economic); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-scientific { --vc-event-fill: var(--vc-event-scientific); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-disaster { --vc-event-fill: var(--vc-event-disaster); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-resonance { --vc-event-fill: var(--vc-event-resonance); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-myrkild { --vc-event-fill: var(--vc-event-myrkild); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-naranor { --vc-event-fill: var(--vc-event-naranor); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-exploration { --vc-event-fill: var(--vc-event-exploration); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-social { --vc-event-fill: var(--vc-event-social); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-environmental { --vc-event-fill: var(--vc-event-environmental); }
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-unknown { --vc-event-fill: var(--vc-event-unknown); }
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item:is(.vis-box, .vis-range) {
+  border-color: var(--vc-event-outline) !important;
+  background-color: var(--vc-event-fill) !important;
+  color: var(--vc-event-ink) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item:is(.vis-box, .vis-range) .vis-item-content,
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item:is(.vis-box, .vis-range) a {
+  color: var(--vc-event-ink) !important;
+}
+
+/* Milestones remain native Chronos points rather than being converted into boxes. */
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-point {
+  border-color: transparent !important;
+  background: transparent !important;
+  color: var(--vc-event-fill) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-point .vis-dot {
+  border-color: var(--vc-event-outline) !important;
+  background-color: var(--vc-event-fill) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-point .vis-item-content {
+  border: 1px solid var(--vc-event-outline);
+  background: var(--vc-event-fill);
+  color: var(--vc-event-ink) !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-selected {
+  outline: 2px solid var(--sl-color-white);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--vc-timeline-accent) 30%, transparent) !important;
+}
+
+@media (max-width: 38rem) {
+  .main-frame:has(> .codex-timeline-page) {
+    padding-inline: .75rem;
+  }
+
+  .codex-timeline-page .vc-timeline-app {
+    margin-inline: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item {
+    forced-color-adjust: auto;
+  }
+
+  .vc-timeline-app .vc-timeline-year-grid path {
+    stroke: CanvasText;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Stacking hierarchy
+   Origin: timeline-stacking.css
+
+   Pins timeline layers, overlays and hovercards to deliberate levels.
+   -------------------------------------------------------------------------- */
+
+/*
+ * Native calendar boundaries live in vis-timeline's vertical background panel.
+ * The centre viewport stays transparent so those lines remain visible, while
+ * background era bands and foreground event items preserve Chronos's stacking.
+ */
+.vc-timeline-app .vc-timeline-canvas .vis-itemset > .vis-background {
+  z-index: 0 !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-itemset > .vis-foreground {
+  z-index: 2 !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-foreground .vis-item.vc-timeline-item {
+  z-index: 3 !important;
+  isolation: isolate;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-foreground .vis-item.vc-timeline-item.vis-selected {
+  z-index: 5 !important;
+}
+
+/* --------------------------------------------------------------------------
+   Viewport behaviour
+   Origin: timeline-viewport.css
+
+   Controls timeline canvas sizing and responsive viewport geometry.
+   -------------------------------------------------------------------------- */
+
+/*
+ * The forked Chronos renderer owns one complete, stable viewport. Group and
+ * filter changes may alter the internal row stack, but must not move the rest
+ * of the page. Dense modes use vis-timeline's native vertical scrolling.
+ */
+
+.vc-timeline-app .vc-timeline-canvas {
+  position: relative;
+  block-size: 27rem;
+  min-height: 20rem;
+  max-height: 27rem;
+  overflow: hidden;
+}
+
+.vc-timeline-app.is-compact .vc-timeline-canvas {
+  block-size: 22rem;
+  max-height: 22rem;
+}
+
+.vc-timeline-app .vc-timeline-canvas > .vis-timeline {
+  block-size: 100% !important;
+  min-block-size: 100%;
+  max-block-size: 100%;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-left {
+  scrollbar-width: thin;
+  scrollbar-color: var(--vc-timeline-border-strong) var(--vc-timeline-surface-deep);
+}
+
+/* In grouped views vis-timeline measures each row from both its items and its
+ * label. Give the label a real minimum box so empty/background-only lanes stay
+ * legible, and allow long names to wrap inside their own row rather than paint
+ * across neighbouring rows. */
+.vc-timeline-app .vc-timeline-canvas .vis-labelset > .vis-label {
+  overflow: hidden;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-labelset > .vis-label > .vis-inner {
+  box-sizing: border-box;
+  display: flex;
+  min-block-size: 2rem;
+  align-items: center;
+  padding: .35rem .45rem;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+}
+
+.vc-timeline-app .vc-timeline-minimap {
+  min-height: 4.5rem;
+}
+
+.vc-timeline-app .vc-timeline-minimap > .vis-timeline {
+  height: 4.5rem !important;
+  min-height: 4.5rem !important;
+}
+
+/* The site owns exactly one body-level event hovercard. Suppress vis-timeline's
+ * secondary tooltip node; the hovercard module also removes browser title
+ * attributes before a native title bubble can open. */
+.vc-timeline-app .vis-tooltip:not(.vc-timeline-hovercard),
+body > .vis-tooltip:not(.vc-timeline-hovercard) {
+  display: none !important;
+}
+
+body > .vc-timeline-hovercard {
+  --vc-hovercard-bg: color-mix(in oklch, var(--codex-surface-raised-color) 97%, transparent);
+  --vc-hovercard-border: color-mix(in oklch, var(--codex-accent) 44%, transparent);
+  --vc-hovercard-text: var(--sl-color-text);
+  --vc-hovercard-muted: var(--sl-color-gray-2);
+  --vc-hovercard-accent: var(--sl-color-accent-high);
+  --vc-hovercard-shadow: color-mix(in oklch, var(--codex-shadow-color) 65%, transparent);
+
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: min(18rem, calc(100vw - 1rem)) !important;
+  max-width: 18rem !important;
+  gap: .3rem;
+  margin: 0 !important;
+  padding: .72rem .82rem !important;
+  overflow: hidden !important;
+  border: 1px solid var(--vc-hovercard-border) !important;
+  border-radius: 0 !important;
+  color: var(--vc-hovercard-text) !important;
+  background: var(--vc-hovercard-bg) !important;
+  background-color: var(--vc-hovercard-bg) !important;
+  box-shadow: 0 .75rem 2.5rem var(--vc-hovercard-shadow) !important;
+  backdrop-filter: blur(10px);
+  font-family: var(--vc-font-ui, ui-sans-serif, system-ui) !important;
+  line-height: 1.35;
+  white-space: normal !important;
+  pointer-events: none;
+}
+
+body > .vc-timeline-hovercard[hidden] {
+  display: none !important;
+}
+
+.vc-timeline-hovercard-date {
+  color: var(--vc-hovercard-accent) !important;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.vc-timeline-hovercard-title {
+  overflow: hidden;
+  color: var(--vc-hovercard-text) !important;
+  font-family: var(--vc-font-display, Cinzel, serif);
+  font-size: .9rem;
+  font-weight: 400;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vc-timeline-hovercard-description {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--vc-hovercard-muted) !important;
+  font-size: .78rem;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+
+@media (max-width: 38rem) {
+  .vc-timeline-app .vc-timeline-canvas,
+  .vc-timeline-app.is-compact .vc-timeline-canvas {
+    block-size: 22rem;
+    max-height: 22rem;
+  }
+
+  body > .vc-timeline-hovercard {
+    width: min(16.5rem, calc(100vw - 1rem)) !important;
+  }
+}
+
+@media (forced-colors: active) {
+  body > .vc-timeline-hovercard {
+    border-color: CanvasText !important;
+    color: CanvasText !important;
+    background: Canvas !important;
+    box-shadow: none !important;
+    backdrop-filter: none;
+    forced-color-adjust: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Calendar axis
+   Origin: chronos-calendar-axis.css
+
+   Styles native CustomTime calendar boundaries and labels.
+   -------------------------------------------------------------------------- */
+
+/*
+ * Exact VISCERIUM calendar boundaries are implemented as native vis-timeline
+ * CustomTime components. The bars and their labels are therefore repositioned
+ * in the same redraw as event items instead of following from a separate
+ * requestAnimationFrame overlay.
+ */
+
+.vc-timeline-app .vc-timeline-canvas .vis-time-axis {
+  display: block !important;
+  font-family: var(--vc-font-ui, ui-sans-serif, system-ui);
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-bottom {
+  z-index: 1;
+  min-height: 2.5rem;
+  border-top: 1px solid var(--vc-timeline-border-strong) !important;
+  background: transparent !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-time-axis .vis-text {
+  visibility: hidden !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-grid.vis-vertical {
+  border-color: transparent !important;
+}
+
+/* CustomTime bars live in vis-timeline's vertical background panel. The centre
+ * viewport must remain transparent so those native bars can be seen through it;
+ * era bands and event items still paint in their normal layers above the canvas
+ * background. */
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-background.vis-vertical {
+  z-index: 2;
+  overflow: visible !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center > .vis-content,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center .vis-itemset {
+  background: transparent !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-center,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-left,
+.vc-timeline-app .vc-timeline-canvas .vis-panel.vis-right {
+  z-index: 3;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time[data-vc-calendar-kind] {
+  width: 0 !important;
+  border-inline-start: 1px solid transparent;
+  background: transparent !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time[data-vc-calendar-kind="secondary"] {
+  border-color: color-mix(in oklch, var(--vc-timeline-border) 55%, transparent);
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time[data-vc-calendar-kind="primary"] {
+  border-color: color-mix(in oklch, var(--vc-timeline-border-strong) 82%, transparent);
+}
+
+.vc-timeline-app .vc-timeline-canvas .vc-calendar-time-label {
+  position: absolute;
+  top: var(--vc-calendar-label-top, calc(100% - 3.4rem));
+  left: 0;
+  z-index: 6;
+  max-width: 12rem;
+  translate: -50% 0;
+  color: var(--vc-timeline-muted);
+  font: 800 .68rem/1.15 var(--vc-font-ui, ui-sans-serif, system-ui);
+  letter-spacing: .04em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Chronos-authored markers remain distinct and retain their own styling. */
+.vc-timeline-app .vc-timeline-canvas .vis-custom-time:not([data-vc-calendar-kind]) {
+  z-index: 2;
+}
+
+/* The overview remains intentionally label-free; it is a density navigator. */
+.vc-timeline-app .vc-timeline-minimap .vis-time-axis {
+  display: none !important;
+}

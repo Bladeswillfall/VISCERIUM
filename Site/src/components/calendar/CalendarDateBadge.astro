@@ -1,0 +1,33 @@
+---
+import type { CalendarDateInput } from '../../lib/calendar/types';
+import { resolveEquivalentDates } from '../../lib/calendar/convert';
+
+interface Props {
+  date?: CalendarDateInput;
+  calendars?: string[];
+  title?: string;
+}
+
+const { date, calendars, title = 'Calendar date' } = Astro.props as Props;
+const resolvedDates = date ? resolveEquivalentDates(date, calendars) : [];
+---
+
+{date && resolvedDates.length > 0 && (
+  <aside class="calendar-date-badge codex-frame" aria-label={title}>
+    <p class="codex-kicker">{title}</p>
+    <dl>
+      {resolvedDates.map((resolved) => (
+        <div>
+          <dt>{resolved.calendar.shortName ?? resolved.calendar.name}</dt>
+          <dd>
+            <a href={resolved.href}>{resolved.label}</a>
+            <span class={`calendar-season calendar-season--${resolved.season}`}>{resolved.season}</span>
+            {resolved.observances.map((observance) => (
+              <span class={`calendar-observance calendar-observance--${observance.type}`}>{observance.name}</span>
+            ))}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </aside>
+)}

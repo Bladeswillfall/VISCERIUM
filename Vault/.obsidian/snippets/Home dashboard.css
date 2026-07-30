@@ -1,0 +1,498 @@
+/*
+ * Home dashboard
+ * Compact pane-responsive creator surface. Focus is the only strong panel;
+ * working sections use typography, semantic accents and rules instead of repeated boxes.
+ */
+
+.markdown-preview-view.viscerium-home,
+.markdown-source-view.mod-cm6.viscerium-home {
+  --vc-home-border: var(--vc-border, var(--background-modifier-border));
+  --vc-home-surface: var(--vc-surface-alt, var(--background-primary-alt));
+  --vc-home-muted: var(--text-muted);
+  --line-width-adaptive: 300em;
+  --line-width-wide: 300em;
+  --max-width: 100%;
+  --file-line-width: 100%;
+  container-name: viscerium-home;
+  container-type: inline-size;
+}
+
+.markdown-preview-view.viscerium-home {
+  --file-margins: clamp(0.65rem, 1.6vw, 1.5rem);
+}
+
+/* Home is an interface, not an ordinary note: suppress duplicate document chrome in both modes. */
+.markdown-preview-view.viscerium-home .inline-title,
+.markdown-preview-view.viscerium-home .metadata-container,
+.markdown-source-view.mod-cm6.viscerium-home .inline-title,
+.markdown-source-view.mod-cm6.viscerium-home .metadata-container {
+  display: none !important;
+}
+
+.markdown-preview-view.viscerium-home .markdown-preview-sizer,
+.markdown-preview-view.viscerium-home.is-readable-line-width .markdown-preview-sizer {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  padding-inline: var(--file-margins) !important;
+  box-sizing: border-box;
+}
+
+.markdown-preview-view.viscerium-home .markdown-preview-sizer > div,
+.markdown-preview-view.viscerium-home .markdown-preview-section,
+.markdown-preview-view.viscerium-home .markdown-preview-section > div,
+.markdown-source-view.mod-cm6.viscerium-home .cm-sizer,
+.markdown-source-view.mod-cm6.viscerium-home .cm-contentContainer,
+.markdown-source-view.mod-cm6.viscerium-home .cm-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  box-sizing: border-box;
+}
+
+.markdown-source-view.mod-cm6.viscerium-home .cm-line {
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+}
+
+/* Generic Home callout reset. */
+.viscerium-home .callout:is(
+  [data-callout="home-header"],
+  [data-callout="home-focus"],
+  [data-callout="home-workspace"],
+  [data-callout="home-side"],
+  [data-callout="home-continue"],
+  [data-callout="home-create"],
+  [data-callout="home-writing"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) {
+  margin: 0 0 var(--vc-space-3, 12px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.viscerium-home .callout:is([data-callout="home-workspace"], [data-callout="home-side"]) > .callout-title {
+  display: none;
+}
+
+.viscerium-home .callout:is([data-callout="home-workspace"], [data-callout="home-side"]) > .callout-content {
+  padding: 0;
+}
+
+/* Each work zone gets one quiet semantic accent. */
+.viscerium-home .callout[data-callout="home-focus"] { --vc-home-section-accent: var(--vc-accent, var(--interactive-accent)); }
+.viscerium-home .callout[data-callout="home-continue"] { --vc-home-section-accent: var(--vc-canon, var(--color-cyan)); }
+.viscerium-home .callout[data-callout="home-create"] { --vc-home-section-accent: var(--vc-reuse, var(--color-green)); }
+.viscerium-home .callout[data-callout="home-writing"] { --vc-home-section-accent: var(--vc-writing, var(--color-orange)); }
+.viscerium-home .callout[data-callout="home-activity"] { --vc-home-section-accent: var(--vc-activity, var(--color-green)); }
+.viscerium-home .callout[data-callout="home-navigate"] { --vc-home-section-accent: var(--vc-tools, var(--color-purple)); }
+
+/* Section headings retain Obsidian's pencil/edit affordance. */
+.viscerium-home .callout:is(
+  [data-callout="home-focus"],
+  [data-callout="home-continue"],
+  [data-callout="home-create"],
+  [data-callout="home-writing"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) > .callout-title {
+  margin: 0;
+  padding: 0 0 var(--vc-space-2, 8px);
+  border-bottom: 1px solid color-mix(in srgb, var(--vc-home-section-accent) 28%, var(--vc-home-border));
+  background: transparent;
+  color: color-mix(in srgb, var(--vc-home-section-accent) 34%, var(--text-muted));
+  font-family: var(--font-interface);
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.viscerium-home .callout:is(
+  [data-callout="home-focus"],
+  [data-callout="home-continue"],
+  [data-callout="home-create"],
+  [data-callout="home-writing"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) > .callout-title .callout-icon {
+  color: color-mix(in srgb, var(--vc-home-section-accent) 36%, var(--text-faint));
+  opacity: 0.72;
+}
+
+.viscerium-home .callout:is(
+  [data-callout="home-focus"],
+  [data-callout="home-continue"],
+  [data-callout="home-create"],
+  [data-callout="home-writing"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+):hover > .callout-title .callout-icon {
+  color: var(--vc-home-section-accent);
+  opacity: 1;
+}
+
+.viscerium-home .callout:is(
+  [data-callout="home-continue"],
+  [data-callout="home-create"],
+  [data-callout="home-writing"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) > .callout-content {
+  padding: var(--vc-space-2, 8px) 0 0;
+}
+
+/* Compact identity row. */
+.viscerium-home .callout[data-callout="home-header"] {
+  margin-top: var(--vc-space-1, 4px);
+  border-bottom: 1px solid var(--vc-home-border);
+}
+
+.viscerium-home .callout[data-callout="home-header"] > .callout-title { display: none; }
+
+.viscerium-home .callout[data-callout="home-header"] > .callout-content {
+  display: flex;
+  align-items: baseline;
+  gap: var(--vc-space-4, 16px);
+  padding: var(--vc-space-2, 8px) 0 var(--vc-space-3, 12px);
+}
+
+.viscerium-home .callout[data-callout="home-header"] h1 {
+  margin: 0;
+  font-family: var(--font-interface);
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.viscerium-home .callout[data-callout="home-header"] p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+
+.viscerium-home .callout[data-callout="home-header"] strong {
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: 0.67rem;
+  letter-spacing: 0.1em;
+}
+
+/* Focus is the sole strong dashboard panel. */
+.viscerium-home .callout[data-callout="home-focus"] {
+  margin-block: var(--vc-space-6, 24px) var(--vc-space-4, 16px);
+  border: 1px solid var(--vc-home-border);
+  border-left: 3px solid var(--vc-home-section-accent);
+  background: var(--vc-home-surface);
+}
+
+.viscerium-home .callout[data-callout="home-focus"] > .callout-title {
+  padding: var(--vc-space-2, 8px) var(--vc-space-3, 12px);
+}
+
+.viscerium-home .callout[data-callout="home-focus"] > .callout-content {
+  padding: var(--vc-space-3, 12px);
+}
+
+.viscerium-home .callout[data-callout="home-focus"] h3 {
+  margin: 0 0 var(--vc-space-1, 4px);
+  font-size: 1.05rem;
+}
+
+.viscerium-home .callout[data-callout="home-focus"] p { margin-block: var(--vc-space-1, 4px); }
+
+.viscerium-home .vc-home-focus-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vc-space-2, 8px);
+  margin: var(--vc-space-3, 12px) 0;
+}
+
+/* Work area: Continue owns the larger left column; Create and Writing stack on the right. */
+.viscerium-home .callout[data-callout="home-workspace"] > .callout-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(18rem, 1fr);
+  gap: var(--vc-space-4, 16px);
+}
+
+.viscerium-home .callout[data-callout="home-side"] > .callout-content {
+  display: grid;
+  align-content: start;
+  gap: var(--vc-space-4, 16px);
+}
+
+.viscerium-home .callout[data-callout="home-workspace"] > .callout-content > p,
+.viscerium-home .callout[data-callout="home-side"] > .callout-content > p {
+  display: none;
+}
+
+/* Buttons: only the current Focus action is solid. */
+.viscerium-home button.vc-home-button {
+  min-height: 2rem;
+  margin: 0;
+  padding: 0.36rem 0.68rem;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--vc-radius-control, 4px);
+  font-family: var(--font-interface);
+  font-size: 0.76rem;
+  font-weight: 750;
+  box-shadow: none;
+  transform: none;
+}
+
+.viscerium-home button.vc-home-button-primary {
+  border-color: color-mix(in srgb, var(--interactive-accent) 72%, var(--background-modifier-border));
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.viscerium-home button.vc-home-button-create {
+  border-color: color-mix(in srgb, var(--vc-reuse, var(--color-green)) 30%, var(--background-modifier-border));
+  background: color-mix(in srgb, var(--vc-reuse, var(--color-green)) 4%, transparent);
+  color: var(--text-normal);
+}
+
+.viscerium-home button.vc-home-button-secondary {
+  background: transparent;
+  color: var(--text-normal);
+}
+
+.viscerium-home button.vc-home-button-tertiary {
+  min-height: 1.8rem;
+  padding: 0.28rem 0.52rem;
+  border-color: color-mix(in srgb, var(--background-modifier-border) 75%, transparent);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.viscerium-home button.vc-home-button:hover:not(:disabled) {
+  border-color: var(--interactive-accent);
+  color: var(--text-normal);
+  filter: none;
+}
+
+.viscerium-home button.vc-home-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.viscerium-home .vc-home-create-primary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--vc-space-2, 8px);
+}
+
+.viscerium-home .vc-home-create-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vc-space-2, 8px);
+  margin-top: var(--vc-space-2, 8px);
+}
+
+/* Dense recent-work list. */
+.viscerium-home .vc-home-continue-list { border-top: 1px solid var(--vc-home-border); }
+
+.viscerium-home .vc-home-continue-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--vc-space-3, 12px);
+  padding: 0.38rem 0;
+  border-bottom: 1px solid var(--vc-home-border);
+}
+
+.viscerium-home .vc-home-continue-main {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: var(--vc-space-2, 8px);
+}
+
+.viscerium-home .vc-home-continue-link {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-normal);
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viscerium-home .vc-home-location-label {
+  flex: 0 0 auto;
+  font-family: var(--font-interface);
+  font-size: 0.56rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.viscerium-home .vc-home-location-canon .vc-home-location-label { color: var(--vc-canon); }
+.viscerium-home .vc-home-location-wip .vc-home-location-label { color: var(--vc-wip); }
+.viscerium-home .vc-home-location-writing .vc-home-location-label { color: var(--vc-writing); }
+.viscerium-home .vc-home-location-private .vc-home-location-label { color: var(--vc-private); }
+.viscerium-home .vc-home-location-note .vc-home-location-label { color: var(--text-muted); }
+
+.viscerium-home .vc-home-continue-time,
+.viscerium-home .vc-home-writing-meta,
+.viscerium-home .vc-home-writing-scene-meta {
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+
+/* Writing desk uses compact rows. */
+.viscerium-home .vc-home-writing-project,
+.viscerium-home .vc-home-writing-scene {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--vc-space-3, 12px);
+  padding: 0.38rem 0;
+  border-bottom: 1px solid var(--vc-home-border);
+}
+
+.viscerium-home .vc-home-writing-project { padding-top: 0; }
+.viscerium-home .vc-home-writing-project-link { font-size: 0.95rem; font-weight: 800; }
+.viscerium-home .vc-home-writing-scenes { border-top: 0; }
+.viscerium-home .vc-home-writing-scene-link {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Responsive GitHub-style creator activity grid. Colour means activity intensity only. */
+.viscerium-home .callout[data-callout="home-activity"] {
+  margin-top: var(--vc-space-2, 8px);
+}
+
+.viscerium-home .vc-home-activity-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--vc-space-3, 12px);
+}
+
+.viscerium-home .vc-home-activity-scroll {
+  min-width: 0;
+  width: 100%;
+  overflow: visible;
+}
+
+.viscerium-home .vc-home-heatmap {
+  display: grid;
+  grid-template-columns: repeat(52, minmax(0, 1fr));
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  grid-auto-flow: column;
+  gap: clamp(1px, 0.12vw, 2px);
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 52 / 7;
+}
+
+.viscerium-home .vc-home-heatmap-cell {
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--text-faint) 16%, transparent);
+}
+.viscerium-home .vc-home-heatmap-cell[data-level="1"] { background: color-mix(in srgb, var(--vc-activity, var(--color-green)) 28%, var(--background-secondary)); }
+.viscerium-home .vc-home-heatmap-cell[data-level="2"] { background: color-mix(in srgb, var(--vc-activity, var(--color-green)) 48%, var(--background-secondary)); }
+.viscerium-home .vc-home-heatmap-cell[data-level="3"] { background: color-mix(in srgb, var(--vc-activity, var(--color-green)) 70%, var(--background-secondary)); }
+.viscerium-home .vc-home-heatmap-cell[data-level="4"] { background: color-mix(in srgb, var(--vc-activity, var(--color-green)) 92%, var(--background-secondary)); }
+
+.viscerium-home .vc-home-activity-summary {
+  color: color-mix(in srgb, var(--vc-activity, var(--color-green)) 28%, var(--text-faint));
+  font-family: var(--font-interface);
+  font-size: 0.64rem;
+  line-height: 1.35;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Navigate remains a persistent utility footer, deliberately lighter than work areas. */
+.viscerium-home .callout[data-callout="home-navigate"] {
+  margin-top: var(--vc-space-4, 16px);
+  padding-top: var(--vc-space-1, 4px);
+}
+
+.viscerium-home .vc-home-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--vc-space-4, 16px);
+}
+
+.viscerium-home .vc-home-nav-group {
+  display: grid;
+  align-content: start;
+  gap: var(--vc-space-1, 4px);
+  min-width: 0;
+}
+
+.viscerium-home .vc-home-nav-heading {
+  margin-bottom: var(--vc-space-1, 4px);
+  color: var(--text-faint);
+  font-family: var(--font-interface);
+  font-size: 0.6rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.viscerium-home .vc-home-nav-group:nth-child(1) .vc-home-nav-heading { color: color-mix(in srgb, var(--vc-canon) 58%, var(--text-muted)); }
+.viscerium-home .vc-home-nav-group:nth-child(2) .vc-home-nav-heading { color: color-mix(in srgb, var(--vc-reuse) 54%, var(--text-muted)); }
+.viscerium-home .vc-home-nav-group:nth-child(3) .vc-home-nav-heading { color: color-mix(in srgb, var(--vc-writing) 54%, var(--text-muted)); }
+.viscerium-home .vc-home-nav-group:nth-child(4) .vc-home-nav-heading { color: color-mix(in srgb, var(--vc-tools) 56%, var(--text-muted)); }
+
+.viscerium-home .vc-home-nav-link {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.viscerium-home .vc-home-nav-link:hover { color: var(--text-normal); text-decoration: underline; }
+.viscerium-home a.internal-link { text-underline-offset: 0.15em; }
+.viscerium-home code:not(pre code) { font-size: 0.86em; }
+
+/* Pane-responsive behaviour. */
+.viscerium-home .callout-content,
+.viscerium-home .block-language-dataviewjs,
+.viscerium-home .vc-home-continue-list,
+.viscerium-home .vc-home-nav-grid,
+.viscerium-home .vc-home-heatmap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@container viscerium-home (max-width: 52rem) {
+  .viscerium-home .vc-home-nav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .viscerium-home .vc-home-create-primary { grid-template-columns: 1fr; }
+}
+
+@container viscerium-home (max-width: 44rem) {
+  .viscerium-home .callout[data-callout="home-workspace"] > .callout-content { grid-template-columns: 1fr; }
+  .viscerium-home .callout[data-callout="home-side"] > .callout-content { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@container viscerium-home (max-width: 34rem) {
+  .markdown-preview-view.viscerium-home .markdown-preview-sizer { padding-inline: 0.5rem !important; }
+  .viscerium-home .callout[data-callout="home-header"] > .callout-content { display: block; }
+  .viscerium-home .callout[data-callout="home-header"] p { margin-top: 0.35rem; }
+  .viscerium-home .callout[data-callout="home-side"] > .callout-content,
+  .viscerium-home .vc-home-nav-grid { grid-template-columns: 1fr; }
+  .viscerium-home .vc-home-continue-row,
+  .viscerium-home .vc-home-writing-project,
+  .viscerium-home .vc-home-writing-scene { align-items: start; }
+  .viscerium-home .vc-home-continue-time,
+  .viscerium-home .vc-home-writing-meta,
+  .viscerium-home .vc-home-writing-scene-meta { white-space: normal; text-align: right; }
+  .viscerium-home .vc-home-activity-row { grid-template-columns: 1fr; }
+  .viscerium-home .vc-home-activity-summary { text-align: left; }
+}

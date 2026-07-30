@@ -1,0 +1,329 @@
+---
+import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfContents';
+import TableOfContents from 'virtual:starlight/components/TableOfContents';
+
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+
+function isPresent(value) {
+  return value !== undefined && value !== null && value !== '' && (!Array.isArray(value) || value.length > 0);
+}
+
+function isPlainObject(value) {
+  return value && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isExternalUrl(value) {
+  return typeof value === 'string' && /^[a-z][a-z0-9+.-]*:/i.test(value);
+}
+
+function normaliseAssetPath(value, category = 'images') {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  if (trimmed.startsWith('/') || isExternalUrl(trimmed)) return trimmed;
+  return `/assets/${category}/${trimmed.split('/').pop()}`;
+}
+
+function normaliseRoute(value) {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  if (trimmed.startsWith('/') || trimmed.startsWith('#') || isExternalUrl(trimmed)) return trimmed;
+  return `/${trimmed.replace(/^\/+|\/+$/g, '')}/`;
+}
+
+function formatValue(value) {
+  return Array.isArray(value) ? value.join(', ') : String(value).replace(/-/g, ' ');
+}
+
+function imageTextAlternative(base, text) {
+  return [base, text ? `Text shown in image: ${text}` : undefined].filter(Boolean).join(' — ');
+}
+
+function externalNotice(isExternal) {
+  return isExternal ? ' (opens in a new tab)' : '';
+}
+
+function normaliseSidebarField(field) {
+  if (Array.isArray(field)) {
+    const [label, value] = field;
+    return isPresent(label) && isPresent(value) ? { label, value } : null;
+  }
+  if (!isPlainObject(field)) return null;
+  const label = field.label ?? field.title ?? field.name;
+  const value = field.value ?? field.text;
+  return isPresent(label) && isPresent(value) ? { label, value, href: normaliseRoute(field.href) } : null;
+}
+
+function normaliseSidebarItem(item) {
+  if (typeof item === 'string') return { label: item };
+  if (!isPlainObject(item)) return null;
+  const label = item.label ?? item.title ?? item.name ?? item.value;
+  if (!isPresent(label)) return null;
+  return { label, href: normaliseRoute(item.href) };
+}
+
+function normaliseSidebarSection(section) {
+  if (!isPlainObject(section)) return null;
+  const fields = Array.isArray(section.fields)
+    ? section.fields.map(normaliseSidebarField).filter(Boolean)
+    : [];
+  const items = Array.isArray(section.items)
+    ? section.items.map(normaliseSidebarItem).filter(Boolean)
+    : [];
+  const title = section.title ?? section.label;
+  const note = section.note ?? section.description;
+  if (!isPresent(title) && fields.length === 0 && items.length === 0 && !isPresent(note)) return null;
+  return { title, fields, items, note };
+}
+
+const rawImageSource = entry.image ?? (entry.type === 'image' ? entry.asset : undefined);
+const sidebarImage = normaliseAssetPath(rawImageSource);
+const imageDetailHref = normaliseRoute(entry.imagePage);
+const isDecorativeImage = entry.decorativeImage === true;
+const imageAlt = isDecorativeImage ? '' : imageTextAlternative(entry.alt ?? `${entry.title} image`, entry.imageText);
+const imageDescription = [entry.imageDescription, entry.imageText ? `Text shown in image: ${entry.imageText}` : undefined]
+  .filter(Boolean)
+  .join(' ');
+const imageDescriptionId = imageDescription ? 'codex-sidebar-image-description' : undefined;
+const artworkTitle = entry.imageTitle ?? (entry.type === 'image' ? entry.title : undefined);
+const artworkArtist = entry.artist ?? entry.credit;
+const resolution = entry.width && entry.height ? `${entry.width} × ${entry.height}` : undefined;
+const defaultSidebarFields = [
+  ['Type', entry.type],
+  ['Status', entry.status],
+  ['Era', entry.era],
+  ['Faction', entry.faction],
+  ['Capital', entry.capital],
+  ['Territory', entry.territory],
+  ['Location', entry.location],
+  ['Character', entry.character],
+  ['Species', entry.species],
+  ['Occupation', entry.occupation],
+  ['Alignment', entry.alignment],
+  ['Tags', entry.tags],
+  ['Aliases', entry.aliases],
+  ['Artwork', entry.imageTitle],
+  ['Artist', entry.artist],
+  ['Editor', entry.editor],
+  ['Source', entry.source],
+  ['Source URL', entry.sourceUrl],
+  ['Credit', entry.artist ? undefined : entry.credit],
+  ['License', entry.license],
+  ['Rights', entry.rights],
+  ['Usage', entry.usage],
+  ['Resolution', resolution],
+].filter(([, value]) => isPresent(value)).map(([label, value]) => ({ label, value }));
+const sidebarConfig = isPlainObject(entry.sidebar) ? entry.sidebar : {};
+const customSidebarFields = Array.isArray(sidebarConfig.meta)
+  ? sidebarConfig.meta.map(normaliseSidebarField).filter(Boolean)
+  : [];
+const sidebarFields = sidebarConfig.replaceMeta === true && customSidebarFields.length > 0
+  ? customSidebarFields
+  : defaultSidebarFields;
+const customSidebarSections = Array.isArray(sidebarConfig.sections)
+  ? sidebarConfig.sections.map(normaliseSidebarSection).filter(Boolean)
+  : [];
+---
+
+{
+  starlightRoute.toc && (
+    <>
+      <div class="lg:sl-hidden">
+        <MobileTableOfContents />
+      </div>
+      <aside class="right-sidebar-panel codex-page-sidebar sl-hidden lg:sl-block" aria-label="Page sidebar">
+        <div class="sl-container">
+          <section class="codex-sidebar-card" aria-labelledby="codex-sidebar-title">
+            {sidebarImage && (
+              <div class="codex-sidebar-artwork">
+                {imageDetailHref ? (
+                  <a class="codex-sidebar-image-link" href={imageDetailHref} aria-label={`Open image details for ${artworkTitle ?? entry.title}`}>
+                    <img class="codex-sidebar-image" src={sidebarImage} alt={imageAlt} aria-describedby={imageDescriptionId} loading="lazy" decoding="async" />
+                  </a>
+                ) : (
+                  <img class="codex-sidebar-image" src={sidebarImage} alt={imageAlt} aria-describedby={imageDescriptionId} loading="lazy" decoding="async" />
+                )}
+                {imageDescription && <p id={imageDescriptionId} class="codex-sr-only">{imageDescription}</p>}
+                {(artworkTitle || artworkArtist) && (
+                  <div class="codex-sidebar-art-caption">
+                    {artworkTitle && <p class="codex-sidebar-art-title">{artworkTitle}</p>}
+                    {artworkArtist && <p class="codex-sidebar-art-artist">by {artworkArtist}</p>}
+                  </div>
+                )}
+              </div>
+            )}
+            <div class="codex-sidebar-body">
+              <p class="codex-sidebar-kicker">{entry.type ?? 'Entry'}</p>
+              <h2 id="codex-sidebar-title">{entry.title}</h2>
+              {entry.description && <p class="codex-sidebar-description">{entry.description}</p>}
+              {sidebarFields.length > 0 && (
+                <dl class="codex-sidebar-meta">
+                  {sidebarFields.map(({ label, value, href }) => {
+                    const linkedExternally = href && isExternalUrl(href);
+                    const valueIsExternal = !href && isExternalUrl(value);
+                    return (
+                      <div>
+                        <dt>{label}</dt>
+                        <dd>
+                          {href ? (
+                            <a href={href} target={linkedExternally ? '_blank' : undefined} rel={linkedExternally ? 'noreferrer' : undefined}>
+                              {formatValue(value)}{linkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
+                            </a>
+                          ) : valueIsExternal ? (
+                            <a href={value} target="_blank" rel="noreferrer">Open {label}<span class="codex-sr-only">{externalNotice(true)}</span></a>
+                          ) : formatValue(value)}
+                        </dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+              )}
+              {customSidebarSections.length > 0 && (
+                <div class="codex-sidebar-subsections">
+                  {customSidebarSections.map((section) => (
+                    <section class="codex-sidebar-subsection">
+                      {section.title && <h3>{section.title}</h3>}
+                      {section.fields.length > 0 && (
+                        <dl class="codex-sidebar-meta codex-sidebar-meta-compact">
+                          {section.fields.map(({ label, value, href }) => {
+                            const linkedExternally = href && isExternalUrl(href);
+                            const valueIsExternal = !href && isExternalUrl(value);
+                            return (
+                              <div>
+                                <dt>{label}</dt>
+                                <dd>
+                                  {href ? (
+                                    <a href={href} target={linkedExternally ? '_blank' : undefined} rel={linkedExternally ? 'noreferrer' : undefined}>
+                                      {formatValue(value)}{linkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
+                                    </a>
+                                  ) : valueIsExternal ? (
+                                    <a href={value} target="_blank" rel="noreferrer">Open {label}<span class="codex-sr-only">{externalNotice(true)}</span></a>
+                                  ) : formatValue(value)}
+                                </dd>
+                              </div>
+                            );
+                          })}
+                        </dl>
+                      )}
+                      {section.items.length > 0 && (
+                        <ul class="codex-sidebar-list">
+                          {section.items.map((item) => {
+                            const linkedExternally = item.href && isExternalUrl(item.href);
+                            return <li>{item.href ? <a href={item.href} target={linkedExternally ? '_blank' : undefined} rel={linkedExternally ? 'noreferrer' : undefined}>{item.label}{linkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}</a> : item.label}</li>;
+                          })}
+                        </ul>
+                      )}
+                      {section.note && <p class="codex-sidebar-note">{section.note}</p>}
+                    </section>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+          <TableOfContents />
+        </div>
+      </aside>
+    </>
+  )
+}
+
+<style>
+  @layer starlight.core {
+    .right-sidebar-panel {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      padding: 1rem 0;
+    }
+
+    .sl-container {
+      box-sizing: border-box;
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    .codex-sidebar-card,
+    :global(starlight-toc nav) {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .right-sidebar-panel :global(h2) {
+      color: var(--sl-color-white);
+      font-size: var(--sl-text-h5);
+      font-weight: 600;
+      line-height: var(--sl-line-height-headings);
+      margin-bottom: 0.5rem;
+    }
+
+    .codex-sidebar-subsections {
+      border-top: 1px solid var(--sl-color-gray-5);
+      margin-top: 1rem;
+      padding-top: 0.25rem;
+    }
+
+    .codex-sidebar-subsection {
+      border-top: 1px solid color-mix(in oklch, var(--sl-color-gray-5), transparent 45%);
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+    }
+
+    .codex-sidebar-subsection:first-child {
+      border-top: 0;
+      margin-top: 0;
+    }
+
+    .codex-sidebar-subsection h3 {
+      color: var(--sl-color-gray-2);
+      font-size: var(--sl-text-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin: 0 0 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .codex-sidebar-meta-compact {
+      margin-top: 0;
+    }
+
+    .codex-sidebar-list {
+      color: var(--sl-color-gray-3);
+      font-size: var(--sl-text-xs);
+      line-height: 1.55;
+      margin: 0.25rem 0 0;
+      padding-inline-start: 1.1rem;
+    }
+
+    .codex-sidebar-list li + li {
+      margin-top: 0.35rem;
+    }
+
+    .codex-sidebar-note {
+      color: var(--sl-color-gray-3);
+      font-size: var(--sl-text-xs);
+      font-style: italic;
+      line-height: 1.6;
+      margin: 0.75rem 0 0;
+    }
+
+    .right-sidebar-panel :global(:where(a)) {
+      display: block;
+      font-size: var(--sl-text-xs);
+      text-decoration: none;
+      color: var(--sl-color-gray-3);
+      overflow-wrap: anywhere;
+    }
+
+    .right-sidebar-panel :global(:where(a):hover) {
+      color: var(--sl-color-white);
+    }
+  }
+</style>

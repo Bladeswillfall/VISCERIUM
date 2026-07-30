@@ -1,0 +1,43 @@
+{
+  "size": {
+    "w": 7680,
+    "h": 3840
+  },
+  "layers": [
+    {
+      "id": "layer-settlements",
+      "name": "civilisation/settlements",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-fortifications",
+      "name": "civilisation/fortifications",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-ports",
+      "name": "civilisation/ports",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-ruins",
+      "name": "civilisation/ruins",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-myrkild",
+      "name": "threats/myrkild/rifts",
+      "visible": true,
+      "locked": false
+    }
+  ],
+  "markers": [],
+  "panClamp": true,
+  "drawLayers": [],
+  "drawings": [],
+  "textLayers": []
+}

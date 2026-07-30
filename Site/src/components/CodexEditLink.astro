@@ -1,0 +1,18 @@
+---
+import siteConfig from '../../site.config.mjs';
+
+const { starlightRoute } = Astro.locals;
+const sourcePath = starlightRoute.entry.data.sourcePath;
+const encodedSourcePath = typeof sourcePath === 'string'
+  ? sourcePath.split('/').map((segment) => encodeURIComponent(segment)).join('/')
+  : undefined;
+const editUrl = encodedSourcePath
+  ? `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/${encodedSourcePath}`
+  : undefined;
+---
+
+{editUrl && (
+  <a class="codex-edit-link" href={editUrl} target="_blank" rel="noreferrer">
+    Edit page<span class="codex-sr-only"> (opens in a new tab)</span>
+  </a>
+)}

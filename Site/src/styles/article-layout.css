@@ -1,0 +1,112 @@
+/* Editorial article rhythm and desktop right-sidebar behaviour. */
+
+@layer starlight.core {
+  /*
+   * Headings should introduce the material below them, not float between two
+   * equally large gaps. Keep the hierarchy spacious, but put most of the
+   * section break above the heading and tighten the heading-to-body join.
+   */
+  .sl-markdown-content:not(:has(.home-gateway)) h2 {
+    margin-block: 3.25rem .65rem;
+  }
+
+  .sl-markdown-content:not(:has(.home-gateway)) h3 {
+    margin-block: 2.55rem .4rem;
+  }
+
+  .sl-markdown-content:not(:has(.home-gateway)) h4 {
+    margin-block: 2.05rem .25rem;
+  }
+
+  .sl-markdown-content:not(:has(.home-gateway)) h5 {
+    margin-block: 1.65rem .25rem;
+  }
+
+  .sl-markdown-content:not(:has(.home-gateway)) h6 {
+    margin-block: 1.45rem .2rem;
+  }
+
+  /*
+   * Article paragraphs should not add their own leading gap. Vertical rhythm
+   * is owned by the element before them, which keeps headings visibly attached
+   * to the prose they introduce and avoids doubled/collapsed top spacing.
+   */
+  .sl-markdown-content:not(:has(.home-gateway)) p {
+    margin-top: 0;
+  }
+
+  /*
+   * Starlight applies document-flow spacing to adjacent block siblings. Inside
+   * authored grid layouts that makes every cell after the first gain a top
+   * margin, even though the grid already owns spacing through `gap`. Keep the
+   * ordinary Markdown rhythm inside each cell, but remove exterior block margins
+   * from every direct grid item so rows and columns align consistently.
+   */
+  .sl-markdown-content :is(.cx-cols, .cx-row) > * {
+    margin-block: 0 !important;
+  }
+
+  /*
+   * Starlight's generic flow spacing can otherwise re-introduce a full margin
+   * on the first block after a heading. Let the heading's trailing margin own
+   * that relationship instead.
+   */
+  .sl-markdown-content:not(:has(.home-gateway))
+    :is(h2, h3, h4, h5, h6)
+    + :is(p, ul, ol, dl, table, figure, blockquote, .cx-cols, .cx-row, .cx-card) {
+    margin-block-start: 0 !important;
+  }
+}
+
+@media (min-width: 72rem) {
+  /*
+   * The article metadata should scroll normally. Stretch the sidebar column to
+   * the article's height so the TOC can remain sticky for the full article.
+   */
+  .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) > .right-sidebar-container {
+    align-self: stretch;
+  }
+
+  .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) .right-sidebar {
+    position: relative;
+    top: auto;
+    block-size: 100%;
+    max-block-size: none;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) :is(
+    .right-sidebar-panel,
+    .codex-page-sidebar,
+    .codex-page-sidebar > .sl-container
+  ) {
+    block-size: 100%;
+    min-block-size: 0;
+  }
+
+  .codex-page-sidebar > .sl-container {
+    align-content: start;
+  }
+
+  /*
+   * Pin only the article TOC. Image/reference metadata above it and backlinks
+   * below it remain ordinary sidebar content and scroll away with the page.
+   */
+  .codex-page-sidebar starlight-toc {
+    position: sticky;
+    z-index: 4;
+    top: calc(var(--sl-nav-height) + 1rem);
+    display: block;
+    max-block-size: calc(100dvh - var(--sl-nav-height) - 2rem);
+    padding-block: .45rem .7rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    background: var(--sl-color-bg);
+  }
+
+  .codex-page-sidebar starlight-toc nav {
+    margin-block: 0;
+  }
+}

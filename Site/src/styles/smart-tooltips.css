@@ -1,0 +1,73 @@
+/* ========================================================================== 
+   Smart tooltip surfaces
+
+   Body-level floating surfaces avoid clipping by card overflow and use the
+   shared safe-zone positioning utility. Existing pseudo-element tooltips stay
+   as the no-JavaScript fallback and are suppressed only after installation.
+   ========================================================================== */
+
+.codex-smart-tooltip {
+  --smart-tooltip-accent: var(--sl-color-accent);
+  position: fixed;
+  z-index: var(--codex-z-tooltip, 1000);
+  inline-size: max-content;
+  max-inline-size: min(19rem, calc(100vw - 1.5rem));
+  padding: .7rem .8rem;
+  border: 1px solid color-mix(in oklch, var(--smart-tooltip-accent) 30%, var(--sl-color-hairline-light));
+  border-radius: .55rem;
+  background: color-mix(in oklch, var(--sl-color-bg) 96%, var(--codex-surface-raised-color));
+  color: var(--sl-color-white);
+  font-family: var(--vc-font-body);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.45;
+  text-align: start;
+  text-transform: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, .25rem, 0);
+  transition: opacity .14s ease, transform .14s ease;
+  box-shadow: 0 .8rem 2rem var(--codex-shadow-color);
+  overflow-wrap: anywhere;
+}
+
+.codex-smart-tooltip[hidden] {
+  display: none;
+}
+
+.codex-smart-tooltip[data-placement='bottom'] {
+  transform: translate3d(0, -.25rem, 0);
+}
+
+.codex-smart-tooltip[data-placement='left'] {
+  transform: translate3d(.25rem, 0, 0);
+}
+
+.codex-smart-tooltip[data-placement='right'] {
+  transform: translate3d(-.25rem, 0, 0);
+}
+
+.codex-smart-tooltip.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+html.smart-tooltips-ready .era-primer__tip::after {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .codex-smart-tooltip {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .codex-smart-tooltip {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+}

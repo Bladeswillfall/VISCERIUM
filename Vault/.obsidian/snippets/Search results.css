@@ -1,0 +1,26 @@
+/*
+ * Search results
+ * Makes search output denser while keeping matched context readable.
+ */
+
+.workspace-leaf-content[data-type="search"] .search-result-file-title {
+  padding-block: 0.35rem;
+  font-weight: 650;
+}
+
+.workspace-leaf-content[data-type="search"] .search-result-file-match {
+  margin-block: 0.2rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--background-secondary) 78%, transparent);
+}
+
+.workspace-leaf-content[data-type="search"] .search-result-file-matched-text {
+  border-radius: 3px;
+  padding-inline: 0.08em;
+  background: color-mix(in srgb, var(--text-highlight-bg) 82%, transparent);
+}
+
+.workspace-leaf-content[data-type="search"] .search-results-children {
+  margin-inline-start: 0.45rem;
+}

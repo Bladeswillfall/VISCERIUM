@@ -1,0 +1,14 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import RelationshipGraph from '../../components/RelationshipGraph.astro';
+import graph from '../../data/relationships.json';
+---
+
+<StarlightPage frontmatter={{ title: 'Relationships', description: 'Explore explicit political, personal and organisational relationships within VISCERIUM.', explorationPage: true, tableOfContents: false, giscus: false }}>
+  <section class="relationship-page">
+    <p class="atlas__eyebrow">Explore VISCERIUM</p>
+    <h1>Relationships</h1>
+    <p>This view deliberately shows explicit structured relationships rather than every wikilink. Use it for diplomacy, rivalries, membership, command structures, lineage and other relationships where the connection itself matters.</p>
+    <RelationshipGraph graph={graph} />
+  </section>
+</StarlightPage>

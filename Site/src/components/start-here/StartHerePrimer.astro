@@ -1,0 +1,339 @@
+---
+import '../../styles/start-here-pages.css';
+import ErrackMapMark from './ErrackMapMark.astro';
+
+const eraRoutes = {
+  citadel: '/eras/citadel/',
+  smog: '/eras/smog/',
+  nearsight: '/eras/nearsight/',
+  entropy: '/eras/entropy/',
+};
+
+const assetRoot = 'https://wa-cdn.nyc3.cdn.digitaloceanspaces.com/user-data/production/4e045179-ba57-4130-8eed-cfdd0223c3d7/uploads/images';
+const nadirMark = `${assetRoot}/598b4c8d3d6aaae231daefd475d4888a.png`;
+const zenithMark = `${assetRoot}/0e0f4f66d44a0c03ce3ec042978a6a2f.png`;
+const resonanceTrail = `${assetRoot}/70c9317a764228e870cb7d68d604a64b.png`;
+const okseFlag = `${assetRoot}/1d6a04547df953b36f4d6f8ce73e91f2.png`;
+const krassFlag = `${assetRoot}/8959261124e62edee28ea6301fa6e1f2.png`;
+---
+
+<div class="start-here-primer" data-start-here-primer>
+  <section class="start-hero" aria-labelledby="start-hero-title">
+    <div class="start-hero__veil" aria-hidden="true"></div>
+    <div class="start-hero__copy">
+      <p class="start-eyebrow">Introduction to VISCERIUM</p>
+      <h1 id="start-hero-title">VISCERIUM</h1>
+      <p class="start-hero__tagline">One timeline. Four eras. Infinite stories.</p>
+      <p class="start-hero__lead">
+        A single wounded world carried from steel and superstition to orbital war. Kingdoms become republics,
+        ritual becomes science, and old warnings survive long after their meanings are forgotten.
+      </p>
+      <p class="start-hero__question">What will you discover first?</p>
+      <a class="start-scroll-link" href="#start-timeline">Begin <span aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+
+  <section class="start-section start-timeline" id="start-timeline" aria-labelledby="start-timeline-title">
+    <div class="start-shell start-section__intro">
+      <p class="start-eyebrow">The timeline</p>
+      <h2 id="start-timeline-title">The same world keeps changing its explanation.</h2>
+      <p class="start-lead">
+        CITADEL, SMOG, NEARSIGHT and ENTROPY are not alternate settings. They are four moments in one continuous history.
+        Every age inherits the victories, damage, institutions and lies of the one before it.
+      </p>
+    </div>
+
+    <div class="start-era-sequence" aria-label="The four eras of VISCERIUM">
+      <a class="start-era-band start-era-band--citadel" href={eraRoutes.citadel}>
+        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__copy">
+          <span class="start-era-band__number">Era I</span>
+          <strong>CITADEL</strong>
+          <p>Steel, siegecraft and early gunpowder. Resonance is ritual, gift, curse or sorcery. Folklore is often survival knowledge wearing an old name.</p>
+          <span class="start-era-band__action">Enter CITADEL →</span>
+        </div>
+      </a>
+
+      <a class="start-era-band start-era-band--smog" href={eraRoutes.smog}>
+        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__copy">
+          <span class="start-era-band__number">Era II</span>
+          <strong>SMOG</strong>
+          <p>Industry, combustion and mechanised war. Old rites acquire gauges, ministries and production quotas. Humanity learns to industrialise danger before it learns restraint.</p>
+          <span class="start-era-band__action">Enter SMOG →</span>
+        </div>
+      </a>
+
+      <a class="start-era-band start-era-band--nearsight" href={eraRoutes.nearsight}>
+        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__copy">
+          <span class="start-era-band__number">Era III</span>
+          <strong>NEARSIGHT</strong>
+          <p>Satellites, robotics, networks and exoskeletons. Humanity can finally watch almost the whole planet at once, and mistakes greater visibility for complete understanding.</p>
+          <span class="start-era-band__action">Enter NEARSIGHT →</span>
+        </div>
+      </a>
+
+      <a class="start-era-band start-era-band--entropy" href={eraRoutes.entropy}>
+        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__copy">
+          <span class="start-era-band__number">Era IV</span>
+          <strong>ENTROPY</strong>
+          <p>Vacuum warfare, altered flesh and deep-space reach. The old struggle escapes Errack, and the scale of what has always surrounded the Degel System becomes impossible to ignore.</p>
+          <span class="start-era-band__action">Enter ENTROPY →</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="start-breadcrumb" aria-labelledby="breadcrumb-era-title">
+    <div class="start-shell start-breadcrumb__inner">
+      <div class="start-breadcrumb__prompt">
+        <span>01</span>
+        <div><p class="start-eyebrow">Leave a breadcrumb</p><h3 id="breadcrumb-era-title">Which age pulled hardest?</h3></div>
+      </div>
+      <div class="start-choice-row start-choice-row--four" data-breadcrumb-group="era">
+        <button class="start-choice" type="button" data-value="citadel" aria-pressed="false"><strong>CITADEL</strong><span>Steel & folklore</span></button>
+        <button class="start-choice" type="button" data-value="smog" aria-pressed="false"><strong>SMOG</strong><span>Industry & trenches</span></button>
+        <button class="start-choice" type="button" data-value="nearsight" aria-pressed="false"><strong>NEARSIGHT</strong><span>Networks & false certainty</span></button>
+        <button class="start-choice" type="button" data-value="entropy" aria-pressed="false"><strong>ENTROPY</strong><span>Orbit & revelation</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="start-section start-place" id="start-world" aria-labelledby="start-place-title">
+    <div class="start-place__image" aria-hidden="true">
+      <img src="/assets/images/errack.webp" alt="" loading="lazy" />
+    </div>
+    <div class="start-shell start-place__copy">
+      <p class="start-eyebrow">The place</p>
+      <h2 id="start-place-title">The horror needs something worth threatening.</h2>
+      <p class="start-lead">
+        Errack is the heart of VISCERIUM: a life-sustaining world of savage beauty, ecological extremes and enduring human civilisation.
+      </p>
+      <p>
+        Jungles, highlands, deserts, archipelagos and storm-lashed cities stretch beneath twin moons and faint planetary rings. People farm, trade, pray, swear, fall in love, wage stupid wars and teach children warnings whose original reasons have been forgotten.
+      </p>
+      <p>
+        VISCERIUM is dark, but darkness only matters because there is something to lose. Wonder, culture, humour, ordinary work and stubborn hope are not relief from the setting; they are what gives its violence weight.
+      </p>
+      <a class="start-inline-link" href="/degel-system/errack/">Explore Errack <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section class="start-culture" aria-labelledby="start-culture-title">
+    <div class="start-culture__flags" aria-hidden="true">
+      <img class="start-culture__flag start-culture__flag--okse" src={okseFlag} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      <img class="start-culture__flag start-culture__flag--krass" src={krassFlag} alt="" loading="lazy" referrerpolicy="no-referrer" />
+    </div>
+    <div class="start-shell start-culture__copy">
+      <p class="start-eyebrow">People live here</p>
+      <h2 id="start-culture-title">History is not waiting for the plot.</h2>
+      <p class="start-lead">Civilisations rise, fracture, trade, marry, conquer and remember. Their banners outlive rulers; their customs outlive the reasons they began.</p>
+      <p>
+        A farmer in CITADEL, a factory worker in SMOG, a Pathfinder in NEARSIGHT and a ship crew in ENTROPY all inhabit the same history from radically different distances. The cosmic struggle matters because ordinary people keep having lives underneath it.
+      </p>
+    </div>
+  </section>
+
+  <section class="start-breadcrumb start-breadcrumb--quiet" aria-labelledby="breadcrumb-world-title">
+    <div class="start-shell start-breadcrumb__inner">
+      <div class="start-breadcrumb__prompt">
+        <span>02</span>
+        <div><p class="start-eyebrow">Leave a breadcrumb</p><h3 id="breadcrumb-world-title">What caught at you first?</h3></div>
+      </div>
+      <div class="start-choice-row" data-breadcrumb-group="world">
+        <button class="start-choice" type="button" data-value="culture" aria-pressed="false"><strong>The people</strong><span>Nations, customs & ordinary lives</span></button>
+        <button class="start-choice" type="button" data-value="danger" aria-pressed="false"><strong>The thing outside</strong><span>Monsters, incursions & anomalies</span></button>
+        <button class="start-choice" type="button" data-value="inheritance" aria-pressed="false"><strong>The old warning</strong><span>History, memory & consequence</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="start-section start-threat" id="start-threat" aria-labelledby="start-threat-title">
+    <div class="start-shell start-section__intro start-threat__intro">
+      <p class="start-eyebrow">The threat</p>
+      <h2 id="start-threat-title">The monsters are real. The explanations arrive later.</h2>
+      <p class="start-lead">
+        Across history, humanity repeatedly meets things it cannot explain cleanly. The safest place to begin is with what people inside each era can witness, survive and misunderstand.
+      </p>
+    </div>
+
+    <div class="start-threat-pair">
+      <article class="start-threat-beat start-threat-beat--myrkild">
+        <img class="start-threat-beat__mark" src={nadirMark} alt="Symbol associated with the Nadirs" loading="lazy" referrerpolicy="no-referrer" />
+        <div class="start-threat-beat__copy">
+          <p class="start-eyebrow">The recurring wound</p>
+          <h3>Myrkild</h3>
+          <p>Across the eras they are called beasts, blights, demons, organisms and incursions. Their forms adapt. Landscapes and bodies change around them. Local folklore may understand the danger long before any institution understands the cause.</p>
+          <p class="start-threat-beat__line">A CITADEL hunter can be right for the wrong reason. A NEARSIGHT analyst can be wrong with better instruments.</p>
+        </div>
+      </article>
+
+      <article class="start-threat-beat start-threat-beat--beyond">
+        <img class="start-threat-beat__mark" src={zenithMark} alt="Symbol associated with the Zeniths" loading="lazy" referrerpolicy="no-referrer" />
+        <div class="start-threat-beat__copy">
+          <p class="start-eyebrow">Something more precise</p>
+          <h3>Beyond the firelight</h3>
+          <p>Some evidence is too deliberate to fit the Myrkild. Impossible structures, repeating patterns and interventions become harder to dismiss as humanity's instruments improve.</p>
+          <p class="start-threat-beat__line">There are deeper answers in VISCERIUM. The introduction does not hand every century the knowledge of the last.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="start-wyrd" id="start-resonance" aria-labelledby="start-wyrd-title">
+    <div class="start-wyrd__graphic" aria-hidden="true">
+      <img src={resonanceTrail} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      <span class="start-wyrd__stone"></span>
+    </div>
+    <div class="start-shell start-wyrd__content">
+      <p class="start-eyebrow">The Wyrd</p>
+      <h2 id="start-wyrd-title">Every gift is a wound. Every miracle a curse.</h2>
+      <div class="start-wyrd__grid">
+        <div>
+          <h3>Power is physical here.</h3>
+          <p class="start-lead">Resonance is vibration, pressure, distortion and consequence made intimate.</p>
+        </div>
+        <div>
+          <p>
+            Across history, humanity changes the vocabulary around it. Sorcerer becomes Resonant. Sacred chamber becomes laboratory. Folk warning becomes operating procedure. The force underneath those names still makes matter yield in ways matter should not.
+          </p>
+          <p>
+            Its presence is sensory: bass through the chest, surfaces trembling out of rhythm, prismatic fringes bending around impossible forces. The body of the Resonant is part of the act. Power has exertion, risk and aftermath.
+          </p>
+          <a class="start-inline-link" href="/eras/citadel/events/the-breaking-of-lorndale/">Experience Resonance in Lorndale <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="start-story-scale" aria-labelledby="start-scale-title">
+    <div class="start-story-scale__mark" aria-hidden="true">V</div>
+    <div class="start-shell start-story-scale__inner">
+      <p class="start-eyebrow">The scale of the story</p>
+      <h2 id="start-scale-title">The world is enormous. The stories do not have to be.</h2>
+      <p class="start-story-scale__statement">Most people in VISCERIUM will never meet a false god. They may spend their entire lives dealing with the consequences of somebody else's war with one.</p>
+      <div class="start-story-scale__copy">
+        <p>A Pathfinder trying to bring three people home can matter. A soldier surviving one trench can matter. A family racing a quarantine closure can matter. A crew deciphering one impossible transmission can matter.</p>
+        <p>The larger world continues around them. Nations bargain. Institutions fail. Old lies acquire new uniforms. Victories create consequences for people not yet born.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="start-breadcrumb start-breadcrumb--last" aria-labelledby="breadcrumb-thread-title">
+    <div class="start-shell start-breadcrumb__inner">
+      <div class="start-breadcrumb__prompt">
+        <span>03</span>
+        <div><p class="start-eyebrow">Leave a breadcrumb</p><h3 id="breadcrumb-thread-title">What do you want to understand next?</h3></div>
+      </div>
+      <div class="start-choice-row start-choice-row--four" data-breadcrumb-group="thread">
+        <button class="start-choice" type="button" data-value="resonance" aria-pressed="false"><strong>Resonance</strong><span>Power, ritual & cost</span></button>
+        <button class="start-choice" type="button" data-value="incursion" aria-pressed="false"><strong>The incursions</strong><span>Myrkild & anomalies</span></button>
+        <button class="start-choice" type="button" data-value="world" aria-pressed="false"><strong>Errack</strong><span>Places, nations & life</span></button>
+        <button class="start-choice" type="button" data-value="history" aria-pressed="false"><strong>The timeline</strong><span>Causes & consequences</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="start-route start-shell" id="your-route" aria-labelledby="your-route-title">
+    <p class="start-eyebrow">Your doorway</p>
+    <h2 id="your-route-title">Follow what caught your attention.</h2>
+    <p class="start-lead start-route__intro">The breadcrumbs never hide canon. They simply assemble a useful first path through a setting much larger than one introduction.</p>
+    <div class="start-route__result" data-route-result aria-live="polite">
+      <div class="start-route__empty"><strong>Choose any breadcrumb above.</strong><p>Your suggested route will assemble here as you read.</p></div>
+    </div>
+    <nav class="start-route__fallback" aria-label="Fixed routes into the Codex">
+      <span>Or ignore the breadcrumbs:</span>
+      <a href="/degel-system/errack/">Errack</a>
+      <a href="/timelines/super/">Complete timeline</a>
+      <a href="/eras/citadel/events/the-breaking-of-lorndale/">The Breaking of Lorndale</a>
+    </nav>
+  </section>
+</div>
+
+<script>
+  const root = document.querySelector('[data-start-here-primer]');
+
+  if (root instanceof HTMLElement && root.dataset.initialised !== 'true') {
+    root.dataset.initialised = 'true';
+
+    const selections = { world: null, era: null, thread: null };
+    const destinations = {
+      era: {
+        citadel: { title: 'CITADEL', href: '/eras/citadel/', copy: 'Begin while the impossible is still carried through folklore, ritual, steel and local memory.' },
+        smog: { title: 'SMOG', href: '/eras/smog/', copy: 'Begin where inherited terrors are measured, institutionalised and fed into industrial war.' },
+        nearsight: { title: 'NEARSIGHT', href: '/eras/nearsight/', copy: 'Begin with a world confident that networks and sensors have finally made it legible.' },
+        entropy: { title: 'ENTROPY', href: '/eras/entropy/', copy: 'Begin after the struggle reaches orbit and old mysteries become problems of survival at system scale.' },
+      },
+      world: {
+        culture: { title: 'Errack', href: '/degel-system/errack/', copy: 'Ground the horror in the planet, places and people that give it something meaningful to threaten.' },
+        danger: { title: 'The Kraal Nine Signal Return', href: '/eras/nearsight/events/the-kraal-nine-signal-return/', copy: 'Start with contested evidence: a small incident that refuses to fit the explanation available to the people recording it.' },
+        inheritance: { title: 'The complete timeline', href: '/timelines/super/', copy: 'Trace the causal spine and watch warnings, discoveries and mistakes change form across the ages.' },
+      },
+      thread: {
+        resonance: { title: 'The Breaking of Lorndale', href: '/eras/citadel/events/the-breaking-of-lorndale/', copy: 'Meet Resonance as lived catastrophe before moving into later attempts to classify and standardise it.' },
+        incursion: { title: 'The Kraal Nine Signal Return', href: '/eras/nearsight/events/the-kraal-nine-signal-return/', copy: 'Follow an incident where Resonance, Myrkild and scientific evidence collide without producing an easy answer.' },
+        world: { title: 'Errack', href: '/degel-system/errack/', copy: 'Move outward into geography, nations and ordinary lives that make the setting more than its threats.' },
+        history: { title: 'The complete timeline', href: '/timelines/super/', copy: 'Follow what each age inherits from the one before it, including the things it misunderstands.' },
+      },
+    };
+
+    const routeResult = root.querySelector('[data-route-result]');
+
+    function uniqueDestinations(items) {
+      const seen = new Set();
+      return items.filter((item) => {
+        if (!item || seen.has(item.href)) return false;
+        seen.add(item.href);
+        return true;
+      });
+    }
+
+    function renderRoute() {
+      if (!(routeResult instanceof HTMLElement)) return;
+      const picks = uniqueDestinations([
+        selections.era ? destinations.era[selections.era] : null,
+        selections.thread ? destinations.thread[selections.thread] : null,
+        selections.world ? destinations.world[selections.world] : null,
+      ]);
+
+      if (picks.length === 0) {
+        routeResult.innerHTML = '<div class="start-route__empty"><strong>Choose any breadcrumb above.</strong><p>Your suggested route will assemble here as you read.</p></div>';
+        return;
+      }
+
+      routeResult.innerHTML = picks.map((item, index) => `
+        <a class="start-route-card" href="${item.href}">
+          <span>${String(index + 1).padStart(2, '0')}</span>
+          <strong>${item.title}</strong>
+          <p>${item.copy}</p>
+          <em>Continue →</em>
+        </a>
+      `).join('');
+    }
+
+    root.querySelectorAll('[data-breadcrumb-group]').forEach((groupElement) => {
+      if (!(groupElement instanceof HTMLElement)) return;
+      const group = groupElement.dataset.breadcrumbGroup;
+      if (!group || !(group in selections)) return;
+
+      groupElement.querySelectorAll('.start-choice').forEach((button) => {
+        button.addEventListener('click', () => {
+          if (!(button instanceof HTMLButtonElement)) return;
+          const value = button.dataset.value;
+          if (!value) return;
+
+          groupElement.querySelectorAll('.start-choice').forEach((other) => {
+            const selected = other === button;
+            other.classList.toggle('is-selected', selected);
+            other.setAttribute('aria-pressed', selected ? 'true' : 'false');
+          });
+
+          selections[group] = value;
+          renderRoute();
+        });
+      });
+    });
+  }
+</script>

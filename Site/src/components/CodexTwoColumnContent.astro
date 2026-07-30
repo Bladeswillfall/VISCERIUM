@@ -1,0 +1,33 @@
+---
+const { starlightRoute } = Astro.locals;
+const eraStyle = starlightRoute.entry.data.eraStyle;
+const timelinePage = starlightRoute.entry.data.timelinePage === true;
+const explorationPage = starlightRoute.entry.data.explorationPage === true;
+const slugPath = starlightRoute.entry.data.slug ?? starlightRoute.entry.id.replace(/\.(md|mdx)$/, '');
+const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel-system';
+---
+
+<div
+  class:list={[
+    "codex-two-column-content lg:sl-flex",
+    eraStyle && `era-style-${eraStyle}`,
+    timelinePage && "codex-timeline-page",
+    explorationPage && "codex-exploration-page",
+    isDegelSystemIndex && "codex-degel-system-page",
+  ]}
+  data-era-style={eraStyle}
+  data-timeline-page={timelinePage || undefined}
+  data-exploration-page={explorationPage || undefined}
+  data-degel-system-page={isDegelSystemIndex || undefined}
+>
+  <div class="main-pane codex-main-pane">
+    {!timelinePage && !explorationPage && starlightRoute.toc && !isDegelSystemIndex && (
+      <aside class="right-sidebar-container">
+        <div class="right-sidebar">
+          <slot name="right-sidebar" />
+        </div>
+      </aside>
+    )}
+    <slot />
+  </div>
+</div>

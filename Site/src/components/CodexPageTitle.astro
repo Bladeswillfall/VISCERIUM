@@ -1,0 +1,262 @@
+---
+import { getCollection } from 'astro:content';
+import '../styles/storyteller-view.css';
+import CalendarDateBadge from './calendar/CalendarDateBadge.astro';
+import CodexIcon from './CodexIcon.astro';
+import ContinuitySwitcher from './ContinuitySwitcher.astro';
+import DegelSystemExplorer from './degel-system/DegelSystemExplorer.astro';
+import StorytellerSwitcher from './StorytellerSwitcher.astro';
+
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+const isExplorationPage = entry.explorationPage === true;
+
+const breadcrumbGroupIcons = {
+  calendar: 'event',
+  characters: 'character',
+  citadel: 'faction',
+  'degel-system': 'spark',
+  entropy: 'spark',
+  eras: 'event',
+  events: 'event',
+  factions: 'faction',
+  images: 'image',
+  locations: 'location',
+  maps: 'map',
+  nearsight: 'spark',
+  smog: 'status',
+};
+
+function isExternalUrl(value) {
+  return typeof value === 'string' && /^[a-z][a-z0-9+.-]*:/i.test(value);
+}
+
+function normaliseAssetPath(value, category = 'images') {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  if (trimmed.startsWith('/') || isExternalUrl(trimmed)) return trimmed;
+  return `/assets/${category}/${trimmed.split('/').pop()}`;
+}
+
+function imageTextAlternative(base, text) {
+  return [base, text ? `Text shown in image: ${text}` : undefined].filter(Boolean).join(' — ');
+}
+
+function normaliseSlug(value) {
+  return String(value ?? '')
+    .replace(/\.(md|mdx)$/i, '')
+    .replace(/^\/+|\/+$/g, '')
+    .replace(/\/index$/i, '');
+}
+
+function breadcrumbIconForSegment(segment) {
+  return breadcrumbGroupIcons[String(segment ?? '').trim().toLowerCase()];
+}
+
+const imageSource = entry.headerImage ?? entry.image ?? (entry.type === 'image' ? entry.asset : undefined);
+const headerImage = normaliseAssetPath(imageSource);
+const isDecorativeImage = entry.decorativeImage === true;
+const headerAlt = isDecorativeImage ? '' : imageTextAlternative(entry.alt ?? `${entry.title} header image`, entry.imageText);
+const headerDescription = [entry.imageDescription, entry.imageText ? `Text shown in image: ${entry.imageText}` : undefined]
+  .filter(Boolean)
+  .join(' ');
+const headerDescriptionId = headerDescription ? 'codex-header-image-description' : undefined;
+const headerClass = entry.type === 'image' ? 'codex-header-image codex-header-image-artwork' : 'codex-header-image';
+const titleIcon = entry.titleIcon ?? entry.icon;
+const slugPath = entry.slug ?? starlightRoute.entry.id.replace(/\.(md|mdx)$/, '');
+const normalisedSlugPath = normaliseSlug(slugPath);
+const isDegelSystemIndex = normalisedSlugPath === 'degel-system';
+const breadcrumbParts = slugPath === 'index' ? [] : normalisedSlugPath.split('/').filter(Boolean);
+const breadcrumbEntries = await getCollection('docs');
+const breadcrumbEntryBySlug = new Map(
+  breadcrumbEntries.map((doc) => [normaliseSlug(doc.data.slug ?? doc.id), doc.data]),
+);
+const breadcrumbs = breadcrumbParts.map((part, index) => {
+  const crumbSlug = breadcrumbParts.slice(0, index + 1).join('/');
+  const href = `/${crumbSlug}/`;
+  const current = index === breadcrumbParts.length - 1;
+  const crumbEntry = current ? entry : breadcrumbEntryBySlug.get(crumbSlug);
+  const label = current
+    ? entry.title
+    : crumbEntry?.title ?? part.replace(/[-_]/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+  const icon = crumbEntry?.sidebarIcon
+    ?? crumbEntry?.icon
+    ?? crumbEntry?.titleIcon
+    ?? breadcrumbIconForSegment(part);
+  return { href, label, icon, current, part, previous: breadcrumbParts[index - 1] };
+}).filter(({ part, previous }) => part !== 'version' || previous !== 'releases');
+---
+
+{!isExplorationPage && headerImage && (
+  <>
+    <svg class="codex-header-fade-filter" width="0" height="0" aria-hidden="true">
+      <linearGradient id="codex-header-inner-fade-gradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="white" />
+        <stop offset=".68" stop-color="white" />
+        <stop offset=".72" stop-color="white" stop-opacity=".98" />
+        <stop offset=".76" stop-color="white" stop-opacity=".92" />
+        <stop offset=".8" stop-color="white" stop-opacity=".82" />
+        <stop offset=".84" stop-color="white" stop-opacity=".68" />
+        <stop offset=".88" stop-color="white" stop-opacity=".5" />
+        <stop offset=".92" stop-color="white" stop-opacity=".31" />
+        <stop offset=".96" stop-color="white" stop-opacity=".14" />
+        <stop offset="1" stop-color="white" stop-opacity="0" />
+      </linearGradient>
+      <mask
+        id="codex-header-inner-fade"
+        maskUnits="objectBoundingBox"
+        maskContentUnits="objectBoundingBox"
+      >
+        <rect width="1" height="1" fill="url('#codex-header-inner-fade-gradient')" />
+      </mask>
+      <filter
+        id="codex-header-bottom-fade"
+        x="0"
+        y="0"
+        width="100%"
+        height="170%"
+        color-interpolation-filters="sRGB"
+      >
+        <feTurbulence type="fractalNoise" baseFrequency=".45" numOctaves="3" seed="11" result="noise" />
+        <feColorMatrix
+          in="noise"
+          values="0 0 0 0 .5
+                  .333 .333 .333 0 0
+                  0 0 0 0 .5
+                  0 0 0 1 0"
+          result="vertical-noise"
+        />
+        <feColorMatrix in="noise" type="luminanceToAlpha" result="noise-alpha" />
+        <feComponentTransfer in="noise-alpha" result="grain-alpha">
+          <feFuncA type="table" tableValues=".1 1" />
+        </feComponentTransfer>
+        <feComponentTransfer in="SourceAlpha" result="inverse-alpha">
+          <feFuncA type="linear" slope="-1" intercept="1" />
+        </feComponentTransfer>
+        <feComposite in="SourceAlpha" in2="inverse-alpha" operator="in" result="fade-band" />
+        <feComposite in="fade-band" in2="grain-alpha" operator="in" result="grain-cut" />
+        <feComponentTransfer in="grain-cut" result="scaled-grain-cut">
+          <feFuncA type="linear" slope="2" />
+        </feComponentTransfer>
+        <feComposite in="SourceGraphic" in2="scaled-grain-cut" operator="out" result="grained-source" />
+        <feGaussianBlur in="grained-source" stdDeviation="0 18" result="blurred" />
+        <feOffset in="blurred" dy="30" result="extended" />
+        <feDisplacementMap
+          in="extended"
+          in2="vertical-noise"
+          scale="24"
+          xChannelSelector="R"
+          yChannelSelector="G"
+          result="grainy-extension"
+        />
+        <feComposite
+          in="grainy-extension"
+          in2="grained-source"
+          operator="out"
+          result="outside-extension"
+        />
+        <feComposite in="outside-extension" in2="grain-alpha" operator="in" result="grained-extension" />
+        <feComponentTransfer in="grained-extension" result="faded-extension">
+          <feFuncA type="linear" slope=".55" />
+        </feComponentTransfer>
+        <feBlend in="grained-source" in2="faded-extension" />
+      </filter>
+    </svg>
+
+    <figure class="codex-header-figure">
+      <img
+        class={headerClass}
+        src={headerImage}
+        alt={headerAlt}
+        aria-describedby={headerDescriptionId}
+        loading="eager"
+        decoding="async"
+      />
+      {headerDescription && <figcaption id={headerDescriptionId} class="codex-sr-only">{headerDescription}</figcaption>}
+    </figure>
+  </>
+)}
+{!isExplorationPage && (
+  <h1 id="_top" class:list={{ 'codex-page-title': Boolean(titleIcon) }}>
+    {titleIcon && <CodexIcon spec={titleIcon} class="codex-title-icon" />}
+    <span>{entry.title}</span>
+    {entry.pronunciation && <span class="codex-title-pronunciation">{entry.pronunciation}</span>}
+  </h1>
+)}
+{!isExplorationPage && breadcrumbs.length > 0 && (
+  <nav class="codex-breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/" class="codex-breadcrumb-item">
+      <CodexIcon spec="home" class="codex-breadcrumb-icon" />
+      <span>Home</span>
+    </a>
+    {breadcrumbs.map((crumb) => (
+      <>
+        <span aria-hidden="true">/</span>
+        {crumb.current ? (
+          <span class="codex-breadcrumb-item" aria-current="page">
+            {crumb.icon && <CodexIcon spec={crumb.icon} class="codex-breadcrumb-icon" />}
+            <span>{crumb.label}</span>
+          </span>
+        ) : (
+          <a href={crumb.href} class="codex-breadcrumb-item">
+            {crumb.icon && <CodexIcon spec={crumb.icon} class="codex-breadcrumb-icon" />}
+            <span>{crumb.label}</span>
+          </a>
+        )}
+      </>
+    ))}
+  </nav>
+)}
+{!isExplorationPage && <ContinuitySwitcher />}
+{!isExplorationPage && entry.calendarDate && <CalendarDateBadge date={entry.calendarDate} title="Event date" />}
+{!isExplorationPage && <StorytellerSwitcher />}
+{!isExplorationPage && isDegelSystemIndex && <DegelSystemExplorer />}
+
+<style>
+  @layer starlight.core {
+    .codex-header-fade-filter {
+      position: fixed;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .codex-header-figure {
+      position: relative;
+      z-index: 0;
+      margin: 0;
+      filter: url('#codex-header-bottom-fade');
+    }
+
+    .codex-header-image {
+      -webkit-mask-image: url('#codex-header-inner-fade');
+      mask-image: url('#codex-header-inner-fade');
+    }
+
+    .codex-header-figure + h1 {
+      position: relative;
+      z-index: 1;
+      margin-top: -2.25rem;
+    }
+
+    h1 {
+      margin-top: 1rem;
+      font-size: var(--sl-text-h1);
+      line-height: var(--sl-line-height-headings);
+      font-weight: 600;
+      color: var(--sl-color-white);
+    }
+
+    .codex-title-pronunciation {
+      display: inline-block;
+      margin-inline-start: 0.5rem;
+      font-size: 0.45em;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--sl-color-gray-3);
+      vertical-align: 0.16em;
+      white-space: nowrap;
+    }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import TimelineApp from '../../components/timeline/TimelineApp.astro';
+import { TIMELINE_IDS } from '../../lib/timeline/core.mjs';
+
+const datasets = import.meta.glob('../../data/timelines/{super,citadel,smog,nearsight,entropy}.json', {
+  eager: true,
+  import: 'default',
+});
+
+export function getStaticPaths() {
+  return TIMELINE_IDS.map((id) => ({ params: { id } }));
+}
+
+const id = Astro.params.id;
+const timeline = datasets[`../../data/timelines/${id}.json`];
+if (!timeline) return Astro.redirect('/timelines/');
+---
+
+<StarlightPage
+  frontmatter={{
+    title: timeline.title,
+    description: timeline.description,
+    timelinePage: true,
+  }}
+>
+  <header class="vc-timeline-page-header">
+    <p class="timeline-kicker">Generated chronology</p>
+    <h1>{timeline.title}</h1>
+    <p>{timeline.description}</p>
+    <p>{timeline.events.length} published event{timeline.events.length === 1 ? '' : 's'}.</p>
+  </header>
+  <TimelineApp dataset={timeline} />
+</StarlightPage>

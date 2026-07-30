@@ -1,0 +1,28 @@
+name: Typo or broken link
+description: Report a spelling issue, dead link, bad redirect, or small copy fix.
+title: "[Typo/link]: "
+labels:
+  - documentation
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page or URL
+      description: Where is the typo or broken link?
+      placeholder: https://www.viscerium.co.uk/...
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What needs fixing?
+      description: Quote the typo, name the broken link, or describe the small correction.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Suggested replacement
+      description: Optional replacement text or corrected link.
+    validations:
+      required: false

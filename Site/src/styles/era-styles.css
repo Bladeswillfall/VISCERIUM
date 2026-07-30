@@ -1,0 +1,533 @@
+/* ==========================================================================
+   Era identity and context
+
+   Consolidated from era-styles.css, era-context.css, telescope-scope.css. Section order is intentional:
+   later sections may refine or override earlier ownership layers. Keep the
+   provenance comments when moving rules so cascade-sensitive behaviour remains
+   understandable in isolation.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Era palettes and article treatments
+   Origin: era-styles.css
+
+   Defines era identities and applies scoped visual treatments.
+   -------------------------------------------------------------------------- */
+
+@layer ion {
+  /*
+    Era identity palette.
+
+    The original VISCERIUM hues are retained as identity anchors, while links and
+    controls use theme-specific lightness values tuned against the Codex page
+    backgrounds. sRGB fallbacks come first; OKLCH-capable displays replace them
+    below and inherit the shared P3 chroma multiplier from color-tokens.css.
+  */
+  :root,
+  :root[data-theme='dark'] {
+    /* Vivid identity anchors used by homepage, timeline, graph, and derived UI. */
+    --era-e1-base: #dc143c;
+    --era-e2-base: #a5b516;
+    --era-e3-base: #bd0b5f;
+    --era-e4-base: #00ccbc;
+    --era-quote-warm-base: #8c7853;
+
+    /* Dark-theme text accents: ~4.7:1 normal, with a contrast bump on interaction. */
+    --era-e1-accent: #b56873;
+    --era-e1-accent-high: #f83b52;
+    --era-e1-heading: var(--era-e1-accent);
+    --era-e1-surface: #6e141f;
+    --era-e1-button: #974e59;
+    --era-e1-button-hover: #e01c3f;
+    --era-e1-quotemarks: rgb(220 20 60 / 0.24);
+
+    --era-e2-accent: #7d8250;
+    --era-e2-accent-high: #7f8d00;
+    --era-e2-heading: var(--era-e2-accent);
+    --era-e2-surface: #555d19;
+    --era-e2-button: #5f6900;
+    --era-e2-button-hover: #6d7a00;
+    --era-e2-quotemarks: rgb(140 120 83 / 0.24);
+
+    --era-e3-accent: #b2668d;
+    --era-e3-accent-high: #eb4684;
+    --era-e3-heading: var(--era-e3-accent);
+    --era-e3-surface: #5d0f2f;
+    --era-e3-button: #954b72;
+    --era-e3-button-hover: #d42e71;
+    --era-e3-quotemarks: rgb(140 120 83 / 0.24);
+
+    --era-e4-accent: #568786;
+    --era-e4-accent-high: #009688;
+    --era-e4-heading: var(--era-e4-accent);
+    --era-e4-surface: #1b6860;
+    --era-e4-button: #756047;
+    --era-e4-button-hover: #797267;
+    --era-e4-quotemarks: rgb(140 120 83 / 0.24);
+
+    --era-button-text: #fff;
+  }
+
+  :root[data-theme='light'] {
+    /*
+      Keep the same era hue identities vivid against the warm #b9b4a9 page.
+      Darker mid-tones clear AA without collapsing the accents toward black.
+    */
+    --era-e1-accent: #7b0f2f;
+    --era-e1-accent-high: #62000c;
+    --era-e1-heading: var(--era-e1-accent);
+    --era-e1-surface: #e5a4a3;
+    --era-e1-button: #5f1b2a;
+    --era-e1-button-hover: #500000;
+
+    --era-e2-accent: #444700;
+    --era-e2-accent-high: #2c3300;
+    --era-e2-heading: var(--era-e2-accent);
+    --era-e2-surface: #b5bc93;
+    --era-e2-button: #313700;
+    --era-e2-button-hover: #222600;
+
+    --era-e3-accent: #73144e;
+    --era-e3-accent-high: #5f0028;
+    --era-e3-heading: var(--era-e3-accent);
+    --era-e3-surface: #dfa5b4;
+    --era-e3-button: #5d1840;
+    --era-e3-button-hover: #4f0010;
+
+    --era-e4-accent: #004849;
+    --era-e4-accent-high: #00342e;
+    --era-e4-heading: var(--era-e4-accent);
+    --era-e4-surface: #96c2bb;
+    --era-e4-button: #433018;
+    --era-e4-button-hover: #292219;
+  }
+
+  @supports (color: oklch(from red l c h)) {
+    :root,
+    :root[data-theme='dark'] {
+      /* Original vivid identity hues, now participating in the shared P3 boost. */
+      --era-e1-base: oklch(57.12% calc(0.2219 * var(--codex-chroma-scale)) 20.09);
+      --era-e2-base: oklch(73.56% calc(0.1635 * var(--codex-chroma-scale)) 116.05);
+      --era-e3-base: oklch(51.86% calc(0.2048 * var(--codex-chroma-scale)) 2.13);
+      --era-e4-base: oklch(75.99% calc(0.134 * var(--codex-chroma-scale)) 184.92);
+      --era-quote-warm-base: oklch(58.21% calc(0.0579 * var(--codex-chroma-scale)) 82.43);
+
+      /* Accessible dark-theme links and heading accents. */
+      --era-e1-accent: oklch(60.61% calc(0.0983 * var(--codex-chroma-scale)) 11.35);
+      --era-e1-accent-high: oklch(64.63% calc(0.2219 * var(--codex-chroma-scale)) 20.09);
+      --era-e1-heading: var(--era-e1-accent);
+      --era-e1-surface: oklch(from var(--era-e1-base) calc(l * 0.62) calc(c * 0.55) h);
+      --era-e1-button: oklch(51.44% calc(0.0983 * var(--codex-chroma-scale)) 11.35);
+      --era-e1-button-hover: oklch(58.25% calc(0.2219 * var(--codex-chroma-scale)) 20.09);
+      --era-e1-quotemarks: oklch(from var(--era-e1-base) l c h / 0.24);
+
+      --era-e2-accent: oklch(59.03% calc(0.0703 * var(--codex-chroma-scale)) 112.74);
+      --era-e2-accent-high: oklch(60.98% calc(0.1635 * var(--codex-chroma-scale)) 116.05);
+      --era-e2-heading: var(--era-e2-accent);
+      --era-e2-surface: oklch(from var(--era-e2-base) calc(l * 0.62) calc(c * 0.55) h);
+      --era-e2-button: oklch(49.45% calc(0.1373 * var(--codex-chroma-scale)) 115.61);
+      --era-e2-button-hover: oklch(54.52% calc(0.1635 * var(--codex-chroma-scale)) 116.05);
+      --era-e2-quotemarks: oklch(from var(--era-quote-warm-base) l c h / 0.24);
+
+      --era-e3-accent: oklch(60.8% calc(0.1095 * var(--codex-chroma-scale)) 348.73);
+      --era-e3-accent-high: oklch(64.55% calc(0.2048 * var(--codex-chroma-scale)) 2.13);
+      --era-e3-heading: var(--era-e3-accent);
+      --era-e3-surface: oklch(from var(--era-e3-base) calc(l * 0.62) calc(c * 0.55) h);
+      --era-e3-button: oklch(51.64% calc(0.1095 * var(--codex-chroma-scale)) 348.73);
+      --era-e3-button-hover: oklch(58.16% calc(0.2048 * var(--codex-chroma-scale)) 2.13);
+      --era-e3-quotemarks: oklch(from var(--era-quote-warm-base) l c h / 0.24);
+
+      --era-e4-accent: oklch(58.76% calc(0.0523 * var(--codex-chroma-scale)) 195.47);
+      --era-e4-accent-high: oklch(59.21% calc(0.134 * var(--codex-chroma-scale)) 184.92);
+      --era-e4-heading: var(--era-e4-accent);
+      --era-e4-surface: oklch(from var(--era-e4-base) calc(l * 0.62) calc(c * 0.55) h);
+      --era-e4-button: oklch(50.37% calc(0.0461 * var(--codex-chroma-scale)) 72.63);
+      --era-e4-button-hover: oklch(55.51% calc(0.019 * var(--codex-chroma-scale)) 76.82);
+      --era-e4-quotemarks: oklch(from var(--era-quote-warm-base) l c h / 0.24);
+    }
+
+    :root[data-theme='light'] {
+      /* Saturated dark mid-tones preserve era identity while clearing AA on the light page. */
+      --era-e1-accent: oklch(38% calc(0.14 * var(--codex-chroma-scale)) 11.35);
+      --era-e1-accent-high: oklch(30% calc(0.14 * var(--codex-chroma-scale)) 20.09);
+      --era-e1-heading: var(--era-e1-accent);
+      --era-e1-surface: oklch(78% calc(0.0777 * var(--codex-chroma-scale)) 20.09);
+      --era-e1-button: oklch(33.61% calc(0.0983 * var(--codex-chroma-scale)) 11.35);
+      --era-e1-button-hover: oklch(18.5% calc(0.2219 * var(--codex-chroma-scale)) 20.09);
+
+      --era-e2-accent: oklch(38% calc(0.12 * var(--codex-chroma-scale)) 112.74);
+      --era-e2-accent-high: oklch(30% calc(0.12 * var(--codex-chroma-scale)) 116.05);
+      --era-e2-heading: var(--era-e2-accent);
+      --era-e2-surface: oklch(78% calc(0.0572 * var(--codex-chroma-scale)) 116.05);
+      --era-e2-button: oklch(31.56% calc(0.1373 * var(--codex-chroma-scale)) 115.61);
+      --era-e2-button-hover: oklch(25.02% calc(0.1635 * var(--codex-chroma-scale)) 116.05);
+
+      --era-e3-accent: oklch(38% calc(0.14 * var(--codex-chroma-scale)) 348.73);
+      --era-e3-accent-high: oklch(30% calc(0.14 * var(--codex-chroma-scale)) 2.13);
+      --era-e3-heading: var(--era-e3-accent);
+      --era-e3-surface: oklch(78% calc(0.0717 * var(--codex-chroma-scale)) 2.13);
+      --era-e3-button: oklch(33.81% calc(0.1095 * var(--codex-chroma-scale)) 348.73);
+      --era-e3-button-hover: oklch(20.58% calc(0.2048 * var(--codex-chroma-scale)) 2.13);
+
+      --era-e4-accent: oklch(36% calc(0.07 * var(--codex-chroma-scale)) 195.47);
+      --era-e4-accent-high: oklch(28% calc(0.08 * var(--codex-chroma-scale)) 184.92);
+      --era-e4-heading: var(--era-e4-accent);
+      --era-e4-surface: oklch(78% calc(0.0469 * var(--codex-chroma-scale)) 184.92);
+      --era-e4-button: oklch(32.55% calc(0.0461 * var(--codex-chroma-scale)) 72.63);
+      --era-e4-button-hover: oklch(25.81% calc(0.019 * var(--codex-chroma-scale)) 76.82);
+    }
+  }
+
+  /*
+    Apply the generated eraStyle metadata in the Codex layer itself. Keeping these
+    selectors in `ion` ensures they outrank Starlight's generic link presentation.
+  */
+  .codex-two-column-content[data-era-style] {
+    --era-link: var(--sl-color-accent-high);
+    --era-link-hover: var(--sl-color-white);
+    --era-button: var(--codex-surface-raised-color);
+    --era-button-hover: var(--codex-palette-deep);
+    --era-button-label: var(--era-button-text, var(--codex-fixed-light));
+    --era-quotemarks: color-mix(in oklch, var(--codex-accent) 35%, transparent);
+    --era-icon-accent: var(--sl-color-accent-high);
+    --era-heading-accent: var(--sl-color-accent-high);
+    --era-graph-accent: var(--era-icon-accent);
+  }
+
+  .codex-two-column-content[data-era-style='e1'] {
+    --era-link: var(--era-e1-accent);
+    --era-link-hover: var(--era-e1-accent-high);
+    --era-button: var(--era-e1-button);
+    --era-button-hover: var(--era-e1-button-hover);
+    --era-quotemarks: var(--era-e1-quotemarks);
+    --era-icon-accent: var(--era-e1-accent);
+    --era-heading-accent: var(--era-e1-heading);
+    --era-graph-accent: var(--era-e1-accent);
+  }
+
+  .codex-two-column-content[data-era-style='e2'] {
+    --era-link: var(--era-e2-accent);
+    --era-link-hover: var(--era-e2-accent-high);
+    --era-button: var(--era-e2-button);
+    --era-button-hover: var(--era-e2-button-hover);
+    --era-quotemarks: var(--era-e2-quotemarks);
+    --era-icon-accent: var(--era-e2-accent);
+    --era-heading-accent: var(--era-e2-heading);
+    --era-graph-accent: var(--era-e2-accent);
+  }
+
+  .codex-two-column-content[data-era-style='e3'] {
+    --era-link: var(--era-e3-accent);
+    --era-link-hover: var(--era-e3-accent-high);
+    --era-button: var(--era-e3-button);
+    --era-button-hover: var(--era-e3-button-hover);
+    --era-quotemarks: var(--era-e3-quotemarks);
+    --era-icon-accent: var(--era-e3-accent);
+    --era-heading-accent: var(--era-e3-heading);
+    --era-graph-accent: var(--era-e3-accent);
+  }
+
+  .codex-two-column-content[data-era-style='e4'] {
+    --era-link: var(--era-e4-accent);
+    --era-link-hover: var(--era-e4-accent-high);
+    --era-button: var(--era-e4-button);
+    --era-button-hover: var(--era-e4-button-hover);
+    --era-quotemarks: var(--era-e4-quotemarks);
+    --era-icon-accent: var(--era-e4-accent);
+    --era-heading-accent: var(--era-e4-heading);
+    --era-graph-accent: var(--era-e4-accent);
+  }
+
+  .codex-two-column-content[data-era-style] :where(
+    .sl-markdown-content a,
+    .codex-breadcrumbs a,
+    .codex-sidebar-meta a,
+    .codex-sidebar-list a,
+    .calendar-date-badge a,
+    starlight-toc a
+  ) {
+    color: var(--era-link);
+  }
+
+  .codex-two-column-content[data-era-style] :where(
+    .sl-markdown-content a:hover,
+    .sl-markdown-content a:focus-visible,
+    .sl-markdown-content a[aria-current='true'],
+    .codex-breadcrumbs a:hover,
+    .codex-breadcrumbs a:focus-visible,
+    .codex-breadcrumbs a[aria-current='true'],
+    .codex-sidebar-meta a:hover,
+    .codex-sidebar-meta a:focus-visible,
+    .codex-sidebar-meta a[aria-current='true'],
+    .codex-sidebar-list a:hover,
+    .codex-sidebar-list a:focus-visible,
+    .codex-sidebar-list a[aria-current='true'],
+    .calendar-date-badge a:hover,
+    .calendar-date-badge a:focus-visible,
+    .calendar-date-badge a[aria-current='true'],
+    starlight-toc a:hover,
+    starlight-toc a:focus-visible,
+    starlight-toc a[aria-current='true']
+  ) {
+    /* ion-theme.css has a generic !important hover/current rule; era pages win here. */
+    color: var(--era-link-hover) !important;
+  }
+
+  /* Era-aware Codex action buttons keep their historical per-era control identity. */
+  .codex-two-column-content[data-era-style] .codex-link-button {
+    background: var(--era-button);
+    color: var(--era-button-label) !important;
+  }
+
+  .codex-two-column-content[data-era-style] .codex-link-button:hover,
+  .codex-two-column-content[data-era-style] .codex-link-button:focus-visible {
+    background: var(--era-button-hover);
+    color: var(--era-button-label) !important;
+  }
+
+  /* Restore the original quotation-mark treatment as an era semantic token. */
+  .codex-two-column-content[data-era-style] .sl-markdown-content blockquote::before,
+  .codex-two-column-content[data-era-style] .sl-markdown-content blockquote::after {
+    color: var(--era-quotemarks);
+  }
+
+  .codex-two-column-content[data-era-style] .codex-kicker {
+    color: var(--sl-color-white);
+  }
+
+  .codex-two-column-content[data-era-style] .codex-title-icon {
+    color: var(--era-icon-accent);
+  }
+
+  .codex-two-column-content[data-era-style] .sl-markdown-content :is(h2, h3) > .codex-heading-icon {
+    color: var(--era-heading-accent);
+  }
+
+  @media (forced-colors: active) {
+    .sl-markdown-content h2::before {
+      background: CanvasText;
+    }
+
+    .codex-two-column-content[data-era-style] .codex-link-button {
+      background: ButtonFace;
+      color: ButtonText !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Persistent era context
+   Origin: era-context.css
+
+   Styles context controls, continuity navigation and scoped sidebars.
+   -------------------------------------------------------------------------- */
+
+@layer ion {
+  .codex-era-context-control {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    margin-inline-end: .4rem;
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+  }
+
+  .codex-era-context-control[hidden] { display: none !important; }
+
+  .codex-era-context-current,
+  .codex-era-context-exit,
+  .codex-continuity-chip,
+  .codex-universal-badge {
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: 999px;
+    padding: .22rem .58rem;
+    text-decoration: none;
+  }
+
+  .codex-era-context-current {
+    color: var(--era-link, var(--sl-color-accent-high));
+    background: color-mix(in oklch, var(--era-link, var(--sl-color-accent-high)) 10%, transparent);
+    font-weight: 700;
+  }
+
+  .codex-era-context-exit {
+    color: var(--sl-color-gray-2);
+    background: transparent;
+  }
+
+  .codex-era-context-exit-icon { display: none; }
+
+  .codex-era-context-exit:hover,
+  .codex-era-context-exit:focus-visible { color: var(--sl-color-white); }
+
+  .codex-continuity-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+    margin-block: .7rem 1.15rem;
+  }
+
+  .codex-continuity-switcher__label {
+    margin-inline-end: .15rem;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .codex-continuity-chip {
+    color: var(--sl-color-gray-2);
+    background: var(--sl-color-bg-nav);
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+  }
+
+  .codex-continuity-chip:hover,
+  .codex-continuity-chip:focus-visible { color: var(--sl-color-white); }
+
+  .codex-continuity-chip.unavailable {
+    color: var(--sl-color-gray-4);
+    background: transparent;
+    border-style: dashed;
+    cursor: not-allowed;
+    opacity: .65;
+  }
+
+  .codex-continuity-chip.active {
+    border-color: var(--era-link, var(--sl-color-accent-high));
+    color: var(--era-link, var(--sl-color-accent-high));
+    font-weight: 700;
+  }
+
+  .codex-universal-badge {
+    display: inline-flex;
+    width: max-content;
+    margin-block: .65rem 1rem;
+    border: 1px solid var(--codex-border-strong);
+    border-radius: 0;
+    color: var(--sl-color-gray-2);
+    background: var(--sl-color-bg-nav);
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  /*
+   * Navigation stays deliberately black in both themes, but the Universal badge
+   * lives in editorial content. In light mode treat it as quiet taxonomy rather
+   * than inheriting the fixed-navigation surface.
+   */
+  :root[data-theme='light'] .codex-universal-badge {
+    border-color: color-mix(in oklch, var(--codex-palette-deep) 68%, transparent);
+    color: var(--codex-palette-ink);
+    background: color-mix(in oklch, var(--codex-palette-light) 58%, transparent);
+  }
+
+  .codex-sidebar-era-scope { display: none; }
+  :root[data-era-context='CITADEL'] .codex-sidebar-global,
+  :root[data-era-context='SMOG'] .codex-sidebar-global,
+  :root[data-era-context='NEARSIGHT'] .codex-sidebar-global,
+  :root[data-era-context='ENTROPY'] .codex-sidebar-global { display: none; }
+
+  :root[data-era-context='CITADEL'] .codex-sidebar-era-scope[data-era-sidebar='CITADEL'],
+  :root[data-era-context='SMOG'] .codex-sidebar-era-scope[data-era-sidebar='SMOG'],
+  :root[data-era-context='NEARSIGHT'] .codex-sidebar-era-scope[data-era-sidebar='NEARSIGHT'],
+  :root[data-era-context='ENTROPY'] .codex-sidebar-era-scope[data-era-sidebar='ENTROPY'] { display: block; }
+
+  .codex-sidebar-era-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin: 0 .35rem .75rem;
+    padding-block-end: .7rem;
+    border-bottom: 1px solid var(--sl-color-hairline-light);
+  }
+
+  .codex-sidebar-era-toolbar strong {
+    color: var(--era-link, var(--sl-color-accent-high));
+    letter-spacing: .06em;
+  }
+
+  .codex-sidebar-era-toolbar a {
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+  }
+
+  :root[data-era-context='CITADEL'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e1-accent);
+    --era-link-hover: var(--era-e1-accent-high);
+    --era-heading-accent: var(--era-e1-heading);
+    --era-icon-accent: var(--era-e1-accent);
+  }
+  :root[data-era-context='SMOG'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e2-accent);
+    --era-link-hover: var(--era-e2-accent-high);
+    --era-heading-accent: var(--era-e2-heading);
+    --era-icon-accent: var(--era-e2-accent);
+  }
+  :root[data-era-context='NEARSIGHT'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e3-accent);
+    --era-link-hover: var(--era-e3-accent-high);
+    --era-heading-accent: var(--era-e3-heading);
+    --era-icon-accent: var(--era-e3-accent);
+  }
+  :root[data-era-context='ENTROPY'] .codex-two-column-content:not([data-era-style]) {
+    --era-link: var(--era-e4-accent);
+    --era-link-hover: var(--era-e4-accent-high);
+    --era-heading-accent: var(--era-e4-heading);
+    --era-icon-accent: var(--era-e4-accent);
+  }
+
+  @media (max-width: 44rem) {
+    .codex-era-context-control {
+      gap: .3rem;
+      margin-inline-end: 0;
+    }
+    .codex-era-context-current { display: none; }
+    .codex-era-context-exit {
+      display: inline-grid;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex: 0 0 2.5rem;
+      place-items: center;
+      padding: 0;
+    }
+    .codex-era-context-exit-icon {
+      display: block;
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+    .codex-era-context-exit [data-era-exit-label] { display: none; }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Era-aware search scope
+   Origin: telescope-scope.css
+
+   Shows the active era inside Telescope search.
+   -------------------------------------------------------------------------- */
+
+@layer ion {
+  .telescope__scope {
+    margin: -.1rem 1rem .55rem;
+    color: var(--sl-color-gray-3);
+    font-family: var(--sl-font-system);
+    font-size: var(--sl-text-xs);
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+
+  :root[data-era-context='CITADEL'] #telescope-dialog .telescope__scope,
+  :root[data-era-context='SMOG'] #telescope-dialog .telescope__scope,
+  :root[data-era-context='NEARSIGHT'] #telescope-dialog .telescope__scope,
+  :root[data-era-context='ENTROPY'] #telescope-dialog .telescope__scope {
+    color: var(--era-link, var(--sl-color-accent-high));
+  }
+}

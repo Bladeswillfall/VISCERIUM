@@ -1,0 +1,297 @@
+/* ==========================================================================
+   Chronos renderer integration
+
+   Consolidated from chronos-native.css, chronos.css. Section order is intentional:
+   later sections may refine or override earlier ownership layers. Keep the
+   provenance comments when moving rules so cascade-sensitive behaviour remains
+   understandable in isolation.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Native renderer adaptation
+   Origin: chronos-native.css
+
+   Maps Chronos and vis-timeline surfaces into the Codex visual system.
+   -------------------------------------------------------------------------- */
+
+/*
+ * Preserve Chronos as the primary timeline UI.
+ * VISCERIUM contributes theme tokens and metadata states without replacing
+ * Chronos item geometry, range treatment, group layout or refit control.
+ */
+
+.vc-timeline-app,
+.vc-chronos-embed,
+.vc-chronos-core.chronos-timeline-container,
+.vc-timeline-app .chronos-timeline-container,
+.vc-chronos-embed .chronos-timeline-container {
+  --chronos-bg-primary: var(--codex-bg);
+  --chronos-bg-secondary: var(--codex-surface-raised-color);
+  --chronos-canvas: color-mix(in oklch, var(--chronos-bg-primary) 90%, var(--codex-fixed-dark));
+  --chronos-canvas-raised: color-mix(in oklch, var(--chronos-bg-secondary) 92%, var(--codex-fixed-dark));
+  --chronos-canvas-muted: color-mix(in oklch, var(--chronos-bg-secondary) 76%, var(--chronos-bg-primary));
+  --chronos-grid-minor: color-mix(in oklch, var(--codex-border) 52%, transparent);
+  --chronos-grid-major: color-mix(in oklch, var(--codex-border-strong) 68%, transparent);
+  --chronos-text-normal: var(--sl-color-white);
+  --chronos-text-muted: var(--sl-color-gray-3);
+  --chronos-text-on-accent: var(--codex-fixed-light);
+  --chronos-accent: var(--sl-color-accent-high);
+  --chronos-accent-hover: color-mix(in oklch, var(--sl-color-accent-high) 82%, var(--codex-fixed-light));
+  --chronos-accent-alpha: color-mix(in oklch, var(--sl-color-accent-high) 20%, transparent);
+  --chronos-border: var(--codex-border);
+  --chronos-border-active: color-mix(in oklch, var(--sl-color-accent-high) 52%, transparent);
+  --chronos-interactive: var(--sl-color-accent-high);
+  --chronos-interactive-hover: color-mix(in oklch, var(--sl-color-accent-high) 82%, var(--codex-fixed-light));
+  --chronos-icon-color: var(--sl-color-gray-3);
+  --chronos-bg-text: var(--sl-color-white);
+  --chronos-radius: 6px;
+  --chronos-radius-small: 3px;
+  color-scheme: dark;
+}
+
+/*
+ * Starlight's article rhythm applies sibling spacing inside markdown content.
+ * Every vis-timeline structural layer and event item participates in its own
+ * absolute-positioned layout; a host prose margin changes the painted geometry
+ * without changing vis-timeline's measurements. The resulting 1rem offsets
+ * produce fake row gaps and clip the final item. Keep that rhythm completely
+ * outside the Chronos renderer boundary.
+ */
+.vc-timeline-app .chronos-timeline-container :is(
+  .vis-itemset > .vis-background,
+  .vis-itemset > .vis-foreground,
+  .vis-itemset > .vis-axis,
+  .vis-labelset > .vis-label,
+  .vis-foreground > .vis-group,
+  .vis-background > .vis-group,
+  .vis-axis > .vis-group,
+  .vis-group > .vis-item,
+  .vis-item > .vis-item-content
+),
+.vc-chronos-embed .chronos-timeline-container :is(
+  .vis-itemset > .vis-background,
+  .vis-itemset > .vis-foreground,
+  .vis-itemset > .vis-axis,
+  .vis-labelset > .vis-label,
+  .vis-foreground > .vis-group,
+  .vis-background > .vis-group,
+  .vis-axis > .vis-group,
+  .vis-group > .vis-item,
+  .vis-item > .vis-item-content
+) {
+  margin: 0 !important;
+}
+
+/*
+ * vis-timeline ships several pale panel surfaces that sit below Chronos's
+ * theme variables. Keep Chronos geometry, but explicitly seat those panels in
+ * the Codex dark palette so the canvas does not appear as an embedded light UI.
+ */
+.vc-timeline-app .chronos-timeline-container,
+.vc-chronos-embed .chronos-timeline-container,
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-timeline,
+.vc-chronos-embed .vis-timeline {
+  color: var(--chronos-text-normal);
+  background-color: var(--chronos-canvas) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) :is(
+  .vis-panel.vis-center,
+  .vis-panel.vis-background,
+  .vis-panel.vis-foreground,
+  .vis-content
+),
+.vc-chronos-embed :is(
+  .vis-panel.vis-center,
+  .vis-panel.vis-background,
+  .vis-panel.vis-foreground,
+  .vis-content
+) {
+  background-color: var(--chronos-canvas) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) :is(
+  .vis-panel.vis-left,
+  .vis-panel.vis-right,
+  .vis-panel.vis-top,
+  .vis-panel.vis-bottom,
+  .vis-labelset,
+  .vis-time-axis
+),
+.vc-chronos-embed :is(
+  .vis-panel.vis-left,
+  .vis-panel.vis-right,
+  .vis-panel.vis-top,
+  .vis-panel.vis-bottom,
+  .vis-labelset,
+  .vis-time-axis
+) {
+  color: var(--chronos-text-muted);
+  background-color: var(--chronos-canvas-raised) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-label,
+.vc-chronos-embed .vis-label {
+  color: var(--chronos-text-muted);
+  border-color: var(--chronos-border) !important;
+  background-color: var(--chronos-canvas-muted) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-label .vis-inner,
+.vc-chronos-embed .vis-label .vis-inner,
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-time-axis .vis-text,
+.vc-chronos-embed .vis-time-axis .vis-text {
+  color: var(--chronos-text-muted) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-grid.vis-minor,
+.vc-chronos-embed .vis-grid.vis-minor {
+  border-color: var(--chronos-grid-minor) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-grid.vis-major,
+.vc-chronos-embed .vis-grid.vis-major {
+  border-color: var(--chronos-grid-major) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) :is(.vis-panel, .vis-timeline),
+.vc-chronos-embed :is(.vis-panel, .vis-timeline) {
+  border-color: var(--chronos-border) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-shadow,
+.vc-chronos-embed .vis-shadow {
+  box-shadow: 0 0 1rem color-mix(in oklch, var(--codex-fixed-dark) 72%, transparent) !important;
+}
+
+/* Native Markdown embeds should look like Chronos, not a second Codex card. */
+.vc-chronos-embed {
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: var(--chronos-radius, 6px);
+  background: transparent;
+  box-shadow: none;
+}
+
+.vc-chronos-embed-canvas {
+  min-height: 20rem;
+  border: 0;
+  background: var(--chronos-canvas);
+}
+
+/* Undo the earlier host replacement of Chronos's refit control. */
+.vc-chronos-core .chronos-timeline-refit-button,
+.vc-chronos-host .chronos-timeline-refit-button,
+.vc-chronos-embed .chronos-timeline-refit-button {
+  top: auto;
+  right: 5px;
+  bottom: 2px;
+  width: auto;
+  height: auto;
+  padding: 2px 5px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--chronos-icon-color);
+  background: transparent;
+  box-shadow: none;
+}
+
+.vc-chronos-core .chronos-timeline-refit-button:hover,
+.vc-chronos-core .chronos-timeline-refit-button:focus-visible,
+.vc-chronos-embed .chronos-timeline-refit-button:hover,
+.vc-chronos-embed .chronos-timeline-refit-button:focus-visible {
+  background: color-mix(in oklch, var(--sl-color-gray-3) 15%, transparent);
+}
+
+.vc-chronos-core .chronos-timeline-refit-button svg,
+.vc-chronos-host .chronos-timeline-refit-button svg,
+.vc-chronos-embed .chronos-timeline-refit-button svg {
+  width: 16px;
+  height: auto;
+}
+
+/* Let Chronos own item shapes and parser-assigned colours. */
+.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item,
+.vc-chronos-embed .vis-item {
+  border-radius: var(--chronos-radius-small, 3px);
+  border-color: var(--chronos-accent);
+  color: var(--chronos-text-on-accent);
+  box-shadow: none;
+  font-family: inherit;
+}
+
+.vc-timeline-app .vc-timeline-canvas .vis-item.vis-box.vc-timeline-item,
+.vc-timeline-app .vc-timeline-canvas .vis-item.vis-range.vc-timeline-item,
+.vc-chronos-embed .vis-item.vis-box,
+.vc-chronos-embed .vis-item.vis-range {
+  border-color: transparent;
+  color: var(--chronos-text-on-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Host framing
+   Origin: chronos.css
+
+   Owns embedded Chronos sizing, fallback content and reduced motion.
+   -------------------------------------------------------------------------- */
+
+/* Host-only framing for Chronos. Item, group, period and control styling remains native. */
+
+.vc-chronos-embed,
+.vc-chronos-core {
+  position: relative;
+  min-width: 0;
+}
+
+.vc-chronos-embed {
+  margin-block: 1.5rem;
+}
+
+.vc-chronos-embed-canvas {
+  position: relative;
+  min-height: 20rem;
+  touch-action: pan-y pinch-zoom;
+}
+
+.vc-chronos-source-fallback {
+  padding: .8rem;
+  color: var(--chronos-text-muted);
+}
+
+.vc-chronos-source-fallback > :first-child {
+  margin-top: 0;
+}
+
+.vc-chronos-source-fallback pre {
+  max-height: 20rem;
+  overflow: auto;
+}
+
+.vc-chronos-credit {
+  margin-inline-start: auto;
+  color: var(--sl-color-gray-4);
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 40rem) {
+  .vc-chronos-embed {
+    margin-inline: calc(var(--sl-content-pad-x, 1rem) * -.35);
+  }
+
+  .vc-chronos-embed-canvas {
+    min-height: 16rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-chronos-core *,
+  .vc-chronos-embed * {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

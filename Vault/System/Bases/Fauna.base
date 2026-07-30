@@ -1,0 +1,77 @@
+filters:
+  and:
+    - type == "fauna"
+    - '!file.inFolder("Templates")'
+formulas:
+  era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
+properties:
+  title:
+    displayName: Fauna
+  description:
+    displayName: Identity
+  entity_id:
+    displayName: Continuity ID
+  formula.era_context:
+    displayName: Era / scope
+  fauna_kind:
+    displayName: Kind
+  size_class:
+    displayName: Size
+  locations:
+    displayName: Locations
+  biomes:
+    displayName: Biomes
+  rarity:
+    displayName: Rarity
+  threat_level:
+    displayName: Threat
+  encounter_behaviour:
+    displayName: Encounter behaviour
+  human_relevance:
+    displayName: Why people care
+  development_level:
+    displayName: Development
+  image:
+    displayName: Artwork
+views:
+  - type: cards
+    name: Fauna Cards
+    order:
+      - title
+      - description
+      - formula.era_context
+      - fauna_kind
+      - size_class
+      - locations
+      - rarity
+    sort:
+      - property: title
+        direction: ASC
+    cardSize: 260
+    imageFit: cover
+    imageAspectRatio: 1.5
+    image: image
+  - type: table
+    name: Database
+    order:
+      - title
+      - entity_id
+      - formula.era_context
+      - fauna_kind
+      - size_class
+      - locations
+      - biomes
+      - rarity
+      - threat_level
+      - signs_of_presence
+      - encounter_behaviour
+      - ecology_summary
+      - human_relevance
+      - cultural_significance
+      - story_complication
+      - development_level
+      - status
+      - file.mtime
+    sort:
+      - property: title
+        direction: ASC

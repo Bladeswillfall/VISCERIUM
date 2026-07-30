@@ -1,0 +1,26 @@
+/*
+ * Blockquote styling
+ * Gives quoted text a clear but restrained visual boundary.
+ */
+
+.markdown-rendered blockquote {
+  margin-block: 1.25em;
+  padding: 0.65em 1em;
+  border-inline-start: 3px solid var(--interactive-accent);
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--background-secondary) 72%, transparent);
+  color: var(--text-muted);
+}
+
+.markdown-rendered blockquote > :first-child {
+  margin-top: 0;
+}
+
+.markdown-rendered blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.cm-s-obsidian .HyperMD-quote {
+  border-inline-start-color: var(--interactive-accent);
+  color: var(--text-muted);
+}

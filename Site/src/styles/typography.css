@@ -1,0 +1,304 @@
+:root {
+  --vc-font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
+  --vc-font-body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --vc-font-ui: 'IBM Plex Sans', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --vc-font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --sl-font: var(--vc-font-ui);
+  --sl-font-mono: var(--vc-font-mono);
+}
+
+html,
+body,
+.sl-markdown-content {
+  font-family: var(--vc-font-body);
+}
+
+/* Cinzel is the Codex's restrained display face. Keep every current use at its native 400 weight and never synthesize a heavier variant. */
+:where(
+  .site-title,
+  .header .site-title,
+  .sl-markdown-content h1,
+  .content-panel h1,
+  h1#_top,
+  .codex-sidebar-card h2,
+  .calendar-module__intro h2,
+  .support-hero h1,
+  .support-section h2,
+  .support-note h2,
+  .sl-markdown-content blockquote::before,
+  .sl-markdown-content blockquote::after,
+  .home-hero h1,
+  .home-era-card h2,
+  .home-section__heading,
+  .home-tech-era__index,
+  .home-tech-era strong,
+  .home-stat dd,
+  .home-route-card__symbol,
+  .home-route-card h3
+) {
+  font-weight: 400 !important;
+  font-synthesis-weight: none;
+}
+
+.site-title,
+.header .site-title,
+.sl-markdown-content h1,
+.content-panel h1,
+h1#_top {
+  font-family: var(--vc-font-display);
+  font-weight: 400;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+.sl-markdown-content h2,
+.content-panel h2 {
+  font-family: var(--vc-font-body);
+  font-weight: 400;
+  letter-spacing: .01em;
+}
+
+.sl-markdown-content h3,
+.sl-markdown-content h4,
+.sl-markdown-content h5,
+.sl-markdown-content h6,
+.content-panel h3,
+.content-panel h4,
+.content-panel h5,
+.content-panel h6 {
+  font-family: var(--vc-font-ui);
+  font-weight: 400;
+  letter-spacing: .015em;
+}
+
+/*
+  In-article Era Spine hierarchy. The generated page title and the bespoke
+  landing-page composition are deliberately excluded for separate design passes.
+*/
+.sl-markdown-content:not(:has(.home-gateway)) h1 {
+  margin-block: 3.5rem 1.25rem;
+  font-size: clamp(2.35rem, 5vw, 4.8rem);
+  line-height: .92;
+}
+
+.sl-markdown-content:not(:has(.home-gateway)) h2 {
+  position: relative;
+  margin-block: 3.5rem 1rem;
+  padding-inline-start: 1rem;
+  border: 0;
+  font-family: var(--vc-font-display);
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  font-weight: 400;
+  letter-spacing: .01em;
+  line-height: 1.08;
+}
+
+.sl-markdown-content:not(:has(.home-gateway)) h2::before {
+  content: '';
+  position: absolute;
+  inset-block: .12em .08em;
+  inset-inline-start: 0;
+  inline-size: .3rem;
+  background: var(--era-heading-accent, var(--sl-color-accent-high));
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+  pointer-events: none;
+}
+
+.sl-markdown-content:not(:has(.home-gateway)) h3 {
+  margin-block: 2.4rem .75rem;
+  color: var(--era-heading-accent, var(--sl-color-accent-high));
+  font-family: var(--vc-font-ui);
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.sl-markdown-content:not(:has(.home-gateway)) h4 {
+  margin-block: 1.9rem .55rem;
+  font-family: var(--vc-font-body);
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.sl-markdown-content:not(:has(.home-gateway)) h5 {
+  margin-block: 1.5rem .45rem;
+  color: var(--sl-color-gray-3);
+  font-family: var(--vc-font-ui);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.sl-markdown-content:not(:has(.home-gateway)) h6 {
+  margin-block: 1.35rem .4rem;
+  color: var(--sl-color-gray-4);
+  font-family: var(--vc-font-ui);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+/* Compose headings across the site and avoid weak final lines in editorial copy. */
+:where(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
+}
+
+main :where(p, blockquote, dd, figcaption),
+.sl-markdown-content li {
+  text-wrap: pretty;
+}
+
+nav,
+button,
+input,
+select,
+textarea,
+.header,
+.sidebar-pane,
+.right-sidebar,
+.pagination-links,
+.codex-sidebar-meta,
+.codex-breadcrumbs,
+.codex-warning,
+.ion-codex-footer,
+figcaption,
+table th {
+  font-family: var(--vc-font-ui);
+}
+
+p,
+li,
+blockquote,
+table td,
+.sl-markdown-content dd {
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+
+code,
+pre,
+kbd,
+samp,
+.expressive-code,
+.expressive-code pre,
+.expressive-code code {
+  font-family: var(--vc-font-mono);
+}
+
+.sl-markdown-content code:not(pre code) {
+  font-size: .92em;
+}
+
+/* Build-time KaTeX and codex equation panels. */
+.cx-equation {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--codex-accent-soft);
+  border-radius: .5rem;
+  background: var(--codex-surface-raised-color);
+}
+
+.cx-equation-title {
+  margin: 0 0 .75rem;
+  color: var(--sl-color-accent-high);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-sm);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cx-equation > :first-child {
+  margin-top: 0;
+}
+
+.cx-equation > :last-child {
+  margin-bottom: 0;
+}
+
+/* Native Markdown quotations. */
+.sl-markdown-content blockquote {
+  position: relative;
+  margin-block: 2rem;
+  margin-inline: clamp(.25rem, 2vw, 1.75rem);
+  padding: 1.25rem clamp(1.25rem, 3vw, 2rem) 1.2rem clamp(2.5rem, 5vw, 3.75rem);
+  overflow: visible;
+  border: 1px solid color-mix(in oklch, var(--codex-accent) 20%, transparent);
+  border-inline-start-color: color-mix(in oklch, var(--codex-accent) 35%, transparent);
+  border-radius: .1rem;
+  background: var(--codex-surface);
+  box-shadow:
+    0 1.25rem 2.5rem color-mix(in oklch, var(--codex-shadow-color) 18%, transparent),
+    inset 0 0 0 1px color-mix(in oklch, var(--codex-fixed-light) 1.8%, transparent);
+  color: var(--sl-color-gray-2);
+  font-family: var(--vc-font-body);
+  font-size: clamp(1.05rem, 1.25vw, 1.28rem);
+  line-height: 1.75;
+}
+
+.sl-markdown-content blockquote::before,
+.sl-markdown-content blockquote::after {
+  position: absolute;
+  z-index: 0;
+  color: color-mix(in oklch, var(--codex-accent) 35%, transparent);
+  font-family: var(--vc-font-display);
+  font-size: clamp(3.25rem, 7vw, 5.25rem);
+  font-weight: 400;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.sl-markdown-content blockquote::before {
+  content: '“';
+  inset-block-start: -.55rem;
+  inset-inline-start: .45rem;
+}
+
+.sl-markdown-content blockquote::after {
+  content: '”';
+  inset-block-end: -4.6rem;
+  inset-inline-end: .5rem;
+}
+
+.sl-markdown-content blockquote > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sl-markdown-content blockquote > :first-child {
+  margin-top: 0;
+}
+
+.sl-markdown-content blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.sl-markdown-content blockquote p {
+  margin-block: .75rem;
+}
+
+.sl-markdown-content blockquote :is(cite, footer) {
+  display: block;
+  margin-block-start: .75rem;
+  color: var(--sl-color-gray-3);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-sm);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: .025em;
+  text-align: end;
+}
+
+.sl-markdown-content blockquote :is(cite, footer)::before {
+  content: '— ';
+}

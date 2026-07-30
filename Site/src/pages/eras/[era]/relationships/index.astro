@@ -1,0 +1,36 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import RelationshipGraph from '../../../../components/RelationshipGraph.astro';
+import graph from '../../../../data/relationships.json';
+import { HISTORICAL_ERAS } from '../../../../lib/era-context.mjs';
+
+export function getStaticPaths() {
+  return HISTORICAL_ERAS.map((era) => ({ params: { era: era.toLowerCase() }, props: { era } }));
+}
+
+const { era } = Astro.props;
+const nodes = (graph.nodes ?? []).filter((node) => node.era === era || node.era === 'Universal');
+const nodeIds = new Set(nodes.map((node) => node.id));
+const edges = (graph.edges ?? []).filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target));
+const relationTypes = (graph.relationTypes ?? []).map((relation) => ({
+  ...relation,
+  count: edges.filter((edge) => edge.type === relation.id).length,
+})).filter((relation) => relation.count > 0);
+const scopedGraph = { nodes, edges, relationTypes };
+---
+
+<StarlightPage frontmatter={{
+  title: `${era} Relationships`,
+  description: `Explore explicit relationships relevant to ${era}, including Universal material.`,
+  era,
+  explorationPage: true,
+  tableOfContents: false,
+  giscus: false,
+}}>
+  <section class="relationship-page">
+    <p class="atlas__eyebrow">Explore {era}</p>
+    <h1>Relationships</h1>
+    <p>This view contains only structured relationships whose participating entities are available in {era} or are explicitly Universal. Exit {era} mode to explore the complete cross-era graph.</p>
+    <RelationshipGraph graph={scopedGraph} />
+  </section>
+</StarlightPage>

@@ -1,0 +1,130 @@
+---
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+
+function readDate(value) {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(String(value));
+  return Number.isNaN(date.valueOf()) ? null : date;
+}
+
+function entryDate(data) {
+  return readDate(data.updated) ?? readDate(data.date) ?? readDate(data.published);
+}
+
+function routeFor(entry) {
+  const slug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/i, '');
+  return slug === 'index' ? '/' : `/${String(slug).replace(/^\/+|\/+$/g, '')}/`;
+}
+
+function asLabel(value) {
+  if (!value) return null;
+  return Array.isArray(value) ? value.join(', ') : String(value);
+}
+
+function changeKind(data) {
+  const published = readDate(data.published);
+  const updated = readDate(data.updated ?? data.date);
+  if (published && updated && updated.valueOf() > published.valueOf()) return 'Updated';
+  return published && !updated ? 'Published' : 'Updated';
+}
+
+const entries = (await getCollection('docs', ({ data }) => (
+  data.status === 'published'
+  && data.type !== 'category'
+  && data.type !== 'system'
+)))
+  .map((entry) => ({ entry, date: entryDate(entry.data), kind: changeKind(entry.data) }))
+  .filter(({ date }) => date)
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf() || a.entry.data.title.localeCompare(b.entry.data.title))
+  .slice(0, 30);
+
+const formatter = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<StarlightPage frontmatter={{ title: "What's New", description: 'Recently published and updated VISCERIUM Codex pages.' }}>
+  <section class="whats-new-page">
+    <header class="whats-new-hero">
+      <p class="codex-kicker">Codex activity</p>
+      <h1>What’s New</h1>
+      <p>
+        This page is generated from public canon metadata during each build. Add <code>published</code>, <code>updated</code>,
+        or <code>date</code> to a lore note; when no date is supplied, the sync process uses the latest available Git commit date.
+      </p>
+    </header>
+
+    {entries.length > 0 ? (
+      <ol class="whats-new-list">
+        {entries.map(({ entry, date, kind }) => {
+          const era = asLabel(entry.data.era);
+          const type = asLabel(entry.data.type);
+          return (
+            <li class="whats-new-entry">
+              <div class="whats-new-entry__meta">
+                <time datetime={date.toISOString()}>{formatter.format(date)}</time>
+                <span>{kind}</span>
+                {type && <span>{type}</span>}
+                {era && <span>{era}</span>}
+              </div>
+              <h2><a href={routeFor(entry)}>{entry.data.title}</a></h2>
+              <p>{entry.data.description}</p>
+            </li>
+          );
+        })}
+      </ol>
+    ) : (
+      <div class="codex-warning">
+        <p><strong>No dated public updates are available yet.</strong></p>
+        <p>Add a <code>published</code> or <code>updated</code> date to a canon note, then run the normal sync/build.</p>
+      </div>
+    )}
+  </section>
+</StarlightPage>
+
+<style>
+  .whats-new-page {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .whats-new-hero {
+    max-width: 52rem;
+  }
+
+  .whats-new-list {
+    display: grid;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .whats-new-entry {
+    padding: 1.25rem;
+    border: 1px solid var(--sl-color-hairline-light);
+    background: var(--codex-surface-raised-color);
+  }
+
+  .whats-new-entry h2 {
+    margin-block: .45rem .35rem;
+    font-size: var(--sl-text-xl);
+  }
+
+  .whats-new-entry p {
+    margin: 0;
+  }
+
+  .whats-new-entry__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem .75rem;
+    font-family: var(--sl-font-system-mono);
+    font-size: var(--sl-text-xs);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--sl-color-gray-3);
+  }
+</style>

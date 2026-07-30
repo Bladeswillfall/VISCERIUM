@@ -1,0 +1,20 @@
+/*
+ * Paragraph spacing
+ * Adds breathing room to prose without changing note structure.
+ */
+
+.markdown-reading-view .markdown-rendered {
+  line-height: 1.68;
+}
+
+.markdown-reading-view .markdown-rendered p {
+  margin-block: 0 1.05em;
+}
+
+.markdown-reading-view .markdown-rendered :is(ul, ol) {
+  margin-block: 0.65em 1em;
+}
+
+.markdown-reading-view .markdown-rendered li + li {
+  margin-top: 0.22em;
+}

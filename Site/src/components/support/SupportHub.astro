@@ -1,0 +1,70 @@
+---
+import { Badge, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { githubSupportLinks, monetarySupportLinks, socialLinks } from '../../config/supportLinks.mjs';
+import LocalIcon from '../LocalIcon.astro';
+---
+
+<section class="support-page">
+  <header class="support-hero">
+    <h1>Support the VISCERIUM Codex</h1>
+    <p>Report issues, suggest corrections, support continued development, or find official channels as they come online.</p>
+  </header>
+
+  <section class="support-section" aria-labelledby="improve-codex-title">
+    <header>
+      <h2 id="improve-codex-title">Help improve the Codex</h2>
+      <p>GitHub keeps bugs, corrections, and feature requests public and trackable.</p>
+    </header>
+    <CardGrid>
+      {githubSupportLinks.map((link) => (
+        <LinkCard
+          title={link.title}
+          description={link.text}
+          href={link.href}
+          target="_blank"
+          rel="noreferrer"
+        />
+      ))}
+    </CardGrid>
+  </section>
+
+  <section class="support-section" aria-labelledby="support-project-title">
+    <header>
+      <h2 id="support-project-title">Support the project</h2>
+      <p>These routes will open once the public supporter structure is ready.</p>
+    </header>
+    <div class="support-placeholders">
+      {monetarySupportLinks.map((link) => (
+        <div>
+          <LocalIcon name={link.icon} />
+          <span><strong>{link.title}</strong><small>{link.text}</small></span>
+          <Badge text="Coming soon" variant="note" />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="support-section" aria-labelledby="socials-title">
+    <header>
+      <h2 id="socials-title">Official socials</h2>
+      <p>Reserved account slots remain visible until each official channel is active.</p>
+    </header>
+    <ul class="support-socials">
+      {socialLinks.map((link) => (
+        <li aria-label={`${link.label} coming soon`}>
+          <LocalIcon name={link.icon} />
+          <span>{link.label}</span>
+          <small>Coming soon</small>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="support-contact" aria-labelledby="private-contact-title">
+    <div>
+      <h2 id="private-contact-title">Need to contact privately?</h2>
+      <p>Use the contact page for collaboration, rights or credit concerns, and sensitive questions.</p>
+    </div>
+    <a class="support-button" href="/contact/">Contact us</a>
+  </section>
+</section>
