@@ -13,9 +13,9 @@ const feedMaxItems = Number.parseInt(env.PUBLIC_FEED_MAX_ITEMS ?? '50', 10);
 const ga4MeasurementId = env.PUBLIC_GA4_MEASUREMENT_ID?.trim() ?? '';
 const cloudflareAnalyticsToken = env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN?.trim() ?? '';
 const giscusRepo = env.PUBLIC_GISCUS_REPO?.trim() || 'Bladeswillfall/VISCERIUM';
-const giscusRepoId = env.PUBLIC_GISCUS_REPO_ID?.trim() ?? '';
-const giscusCategory = env.PUBLIC_GISCUS_CATEGORY?.trim() ?? '';
-const giscusCategoryId = env.PUBLIC_GISCUS_CATEGORY_ID?.trim() ?? '';
+const giscusRepoId = env.PUBLIC_GISCUS_REPO_ID?.trim() || 'R_kgDOTOiQ7g';
+const giscusCategory = env.PUBLIC_GISCUS_CATEGORY?.trim() || 'Comments';
+const giscusCategoryId = env.PUBLIC_GISCUS_CATEGORY_ID?.trim() || 'DIC_kwDOTOiQ7s4DCYjH';
 const contactFormEndpoint = env.PUBLIC_CONTACT_FORM_ENDPOINT?.trim() ?? '';
 const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? '';
 
@@ -64,8 +64,11 @@ export default {
     google: env.PUBLIC_GOOGLE_SITE_VERIFICATION?.trim() ?? '',
   },
   giscus: {
+    // Match the proven deployment behaviour from the previous Codex: the public
+    // integration is available without dashboard variables, with an explicit
+    // value of 0 retained as an emergency off switch.
     enabled:
-      env.PUBLIC_GISCUS_ENABLED === '1'
+      env.PUBLIC_GISCUS_ENABLED !== '0'
       && giscusRepo === 'Bladeswillfall/VISCERIUM'
       && Boolean(giscusRepoId && giscusCategory && giscusCategoryId),
     repo: giscusRepo,
