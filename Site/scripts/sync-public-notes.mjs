@@ -9,6 +9,7 @@ import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
 import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';
+import { resolveGiscusForPage } from '../src/lib/page-kind.mjs';
 
 const siteRoot = process.cwd();
 const sourceDir = path.resolve(siteRoot, siteConfig.loreSourceDir);
@@ -125,6 +126,7 @@ function stringifyFrontmatter(frontmatter, generated) {
   for (const [key, value] of Object.entries(generated.assets ?? {})) setField(key, value);
   if (generated.links?.length && !lines.some((line) => line.startsWith('links:'))) {
     lines.push(`links: ${JSON.stringify(generated.links)}`);
+  setField('giscus', generated.giscus);
   }
   setField('sourcePath', JSON.stringify(generated.sourcePath));
 
@@ -483,6 +485,7 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
     type: parsed.data.type,
     era: parsed.data.era,
     eraStyle: parsed.data.eraStyle,
+    giscus: resolveGiscusForPage(parsed.data, slug),
     links: graphLinks(parsed.data, slug, file, parsed),
     sourcePath,
     assets: frontmatterAssets,

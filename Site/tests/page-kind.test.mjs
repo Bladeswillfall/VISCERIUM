@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { classifyCodexPage } from '../src/lib/page-kind.mjs';
+import {
+  classifyCodexPage,
+  resolveGiscusForPage,
+} from '../src/lib/page-kind.mjs';
 
 test('standard lore entries retain article presentation', () => {
   const result = classifyCodexPage({ type: 'faction', slug: 'eras/citadel/okse-dominion' });
@@ -39,4 +42,37 @@ test('category, Start Here and composed utility pages are structural', () => {
   assert.equal(classifyCodexPage({ type: 'timeline', slug: 'eras/citadel/timeline' }).isStructural, true);
   assert.equal(classifyCodexPage({ type: 'article', slug: 'custom', explorationPage: true }).isStructural, true);
   assert.equal(classifyCodexPage({ type: 'article', slug: 'timeline', timelinePage: true }).isStructural, true);
+});
+test('Giscus defaults to standard articles while preserving explicit overrides', () => {
+  assert.equal(resolveGiscusForPage({
+    type: 'faction',
+    slug: 'eras/citadel/okse-dominion',
+  }), true);
+
+  assert.equal(resolveGiscusForPage({
+    type: 'category',
+    slug: 'eras/citadel/factions',
+  }), false);
+
+  assert.equal(resolveGiscusForPage({
+    type: 'continuity',
+    slug: 'entities/example',
+  }), false);
+
+  assert.equal(resolveGiscusForPage({
+    type: 'article',
+    slug: 'start-here',
+  }), false);
+
+  assert.equal(resolveGiscusForPage({
+    type: 'faction',
+    slug: 'eras/citadel/okse-dominion',
+    giscus: false,
+  }), false);
+
+  assert.equal(resolveGiscusForPage({
+    type: 'category',
+    slug: 'eras/citadel/factions',
+    giscus: true,
+  }), true);
 });

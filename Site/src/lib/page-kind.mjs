@@ -30,3 +30,7 @@ export function classifyCodexPage(entry = {}, fallbackId = '') {
     isStandardArticle: !isStructural,
   };
 }
+export function resolveGiscusForPage(entry = {}, fallbackId = '') {
+  if (typeof entry.giscus === 'boolean') return entry.giscus;
+  return classifyCodexPage(entry, fallbackId).isStandardArticle;
+}
