@@ -44,7 +44,7 @@ export default {
     enabled: env.PUBLIC_WEBMENTIONS_ENABLED === '1' && Boolean(webmentionEndpoint),
     username: webmentionUsername,
     endpoint: webmentionEndpoint,
-    pingbackEndpoint: webmentionPingbackEndpoint,
+    pingbackEndpoint: webmentionPingbackPingbackEndpoint,
     apiEndpoint: env.PUBLIC_WEBMENTION_API_ENDPOINT || 'https://webmention.io/api/mentions.jf2',
     maxMentions: Number.isFinite(webmentionMaxMentions) ? webmentionMaxMentions : 24,
   },
@@ -79,13 +79,11 @@ export default {
     reactions: env.PUBLIC_GISCUS_REACTIONS_ENABLED !== '0',
     inputPosition: env.PUBLIC_GISCUS_INPUT_POSITION ?? 'bottom',
     theme: {
-      // Keep dark mode exactly as before. For light mode, use Giscus' own
-      // noborder_light counterpart instead of a VISCERIUM-coloured custom theme.
-      // Auto mode uses a tiny stylesheet that switches between the two stock
-      // noborder themes based on the operating-system preference.
+      // Use Giscus-hosted themes so local, preview, and CI builds do not depend
+      // on the production domain or its certificate being available.
       dark: env.PUBLIC_GISCUS_DARK_THEME ?? env.PUBLIC_GISCUS_THEME ?? 'noborder_dark',
       light: 'noborder_light',
-      auto: `${siteUrl}/giscus-auto.css`,
+      auto: 'preferred_color_scheme',
     },
     lazy: env.PUBLIC_GISCUS_LOADING !== 'eager',
   },
