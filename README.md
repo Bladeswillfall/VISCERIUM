@@ -213,3 +213,4 @@ PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=
 ```
 
 Cloudflare's automatic Web Analytics injection and the repository-managed snippet must not both be enabled. Search Console verification is separate public metadata, configured with `PUBLIC_GOOGLE_SITE_VERIFICATION`. Consent and privacy requirements remain an owner decision before analytics is activated.
+<!-- Temporary GitHub Actions validation -->
