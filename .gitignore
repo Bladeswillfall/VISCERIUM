@@ -67,8 +67,3 @@ Site/.dev.vars
 Vault/Drafts/
 Vault/Private/
 Vault/Stories/
-
-# Local-only/private authoring
-Vault/Drafts/
-Vault/Private/
-Vault/Stories/
