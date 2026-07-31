@@ -68,9 +68,7 @@ jobs:
           retention-days: 1
 
       - name: Install browser runtime
-        run: |
-          npm install --no-save --package-lock=false --legacy-peer-deps --no-audit --no-fund @playwright/test@1.55.0
-          npx --no-install playwright install chromium
+        run: npx --no-install playwright install --with-deps chromium
 
       - name: Start preview
         run: |

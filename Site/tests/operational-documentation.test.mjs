@@ -31,7 +31,7 @@ test('all operational SOPs reference the shared documentation writing standard',
 });
 
 test('the World Anvil migration guide gives exact novice-facing Obsidian actions', () => {
-  const guide = read('Vault/Drafts/Inbox/World Anvil Migration Review.md');
+  const guide = read('Site/tests/fixtures/world-anvil-migration-review.md');
   assert.match(guide, /World Anvil Import → Review first/);
   assert.match(guide, /Tier 1/);
   assert.match(guide, /Tier 4/);
