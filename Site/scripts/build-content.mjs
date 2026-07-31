@@ -9,6 +9,7 @@ import { generateMapData } from './generate-map-data.mjs';
 import { generateRelationshipData } from './generate-relationship-data.mjs';
 import { generateStorytellerData } from './generate-storyteller-data.mjs';
 import { generateReferencedIn } from './generate-referenced-in.mjs';
+import { applyGiscusPolicy } from './apply-giscus-policy.mjs';
 
 const modeArgument = process.argv.find((value) => value.startsWith('--mode='));
 const mode = modeArgument?.slice('--mode='.length) || 'build';
@@ -91,6 +92,7 @@ if (!validModes.has(mode)) {
     await import('./generate-continuity-pages.mjs');
     await import('./generate-era-tag-pages.mjs');
     await import('./generate-category-pages.mjs');
+    await applyGiscusPolicy();
 
     const docs = await loadGeneratedDocs({ refresh: true });
     if (mode === 'build' && !validateGeneratedContent(docs)) {
