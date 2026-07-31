@@ -124,7 +124,7 @@ export const collections = {
         updated: frontmatterDate.optional(),
         contributors: z.array(contributorReferenceSchema).optional(),
         defaultContributors: z.boolean().optional(),
-        giscus: z.boolean().optional().default(true),
+        giscus: z.boolean().optional(),
         era: eraOrEras.optional(),
         eras: z.array(eraValue).optional(),
         faction: stringOrStrings.optional(),
