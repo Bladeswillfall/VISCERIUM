@@ -49,8 +49,8 @@ test('StoryLine timeline uses an in-memory adapter instead of duplicate source f
   assert.doesNotMatch(adapter, /scene\.calendarDate/);
 });
 
-test('real StoryLine test scene is placeable on the VISCERIUM calendar', () => {
-  const scene = read('Vault/Stories/My Trilogy/My Novel/Scenes/Act 1/01-01 Test scene.md');
+test('synthetic StoryLine fixture is placeable on the VISCERIUM calendar', () => {
+  const scene = read('Site/tests/fixtures/storyline-test-scene.md');
   const storyDate = scene.match(/^storyDate:\s*["']?(.+?)["']?\s*$/m)?.[1];
 
   assert.ok(storyDate, 'test scene should contain storyDate');
