@@ -41,6 +41,9 @@ test('Giscus uses the migrated public repository defaults without deploy variabl
   assert.equal(config.repoId, 'R_kgDOTOiQ7g');
   assert.equal(config.category, 'Comments');
   assert.equal(config.categoryId, 'DIC_kwDOTOiQ7s4DCYjH');
+  assert.equal(config.theme.dark, 'noborder_dark');
+  assert.equal(config.theme.light, 'noborder_light');
+  assert.equal(config.theme.auto, 'preferred_color_scheme');
 });
 
 test('Giscus retains an explicit deployment off switch', async () => {
