@@ -44,7 +44,7 @@ export default {
     enabled: env.PUBLIC_WEBMENTIONS_ENABLED === '1' && Boolean(webmentionEndpoint),
     username: webmentionUsername,
     endpoint: webmentionEndpoint,
-    pingbackEndpoint: webmentionPingbackPingbackEndpoint,
+    pingbackEndpoint: webmentionPingbackEndpoint,
     apiEndpoint: env.PUBLIC_WEBMENTION_API_ENDPOINT || 'https://webmention.io/api/mentions.jf2',
     maxMentions: Number.isFinite(webmentionMaxMentions) ? webmentionMaxMentions : 24,
   },
