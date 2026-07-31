@@ -48,7 +48,7 @@ test('replacement defaults use the new repository and canonical domain', async (
   assert.equal(config.webmentions.username, 'www.viscerium.co.uk');
 });
 
-test('owner-controlled integrations remain inert without complete real values', async () => {
+test('private integrations remain inert while Giscus uses public defaults', async () => {
   const config = await loadConfig({
     PUBLIC_GA4_ENABLED: '1',
     PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED: '1',
@@ -59,11 +59,11 @@ test('owner-controlled integrations remain inert without complete real values', 
 
   assert.equal(config.analytics.ga4.enabled, false);
   assert.equal(config.analytics.cloudflare.enabled, false);
-  assert.equal(config.giscus.enabled, false);
+  assert.equal(config.giscus.enabled, true);
   assert.equal(config.webmentions.enabled, false);
   assert.equal(config.contactForm.enabled, false);
-  assert.equal(config.giscus.repoId, '');
-  assert.equal(config.giscus.categoryId, '');
+  assert.equal(config.giscus.repoId, 'R_kgDOTOiQ7g');
+  assert.equal(config.giscus.categoryId, 'DIC_kwDOTOiQ7s4DCYjH');
 });
 
 test('site identity and lore source support environment overrides', async () => {
