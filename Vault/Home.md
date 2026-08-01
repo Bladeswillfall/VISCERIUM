@@ -35,52 +35,9 @@ cssclasses:
 
 > [!home-workspace]
 > > [!home-continue] CONTINUE
-> > ```dataviewjs
-> > const pages = dv.pages("")
-> >   .where((page) => {
-> >     const path = page.file.path;
-> >     return path !== "Home.md"
-> >       && !path.startsWith("System/")
-> >       && !path.startsWith("Templates/")
-> >       && !path.startsWith("Demo/");
-> >   })
-> >   .sort((page) => page.file.mtime, "desc")
-> >   .limit(6);
+> > ![[System/Bases/Lore Registry.base#Recently edited]]
 > >
-> > const area = (path) => {
-> >   if (path.startsWith("Lore/")) return { label: "CANON", key: "canon" };
-> >   if (path.startsWith("Stories/")) return { label: "WRITING", key: "writing" };
-> >   if (path.startsWith("Drafts/")) return { label: "WIP", key: "wip" };
-> >   if (path.startsWith("Private/")) return { label: "PRIVATE", key: "private" };
-> >   return { label: "NOTE", key: "note" };
-> > };
-> >
-> > if (pages.length === 0) {
-> >   dv.paragraph("No recent creator notes yet.");
-> > } else {
-> >   const list = dv.container.createDiv({ cls: "vc-home-continue-list" });
-> >   for (const page of pages) {
-> >     const zone = area(page.file.path);
-> >     const row = list.createDiv({ cls: `vc-home-continue-row vc-home-location-${zone.key}` });
-> >     const main = row.createDiv({ cls: "vc-home-continue-main" });
-> >     const link = main.createEl("a", {
-> >       text: String(page.title ?? page.file.name),
-> >       cls: "internal-link vc-home-continue-link",
-> >       attr: { href: page.file.path, "data-href": page.file.path },
-> >     });
-> >     link.addEventListener("click", (event) => {
-> >       event.preventDefault();
-> >       app.workspace.openLinkText(page.file.path, "Home.md", event.ctrlKey || event.metaKey);
-> >     });
-> >     main.createSpan({ text: zone.label, cls: "vc-home-location-label" });
-> >     row.createSpan({
-> >       text: page.file.mtime.toRelative() ?? page.file.mtime.toFormat("dd LLL yyyy"),
-> >       cls: "vc-home-continue-time",
-> >     });
-> >   }
-> > }
-> > ```
-> > → [[System/Bases/World Anvil Import.base|World Anvil Import]]
+> > → [[System/Bases/Lore Registry.base|Open the full Lore Registry]]
 >
 > > [!home-side]
 > > > [!home-create] CREATE
@@ -221,6 +178,21 @@ cssclasses:
 > > > }
 > > > ```
 
+> [!home-navigate] PROJECT STATUS
+> **Needs attention**
+>
+> ![[System/Bases/Needs Attention.base#Homepage]]
+>
+> → [[System/Bases/Needs Attention.base|Open all issues]]
+>
+> **Structurally ready**
+>
+> ![[System/Bases/Publishing.base#Homepage]]
+>
+> *Structurally ready means the required publishing fields exist. It is not an editorial approval.*
+>
+> → [[System/Bases/Publishing.base|Open the publishing gate]]
+
 > [!home-activity] CREATOR ACTIVITY
 > ```dataviewjs
 > const activityKey = `viscerium-creator-activity:v2:${app.vault.getName()}`;
@@ -279,6 +251,9 @@ cssclasses:
 >   {
 >     title: "DATABASES",
 >     links: [
+>       ["Lore Registry", "System/Bases/Lore Registry.base"],
+>       ["Needs Attention", "System/Bases/Needs Attention.base"],
+>       ["Publishing", "System/Bases/Publishing.base"],
 >       ["Story Entities", "System/Bases/Story Entities.base"],
 >       ["Myrkild Units", "System/Bases/Myrkild Units.base"],
 >       ["World Anvil Import", "System/Bases/World Anvil Import.base"],
