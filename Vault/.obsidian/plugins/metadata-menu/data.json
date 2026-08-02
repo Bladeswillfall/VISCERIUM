@@ -1,0 +1,174 @@
+{
+  "presetFields": [
+    {
+      "name": "status",
+      "type": "Select",
+      "id": "vc-status",
+      "path": "",
+      "options": {
+        "sourceType": "ValuesList",
+        "valuesList": {
+          "0": "draft",
+          "1": "published"
+        }
+      }
+    },
+    {
+      "name": "type",
+      "type": "Select",
+      "id": "vc-type",
+      "path": "",
+      "options": {
+        "sourceType": "ValuesList",
+        "valuesList": {
+          "0": "article",
+          "1": "character",
+          "2": "faction",
+          "3": "location",
+          "4": "event",
+          "5": "species",
+          "6": "fauna",
+          "7": "flora",
+          "8": "fungi",
+          "9": "item",
+          "10": "myrkild-unit",
+          "11": "image"
+        }
+      }
+    },
+    {
+      "name": "headerImage",
+      "type": "Media",
+      "id": "vc-header-image",
+      "path": "",
+      "options": {
+        "embed": false,
+        "folders": [
+          "Assets/Images"
+        ],
+        "display": "card",
+        "thumbnailSize": "100"
+      }
+    },
+    {
+      "name": "decorativeImage",
+      "type": "Boolean",
+      "id": "vc-decorative-image",
+      "path": "",
+      "options": {}
+    },
+    {
+      "name": "tags",
+      "type": "Multi",
+      "id": "vc-tags",
+      "path": "",
+      "options": {
+        "sourceType": "ValuesList",
+        "valuesList": {}
+      },
+      "display": "asArray"
+    },
+    {
+      "name": "related",
+      "type": "MultiFile",
+      "id": "vc-related",
+      "path": "",
+      "options": {
+        "dvQueryString": "dv.pages().where(p => p.file.path.startsWith(\"Lore/\") || p.file.path.startsWith(\"Drafts/Inbox/\"))"
+      },
+      "display": "asArray"
+    },
+    {
+      "name": "location",
+      "type": "MultiFile",
+      "id": "vc-location",
+      "path": "",
+      "options": {
+        "dvQueryString": "dv.pages().where(p => p.type == \"location\")"
+      },
+      "display": "asArray"
+    },
+    {
+      "name": "faction",
+      "type": "MultiFile",
+      "id": "vc-faction",
+      "path": "",
+      "options": {
+        "dvQueryString": "dv.pages().where(p => p.type == \"faction\")"
+      },
+      "display": "asArray"
+    },
+    {
+      "name": "participants",
+      "type": "MultiFile",
+      "id": "vc-participants",
+      "path": "",
+      "options": {
+        "dvQueryString": "dv.pages().where(p => p.type == \"character\")"
+      },
+      "display": "asArray"
+    }
+  ],
+  "fileClassQueries": [],
+  "displayFieldsInContextMenu": true,
+  "globallyIgnoredFields": [
+    "created",
+    "updated",
+    "word_count",
+    "open_task_count",
+    "era",
+    "eras",
+    "entity_id",
+    "continuity",
+    "calendarDate",
+    "calendarEndDate",
+    "timeline",
+    "timelineBlocks",
+    "slug",
+    "sourcePath",
+    "eraStyle",
+    "import_source",
+    "import_source_type",
+    "import_source_file",
+    "import_issues"
+  ],
+  "classFilesPath": null,
+  "isAutosuggestEnabled": true,
+  "fileClassAlias": "fileClass",
+  "settingsVersion": "5.0",
+  "firstDayOfWeek": 1,
+  "enableLinks": true,
+  "enableTabHeader": true,
+  "enableEditor": true,
+  "enableBacklinks": true,
+  "enableBases": true,
+  "enableMarkdown": true,
+  "enableStarred": true,
+  "enableFileExplorer": true,
+  "enableSearch": true,
+  "enableProperties": true,
+  "tableViewMaxRecords": 20,
+  "frontmatterListDisplay": "asArray",
+  "fileClassExcludedFolders": [
+    "Templates",
+    "System",
+    "Drafts/WorldAnvil Import"
+  ],
+  "showIndexingStatusInStatusBar": false,
+  "fileIndexingExcludedFolders": [
+    "Templates",
+    "System",
+    "Drafts/WorldAnvil Import"
+  ],
+  "fileIndexingExcludedExtensions": [
+    ".excalidraw.md"
+  ],
+  "fileIndexingExcludedRegex": [],
+  "frontmatterOnly": true,
+  "showFileClassSelectInModal": false,
+  "chooseFileClassAtFileCreation": false,
+  "autoInsertFieldsAtFileClassInsertion": false,
+  "fileClassIcon": "package",
+  "isAutoCalculationEnabled": true,
+  "disableDataviewPrompt": false
+}

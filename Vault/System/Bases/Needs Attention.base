@@ -1,0 +1,132 @@
+filters:
+  and:
+    - file.ext == "md"
+    - or:
+        - file.inFolder("Lore")
+        - file.inFolder("Drafts/WorldAnvil Import")
+formulas:
+  display_title: 'if(title.isEmpty(), file.name, title)'
+  area: 'if(file.inFolder("Lore"), "CANON", "IMPORT")'
+  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
+  era_count: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))'
+  era_sensitive_types: '["character", "faction", "location", "event", "species", "fauna", "flora", "fungi", "item", "myrkild-unit"]'
+  needs_era: 'formula.era_sensitive_types.contains(type) && formula.era_count == 0'
+  migration_issue_count: 'list(import_issues).filter(value != null).length'
+  issue_count: 'if(title.isEmpty(), 1, 0) + if(description.isEmpty(), 1, 0) + if(type.isEmpty(), 1, 0) + if(formula.needs_era, 1, 0) + formula.migration_issue_count'
+  attention: 'if(title.isEmpty(), "Missing title · ", "") + if(description.isEmpty(), "Missing description · ", "") + if(type.isEmpty(), "Missing type · ", "") + if(formula.needs_era, "Missing era · ", "") + if(formula.migration_issue_count > 0, formula.migration_issue_count.toString() + " migration issue(s)", "")'
+properties:
+  formula.display_title:
+    displayName: Note
+  formula.area:
+    displayName: Area
+  formula.attention:
+    displayName: Needs attention
+  formula.issue_count:
+    displayName: Issues
+  type:
+    displayName: Type
+  formula.era_context:
+    displayName: Era / scope
+  status:
+    displayName: Status
+  import_issues:
+    displayName: Migration issues
+  file.mtime:
+    displayName: Modified
+views:
+  - type: table
+    name: Homepage
+    limit: 6
+    filters:
+      and:
+        - formula.issue_count > 0
+    order:
+      - formula.display_title
+      - formula.area
+      - formula.attention
+      - file.mtime
+    sort:
+      - property: formula.issue_count
+        direction: DESC
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: All issues
+    filters:
+      and:
+        - formula.issue_count > 0
+    order:
+      - formula.display_title
+      - formula.area
+      - formula.attention
+      - formula.issue_count
+      - type
+      - formula.era_context
+      - status
+      - import_issues
+      - file.mtime
+    sort:
+      - property: formula.issue_count
+        direction: DESC
+      - property: formula.display_title
+        direction: ASC
+  - type: table
+    name: Missing descriptions
+    filters:
+      and:
+        - description.isEmpty()
+    order:
+      - formula.display_title
+      - formula.area
+      - type
+      - formula.era_context
+      - status
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Missing type
+    filters:
+      and:
+        - type.isEmpty()
+    order:
+      - formula.display_title
+      - formula.area
+      - formula.era_context
+      - status
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Missing era
+    filters:
+      and:
+        - formula.needs_era
+    order:
+      - formula.display_title
+      - formula.area
+      - type
+      - status
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Migration review
+    filters:
+      and:
+        - formula.migration_issue_count > 0
+    order:
+      - formula.display_title
+      - type
+      - formula.era_context
+      - import_issues
+      - formula.migration_issue_count
+      - file.mtime
+    sort:
+      - property: formula.migration_issue_count
+        direction: DESC
+      - property: formula.display_title
+        direction: ASC

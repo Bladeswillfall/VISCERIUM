@@ -12,6 +12,8 @@ All operational documents use [[Documentation Writing Standard|the VISCERIUM ASD
 | --- | --- |
 | Create or revise fauna, flora, fungi, items, or similar records | [[Entity Authoring SOP]] |
 | Create and file a Story Entity in Obsidian | [[Story Entity Workflow SOP]] |
+| Edit dates, status, type, images, tags, or relationship frontmatter | [[Frontmatter Authoring Workflow]] |
+| Place, size, wrap, or contour an image inside article prose or columns | [[Article Image Layout]] |
 | Split one continuing subject into separate historical versions | [[Era Edition Workflow SOP]] |
 | Add or change shared properties, templates, or Base columns | [[Schema Change SOP]] |
 | Add structured semantic relationships | [[Relationship Authoring SOP]] |

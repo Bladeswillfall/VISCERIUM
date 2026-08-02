@@ -1,6 +1,7 @@
 ---
 title: "{{title}}"
 description:
+created:
 status: draft
 type: event
 era:

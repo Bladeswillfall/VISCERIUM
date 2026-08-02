@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Authored article image layout
+
+   Obsidian embeds may carry VISCERIUM presentation flags:
+   ![[image.webp|left|320]]
+   ![[image.webp|right|320|shape|gap=16]]
+
+   These rules remain compatible with the responsive [cols]/[col] system.
+   ========================================================================== */
+
+/* Storyteller switches the Lore panel with the native hidden attribute. */
+.sl-markdown-content:not([hidden]) {
+  display: flow-root;
+}
+
+.sl-markdown-content[hidden] {
+  display: none !important;
+}
+
+.sl-markdown-content .vc-image-embed {
+  box-sizing: border-box;
+  display: block;
+  max-width: 100%;
+  margin-block: .25rem .9rem;
+  overflow: visible;
+}
+
+.sl-markdown-content .vc-image-embed > :where(img, a),
+.sl-markdown-content .vc-image-embed .vc-image-link,
+.sl-markdown-content .vc-image-embed .vc-image-link > img {
+  display: block;
+  max-width: 100%;
+}
+
+.sl-markdown-content .vc-image-embed img {
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.sl-markdown-content .vc-image-left,
+.sl-markdown-content .vc-image-right {
+  width: min(var(--vc-image-width, 42%), 100%);
+}
+
+.sl-markdown-content .vc-image-left {
+  float: left;
+  margin-inline: 0 var(--vc-image-gap, 1rem);
+}
+
+.sl-markdown-content .vc-image-right {
+  float: right;
+  margin-inline: var(--vc-image-gap, 1rem) 0;
+}
+
+.sl-markdown-content .vc-image-center {
+  width: min(var(--vc-image-width, 100%), 100%);
+  margin-inline: auto;
+}
+
+.sl-markdown-content .vc-image-wide {
+  width: 100%;
+  margin-inline: 0;
+}
+
+/* Full intentionally breaks beyond the prose lane, but never beyond the viewport. */
+.sl-markdown-content .vc-image-full {
+  width: min(72rem, calc(100vw - 2rem));
+  max-width: none;
+  margin-inline: 50%;
+  transform: translateX(-50%);
+}
+
+/* Alpha-aware wrapping. The generated custom property contains the resolved asset URL. */
+.sl-markdown-content .vc-image-shape {
+  shape-outside: var(--vc-image-shape);
+  shape-image-threshold: .12;
+  shape-margin: var(--vc-image-gap, .75rem);
+  margin-inline: 0;
+}
+
+.sl-markdown-content .vc-image-shape img {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Each authored column owns its floats. A full image inside a column becomes column-wide. */
+.sl-markdown-content .cx-col {
+  display: flow-root;
+  min-width: 0;
+}
+
+.sl-markdown-content .cx-col .vc-image-full {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  transform: none;
+}
+
+/* Structural content starts a new composition rather than inheriting an old float. */
+.sl-markdown-content > :is(.sl-heading-wrapper, h2, h3, h4, h5, h6, hr, blockquote, table, .starlight-aside, .cx-cols),
+.sl-markdown-content .cx-col > :is(.sl-heading-wrapper, h2, h3, h4, h5, h6, hr, blockquote, table, .starlight-aside, .cx-cols) {
+  clear: both;
+}
+
+@media (max-width: 42rem) {
+  .sl-markdown-content .vc-image-left,
+  .sl-markdown-content .vc-image-right,
+  .sl-markdown-content .vc-image-shape {
+    float: none;
+    width: min(var(--vc-image-width, 100%), 100%);
+    margin-inline: auto;
+    shape-outside: none;
+  }
+
+  .sl-markdown-content .vc-image-full {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+    transform: none;
+  }
+}

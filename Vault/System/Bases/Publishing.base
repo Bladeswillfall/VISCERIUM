@@ -1,0 +1,119 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder("Lore")
+formulas:
+  display_title: 'if(title.isEmpty(), file.name, title)'
+  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
+  missing_required: 'if(title.isEmpty(), 1, 0) + if(description.isEmpty(), 1, 0) + if(type.isEmpty(), 1, 0) + if(status.isEmpty(), 1, 0)'
+  blockers: 'if(title.isEmpty(), "Missing title · ", "") + if(description.isEmpty(), "Missing description · ", "") + if(type.isEmpty(), "Missing type · ", "") + if(status.isEmpty(), "Missing status", "")'
+  publication_state: 'if(status == "published" && formula.missing_required > 0, html("<span class=\"publish-state publish-state--blocked\">BLOCKED</span>"), if(status == "published", html("<span class=\"publish-state publish-state--published\">PUBLISHED</span>"), if(formula.missing_required > 0, html("<span class=\"publish-state publish-state--incomplete\">INCOMPLETE</span>"), html("<span class=\"publish-state publish-state--ready\">STRUCTURALLY READY</span>"))))'
+properties:
+  formula.display_title:
+    displayName: Article
+  formula.publication_state:
+    displayName: Gate
+  formula.blockers:
+    displayName: Blocking fields
+  formula.missing_required:
+    displayName: Missing
+  type:
+    displayName: Type
+  formula.era_context:
+    displayName: Era / scope
+  status:
+    displayName: Status
+  development_level:
+    displayName: Development
+  file.folder:
+    displayName: Folder
+  file.mtime:
+    displayName: Modified
+views:
+  - type: table
+    name: Homepage
+    limit: 5
+    filters:
+      and:
+        - status != "published"
+        - formula.missing_required == 0
+    order:
+      - formula.display_title
+      - formula.publication_state
+      - type
+      - formula.era_context
+      - status
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Structurally ready
+    filters:
+      and:
+        - status != "published"
+        - formula.missing_required == 0
+    order:
+      - formula.display_title
+      - formula.publication_state
+      - type
+      - formula.era_context
+      - status
+      - development_level
+      - file.folder
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Blocked
+    filters:
+      and:
+        - formula.missing_required > 0
+    order:
+      - formula.display_title
+      - formula.publication_state
+      - formula.blockers
+      - type
+      - formula.era_context
+      - status
+      - file.folder
+      - file.mtime
+    sort:
+      - property: formula.missing_required
+        direction: DESC
+      - property: formula.display_title
+        direction: ASC
+  - type: table
+    name: Published
+    filters:
+      and:
+        - status == "published"
+        - formula.missing_required == 0
+    order:
+      - formula.display_title
+      - type
+      - formula.era_context
+      - development_level
+      - file.folder
+      - file.mtime
+    sort:
+      - property: formula.display_title
+        direction: ASC
+  - type: table
+    name: All lore
+    order:
+      - formula.display_title
+      - formula.publication_state
+      - formula.blockers
+      - type
+      - formula.era_context
+      - status
+      - development_level
+      - file.folder
+      - file.mtime
+    sort:
+      - property: formula.publication_state
+        direction: ASC
+      - property: formula.display_title
+        direction: ASC

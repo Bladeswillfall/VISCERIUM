@@ -1,0 +1,84 @@
+{
+  "rules": [
+    {
+      "key": "created",
+      "autoadd": false,
+      "no_overwrite": true,
+      "trigger": [
+        "modification",
+        "open"
+      ],
+      "whererun": [
+        "Lore",
+        "Drafts",
+        "Private",
+        "Stories"
+      ],
+      "whereignore": [
+        "Drafts/WorldAnvil Import"
+      ],
+      "result_regex": "^\\d{4}-\\d{2}-\\d{2}",
+      "type": "file",
+      "file_pull": "created"
+    },
+    {
+      "key": "updated",
+      "autoadd": true,
+      "trigger": [
+        "modification"
+      ],
+      "whererun": [
+        "Lore",
+        "Drafts",
+        "Private",
+        "Stories"
+      ],
+      "whereignore": [
+        "Drafts/WorldAnvil Import"
+      ],
+      "result_regex": "^\\d{4}-\\d{2}-\\d{2}",
+      "type": "file",
+      "file_pull": "modified"
+    },
+    {
+      "key": "word_count",
+      "autoadd": true,
+      "trigger": [
+        "modification"
+      ],
+      "whererun": [
+        "Lore",
+        "Drafts",
+        "Private",
+        "Stories"
+      ],
+      "whereignore": [
+        "Drafts/WorldAnvil Import"
+      ],
+      "type": "file",
+      "file_pull": "words"
+    },
+    {
+      "key": "open_task_count",
+      "autoadd": true,
+      "trigger": [
+        "modification"
+      ],
+      "whererun": [
+        "Lore",
+        "Drafts",
+        "Private",
+        "Stories"
+      ],
+      "whereignore": [
+        "Drafts/WorldAnvil Import"
+      ],
+      "type": "lines",
+      "match": "starting_with",
+      "value": "- [ ]",
+      "pull": "count",
+      "ignore_indentation": true
+    }
+  ],
+  "showNotices": false
+}

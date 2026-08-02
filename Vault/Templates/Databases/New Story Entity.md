@@ -103,6 +103,9 @@ if (entityId && !ENTITY_ID_PATTERN.test(entityId)) {
 // compatible with older direct includes.
 rendered = rendered.replace(/^publish:\s*false\s*\r?\n/m, "");
 rendered = rendered.replace(/^eras:\s*\[\s*("(?:CITADEL|SMOG|NEARSIGHT|ENTROPY|Universal)")\s*\]\s*$/m, "era: $1");
+if (!/^created:/m.test(rendered)) {
+  rendered = rendered.replace(/^(development_level:\s*[^\r\n]+)$/m, "$1\ncreated:");
+}
 if (entityId && !/^entity_id:/m.test(rendered)) {
   rendered = rendered.replace(/^(development_level:\s*[^\r\n]+)$/m, `$1\nentity_id: ${JSON.stringify(entityId)}`);
 }

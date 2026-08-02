@@ -36,12 +36,15 @@ test('VISCERIUM Home is a compact creator dashboard rather than a manual', async
   assert.match(home.content, /Open Review First/);
   assert.match(home.content, /home-workspace/);
   assert.match(home.content, /CONTINUE/);
-  assert.match(home.content, /vc-home-continue-list/);
-  assert.match(home.content, /page\.title \?\? page\.file\.name/);
+  assert.match(home.content, /System\/Bases\/Lore Registry\.base#Recently edited/);
+  assert.match(home.content, /Open the full Lore Registry/);
   assert.match(home.content, /CREATE/);
   assert.match(home.content, /vc-home-create-primary/);
   assert.match(home.content, /WRITING/);
   assert.match(home.content, /activeProjectFile/);
+  assert.match(home.content, /PROJECT STATUS/);
+  assert.match(home.content, /System\/Bases\/Needs Attention\.base#Homepage/);
+  assert.match(home.content, /System\/Bases\/Publishing\.base#Homepage/);
   assert.match(home.content, /CREATOR ACTIVITY/);
   assert.match(home.content, /vc-home-heatmap/);
   assert.match(home.content, /viscerium-creator-activity:v2/);

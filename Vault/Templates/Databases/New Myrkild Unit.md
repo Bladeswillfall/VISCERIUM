@@ -18,7 +18,7 @@ async function ensureFolder(folderPath) {
     if (!tp.app.vault.getAbstractFileByPath(current)) await tp.app.vault.createFolder(current);
   }
 }
-const fm = ["---", `title: ${JSON.stringify(title)}`, `description: ${JSON.stringify("A WIP Myrkild unit profile.")}`, "status: draft", "type: myrkild-unit", "unit_id: null", "source_id: null", `unit_name: ${JSON.stringify(title)}`, `era: ${JSON.stringify(era)}`, "species: Myrkild", `myrkild_species: ${JSON.stringify(myrkildSpecies)}`, `origin: ${JSON.stringify(origin)}`, "natural_host: null", "role: null"];
+const fm = ["---", `title: ${JSON.stringify(title)}`, `description: ${JSON.stringify("A WIP Myrkild unit profile.")}`, "created:", "status: draft", "type: myrkild-unit", "unit_id: null", "source_id: null", `unit_name: ${JSON.stringify(title)}`, `era: ${JSON.stringify(era)}`, "species: Myrkild", `myrkild_species: ${JSON.stringify(myrkildSpecies)}`, `origin: ${JSON.stringify(origin)}`, "natural_host: null", "role: null"];
 if (size) fm.push(`size_class: ${JSON.stringify(size)}`); else fm.push("size_class: null");
 fm.push("threat_rating: null", "strain: null", "subtype: null", "rarity: null", `locations: ${yamlList(locations)}`, "biomes: []", "tactics: null", "weaknesses: null", "visual_notes: null", "image: null", "review_status: draft", "development_level: stub", "source: null", "source_sheet: null", "source_row: null", "source_species_entry: null", "tags: [myrkild, unit]", "---");
 const body = ["", "> [!tip] Stop when usable", "> Keep the structured profile focused on placement, battlefield behaviour and counterplay.", "", "## Battlefield profile", "", "## Tactics and behaviour", "", "## Weaknesses and counterplay", "", "## Visual notes", "", "## Availability notes", ""];
