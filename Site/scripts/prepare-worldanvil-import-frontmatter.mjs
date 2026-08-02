@@ -29,37 +29,54 @@ function frontmatterTitle(frontmatter, fallback) {
   return match[1].trim().replace(/^['"]|['"]$/g, '') || fallback;
 }
 
+function blankScalarLine(line, key) {
+  const match = String(line ?? '').match(new RegExp(`^${key}:\\s*(.*)$`));
+  if (!match) return false;
+  return ['', 'null', '~', '""', "''"].includes(match[1].trim().toLowerCase());
+}
+
 export function prepareImportMarkdown(markdown, fallbackTitle = '') {
   const parts = splitFrontmatter(markdown);
   if (!parts.hasFrontmatter) {
     return { markdown: String(markdown ?? ''), changed: false, skipped: true, added: [] };
   }
 
-  const added = [];
+  const changedFields = [];
+  const insertions = [];
   const lines = parts.frontmatter.split('\n');
   const title = frontmatterTitle(parts.frontmatter, fallbackTitle);
   const description = descriptionFromBody(parts.body, '');
+  let descriptionIndex = lines.findIndex((line) => /^description:/.test(line));
 
-  if (!hasProperty(parts.frontmatter, 'description') && description) {
-    added.push(`description: ${JSON.stringify(description)}`);
+  if (description && (descriptionIndex < 0 || blankScalarLine(lines[descriptionIndex], 'description'))) {
+    const descriptionLine = `description: ${JSON.stringify(description)}`;
+    changedFields.push(descriptionLine);
+    if (descriptionIndex >= 0) lines[descriptionIndex] = descriptionLine;
+    else insertions.push(descriptionLine);
   }
-  if (!hasProperty(parts.frontmatter, 'created')) added.push('created:');
-  if (!hasProperty(parts.frontmatter, 'updated')) added.push('updated:');
+  if (!hasProperty(parts.frontmatter, 'created')) {
+    changedFields.push('created:');
+    insertions.push('created:');
+  }
+  if (!hasProperty(parts.frontmatter, 'updated')) {
+    changedFields.push('updated:');
+    insertions.push('updated:');
+  }
 
-  if (!added.length) {
+  if (!changedFields.length) {
     return { markdown: String(markdown ?? ''), changed: false, skipped: false, added: [] };
   }
 
-  const descriptionIndex = lines.findIndex((line) => /^description:/.test(line));
+  descriptionIndex = lines.findIndex((line) => /^description:/.test(line));
   const titleIndex = lines.findIndex((line) => /^title:/.test(line));
   const insertionIndex = (descriptionIndex >= 0 ? descriptionIndex : titleIndex) + 1;
-  lines.splice(Math.max(insertionIndex, 0), 0, ...added);
+  if (insertions.length) lines.splice(Math.max(insertionIndex, 0), 0, ...insertions);
 
   return {
     markdown: `---\n${lines.join('\n')}\n---\n${parts.body}`,
     changed: true,
     skipped: false,
-    added,
+    added: changedFields,
     title,
   };
 }
