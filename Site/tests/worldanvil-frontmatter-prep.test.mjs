@@ -67,6 +67,19 @@ test('World Anvil preparation excludes generated review tasks from descriptions'
   assert.doesNotMatch(prepared.markdown, /description:.*Place this import/m);
 });
 
+test('World Anvil preparation removes a stale task-based description', () => {
+  const contaminated = reviewOnly.replace(
+    'status: draft',
+    'description: "- [ ] Place this import in the correct VISCERIUM era."\nstatus: draft',
+  );
+  const prepared = prepareImportMarkdown(contaminated, 'Empty Import');
+
+  assert.equal(prepared.changed, true);
+  assert.equal(prepared.descriptionUnresolved, true);
+  assert.equal(prepared.invalidDescriptionRemoved, true);
+  assert.doesNotMatch(prepared.markdown, /^description:/m);
+});
+
 test('World Anvil preparation ignores checklist paragraphs before useful prose', () => {
   const checklistThenProse = sample.replace(
     'The Krass Dominion is a land where the air itself conspires against life.',
@@ -108,6 +121,7 @@ test('World Anvil preparation reports unresolved descriptions in audit and write
   assert.equal(written.changed, 1);
   assert.equal(written.descriptionsAdded, 1);
   assert.equal(written.descriptionsUnresolved, 1);
+  assert.equal(written.invalidDescriptionsRemoved, 0);
   assert.equal(written.updatedKeysAdded, 1);
   assert.doesNotMatch(await fs.readFile(note, 'utf8'), /^created:/m);
 
