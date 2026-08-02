@@ -10,7 +10,7 @@ Follow [[Documentation Writing Standard]] for operational wording.
 
 ## Purpose
 
-Reduce repetitive migration work without silently deciding canon, continuity, relationships, or publication.
+Reduce repetitive migration work without silently deciding canon, continuity, relationships, publication, or historical metadata.
 
 ## Before you start
 
@@ -37,10 +37,16 @@ This command performs only repeatable mechanical work:
 
 - adds baseline import metadata;
 - converts legacy article links only when one target is certain;
-- derives a working `description` from the first useful prose paragraph when no description exists;
-- adds blank `created:` and `updated:` keys when they are absent;
+- derives a working `description` from the first useful prose paragraph when possible;
+- excludes generated migration tasks and checklist paragraphs from descriptions;
+- adds a blank `updated:` key when it is absent;
+- reports descriptions that remain unresolved;
 - refreshes note-level migration tasks;
 - refreshes the World Anvil Base, migration review note, and generated report.
+
+The command deliberately does not add `created:` to an import.
+
+> **Why:** Auto-Properties derives `created` from the filesystem birth time. For a migrated file, that normally records export, copy, or import time rather than the article's real source creation date.
 
 The command does not decide:
 
@@ -63,7 +69,14 @@ npm run migration:worldanvil:integrate
 npm run migration:worldanvil:prepare
 ```
 
-The second command reports how many imports still lack a generated description or timestamp keys.
+The second command reports:
+
+- descriptions that can be generated;
+- descriptions that remain missing or blank because no usable prose exists;
+- missing `updated:` keys;
+- files without valid frontmatter.
+
+A zero value for **Would change** does not mean every description is resolved. Read **Descriptions still unresolved** as well.
 
 ### 3. Process the queue
 
@@ -83,15 +96,16 @@ Do not insert a full creation template into an imported note.
 1. Confirm the title and final `type`.
 2. Set `era` or Universal scope with VISCERIUM Creator Tools.
 3. Set `entity_id` only when continuity requires it.
-4. Confirm that the generated description is accurate. Rewrite it when it is only a useful placeholder.
-5. Move the note to its deliberate Drafts or Lore destination.
-6. Edit the note once after the move.
-7. Confirm that Auto-Properties fills `created`, `updated`, `word_count`, and `open_task_count` as applicable.
-8. Keep `status: draft` until publication is deliberate.
+4. Confirm that the generated description is accurate. Write one manually when the audit reports it as unresolved.
+5. Add `created` only when an authoritative source creation date is known. Otherwise leave it absent.
+6. Move the note to its deliberate Drafts or Lore destination.
+7. Edit the note once after the move.
+8. Confirm that Auto-Properties fills `updated`, `word_count`, and `open_task_count` as applicable.
+9. Keep `status: draft` until publication is deliberate.
 
-The import queue is excluded from Auto-Properties. Timestamp keys are seeded there, but values populate only after the note leaves the import folder and enters a managed authoring folder.
+The import queue is excluded from Auto-Properties. The migration pass seeds `updated:` there so normal editing can maintain it after filing. It does not seed `created:`.
 
-> **Why:** Bulk timestamp updates inside the import queue would record import or checkout dates as if they were historical article dates.
+> **Why:** Moving a file preserves its filesystem creation time on common systems. A blank `created:` key would therefore invite Auto-Properties to lock in a false import-time date.
 
 ## Check the result
 
@@ -106,10 +120,11 @@ npm run build
 Confirm these conditions:
 
 1. The resolved note has one frontmatter block.
-2. `created` and `updated` exist.
-3. The description is accurate enough for a card or public summary.
-4. No unresolved migration task remains hidden by a move.
-5. The note has a deliberate destination and status.
+2. `updated` exists and reflects maintained authoring activity after filing.
+3. `created` is either an authoritative source date or absent.
+4. The description is accurate enough for a card or public summary.
+5. No unresolved migration task remains hidden by a move.
+6. The note has a deliberate destination and status.
 
 ## Stop condition
 
