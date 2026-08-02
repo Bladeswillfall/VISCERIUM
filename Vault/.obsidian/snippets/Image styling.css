@@ -1,15 +1,28 @@
 /*
  * Image styling
- * Artwork keeps restrained framing without decorative rounding.
+ *
+ * VISCERIUM image flags mirror the public Codex:
+ * ![[image.webp|left|320]]
+ * ![[image.webp|right|320|shape|gap=16]]
+ * ![[image.webp|center|480]]
+ * ![[image.webp|wide]]
+ *
+ * The VISCERIUM Image Tools plugin adds the vc-image-* classes and resolves the
+ * image URL required by CSS shape-outside. Unflagged embeds retain the ordinary
+ * centred block treatment below.
  */
 
-.markdown-reading-view .image-embed {
+.markdown-reading-view .image-embed,
+.markdown-source-view.mod-cm6 .image-embed {
+  box-sizing: border-box;
   display: block;
+  max-width: 100%;
   margin-block: 1rem 1.25rem;
   text-align: center;
 }
 
-.markdown-reading-view .image-embed img {
+.markdown-reading-view .image-embed img,
+.markdown-source-view.mod-cm6 .image-embed img {
   display: block;
   max-width: 100%;
   height: auto;
@@ -20,6 +33,103 @@
 }
 
 .markdown-reading-view .image-embed[alt*="|"] img,
-.markdown-reading-view .image-embed img[width] {
+.markdown-reading-view .image-embed img[width],
+.markdown-source-view.mod-cm6 .image-embed[alt*="|"] img,
+.markdown-source-view.mod-cm6 .image-embed img[width] {
   width: auto;
+}
+
+.markdown-reading-view .vc-image-embed,
+.markdown-source-view.mod-cm6 .vc-image-embed {
+  overflow: visible;
+  text-align: initial;
+}
+
+.markdown-reading-view .vc-image-embed img,
+.markdown-source-view.mod-cm6 .vc-image-embed img {
+  width: 100%;
+  margin: 0;
+}
+
+.markdown-reading-view .vc-image-left,
+.markdown-reading-view .vc-image-right,
+.markdown-source-view.mod-cm6 .vc-image-left,
+.markdown-source-view.mod-cm6 .vc-image-right {
+  width: min(var(--vc-image-width, 42%), 100%);
+  margin-block: .25rem .9rem;
+}
+
+.markdown-reading-view .vc-image-left,
+.markdown-source-view.mod-cm6 .vc-image-left {
+  float: left;
+  margin-inline: 0 var(--vc-image-gap, 1rem);
+}
+
+.markdown-reading-view .vc-image-right,
+.markdown-source-view.mod-cm6 .vc-image-right {
+  float: right;
+  margin-inline: var(--vc-image-gap, 1rem) 0;
+}
+
+.markdown-reading-view .vc-image-center,
+.markdown-source-view.mod-cm6 .vc-image-center {
+  width: min(var(--vc-image-width, 100%), 100%);
+  margin-inline: auto;
+}
+
+.markdown-reading-view .vc-image-wide,
+.markdown-reading-view .vc-image-full,
+.markdown-source-view.mod-cm6 .vc-image-wide,
+.markdown-source-view.mod-cm6 .vc-image-full {
+  float: none;
+  width: 100%;
+  margin-inline: 0;
+}
+
+.markdown-reading-view .vc-image-shape,
+.markdown-source-view.mod-cm6 .vc-image-shape {
+  shape-outside: var(--vc-image-shape);
+  shape-image-threshold: .12;
+  shape-margin: var(--vc-image-gap, .75rem);
+  margin-inline: 0;
+}
+
+.markdown-reading-view .vc-image-shape img,
+.markdown-source-view.mod-cm6 .vc-image-shape img {
+  border: 0;
+  background: transparent;
+}
+
+/* The article and every rendered authored column own their floats. */
+.markdown-reading-view .markdown-preview-section,
+.markdown-reading-view .vc-layout-col-rendered,
+.markdown-source-view.mod-cm6 .cm-contentContainer,
+.markdown-source-view.mod-cm6 .vc-layout-col-rendered {
+  display: flow-root;
+}
+
+.markdown-reading-view .vc-layout-col-rendered .vc-image-full,
+.markdown-source-view.mod-cm6 .vc-layout-col-rendered .vc-image-full {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+}
+
+.markdown-reading-view :is(h1, h2, h3, h4, h5, h6, hr, blockquote, table, .callout, .vc-layout-cols-rendered),
+.markdown-source-view.mod-cm6 :is(h1, h2, h3, h4, h5, h6, hr, blockquote, table, .callout, .vc-layout-cols-rendered) {
+  clear: both;
+}
+
+@media (max-width: 700px) {
+  .markdown-reading-view .vc-image-left,
+  .markdown-reading-view .vc-image-right,
+  .markdown-reading-view .vc-image-shape,
+  .markdown-source-view.mod-cm6 .vc-image-left,
+  .markdown-source-view.mod-cm6 .vc-image-right,
+  .markdown-source-view.mod-cm6 .vc-image-shape {
+    float: none;
+    width: min(var(--vc-image-width, 100%), 100%);
+    margin-inline: auto;
+    shape-outside: none;
+  }
 }
