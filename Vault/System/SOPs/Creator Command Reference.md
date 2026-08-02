@@ -22,6 +22,8 @@ Follow [[Documentation Writing Standard]] for operational wording.
 | Return to the creator dashboard | Open [[Home]] |
 | See deliberate work tasks | [[Home]] → **All creator tasks**, or [[System/Creator Tasks|Creator Tasks]] |
 | Continue the World Anvil transfer | [[Home]] → **Open Review First**, or [[Drafts/Inbox/World Anvil Migration Review|Migration Guide]] |
+| Apply the safe mechanical World Anvil pass | `cd Site` then `npm run migration:worldanvil:integrate:write` |
+| Audit missing World Anvil descriptions and timestamp keys | `cd Site` then `npm run migration:worldanvil:prepare` |
 | Update an existing World Anvil article | [[#Update an existing World Anvil import]] |
 | Reopen import context for the active World Anvil note | **VISCERIUM Creator Tools: Open World Anvil import review context** |
 | Create fauna, flora, fungi, or an item | [[Home]] → **+ Story Entity** |
@@ -206,6 +208,8 @@ The Markdown note remains the source of truth.
 
 ## World Anvil transfer
 
+Follow [[World Anvil Migration SOP]] for the end-to-end process.
+
 Start with [[Home]] → **Open Review First**. Use [[Drafts/Inbox/World Anvil Migration Review|Migration Guide]] when a card's action is unclear.
 
 Opening an unresolved World Anvil import reveals its **Import review** pane.
@@ -218,21 +222,54 @@ It can open an existing same-title Codex note beside the import.
 
 It moves through the remaining queue in Review-first priority order.
 
+### Apply the safe mechanical migration pass
+
+Command:
+
+```bash
+cd Site
+npm run migration:worldanvil:integrate:write
+```
+
+Changes files: **Yes.**
+
+The command adds or refreshes baseline import metadata, certain legacy links, generated review tasks, the migration Base, and the generated migration report. It also derives a working description from existing prose when possible and adds blank `created:` and `updated:` keys.
+
+It does not choose canon, era, continuity identity, duplicate resolution, semantic relationships, or artwork rights.
+
+### Audit migration frontmatter
+
+Command:
+
+```bash
+cd Site
+npm run migration:worldanvil:prepare
+```
+
+Changes files: **No.**
+
+Reports how many imported notes still lack a derivable description or one of the timestamp keys.
+
+Use `npm run migration:worldanvil:prepare:write` only when you need to apply that frontmatter preparation without rerunning the complete integration pass.
+
 ### Update an existing World Anvil import
 
 Use this procedure when you convert one integrated import into a current VISCERIUM note.
 
 There is no single Templater command that can apply every current field safely.
 
-Integrated imports already contain these baseline properties:
+Integrated imports contain or receive these baseline properties:
 
 - `title`
+- `description` when useful prose can supply one
+- `created`
+- `updated`
 - `status`
 - `type`
 - `development_level`
 - `import_source`
 
-> **Why:** The World Anvil integration adds baseline frontmatter before editorial review begins.
+> **Why:** The World Anvil integration adds safe baseline frontmatter before editorial review begins. The blank timestamp keys are not populated while the note remains in the excluded import queue.
 
 Do not insert a full creation or type template into an existing import.
 
@@ -241,10 +278,11 @@ Full templates contain a complete frontmatter block and article skeleton.
 #### Confirm the core frontmatter
 
 1. Open the imported note.
-2. Confirm that the five baseline properties exist.
+2. Confirm that the baseline properties exist.
 3. Keep `status: draft` during migration.
 4. Correct `type` in Properties when the imported mapping is wrong.
-5. Write a reader-safe `description` before publication.
+5. Confirm or rewrite the generated `description` before publication.
+6. Do not invent values for `created` or `updated` inside the import queue.
 
 Common public properties are listed in [[System/Publishing Rules#Recommended frontmatter|Recommended frontmatter]].
 
@@ -285,7 +323,9 @@ Do not confuse article facts with [[System/Creator Sidebar|the Obsidian creator 
 3. Confirm that `entity_id` exists only when continuity requires it.
 4. Confirm that optional properties contain useful facts.
 5. Complete the note's **Import review** checklist.
-6. Run `cd Site && npm run doctor:vault`.
+6. Move the note to its deliberate Drafts or Lore destination.
+7. Edit it once and confirm that Auto-Properties populates the timestamp values.
+8. Run `cd Site && npm run doctor:vault`.
 
 **Stop condition:** The import has current frontmatter, no unresolved structural decision, and a deliberate destination.
 
