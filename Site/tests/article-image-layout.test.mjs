@@ -82,11 +82,14 @@ test('MDX image markup remains valid inside authored columns', () => {
   assert.doesNotMatch(markup, / style="/);
 });
 
-test('image layout CSS contains floats inside columns and collapses safely on mobile', async () => {
+test('image layout CSS contains floats without overriding hidden Storyteller panels', async () => {
   const css = await readSite('src/styles/image-layout.css');
   const entrypoint = await readSite('src/styles/ion-layers.css');
 
   assert.match(entrypoint, /@import '\.\/image-layout\.css';/);
+  assert.match(css, /\.sl-markdown-content:not\(\[hidden\]\)\s*\{[\s\S]*?display:\s*flow-root/);
+  assert.match(css, /\.sl-markdown-content\[hidden\]\s*\{[\s\S]*?display:\s*none\s*!important/);
+  assert.doesNotMatch(css, /\.sl-markdown-content\s*\{\s*display:\s*flow-root/);
   assert.match(css, /\.vc-image-left[\s\S]*?float:\s*left/);
   assert.match(css, /\.vc-image-right[\s\S]*?float:\s*right/);
   assert.match(css, /\.vc-image-shape[\s\S]*?shape-outside:\s*var\(--vc-image-shape\)/);
