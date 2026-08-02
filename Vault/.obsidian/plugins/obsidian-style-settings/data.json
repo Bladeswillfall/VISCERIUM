@@ -1,0 +1,11 @@
+{
+  "baseline-style@@accented-interface": true,
+  "baseline-style@@color-scheme-light": "default-light",
+  "baseline-style@@color-scheme-dark": "sanctum-dark",
+  "baseline-style@@background-contrast-dark": "contrast-dark",
+  "baseline-style@@layout-style": "layout-cards",
+  "baseline-style@@element-style": "input-cupertino",
+  "baseline-style@@status-bar-style": "status-bar-baseline",
+  "baseline-style@@anim-motion-baseline": "cubic-bezier(0.1, 0, 0.1, 1.25)",
+  "baseline-style@@reduce-motion": true
+}
