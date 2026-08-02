@@ -86,22 +86,29 @@ export function parseObsidianImageEmbed(rawSpec) {
   };
 }
 
-export function renderArticleImage({ spec, filename, url, href }) {
+export function renderArticleImage({ spec, filename, url, href, jsx = false }) {
   const alignment = ALIGNMENTS.has(spec?.alignment) ? spec.alignment : 'center';
   const classes = ['vc-image-embed', `vc-image-${safeClassToken(alignment)}`];
-  const styles = [];
+  const style = {};
 
   if (spec?.shape) classes.push('vc-image-shape');
-  if (spec?.width) styles.push(`--vc-image-width:${spec.width}px`);
-  if (spec?.gap !== undefined) styles.push(`--vc-image-gap:${spec.gap}px`);
-  if (spec?.shape) styles.push(`--vc-image-shape:url(&quot;${escapeAttribute(url)}&quot;)`);
+  if (spec?.width) style['--vc-image-width'] = `${spec.width}px`;
+  if (spec?.gap !== undefined) style['--vc-image-gap'] = `${spec.gap}px`;
+  if (spec?.shape) style['--vc-image-shape'] = `url("${url}")`;
 
-  const styleAttribute = styles.length ? ` style="${styles.join(';')}"` : '';
+  const classAttribute = jsx ? 'className' : 'class';
+  const styleAttribute = Object.keys(style).length
+    ? jsx
+      ? ` style={${JSON.stringify(style)}}`
+      : ` style="${Object.entries(style).map(([key, value]) => `${key}:${escapeAttribute(value)}`).join(';')}"`
+    : '';
   const alt = escapeAttribute(spec?.alt || filename);
-  const image = `<img src="${escapeAttribute(url)}" alt="${alt}" loading="lazy" decoding="async">`;
+  const image = jsx
+    ? `<img src="${escapeAttribute(url)}" alt="${alt}" loading="lazy" decoding="async" />`
+    : `<img src="${escapeAttribute(url)}" alt="${alt}" loading="lazy" decoding="async">`;
   const content = href
-    ? `<a href="${escapeAttribute(href)}" class="vc-image-link">${image}</a>`
+    ? `<a href="${escapeAttribute(href)}" ${classAttribute}="vc-image-link">${image}</a>`
     : image;
 
-  return `<figure class="${classes.join(' ')}"${styleAttribute}>${content}</figure>`;
+  return `\n\n<figure ${classAttribute}="${classes.join(' ')}"${styleAttribute}>${content}</figure>\n\n`;
 }
