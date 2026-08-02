@@ -1,12 +1,7 @@
 [
-  "obsidian-git",
   "image-converter",
-  "dataview",
   "editing-toolbar",
-  "table-editor-obsidian",
   "breadcrumbs",
-  "obsidian-importer",
-  "chronos",
   "templater-obsidian",
   "auto-properties",
   "metadata-menu",
@@ -18,6 +13,10 @@
   "viscerium-image-tools",
   "iconic",
   "harper",
-  "obsidian-style-settings",
-  "zoom-map"
+  "zoom-map",
+  "table-editor-obsidian",
+  "chronos",
+  "dataview",
+  "obsidian-git",
+  "obsidian-importer"
 ]

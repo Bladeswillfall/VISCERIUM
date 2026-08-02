@@ -3,10 +3,10 @@
   "autoCommitMessage": "vault backup: {{date}}",
   "commitMessageScript": "",
   "commitDateFormat": "YYYY-MM-DD HH:mm:ss",
-  "autoSaveInterval": 30,
+  "autoSaveInterval": 0,
   "autoPushInterval": 0,
   "autoPullInterval": 0,
-  "autoPullOnBoot": true,
+  "autoPullOnBoot": false,
   "autoCommitOnlyStaged": false,
   "disablePush": false,
   "pullBeforePush": true,
@@ -33,12 +33,12 @@
   "gitDir": "",
   "showFileMenu": true,
   "authorInHistoryView": "hide",
-  "dateInHistoryView": true,
+  "dateInHistoryView": false,
   "diffStyle": "split",
   "hunks": {
-    "showSigns": true,
+    "showSigns": false,
     "hunkCommands": false,
-    "statusBar": "colored"
+    "statusBar": "disabled"
   },
   "lineAuthor": {
     "show": false,
