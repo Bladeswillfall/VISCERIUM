@@ -15,6 +15,7 @@ const sopFiles = [
   'Vault/System/SOPs/Sourcebook Readiness SOP.md',
   'Vault/System/SOPs/Story Entity Workflow SOP.md',
   'Vault/System/SOPs/Storyteller View SOP.md',
+  'Vault/System/SOPs/World Anvil Migration SOP.md',
 ];
 
 test('all operational SOPs reference the shared documentation writing standard', () => {
