@@ -1,0 +1,9 @@
+{
+  "id": "viscerium-image-tools",
+  "name": "VISCERIUM Image Tools",
+  "version": "0.1.0",
+  "minAppVersion": "1.8.7",
+  "description": "Renders VISCERIUM article image alignment, sizing and transparent-shape wrapping flags in Obsidian.",
+  "author": "VISCERIUM",
+  "isDesktopOnly": false
+}
