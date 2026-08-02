@@ -19,7 +19,7 @@
 | Tool | Fields or actions it owns |
 | --- | --- |
 | Auto-Properties | `created`, `updated`, `word_count`, `open_task_count` |
-| Metadata Menu | `status`, `type`, `development_level`, `headerImage`, `decorativeImage`, `tags`, `related`, `location`, `faction`, `participants` |
+| Metadata Menu | `status`, `type`, `headerImage`, `decorativeImage`, `tags`, `related`, `location`, `faction`, `participants` |
 | VISCERIUM Creator Tools | `era`, `entity_id`, era editions, continuity checks, World Anvil review |
 
 Do not add `era` to Metadata Menu.
@@ -47,12 +47,14 @@ Do not run **Auto-Properties: Update property values for every note in vault** d
 
 1. Open a lore or draft note.
 2. Use Metadata Menu from the Properties view, file menu, command palette, or supported Base view.
-3. Choose `status`, `type`, or `development_level` from the controlled lists.
+3. Choose `status` or `type` from the controlled lists.
 4. Use `headerImage` to choose a file from `Assets/Images`.
 5. Use the relationship fields to choose existing character, faction, or location notes.
 6. Use **VISCERIUM Creator Tools: Set controlled era / Universal scope** for `era`.
 
 Metadata Menu does not manage automatic, continuity, chronology, migration, route, or generated fields.
+
+The initial `status` list contains only `draft` and `published` because those are the states currently used by the publishing workflow. Extend the list only through a deliberate schema change.
 
 ## Test the setup
 
