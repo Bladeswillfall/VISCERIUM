@@ -81,3 +81,100 @@
 .bases-view[data-view-type="table"] .bases-tr:hover .bases-td {
   background: var(--background-modifier-hover);
 }
+
+/* Needs Attention uses semantic severity rather than one undifferentiated warning colour. */
+.attention-state {
+  --vc-attention-color: var(--vc-state-warning, var(--color-yellow));
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  max-width: 100%;
+  color: color-mix(in srgb, var(--vc-attention-color) 76%, var(--text-normal));
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.attention-state::before {
+  content: attr(data-issues);
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding-inline: 0.28rem;
+  border: 1px solid color-mix(in srgb, var(--vc-attention-color) 58%, var(--background-modifier-border));
+  border-radius: var(--vc-radius-control, 4px);
+  background: color-mix(in srgb, var(--vc-attention-color) 11%, transparent);
+  color: var(--vc-attention-color);
+  font-family: var(--font-interface);
+  font-size: 0.7em;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.attention-state--notice {
+  --vc-attention-color: var(--vc-state-warning, var(--color-yellow));
+}
+
+.attention-state--elevated {
+  --vc-attention-color: var(--color-orange);
+}
+
+.attention-state--urgent {
+  --vc-attention-color: color-mix(in srgb, var(--color-red) 68%, var(--color-orange));
+}
+
+.attention-state--critical {
+  --vc-attention-color: color-mix(in srgb, var(--color-red) 82%, #6f1020);
+  font-weight: 800;
+}
+
+/* Project Status labels frame the embedded Bases without turning them into card panels. */
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:first-of-type strong,
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:nth-of-type(3) strong {
+  display: block;
+  margin: 0.15rem 0 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:first-of-type strong {
+  color: color-mix(in srgb, var(--vc-state-danger, var(--color-red)) 72%, var(--text-normal));
+}
+
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:nth-of-type(3) strong {
+  color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 56%, var(--text-normal));
+}
+
+/* Homepage rows become progressively more insistent as their issue count rises. */
+.viscerium-home .bases-tr:has(.attention-state--notice) .bases-td {
+  background: color-mix(in srgb, var(--vc-state-warning, var(--color-yellow)) 4%, transparent);
+}
+
+.viscerium-home .bases-tr:has(.attention-state--elevated) .bases-td {
+  background: color-mix(in srgb, var(--color-orange) 6%, transparent);
+}
+
+.viscerium-home .bases-tr:has(.attention-state--urgent) .bases-td {
+  background: color-mix(in srgb, var(--color-red) 8%, transparent);
+}
+
+.viscerium-home .bases-tr:has(.attention-state--critical) .bases-td {
+  background: color-mix(in srgb, var(--color-red) 13%, transparent);
+}
+
+.viscerium-home .bases-tr:has(.attention-state--notice):hover .bases-td {
+  background: color-mix(in srgb, var(--vc-state-warning, var(--color-yellow)) 8%, var(--background-modifier-hover));
+}
+
+.viscerium-home .bases-tr:has(.attention-state--elevated):hover .bases-td {
+  background: color-mix(in srgb, var(--color-orange) 10%, var(--background-modifier-hover));
+}
+
+.viscerium-home .bases-tr:has(.attention-state--urgent):hover .bases-td {
+  background: color-mix(in srgb, var(--color-red) 13%, var(--background-modifier-hover));
+}
+
+.viscerium-home .bases-tr:has(.attention-state--critical):hover .bases-td {
+  background: color-mix(in srgb, var(--color-red) 18%, var(--background-modifier-hover));
+}

@@ -10,6 +10,13 @@
   line-height: 1.12;
 }
 
+/* The creator dashboard brand mark is intentionally distinct from article headings. */
+.markdown-preview-view.viscerium-home .callout[data-callout="home-header"] h1,
+.markdown-source-view.mod-cm6.viscerium-home .HyperMD-header-1 {
+  font-family: "Cinzel", serif;
+  letter-spacing: 0.08em;
+}
+
 .markdown-rendered h2,
 .markdown-source-view.mod-cm6 .HyperMD-header-2 {
   margin-top: 1.9em;
