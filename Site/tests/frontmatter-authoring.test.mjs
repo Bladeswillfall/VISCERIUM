@@ -55,12 +55,21 @@ test('frontmatter plugins separate mechanical, authorial and continuity fields',
   }
 });
 
-test('creator templates seed guarded blank timestamps', async () => {
+test('all note-creation templates seed guarded blank timestamps', async () => {
   const templates = [
     'Templates/Lore/New Lore Entity.md',
     'Templates/Databases/New Story Entity.md',
     'Templates/Databases/New Myrkild Unit.md',
+    'Templates/Lore/Character Template.md',
+    'Templates/Lore/Faction Template.md',
+    'Templates/Lore/Location Template.md',
     'Templates/Lore/Event Template.md',
+    'Templates/Lore/Era Template.md',
+    'Templates/Publishing/Map Template.md',
+    'Templates/Publishing/Image Metadata Template.md',
+    'Templates/Timelines/Timeline Template.md',
+    'Templates/Timelines/Chronos Timeline Template.md',
+    'Templates/Databases/Myrkild Unit Profile.md',
   ];
 
   for (const template of templates) {
