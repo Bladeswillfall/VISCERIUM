@@ -9,9 +9,7 @@
         "sourceType": "ValuesList",
         "valuesList": {
           "0": "draft",
-          "1": "review",
-          "2": "published",
-          "3": "archived"
+          "1": "published"
         }
       }
     },
@@ -35,23 +33,6 @@
           "9": "item",
           "10": "myrkild-unit",
           "11": "image"
-        }
-      }
-    },
-    {
-      "name": "development_level",
-      "type": "Select",
-      "id": "vc-development-level",
-      "path": "",
-      "options": {
-        "sourceType": "ValuesList",
-        "valuesList": {
-          "0": "stub",
-          "1": "outline",
-          "2": "draft",
-          "3": "developed",
-          "4": "review",
-          "5": "complete"
         }
       }
     },
