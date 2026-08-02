@@ -50,21 +50,31 @@ test('frontmatter plugins separate mechanical, authorial and continuity fields',
   assert.ok(!presetFields.has('development_level'));
   assert.deepEqual(presetFields.get('headerImage').options.folders, ['Assets/Images']);
 
-  for (const protectedField of ['created', 'updated', 'era', 'entity_id', 'calendarDate', 'timeline', 'import_issues']) {
-    assert.ok(metadataMenu.globallyIgnoredFields.includes(protectedField), `${protectedField} must not be edited through Metadata Menu`);
+  for (const fieldName of ['created', 'updated', 'era', 'entity_id', 'calendarDate', 'timeline', 'import_issues']) {
+    assert.ok(metadataMenu.globallyIgnoredFields.includes(fieldName), `${fieldName} must not be edited through Metadata Menu`);
   }
 });
 
-test('creator templates seed a guarded blank creation date', async () => {
+test('all note-creation templates seed guarded blank timestamps', async () => {
   const templates = [
     'Templates/Lore/New Lore Entity.md',
     'Templates/Databases/New Story Entity.md',
     'Templates/Databases/New Myrkild Unit.md',
+    'Templates/Lore/Character Template.md',
+    'Templates/Lore/Faction Template.md',
+    'Templates/Lore/Location Template.md',
     'Templates/Lore/Event Template.md',
+    'Templates/Lore/Era Template.md',
+    'Templates/Publishing/Map Template.md',
+    'Templates/Publishing/Image Metadata Template.md',
+    'Templates/Timelines/Timeline Template.md',
+    'Templates/Timelines/Chronos Timeline Template.md',
+    'Templates/Databases/Myrkild Unit Profile.md',
   ];
 
   for (const template of templates) {
     const source = await readText(template);
     assert.match(source, /created:/, `${template} must seed the guarded created property`);
+    assert.match(source, /updated:/, `${template} must seed the automatic updated property`);
   }
 });

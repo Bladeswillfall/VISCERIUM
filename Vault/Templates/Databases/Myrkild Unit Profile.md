@@ -1,6 +1,8 @@
 ---
 title: "{{title}}"
 description: "A WIP Myrkild unit profile."
+created:
+updated:
 status: draft
 type: myrkild-unit
 unit_id: null

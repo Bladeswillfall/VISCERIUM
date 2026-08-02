@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+updated:
 status: draft
 type: event
 era:

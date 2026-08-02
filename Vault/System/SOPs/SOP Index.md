@@ -10,6 +10,7 @@ All operational documents use [[Documentation Writing Standard|the VISCERIUM ASD
 
 | Task | Use this SOP |
 | --- | --- |
+| Process, triage, or file World Anvil imports | [[World Anvil Migration SOP]] |
 | Create or revise fauna, flora, fungi, items, or similar records | [[Entity Authoring SOP]] |
 | Create and file a Story Entity in Obsidian | [[Story Entity Workflow SOP]] |
 | Edit dates, status, type, images, tags, or relationship frontmatter | [[Frontmatter Authoring Workflow]] |

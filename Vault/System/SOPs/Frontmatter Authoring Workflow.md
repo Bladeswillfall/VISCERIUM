@@ -31,7 +31,7 @@ Do not add `era` to Metadata Menu.
 | Property | Trigger | Behaviour |
 | --- | --- | --- |
 | `created` | New-note modification or later open | Fills only when the note already contains a blank `created:` key. It never overwrites a value. |
-| `updated` | Note modification | Records the current local date. |
+| `updated` | Note modification | Fills the seeded blank `updated:` key and records the current local date on later edits. |
 | `word_count` | Note modification | Counts words in the note body. |
 | `open_task_count` | Note modification | Counts unchecked Markdown tasks. |
 
@@ -41,7 +41,40 @@ The rules ignore `Drafts/WorldAnvil Import`.
 
 Do not run **Auto-Properties: Update property values for every note in vault** during the first test.
 
-> **Why:** Existing files can have checkout-time filesystem dates. The guarded `created:` workflow prevents false historical dates.
+> **Why:** Existing files can have checkout-time filesystem dates. The guarded timestamp workflow prevents false historical dates.
+
+## Creation templates
+
+The supported new-note creation paths seed both blank timestamp properties:
+
+```yaml
+created:
+updated:
+```
+
+This applies to Lore Entities, Story Entities, Myrkild Units, events, characters, factions, locations, eras, maps, image records, and timelines.
+
+Do not type dates into a new note unless you are deliberately preserving a known source date.
+
+## World Anvil imports
+
+Use [[World Anvil Migration SOP]] for the import queue.
+
+Run this command from `Site` after importing or after a broad migration batch:
+
+```bash
+npm run migration:worldanvil:integrate:write
+```
+
+The command derives a working description from existing prose when possible, reports descriptions it cannot derive, and seeds a blank `updated:` key. It excludes generated import-review tasks from candidate descriptions.
+
+The command does not add `created:` to imported notes.
+
+> **Why:** A migrated file's filesystem creation time normally identifies when it was exported, copied, or imported. It is not a trustworthy article creation date.
+
+After you move a resolved import to its final Drafts or Lore folder, edit it once and confirm that Auto-Properties fills `updated`, `word_count`, and `open_task_count` as applicable.
+
+Add `created` manually only when you have an authoritative source creation date. Otherwise leave it absent.
 
 ## Edit controlled fields
 
@@ -66,9 +99,9 @@ Create one test note with each Home action that you use:
 
 For each test note:
 
-1. Confirm that the template contains a blank `created:` property.
+1. Confirm that the template contains blank `created:` and `updated:` properties.
 2. Type a short sentence.
-3. Confirm that `created`, `updated`, and `word_count` appear.
+3. Confirm that `created`, `updated`, and `word_count` populate.
 4. Add one unchecked task and confirm that `open_task_count` appears.
 5. Change `status` and `type` with Metadata Menu.
 6. Choose one `headerImage`.
@@ -100,7 +133,7 @@ Check these conditions:
 
 Stop when one representative note completes the full workflow without:
 
-- touching `System`, `Templates`, or the World Anvil import queue;
+- touching `System`, `Templates`, or the World Anvil import queue during normal editing;
 - changing `era` outside Creator Tools;
 - producing repeated Git changes while the note is idle;
 - failing the vault doctor or site build.
