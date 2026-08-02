@@ -5,17 +5,17 @@ filters:
         - file.inFolder("Lore")
         - file.inFolder("Drafts/WorldAnvil Import")
 formulas:
-  display_title: 'if(title.isEmpty(), file.name, title)'
-  area: 'if(file.inFolder("Lore"), "CANON", "IMPORT")'
-  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
-  era_count: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))'
+  display_title: if(title.isEmpty(), file.name, title)
+  area: if(file.inFolder("Lore"), "CANON", "IMPORT")
+  era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
+  era_count: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))
   era_sensitive_types: '["character", "faction", "location", "event", "species", "fauna", "flora", "fungi", "item", "myrkild-unit"]'
-  needs_era: 'formula.era_sensitive_types.contains(type) && formula.era_count == 0'
-  migration_issue_count: 'list(import_issues).filter(value != null).length'
-  issue_count: 'if(title.isEmpty(), 1, 0) + if(description.isEmpty(), 1, 0) + if(type.isEmpty(), 1, 0) + if(formula.needs_era, 1, 0) + formula.migration_issue_count'
-  attention_text: 'if(title.isEmpty(), "Missing title · ", "") + if(description.isEmpty(), "Missing description · ", "") + if(type.isEmpty(), "Missing type · ", "") + if(formula.needs_era, "Missing era · ", "") + if(formula.migration_issue_count > 0, formula.migration_issue_count.toString() + " migration issue(s)", "")'
-  attention_severity: 'if(formula.issue_count >= 4, "critical", if(formula.issue_count == 3, "urgent", if(formula.issue_count == 2, "elevated", "notice")))'
-  attention: 'html("<span class=\"attention-state attention-state--" + formula.attention_severity + "\" data-issues=\"" + formula.issue_count.toString() + "\">" + formula.attention_text + "</span>")'
+  needs_era: formula.era_sensitive_types.contains(type) && formula.era_count == 0
+  migration_issue_count: list(import_issues).filter(value != null).length
+  issue_count: if(title.isEmpty(), 1, 0) + if(description.isEmpty(), 1, 0) + if(type.isEmpty(), 1, 0) + if(formula.needs_era, 1, 0) + formula.migration_issue_count
+  attention_text: if(title.isEmpty(), "Missing title · ", "") + if(description.isEmpty(), "Missing description · ", "") + if(type.isEmpty(), "Missing type · ", "") + if(formula.needs_era, "Missing era · ", "") + if(formula.migration_issue_count > 0, formula.migration_issue_count.toString() + " migration issue(s)", "")
+  attention_severity: if(formula.issue_count >= 4, "critical", if(formula.issue_count == 3, "urgent", if(formula.issue_count == 2, "elevated", "notice")))
+  attention: html("<span class=\"attention-state attention-state--" + formula.attention_severity + "\" data-issues=\"" + formula.issue_count.toString() + "\">" + formula.attention_text + "</span>")
 properties:
   formula.display_title:
     displayName: Note
@@ -38,7 +38,6 @@ properties:
 views:
   - type: table
     name: Homepage
-    limit: 6
     filters:
       and:
         - formula.issue_count > 0
@@ -52,6 +51,7 @@ views:
         direction: DESC
       - property: file.mtime
         direction: DESC
+    limit: 6
   - type: table
     name: All issues
     filters:
