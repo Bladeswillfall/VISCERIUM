@@ -1,6 +1,8 @@
 ---
 title: "{{title}}"
 description:
+created:
+updated:
 status: draft
 type: faction
 icon: faction
