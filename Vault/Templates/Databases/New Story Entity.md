@@ -108,7 +108,7 @@ if (!/^created:/m.test(rendered)) {
 }
 if (!/^updated:/m.test(rendered)) {
   rendered = /^created:/m.test(rendered)
-    ? rendered.replace(/^(created:\s*)$/m, "$1\nupdated:")
+    ? rendered.replace(/^(created:[^\r\n]*)$/m, "$1\nupdated:")
     : rendered.replace(/^(development_level:\s*[^\r\n]+)$/m, "$1\nupdated:");
 }
 if (entityId && !/^entity_id:/m.test(rendered)) {
