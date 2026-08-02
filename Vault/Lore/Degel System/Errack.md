@@ -42,6 +42,8 @@ sidebar:
 ---
 Nestled in the [[Degel System/Degel|Degel system]], Errack presents a paradox: a life-sustaining planet teeming with rich plant life and biodiversity, yet a world of savage beauty and unforgiving extremes. Towering mountains pierce skies above expansive jungles teeming with both vibrant life and lurking horrors, while arid deserts push the limits of ecological adaptation. Every corner of Errack showcases nature's ingenuity and ferocity, demanding respect and resilience from all who dare to inhabit it.
 
+test
+
 ## [Icon:event] Orbital period
 Most societies on Errack subscribe to a common calendar built around the planet's orbital period:
 - **Year:** 364 standard days.
