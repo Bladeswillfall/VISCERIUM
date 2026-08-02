@@ -36,6 +36,10 @@ function blankScalarLine(line, key) {
   return ['', 'null', '~', '""', "''"].includes(match[1].trim().toLowerCase());
 }
 
+function taskDescriptionLine(line) {
+  return /^description:\s*["']?\s*[-*+]\s+\[[ xX]\]\s+/i.test(String(line ?? ''));
+}
+
 function descriptionSource(body) {
   return String(body ?? '')
     .replace(REVIEW_BLOCK_RE, '')
@@ -53,6 +57,7 @@ export function prepareImportMarkdown(markdown, fallbackTitle = '') {
       skipped: true,
       added: [],
       descriptionUnresolved: false,
+      invalidDescriptionRemoved: false,
     };
   }
 
@@ -61,17 +66,26 @@ export function prepareImportMarkdown(markdown, fallbackTitle = '') {
   const lines = parts.frontmatter.split('\n');
   const title = frontmatterTitle(parts.frontmatter, fallbackTitle);
   let descriptionIndex = lines.findIndex((line) => /^description:/.test(line));
-  const descriptionNeedsValue = descriptionIndex < 0 || blankScalarLine(lines[descriptionIndex], 'description');
+  const invalidDescription = descriptionIndex >= 0 && taskDescriptionLine(lines[descriptionIndex]);
+  const descriptionNeedsValue = descriptionIndex < 0
+    || blankScalarLine(lines[descriptionIndex], 'description')
+    || invalidDescription;
   const description = descriptionNeedsValue
     ? descriptionFromBody(descriptionSource(parts.body), '')
     : '';
   const descriptionUnresolved = descriptionNeedsValue && !description;
+  let invalidDescriptionRemoved = false;
 
   if (descriptionNeedsValue && description) {
     const descriptionLine = `description: ${JSON.stringify(description)}`;
     changedFields.push(descriptionLine);
     if (descriptionIndex >= 0) lines[descriptionIndex] = descriptionLine;
     else insertions.push(descriptionLine);
+  } else if (invalidDescription) {
+    lines.splice(descriptionIndex, 1);
+    descriptionIndex = -1;
+    invalidDescriptionRemoved = true;
+    changedFields.push('description: <removed generated task>');
   }
 
   // Do not seed created: for imports. Auto-Properties derives it from the file
@@ -89,6 +103,7 @@ export function prepareImportMarkdown(markdown, fallbackTitle = '') {
       skipped: false,
       added: [],
       descriptionUnresolved,
+      invalidDescriptionRemoved: false,
       title,
     };
   }
@@ -104,6 +119,7 @@ export function prepareImportMarkdown(markdown, fallbackTitle = '') {
     skipped: false,
     added: changedFields,
     descriptionUnresolved,
+    invalidDescriptionRemoved,
     title,
   };
 }
@@ -126,6 +142,7 @@ export async function prepareWorldAnvilFrontmatter({ vault = DEFAULT_VAULT, writ
     skipped: 0,
     descriptionsAdded: 0,
     descriptionsUnresolved: 0,
+    invalidDescriptionsRemoved: 0,
     updatedKeysAdded: 0,
   };
 
@@ -139,10 +156,13 @@ export async function prepareWorldAnvilFrontmatter({ vault = DEFAULT_VAULT, writ
       continue;
     }
     if (prepared.descriptionUnresolved) stats.descriptionsUnresolved += 1;
+    if (prepared.invalidDescriptionRemoved) stats.invalidDescriptionsRemoved += 1;
     if (!prepared.changed) continue;
 
     stats.changed += 1;
-    if (prepared.added.some((line) => line.startsWith('description:'))) stats.descriptionsAdded += 1;
+    if (prepared.added.some((line) => line.startsWith('description:') && !line.includes('<removed'))) {
+      stats.descriptionsAdded += 1;
+    }
     if (prepared.added.includes('updated:')) stats.updatedKeysAdded += 1;
     if (write) await fs.writeFile(fullPath, prepared.markdown, 'utf8');
   }
@@ -151,6 +171,7 @@ export async function prepareWorldAnvilFrontmatter({ vault = DEFAULT_VAULT, writ
   console.log(`Imported notes: ${stats.total}`);
   console.log(`${write ? 'Changed' : 'Would change'}: ${stats.changed}`);
   console.log(`Descriptions added: ${stats.descriptionsAdded}`);
+  console.log(`Invalid task descriptions removed: ${stats.invalidDescriptionsRemoved}`);
   console.log(`Descriptions still unresolved: ${stats.descriptionsUnresolved}`);
   console.log(`updated keys added: ${stats.updatedKeysAdded}`);
   if (stats.skipped) console.log(`Skipped without valid frontmatter: ${stats.skipped}`);
