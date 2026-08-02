@@ -1,8 +1,16 @@
 # World Anvil Migration SOP
 
-> **Next action:** Run the migration integration command, then work from the highest-priority unresolved card.
+> **Use this SOP when:** You integrate, triage, or file articles under `Drafts/WorldAnvil Import`.
 >
 > **Result:** Mechanical cleanup is automated, while canon decisions remain explicit and reviewable.
+>
+> **First action:** Open a terminal in `Site` and run the migration integration command.
+
+Follow [[Documentation Writing Standard]] for operational wording.
+
+## Purpose
+
+Reduce repetitive migration work without silently deciding canon, continuity, relationships, or publication.
 
 ## Before you start
 
@@ -15,7 +23,9 @@ The import folder is local authoring data and is excluded from Git.
 
 > **Why:** GitHub and pull requests can improve the migration tooling, but they cannot inspect or edit the local imported articles themselves.
 
-## Run the mechanical pass
+## Procedure
+
+### 1. Run the mechanical pass
 
 Run:
 
@@ -44,7 +54,7 @@ The command does not decide:
 
 > **Why:** These decisions can change meaning. Automating them would reduce work by silently creating bad canon.
 
-## Audit without changing files
+### 2. Audit without changing files
 
 Run either command when you need a report only:
 
@@ -55,7 +65,7 @@ npm run migration:worldanvil:prepare
 
 The second command reports how many imports still lack a generated description or timestamp keys.
 
-## Process the queue
+### 3. Process the queue
 
 1. Open `World Anvil Import.base`.
 2. Start with **Review first**.
@@ -68,7 +78,7 @@ Do not insert a full creation template into an imported note.
 
 > **Why:** Full templates contain another frontmatter block and article skeleton. The migration command supplies the safe baseline instead.
 
-## File a resolved import
+### 4. File a resolved import
 
 1. Confirm the title and final `type`.
 2. Set `era` or Universal scope with VISCERIUM Creator Tools.
