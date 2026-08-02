@@ -45,14 +45,14 @@ Do not run **Auto-Properties: Update property values for every note in vault** d
 
 ## Creation templates
 
-The supported creation paths seed both blank timestamp properties:
+The supported new-note creation paths seed both blank timestamp properties:
 
 ```yaml
 created:
 updated:
 ```
 
-This applies to Lore Entities, Story Entities, Myrkild Units, and event templates.
+This applies to Lore Entities, Story Entities, Myrkild Units, events, characters, factions, locations, eras, maps, image records, and timelines.
 
 Do not type dates into a new note unless you are deliberately preserving a known source date.
 
@@ -66,11 +66,15 @@ Run this command from `Site` after importing or after a broad migration batch:
 npm run migration:worldanvil:integrate:write
 ```
 
-The command derives a working description from existing prose when possible and seeds blank `created:` and `updated:` keys. It does not populate timestamp values while the note remains inside `Drafts/WorldAnvil Import`.
+The command derives a working description from existing prose when possible, reports descriptions it cannot derive, and seeds a blank `updated:` key. It excludes generated import-review tasks from candidate descriptions.
 
-After you move a resolved import to its final Drafts or Lore folder, edit it once and confirm that Auto-Properties fills the timestamps.
+The command does not add `created:` to imported notes.
 
-> **Why:** Import and checkout timestamps are not reliable World Anvil article dates.
+> **Why:** A migrated file's filesystem creation time normally identifies when it was exported, copied, or imported. It is not a trustworthy article creation date.
+
+After you move a resolved import to its final Drafts or Lore folder, edit it once and confirm that Auto-Properties fills `updated`, `word_count`, and `open_task_count` as applicable.
+
+Add `created` manually only when you have an authoritative source creation date. Otherwise leave it absent.
 
 ## Edit controlled fields
 
