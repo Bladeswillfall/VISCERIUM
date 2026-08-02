@@ -6,6 +6,7 @@ import { isMainModule } from './script-entry.mjs';
 
 const DEFAULT_VAULT = path.resolve(process.cwd(), '../Vault');
 const IMPORT_REL = 'Drafts/WorldAnvil Import';
+const REVIEW_BLOCK_RE = /<!-- worldanvil-migration-review:start -->[\s\S]*?<!-- worldanvil-migration-review:end -->\n?/g;
 
 function splitFrontmatter(markdown) {
   const text = String(markdown ?? '').replace(/\r\n/g, '\n');
@@ -35,36 +36,61 @@ function blankScalarLine(line, key) {
   return ['', 'null', '~', '""', "''"].includes(match[1].trim().toLowerCase());
 }
 
+function descriptionSource(body) {
+  return String(body ?? '')
+    .replace(REVIEW_BLOCK_RE, '')
+    .split(/\n\s*\n/)
+    .filter((block) => !/^\s*[-*+]\s+\[[ xX]\]\s+/.test(block))
+    .join('\n\n');
+}
+
 export function prepareImportMarkdown(markdown, fallbackTitle = '') {
   const parts = splitFrontmatter(markdown);
   if (!parts.hasFrontmatter) {
-    return { markdown: String(markdown ?? ''), changed: false, skipped: true, added: [] };
+    return {
+      markdown: String(markdown ?? ''),
+      changed: false,
+      skipped: true,
+      added: [],
+      descriptionUnresolved: false,
+    };
   }
 
   const changedFields = [];
   const insertions = [];
   const lines = parts.frontmatter.split('\n');
   const title = frontmatterTitle(parts.frontmatter, fallbackTitle);
-  const description = descriptionFromBody(parts.body, '');
   let descriptionIndex = lines.findIndex((line) => /^description:/.test(line));
+  const descriptionNeedsValue = descriptionIndex < 0 || blankScalarLine(lines[descriptionIndex], 'description');
+  const description = descriptionNeedsValue
+    ? descriptionFromBody(descriptionSource(parts.body), '')
+    : '';
+  const descriptionUnresolved = descriptionNeedsValue && !description;
 
-  if (description && (descriptionIndex < 0 || blankScalarLine(lines[descriptionIndex], 'description'))) {
+  if (descriptionNeedsValue && description) {
     const descriptionLine = `description: ${JSON.stringify(description)}`;
     changedFields.push(descriptionLine);
     if (descriptionIndex >= 0) lines[descriptionIndex] = descriptionLine;
     else insertions.push(descriptionLine);
   }
-  if (!hasProperty(parts.frontmatter, 'created')) {
-    changedFields.push('created:');
-    insertions.push('created:');
-  }
+
+  // Do not seed created: for imports. Auto-Properties derives it from the file
+  // birth time, which is the export/import time rather than an authoritative
+  // World Anvil article creation date.
   if (!hasProperty(parts.frontmatter, 'updated')) {
     changedFields.push('updated:');
     insertions.push('updated:');
   }
 
   if (!changedFields.length) {
-    return { markdown: String(markdown ?? ''), changed: false, skipped: false, added: [] };
+    return {
+      markdown: String(markdown ?? ''),
+      changed: false,
+      skipped: false,
+      added: [],
+      descriptionUnresolved,
+      title,
+    };
   }
 
   descriptionIndex = lines.findIndex((line) => /^description:/.test(line));
@@ -77,6 +103,7 @@ export function prepareImportMarkdown(markdown, fallbackTitle = '') {
     changed: true,
     skipped: false,
     added: changedFields,
+    descriptionUnresolved,
     title,
   };
 }
@@ -98,7 +125,7 @@ export async function prepareWorldAnvilFrontmatter({ vault = DEFAULT_VAULT, writ
     changed: 0,
     skipped: 0,
     descriptionsAdded: 0,
-    createdKeysAdded: 0,
+    descriptionsUnresolved: 0,
     updatedKeysAdded: 0,
   };
 
@@ -111,11 +138,11 @@ export async function prepareWorldAnvilFrontmatter({ vault = DEFAULT_VAULT, writ
       stats.skipped += 1;
       continue;
     }
+    if (prepared.descriptionUnresolved) stats.descriptionsUnresolved += 1;
     if (!prepared.changed) continue;
 
     stats.changed += 1;
     if (prepared.added.some((line) => line.startsWith('description:'))) stats.descriptionsAdded += 1;
-    if (prepared.added.includes('created:')) stats.createdKeysAdded += 1;
     if (prepared.added.includes('updated:')) stats.updatedKeysAdded += 1;
     if (write) await fs.writeFile(fullPath, prepared.markdown, 'utf8');
   }
@@ -124,7 +151,7 @@ export async function prepareWorldAnvilFrontmatter({ vault = DEFAULT_VAULT, writ
   console.log(`Imported notes: ${stats.total}`);
   console.log(`${write ? 'Changed' : 'Would change'}: ${stats.changed}`);
   console.log(`Descriptions added: ${stats.descriptionsAdded}`);
-  console.log(`created keys added: ${stats.createdKeysAdded}`);
+  console.log(`Descriptions still unresolved: ${stats.descriptionsUnresolved}`);
   console.log(`updated keys added: ${stats.updatedKeysAdded}`);
   if (stats.skipped) console.log(`Skipped without valid frontmatter: ${stats.skipped}`);
 
