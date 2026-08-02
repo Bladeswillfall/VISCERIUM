@@ -452,7 +452,7 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
     const imageSlug = imageSlugByAsset.get(assetKey(filename));
     const href = imageSlug ? slugToRoute(imageSlug) : undefined;
     const rendered = imageSpec.hasLayout
-      ? renderArticleImage({ spec: imageSpec, filename, url, href })
+      ? renderArticleImage({ spec: imageSpec, filename, url, href, jsx: outputRequiresMdx })
       : renderMarkdownImage(imageSpec.alt || filename, filename, url);
     converted = converted.replace(match[0], rendered);
   }
