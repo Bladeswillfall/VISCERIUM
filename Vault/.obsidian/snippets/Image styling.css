@@ -100,10 +100,9 @@
   background: transparent;
 }
 
-/* The article and every rendered authored column own their floats. */
+/* The rendered article and every authored column own their floats. */
 .markdown-reading-view .markdown-preview-section,
 .markdown-reading-view .vc-layout-col-rendered,
-.markdown-source-view.mod-cm6 .cm-contentContainer,
 .markdown-source-view.mod-cm6 .vc-layout-col-rendered {
   display: flow-root;
 }
