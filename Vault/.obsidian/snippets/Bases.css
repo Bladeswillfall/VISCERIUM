@@ -129,7 +129,8 @@
 }
 
 /* Project Status labels frame the embedded Bases without turning them into card panels. */
-.viscerium-home .vc-home-status-heading {
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:first-of-type strong,
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:nth-of-type(3) strong {
   display: block;
   margin: 0.15rem 0 0.45rem;
   font-size: 0.95rem;
@@ -137,11 +138,11 @@
   letter-spacing: 0.01em;
 }
 
-.viscerium-home .vc-home-status-heading--attention {
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:first-of-type strong {
   color: color-mix(in srgb, var(--vc-state-danger, var(--color-red)) 72%, var(--text-normal));
 }
 
-.viscerium-home .vc-home-status-heading--ready {
+.viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:nth-of-type(3) strong {
   color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 56%, var(--text-normal));
 }
 
