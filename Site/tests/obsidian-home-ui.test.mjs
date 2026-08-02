@@ -51,7 +51,7 @@ test('Home keeps DataviewJS lines at the code fence quote depth', async () => {
     index = cursor;
   }
 
-  assert.ok(blocks >= 6, 'Home should retain its compact interactive dashboard widgets');
+  assert.ok(blocks >= 5, 'Home should retain its compact interactive dashboard widgets around the native Bases views');
 });
 
 test('Home working band keeps Continue beside a stacked Create and Writing column', async () => {
