@@ -8,8 +8,13 @@
    These rules remain compatible with the responsive [cols]/[col] system.
    ========================================================================== */
 
-.sl-markdown-content {
+/* Storyteller switches the Lore panel with the native hidden attribute. */
+.sl-markdown-content:not([hidden]) {
   display: flow-root;
+}
+
+.sl-markdown-content[hidden] {
+  display: none !important;
 }
 
 .sl-markdown-content .vc-image-embed {
