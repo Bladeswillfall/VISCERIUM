@@ -23,7 +23,7 @@ Follow [[Documentation Writing Standard]] for operational wording.
 | See deliberate work tasks | [[Home]] → **All creator tasks**, or [[System/Creator Tasks|Creator Tasks]] |
 | Continue the World Anvil transfer | [[Home]] → **Open Review First**, or [[Drafts/Inbox/World Anvil Migration Review|Migration Guide]] |
 | Apply the safe mechanical World Anvil pass | `cd Site` then `npm run migration:worldanvil:integrate:write` |
-| Audit missing World Anvil descriptions and timestamp keys | `cd Site` then `npm run migration:worldanvil:prepare` |
+| Audit unresolved World Anvil descriptions and missing update keys | `cd Site` then `npm run migration:worldanvil:prepare` |
 | Update an existing World Anvil article | [[#Update an existing World Anvil import]] |
 | Reopen import context for the active World Anvil note | **VISCERIUM Creator Tools: Open World Anvil import review context** |
 | Create fauna, flora, fungi, or an item | [[Home]] → **+ Story Entity** |
@@ -233,7 +233,9 @@ npm run migration:worldanvil:integrate:write
 
 Changes files: **Yes.**
 
-The command adds or refreshes baseline import metadata, certain legacy links, generated review tasks, the migration Base, and the generated migration report. It also derives a working description from existing prose when possible and adds blank `created:` and `updated:` keys.
+The command adds or refreshes baseline import metadata, certain legacy links, generated review tasks, the migration Base, and the generated migration report. It also derives a working description from existing prose when possible, reports descriptions it cannot derive, and adds a blank `updated:` key.
+
+It does not add `created:` because a migrated file's filesystem birth time is not a trustworthy article creation date.
 
 It does not choose canon, era, continuity identity, duplicate resolution, semantic relationships, or artwork rights.
 
@@ -248,7 +250,9 @@ npm run migration:worldanvil:prepare
 
 Changes files: **No.**
 
-Reports how many imported notes still lack a derivable description or one of the timestamp keys.
+Reports descriptions that can be generated, descriptions that remain unresolved, missing `updated:` keys, and files without valid frontmatter.
+
+Read **Descriptions still unresolved** even when **Would change** is zero.
 
 Use `npm run migration:worldanvil:prepare:write` only when you need to apply that frontmatter preparation without rerunning the complete integration pass.
 
@@ -262,14 +266,15 @@ Integrated imports contain or receive these baseline properties:
 
 - `title`
 - `description` when useful prose can supply one
-- `created`
 - `updated`
 - `status`
 - `type`
 - `development_level`
 - `import_source`
 
-> **Why:** The World Anvil integration adds safe baseline frontmatter before editorial review begins. The blank timestamp keys are not populated while the note remains in the excluded import queue.
+`created` remains absent unless an authoritative source creation date is known.
+
+> **Why:** The World Anvil integration adds safe baseline frontmatter before editorial review begins. It does not turn an export, copy, or import timestamp into article history.
 
 Do not insert a full creation or type template into an existing import.
 
@@ -282,7 +287,8 @@ Full templates contain a complete frontmatter block and article skeleton.
 3. Keep `status: draft` during migration.
 4. Correct `type` in Properties when the imported mapping is wrong.
 5. Confirm or rewrite the generated `description` before publication.
-6. Do not invent values for `created` or `updated` inside the import queue.
+6. Leave `created` absent unless you have an authoritative source date.
+7. Do not invent a value for `updated` inside the import queue.
 
 Common public properties are listed in [[System/Publishing Rules#Recommended frontmatter|Recommended frontmatter]].
 
@@ -324,8 +330,9 @@ Do not confuse article facts with [[System/Creator Sidebar|the Obsidian creator 
 4. Confirm that optional properties contain useful facts.
 5. Complete the note's **Import review** checklist.
 6. Move the note to its deliberate Drafts or Lore destination.
-7. Edit it once and confirm that Auto-Properties populates the timestamp values.
-8. Run `cd Site && npm run doctor:vault`.
+7. Edit it once and confirm that Auto-Properties populates `updated`, `word_count`, and `open_task_count` as applicable.
+8. Confirm that `created` is authoritative or absent.
+9. Run `cd Site && npm run doctor:vault`.
 
 **Stop condition:** The import has current frontmatter, no unresolved structural decision, and a deliberate destination.
 
