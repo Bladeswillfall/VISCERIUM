@@ -67,6 +67,21 @@ test('public image markup carries layout data while keeping accessible alt text 
   assert.doesNotMatch(markup, /alt="[^"]*(?:right|shape|gap=16)/i);
 });
 
+test('MDX image markup remains valid inside authored columns', () => {
+  const spec = parseObsidianImageEmbed('abberath.webp|left|220|shape|gap=12');
+  const markup = renderArticleImage({
+    spec,
+    filename: 'abberath.webp',
+    url: '/assets/images/abberath.webp',
+    jsx: true,
+  });
+
+  assert.match(markup, /<figure className="vc-image-embed vc-image-left vc-image-shape"/);
+  assert.match(markup, /style=\{\{"--vc-image-width":"220px","--vc-image-gap":"12px","--vc-image-shape":"url\(\\"\/assets\/images\/abberath\.webp\\"\)"\}\}/);
+  assert.match(markup, /<img[^>]+\/>/);
+  assert.doesNotMatch(markup, / style="/);
+});
+
 test('image layout CSS contains floats inside columns and collapses safely on mobile', async () => {
   const css = await readSite('src/styles/image-layout.css');
   const entrypoint = await readSite('src/styles/ion-layers.css');
@@ -97,10 +112,11 @@ test('Obsidian loads the first-party image renderer and matching snippet rules',
   assert.match(css, /@media \(max-width:\s*700px\)[\s\S]*?shape-outside:\s*none/);
 });
 
-test('public sync preserves pipe flags instead of discarding them', async () => {
+test('public sync preserves pipe flags and selects MDX-safe output for columns', async () => {
   const sync = await readSite('scripts/sync-public-notes.mjs');
 
   assert.match(sync, /parseObsidianImageEmbed\(match\[1\]\)/);
   assert.match(sync, /renderArticleImage/);
+  assert.match(sync, /jsx:\s*outputRequiresMdx/);
   assert.doesNotMatch(sync, /match\[1\]\.split\('\|'\)\[0\]/);
 });
