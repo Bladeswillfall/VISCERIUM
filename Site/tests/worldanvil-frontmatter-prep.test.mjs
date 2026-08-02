@@ -34,6 +34,15 @@ test('World Anvil preparation adds only safe mechanical frontmatter', () => {
   assert.doesNotMatch(prepared.markdown, /^entity_id:/m);
 });
 
+test('World Anvil preparation fills a blank description without duplicating the property', () => {
+  const blank = sample.replace('title: "Krass Dominion"', 'title: "Krass Dominion"\ndescription:');
+  const prepared = prepareImportMarkdown(blank, 'Krass Dominion');
+
+  assert.equal(prepared.changed, true);
+  assert.equal((prepared.markdown.match(/^description:/gm) ?? []).length, 1);
+  assert.match(prepared.markdown, /^description: "The Krass Dominion is a land where the air itself conspires against life\."$/m);
+});
+
 test('World Anvil preparation preserves existing descriptions and dates', () => {
   const existing = sample.replace(
     'title: "Krass Dominion"',
