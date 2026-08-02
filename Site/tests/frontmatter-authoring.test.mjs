@@ -50,12 +50,12 @@ test('frontmatter plugins separate mechanical, authorial and continuity fields',
   assert.ok(!presetFields.has('development_level'));
   assert.deepEqual(presetFields.get('headerImage').options.folders, ['Assets/Images']);
 
-  for (const protectedField of ['created', 'updated', 'era', 'entity_id', 'calendarDate', 'timeline', 'import_issues']) {
-    assert.ok(metadataMenu.globallyIgnoredFields.includes(protectedField), `${protectedField} must not be edited through Metadata Menu`);
+  for (const fieldName of ['created', 'updated', 'era', 'entity_id', 'calendarDate', 'timeline', 'import_issues']) {
+    assert.ok(metadataMenu.globallyIgnoredFields.includes(fieldName), `${fieldName} must not be edited through Metadata Menu`);
   }
 });
 
-test('creator templates seed a guarded blank creation date', async () => {
+test('creator templates seed guarded blank timestamps', async () => {
   const templates = [
     'Templates/Lore/New Lore Entity.md',
     'Templates/Databases/New Story Entity.md',
@@ -66,5 +66,6 @@ test('creator templates seed a guarded blank creation date', async () => {
   for (const template of templates) {
     const source = await readText(template);
     assert.match(source, /created:/, `${template} must seed the guarded created property`);
+    assert.match(source, /updated:/, `${template} must seed the automatic updated property`);
   }
 });
