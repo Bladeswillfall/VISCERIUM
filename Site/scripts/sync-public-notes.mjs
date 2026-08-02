@@ -7,6 +7,7 @@ import { cleanSlug, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs'
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
+import { parseObsidianImageEmbed, renderArticleImage } from './image-layout.mjs';
 import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';
 import { resolveGiscusForPage } from '../src/lib/page-kind.mjs';
@@ -435,14 +436,25 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
   let converted = stripDataviewBlocks(content).replace(/^%%[\s\S]*?%%\s*/gm, '');
   const embeds = [...converted.matchAll(/!\[\[([^\]]+)\]\]/g)];
   for (const match of embeds) {
-    const rawTarget = match[1].split('|')[0].trim();
+    const imageSpec = parseObsidianImageEmbed(match[1]);
+    const rawTarget = imageSpec.target.trim();
     const filename = path.basename(rawTarget);
     let url = await copyAsset('Images', filename) ?? await copyAsset('Maps', filename) ?? await copyAsset('Documents', filename);
     if (!url) {
       warnings.push(`Missing embedded asset "${filename}" in ${path.relative(sourceDir, currentFile)}; using ${missingImagePath}`);
       url = missingImagePath;
     }
-    converted = converted.replace(match[0], markdownImage(filename, url));
+
+    for (const issue of imageSpec.issues) {
+      warnings.push(`Image layout "${match[1]}" in ${path.relative(sourceDir, currentFile)}: ${issue}`);
+    }
+
+    const imageSlug = imageSlugByAsset.get(assetKey(filename));
+    const href = imageSlug ? slugToRoute(imageSlug) : undefined;
+    const rendered = imageSpec.hasLayout
+      ? renderArticleImage({ spec: imageSpec, filename, url, href })
+      : renderMarkdownImage(imageSpec.alt || filename, filename, url);
+    converted = converted.replace(match[0], rendered);
   }
 
   converted = await rewriteMarkdownImages(converted, currentFile);
