@@ -10,11 +10,11 @@ The current authorship and provenance statement is:
 
 > **VISCERIUM was created and authored by Fall. Its canon was developed without generative AI.**
 
-The current rights notice is:
+The current creative-rights notice is:
 
 > **VISCERIUM created by Fall. © Fall. All rights reserved.**
 
-These statements identify the creator and current rights holder. They do not grant permission to use VISCERIUM material.
+These statements identify the creator and current rights holder of original VISCERIUM creative material. They do not grant permission to use that material, and they do not claim ownership of third-party software or assets.
 
 ## Planned NULL Holdings Ltd credit
 
@@ -24,11 +24,34 @@ The planned role upon incorporation is:
 
 > **Fall — Founder and Creator of VISCERIUM; Founder and Group Creative Director of NULL Holdings Ltd.**
 
-After incorporation and a formal written assignment of the relevant rights, the intended rights notice is:
+After incorporation and a formal written assignment of the relevant rights, the intended creative-rights notice is:
 
 > **VISCERIUM created by Fall. © NULL Holdings Ltd. All rights reserved.**
 
 Do not use that corporate ownership notice before both incorporation and written assignment have occurred.
+
+## Software and third-party attribution
+
+Original first-party VISCERIUM software is licensed under [`LICENSE-CODE.md`](LICENSE-CODE.md).
+
+The creator credit for VISCERIUM does not replace the copyright notices, licence terms, or attribution requirements of third-party frameworks, libraries, plugins, fonts, icons, and services.
+
+Use [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) as the repository's day-one attribution record for:
+
+- Astro and official Astro integrations;
+- Starlight and Starlight plugins;
+- Obsidian and Obsidian community plugins;
+- Leaflet map tooling;
+- Cytoscape graph tooling;
+- Vis Timeline and Chronos timeline tooling;
+- Telescope and Fuse.js search tooling;
+- Preact, KaTeX, Playwright, and build dependencies;
+- open font families; and
+- other third-party components used by the Codex and creator environment.
+
+Where an upstream licence requires a copyright notice, licence text, source availability, modification notice, or attribution, preserve that requirement in source and distributed forms.
+
+Do not describe a third-party component as created, owned, endorsed, or officially sponsored by VISCERIUM.
 
 ## Contributor attribution
 
@@ -56,6 +79,14 @@ Attribution alone does not create copyright ownership, royalties, equity, approv
 
 This file does not itself assign rights, waive moral rights, or promise acceptance of a submission.
 
+## Code contributors
+
+Unless separate written terms apply, accepted original code contributions to paths covered by `LICENSE-CODE.md` may be distributed under the MIT License.
+
+Code contributors retain attribution through Git history, commit metadata, pull-request records, and any notices required by an applicable source file or upstream licence.
+
+A code contribution does not grant rights to VISCERIUM creative material and does not make the contributor a creator or owner of the VISCERIUM setting.
+
 ## Unofficial and fan works
 
 No person may imply that an unofficial work is canon, endorsed, commissioned, or published by VISCERIUM or any future NULL company.
@@ -70,5 +101,7 @@ This is a day-one attribution policy. Review it when any of these events occurs:
 - VISCERIUM rights are formally assigned;
 - the first creative contributor agreement is adopted;
 - the first commissioned or franchised work is contracted;
-- a fan-content policy is introduced; or
+- a fan-content policy is introduced;
+- a dependency, plugin, font, icon set, or third-party licence changes;
+- a release distributes third-party source or binary files; or
 - the project's generative-AI provenance statement changes.
