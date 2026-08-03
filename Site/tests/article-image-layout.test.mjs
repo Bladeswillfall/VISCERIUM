@@ -106,7 +106,7 @@ test('Obsidian loads the first-party image renderer and matching snippet rules',
 
   assert.ok(plugins.includes('viscerium-image-tools'));
   assert.equal(manifest.id, 'viscerium-image-tools');
-  assert.equal(manifest.version, '0.2.0');
+  assert.equal(manifest.version, '0.2.1');
   assert.doesNotThrow(() => new Function(runtime));
   assert.match(runtime, /registerMarkdownPostProcessor/);
   assert.match(runtime, /currentSrc/);
