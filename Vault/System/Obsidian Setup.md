@@ -50,7 +50,9 @@ The older/general route remains valid: **Templater: Create new note from templat
 
 Creating a normal new Markdown note directly inside one of the four ordinary database folders uses the same [[New Story Entity]] workflow automatically when the per-device creation trigger is enabled. The folder supplies the entity type, so that question is skipped.
 
-Use **Templater: Insert template** and choose [[Add Storyteller Fields]] to add **or edit** optional Storyteller fields on a supported note. Every module remains selectable after initial population, existing free-text answers are pre-filled, blank submission clears a value, and cancelling a prompt preserves it. The filename is retained for compatibility even though the workflow now supports editing as well as adding.
+New article templates and guided creation workflows include a marked `## Storyteller View` footer. Edit that section directly with ordinary Markdown.
+
+For an older note without the footer, place the cursor at the end of the note, use **Templater: Insert template**, and choose [[Add Storyteller Fields]]. The filename is retained for compatibility, but the helper now inserts the Storyteller boundary comments and foldable heading. It does not edit frontmatter properties. If either marker already exists, it refuses to insert a second section.
 
 Do not invoke templates under `Templates/_Internals/`, `Templates/_Scripts/` or `Templates/_Startup/` directly. They contain shared implementation, user-script helpers or startup behaviour rather than creator-facing workflows.
 
@@ -61,14 +63,14 @@ Use [[Home]] → **Creator Context** to open Outline, Backlinks and Local Graph 
 All templates live beneath the single `Templates/` root and are grouped by purpose:
 
 - **`Templates/Lore/`** — guided Lore creation plus static Character, Faction, Location, Event and Era skeletons.
-- **`Templates/Databases/`** — Story Entity, Myrkild unit and progressive Storyteller-field workflows.
+- **`Templates/Databases/`** — Story Entity and Myrkild unit creation plus the compatibility helper for inserting a marked Storyteller section into older notes.
 - **`Templates/Publishing/`** — Map and Image Metadata skeletons.
 - **`Templates/Timelines/`** — canonical and note-local timeline templates.
 - **`Templates/_Internals/`** — shared implementation; never invoke directly.
 - **`Templates/_Scripts/`** — Templater user-script helpers such as the relationship picker; never invoke directly.
 - **`Templates/_Startup/`** — startup automation; never invoke directly.
 
-Public-Lore templates deliberately do **not** render an Obsidian-only infobox/sidebar. Structured metadata remains in Properties/frontmatter; the article body stays focused on readable worldbuilding.
+Public-Lore templates deliberately do **not** render an Obsidian-only infobox/sidebar. Structured metadata remains in Properties/frontmatter; the article body stays focused on readable worldbuilding and its marked Storyteller section remains ordinary Markdown.
 
 ## Story entity workflow
 
@@ -84,9 +86,10 @@ Templates use a simple wiki-style shape:
 - A concise summary first.
 - Topic sections only where they help explain or use the subject.
 - Wikilinks for meaningful relationships and navigation.
+- A marked Storyteller footer for scene-facing guidance that needs normal Markdown, tables, images or embeds.
 - Creator-only guidance inside `%% comments %%` where it should not become public prose.
 
-Bases are authoring and browsing views over the same Markdown properties. Keep canonical information in the notes themselves rather than relying on view-only configuration.
+Bases are authoring and browsing views over stable Markdown properties. Keep canonical information in the notes themselves rather than relying on view-only configuration. Keep Storyteller prose in the article body rather than forcing it into properties for display in a Base.
 
 This is intentionally plain Markdown so the vault remains portable. Homepage actions and Dataview summaries are creator conveniences only; the underlying notes, properties and SOPs remain usable without them.
 
