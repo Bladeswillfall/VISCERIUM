@@ -173,7 +173,7 @@ Louis is the designated marksman for Delta Two One, with wicked reflexes and a h
 
 2nd In Command of Delta Two One. As a CQB and hand-to-hand specialist, Akanni earned his surname upon joining the ICSSAS and has since only gotten more and more effective in his role as a now team leader.  
 
-##### [[Lore/Eras/ENTROPY/Characters/Person-Tpr. Hannah Moeko-860]]
+##### [[Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko]]
 
 The designated marksman for Delta Two Two, Hannah has proven to be a truly lethal operator. Though Hanna is a bit more introverted and quiet than her comrades, when in uniform or on mission, she is focused and determined to be useful.  
 

@@ -36,7 +36,7 @@ import_issues:
   - "legacy-type-review"
   - "relationship-review"
 ---
-Serving as a covert special forces group split into two teams, Delta Two One currently consists of four members; Cpl. May Zhang, LCpl. Akanni Balogun, [[Lore/Eras/ENTROPY/Characters/Person-Tpr. Bailey Pittman-fe4]] and Tpr. Tobi Schöler. Additionally, in complement to Delta Two One, Detla Two Two is composed of; LCpl. Akanni Balogun, [[Lore/Eras/ENTROPY/Characters/Person-Tpr. Hannah Moeko-860]], Tpr. Mía Alvarado and Tpr. Ilya Artemiy Valerianovich.  
+Serving as a covert special forces group split into two teams, Delta Two One currently consists of four members; Cpl. May Zhang, LCpl. Akanni Balogun, [[Lore/Eras/ENTROPY/Characters/Tpr. Bailey Pittman]] and Tpr. Tobi Schöler. Additionally, in complement to Delta Two One, Detla Two Two is composed of; LCpl. Akanni Balogun, [[Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko]], Tpr. Mía Alvarado and Tpr. Ilya Artemiy Valerianovich.  
 
 ### Training
 

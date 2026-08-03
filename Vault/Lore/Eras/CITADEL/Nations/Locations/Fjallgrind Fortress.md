@@ -16,6 +16,6 @@ import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-Fjallgrind Fortress-a68.md"
 ---
-Situated on the [[Location-Issvatn river-fe0]] between Valenheim and Vagrvik.
+Situated on the [[Issvatn river]] between Valenheim and Vagrvik.
 
 _All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
