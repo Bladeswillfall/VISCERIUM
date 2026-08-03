@@ -3,11 +3,15 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import {
   backfillFolderFrontmatter,
   planFolderFrontmatter,
 } from '../scripts/backfill-folder-frontmatter.mjs';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const checkedInVault = path.resolve(here, '../../Vault');
 
 async function fixtureVault() {
   const vaultRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-folder-frontmatter-'));
@@ -135,4 +139,13 @@ test('notes without valid frontmatter are review-only', async (t) => {
   assert.equal(report.changed.length, 0);
   assert.deepEqual(report.notices, [{ path: 'Lore/Items/Loose.md', notice: 'missing-frontmatter' }]);
   assert.equal(await fs.readFile(file, 'utf8'), 'Loose prose only.\n');
+});
+
+test('checked-in Lore has no pending safe folder-derived frontmatter additions', async () => {
+  const report = await backfillFolderFrontmatter({ vaultRoot: checkedInVault });
+  assert.deepEqual(
+    report.changed,
+    [],
+    `Run npm run frontmatter:folders:write and review these safe additions:\n${JSON.stringify(report.changed, null, 2)}`,
+  );
 });
