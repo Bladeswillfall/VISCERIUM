@@ -2,12 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '../..');
 const vaultRoot = path.join(repoRoot, 'Vault');
+const require = createRequire(import.meta.url);
 
 async function readText(relativePath) {
   return fs.readFile(path.join(vaultRoot, relativePath), 'utf8');
@@ -36,10 +38,14 @@ function templaterScript(source) {
 }
 
 const publicSkeletons = [
+  ['Templates/Lore/Article Template.md', 'article'],
   ['Templates/Lore/Character Template.md', 'character'],
   ['Templates/Lore/Faction Template.md', 'faction'],
   ['Templates/Lore/Location Template.md', 'location'],
   ['Templates/Lore/Event Template.md', 'event'],
+  ['Templates/Lore/Species Template.md', 'species'],
+  ['Templates/Lore/Item Template.md', 'item'],
+  ['Templates/Lore/Calendar Template.md', 'calendar'],
   ['Templates/Lore/Era Template.md', 'era'],
   ['Templates/Publishing/Map Template.md', 'map'],
   ['Templates/Publishing/Image Metadata Template.md', 'image'],
@@ -58,10 +64,12 @@ const creatorTemplates = [
   'Templates/Lore/Add Location Fields.md',
   'Templates/Databases/Myrkild Unit Profile.md',
   'Templates/_Internals/Story Entity Core.md',
+  'Templates/_Internals/Folder Entity Router.md',
   'Templates/_Startup/Open VISCERIUM Home.md',
   'Templates/Lore/New Lore Entity.md',
   'Templates/Databases/New Myrkild Unit.md',
   'Templates/_Scripts/reference_picker.js',
+  'Templates/_Scripts/folder_entity_router.js',
 ];
 
 test('publishable Lore skeletons start safe and avoid duplicate rendered chrome', async () => {
@@ -105,6 +113,50 @@ test('interactive Templater script blocks parse as async JavaScript', async () =
   }
 });
 
+test('folder-triggered Templater rules cover Lore, Inbox, specialist databases and nested folders', async () => {
+  const config = await readJson('.obsidian/plugins/templater-obsidian/data.json');
+  const rules = new Map(config.folder_templates.map((entry) => [entry.folder, entry.template]));
+
+  assert.equal(config.trigger_on_file_creation_mode, 'folder');
+  assert.equal(rules.get('Lore'), 'Templates/_Internals/Folder Entity Router.md');
+  assert.equal(rules.get('Drafts/Inbox'), 'Templates/_Internals/Folder Entity Router.md');
+  assert.equal(rules.get('Drafts/Databases/Fauna'), 'Templates/Databases/New Story Entity.md');
+  assert.equal(rules.get('Drafts/Databases/Flora'), 'Templates/Databases/New Story Entity.md');
+  assert.equal(rules.get('Drafts/Databases/Fungi'), 'Templates/Databases/New Story Entity.md');
+  assert.equal(rules.get('Drafts/Databases/Items'), 'Templates/Databases/New Story Entity.md');
+  assert.equal(rules.get('Drafts/Databases/Myrkild Units'), 'Templates/Databases/New Myrkild Unit.md');
+
+  const storyEntity = await readText('Templates/Databases/New Story Entity.md');
+  assert.match(storyEntity, /currentFolder\.startsWith\(`\$\{folder\}\/'/);
+  assert.match(storyEntity, /!startedInTypeFolder/);
+});
+
+test('folder entity router selects the nearest semantic template and path-derived defaults', () => {
+  const routerPath = path.join(vaultRoot, 'Templates/_Scripts/folder_entity_router.js');
+  delete require.cache[require.resolve(routerPath)];
+  const router = require(routerPath);
+
+  assert.equal(router.classifyFolder('Lore/Eras/CITADEL/Weapons & Armour/Weaponry').type, 'item');
+  assert.equal(router.classifyFolder('Lore/Eras/CITADEL/Armour').type, 'item');
+  assert.equal(router.classifyFolder('Lore/Eras/CITADEL/Nations').type, 'faction');
+  assert.equal(router.classifyFolder('Lore/Universal/Fauna/Reptile').type, 'species');
+  assert.equal(router.classifyFolder('Lore/Myrkildicary').type, 'species');
+  assert.equal(router.classifyFolder('Lore/Eras').type, 'era');
+  assert.equal(router.classifyFolder('Lore/Eras/CITADEL'), null);
+
+  assert.equal(router.inferEra('Lore/Eras/CITADEL/Weapons & Armour/Weaponry'), 'CITADEL');
+  assert.equal(router.inferEra('Lore/Universal/Fauna/Reptile'), 'Universal');
+  assert.equal(router.inferSubtype('item', 'Lore/Eras/CITADEL/Weapons & Armour/Weaponry'), 'weapon');
+  assert.equal(router.inferSubtype('item', 'Lore/Eras/CITADEL/Armour'), 'armour');
+  assert.equal(router.inferSubtype('species', 'Lore/Universal/Fauna/Reptile'), 'reptile');
+  assert.equal(router.inferSubtype('species', 'Lore/Myrkildicary'), 'Myrkild');
+
+  assert.equal(router.ROUTES.item.template, 'Templates/Lore/Item Template.md');
+  assert.equal(router.ROUTES.species.template, 'Templates/Lore/Species Template.md');
+  assert.equal(router.ROUTES.calendar.template, 'Templates/Lore/Calendar Template.md');
+  assert.equal(router.ROUTES.article.template, 'Templates/Lore/Article Template.md');
+});
+
 test('creator-facing and internal Templater workflows remain present after the template audit', async () => {
   for (const relativePath of creatorTemplates) {
     const content = await readText(relativePath);
@@ -117,6 +169,7 @@ test('creator-facing and internal Templater workflows remain present after the t
   const core = await readText('Templates/_Internals/Story Entity Core.md');
   const lore = await readText('Templates/Lore/New Lore Entity.md');
   const unit = await readText('Templates/Databases/New Myrkild Unit.md');
+  const folderRouter = await readText('Templates/_Internals/Folder Entity Router.md');
 
   assert.match(wrapper, /Story Entity Core/);
   assert.match(injector, /processFrontMatter/);
@@ -135,6 +188,7 @@ test('creator-facing and internal Templater workflows remain present after the t
   assert.match(lore, /LOCATION_KINDS/);
   assert.match(lore, /Add Location Fields/);
   assert.match(unit, /tp\.user\.reference_picker/);
+  assert.match(folderRouter, /tp\.user\.folder_entity_router/);
 });
 
 test('sourcebook location fields survive in representative non-canon location notes', async () => {
