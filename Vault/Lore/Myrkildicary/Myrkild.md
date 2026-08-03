@@ -13,38 +13,32 @@ tags:
 era: Universal
 word_count: 3020
 open_task_count: 0
-sidebar: |-
-  Scientific name
-
-  Proteus xenophage
-
-  Average size
-
-  25um
-
-  Consistent features
-
-  A translucent outer membrane with various masses protruding outwards from the surface of the membrane, and a spiked icosahedral core.  
-  A persistent weakness to fire, UVc light.
-
-  Survivability
-
-  -22°F to 170°F (-30°C to 76.66°C)
-
-  Species
-
-  Gluttony,  
-  Envy,  
-  Sloth,  
-  Wrath,  
-  Lust,  
-  Pride,  
-  Greed
-
-  Constructs
-
-  7 Nadirs of Sin,  
-  Underlings
+sidebar:
+  replaceMeta: true
+  meta:
+    - label: Scientific name
+      value: Proteus xenophage
+    - label: Average size
+      value: 25um
+    - label: Consistent features
+      value:
+        - A translucent outer membrane with various masses protruding outwards from the surface of the membrane, and a spiked icosahedral core.
+        - A persistent weakness to fire, UVc light.
+    - label: Survivability
+      value: -22°F to 170°F (-30°C to 76.66°C)
+    - label: Species
+      value:
+        - Gluttony
+        - Envy
+        - Sloth
+        - Wrath
+        - Lust
+        - Pride
+        - Greed
+    - label: Constructs
+      value:
+        - 7 Nadirs of Sin
+        - Underlings
 ---
 > Watch for unusual growths on your meat, fruit and vegetables, these can be indications of Myrkild in the vicinity. Under no circumstances should you consume produce you believe to be infected.
 > 
