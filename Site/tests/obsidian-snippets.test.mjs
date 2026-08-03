@@ -6,6 +6,8 @@ import path from "node:path";
 const repoRoot = path.resolve(import.meta.dirname, "../..");
 const snippetsDir = path.join(repoRoot, "Vault", ".obsidian", "snippets");
 const appearancePath = path.join(repoRoot, "Vault", ".obsidian", "appearance.json");
+const setupPath = path.join(repoRoot, "Vault", "System", "Obsidian Setup.md");
+const snippetsGuidePath = path.join(repoRoot, "Vault", "System", "Obsidian CSS Snippets.md");
 
 test("enabled Obsidian CSS snippets exist as files", () => {
   const appearance = JSON.parse(fs.readFileSync(appearancePath, "utf8"));
@@ -45,5 +47,17 @@ test("ordinary Obsidian articles use a responsive wide lane in both Markdown mod
   assert.match(css, /\.cm-contentContainer/);
   assert.match(css, /\.cm-line/);
   assert.doesNotMatch(css, /100vw/);
-}
-);
+});
+
+test("article width documentation names the snippet owner and Home exception", () => {
+  const setup = fs.readFileSync(setupPath, "utf8");
+  const snippetsGuide = fs.readFileSync(snippetsGuidePath, "utf8");
+
+  for (const document of [setup, snippetsGuide]) {
+    assert.match(document, /Article widths\.css/);
+    assert.match(document, /Home dashboard\.css/);
+    assert.doesNotMatch(document, /Ordinary note width belongs to the active Obsidian theme/);
+  }
+
+  assert.match(snippetsGuide, /Do not add competing global `markdown-preview-sizer`/);
+});
