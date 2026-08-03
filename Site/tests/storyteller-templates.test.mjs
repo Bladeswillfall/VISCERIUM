@@ -26,12 +26,29 @@ const templates = [
   'Templates/Databases/Myrkild Unit Profile.md',
 ];
 
-test('every article-producing template contains one ordered Storyteller boundary pair', async () => {
+const dynamicArticleGenerators = [
+  'Templates/Lore/New Lore Entity.md',
+  'Templates/_Internals/Story Entity Core.md',
+  'Templates/Databases/New Myrkild Unit.md',
+];
+
+test('every static article template contains one ordered Storyteller boundary pair', async () => {
   for (const relativePath of templates) {
     const source = await fs.readFile(path.join(vaultRoot, relativePath), 'utf8');
     assert.equal(source.split(start).length - 1, 1, `${relativePath} start marker`);
     assert.equal(source.split(end).length - 1, 1, `${relativePath} end marker`);
     assert.ok(source.indexOf(start) < source.indexOf(end), `${relativePath} marker order`);
     assert.match(source.slice(source.indexOf(start), source.indexOf(end)), /^## Storyteller View$/m);
+  }
+});
+
+test('every dynamic article generator emits the marked Storyteller footer', async () => {
+  for (const relativePath of dynamicArticleGenerators) {
+    const source = await fs.readFile(path.join(vaultRoot, relativePath), 'utf8');
+    assert.equal(source.split(start).length - 1, 1, `${relativePath} start marker constant`);
+    assert.equal(source.split(end).length - 1, 1, `${relativePath} end marker constant`);
+    assert.match(source, /"## Storyteller View"/, `${relativePath} should emit the foldable heading`);
+    assert.match(source, /STORYTELLER_START/);
+    assert.match(source, /STORYTELLER_END/);
   }
 });
