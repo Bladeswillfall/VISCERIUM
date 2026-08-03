@@ -9,6 +9,10 @@
   "user_scripts_folder": "Templates/_Scripts",
   "folder_templates": [
     {
+      "folder": "Drafts/Databases/Myrkild Units",
+      "template": "Templates/Databases/New Myrkild Unit.md"
+    },
+    {
       "folder": "Drafts/Databases/Fauna",
       "template": "Templates/Databases/New Story Entity.md"
     },
@@ -23,6 +27,14 @@
     {
       "folder": "Drafts/Databases/Items",
       "template": "Templates/Databases/New Story Entity.md"
+    },
+    {
+      "folder": "Drafts/Inbox",
+      "template": "Templates/_Internals/Folder Entity Router.md"
+    },
+    {
+      "folder": "Lore",
+      "template": "Templates/_Internals/Folder Entity Router.md"
     }
   ],
   "file_templates": [],
