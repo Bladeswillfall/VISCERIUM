@@ -18,12 +18,13 @@ async function readRepo(relativePath) {
   return fs.readFile(path.join(repoRoot, relativePath), 'utf8');
 }
 
-test('Storyteller markers become stable hidden public boundaries without flattening Markdown', () => {
+test('Storyteller markers become stable block-level public boundaries without flattening Markdown', () => {
   const source = `${STORYTELLER_START}\n\n## Storyteller View\n\n| Sign | Meaning |\n| --- | --- |\n| Smoke | Occupied |\n\n${STORYTELLER_END}`;
   const transformed = transformStorytellerMarkers(source, 'test.md');
 
-  assert.match(transformed, /data-codex-storyteller-boundary="start"/);
-  assert.match(transformed, /data-codex-storyteller-boundary="end"/);
+  assert.match(transformed, /<div data-codex-storyteller-boundary="start" hidden><\/div>/);
+  assert.match(transformed, /<div data-codex-storyteller-boundary="end" hidden><\/div>/);
+  assert.doesNotMatch(transformed, /<span data-codex-storyteller-boundary/);
   assert.match(transformed, /## Storyteller View/);
   assert.match(transformed, /\| Smoke \| Occupied \|/);
   assert.doesNotMatch(transformed, /viscerium:storyteller:start/);
@@ -93,6 +94,8 @@ test('public switcher keeps Lore default and moves rendered Markdown between the
   assert.match(component, /data-codex-storyteller-boundary/);
   assert.match(component, /storytellerContent\.append\(node\)/);
   assert.match(component, /isMeaningfulStorytellerNode/);
+  assert.match(component, /\.sl-heading-wrapper/);
+  assert.match(component, /querySelector\(':scope > h1, :scope > h2/);
   assert.match(component, /ArrowLeft/);
   assert.match(component, /ArrowRight/);
   assert.match(component, /activate\('lore'\)/);
