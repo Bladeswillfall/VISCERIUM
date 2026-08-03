@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { findVaultNoteRoute } from '../helpers/vault-note.mjs';
 
-const okseDominionUrl = 'http://127.0.0.1:4321/eras/citadel/okse-dominion/';
+const okseDominionPath = await findVaultNoteRoute({
+  title: 'Okse Dominion',
+  type: 'faction',
+  era: 'CITADEL',
+});
+const okseDominionUrl = new URL(okseDominionPath, 'http://127.0.0.1:4321').href;
 
 test.use({ viewport: { width: 1280, height: 900 } });
 
