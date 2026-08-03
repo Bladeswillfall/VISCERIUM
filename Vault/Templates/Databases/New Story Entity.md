@@ -10,7 +10,10 @@ const TYPE_FOLDERS = {
 };
 
 const currentFolder = tp.file.folder(true);
-const inferredEntry = Object.entries(TYPE_FOLDERS).find(([, folder]) => currentFolder === folder);
+const inferredEntry = Object.entries(TYPE_FOLDERS).find(([, folder]) =>
+  currentFolder === folder || currentFolder.startsWith(`${folder}/`)
+);
+const startedInTypeFolder = Boolean(inferredEntry);
 let selectedType = inferredEntry?.[0] ?? null;
 
 function slugify(value) {
@@ -116,7 +119,7 @@ if (entityId && !/^entity_id:/m.test(rendered)) {
 }
 
 const targetFolder = selectedType ? TYPE_FOLDERS[selectedType] : null;
-if (targetFolder && tp.file.folder(true) !== targetFolder) {
+if (targetFolder && !startedInTypeFolder && tp.file.folder(true) !== targetFolder) {
   // Templater checks new blank files after a short delay. Keep a command-created
   // note out of folder-triggered directories until that creation event has passed,
   // otherwise the same template can be applied twice.
