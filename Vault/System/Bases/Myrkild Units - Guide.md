@@ -3,7 +3,7 @@
 The Myrkild unit database uses **Obsidian Bases** as a browsing and editing layer over normal Markdown notes.
 
 > [!important] Source of truth
-> The `.base` file is only a view. Each unit profile is a Markdown note whose YAML properties hold the structured data. This keeps the vault portable and lets the Codex consume the same data later.
+> The `.base` file is only a view. Each unit profile is a Markdown note whose YAML properties hold stable structured data. Lore and Storyteller prose remain in the Markdown body.
 
 ## Open the database
 
@@ -25,7 +25,7 @@ The first pass seeds **20 real profiles** from `Myrkild units - populated.xlsx` 
 
 The seed covers all seven Myrkild species in both Mutated and Purespawn CITADEL profiles, plus representative irradiated profiles in SMOG, NEARSIGHT, and ENTROPY.
 
-They live under `Drafts/Databases/Myrkild Units/` and are deliberately marked `publish: false`, `status: draft`, and `review_status: imported`.
+They live under `Drafts/Databases/Myrkild Units/` and are deliberately marked `status: draft` and `review_status: imported`.
 
 Repeated constructs across eras are treated as era-specific profiles. This preserves era-specific threat ratings, tactics, counterplay, and visual notes rather than flattening them into one record.
 
@@ -40,17 +40,20 @@ Repeated constructs across eras are treated as era-specific profiles. This prese
 
 Because the Base filters on `type: myrkild-unit` rather than folder path, a reviewed unit can later move into `Lore/` without disappearing from the database.
 
-## Progressive Storyteller fields
+## Storyteller section
 
 The default unit template remains focused on battlefield role, tactics, weaknesses and availability.
 
-When a specific story needs more, run **Templater: Insert template** and choose [[Add Storyteller Fields]]. For Myrkild units, this can add:
+When a specific story needs more, write normal Markdown inside the marked `## Storyteller View` footer. Useful material may include:
 
 - signs of presence and encounter context;
 - what informed people know or do in response;
-- a consequence or complication beyond combat.
+- a consequence or complication beyond combat;
+- tables, images or other material that would be clumsy or impossible in a property field.
 
-Do not add these fields simply to make the profile look complete. Follow [[Entity Authoring SOP]].
+For an older unit note without markers, place the cursor at its end, run **Templater: Insert template**, and choose [[Add Storyteller Fields]]. The retained template name inserts the marked Markdown section; it does not add Storyteller properties.
+
+Do not add headings simply to make the profile look complete. Follow [[Entity Authoring SOP]] and [[Storyteller View SOP]].
 
 ## Availability model
 
@@ -80,3 +83,4 @@ Imported notes are WIP. When a unit is ready for the Codex:
 3. Move it into an appropriate folder under `Lore/`.
 4. Set `status: published`.
 5. Ensure `title` and `description` are suitable for publication.
+6. Confirm that any public Storyteller material sits between one valid marker pair.

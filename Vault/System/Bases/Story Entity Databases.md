@@ -3,7 +3,7 @@
 The fauna, flora, fungi and item databases use **Obsidian Bases** as creator-only card browsers over ordinary Markdown notes. Myrkild retain their specialised database while also appearing in the cross-entity index.
 
 > [!important] Public presentation
-> Base cards do not publish to the Codex. The public consumer sees the Lore and Storyteller views. Structured properties from these notes can feed the Storyteller view later without exposing the authoring interface.
+> Base cards do not publish to the Codex. Profile properties support creator filtering and comparison. Public Storyteller material is authored as Markdown in the marked footer of each note.
 
 ## Open the databases
 
@@ -14,7 +14,7 @@ The fauna, flora, fungi and item databases use **Obsidian Bases** as creator-onl
 - [[Items.base]]
 - [[Myrkild Units.base]]
 
-Use **Story Entities** to answer broad creator questions such as what exists, what changed recently, what type an entry belongs to, or which entries remain stubs. Use the type-specific Bases for cards, detailed comparison and structured editing.
+Use **Story Entities** to answer broad creator questions such as what exists, what changed recently, what type an entry belongs to, or which entries remain stubs. Use the type-specific Bases for cards, profile comparison and structured editing.
 
 The master index is deliberately not a completion dashboard. `development_level` remains a fitness state, not a percentage or obligation to fill more fields.
 
@@ -44,21 +44,23 @@ The fastest routes are equivalent:
 
 The direct command is registered from the same [[New Story Entity]] template. The general Templater route remains available: **Templater: Create new note from template** → [[New Story Entity]].
 
-The template creates only the optional properties you select. Declining a module does not establish negative canon and does not leave a visible checklist of missing work.
+The template creates only the profile properties that are useful for filtering and placement. Optional Storyteller answers are written as ordinary Markdown inside the marked footer. Declining a module does not establish negative canon and does not leave a visible checklist of missing work.
 
 ## Create from a database folder
 
 When Templater's per-device **Trigger Templater on new file creation** switch is enabled, creating a normal new Markdown note directly inside one of the four ordinary story-entity folders automatically launches the same [[New Story Entity]] workflow.
 
-The folder supplies the entity type, so the Fauna / Flora / Fungi / Item question is skipped. All later prompts and generated properties remain identical to command-based creation.
+The folder supplies the entity type, so the Fauna / Flora / Fungi / Item question is skipped. All later prompts and generated content remain identical to command-based creation.
 
 The repository stores the folder-template rules, but the master trigger switch is local to each Obsidian device. See [[Story Entity Workflow SOP]] for setup and troubleshooting.
 
 ## Add detail later
 
-Open an existing fauna, flora, fungi, item or Myrkild unit note, place the cursor where no inserted text will disrupt prose, then run **Templater: Insert template** and choose [[Add Storyteller Fields]].
+Open the note and edit the `## Storyteller View` footer directly. Use normal headings, tables, links, images, lists, callouts and embeds between the markers.
 
-The injector adds only currently absent fields to the note's frontmatter. It does not add prose or change existing values.
+For an older note without a marked footer, place the cursor at the end of the note, run **Templater: Insert template**, and choose [[Add Storyteller Fields]]. The retained template name now inserts the Markdown boundaries and heading; it does not add properties.
+
+Do not move Storyteller prose into properties merely to expose it in a Base.
 
 ## Check creator-data health
 
@@ -73,7 +75,7 @@ Vault Doctor validates objective structure rather than creative completeness. It
 
 Notices do **not** fail the check. They flag things worth human inspection, such as a plain-text location that closely resembles a canonical note title and may contain a typo.
 
-Missing optional Storyteller/worldbuilding properties are not errors or notices merely because they are absent.
+Missing optional profile properties and empty Storyteller sections are not errors or notices merely because they are absent.
 
 See [[Creator Command Reference]] for the wider Obsidian and terminal command knowledge base.
 
@@ -89,14 +91,16 @@ These are fitness states, not completion percentages. A background species can r
 
 The Markdown note and its properties are the source of truth. A `.base` file is only a view. Do not store canon solely in Base configuration, filters or formulas.
 
+Profile properties hold stable facts used for browsing and placement. Lore and Storyteller prose stay in the Markdown body.
+
 ## Placement model
 
 The practical target remains:
 
 > **Can this subject plausibly exist here, during these eras, and matter to the story being told?**
 
-Use `eras`, `locations`, `biomes`, `rarity` and type-specific properties only where they help answer that question.
+Use `era`, `locations`, `biomes`, `rarity` and type-specific profile properties only where they help answer that question.
 
 ## Further guidance
 
-Follow [[Story Entity Workflow SOP]] for creation and filing, [[Entity Authoring SOP]] when deciding what to add, and [[Schema Change SOP]] before adding new shared properties or expanding a template. Use [[Creator Command Reference]] whenever you need to remember how to invoke the tooling.
+Follow [[Story Entity Workflow SOP]] for creation and filing, [[Storyteller View SOP]] for marked footer authoring, [[Entity Authoring SOP]] when deciding what to add, and [[Schema Change SOP]] before adding new shared properties or expanding a template. Use [[Creator Command Reference]] whenever you need to remember how to invoke the tooling.

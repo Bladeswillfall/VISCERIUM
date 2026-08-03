@@ -37,7 +37,7 @@ tags:
 ---
 
 > [!tip] Stop when usable
-> Keep the structured profile focused on placement, battlefield behaviour and counterplay. Add optional Storyteller fields later with [[Add Storyteller Fields]] only when a story needs signs of presence, encounter context, human response or consequences beyond combat.
+> Keep structured properties focused on placement, battlefield behaviour and counterplay. Put scene-facing guidance inside the Storyteller section at the end of the note, where normal headings, tables, links and images remain available.
 
 ## Battlefield profile
 
@@ -59,6 +59,10 @@ Use the properties panel for structured fields. Keep the body for useful prose, 
 
 Add `locations`, `biomes`, and `rarity` when the unit's distribution is known. The Base can then be filtered to answer whether this unit plausibly appears in a given era and place.
 
-## Storyteller development
+<!-- viscerium:storyteller:start -->
 
-Do not add optional fields to make the profile look complete. Follow [[Entity Authoring SOP]] and use [[Add Storyteller Fields]] only when the current story needs them.
+## Storyteller View
+
+%% Add only practical scene material: signs of presence, encounter context, informed responses, consequences beyond combat, or other guidance a storyteller can act on. %%
+
+<!-- viscerium:storyteller:end -->

@@ -32,3 +32,9 @@ timelineBlocks:
 ## Timeline Notes
 
 Record scope, filtering intent, disputed chronology, or editorial context that somebody maintaining the timeline actually needs.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

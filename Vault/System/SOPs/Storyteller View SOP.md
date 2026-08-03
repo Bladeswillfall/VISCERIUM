@@ -1,171 +1,147 @@
 # Storyteller View SOP
 
-> **Use this SOP when:** You decide what becomes public Storyteller content.
+> **Use this SOP when:** You add practical scene, encounter, location or story guidance to a Lore article.
 >
-> **Result:** The Storyteller view gives practical story guidance without changing Lore.
+> **Result:** Storyteller material remains normal Markdown in Obsidian and appears as the article's Storyteller view on the public Codex.
 >
-> **First action:** Open the canonical note.
+> **First action:** Open the canonical note and scroll to its marked Storyteller footer.
 
 Follow [[Documentation Writing Standard]] for operational wording.
 
 ## Purpose
 
-Keep Lore and Storyteller content separate but consistent.
+Keep Lore and Storyteller content separate without forcing story guidance into frontmatter.
 
 Lore explains what a subject is.
 
-Storyteller explains how a creator can use the subject in a scene, encounter, or location.
+Storyteller explains how a creator can use the subject in a scene, encounter, journey, location or plot.
 
-It also explains how the subject can create a complication.
+The Storyteller section supports the same Markdown as the rest of the article, including:
 
-An Obsidian Base card is an authoring view, not a public Storyteller view.
+- headings and foldable subsections;
+- tables and lists;
+- wikilinks and ordinary links;
+- images and embeds;
+- callouts, quotations and layout shortcodes supported by the Codex.
 
-## Before you start
+## Required boundaries
 
-1. Open the canonical note.
-2. Confirm that each world fact exists in Lore or canonical source properties.
-3. Identify the practical question that the Storyteller field must answer.
+Every article template ends with these stable machine-readable markers:
 
-## Decide whether to add Storyteller data
+```markdown
+<!-- viscerium:storyteller:start -->
 
-Add Storyteller data when it answers an encounter question:
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->
+```
+
+Write Storyteller content between the markers.
+
+Do not rename, duplicate, reorder or partially delete the markers.
+
+The visible `## Storyteller View` heading may be folded in Obsidian. The public build identifies the section by its invisible markers, not by the visible heading text.
+
+## Add the section to an older note
+
+1. Place the cursor at the end of the article.
+2. Run **Templater: Insert template**.
+3. Select `Add Storyteller Fields`.
+4. Confirm that one marked Storyteller section now exists.
+
+The retained template filename avoids breaking existing links and habits; it now inserts a Markdown section rather than properties.
+
+## Decide whether to add Storyteller content
+
+Add content when it answers a practical encounter question:
 
 - Where and when can the subject appear?
 - How can characters notice or identify it?
 - What does it do when encountered or used?
+- What limits, counters or consequences matter?
 
-Add Storyteller data when it answers a story question:
+Add content when it answers a story question:
 
 - Why do people care about it?
-- What consequence, choice, or problem can it create?
-- Which confirmed setting relationship connects to it?
+- What choice, pressure or problem can it create?
+- Which confirmed relationships make it useful in a story?
+- What would an outsider, local, professional or informed observer know?
 
-Keep encyclopaedic detail in Lore.
+Keep encyclopaedic explanation in Lore.
 
-Omit a fact when it provides no practical story use.
+Omit material that provides no practical story use.
 
-> **Why:** The admission test prevents a second, shorter copy of the Lore article.
+## Structure the section
 
-## Add or edit Storyteller data
+Use headings that fit the subject and the material actually available.
 
-### Select the modules
+Examples include:
 
-1. Open the note.
-2. Press **Ctrl/Cmd + P**.
-3. Run **Templater: Insert template**.
-4. Select `Add Storyteller Fields`.
-5. Select only the modules that you need.
-
-### Resolve each prompt
-
-| Goal | Action |
+| Subject | Useful headings |
 | --- | --- |
-| Replace a free-text value | Edit the pre-filled value. |
-| Remove a free-text value | Submit a blank value. |
-| Keep a free-text value | Cancel the prompt. |
-| Keep or remove a controlled value | Select **Keep current** or **Clear value**. |
+| Fauna | Signs of presence; Encounter behaviour; Why people care |
+| Flora | Identification; Growth conditions; Uses; Hazards |
+| Fungi | Fruiting and spread; Exposure risks; Practical value |
+| Items | Use; Limitations; Availability; Common users |
+| Myrkild units | Signs; Tactics; Counterplay; Consequences beyond combat |
+| Locations | Approach; First impression; Reasons to visit; Local knowledge; Current tensions |
+| Factions | Recognisable presence; Current agenda; Preferred methods; Reach and limits; Internal tensions |
 
-Clearing a property removes it from the note.
+These are prompts, not a schema. Rename, reorder, combine or omit them whenever another structure communicates the material better.
 
-Unselected modules remain unchanged.
+## Protect the source meaning
 
-## Generation rules
-
-### Protect the source meaning
-
-1. Treat note properties as source data, not finished public text.
-2. Do not infer negative canon from an absent property.
+1. Confirm that every world fact already exists in Lore or another canonical source.
+2. Do not infer negative canon from an absent fact.
 3. Do not add connective text that changes the source meaning.
-4. Hide creator-only fields and internal IDs.
+4. Keep creator-only secrets in `Vault/Private` unless the public Storyteller view is intended to reveal them.
+5. Do not duplicate Lore merely to make the Storyteller section look complete.
 
-### Build the public view
-
-1. Hide absent properties.
-2. Use natural reader-facing headings.
-3. Combine related values only when their meaning remains accurate.
-
-The generated nested `storyteller` object is a site output.
-
-Do not author that generated object manually.
-
-## Public behaviour
-
-Published notes keep Lore as the default view.
-
-Show the **Lore / Storyteller** switch only when supported Storyteller source properties exist.
-
-Storyteller mode uses the same article route and sidebar.
-
-Hide the Lore table of contents while Storyteller content is visible.
-
-Do not generate Storyteller content automatically from ordinary Lore text.
-
-## Type-specific language
-
-Use headings that match the subject type.
-
-| Type | Example headings |
-| --- | --- |
-| Fauna | **Signs of presence**, **Encounter behaviour**, **Why people care** |
-| Flora | **Identification**, **Growth conditions**, **Use**, **Hazards** |
-| Fungi | **Fruiting and spread**, **Exposure risks**, **Practical value** |
-| Items | **Use**, **Limitations**, **Availability**, **Common users** |
-| Myrkild units | **Signs**, **Tactics**, **Counterplay**, **Consequences beyond combat** |
-| Locations | **Approach**, **First impression**, **Why people come**, **Local knowledge**, **Local tensions** |
-| Factions | **Recognisable presence**, **Current agenda**, **Preferred methods**, **Reach and limits**, **Internal tensions** |
-
-Do not force every subject type through identical headings.
-
-## Keep world facts and Storyteller facts separate
-
-World properties describe what is true.
-
-Storyteller properties describe how that truth becomes useful in a story.
-
-Example:
-
-`economic_role` can record that a town depends on ironworking.
-
-`why_people_come` can explain that travellers arrive to commission durable armour.
-
-Do not duplicate one sentence across both layers only to fill fields.
+When Lore and Storyteller content disagree, decide which statement is canonical and correct the other. Do not preserve two conflicting versions.
 
 ## Rules-system content
 
-Keep shared Storyteller output fiction-first and system-agnostic.
+Keep shared Storyteller material fiction-first and system-agnostic.
 
 Useful example:
 
 > Dangerous to an isolated armed traveller, but reluctant to confront an organised group.
 
-Do not put game-system statistics into the shared Storyteller layer.
+Do not put game-system statistics into the shared Storyteller section. A future system adapter can add statistics on top of canon.
 
-A future system adapter can add those statistics on top of canon.
+## Public behaviour
+
+Published notes keep Lore as the default view.
+
+The Lore / Storyteller switch appears only when the marked section contains material beyond its `Storyteller View` heading.
+
+The public build removes an empty marked section from the rendered Lore article.
+
+Storyteller mode uses the same route, article chrome, sidebar and Markdown rendering as Lore.
+
+Do not generate Storyteller content automatically from ordinary Lore text.
 
 ## Check the result
 
-1. Confirm that Storyteller text does not contradict Lore.
-2. Confirm that each visible section gives a practical story use.
-3. Confirm that absent fields do not create empty public headings.
-4. Run `cd Site && npm run build` after a structural Storyteller change.
-5. Open the affected public page after a presentation change.
+1. Confirm that the note contains exactly one start marker and one end marker.
+2. Confirm that the start marker appears before the end marker.
+3. Confirm that all Storyteller content sits between them.
+4. Confirm that the section renders correctly in Obsidian.
+5. Confirm that Storyteller text does not contradict Lore.
+6. Confirm that each visible subsection gives practical story use.
+7. Run `cd Site && npm run build` after a structural Storyteller change.
+8. Open the affected public page after a presentation change.
 
-When Lore and Storyteller data disagree, decide which value is canonical.
-
-Correct the other value.
-
-Do not preserve two conflicting versions.
+Malformed or duplicated markers fail the public content build rather than silently publishing a broken view.
 
 ## Publication threshold
 
-Do not wait for every supported Storyteller field.
+Do not wait for a complete set of headings.
 
-Publish the useful, accurate sections that exist.
+Publish the useful, accurate material that exists and omit the rest.
 
-Hide the rest.
+A short accurate section is better than a long padded one.
 
 ## Stop condition
 
-Stop when the Storyteller view gives practical guidance without inventing detail.
-
-A short accurate panel is better than a long padded panel.
+Stop when the Storyteller section gives practical guidance without inventing detail or duplicating Lore.

@@ -167,17 +167,25 @@ Optional location field families are injected progressively through [[Templates/
 
 These fields record world facts. They remain optional and should not be populated merely because a location belongs to one of the broad kinds.
 
-## Storyteller properties
+## Storyteller sections are not frontmatter
 
-Storyteller properties are concise creator data intended to support story-facing presentation. They do not replace Lore prose.
+Storyteller guidance is authored as normal Markdown between the article footer markers:
 
-Locations may use fields such as `approach_signs`, `first_impression`, `sensory_signature`, `why_people_come`, `ordinary_activity`, `outsider_knowledge`, `local_knowledge`, `local_tension` and `story_complication`.
+```markdown
+<!-- viscerium:storyteller:start -->
 
-Factions may use fields such as `recognisable_presence`, `encounter_context`, `public_reputation`, `current_wants`, `current_pressures`, `preferred_methods`, `resources_and_reach`, `operational_limits`, `internal_tensions` and `story_complication`.
+## Storyteller View
 
-During the public build, supported populated fields are projected into a generated nested `storyteller` object used by the Codex Lore / Storyteller switch. **Do not author `storyteller` manually in vault frontmatter.** The flat creator properties remain the source of truth.
+<!-- viscerium:storyteller:end -->
+```
 
-See [[Storyteller View SOP]] for the admission test and public interpretation rules.
+Frontmatter remains reserved for stable, queryable facts such as type, era, continuity, relationships, map placement, profile metadata and publication state.
+
+Do not store Storyteller presentation text in properties such as `approach_signs`, `first_impression`, `current_wants`, `preferred_methods`, `story_complication` or similar fields. Put that material in the marked Storyteller section where headings, tables, images, links and other Markdown remain available.
+
+The public build identifies the section through its markers and renders the same authored Markdown in the Lore / Storyteller switch. It does not generate a nested `storyteller` frontmatter object.
+
+See [[Storyteller View SOP]] for authoring rules and the admission test.
 
 ## Creator maturity
 

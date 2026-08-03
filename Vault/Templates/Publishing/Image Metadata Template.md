@@ -40,3 +40,9 @@ Record where the image is used and any restrictions or expectations around reuse
 ## Related
 
 Link the lore, project, faction, character, location, or other material this image meaningfully depicts or supports.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

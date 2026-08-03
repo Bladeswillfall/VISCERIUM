@@ -18,7 +18,7 @@ test('Lore is the default and Storyteller replaces the article body without beco
 
   const loreTab = page.getByRole('tab', { name: 'Lore' });
   const storytellerTab = page.getByRole('tab', { name: 'Storyteller' });
-  const loreBody = page.locator('.sl-markdown-content');
+  const loreBody = page.locator('#codex-lore-panel');
   const storytellerPanel = page.locator('[data-codex-storyteller-panel]');
   const sidebar = page.locator('.right-sidebar-container');
 
@@ -26,6 +26,7 @@ test('Lore is the default and Storyteller replaces the article body without beco
   await expect(storytellerTab).toHaveAttribute('aria-selected', 'false');
   await expect(loreBody).toBeVisible();
   await expect(loreBody.getByRole('heading', { name: 'Port function' })).toBeVisible();
+  await expect(loreBody.getByRole('heading', { name: 'Approach and first impression' })).toHaveCount(0);
   await expect(storytellerPanel).toBeHidden();
   await expect(sidebar).toBeVisible();
 
@@ -35,10 +36,11 @@ test('Lore is the default and Storyteller replaces the article body without beco
   await expect(loreTab).toHaveAttribute('aria-selected', 'false');
   await expect(loreBody).toBeHidden();
   await expect(storytellerPanel).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Experience' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Use' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Knowledge' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Local pressure' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Storyteller View' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Approach and first impression' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Why people come' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'What outsiders know' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Current pressure' })).toBeVisible();
   await expect(sidebar).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-codex-article-view', 'storyteller');
   await expect(page).toHaveURL(storytellerDemoUrl);
@@ -71,20 +73,23 @@ test('Okse uses the same public switch with canon-grounded faction sections', as
 
   const loreTab = page.getByRole('tab', { name: 'Lore' });
   const storytellerTab = page.getByRole('tab', { name: 'Storyteller' });
+  const loreBody = page.locator('#codex-lore-panel');
   const storytellerPanel = page.locator('[data-codex-storyteller-panel]');
   const sidebar = page.locator('.right-sidebar-container');
 
   await expect(loreTab).toHaveAttribute('aria-selected', 'true');
-  await expect(page.locator('.sl-markdown-content')).toContainText('Iron roots, blood fruit.');
+  await expect(loreBody).toContainText('Iron roots, blood fruit.');
+  await expect(loreBody.getByRole('heading', { name: 'Current agenda' })).toHaveCount(0);
 
   await storytellerTab.click();
 
   await expect(storytellerPanel).toBeVisible();
   await expect(sidebar).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Presence' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Agenda' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Reach' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Internal friction' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Storyteller View' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Recognisable presence' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Current agenda' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Resources and limits' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Internal tensions' })).toBeVisible();
   await expect(storytellerPanel.getByRole('heading', { name: 'Consequences of involvement' })).toBeVisible();
   await expect(storytellerPanel).toContainText('defensive self-sufficiency');
   await expect(storytellerPanel).toContainText('Leysingi');

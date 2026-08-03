@@ -23,12 +23,6 @@ properties:
     displayName: Biomes
   rarity:
     displayName: Rarity
-  fruiting_conditions:
-    displayName: Fruiting conditions
-  human_relevance:
-    displayName: Why people care
-  hazards:
-    displayName: Hazards
   development_level:
     displayName: Development
   image:
@@ -62,14 +56,6 @@ views:
       - locations
       - biomes
       - rarity
-      - identification
-      - signs_of_presence
-      - fruiting_conditions
-      - spread
-      - human_relevance
-      - hazards
-      - cultural_significance
-      - story_complication
       - development_level
       - status
       - file.mtime

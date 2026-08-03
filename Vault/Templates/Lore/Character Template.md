@@ -62,3 +62,9 @@ Use prose for nuance and wikilinks for meaningful relationships. Keep the frontm
 ## Related
 
 Add only links that help a reader or creator understand the character in context.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

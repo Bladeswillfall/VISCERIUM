@@ -58,3 +58,9 @@ Link the most important places represented on this map rather than duplicating t
 ## Map Notes
 
 Keep projection quirks, uncertain boundaries, source limitations, or creator-only cartographic decisions here.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->
