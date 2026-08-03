@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { buildStorytellerProjection } from '../src/lib/storyteller.mjs';
 import { generateStorytellerData } from '../scripts/generate-storyteller-data.mjs';
+import { findVaultNote } from './helpers/vault-note.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '../..');
@@ -49,8 +50,12 @@ test('non-canon trade port provides a complete public location canary', async ()
 });
 
 test('Okse provides a canon-grounded faction Storyteller projection', async () => {
-  const source = matter(await readRepo('Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md'));
-  const projection = buildStorytellerProjection(source.data);
+  const { data } = await findVaultNote({
+    title: 'Okse Dominion',
+    type: 'faction',
+    era: 'CITADEL',
+  });
+  const projection = buildStorytellerProjection(data);
 
   assert.ok(projection);
   assert.equal(projection.type, 'faction');
