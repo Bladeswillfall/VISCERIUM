@@ -44,7 +44,7 @@ The public website is generated from reviewed, published source notes. The repos
 
 > **VISCERIUM was created and authored by Fall. Its canon was developed without generative AI.**
 
-The current rights notice is:
+The current creative-rights notice is:
 
 > **VISCERIUM created by Fall. © Fall. All rights reserved.**
 
@@ -54,11 +54,25 @@ The planned role upon incorporation is:
 
 > **Fall — Founder and Creator of VISCERIUM; Founder and Group Creative Director of NULL Holdings Ltd.**
 
-After incorporation and a formal written assignment, the intended rights notice is:
+After incorporation and a formal written assignment, the intended creative-rights notice is:
 
 > **VISCERIUM created by Fall. © NULL Holdings Ltd. All rights reserved.**
 
-Public access to this repository does not place VISCERIUM in the public domain or grant permission to reproduce, adapt, distribute, train on, or commercially exploit its contents. Read **[LICENSE.md](LICENSE.md)** and **[ATTRIBUTION.md](ATTRIBUTION.md)** for the current day-one position.
+### Creative material
+
+VISCERIUM Lore, canon, fiction, articles, artwork, maps, characters, factions, branding, and other original creative material remain proprietary and all rights reserved.
+
+Public access does not place that material in the public domain or grant permission to reproduce, adapt, distribute, commercially exploit, or use it as generative-AI training material.
+
+### Software
+
+Original first-party website code, build scripts, tests, and VISCERIUM creator-tool code are open source under the **[MIT License](LICENSE-CODE.md)**.
+
+That software licence does not grant rights to VISCERIUM's Lore, artwork, maps, branding, canon, or other creative assets processed or displayed by the software.
+
+Astro, Starlight, Obsidian integrations, map tools, graph tools, timeline libraries, search libraries, fonts, and other third-party components remain subject to their respective upstream licences. See **[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)**.
+
+Read **[LICENSE.md](LICENSE.md)** for the full repository licence map and **[ATTRIBUTION.md](ATTRIBUTION.md)** for creator and contributor credit.
 
 ## Get involved
 
@@ -72,7 +86,7 @@ Report typos, broken links, content corrections, site bugs, or feature ideas thr
 
 Code, documentation, accessibility, tooling, testing, and interface improvements are welcome through pull requests. Read **[CONTRIBUTING.md](CONTRIBUTING.md)** before changing the repository.
 
-Opening a pull request does not transfer copyright or make a contribution part of VISCERIUM canon. Creative canon contributions will require separate written contributor terms before acceptance.
+Opening a pull request does not transfer copyright or make a contribution part of VISCERIUM canon. Accepted code contributions to MIT-covered paths are distributed under the repository's MIT software licence. Creative canon contributions require separate written contributor terms before acceptance.
 
 ### Propose a creative collaboration
 
@@ -84,7 +98,9 @@ VISCERIUM remains a curated setting. Suggestions and contributions are reviewed 
 
 Operational instructions have been moved out of this front page.
 
-- **[Repository licence](LICENSE.md)**
+- **[Repository licence map](LICENSE.md)**
+- **[Open-source code licence](LICENSE-CODE.md)**
+- **[Third-party notices](THIRD_PARTY_NOTICES.md)**
 - **[Attribution and creator credit](ATTRIBUTION.md)**
 - **[Standard Operating Procedures](Vault/System/SOPs/SOP%20Index.md)**
 - **[Codex Publishing and Deployment SOP](Vault/System/SOPs/Codex%20Publishing%20and%20Deployment%20SOP.md)**
