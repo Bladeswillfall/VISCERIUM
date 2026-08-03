@@ -12,6 +12,7 @@ import_source_type: Species
 import_source_file: Species-Turlotl-4c5.md
 import_issues:
   - missing-inline-assets
+era: CITADEL
 ---
 A rare and cute amphibian, the Tutlotl
 

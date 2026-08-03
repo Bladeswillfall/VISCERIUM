@@ -10,6 +10,7 @@ eras:
 import_source: worldanvil
 import_source_type: Species
 import_source_file: Species-Maw Lanterns-00a.md
+era: CITADEL
 ---
 Strain pressure: Gluttony + Lust Silhouette: Giant hanging sacs and translucent bulbs dangling over ravines, cave mouths, and sinkholes, glowing softly with trapped alchemical biolight. Logic: They lure prey and carrion-birds into precarious places, then feed on the fallout below. Why they fit: They’re beautiful, predatory, and tied to voids in the landscape rather than random glowing-fantasy nonsense. Use: Rendered gland-fluid can be refined into signal lamps and trench markers. Fear: A cluster of Maw Lanterns over a ravine is basically nature building a baited execution site.
 

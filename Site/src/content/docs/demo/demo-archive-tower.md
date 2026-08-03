@@ -1,6 +1,8 @@
 ---
 title: Demo Archive Tower
-description: "NON-CANON nested-map landmark used to verify a second marker type and layer inside the city map."
+description: >-
+  NON-CANON nested-map landmark used to verify a second marker type and layer
+  inside the city map.
 status: published
 type: location
 icon: location
@@ -10,7 +12,7 @@ region: Demo Gate City
 map:
   id: exploration-demo-city
   x: 78
-  y: 67
+  'y': 67
   marker: landmark
   layer:
     - civilisation/landmarks
@@ -22,9 +24,11 @@ related:
   - Demo Market Ward
 slug: demo/demo-archive-tower
 eraStyle: e1
-links: ["demo/demo-market-ward/"]
-sourcePath: "Demo/Demo Archive Tower.md"
-updated: "2026-07-23T17:49:19+01:00"
+links:
+  - demo/demo-market-ward/
+giscus: true
+sourcePath: Demo/Demo Archive Tower.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

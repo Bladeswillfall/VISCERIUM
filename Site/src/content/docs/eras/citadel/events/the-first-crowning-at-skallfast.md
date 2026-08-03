@@ -1,6 +1,8 @@
 ---
-title: "The First Crowning at Skallfast"
-description: "The oath-crowning that transformed a ring of fortified valleys into the first recognised Okse Dominion."
+title: The First Crowning at Skallfast
+description: >-
+  The oath-crowning that transformed a ring of fortified valleys into the first
+  recognised Okse Dominion.
 status: published
 type: event
 era: CITADEL
@@ -24,20 +26,21 @@ timeline:
   era: auto
   order: 1
 location:
-  - "Skallfast"
+  - Skallfast
 faction:
-  - "Okse Dominion"
+  - Okse Dominion
 participants:
-  - "Hroth Varn"
-outcome: "The valley kings accepted one war-crown and a common levy."
+  - Hroth Varn
+outcome: The valley kings accepted one war-crown and a common levy.
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "okse"
+  - citadel
+  - timeline-showcase
+  - okse
 slug: eras/citadel/events/the-first-crowning-at-skallfast
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The First Crowning at Skallfast.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The First Crowning at Skallfast.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The oath-crowning that transformed a ring of fortified valleys into the first recognised Okse Dominion.

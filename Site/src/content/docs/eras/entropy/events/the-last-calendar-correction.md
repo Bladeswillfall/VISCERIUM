@@ -1,6 +1,8 @@
 ---
-title: "The Last Calendar Correction"
-description: "On a leap intercalary day, the major human polities reconciled their drifting clocks to one civil chronology for the last time."
+title: The Last Calendar Correction
+description: >-
+  On a leap intercalary day, the major human polities reconciled their drifting
+  clocks to one civil chronology for the last time.
 status: published
 type: event
 era: ENTROPY
@@ -24,20 +26,23 @@ timeline:
   era: auto
   order: 10
 location:
-  - "Distributed Concordance"
+  - Distributed Concordance
 faction:
-  - "Human Successor Polities"
+  - Human Successor Polities
 participants:
-  - "Chronology Delegates"
-outcome: "A final shared date was established even though no authority could enforce future synchronisation."
+  - Chronology Delegates
+outcome: >-
+  A final shared date was established even though no authority could enforce
+  future synchronisation.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "intercalary"
+  - entropy
+  - timeline-showcase
+  - intercalary
 slug: eras/entropy/events/the-last-calendar-correction
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Last Calendar Correction.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Last Calendar Correction.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 On a leap intercalary day, the major human polities reconciled their drifting clocks to one civil chronology for the last time.

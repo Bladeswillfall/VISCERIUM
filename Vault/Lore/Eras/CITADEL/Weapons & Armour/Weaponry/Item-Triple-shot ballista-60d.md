@@ -10,6 +10,8 @@ import_source_type: Item
 import_source_file: Item-Triple-shot ballista-60d.md
 import_issues:
   - needs-era
+era: CITADEL
+item_type: weapon
 ---
 Based off of the Wuhou Chariot from the Three Kingdoms dynasty.
 

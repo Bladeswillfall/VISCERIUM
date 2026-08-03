@@ -1,6 +1,8 @@
 ---
-title: "The Juggernaut Compact"
-description: "Independent fortress-fleets agreed to mutual rescue, ammunition interchange and shared Naranor contact protocols."
+title: The Juggernaut Compact
+description: >-
+  Independent fortress-fleets agreed to mutual rescue, ammunition interchange
+  and shared Naranor contact protocols.
 status: published
 type: event
 era: ENTROPY
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 4
 location:
-  - "Free Anchorage Pelagos"
+  - Free Anchorage Pelagos
 faction:
-  - "Juggernaut Compact"
+  - Juggernaut Compact
 participants:
-  - "Fortress-Fleet Captains"
-outcome: "Mobile polities gained a common doctrine without surrendering sovereignty."
+  - Fortress-Fleet Captains
+outcome: Mobile polities gained a common doctrine without surrendering sovereignty.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "juggernauts"
+  - entropy
+  - timeline-showcase
+  - juggernauts
 slug: eras/entropy/events/the-juggernaut-compact
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Juggernaut Compact.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Juggernaut Compact.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Independent fortress-fleets agreed to mutual rescue, ammunition interchange and shared Naranor contact protocols.

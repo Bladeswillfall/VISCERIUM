@@ -1,6 +1,8 @@
 ---
-title: "The Black Furnace Accord"
-description: "Industrial states divided the coal basins, railway gauges and munitions markets that would define the SMOG era."
+title: The Black Furnace Accord
+description: >-
+  Industrial states divided the coal basins, railway gauges and munitions
+  markets that would define the SMOG era.
 status: published
 type: event
 era: SMOG
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 1
 location:
-  - "Black Furnace Hall"
+  - Black Furnace Hall
 faction:
-  - "Continental Foundry League"
-  - "Askalian Crown"
+  - Continental Foundry League
+  - Askalian Crown
 participants:
-  - "The Furnace Delegates"
-outcome: "Shared industrial standards enabled continental-scale mobilisation."
+  - The Furnace Delegates
+outcome: Shared industrial standards enabled continental-scale mobilisation.
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "industry"
+  - smog
+  - timeline-showcase
+  - industry
 slug: eras/smog/events/the-black-furnace-accord
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Black Furnace Accord.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Black Furnace Accord.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Industrial states divided the coal basins, railway gauges and munitions markets that would define the SMOG era.

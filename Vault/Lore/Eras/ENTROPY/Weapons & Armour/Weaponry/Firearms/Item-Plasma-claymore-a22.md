@@ -10,6 +10,8 @@ eras:
 import_source: worldanvil
 import_source_type: Item
 import_source_file: Item-Plasma-claymore-a22.md
+era: ENTROPY
+item_type: weapon
 ---
 A heavy (two-handed) cannon, fires a tall but thin blade of plasma with a long tail capable of easily slicing through multiple soft targets and some hard targets. The plasma starts off as usual within the weapon but as the weapon fires, the weapon squeezes and stretches the plasma into the appropriate shape.
 

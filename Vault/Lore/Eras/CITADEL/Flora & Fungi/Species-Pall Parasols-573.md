@@ -13,6 +13,7 @@ import_source_file: Species-Pall Parasols-573.md
 import_issues:
   - duplicate-title
   - missing-inline-assets
+era: CITADEL
 ---
 > Do not sleep beneath the pall, no matter how soft the ground seems.
 > 

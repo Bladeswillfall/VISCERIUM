@@ -1,6 +1,8 @@
 ---
-title: "The Abberath Disclosure"
-description: "Leaked archives revealed that Abberath manifestations had been catalogued, cultivated and suppressed for centuries."
+title: The Abberath Disclosure
+description: >-
+  Leaked archives revealed that Abberath manifestations had been catalogued,
+  cultivated and suppressed for centuries.
 status: published
 type: event
 era: ENTROPY
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Concordance Mesh"
+  - Concordance Mesh
 faction:
-  - "Continuity Directorate"
+  - Continuity Directorate
 participants:
-  - "The Glass Archive Leakers"
-outcome: "Public understanding of Resonance fractured into incompatible models."
+  - The Glass Archive Leakers
+outcome: Public understanding of Resonance fractured into incompatible models.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "abberath"
+  - entropy
+  - timeline-showcase
+  - abberath
 slug: eras/entropy/events/the-abberath-disclosure
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Abberath Disclosure.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Abberath Disclosure.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Leaked archives revealed that Abberath manifestations had been catalogued, cultivated and suppressed for centuries.

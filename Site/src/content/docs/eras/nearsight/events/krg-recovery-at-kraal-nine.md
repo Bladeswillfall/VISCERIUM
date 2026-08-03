@@ -1,6 +1,8 @@
 ---
-title: "KRG Recovery at Kraal Nine"
-description: "Karoo Recovery Group contractors extracted a damaged sensor core from a collapsed underground relay."
+title: KRG Recovery at Kraal Nine
+description: >-
+  Karoo Recovery Group contractors extracted a damaged sensor core from a
+  collapsed underground relay.
 status: published
 type: event
 era: NEARSIGHT
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 1
 location:
-  - "Kraal Nine Relay"
+  - Kraal Nine Relay
 faction:
-  - "KRG"
+  - KRG
 participants:
-  - "Jakkal Team"
-outcome: "The core was recovered before state forces reached the site."
+  - Jakkal Team
+outcome: The core was recovered before state forces reached the site.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "krg"
-  - "same-day"
+  - nearsight
+  - timeline-showcase
+  - krg
+  - same-day
 slug: eras/nearsight/events/krg-recovery-at-kraal-nine
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/KRG Recovery at Kraal Nine.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/KRG Recovery at Kraal Nine.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Karoo Recovery Group contractors extracted a damaged sensor core from a collapsed underground relay.

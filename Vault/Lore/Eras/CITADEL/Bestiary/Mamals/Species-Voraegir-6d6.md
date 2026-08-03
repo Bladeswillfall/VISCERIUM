@@ -1,4 +1,5 @@
 ---
+era: CITADEL
 sidebar:
   replaceMeta: true
   meta:

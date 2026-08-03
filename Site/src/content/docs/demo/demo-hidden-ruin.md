@@ -1,6 +1,8 @@
 ---
 title: Demo Hidden Ruin
-description: "NON-CANON high-zoom ruin used to verify detail appearing only when the Atlas is zoomed in."
+description: >-
+  NON-CANON high-zoom ruin used to verify detail appearing only when the Atlas
+  is zoomed in.
 status: published
 type: location
 icon: location
@@ -9,7 +11,7 @@ region: Central Testland
 map:
   id: exploration-demo-world
   x: 49
-  y: 28
+  'y': 28
   marker: ruin
   layer:
     - civilisation/ruins
@@ -20,8 +22,9 @@ tags:
 related: []
 slug: demo/demo-hidden-ruin
 eraStyle: e1
-sourcePath: "Demo/Demo Hidden Ruin.md"
-updated: "2026-07-23T17:48:59+01:00"
+sourcePath: Demo/Demo Hidden Ruin.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 > [!caution]

@@ -1,4 +1,5 @@
 ---
+era: ENTROPY
 sidebar:
   replaceMeta: true
   meta:

@@ -1,6 +1,8 @@
 ---
-title: "The Nine-Stack Lockout"
-description: "Factory owners sealed the ward gates hours after recognising the union, trapping night crews inside and day crews outside."
+title: The Nine-Stack Lockout
+description: >-
+  Factory owners sealed the ward gates hours after recognising the union,
+  trapping night crews inside and day crews outside.
 status: published
 type: event
 era: SMOG
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Nine-Stack Ward"
+  - Nine-Stack Ward
 faction:
-  - "Foundry Owners' Council"
+  - Foundry Owners' Council
 participants:
-  - "Night Furnace Crews"
-outcome: "The strike became a siege and drew national attention."
+  - Night Furnace Crews
+outcome: The strike became a siege and drew national attention.
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "same-day"
+  - smog
+  - timeline-showcase
+  - same-day
 slug: eras/smog/events/the-nine-stack-lockout
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Nine-Stack Lockout.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Nine-Stack Lockout.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Factory owners sealed the ward gates hours after recognising the union, trapping night crews inside and day crews outside.

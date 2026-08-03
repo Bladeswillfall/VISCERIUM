@@ -1,16 +1,26 @@
 ---
 title: Demo Market Ward
-description: "NON-CANON nested-map district marker used to verify city-level Atlas navigation."
+description: >-
+  NON-CANON nested-map district marker used to verify city-level Atlas
+  navigation.
 status: published
 type: location
 icon: location
 era: CITADEL
 faction: Demo Concord
 region: Demo Gate City
+location_kind: settlement
+settlement_scale: urban district
+population_band: Dense resident and transient population relative to surrounding wards.
+governance_summary: >-
+  Municipal authority is exercised locally through market officials and the city
+  watch.
+economic_role: 'Concentrates retail trade, brokerage and day labour for the surrounding city.'
+local_services: 'Markets, food sellers, lodging, money changing and freight brokerage.'
 map:
   id: exploration-demo-city
   x: 47
-  y: 46
+  'y': 46
   marker: settlement
   layer:
     - civilisation/districts
@@ -22,9 +32,11 @@ related:
   - Demo Archive Tower
 slug: demo/demo-market-ward
 eraStyle: e1
-links: ["demo/demo-archive-tower/"]
-sourcePath: "Demo/Demo Market Ward.md"
-updated: "2026-07-23T17:49:10+01:00"
+links:
+  - demo/demo-archive-tower/
+giscus: true
+sourcePath: Demo/Demo Market Ward.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

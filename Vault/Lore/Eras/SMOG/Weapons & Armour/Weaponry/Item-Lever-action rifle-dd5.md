@@ -10,6 +10,8 @@ eras:
 import_source: worldanvil
 import_source_type: Item
 import_source_file: Item-Lever-action rifle-dd5.md
+era: SMOG
+item_type: weapon
 ---
 A somewhat antiquated rifle now that bolt-actions are so prevelant.  
   Rifle has a guide protruding form the loading port to act as a guide for the speedloader tube (ref. https://youtu.be/6xPNQEgN6Ks) often utilised with this rifle. Users of this type of rifle are often seen with a "quill" of speedloaders".

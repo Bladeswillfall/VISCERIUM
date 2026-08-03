@@ -6,6 +6,7 @@ slug: eras
 type: category
 pagefind: true
 tableOfContents: false
+giscus: false
 ---
 Browse every public Codex page filed beneath **Eras**.
 
@@ -16,7 +17,7 @@ Browse every public Codex page filed beneath **Eras**.
 <h3 id="subcategories-c" class="codex-alpha-index__letter">C</h3>
 <ul class="codex-alpha-index__items">
 <li class="codex-alpha-index__item">
-<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/citadel/">CITADEL</a><span class="codex-alpha-index__meta">10 pages</span></div>
+<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/citadel/">CITADEL</a><span class="codex-alpha-index__meta">11 pages</span></div>
 </li>
 </ul>
 </section>
@@ -102,6 +103,10 @@ Browse every public Codex page filed beneath **Eras**.
 <li class="codex-alpha-index__item">
 <div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/entropy/">ENTROPY</a><span class="codex-alpha-index__meta">era</span></div>
 <p class="codex-alpha-index__description">The far-future age of dark cybernetics, vacuum warfare and a civilisation confronting the full scale of the Naranor threat.</p>
+</li>
+<li class="codex-alpha-index__item">
+<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/citadel/errack-citadel-map/">Errack — CITADEL</a><span class="codex-alpha-index__meta">map</span></div>
+<p class="codex-alpha-index__description">The canonical Atlas map of Errack during the CITADEL era, presented without the non-canon markers used by the exploration demo.</p>
 </li>
 </ul>
 </section>
@@ -241,7 +246,7 @@ Browse every public Codex page filed beneath **Eras**.
 <h3 id="pages-o" class="codex-alpha-index__letter">O</h3>
 <ul class="codex-alpha-index__items">
 <li class="codex-alpha-index__item">
-<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/citadel/okse-dominion/">Okse Dominion</a><span class="codex-alpha-index__meta">faction</span></div>
+<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/citadel/nations/okse-dominion/">Okse Dominion</a><span class="codex-alpha-index__meta">faction</span></div>
 <p class="codex-alpha-index__description">A harsh mountain dominion of the Oksmun, built on endurance, fortification, oil, slave labour, and old Vetruxi blood.</p>
 </li>
 <li class="codex-alpha-index__item">

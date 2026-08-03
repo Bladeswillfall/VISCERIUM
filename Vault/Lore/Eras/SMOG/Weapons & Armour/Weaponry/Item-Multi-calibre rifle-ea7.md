@@ -10,6 +10,8 @@ eras:
 import_source: worldanvil
 import_source_type: Item
 import_source_file: Item-Multi-calibre rifle-ea7.md
+era: SMOG
+item_type: weapon
 ---
 Firing two types of ammunition, this rifle has a secondary, larger barrel for single-shot firing when there's an unexpected or larger enemy that needs to go down, now.  
   The top barrel accommodates magazine-fed (e.g. Mk.3 Lee-enfield) 7.92×57mm Mauser (used in the Kar98k), whereas the bottom, a breech-loaded Mauser 13.2mm TuF (13.2×92mmSR) (used in the Mauser Tankgewehr M1918).

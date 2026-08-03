@@ -1,6 +1,8 @@
 ---
-title: "The Gate Ignition Echo"
-description: "Minutes after the GARMIR corridor closed, an identical ignition signature appeared beyond the mapped edge of human space."
+title: The Gate Ignition Echo
+description: >-
+  Minutes after the GARMIR corridor closed, an identical ignition signature
+  appeared beyond the mapped edge of human space.
 status: published
 type: event
 era: ENTROPY
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Unmapped Deep Range"
+  - Unmapped Deep Range
 faction:
-  - "Gate Authority"
+  - Gate Authority
 participants:
-  - "Outer Listening Net"
-outcome: "The second signal was classified and the public ignition record was shortened."
+  - Outer Listening Net
+outcome: The second signal was classified and the public ignition record was shortened.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "garmir"
-  - "same-day"
+  - entropy
+  - timeline-showcase
+  - garmir
+  - same-day
 slug: eras/entropy/events/the-gate-ignition-echo
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Gate Ignition Echo.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Gate Ignition Echo.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Minutes after the GARMIR corridor closed, an identical ignition signature appeared beyond the mapped edge of human space.

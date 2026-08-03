@@ -1,6 +1,8 @@
 ---
-title: "The First Resonance Meter Standard"
-description: "Guild laboratories agreed on a reproducible scale for comparing Resonant activity across instruments and cities."
+title: The First Resonance Meter Standard
+description: >-
+  Guild laboratories agreed on a reproducible scale for comparing Resonant
+  activity across instruments and cities.
 status: published
 type: event
 era: SMOG
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 5
 location:
-  - "Institute of Civic Measures"
+  - Institute of Civic Measures
 faction:
-  - "Resonance Guild Compact"
+  - Resonance Guild Compact
 participants:
-  - "Committee of Eleven Needles"
-outcome: "Resonance became measurable enough to regulate, insure and weaponise."
+  - Committee of Eleven Needles
+outcome: 'Resonance became measurable enough to regulate, insure and weaponise.'
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "science"
+  - smog
+  - timeline-showcase
+  - science
 slug: eras/smog/events/the-first-resonance-meter-standard
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The First Resonance Meter Standard.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The First Resonance Meter Standard.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Guild laboratories agreed on a reproducible scale for comparing Resonant activity across instruments and cities.

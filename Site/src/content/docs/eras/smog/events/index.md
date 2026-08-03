@@ -6,6 +6,7 @@ slug: eras/smog/events
 type: category
 pagefind: true
 tableOfContents: false
+giscus: false
 ---
 Browse every public Codex page filed beneath **Events**.
 

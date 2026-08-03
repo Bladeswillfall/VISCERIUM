@@ -1,6 +1,8 @@
 ---
-title: "First Jade Current Compact Deployment"
-description: "The Jade Current Compact deployed a civil-compatible expeditionary force after a coastal infrastructure collapse."
+title: First Jade Current Compact Deployment
+description: >-
+  The Jade Current Compact deployed a civil-compatible expeditionary force after
+  a coastal infrastructure collapse.
 status: published
 type: event
 era: NEARSIGHT
@@ -25,20 +27,23 @@ timeline:
   era: auto
   order: 7
 location:
-  - "Lume Delta"
+  - Lume Delta
 faction:
-  - "Jade Current Compact"
+  - Jade Current Compact
 participants:
-  - "First Current Relief Group"
-outcome: "A multinational force restored ports, power and security without assuming formal occupation."
+  - First Current Relief Group
+outcome: >-
+  A multinational force restored ports, power and security without assuming
+  formal occupation.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "jade-current"
+  - nearsight
+  - timeline-showcase
+  - jade-current
 slug: eras/nearsight/events/first-jade-current-compact-deployment
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/First Jade Current Compact Deployment.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/First Jade Current Compact Deployment.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The Jade Current Compact deployed a civil-compatible expeditionary force after a coastal infrastructure collapse.

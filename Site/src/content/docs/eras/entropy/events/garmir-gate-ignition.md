@@ -1,6 +1,8 @@
 ---
-title: "GARMIR Gate Ignition"
-description: "The GARMIR transit structure opened a stable corridor through folded space for eleven minutes."
+title: GARMIR Gate Ignition
+description: >-
+  The GARMIR transit structure opened a stable corridor through folded space for
+  eleven minutes.
 status: published
 type: event
 era: ENTROPY
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 1
 location:
-  - "GARMIR Gate"
+  - GARMIR Gate
 faction:
-  - "Gate Authority"
+  - Gate Authority
 participants:
-  - "Ignition Crew One"
-outcome: "Human vessels crossed interstellar distance without conventional transit."
+  - Ignition Crew One
+outcome: Human vessels crossed interstellar distance without conventional transit.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "garmir"
-  - "same-day"
+  - entropy
+  - timeline-showcase
+  - garmir
+  - same-day
 slug: eras/entropy/events/garmir-gate-ignition
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/GARMIR Gate Ignition.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/GARMIR Gate Ignition.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The GARMIR transit structure opened a stable corridor through folded space for eleven minutes.

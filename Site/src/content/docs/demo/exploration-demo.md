@@ -1,6 +1,8 @@
 ---
 title: Exploration Feature Demo
-description: "NON-CANON disposable content for manually verifying the Atlas and Relationships explorers."
+description: >-
+  NON-CANON disposable content for manually verifying the Atlas and
+  Relationships explorers.
 status: published
 type: article
 icon: codex
@@ -12,9 +14,13 @@ related:
   - Demo Concord
   - Demo Marshal
 slug: demo/exploration-demo
-links: ["demo/exploration-demo-world/","demo/demo-concord/","demo/demo-marshal/"]
-sourcePath: "Demo/Exploration Demo.md"
-updated: "2026-07-23T17:50:49+01:00"
+links:
+  - demo/exploration-demo-world/
+  - demo/demo-concord/
+  - demo/demo-marshal/
+giscus: true
+sourcePath: Demo/Exploration Demo.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!danger]

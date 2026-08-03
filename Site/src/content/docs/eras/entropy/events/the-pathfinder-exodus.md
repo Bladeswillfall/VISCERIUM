@@ -1,6 +1,8 @@
 ---
-title: "The Pathfinder Exodus"
-description: "Civilian pathfinder fleets departed Errack in staggered waves to establish redundant human settlements beyond mapped war corridors."
+title: The Pathfinder Exodus
+description: >-
+  Civilian pathfinder fleets departed Errack in staggered waves to establish
+  redundant human settlements beyond mapped war corridors.
 status: published
 type: event
 era: ENTROPY
@@ -32,21 +34,22 @@ timeline:
   era: auto
   order: 3
 location:
-  - "Errack Orbital Ring"
-  - "Outer Colonisation Routes"
+  - Errack Orbital Ring
+  - Outer Colonisation Routes
 faction:
-  - "Pathfinder Fleets"
+  - Pathfinder Fleets
 participants:
-  - "Exodus Cohorts"
-outcome: "Human civilisation became distributed beyond a single planetary system."
+  - Exodus Cohorts
+outcome: Human civilisation became distributed beyond a single planetary system.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "pathfinder"
+  - entropy
+  - timeline-showcase
+  - pathfinder
 slug: eras/entropy/events/the-pathfinder-exodus
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Pathfinder Exodus.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Pathfinder Exodus.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Civilian pathfinder fleets departed Errack in staggered waves to establish redundant human settlements beyond mapped war corridors.
