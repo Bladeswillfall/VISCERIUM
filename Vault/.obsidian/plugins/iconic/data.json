@@ -1,5 +1,5 @@
 {
-  "biggerIcons": "mobile",
+  "biggerIcons": "on",
   "clickableIcons": "desktop",
   "showAllFileIcons": false,
   "showAllFolderIcons": true,
@@ -28,7 +28,29 @@
   },
   "appIcons": {},
   "tabIcons": {},
-  "fileIcons": {},
+  "fileIcons": {
+    "Lore/Eras/CITADEL/Bestiary": {
+      "icon": "lucide-paw-print"
+    },
+    "Lore/Eras/CITADEL/Bestiary/Birds": {
+      "icon": "lucide-bird"
+    },
+    "Lore/Eras/CITADEL/Bestiary/Fish": {
+      "icon": "lucide-fish"
+    },
+    "Lore/Eras/CITADEL/Bestiary/Mammals": {
+      "icon": "lucide-dog"
+    },
+    "Lore/Eras/CITADEL/Flora & Fungi": {
+      "icon": "lucide-sprout"
+    },
+    "Lore/Eras/CITADEL/Flora & Fungi/Florary": {
+      "icon": "lucide-flower-2"
+    },
+    "Lore/Eras/CITADEL/Nations": {
+      "icon": "lucide-earth"
+    }
+  },
   "bookmarkIcons": {},
   "tagIcons": {},
   "propertyIcons": {},

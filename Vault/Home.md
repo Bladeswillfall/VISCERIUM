@@ -2,7 +2,6 @@
 cssclasses:
   - viscerium-home
 ---
-
 > [!home-header]
 > # VISCERIUM
 > **CREATOR VAULT · ERRACK**
