@@ -9,17 +9,92 @@ Open only the `Vault/` folder in Obsidian.
 
 1. Enable Obsidian's built-in **Templates** core plugin.
 2. Enable Obsidian's built-in **Bases** core plugin. It is already enabled in the checked-in vault configuration.
-3. Enable the **Templater** community plugin. It is included and enabled in the checked-in vault configuration.
-4. Enable **Dataview**. Home uses it for creator widgets and small action surfaces; database and lore source data remain ordinary Markdown/YAML.
-5. Keep both template folder locations set to `Templates`. The checked-in configuration already does this; role-specific templates live in subfolders beneath that single root.
-6. In **Settings → Templater → File creation**, enable **Trigger Templater on new file creation** on each device where folder-first story-entity creation should work. This master toggle is device-local and cannot be enabled by Git.
-7. Leave Templater's matching mode on **Folder templates**. The repository already contains narrowly scoped rules for `Drafts/Databases/Fauna`, `Flora`, `Fungi` and `Items`; do not add a `/` catch-all rule.
-8. In **Settings → Templater → Startup templates**, enable **Enable startup templates** on each device where [[Home]] should open automatically and local creator activity should be recorded between vault sessions. The repository already registers `Templates/_Startup/Open VISCERIUM Home.md`; only the device-local permission must be enabled.
-9. Write publishable lore in `Lore/`.
-10. Keep drafts in `Drafts/`, private notes in `Private/`, process notes, SOPs and Bases in `System/`, and demonstration material in `Demo/`.
-11. Put real project images in `Assets/Images/` and fictional map images in `Assets/Maps/`. Demo assets stay beneath `Demo/Assets/`.
+3. Install and enable the **Templater** community plugin. Its ID, tested version and shared settings are recorded by the repository.
+4. Install and enable **Dataview**. Home uses it for creator widgets and small action surfaces; database and Lore source data remain ordinary Markdown/YAML.
+5. Complete [Plugin installation and shared settings](#plugin-installation-and-shared-settings) before relying on creator workflows.
+6. Keep both template folder locations set to `Templates`. The checked-in configuration already does this; role-specific templates live in subfolders beneath that single root.
+7. In **Settings → Templater → File creation**, enable **Trigger Templater on new file creation** on each device where folder-first story-entity creation should work. This master toggle is device-local and cannot be enabled by Git.
+8. Leave Templater's matching mode on **Folder templates**. The repository already contains narrowly scoped rules for `Drafts/Databases/Fauna`, `Flora`, `Fungi` and `Items`; do not add a `/` catch-all rule.
+9. In **Settings → Templater → Startup templates**, enable **Enable startup templates** on each device where [[Home]] should open automatically and local creator activity should be recorded between vault sessions. The repository already registers `Templates/_Startup/Open VISCERIUM Home.md`; only the device-local permission must be enabled.
+10. Write publishable Lore in `Lore/`.
+11. Keep drafts in `Drafts/`, private notes in `Private/`, process notes, SOPs and Bases in `System/`, and demonstration material in `Demo/`.
+12. Put real project images in `Assets/Images/` and fictional map images in `Assets/Maps/`. Demo assets stay beneath `Demo/Assets/`.
 
 Restart Obsidian after first opening the vault if Templater commands do not appear immediately.
+
+## Plugin installation and shared settings
+
+The repository records the creator plugin environment without redistributing ordinary third-party plugin code.
+
+Use these files as the source of truth:
+
+| File | Purpose |
+| --- | --- |
+| `Vault/.obsidian/community-plugins.json` | Enabled plugin IDs and load order |
+| `Vault/System/Obsidian Plugin Profile.json` | Tested plugin versions, installation source and shared-setting paths |
+| `Vault/.obsidian/plugins/<plugin-id>/data.json` | Intentional shared settings for selected plugins |
+| `THIRD_PARTY_NOTICES.md` | Upstream projects, licences and attribution |
+
+Third-party `main.js`, `styles.css`, `manifest.json`, workers, maps, binaries and caches are ignored by Git.
+
+The repository tracks first-party VISCERIUM plugins because their code is maintained here. It also tracks the modified MySnippets compatibility runtime under its upstream MPL-2.0 terms.
+
+### Install the community plugins
+
+1. Open `Vault/` in Obsidian.
+2. Open **Settings → Community plugins**.
+3. Disable Restricted mode when Obsidian asks.
+4. Read `System/Obsidian Plugin Profile.json`.
+5. Install each entry whose `source` is `obsidian-community`.
+6. Use the recorded `testedVersion` when a version choice is available.
+7. Confirm that the enabled IDs match `.obsidian/community-plugins.json`.
+8. Close Obsidian completely.
+
+> **Why:** Closing Obsidian prevents a running plugin from rewriting settings while Git restores the shared profile.
+
+### Reapply the VISCERIUM settings
+
+From the repository root, run:
+
+```bash
+git restore --source=HEAD -- ':(glob)Vault/.obsidian/plugins/*/data.json'
+```
+
+This restores only the shared plugin settings tracked by the repository.
+
+It does not restore third-party executables or manifests.
+
+Reopen Obsidian after the command completes.
+
+A plugin that has no tracked `data.json` uses its local defaults and device-local settings.
+
+### Check the installation
+
+1. Run `git status --short` from the repository root.
+2. Confirm that installed third-party `main.js`, `styles.css` and `manifest.json` files do not appear.
+3. Confirm that each required community plugin appears in Obsidian.
+4. Confirm that Templater, Dataview, Metadata Menu, Image Converter and the VISCERIUM tools load without an error.
+5. Confirm that the Image Converter preset shows **WebP 75**.
+6. Confirm that Templater uses `Templates` and `Templates/_Scripts`.
+
+### Update a shared plugin setting
+
+1. Change the setting in Obsidian.
+2. Close Obsidian.
+3. Run `git diff -- Vault/.obsidian/plugins/<plugin-id>/data.json`.
+4. Remove caches, personal paths, active-window state, ignored-lint hashes and secrets from the change.
+5. Commit the `data.json` change only when it is part of the shared VISCERIUM workflow.
+
+Do not add a new `data.json` exception to `.gitignore` without reviewing the complete file.
+
+### Upgrade a plugin
+
+1. Read the current `testedVersion` in `System/Obsidian Plugin Profile.json`.
+2. Upgrade the plugin locally.
+3. Test the creator workflows that depend on it.
+4. Review changes to its shared `data.json`.
+5. Update `testedVersion` only after the checks pass.
+6. Do not commit the downloaded plugin runtime or upstream manifest.
 
 ## Article width
 
@@ -36,7 +111,7 @@ The checked-in Templater startup template performs two creator conveniences afte
 1. compare creator-note state with the previous vault session and update the rolling 52-week activity history in browser local storage;
 2. open `Home.md` in Reading View, reusing an existing Markdown leaf where possible instead of creating a new Home tab on every launch.
 
-The activity tracker ignores `Home.md`, `System/`, `Templates/` and `Demo/`, and stores no activity ledger in the repository.
+The activity tracker ignores `Home.md`, `System/`, `Templates` and `Demo/`, and stores no activity ledger in the repository.
 
 Templater intentionally stores **Enable startup templates** in local device storage for safety, so Git cannot turn it on. Enable it once per Obsidian installation. If you prefer Obsidian to reopen exactly where you left off instead, leave the toggle off; [[Home]] remains available as an ordinary note, but activity will only update when the startup template next runs.
 
