@@ -7,5 +7,15 @@
   "baseline-style@@element-style": "input-cupertino",
   "baseline-style@@status-bar-style": "status-bar-baseline",
   "baseline-style@@anim-motion-baseline": "cubic-bezier(0.1, 0, 0.1, 1.25)",
-  "baseline-style@@reduce-motion": true
+  "baseline-style@@reduce-motion": true,
+  "baseline-style@@color-scheme-accent": false,
+  "baseline-style@@nav-item-active-style": "nav-item-baseline",
+  "baseline-style@@colorful-folders": "colorful-folders-subtle",
+  "baseline-style@@full-item-name": false,
+  "baseline-style@@bold-folders": false,
+  "baseline-style@@large-new-note": false,
+  "baseline-style@@nav-indentation-guide-color": "rgba(var(--mono-rgb-100), 0.12)",
+  "baseline-style@@colorful-frame": false,
+  "baseline-style@@focus-view": false,
+  "baseline-style@@banner-off": false
 }

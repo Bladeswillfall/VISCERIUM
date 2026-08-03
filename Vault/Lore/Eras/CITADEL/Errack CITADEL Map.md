@@ -1,6 +1,6 @@
 ---
 title: Errack — CITADEL
-description: "The canonical Atlas map of Errack during the CITADEL era, presented without the non-canon markers used by the exploration demo."
+description: The canonical Atlas map of Errack during the CITADEL era, presented without the non-canon markers used by the exploration demo.
 status: published
 type: map
 era: CITADEL
