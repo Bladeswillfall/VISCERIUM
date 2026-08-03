@@ -23,9 +23,11 @@ Restart Obsidian after first opening the vault if Templater commands do not appe
 
 ## Article width
 
-Ordinary note width belongs to the active Obsidian theme. The checked-in theme is **Baseline**. Do not add a second global `markdown-preview-sizer` width system in snippets.
+`Vault/.obsidian/snippets/Article widths.css` owns the responsive width of ordinary Markdown notes in both Reading View and Live Preview. It keeps articles centred, expands the article lane to a `92rem` maximum, and preserves responsive side gutters rather than making prose edge-to-edge.
 
-[[Home]] is intentionally wider because it is a dashboard and `Home dashboard.css` owns that one page's pane-responsive layout.
+Change ordinary article sizing in that snippet instead of adding a competing global `markdown-preview-sizer`, `.cm-sizer` or theme override elsewhere. The active theme still owns typography, colours and the rest of the document chrome.
+
+[[Home]] is intentionally excluded because it is a dashboard rather than an ordinary article. `Home dashboard.css` owns that page's full-width, pane-responsive layout.
 
 ## Startup homepage
 
