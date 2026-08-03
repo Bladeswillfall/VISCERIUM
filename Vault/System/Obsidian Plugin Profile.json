@@ -59,7 +59,8 @@
       "name": "StoryLine",
       "testedVersion": "1.10.55",
       "source": "obsidian-community",
-      "sharedSettings": "Vault/.obsidian/plugins/storyline/data.json"
+      "sharedSettings": "Vault/.obsidian/plugins/storyline/data.json",
+      "note": "The shared settings omit the active project path because StoryLine projects are private and device-local."
     },
     {
       "id": "viscerium-timelines",
@@ -115,7 +116,8 @@
       "name": "Chronos Timeline",
       "testedVersion": "3.6.10",
       "source": "obsidian-community",
-      "sharedSettings": "Vault/.obsidian/plugins/chronos/data.json"
+      "sharedSettings": "Vault/.obsidian/plugins/chronos/data.json",
+      "note": "The shared profile disables Chronos AI features."
     },
     {
       "id": "dataview",
