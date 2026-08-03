@@ -37,7 +37,6 @@
   "weeklyWordGoal": 7000,
   "monthlyWordGoal": 30000,
   "projectWordGoal": 80000,
-  "customLocationTypes": [],
   "enablePlotHoleDetection": true,
   "showWarnings": true,
   "sceneTemplates": [],
@@ -80,14 +79,7 @@
   "stickyNoteLightness": 0,
   "stickyNoteFontColorLight": "",
   "stickyNoteFontColorDark": "",
-  "codexEnabledCategories": [
-    "items"
-  ],
-  "codexCustomCategories": [],
   "codexCategoryFieldTemplates": {},
-  "codexCategoryCustomSections": {},
-  "characterCustomSections": [],
-  "locationCustomSections": [],
   "codexSidebarCategories": [],
   "series": "",
   "sharedCodex": "",

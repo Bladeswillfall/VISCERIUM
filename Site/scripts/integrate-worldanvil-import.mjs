@@ -116,14 +116,18 @@ export function descriptionFromBody(body, fallbackTitle) {
   return String(fallbackTitle ?? '').trim();
 }
 
-function reviewBlock(tasks) {
-  if (!tasks.length) return '';
-  return `${REVIEW_START}\n## Import review\n\n${tasks.map((task) => `- [ ] ${task}`).join('\n')}\n${REVIEW_END}`;
+function checkedReviewTasks(body) {
+  const match = String(body).match(new RegExp(`${REVIEW_START}([\\s\\S]*?)${REVIEW_END}`, 'm'));
+  return new Set([...(match?.[1] ?? '').matchAll(/^- \[[xX]\] (.+)$/gm)].map((entry) => entry[1]));
 }
-function replaceReviewBlock(body, tasks) {
+function reviewBlock(tasks, checkedTasks) {
+  if (!tasks.length) return '';
+  return `${REVIEW_START}\n## Import review\n\n${tasks.map((task) => `- [${checkedTasks.has(task) ? 'x' : ' '}] ${task}`).join('\n')}\n${REVIEW_END}`;
+}
+function replaceReviewBlock(body, tasks, checkedTasks) {
   const re = new RegExp(`${REVIEW_START}[\\s\\S]*?${REVIEW_END}\\n?`, 'm');
   const cleaned = String(body).replace(re, '').trimEnd();
-  const block = reviewBlock(tasks);
+  const block = reviewBlock(tasks, checkedTasks);
   return block ? `${cleaned}\n\n${block}\n` : `${cleaned}\n`;
 }
 function buildIssues({ sourceType, typeReview, eras, duplicate, existingMatch, relationshipReview, unresolvedLinks, assetRefs }) {
@@ -241,11 +245,13 @@ export async function runIntegration({ vault=DEFAULT_VAULT, write=false }={}) {
     const key=src.title.toLocaleLowerCase('en'); const currentMatches=(targets.get(key)??[]).filter((x)=>x.current);
     const converted=convertLegacyArticleLinks(parts.body,targets); const unresolved=remainingLegacyLinks(converted.body); const assets=legacyAssetRefs(converted.body);
     const relationshipReview=relationshipReviewNeeded(managedFrontmatter);
-    const issues=buildIssues({ sourceType:src.sourceType, typeReview:nt.typeReview, eras, duplicate:(titles.get(key)??0)>1, existingMatch:currentMatches.length>0, relationshipReview, unresolvedLinks:unresolved, assetRefs:assets });
-    const tasks=issueTasks({ sourceType:src.sourceType, title:src.title, issues });
+    const detectedIssues=buildIssues({ sourceType:src.sourceType, typeReview:nt.typeReview, eras, duplicate:(titles.get(key)??0)>1, existingMatch:currentMatches.length>0, relationshipReview, unresolvedLinks:unresolved, assetRefs:assets });
+    const checkedTasks=checkedReviewTasks(parts.body);
+    const tasks=issueTasks({ sourceType:src.sourceType, title:src.title, issues:detectedIssues });
+    const issues=detectedIssues.filter((issue) => !issueTasks({ sourceType:src.sourceType, title:src.title, issues:[issue] }).some((task) => checkedTasks.has(task)));
     const description=descriptionFromBody(converted.body,src.title);
     const additions=addFrontmatter(managedFrontmatter,{ file,title:src.title,description,sourceType:src.sourceType,type:nt.type,eras,tags,itemType,locationKind:locationKind(src.sourceType),issues });
-    const fm=[managedFrontmatter,...additions].filter(Boolean).join('\n'); const body=replaceReviewBlock(converted.body,tasks);
+    const fm=[managedFrontmatter,...additions].filter(Boolean).join('\n'); const body=replaceReviewBlock(converted.body,tasks,checkedTasks);
     const output=`---\n${fm}\n---\n${body}`;
     if (output!==raw) { stats.changed++; if (write) await fs.writeFile(full,output,'utf8'); }
     stats.linksConverted += converted.converted; stats.types.set(nt.type,(stats.types.get(nt.type)??0)+1);

@@ -173,6 +173,9 @@
     },
     "traverse_note": {
       "default_field": "up"
+    },
+    "dataview_note": {
+      "default_field": "up"
     }
   },
   "views": {
@@ -321,6 +324,19 @@
         "destination": "frontmatter",
         "target_path_template": "{{source.folder}}/{{attr.field}} {{source.basename}}"
       }
+    },
+    "create_canvas": {
+      "default_options": {
+        "target_path_template": "{{source.folder}}/{{source.basename}} canvas",
+        "depth": 5,
+        "fields": [],
+        "field_group_labels": [],
+        "direction": "LR"
+      }
+    },
+    "edge_audit": {
+      "report_path": "Breadcrumbs Edge Audit.md",
+      "ignore_paths": []
     }
   },
   "suggestors": {
@@ -335,5 +351,6 @@
   "_bc_migrations": {
     "tree_ups_with_downs_default": true,
     "tree_find_root_default": true
-  }
+  },
+  "exclude_folders": []
 }

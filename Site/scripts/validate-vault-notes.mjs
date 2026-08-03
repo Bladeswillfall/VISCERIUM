@@ -22,6 +22,8 @@ const unsafeUrlScheme = /(?:\b(?:href|src|action|formaction)\s*=\s*["']?\s*|\]\(
 const remoteMdxModule = /^\s*(?:import\s+(?:[^'"\n]+\s+from\s+)?|export[^\n]*\s+from\s+)["'](?:https?:|data:|javascript:)/im;
 const remoteDynamicImport = /\bimport\s*\(\s*["'](?:https?:|data:|javascript:)/i;
 const eraPrimerShortcode = /^\s*\[EraPrimer:([^\]\s]+)\]\s*$/gim;
+const migrationReviewScaffolding = /<!--\s*worldanvil-migration-review:(?:start|end)\s*-->/i;
+const draftInboxWikilink = /!?\[\[Drafts\/Inbox\/[^\]]+\]\]/i;
 
 function relative(file) {
   return path.relative(siteRoot, file).replace(/\\/g, '/');
@@ -127,6 +129,13 @@ export function validateVaultNotes(manifest) {
     }
 
     if (data.status !== 'published') continue;
+
+    if (migrationReviewScaffolding.test(content)) {
+      fail(`Published note contains World Anvil migration review scaffolding: ${relative(file)}`);
+    }
+    if (draftInboxWikilink.test(content)) {
+      fail(`Published note links to Drafts/Inbox; publish the target or leave the term unlinked: ${relative(file)}`);
+    }
 
     validateEraPrimerSource(content, data, file);
 

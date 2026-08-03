@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import { descriptionFromBody } from './integrate-worldanvil-import.mjs';
+import { descriptionFromBody, isWorldAnvilArticleFile } from './integrate-worldanvil-import.mjs';
 import { isMainModule } from './script-entry.mjs';
 
 const DEFAULT_VAULT = path.resolve(process.cwd(), '../Vault');
@@ -135,7 +135,7 @@ async function markdownFiles(root) {
 
 export async function prepareWorldAnvilFrontmatter({ vault = DEFAULT_VAULT, write = false } = {}) {
   const importDir = path.join(vault, IMPORT_REL);
-  const files = await markdownFiles(importDir);
+  const files = (await markdownFiles(importDir)).filter(isWorldAnvilArticleFile);
   const stats = {
     total: files.length,
     changed: 0,

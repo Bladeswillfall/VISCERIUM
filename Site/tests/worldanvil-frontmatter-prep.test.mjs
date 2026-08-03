@@ -108,12 +108,15 @@ test('World Anvil preparation reports unresolved descriptions in audit and write
   const importDir = path.join(vault, 'Drafts/WorldAnvil Import');
   const note = path.join(importDir, 'Organization-Krass Dominion-AbC.md');
   const unresolved = path.join(importDir, 'Article-Empty Import-DeF.md');
+  const helper = path.join(importDir, 'meta.md');
   await fs.mkdir(importDir, { recursive: true });
   await fs.writeFile(note, sample, 'utf8');
   await fs.writeFile(unresolved, reviewOnly, 'utf8');
+  await fs.writeFile(helper, sample, 'utf8');
 
   const audit = await prepareWorldAnvilFrontmatter({ vault, write: false });
   assert.equal(audit.changed, 1);
+  assert.equal(audit.total, 2);
   assert.equal(audit.descriptionsUnresolved, 1);
   assert.equal(await fs.readFile(note, 'utf8'), sample);
 
@@ -124,6 +127,7 @@ test('World Anvil preparation reports unresolved descriptions in audit and write
   assert.equal(written.invalidDescriptionsRemoved, 0);
   assert.equal(written.updatedKeysAdded, 1);
   assert.doesNotMatch(await fs.readFile(note, 'utf8'), /^created:/m);
+  assert.equal(await fs.readFile(helper, 'utf8'), sample);
 
   const rerun = await prepareWorldAnvilFrontmatter({ vault, write: true });
   assert.equal(rerun.changed, 0);

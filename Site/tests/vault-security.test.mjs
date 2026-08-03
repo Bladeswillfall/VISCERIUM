@@ -103,6 +103,27 @@ test('published notes reject active HTML and unsafe URL schemes', async (t) => {
   }
 });
 
+test('published notes reject World Anvil review scaffolding', () => {
+  const result = validateQuietly([
+    'Ordinary lore text.',
+    '',
+    '<!-- worldanvil-migration-review:start -->',
+    '## Import review',
+    '- [x] Internal task',
+    '<!-- worldanvil-migration-review:end -->',
+  ].join('\n'));
+
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join('\n'), /migration review scaffolding/);
+});
+
+test('published notes reject links into Drafts Inbox', () => {
+  const result = validateQuietly('Read [[Drafts/Inbox/Resonance|Resonance]] for more detail.');
+
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join('\n'), /links to Drafts\/Inbox/);
+});
+
 test('published note routes are derived from their file paths', () => {
   const result = validateQuietly('Ordinary lore text.', { slug: 'custom-route' });
 
