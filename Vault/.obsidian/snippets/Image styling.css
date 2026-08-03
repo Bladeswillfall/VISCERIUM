@@ -8,9 +8,85 @@
  * ![[image.webp|wide]]
  *
  * The VISCERIUM Image Tools plugin adds the vc-image-* classes and resolves the
- * image URL required by CSS shape-outside. Unflagged embeds retain the ordinary
- * centred block treatment below.
+ * image URL required by CSS shape-outside. It also renders the canonical
+ * frontmatter `headerImage` as a non-authored banner in Reading View and Live
+ * Preview. Unflagged body embeds retain the ordinary centred treatment below.
  */
+
+/* -------------------------------------------------------------------------- */
+/* Article header image                                                       */
+/* -------------------------------------------------------------------------- */
+
+.markdown-reading-view .vc-header-figure,
+.markdown-source-view.mod-cm6 .vc-header-figure {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  width: 100%;
+  height: clamp(13rem, 34vw, 23rem);
+  margin: 0 0 -2.75rem;
+  overflow: hidden;
+  border: 0;
+  background: var(--background-secondary);
+  pointer-events: none;
+  user-select: none;
+}
+
+.markdown-reading-view .vc-header-figure::after,
+.markdown-source-view.mod-cm6 .vc-header-figure::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 42% 0 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--background-primary) 12%, transparent) 28%,
+    color-mix(in srgb, var(--background-primary) 48%, transparent) 56%,
+    color-mix(in srgb, var(--background-primary) 82%, transparent) 78%,
+    var(--background-primary) 100%
+  );
+}
+
+.markdown-reading-view .vc-header-image,
+.markdown-source-view.mod-cm6 .vc-header-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+}
+
+.markdown-reading-view .vc-header-host > .mod-header,
+.markdown-source-view.mod-cm6 .vc-header-host .inline-title {
+  position: relative;
+  z-index: 2;
+}
+
+.markdown-reading-view .vc-header-host > .mod-header {
+  margin-top: 0;
+}
+
+.markdown-source-view.mod-cm6 .vc-header-host .inline-title {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .markdown-reading-view .vc-header-figure,
+  .markdown-source-view.mod-cm6 .vc-header-figure {
+    height: clamp(10rem, 52vw, 16rem);
+    margin-bottom: -2rem;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Authored article images                                                    */
+/* -------------------------------------------------------------------------- */
 
 .markdown-reading-view .image-embed,
 .markdown-source-view.mod-cm6 .image-embed {
