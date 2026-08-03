@@ -6,12 +6,69 @@ Use the [Architecture Guide](Architecture/README.md) before you change an unfami
 
 Use the [Documentation Writing Standard](Vault/System/SOPs/Documentation%20Writing%20Standard.md) for operational documentation.
 
+Read [LICENSE.md](LICENSE.md), [LICENSE-CODE.md](LICENSE-CODE.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) before adding code, dependencies, plugins, fonts, or external assets.
+
 ## Before you change the repository
 
 1. Identify the authoritative source for the feature.
 2. Read the nearest SOP or system guide.
 3. Check the existing tests for that feature.
 4. Do not start from a generated file.
+
+## Licensing and contributions
+
+Original first-party software in MIT-covered paths is distributed under `LICENSE-CODE.md`.
+
+Unless separate written terms apply, submitting original code for acceptance into an MIT-covered path means that the accepted code may be distributed under that MIT licence.
+
+The MIT licence does not grant rights to VISCERIUM Lore, canon, fiction, artwork, maps, branding, logos, or other protected creative material.
+
+Opening an issue or pull request does not make creative material part of VISCERIUM canon and does not transfer creative rights. Creative contributions require separate written terms before acceptance.
+
+## Third-party dependency rules
+
+When you add, remove, fork, or upgrade a third-party dependency:
+
+1. Confirm its current upstream licence.
+2. Confirm that the intended use is compatible with the repository licence map.
+3. Update the relevant package manifest and lockfile.
+4. Update `THIRD_PARTY_NOTICES.md` when the direct dependency or attribution changes.
+5. Preserve required copyright, licence, source-availability, and modification notices.
+6. Do not describe an upstream project as affiliated with or endorsed by VISCERIUM.
+
+Do not copy third-party source or binary files into the repository merely because the project uses them.
+
+## Obsidian plugin rules
+
+Use `Vault/.obsidian/community-plugins.json` as the enabled plugin-ID list.
+
+Use `Vault/System/Obsidian Plugin Profile.json` as the tested-version and installation-source record.
+
+Ordinary third-party plugin payloads are not repository source. Do not commit their:
+
+- `main.js` files;
+- `styles.css` files;
+- `manifest.json` files;
+- source maps;
+- workers;
+- binaries;
+- caches; or
+- downloaded support assets.
+
+Selected third-party `data.json` files may be tracked only when they define an intentional shared VISCERIUM workflow.
+
+Before you add or change a tracked plugin setting:
+
+1. Close Obsidian.
+2. Review the complete `data.json` diff.
+3. Remove secrets, personal paths, active-project state, caches, ignored-lint hashes, and device-local UI state.
+4. Update `.gitignore` only when the setting must be shared.
+5. Update `Vault/System/Obsidian Plugin Profile.json` when the tested version or settings path changes.
+6. Test the affected creator workflow.
+
+First-party `viscerium-*` plugins are repository software and remain tracked.
+
+The modified MySnippets compatibility runtime is an explicit MPL-2.0 exception. Do not treat that exception as permission to vendor other community plugins.
 
 ## Source-of-truth rules
 
@@ -137,4 +194,5 @@ npm run build
 4. State performance effects for substantial timeline changes.
 5. Identify generated files that changed.
 6. Identify publication or privacy risks when they exist.
-7. Merge only after required checks pass.
+7. Identify third-party licences or notices that changed.
+8. Merge only after required checks pass.
