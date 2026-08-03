@@ -130,6 +130,56 @@ const FOLDER_ALIASES = [
   ['demo', 'system'],
 ];
 
+const ITEM_SUBTYPES = new Map([
+  ['weapon', 'weapon'],
+  ['weapons', 'weapon'],
+  ['weaponry', 'weapon'],
+  ['armour', 'armour'],
+  ['armours', 'armour'],
+  ['armor', 'armour'],
+  ['armors', 'armour'],
+  ['equipment', 'equipment'],
+  ['tool', 'tool'],
+  ['tools', 'tool'],
+  ['artefact', 'artefact'],
+  ['artefacts', 'artefact'],
+  ['artifact', 'artefact'],
+  ['artifacts', 'artefact'],
+  ['relic', 'artefact'],
+  ['relics', 'artefact'],
+  ['vehicle', 'vehicle'],
+  ['vehicles', 'vehicle'],
+  ['technology', 'technology'],
+]);
+
+const SPECIES_SUBTYPES = new Map([
+  ['fauna', 'animal'],
+  ['animal', 'animal'],
+  ['animals', 'animal'],
+  ['reptile', 'reptile'],
+  ['reptiles', 'reptile'],
+  ['mammal', 'mammal'],
+  ['mammals', 'mammal'],
+  ['bird', 'bird'],
+  ['birds', 'bird'],
+  ['avian', 'bird'],
+  ['avians', 'bird'],
+  ['fish', 'fish'],
+  ['amphibian', 'amphibian'],
+  ['amphibians', 'amphibian'],
+  ['insect', 'insect'],
+  ['insects', 'insect'],
+  ['arachnid', 'arachnid'],
+  ['arachnids', 'arachnid'],
+  ['flora', 'plant'],
+  ['plant', 'plant'],
+  ['plants', 'plant'],
+  ['fungi', 'fungus'],
+  ['fungus', 'fungus'],
+  ['myrkildicary', 'Myrkild'],
+]);
+
+export const ERA_VALUES = Object.freeze(['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY', 'Universal']);
 export const TYPE_BY_FOLDER = new Map(FOLDER_ALIASES);
 
 export function normaliseSourceSegment(value) {
@@ -147,20 +197,58 @@ export function sourceSegments(file, sourceDir) {
   return relative.split('/').filter(Boolean);
 }
 
-export function inferNoteType(file, sourceDir) {
+function folderSegments(file, sourceDir) {
+  return sourceSegments(file, sourceDir).slice(0, -1);
+}
+
+export function inferRecognisedNoteType(file, sourceDir) {
   const segments = sourceSegments(file, sourceDir);
   for (let index = segments.length - 2; index >= 0; index -= 1) {
     const type = TYPE_BY_FOLDER.get(normaliseSourceSegment(segments[index]));
     if (!type) continue;
 
-    // "Eras" identifies the direct era index notes. It must not turn an
+    // "Eras" identifies only direct era index notes. It must not turn an
     // otherwise untyped descendant of Lore/Eras/<ERA>/ into type: era.
     if (type === 'era' && !(index === 0 && segments.length === 2)) continue;
     return type;
   }
 
   if (segments.length === 1) {
-    return TYPE_BY_FOLDER.get(normaliseSourceSegment(segments[0])) ?? 'article';
+    return TYPE_BY_FOLDER.get(normaliseSourceSegment(segments[0])) ?? null;
   }
-  return 'article';
+  return null;
+}
+
+export function inferNoteType(file, sourceDir) {
+  return inferRecognisedNoteType(file, sourceDir) ?? 'article';
+}
+
+function nearestValue(segments, values) {
+  for (let index = segments.length - 1; index >= 0; index -= 1) {
+    const value = values.get(normaliseSourceSegment(segments[index]));
+    if (value) return value;
+  }
+  return null;
+}
+
+export function inferPathEra(file, sourceDir) {
+  const eras = new Map(ERA_VALUES.map((era) => [era.toLowerCase(), era]));
+  return nearestValue(folderSegments(file, sourceDir), eras);
+}
+
+export function inferPathSubtype(type, file, sourceDir) {
+  const segments = folderSegments(file, sourceDir);
+  if (type === 'item') return nearestValue(segments, ITEM_SUBTYPES);
+  if (type === 'species') return nearestValue(segments, SPECIES_SUBTYPES);
+  return null;
+}
+
+export function inferPathMetadata(file, sourceDir) {
+  const type = inferRecognisedNoteType(file, sourceDir);
+  return {
+    type,
+    era: inferPathEra(file, sourceDir),
+    item_type: type === 'item' ? inferPathSubtype('item', file, sourceDir) : null,
+    species_kind: type === 'species' ? inferPathSubtype('species', file, sourceDir) : null,
+  };
 }
