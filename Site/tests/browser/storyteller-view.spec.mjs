@@ -1,7 +1,13 @@
 import { test, expect } from '@playwright/test';
+import { findVaultNoteRoute } from '../helpers/vault-note.mjs';
 
 const storytellerDemoUrl = 'http://127.0.0.1:4321/demo/demo-trade-port/';
-const okseDominionUrl = 'http://127.0.0.1:4321/eras/citadel/okse-dominion/';
+const okseDominionPath = await findVaultNoteRoute({
+  title: 'Okse Dominion',
+  type: 'faction',
+  era: 'CITADEL',
+});
+const okseDominionUrl = new URL(okseDominionPath, 'http://127.0.0.1:4321').href;
 
 const almostEqual = (left, right, tolerance = 1) => Math.abs(left - right) <= tolerance;
 
