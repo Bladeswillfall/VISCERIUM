@@ -1,42 +1,86 @@
-# VISCERIUM Repository Licence
+# VISCERIUM Repository Licensing
 
 ## Day-one status
 
-This is an interim rights notice for the VISCERIUM repository.
+This repository uses different terms for different kinds of material.
 
-This repository is **not** released under an open-source licence or a Creative Commons licence.
+The VISCERIUM setting and creative material remain proprietary and all rights reserved.
 
-Unless a specific file states otherwise, all copyright and related rights in the repository are reserved.
+Original first-party software is open source under the MIT License.
+
+Third-party software remains subject to its own licence terms.
 
 > **VISCERIUM created by Fall. © Fall. All rights reserved.**
 
-## Scope
+## Licence map
 
-This notice applies, unless expressly stated otherwise, to original material in this repository, including:
+| Material | Current terms |
+| --- | --- |
+| VISCERIUM Lore, canon, fiction, worldbuilding, characters, factions, creatures, histories, terminology, timelines as creative expression, and narrative material | All rights reserved |
+| Original artwork, maps, diagrams, logos, branding, visual identity, and source assets | All rights reserved unless a file states otherwise |
+| Original first-party website code, build scripts, components, styles, tests, and creator-tool code | MIT License under [`LICENSE-CODE.md`](LICENSE-CODE.md) |
+| MySnippets compatibility runtime at `Vault/.obsidian/plugins/mysnippets-plugin/main.js` | Mozilla Public License 2.0 |
+| Third-party packages, libraries, plugins, fonts, icons, and other external components | Their respective upstream terms; see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) |
+| Generated Codex articles and generated data derived from protected VISCERIUM source material | No broader rights than the protected source material |
 
-- VISCERIUM Lore, fiction, canon, characters, factions, creatures, terminology, histories, timelines, and setting material;
-- original artwork, maps, diagrams, logos, branding, and visual identity;
-- website copy, documentation, databases, and structured content;
-- source code, scripts, creator tools, components, styles, and build systems; and
-- adaptations, revisions, and compiled or generated forms of that material.
+## Proprietary VISCERIUM material
 
-Third-party material remains subject to the rights and terms of its respective owner.
+Unless a specific file states otherwise, all rights are reserved in original VISCERIUM creative material, including:
 
-## Permission not granted
+- Lore, fiction, canon, characters, factions, creatures, terminology, histories, cultures, and setting material;
+- original written articles and narrative prose;
+- original artwork, maps, illustrations, diagrams, logos, branding, and visual identity;
+- source-world data and structured creative records; and
+- adaptations, revisions, compilations, and generated presentations of that material.
 
-Public access to this repository does not place its contents in the public domain.
+Public access does not place this material in the public domain.
 
-Except where applicable law permits otherwise, no permission is granted to reproduce, publish, distribute, sublicense, sell, commercially exploit, adapt, translate, create derivative works from, or use repository content as generative-AI training material without prior written permission from the rights holder.
+Except where applicable law permits otherwise, no permission is granted to reproduce, publish, distribute, sublicense, sell, commercially exploit, adapt, translate, create derivative works from, or use proprietary VISCERIUM material as generative-AI training material without prior written permission.
 
-GitHub platform functions may make technical copies or forks under GitHub's own terms. This file grants no broader permission to use the repository contents.
+These restrictions do not override permissions granted for MIT-licensed first-party software or third-party software under its own licence.
+
+## Open-source first-party software
+
+Original first-party software is licensed under the MIT License in [`LICENSE-CODE.md`](LICENSE-CODE.md).
+
+The MIT scope includes original software in these locations, except for generated files, third-party code, protected creative content, and files carrying another notice:
+
+- `Site/src/`;
+- `Site/scripts/`;
+- `Site/tests/`;
+- original configuration and build files under `Site/`;
+- `Tools/obsidian-viscerium-timelines/`;
+- first-party VISCERIUM plugin code under `Vault/.obsidian/plugins/viscerium-*`;
+- original repository automation under `.github/`; and
+- other source-code files that expressly identify `LICENSE-CODE.md` as their licence.
+
+The MIT licence does **not** grant rights to:
+
+- the VISCERIUM name, logos, branding, or visual identity;
+- Lore, canon, fiction, articles, artwork, maps, characters, factions, or other creative material;
+- third-party software or assets;
+- private or unpublished material; or
+- any right to present a derivative project as official, endorsed, canonical, or affiliated with VISCERIUM.
+
+## Third-party software
+
+Third-party software is not relicensed by the VISCERIUM MIT licence or by this scope document.
+
+Each dependency, framework, library, plugin, font, icon set, and external asset remains governed by its own licence and attribution requirements.
+
+See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the day-one inventory and attribution record.
+
+`Site/package-lock.json` and `Tools/obsidian-viscerium-timelines/package-lock.json` record the exact installed npm dependency trees when those lockfiles are current.
 
 ## Contributions
 
 Opening an issue or pull request does not transfer copyright to Fall, VISCERIUM, or any future company.
 
+Unless separate written terms apply, a contributor who submits code for inclusion in an MIT-covered path agrees that the accepted code may be distributed under the MIT License in `LICENSE-CODE.md`.
+
 A creative submission does not become VISCERIUM canon merely because it is posted, discussed, reviewed, or technically merged.
 
-Creative canon contributions will require separate written terms before acceptance. Those terms are intended to address:
+Creative canon contributions require separate written terms before acceptance. Those terms are intended to address:
 
 - assignment or licensing of economic rights;
 - applicable moral-rights waivers;
@@ -53,12 +97,12 @@ NULL Holdings Ltd is the intended future IP-holding company for VISCERIUM.
 
 NULL Holdings Ltd has not yet been incorporated. It is therefore not named here as the current copyright owner, and no transfer of VISCERIUM rights to it is represented by this file.
 
-After incorporation and a formal written assignment, the intended notice is:
+After incorporation and a formal written assignment, the intended creative-rights notice is:
 
 > **VISCERIUM created by Fall. © NULL Holdings Ltd. All rights reserved.**
 
-This file must be reviewed and replaced or amended when that legal structure is established.
+The software copyright notice in `LICENSE-CODE.md` and other rights documents must also be reviewed when that legal structure is established.
 
 ## No warranty
 
-The repository is provided as available, without warranties or guarantees of any kind. No permission to use the protected material should be inferred from its public availability.
+Except where a specific licence states otherwise, repository material is provided as available, without warranties or guarantees of any kind.
