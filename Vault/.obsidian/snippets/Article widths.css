@@ -7,7 +7,8 @@
  * the Home dashboard's purpose-built full-width layout untouched.
  */
 
-.workspace-leaf-content[data-type="markdown"] {
+.markdown-preview-view:not(.viscerium-home),
+.markdown-source-view.mod-cm6:not(.viscerium-home) {
   --vc-article-max-width: 92rem;
   --vc-article-gutter: clamp(1rem, 3%, 2.75rem);
   --file-line-width: var(--vc-article-max-width);
@@ -40,9 +41,10 @@
   max-width: 100% !important;
 }
 
-/* Preserve deliberate breathing room when a pane becomes narrow or split. */
+/* Preserve deliberate breathing room when the whole app is narrow. */
 @media (max-width: 700px) {
-  .workspace-leaf-content[data-type="markdown"] {
+  .markdown-preview-view:not(.viscerium-home),
+  .markdown-source-view.mod-cm6:not(.viscerium-home) {
     --vc-article-gutter: 1rem;
   }
 }
