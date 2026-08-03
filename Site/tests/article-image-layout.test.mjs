@@ -130,12 +130,20 @@ test('Obsidian renders frontmatter headerImage in Reading View and Live Preview'
   assert.match(runtime, /decorativeImage === true/);
   assert.match(runtime, /workspace\.on\('editor-change'/);
   assert.match(runtime, /metadataCache\.on\('changed'/);
+  assert.match(runtime, /return \/\^https:\\\/\\\//);
+  assert.doesNotMatch(runtime, /return \/\^https\?:/);
+  assert.match(runtime, /decorated \+= decorateImageEmbeds\(container\)/);
+  assert.match(runtime, /ownerDocument:\s*target\.ownerDocument/);
+  assert.match(runtime, /onunload\(\)[\s\S]*?getLeavesOfType\('markdown'\)[\s\S]*?removeHeaderImages\(leaf\.view\?\.containerEl\)/);
 
   assert.match(css, /\.vc-header-figure/);
   assert.match(css, /\.vc-header-image/);
   assert.match(css, /object-fit:\s*cover/);
-  assert.match(css, /linear-gradient\(/);
-  assert.match(css, /var\(--background-primary\)/);
+  assert.match(css, /-webkit-mask-image:\s*linear-gradient\(/);
+  assert.match(css, /mask-image:\s*linear-gradient\(/);
+  assert.match(css, /transparent\s+100%/);
+  assert.doesNotMatch(css, /\.vc-header-figure::after/);
+  assert.doesNotMatch(css, /color-mix\(/);
   assert.match(css, /\.vc-header-host \.inline-title/);
 });
 
