@@ -106,6 +106,7 @@ test('Obsidian loads the first-party image renderer and matching snippet rules',
 
   assert.ok(plugins.includes('viscerium-image-tools'));
   assert.equal(manifest.id, 'viscerium-image-tools');
+  assert.equal(manifest.version, '0.2.0');
   assert.doesNotThrow(() => new Function(runtime));
   assert.match(runtime, /registerMarkdownPostProcessor/);
   assert.match(runtime, /currentSrc/);
@@ -113,6 +114,29 @@ test('Obsidian loads the first-party image renderer and matching snippet rules',
   assert.match(css, /\.vc-layout-col-rendered[\s\S]*?display:\s*flow-root/);
   assert.match(css, /\.vc-image-shape[\s\S]*?shape-image-threshold/);
   assert.match(css, /@media \(max-width:\s*700px\)[\s\S]*?shape-outside:\s*none/);
+});
+
+test('Obsidian renders frontmatter headerImage in Reading View and Live Preview', async () => {
+  const runtime = await readVault('.obsidian/plugins/viscerium-image-tools/main.js');
+  const css = await readVault('.obsidian/snippets/Image styling.css');
+
+  assert.match(runtime, /frontmatter\.headerImage/);
+  assert.match(runtime, /getFirstLinkpathDest\(reference, sourcePath\)/);
+  assert.match(runtime, /Assets\/Images\//);
+  assert.match(runtime, /markdown-preview-view \.markdown-preview-sizer/);
+  assert.match(runtime, /markdown-source-view\.mod-cm6 \.cm-sizer/);
+  assert.match(runtime, /data-vc-header-image/);
+  assert.match(runtime, /removeHeaderImages/);
+  assert.match(runtime, /decorativeImage === true/);
+  assert.match(runtime, /workspace\.on\('editor-change'/);
+  assert.match(runtime, /metadataCache\.on\('changed'/);
+
+  assert.match(css, /\.vc-header-figure/);
+  assert.match(css, /\.vc-header-image/);
+  assert.match(css, /object-fit:\s*cover/);
+  assert.match(css, /linear-gradient\(/);
+  assert.match(css, /var\(--background-primary\)/);
+  assert.match(css, /\.vc-header-host \.inline-title/);
 });
 
 test('public sync preserves pipe flags and selects MDX-safe output for columns', async () => {
