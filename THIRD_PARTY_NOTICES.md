@@ -8,11 +8,12 @@ This document records the direct day-one dependencies and authoring integrations
 
 ## Exact dependency records
 
-Use these files as the exact version records for npm software:
+Use these files as the exact version and installation records:
 
 - `Site/package-lock.json` — public Codex, maps, graphs, timelines, search, rendering, and build dependencies;
-- `Tools/obsidian-viscerium-timelines/package-lock.json` — first-party Obsidian timeline plugin dependencies; and
-- `Vault/.obsidian/community-plugins.json` — enabled Obsidian community-plugin identifiers.
+- `Tools/obsidian-viscerium-timelines/package-lock.json` — first-party Obsidian timeline plugin dependencies;
+- `Vault/.obsidian/community-plugins.json` — enabled Obsidian community-plugin identifiers; and
+- `Vault/System/Obsidian Plugin Profile.json` — tested Obsidian plugin versions, installation sources, and shared-setting paths.
 
 Transitive package versions and SPDX licence identifiers are recorded in the relevant npm lockfile. Release and distribution checks must preserve all licence files and notices supplied by installed packages.
 
@@ -56,7 +57,11 @@ References to Obsidian, its interface, and its plugin API do not imply endorseme
 
 ## Obsidian community plugins
 
-The repository records plugin manifests and configuration needed to reproduce the creator environment. Installed third-party plugin bundles are generally excluded by `.gitignore` and must be obtained from their upstream projects or the Obsidian community-plugin service.
+The repository records plugin IDs, tested versions, and selected shared settings needed to reproduce the creator environment.
+
+Ordinary third-party plugin executables, styles, manifests, workers, binaries, maps, and caches are excluded by `.gitignore`. Users obtain those files from the upstream project or the Obsidian community-plugin service.
+
+Selected `data.json` files remain tracked when they define an intentional VISCERIUM workflow. They are configuration, not a redistribution of the upstream plugin implementation.
 
 | Plugin | Creator or maintainer | Upstream licence |
 | --- | --- | --- |
@@ -136,5 +141,7 @@ Update this file when any of these changes occurs:
 4. Fork or modify third-party code.
 5. Change a dependency licence.
 6. Prepare a source or binary distribution outside the normal GitHub and Cloudflare workflows.
+
+Update `Vault/System/Obsidian Plugin Profile.json` after a tested plugin upgrade.
 
 A complete release audit must inspect the installed dependency tree and preserve every licence, notice, attribution, and source-availability obligation required by the versions being distributed.
