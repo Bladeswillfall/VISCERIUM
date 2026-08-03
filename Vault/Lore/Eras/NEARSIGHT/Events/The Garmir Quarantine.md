@@ -40,10 +40,11 @@ participants:
   - "Garmir Quarantine Command"
 outcome: "The basin population was evacuated and the central anomaly was never publicly recovered."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "garmir"
   - "myrkild"
+  - Events
 ---
 
 # The Garmir Quarantine

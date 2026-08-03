@@ -17,6 +17,7 @@ map:
 tags:
   - demo
   - non-canon
+  - Locations
 related: []
 ---
 

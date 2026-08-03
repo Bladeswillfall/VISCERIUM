@@ -11,6 +11,9 @@ import_source_type: "Ethnicity"
 import_source_file: "Ethnicity-Oksmun-7b4.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Cultures
 ---
 The Oksmun are typically a rough and ready lot. Hardy meals, shit weather, thick skin and a cultural pressure to get back up again and again means that you'll seldom see a weak or feeble Oksmun.   For Centuries, they've held against the unstopable hordes from the Ruskahn Empire not once losing ground. They're widely regarded as the being indominable.   The Oksmun praise stamina and endurance above almost everything else.
 

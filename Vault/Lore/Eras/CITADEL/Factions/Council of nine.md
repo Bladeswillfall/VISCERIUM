@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Council of nine-10d.md"
+tags:
+  - CITADEL
+  - Factions
 ---
 a representative from each of the forms of Resonance.- Isen
 - Vindr

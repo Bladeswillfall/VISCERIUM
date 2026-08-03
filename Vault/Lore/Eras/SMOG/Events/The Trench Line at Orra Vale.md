@@ -40,9 +40,10 @@ participants:
   - "Orra Trench Armies"
 outcome: "Neither side gained the valley; both copied its defences."
 tags:
-  - "smog"
+  - "SMOG"
   - "timeline-showcase"
   - "trench-war"
+  - Events
 ---
 
 # The Trench Line at Orra Vale

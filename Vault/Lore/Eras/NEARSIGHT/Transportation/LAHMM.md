@@ -53,6 +53,8 @@ era: "NEARSIGHT"
 tags:
   - "LAHMM"
   - "Lamb"
+  - NEARSIGHT
+  - Transportation
 import_source: "worldanvil"
 import_source_type: "Vehicle"
 import_source_file: "Vehicle-LAHMM-55b.md"

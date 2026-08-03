@@ -9,6 +9,9 @@ development_level: "stub"
 era: "CITADEL"
 tags:
   - "Okse"
+  - CITADEL
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Article"
 import_source_file: "Article-Virki Miellelja-906.md"

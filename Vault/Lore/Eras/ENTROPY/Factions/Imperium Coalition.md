@@ -11,6 +11,9 @@ import_source_type: "Organization"
 import_source_file: "Organization-Imperium Coalition-2c1.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Factions
 ---
 Bringing both the Aliance of Democratic Nations and the Popular Consortium Party together as the majority parties, the Imperium Coalition is the combined peoples front against the Demonic incursion in the Degel system.   Due to all nations within the IC granting IC forces open borders, the IC are able to rapidly deploy to anywhere within the Degel system. When deployed via the IC or on an IC organised mission, units are forbidden from displaying their home nation's flag or any other form of identification that might reveal their place of origin or alegiance beyond the IC insignia/related flags.   A council of ADN and PCP members decide on planetary and off-world activities relating to the defence of Errack and it's people. This includes ensuring international security and peace between the ADN and PCP as well as authorizing military action and enacting sanctions.  
 

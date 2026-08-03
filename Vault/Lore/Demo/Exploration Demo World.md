@@ -16,6 +16,7 @@ tags:
   - non-canon
   - atlas-test
   - ttrpg-maps
+  - Maps
 related:
   - Demo Gate City
   - Demo Frontier Fort

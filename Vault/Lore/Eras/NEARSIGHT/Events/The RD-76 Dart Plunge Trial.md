@@ -32,9 +32,10 @@ participants:
   - "Dart Flight Seven"
 outcome: "Rapid orbital insertion became credible for cargo, troops and strategic recovery."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "rd-76"
+  - Events
 ---
 
 # The RD-76 Dart Plunge Trial

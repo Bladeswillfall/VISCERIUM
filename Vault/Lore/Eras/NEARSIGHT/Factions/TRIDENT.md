@@ -9,6 +9,9 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-TRIDENT-e05.md"
+tags:
+  - NEARSIGHT
+  - Factions
 ---
 The organisation responsible for introducing the _ program.
 

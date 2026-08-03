@@ -38,6 +38,9 @@ import_source_file: "Vehicle-AAPC-7c8.md"
 import_issues:
   - "legacy-type-review"
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 REF: LVT-4, or 4a. And, ACV-30.  
 

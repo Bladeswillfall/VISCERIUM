@@ -82,9 +82,11 @@ sidebar:
 tags:
   - okse
   - dominion
-  - citadel
+  - CITADEL
   - nation
   - faction
+  - Factions
+  - Nations
 ---
 
 :::caution[Content warning]

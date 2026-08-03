@@ -9,6 +9,10 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Location"
 import_source_file: "Location-Sverdstrond-8bf.md"
+tags:
+  - CITADEL
+  - Locations
+  - Nations
 ---
 The Sverdstrond Fylki is home to Aldaness and it's notorious fortress Aldaborg.
 

@@ -8,11 +8,13 @@ item_type: "technology"
 development_level: "stub"
 era: "ENTROPY"
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "satellite"
   - "satellites"
   - "valkyrie"
   - "network"
+  - Items
+  - Technology
 import_source: "worldanvil"
 import_source_type: "Technology"
 import_source_file: "Technology-Valkyrie network-add.md"

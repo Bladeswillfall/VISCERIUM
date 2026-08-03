@@ -9,6 +9,10 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Location"
 import_source_file: "Location-Halvmaneheimr-b82.md"
+tags:
+  - CITADEL
+  - Locations
+  - Nations
 ---
 Realm of the Half-Moon. Home to the Halvmane Mountains, Valenheim, and the great wall Mestrvirki.
 

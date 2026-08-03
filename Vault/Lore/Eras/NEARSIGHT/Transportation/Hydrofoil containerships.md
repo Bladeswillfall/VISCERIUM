@@ -11,6 +11,9 @@ import_source_type: "Vehicle"
 import_source_file: "Vehicle-Hydrofoil containerships-65b.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 Hydrofoil containerships
 

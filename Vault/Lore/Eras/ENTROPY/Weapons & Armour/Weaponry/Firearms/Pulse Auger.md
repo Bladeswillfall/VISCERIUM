@@ -12,6 +12,11 @@ import_source_type: Item
 import_source_file: Item-Pulse Auger-135.md
 era: ENTROPY
 item_type: weapon
+tags:
+  - ENTROPY
+  - Items
+  - Weaponry
+  - Firearms
 ---
 Pulsed laser weapons operate fundamentally differently from conventional continuous-beam lasers. Rather than maintaining a steady energy output, these weapons deliver energy in rapid, intense bursts that create mechanical damage through shock effects. The science behind pulsed lasers reveals that "the energy arrives in one big pulse rather than being spread out over time in a beam, there's a shock effect - the area of the hull hit suddenly gets WAY hotter and the metal expands or vaporises". This creates a drilling or boring action that mechanically penetrates targets rather than simply burning through them.   This is an 'ablative' weapon, it blasts layers off of its target and bores deeper.
 

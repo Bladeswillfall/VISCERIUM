@@ -17,6 +17,10 @@ import_source_type: "Landmark"
 import_source_file: "Landmark-Cavea stations-b83.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 Stationed at the extremities of the [Degel System](/w/viscerium/c/degel-system-category), seven far-off stars shine amongst the depths of the black void.   Thus, there are **only eight stars** to be seen in the skies above [[Lore/Degel System/Errack]]. These eight _stars_, to the denizens of the Degel system are; the one located at the centre of their planetary sytem - Degel and the seven minor stars, Aquilo (North), Auster (South), Calor (heat), Frigus (cool), Caelum (air), Durus (hard) and Unda (water). The North and South stars, Aquilo and Auster are significantly brighter than the other five and have a distinctive coloured flicker at their fringes.  
 

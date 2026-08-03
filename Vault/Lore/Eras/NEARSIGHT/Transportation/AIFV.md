@@ -26,6 +26,9 @@ import_source_file: "Vehicle-AIFV-669.md"
 import_issues:
   - "legacy-type-review"
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 REF: Korean K21 IFV.  
 

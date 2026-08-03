@@ -9,6 +9,9 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Genetic Enhancement for National Empowerment-66c.md"
+tags:
+  - NEARSIGHT
+  - Factions
 ---
 ## A Vision of Human Advancement
 

@@ -39,9 +39,10 @@ participants:
   - "Chain Census Riders"
 outcome: "Bondage became a portable, enforceable commercial record."
 tags:
-  - "citadel"
+  - "CITADEL"
   - "timeline-showcase"
   - "verigoth"
+  - Events
 ---
 
 # The Verigoth Chain Census

@@ -22,6 +22,7 @@ map:
 tags:
   - demo
   - non-canon
+  - Maps
 related:
   - Demo Market Ward
   - Demo Archive Tower

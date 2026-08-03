@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Fran-1b7.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 mad 'witch' lady, alchemist, helpful.
 

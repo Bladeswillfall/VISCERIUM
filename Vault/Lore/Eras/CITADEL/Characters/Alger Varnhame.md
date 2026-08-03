@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Alger Varnhame-85f.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 Previous king of Kingdom of Satol
 

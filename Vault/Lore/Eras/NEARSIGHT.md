@@ -26,8 +26,9 @@ timeline:
   defaultViewport:
     paddingDays: 56
 tags:
-  - nearsight
+  - NEARSIGHT
   - era
+  - Eras
 eraPrimer:
   id: nearsight
   number: Era III

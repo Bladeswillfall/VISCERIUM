@@ -33,9 +33,10 @@ participants:
   - "Caravan of Nine Banners"
 outcome: "Long-distance salt and steel trade became reliable enough to tax."
 tags:
-  - "citadel"
+  - "CITADEL"
   - "timeline-showcase"
   - "trade"
+  - Events
 ---
 
 # The Opening of the Bone Road

@@ -15,6 +15,10 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-Korosseo-a34.md"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 The centre of entertainment in Kisara city, Korosseo - _the colosseum_, hosts a plethora of events and games on a daily basis. Some noteable common events are the **Meat vs Metal games**, **Battlebot brawls** and **Mixed Marial Arts championships**. On top of these, **AR gun games** and some other gameified military _sports_ frequent the colosseum.
 

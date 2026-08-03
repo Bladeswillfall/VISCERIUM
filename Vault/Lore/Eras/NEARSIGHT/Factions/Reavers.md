@@ -8,6 +8,8 @@ development_level: "stub"
 era: "NEARSIGHT"
 tags:
   - "reaver"
+  - NEARSIGHT
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Reavers-560.md"

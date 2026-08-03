@@ -12,6 +12,11 @@ import_source_type: Item
 import_source_file: Item-Beamblade-9dd.md
 era: ENTROPY
 item_type: weapon
+tags:
+  - ENTROPY
+  - Items
+  - Weaponry
+  - Firearms
 ---
 A small, pistol-like weapon, fires a tall and thin blade of UVc energy, only effective at very short ranges.
 

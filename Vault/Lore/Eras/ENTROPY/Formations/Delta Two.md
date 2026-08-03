@@ -29,6 +29,8 @@ era: "ENTROPY"
 tags:
   - "delta"
   - "two"
+  - ENTROPY
+  - Formations
 import_source: "worldanvil"
 import_source_type: "Formation"
 import_source_file: "Formation-Delta Two-d23.md"

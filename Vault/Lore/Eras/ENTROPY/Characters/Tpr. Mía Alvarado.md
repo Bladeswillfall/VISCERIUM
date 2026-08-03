@@ -44,6 +44,9 @@ import_source_file: "Person-Tpr. Mía Alvarado-7e1.md"
 import_issues:
   - "relationship-review"
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Characters
 ---
 > Every day, I strive to be better, to master my emotions and no longer let this rage inside me consume everything. Every day. And yet, my strength is what's kept me alive... Ironic, isn't it?
 > 

@@ -32,6 +32,9 @@ tags:
   - "dominion"
   - "river"
   - "issvatn"
+  - CITADEL
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Location"
 import_source_file: "Location-Issvatn river-fe0.md"

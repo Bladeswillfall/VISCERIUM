@@ -22,6 +22,8 @@ tags:
   - "hollow"
   - "worm"
   - "cult"
+  - CITADEL
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-House of the Hollow Worm-9dc.md"

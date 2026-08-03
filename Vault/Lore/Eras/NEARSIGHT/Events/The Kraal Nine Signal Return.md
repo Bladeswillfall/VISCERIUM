@@ -32,10 +32,11 @@ participants:
   - "Jakkal Team"
 outcome: "The core was destroyed and all surviving telemetry became contested evidence."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "krg"
   - "same-day"
+  - Events
 ---
 
 # The Kraal Nine Signal Return

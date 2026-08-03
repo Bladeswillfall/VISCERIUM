@@ -11,6 +11,9 @@ import_source_type: "Person"
 import_source_file: "Person-Briar Remonnet-052.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - CITADEL
+  - Characters
 ---
 Head of the Remonnet family, Briar ruled the Kingdom of Askalia until his assassination.
 

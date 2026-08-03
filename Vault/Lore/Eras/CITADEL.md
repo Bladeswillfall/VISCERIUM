@@ -26,8 +26,9 @@ timeline:
   defaultViewport:
     paddingDays: 56
 tags:
-  - citadel
+  - CITADEL
   - era
+  - Eras
 eraPrimer:
   id: citadel
   number: Era I

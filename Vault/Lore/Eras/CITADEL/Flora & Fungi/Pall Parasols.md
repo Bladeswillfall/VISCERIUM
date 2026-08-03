@@ -14,6 +14,9 @@ import_issues:
   - duplicate-title
   - missing-inline-assets
 era: CITADEL
+tags:
+  - CITADEL
+  - Flora
 ---
 > Do not sleep beneath the pall, no matter how soft the ground seems.
 > 

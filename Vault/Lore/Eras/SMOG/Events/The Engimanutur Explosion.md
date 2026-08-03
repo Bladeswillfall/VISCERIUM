@@ -31,9 +31,10 @@ participants:
   - "Third Furnace Shift"
 outcome: "The lower works were sealed and the surrounding district remained uninhabitable."
 tags:
-  - "smog"
+  - "SMOG"
   - "timeline-showcase"
   - "intercalary"
+  - Events
 ---
 
 # The Engimanutur Explosion

@@ -10,6 +10,9 @@ import_source_type: Formation
 import_source_file: Formation-AESIR Mk.I-356.md
 import_issues:
   - legacy-type-review
+tags:
+  - ENTROPY
+  - Professions
 ---
 _All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
 

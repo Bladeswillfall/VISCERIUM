@@ -12,7 +12,9 @@ type: "location"
 development_level: "stub"
 era: "SMOG"
 tags:
-  - "smog"
+  - "SMOG"
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Location"
 import_source_file: "Location-Fields of TBN-5d7.md"

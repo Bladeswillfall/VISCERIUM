@@ -11,6 +11,9 @@ import_source_type: "Rank"
 import_source_file: "Rank-Gastronicrie-0ba.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Ranks
 ---
 Culinary sadists who revel in devising grotesque and opulent feasts. With twisted delight, they prepare meals that defy imagination, using ingredients sourced from the most vile and forbidden sources. Theirs is a morbid artistry, creating food that both sustains and corrupts the flesh of the cult's members.
 

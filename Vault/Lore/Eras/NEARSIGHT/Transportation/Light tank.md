@@ -11,6 +11,9 @@ import_source_type: "Vehicle"
 import_source_file: "Vehicle-Light tank-c66.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 REF: AMX-13   Relying on speed and manuverability rather than expensive well armoured tanks, the Popular Consortium Party prefers to use smaller crewed light tanks with high-performance cannons to engage with their foes.  
 Capable of penetrating even the Aliance of Democratic Nations top of the line MBT the [TBN TANK], the [TBN PCP Tank] is lighter and therefore faster too.  

@@ -40,9 +40,10 @@ participants:
   - "The Ash Pilgrims"
 outcome: "New Resonant cults spread through the northern keeps."
 tags:
-  - "citadel"
+  - "CITADEL"
   - "timeline-showcase"
   - "resonance"
+  - Events
 ---
 
 # The Ash-Winter Pilgrimage

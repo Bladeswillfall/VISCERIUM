@@ -25,8 +25,9 @@ timeline:
   defaultViewport:
     paddingDays: 56
 tags:
-  - entropy
+  - ENTROPY
   - era
+  - Eras
 eraPrimer:
   id: entropy
   number: Era IV

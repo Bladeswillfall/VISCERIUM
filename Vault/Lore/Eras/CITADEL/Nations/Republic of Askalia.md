@@ -19,6 +19,8 @@ era: "CITADEL"
 tags:
   - "Nations"
   - "Askalia"
+  - CITADEL
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Republic of Askalia-6c0.md"

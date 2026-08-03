@@ -9,6 +9,9 @@ location_kind: "site"
 era: "CITADEL"
 tags:
   - "Okse"
+  - CITADEL
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-Mestrvirki-801.md"

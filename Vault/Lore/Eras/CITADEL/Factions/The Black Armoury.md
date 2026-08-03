@@ -16,6 +16,9 @@ import_source_type: "Organization"
 import_source_file: "Organization-The Black Armoury-0ab.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - CITADEL
+  - Factions
 ---
 The Black Armoury or BA for short was founded in [1323]. Originally created to produce custom rifles during the age of early blackpowder weapons, the BA of today are one of the oldest survivng arms manufacturers on the planet and now produce a wide range of weapons and defense technologies used by militaires, PMC's and civilians alike.
 

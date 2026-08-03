@@ -32,9 +32,10 @@ participants:
   - "Relay Watch Twelve"
 outcome: "The Naranor threat shifted from hypothesis to strategic certainty."
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "timeline-showcase"
   - "naranor"
+  - Events
 ---
 
 # The First Confirmed Naranor Relay

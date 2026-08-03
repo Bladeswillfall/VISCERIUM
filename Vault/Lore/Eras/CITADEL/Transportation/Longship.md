@@ -10,6 +10,9 @@ import_source_type: Vehicle
 import_source_file: Vehicle-Longship-b6f.md
 import_issues:
   - legacy-type-review
+tags:
+  - CITADEL
+  - Transportation
 ---
 _All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
 

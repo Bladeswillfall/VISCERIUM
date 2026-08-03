@@ -26,6 +26,9 @@ import_source_file: "Organization-Aquillan Seas Trade Union-8be.md"
 import_issues:
   - "relationship-review"
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Factions
 ---
 > Manibus apertis et apertis animis  
 > _Translated: With open hands and open minds._

@@ -32,6 +32,8 @@ era: "CITADEL"
 tags:
   - "Nations"
   - "Krass"
+  - CITADEL
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Krass Dominion-9da.md"

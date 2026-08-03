@@ -8,6 +8,9 @@ location_kind: "settlement"
 era: "CITADEL"
 tags:
   - "Askalia"
+  - CITADEL
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Pikefield-739.md"

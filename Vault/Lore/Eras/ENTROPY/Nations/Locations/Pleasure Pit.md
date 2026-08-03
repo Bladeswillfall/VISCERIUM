@@ -22,6 +22,10 @@ import_source_type: "Landmark"
 import_source_file: "Landmark-Pleasure Pit-b6a.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 One of the largest and most popular nightclubs in Kisara - the Pleasure Pit is located underground inside of what was once an old munitions warehouse built and utilised during _____. It's tall arched ceilings and tiered floors make great use of the dark space. With bare stone walls still displaying the scars of excavation, black metal pipes, railings and fixings running throughout and smooth hard floors in most areas, the club's industrial theme is almost paletable.   Lit with prodominently red, pink and purple hues, the atmosphere here when in use is electrifying with bloodrushing adrenaline, lust and euphoria. The giant speakers ensure that punchy bass rattles through the chest of all who enter. The lighting is almost trance-enducing, smoke machines, lasers, holo-projections and spotlights all programmed seamlessly by a rudimentary AI to sync with the energising music in the most exhilerating way.   To say the Pleasure Pit is _infamous_ would be an understatement. Almost everyone living in the under-belly of Kisara know of the Pleasure Pit - not all know where to find it, but they've certainly heard of it.  
   It is well known for hosting some of the largest and most talked about raves of the century. As well as being rumoured that they are able to provide access to an equally dangerous and life changing service for those who know what to ask for in the back rooms.  

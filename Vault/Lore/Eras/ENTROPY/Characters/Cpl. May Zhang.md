@@ -11,6 +11,9 @@ import_source_type: "Person"
 import_source_file: "Person-Cpl. May Zhang-499.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Characters
 ---
 Leader of Delta Two One a designated to complete SF missions.   May Zhang
 

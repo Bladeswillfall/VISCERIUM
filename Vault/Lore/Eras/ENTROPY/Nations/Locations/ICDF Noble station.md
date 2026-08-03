@@ -15,6 +15,10 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-ICDF Noble station-fd1.md"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 This space station, orbiting [[Lore/Degel System/Errack]] serves as a mainstay headquarters from which the Imperium Coalition Defence Force organizes it's forces.
 

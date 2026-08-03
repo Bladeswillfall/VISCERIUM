@@ -11,6 +11,9 @@ import_source_type: "Formation"
 import_source_file: "Formation-Steinnbendir-3ae.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Formations
 ---
 Muld Resonants as combat engineers and medics; defensive and offensive manipulation of solid matter.   The Okse Dominion is renowned for its grand fortifications and defensive engineering, a legacy driven by Muld Resonants-those attuned to manipulating solid matter. Steinnbendir (Stonebinders) are elite units of Muld Resonants, trained as both frontline sappers and defensive architects.  
 

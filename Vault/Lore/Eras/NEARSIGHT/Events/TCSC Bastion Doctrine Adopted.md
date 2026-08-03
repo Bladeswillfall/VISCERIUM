@@ -32,9 +32,10 @@ participants:
   - "Bastion Doctrine Board"
 outcome: "Heavy armour, engineering vehicles and infantry support were reorganised into persistent advance corridors."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "tcsc"
+  - Events
 ---
 
 # TCSC Bastion Doctrine Adopted

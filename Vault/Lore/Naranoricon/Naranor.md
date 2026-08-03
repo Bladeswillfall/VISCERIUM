@@ -11,6 +11,8 @@ import_source_file: Species-Naranor-723.md
 import_issues: []
 era: Universal
 word_count: 1919
+tags:
+  - Species
 ---
 > Your comprehension is a fleeting shadow, a momentary flicker in the vast expanse of our understanding.  
 > We are the assemblage of countless Nareel, a collective consciousness that transcends your finite minds.   We have existed for millennia before you, and we will exist for millennia after you. We will repeat this experiment as many times as we need to. Our journey _will_ continue.   We _are_ the cycle.

@@ -9,6 +9,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Imperium Coalition Defence Force-d4d.md"
+tags:
+  - ENTROPY
+  - Factions
 ---
 Nicknamed, hellstriders
 

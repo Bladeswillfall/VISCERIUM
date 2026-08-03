@@ -8,6 +8,9 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-TBD character-845.md"
+tags:
+  - NEARSIGHT
+  - Characters
 ---
 > You don't need _hearts and minds_ when you've got _HEAT and mines!_
 > 

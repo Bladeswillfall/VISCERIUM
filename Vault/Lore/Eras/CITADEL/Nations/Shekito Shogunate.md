@@ -9,6 +9,10 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Shekito Shogunate-897.md"
+tags:
+  - CITADEL
+  - Factions
+  - Nations
 ---
 Shekito = Stone tower/Stone pagoda
 

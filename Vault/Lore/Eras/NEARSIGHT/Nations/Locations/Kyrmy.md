@@ -10,6 +10,10 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Kyrmy-969.md"
+tags:
+  - NEARSIGHT
+  - Locations
+  - Nations
 ---
 Capital city of Soloveyko
 

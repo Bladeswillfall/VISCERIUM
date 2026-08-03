@@ -19,6 +19,10 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Location"
 import_source_file: "Location-History of the Nayoru Gulf-599.md"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 ## Summary
 

@@ -12,6 +12,10 @@ import_source_type: "Landmark"
 import_source_file: "Landmark-Naraka Cordillera-052.md"
 import_issues:
   - "unresolved-legacy-links"
+tags:
+  - NEARSIGHT
+  - Locations
+  - Nations
 ---
 Mountain range that is host to the Svaran valley monasteries ref:
 

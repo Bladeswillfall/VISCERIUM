@@ -9,6 +9,9 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Spectres of Sloveyko-808.md"
+tags:
+  - NEARSIGHT
+  - Characters
 ---
 Pilots of the Sloveyko National Army. Regarded as a legend for their devastating blows and skill against ____ .
 

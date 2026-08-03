@@ -11,6 +11,8 @@ tags:
   - "funeral"
   - "ritual"
   - "burial"
+  - CITADEL
+  - Rituals
 import_source: "worldanvil"
 import_source_type: "Ritual"
 import_source_file: "Ritual-Death ritual-875.md"

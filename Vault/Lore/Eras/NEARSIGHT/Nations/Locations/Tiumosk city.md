@@ -39,6 +39,10 @@ import_source_type: "Settlement"
 import_source_file: "Settlement-Tiumosk city-89e.md"
 import_issues:
   - "relationship-review"
+tags:
+  - NEARSIGHT
+  - Locations
+  - Nations
 ---
 > Why the original settlers chose the Obansk plains I can't really be sure... maybe it was the opportunity to hunt whales easier? Or maybe they just really enjoyed the sadistic sport of nude ice diving?
 

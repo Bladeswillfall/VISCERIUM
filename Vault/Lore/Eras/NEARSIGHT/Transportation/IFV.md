@@ -11,6 +11,9 @@ import_source_type: "Vehicle"
 import_source_file: "Vehicle-IFV-6d7.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 ### Design
 

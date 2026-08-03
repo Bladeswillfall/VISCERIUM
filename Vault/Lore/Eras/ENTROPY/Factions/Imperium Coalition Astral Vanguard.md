@@ -9,6 +9,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Imperium Coalition Astral Vanguard-fbb.md"
+tags:
+  - ENTROPY
+  - Factions
 ---
 Sailors and pilots amongst the dead seas, the Astral Vanguard or
 

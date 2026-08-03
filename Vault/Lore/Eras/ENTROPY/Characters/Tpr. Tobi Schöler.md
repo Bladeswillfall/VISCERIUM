@@ -11,6 +11,9 @@ import_source_type: "Person"
 import_source_file: "Person-Tpr. Tobi Schöler-1a8.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Characters
 ---
 To be a real hero, you must be strong enough to be gentle. inspiration: _My name is optimus prime_- Softly spoken but a deep and gruff voice.
 A member of Delta Two One under the Lead of Cpl. May Zhang, Tobi

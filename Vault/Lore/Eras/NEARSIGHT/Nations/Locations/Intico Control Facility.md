@@ -30,6 +30,9 @@ tags:
   - "cannon"
   - "facility"
   - "control"
+  - NEARSIGHT
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-Intico Control Facility-1f2.md"

@@ -11,6 +11,9 @@ import_source_type: "Vehicle"
 import_source_file: "Vehicle-APC-77f.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 Namer Mk2 (Merkava hull)
 

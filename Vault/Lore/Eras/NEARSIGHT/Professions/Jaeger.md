@@ -11,6 +11,9 @@ import_source_type: "Profession"
 import_source_file: "Profession-Jaeger-03d.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Professions
 ---
 The scourge of both Angel and Demon alike, Jaegers are engineered to be the perfect weapon for humanity.
 

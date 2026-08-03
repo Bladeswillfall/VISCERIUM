@@ -16,6 +16,8 @@ tags:
   - "silver"
   - "copper"
   - "golden"
+  - CITADEL
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-The Circle of Trades-703.md"

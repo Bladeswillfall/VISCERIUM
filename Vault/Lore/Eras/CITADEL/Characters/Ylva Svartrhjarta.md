@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Ylva Svartrhjarta-fec.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 Once queen of the Vetruxi kingdom, creator of Rauthrbak Min .   Originally Ylva Asmundottir.
 

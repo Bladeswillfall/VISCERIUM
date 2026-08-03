@@ -8,6 +8,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-LANDCOM-bfa.md"
+tags:
+  - ENTROPY
+  - Factions
 ---
 Land Command
 

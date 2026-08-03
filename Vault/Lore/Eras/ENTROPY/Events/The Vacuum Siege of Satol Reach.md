@@ -40,9 +40,10 @@ participants:
   - "Reach Fleet"
 outcome: "The Reach survived, but three inhabited stations were removed from navigational history."
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "timeline-showcase"
   - "satol"
+  - Events
 ---
 
 # The Vacuum Siege of Satol Reach

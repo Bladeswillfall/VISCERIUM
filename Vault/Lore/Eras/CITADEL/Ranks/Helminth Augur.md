@@ -7,7 +7,7 @@ type: "article"
 development_level: "stub"
 era: "CITADEL"
 tags:
-  - "citadel"
+  - "CITADEL"
   - "worm"
   - "boleth"
   - "cult"
@@ -15,6 +15,7 @@ tags:
   - "nadir"
   - "helminth"
   - "augur"
+  - Ranks
 import_source: "worldanvil"
 import_source_type: "Rank"
 import_source_file: "Rank-Helminth Augur-15f.md"

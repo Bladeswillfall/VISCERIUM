@@ -11,6 +11,9 @@ import_source_type: "Organization"
 import_source_file: "Organization-WYRD-bce.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Factions
 ---
 Anti Myrkild, Naranor research and development group.
 

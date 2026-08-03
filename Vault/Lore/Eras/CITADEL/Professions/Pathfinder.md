@@ -11,6 +11,9 @@ import_source_type: "Profession"
 import_source_file: "Profession-Pathfinder-cfa.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Professions
 ---
 > Ack, back in ma prime, I roamed Errack's lands as a Pathfinder, free a was. Seekin' hidden truths in shadows, goin' on perilous expeditions, mappin' forgotten ruins, facin' unyieldin' beasts...  
 > Memories a' the unknown still haunt ma soul, they do. But ah, the thrill a' embracin' the abyss! It shaped ma very bein'.

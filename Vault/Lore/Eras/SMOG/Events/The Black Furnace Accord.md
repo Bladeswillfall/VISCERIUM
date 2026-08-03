@@ -33,9 +33,10 @@ participants:
   - "The Furnace Delegates"
 outcome: "Shared industrial standards enabled continental-scale mobilisation."
 tags:
-  - "smog"
+  - "SMOG"
   - "timeline-showcase"
   - "industry"
+  - Events
 ---
 
 # The Black Furnace Accord

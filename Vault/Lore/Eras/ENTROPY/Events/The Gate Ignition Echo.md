@@ -32,10 +32,11 @@ participants:
   - "Outer Listening Net"
 outcome: "The second signal was classified and the public ignition record was shortened."
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "timeline-showcase"
   - "garmir"
   - "same-day"
+  - Events
 ---
 
 # The Gate Ignition Echo

@@ -32,9 +32,10 @@ participants:
   - "First Current Relief Group"
 outcome: "A multinational force restored ports, power and security without assuming formal occupation."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "jade-current"
+  - Events
 ---
 
 # First Jade Current Compact Deployment

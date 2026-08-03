@@ -32,9 +32,10 @@ participants:
   - "Skyhook Test Crew"
 outcome: "High-altitude observation became practical for artillery spotting and weather study."
 tags:
-  - "smog"
+  - "SMOG"
   - "timeline-showcase"
   - "aviation"
+  - Events
 ---
 
 # The Skyhook Demonstration

@@ -12,6 +12,10 @@ import_issues:
   - needs-era
 era: CITADEL
 item_type: weapon
+tags:
+  - CITADEL
+  - Items
+  - Weaponry
 ---
 multi-shot scorpion ballista - fires a bundle of bolts at once, in a 'shotgun-like' spread.
 

@@ -12,6 +12,10 @@ import_source_type: Item
 import_source_file: Item-Twin-tube shotgun-ec1.md
 era: SMOG
 item_type: weapon
+tags:
+  - SMOG
+  - Items
+  - Weaponry
 ---
 ref. UTS-15 or KSG-12 Commonly combined with a "quill" of shotgun shell speedloaders (ref. https://youtu.be/M3Hs4do69ms)
 

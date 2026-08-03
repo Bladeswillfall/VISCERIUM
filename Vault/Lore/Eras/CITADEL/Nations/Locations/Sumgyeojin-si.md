@@ -15,6 +15,10 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Sumgyeojin-si-9fc.md"
+tags:
+  - CITADEL
+  - Locations
+  - Nations
 ---
 Meaning "Hidden city" - later becomes Kisara after Shekito Shogunate occupation.  
 

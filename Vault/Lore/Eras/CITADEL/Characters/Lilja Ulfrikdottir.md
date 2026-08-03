@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Lilja Ulfrikdottir-76a.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 Princess/current ruller of Krass Dominion
 

@@ -18,6 +18,7 @@ map:
 tags:
   - demo
   - non-canon
+  - Locations
 related:
   - Demo Market Ward
 ---

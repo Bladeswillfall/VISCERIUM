@@ -11,6 +11,9 @@ import_source: worldanvil
 import_source_type: Species
 import_source_file: Species-Buried Crown-0b6.md
 era: CITADEL
+tags:
+  - CITADEL
+  - Flora
 ---
 > If the earth begins to grow pillars where none stood before, leave the place to its king.
 > 

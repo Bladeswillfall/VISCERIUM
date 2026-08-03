@@ -17,6 +17,11 @@ eras:
 import_source: worldanvil
 import_source_type: Item
 import_source_file: Item-CN47 Chaff Grenade-7d5.md
+tags:
+  - ENTROPY
+  - Items
+  - Weaponry
+  - Explosives
 ---
 A smokescreen deploying grenade that poppulates the area with highly-reflective aluminium particles as well as traditional smoke creating compounds such as potassium chlorate. This combination of components allow the ___ Chaff grenade to block visual line-of-sight across the spectrum and also prevents methods such as WiFi targetting and other non-light based methods of sight.
 

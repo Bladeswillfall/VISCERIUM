@@ -31,9 +31,10 @@ participants:
   - "Furnace Crews"
 outcome: "Production ceased for eleven hours and the union won recognition."
 tags:
-  - "smog"
+  - "SMOG"
   - "timeline-showcase"
   - "same-day"
+  - Events
 ---
 
 # The Nine-Stack Strike

@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Bjorn Erlendson-e7b.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 Son of Erlend Nautleif
 

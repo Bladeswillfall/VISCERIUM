@@ -13,6 +13,9 @@ import_source_file: Species-Cathedral Maw-91e.md
 import_issues:
   - missing-inline-assets
 era: CITADEL
+tags:
+  - CITADEL
+  - Flora
 ---
 > If the trunk is split, keep walking. If it is open, do not look inside.
 > 

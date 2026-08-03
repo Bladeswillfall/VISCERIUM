@@ -14,6 +14,7 @@ alt: Errack shown as a detailed globe and within its broad ring system against a
 tags:
   - errack
   - planet
+  - Locations
 era: Universal
 sidebar:
   replaceMeta: true

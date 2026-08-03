@@ -11,6 +11,9 @@ import_source_type: "Person"
 import_source_file: "Person-Ralof Gullhyrndr-21d.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - CITADEL
+  - Characters
 ---
 ### Prince
 

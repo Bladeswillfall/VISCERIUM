@@ -42,6 +42,9 @@ import_source_file: "Person-Tpr. Hannah Moeko-860.md"
 import_issues:
   - "relationship-review"
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Characters
 ---
 > I am not one to hold illusions of perfection. Yet, in my relentless pursuit of self-improvement, I have learned to harness my flaws and mistakes, forging them into a weapon to achieve my goals.   Many may brand my determination as ruthless, but it is my willingness to take calculated risks and make difficult decisions that sets me apart from the timid and complacent. For what good is a goal if one is not willing to fight tooth and nail to claim it?
 > 

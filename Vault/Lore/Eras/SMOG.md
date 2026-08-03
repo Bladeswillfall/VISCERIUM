@@ -25,8 +25,9 @@ timeline:
   defaultViewport:
     paddingDays: 56
 tags:
-  - smog
+  - SMOG
   - era
+  - Eras
 eraPrimer:
   id: smog
   number: Era II

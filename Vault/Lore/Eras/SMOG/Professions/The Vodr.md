@@ -11,6 +11,9 @@ import_source_type: Profession
 import_source_file: Profession-The Vodr-e20.md
 import_issues:
   - legacy-type-review
+tags:
+  - SMOG
+  - Professions
 ---
 Wardens of the Abberathi, these guardians are folk ceremonially bound to an Abberath in times of war. Trained in the arts of medicine, mechanics and psychology, the Vordr serve a crucial role in maintaining the effectiveness and longevity of these living weapons.  
 

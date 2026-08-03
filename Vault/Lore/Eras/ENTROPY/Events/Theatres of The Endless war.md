@@ -11,6 +11,9 @@ import_source_type: "MilitaryConflict"
 import_source_file: "MilitaryConflict-Theatres of The Endless war-b91.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Events
 ---
 Across the globe devastating battles rage. From wide-open blackened fields scarred with trench lines and craters, to cramped urban combat within the desolate ruins of former cities, the fires of war burn ever bright.   Small groups of specialy trained soldiers often engage in guerilla warfare within demonic territories to cripple the progress of the Nadirs. They aim to acomplish this task by stealing crucial artefacts, destroying key targets, capturing units for research and rescuing captives.  
 

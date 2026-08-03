@@ -16,6 +16,8 @@ sidebar:
 tableOfContents:
   minHeadingLevel: 2
   maxHeadingLevel: 3
+tags:
+  - Calendars
 ---
 
 The Okse Calendar is the first implemented calendar system in the codex. It is rendered from structured calendar data rather than a static image, so event articles can link back to individual days and the site can later show equivalent dates in other cultural calendars.

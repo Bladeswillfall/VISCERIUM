@@ -31,9 +31,10 @@ participants:
   - "Founding Delegations"
 outcome: "A permanent multinational rapid-response command entered service."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "astu"
+  - Events
 ---
 
 # Formation of ASTU

@@ -9,6 +9,9 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Leonard Zenskyy-bb0.md"
+tags:
+  - NEARSIGHT
+  - Characters
 ---
 Leader of Soloveyko Republic
 

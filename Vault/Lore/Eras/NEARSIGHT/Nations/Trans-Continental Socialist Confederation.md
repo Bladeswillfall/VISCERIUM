@@ -24,6 +24,10 @@ import_source_file: "Organization-Trans-Continental Socialist Confederation-148.
 import_issues:
   - "relationship-review"
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Factions
+  - Nations
 ---
 > Progressus per unitatem, unitatem per aequitatem  
 > _Translated: Progress through unity, unity through equity_

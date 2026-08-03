@@ -10,6 +10,10 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-Saishū no Kabe-b9d.md"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 Saishū no Kabe - The final wall, surrounds the megacity of Kisara and is fitted with MLRS, auto-cannons, rotary cannons, automatic grenade launchers and a wide range of artillery and anti-air emplacements. The wall has successfully fought off every incursion against it so far.  
 

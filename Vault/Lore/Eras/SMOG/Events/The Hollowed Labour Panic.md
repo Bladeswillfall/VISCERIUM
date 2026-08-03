@@ -33,9 +33,10 @@ participants:
   - "Night Shift Workers"
 outcome: "Thousands were detained, branded or expelled without proof."
 tags:
-  - "smog"
+  - "SMOG"
   - "timeline-showcase"
   - "myrkild"
+  - Events
 ---
 
 # The Hollowed Labour Panic

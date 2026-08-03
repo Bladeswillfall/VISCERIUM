@@ -35,10 +35,11 @@ participants:
   - "Lorndale Garrison"
 outcome: "The fortress survived as a ruin, but the surrounding lordship ceased to exist."
 tags:
-  - "citadel"
+  - "CITADEL"
   - "timeline-showcase"
   - "lorndale"
   - "resonance"
+  - Events
 ---
 
 # The Breaking of Lorndale

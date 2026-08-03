@@ -9,6 +9,8 @@ era: "CITADEL"
 tags:
   - "Nations"
   - "askalia"
+  - CITADEL
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Kingdom of Askalia-54d.md"

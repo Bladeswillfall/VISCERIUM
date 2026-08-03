@@ -62,6 +62,9 @@ import_source_file: "Vehicle-HiEnA-086.md"
 import_issues:
   - "legacy-type-review"
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 When violence of action is your core operating principal, you expand upon the capabilities of the LAHMM, and develop this feral machine of warfare, the **HiEnA** - **Hi**gh-mobility **En**hanced **A**rmored vehicle.   Capable of 'silent-running' for ___km through the utilisation of its dual-electronic motors and 85kw range extender in the form of a solid-state battery unit.  
 

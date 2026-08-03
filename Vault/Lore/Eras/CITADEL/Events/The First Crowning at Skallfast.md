@@ -31,9 +31,10 @@ participants:
   - "Hroth Varn"
 outcome: "The valley kings accepted one war-crown and a common levy."
 tags:
-  - "citadel"
+  - "CITADEL"
   - "timeline-showcase"
   - "okse"
+  - Events
 ---
 
 # The First Crowning at Skallfast

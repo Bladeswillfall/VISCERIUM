@@ -16,6 +16,9 @@ import_source_type: "Organization"
 import_source_file: "Organization-Popular Consortium Party-63b.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Factions
 ---
 > Равенство в защите и обеспечении  
 > _Translated: Equality in protection and provision_

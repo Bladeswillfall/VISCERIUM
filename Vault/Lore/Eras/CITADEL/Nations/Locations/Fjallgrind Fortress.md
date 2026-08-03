@@ -15,6 +15,10 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-Fjallgrind Fortress-a68.md"
+tags:
+  - CITADEL
+  - Locations
+  - Nations
 ---
 Situated on the [[Issvatn river]] between Valenheim and Vagrvik.
 

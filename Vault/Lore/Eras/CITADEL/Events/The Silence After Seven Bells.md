@@ -32,9 +32,10 @@ participants:
   - "Midwives of Karn Vey"
 outcome: "The event was omitted from civic records but preserved in midwives' rolls."
 tags:
-  - "citadel"
+  - "CITADEL"
   - "timeline-showcase"
   - "same-day"
+  - Events
 ---
 
 # The Silence After Seven Bells

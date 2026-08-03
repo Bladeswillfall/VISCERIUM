@@ -17,6 +17,10 @@ import_source_type: "Landmark"
 import_source_file: "Landmark-Carving port-ccd.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - CITADEL
+  - Locations
+  - Nations
 ---
 > As the great haulers pull into port, swiftly do the workmen rush to the ropes for it is the corpse of a titan they must escort.  
 > Hoisting such prey upon a grand structure of pulleys and chains, holding the great beast steady. Carvers eagerly awaiting for the catch to be in position, axes and giant razors at the ready.  

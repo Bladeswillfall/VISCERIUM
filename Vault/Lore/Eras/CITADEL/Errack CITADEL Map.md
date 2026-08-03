@@ -11,9 +11,10 @@ width: 7680
 height: 3840
 maxZoom: 3
 tags:
-  - citadel
+  - CITADEL
   - errack
   - atlas
+  - Maps
 ---
 
 This map presents Errack as it is understood during **CITADEL**. Use the Atlas view to pan and zoom across the full-resolution artwork. Canonical locations can be added over time without exposing the non-canon test markers used by the separate exploration demonstration.

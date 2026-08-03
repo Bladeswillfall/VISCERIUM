@@ -10,6 +10,9 @@ import_source_type: "Ritual"
 import_source_file: "Ritual-Yule-49a.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Rituals
 ---
 Midwinter Solstice
 

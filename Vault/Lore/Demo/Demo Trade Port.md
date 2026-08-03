@@ -24,6 +24,7 @@ map:
 tags:
   - demo
   - non-canon
+  - Locations
 relationships:
   controlled-by:
     - Demo League

@@ -12,6 +12,10 @@ import_source_type: Item
 import_source_file: Item-Belt-fed bullpup revolver machinegun-21d.md
 era: SMOG
 item_type: weapon
+tags:
+  - SMOG
+  - Items
+  - Weaponry
 ---
 An early LMG design utilising the simple and well understood mechanics of a revolver-type weapon. (ref. https://www.youtube.com/shorts/VsblQU_8pnQ ref2. https://ww2aircraft.net/forum/attachments/canon_revolver_mauser_mg_213_ani-1-gif.217211/)
 

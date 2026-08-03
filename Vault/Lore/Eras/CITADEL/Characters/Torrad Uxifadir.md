@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Torrad Uxifadir-390.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 ### King Eternal (a.k.a. The Uxifadir)
 

@@ -37,6 +37,8 @@ tags:
   - "unfrid"
   - "aldaness"
   - "okse"
+  - CITADEL
+  - Characters
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Asena Unfrid-93f.md"

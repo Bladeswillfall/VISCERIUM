@@ -40,9 +40,10 @@ participants:
   - "Exodus Cohorts"
 outcome: "Human civilisation became distributed beyond a single planetary system."
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "timeline-showcase"
   - "pathfinder"
+  - Events
 ---
 
 # The Pathfinder Exodus

@@ -13,6 +13,9 @@ import_source_file: Species-Bloodharrow Beds-e74.md
 import_issues:
   - missing-inline-assets
 era: CITADEL
+tags:
+  - CITADEL
+  - Flora
 ---
 > Silence on a red plain is not safety. It only means nothing heavy has crossed it yet.
 > 

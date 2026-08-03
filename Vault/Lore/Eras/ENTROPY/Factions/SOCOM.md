@@ -9,6 +9,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-SOCOM-543.md"
+tags:
+  - ENTROPY
+  - Factions
 ---
 Special Operations Command
 

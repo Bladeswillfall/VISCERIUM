@@ -16,6 +16,9 @@ tags:
   - "dominion"
   - "aldaborg"
   - "fortress"
+  - CITADEL
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Landmark"
 import_source_file: "Landmark-Aldaborg fortress-d43.md"

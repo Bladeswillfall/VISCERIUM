@@ -12,6 +12,9 @@ import_source_file: "Formation-AESIR-024.md"
 import_issues:
   - "legacy-type-review"
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Professions
 ---
 > Man-made demons are the AESIR, designed and forged to fight fire with fire, monster with monster.
 > 

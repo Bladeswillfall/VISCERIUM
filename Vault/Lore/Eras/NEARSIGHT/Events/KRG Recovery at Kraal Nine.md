@@ -32,10 +32,11 @@ participants:
   - "Jakkal Team"
 outcome: "The core was recovered before state forces reached the site."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "krg"
   - "same-day"
+  - Events
 ---
 
 # KRG Recovery at Kraal Nine

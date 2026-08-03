@@ -30,6 +30,9 @@ tags:
   - aegir
   - serpent
   - sea
+  - CITADEL
+  - Fauna
+  - Mammals
 import_source: worldanvil
 import_source_type: Species
 import_source_file: Species-Voraegir-6d6.md

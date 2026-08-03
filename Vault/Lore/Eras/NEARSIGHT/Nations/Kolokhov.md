@@ -8,6 +8,10 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Article"
 import_source_file: "Article-Kolokhov-1e2.md"
+tags:
+  - NEARSIGHT
+  - Factions
+  - Nations
 ---
 Pseudo Russia
 

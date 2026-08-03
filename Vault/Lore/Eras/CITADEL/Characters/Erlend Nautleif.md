@@ -11,6 +11,9 @@ import_source_type: "Person"
 import_source_file: "Person-Erlend Nautleif-eaf.md"
 import_issues:
   - "missing-inline-assets"
+tags:
+  - CITADEL
+  - Characters
 ---
 Current ruler of the Okse Dominion
 

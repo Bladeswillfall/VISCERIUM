@@ -11,6 +11,9 @@ import_source_type: "Formation"
 import_source_file: "Formation-Ulfrvaldar-617.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Formations
 ---
 Wolf masters. An Ulfrvaldr holds charge over a pack of wolves bread for combat and hunting. The Ulfrvaldar are renowned for their cruelty and viciousness.
 

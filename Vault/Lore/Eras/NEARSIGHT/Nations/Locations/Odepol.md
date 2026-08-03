@@ -10,6 +10,10 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Odepol-776.md"
+tags:
+  - NEARSIGHT
+  - Locations
+  - Nations
 ---
 City within the Soloveyko Republic
 

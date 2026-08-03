@@ -38,6 +38,8 @@ tags:
   - "Transatmospheric"
   - "dropship"
   - "gunship"
+  - ENTROPY
+  - Transportation
 import_source: "worldanvil"
 import_source_type: "Vehicle"
 import_source_file: "Vehicle-RD-76 Dart-cbe.md"

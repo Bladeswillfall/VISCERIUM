@@ -10,6 +10,10 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Pator-f30.md"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 bodyguard, close attendant / noun. one of train surrounding a king  
   The city Tpr. Mía Alvarado calls home.

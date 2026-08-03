@@ -23,6 +23,7 @@ related:
 tags:
   - demo
   - non-canon
+  - Characters
 ---
 
 > [!caution]

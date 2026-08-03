@@ -10,6 +10,11 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Article"
 import_source_file: "Article-Coil Mod rifle-cf6.md"
+tags:
+  - NEARSIGHT
+  - Items
+  - Weaponry
+  - Firearms
 ---
 Modified rifle to utilise coils. Alows for an "Over-penetration" mode to be toggle 'on', thus making smaller rounds more effective.
 

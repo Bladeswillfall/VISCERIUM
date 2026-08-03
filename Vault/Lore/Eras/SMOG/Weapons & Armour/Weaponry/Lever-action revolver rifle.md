@@ -12,6 +12,10 @@ import_source_type: Item
 import_source_file: Item-Lever-action revolver rifle-fec.md
 era: SMOG
 item_type: weapon
+tags:
+  - SMOG
+  - Items
+  - Weaponry
 ---
 Ref. Rossi Circuit Judge lever action .410
 

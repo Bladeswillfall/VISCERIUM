@@ -39,10 +39,11 @@ type: "article"
 development_level: "stub"
 era: "ENTROPY"
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "camel"
   - "c-300"
   - "magna"
+  - Transportation
 import_source: "worldanvil"
 import_source_type: "Vehicle"
 import_source_file: "Vehicle-MAGNA C-300 Camel-d39.md"

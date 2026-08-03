@@ -19,6 +19,9 @@ import_source_type: "Person"
 import_source_file: "Person-Asgrim Torradsson-e77.md"
 import_issues:
   - "relationship-review"
+tags:
+  - CITADEL
+  - Characters
 ---
 ### Prince
 

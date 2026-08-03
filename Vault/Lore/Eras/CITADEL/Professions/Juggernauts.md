@@ -12,6 +12,9 @@ import_source_file: "Profession-Juggernauts-be5.md"
 import_issues:
   - "legacy-type-review"
   - "missing-inline-assets"
+tags:
+  - CITADEL
+  - Professions
 ---
 Every region has their own variation of this profession and way of armouring and arming them.  
   However, they all have two things in common; Incredible strength and towering size. Most Juggernauts are over 1.95m _(6ft, 5inches)_ tall and weigh in at over 140kg _(308lbs)_.  

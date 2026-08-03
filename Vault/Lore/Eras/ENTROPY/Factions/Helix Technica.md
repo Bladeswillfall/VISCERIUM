@@ -9,6 +9,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Helix Technica-f33.md"
+tags:
+  - ENTROPY
+  - Factions
 ---
 Subsidised by the Imperium Coalition to research biotechnologies and demonic abominations - Helix Technica are the largest biotech corporation in the world, with their main headquarters bing located in Kisara.   With facilities to study and test both arms and armour against various strains of Demons, Helix Technica have been able to make great advancements for humanity throughout the Endless war.  
 

@@ -8,6 +8,8 @@ development_level: "stub"
 era: "CITADEL"
 tags:
   - "askalia"
+  - CITADEL
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Privy Council - Askalia-4aa.md"

@@ -32,9 +32,10 @@ participants:
   - "The Glass Archive Leakers"
 outcome: "Public understanding of Resonance fractured into incompatible models."
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "timeline-showcase"
   - "abberath"
+  - Events
 ---
 
 # The Abberath Disclosure

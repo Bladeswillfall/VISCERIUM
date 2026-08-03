@@ -28,6 +28,9 @@ import_source_file: Formation-AESIR Mk.II-17f.md
 import_issues:
   - legacy-type-review
   - missing-inline-assets
+tags:
+  - ENTROPY
+  - Professions
 ---
 > Born from the crucible of forbidden arts, where genetic manipulation intertwines with technological sorcery, the AESIR emerge as relentless avatars of brutality and surgical devastation.  
 > They are the harbingers of doom, a force cloaked in shadowed might, their every step a symphony of merciless destruction.  

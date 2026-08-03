@@ -18,6 +18,9 @@ import_source_type: "Vehicle"
 import_source_file: "Vehicle-Makolev KV-37-5d8.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 REF: SU-57   Nicknamed "Blackguard"   The Makolev KV-37 is a stealth multirole fighter aircraft powered by twin engines at the tail. Said twin engines are able to provide the KV-37 with supermaneuverability thanks to the thrust vector control (TVC) nozzles.
 

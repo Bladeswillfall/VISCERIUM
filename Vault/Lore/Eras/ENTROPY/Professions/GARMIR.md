@@ -11,6 +11,9 @@ import_source_type: Profession
 import_source_file: Profession-GARMIR-000.md
 import_issues:
   - legacy-type-review
+tags:
+  - ENTROPY
+  - Professions
 ---
 > Rising from the ranks of our greatest soldiers, the GARMIR elevate our defences to new heights!  
 > They are not just defenders; they are our citadels of security, sentinels who embrace innovation and wield it as a weapon for our collective benefit.  

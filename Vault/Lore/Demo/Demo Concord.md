@@ -24,6 +24,7 @@ related:
 tags:
   - demo
   - non-canon
+  - Factions
 ---
 
 > [!caution]

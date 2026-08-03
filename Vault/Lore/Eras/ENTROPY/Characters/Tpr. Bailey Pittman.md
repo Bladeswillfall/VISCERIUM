@@ -51,6 +51,9 @@ import_source_file: "Person-Tpr. Bailey Pittman-fe4.md"
 import_issues:
   - "relationship-review"
   - "missing-inline-assets"
+tags:
+  - ENTROPY
+  - Characters
 ---
 > I miss holding you, feeling your skin, but these damn prosthetics are only good for killing. I hate them, I hate the people who took my hands, who left me alive in this broken body.   Why didn't I die like the others?   Still... I won't let them win. I'll use these limbs to protect others, to make a difference. That's what keeps me going, knowing I can make a change despite everything they took.
 > 

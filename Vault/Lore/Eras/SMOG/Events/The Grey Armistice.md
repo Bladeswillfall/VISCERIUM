@@ -32,9 +32,10 @@ participants:
   - "Grey Mile Delegations"
 outcome: "Formal war ended, but mobilisation systems and emergency governments remained."
 tags:
-  - "smog"
+  - "SMOG"
   - "timeline-showcase"
   - "armistice"
+  - Events
 ---
 
 # The Grey Armistice

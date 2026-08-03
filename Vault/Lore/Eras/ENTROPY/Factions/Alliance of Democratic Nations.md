@@ -23,6 +23,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Alliance of Democratic Nations-2e3.md"
+tags:
+  - ENTROPY
+  - Factions
 ---
 > Libertas disputationis, aequitas judicii, intensio actionis  
 > _Translated: Freedom of discussion, fairness of judgment, intensity of action_

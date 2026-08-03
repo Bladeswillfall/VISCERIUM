@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Signy Gunnvidottir-61c.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 Wife of Erlend Nautleif
 

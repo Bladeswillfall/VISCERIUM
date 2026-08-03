@@ -14,6 +14,9 @@ location_kind: "settlement"
 era: "CITADEL"
 tags:
   - "Okse"
+  - CITADEL
+  - Locations
+  - Nations
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Strondverdir-94b.md"

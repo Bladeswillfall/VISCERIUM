@@ -41,9 +41,10 @@ participants:
   - "Bid Cohorts"
 outcome: "Genetic traits became strategic assets allocated through corporate concessions."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "genetics"
+  - Events
 ---
 
 # The Corporate Genetic Bidding Programme

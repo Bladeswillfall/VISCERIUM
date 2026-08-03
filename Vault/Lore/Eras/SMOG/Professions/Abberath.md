@@ -28,6 +28,9 @@ import_issues:
   - legacy-type-review
   - unresolved-legacy-links
   - missing-inline-assets
+tags:
+  - SMOG
+  - Professions
 ---
 Once proud [Resonants](/w/viscerium/a/resonance-article) - individuals with heightened sensitivity to the ethereal energies that permeate the world, they succumbed to the allure of greater power, becoming Hollowed. This transformation stripped away their humanity, leaving them vulnerable to the crude sciences of mankind and a final, irreversible metamorphosis into the Abberathi.   The Abberathi are biologically mutated weapons of war crafted by the desperate science of mankind. They are now a tool, a weapon with renewed purpose, reforged from their exotic and magnificent origins into an unthinking creature of destruction.  
 

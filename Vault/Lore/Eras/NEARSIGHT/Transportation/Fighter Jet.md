@@ -10,6 +10,9 @@ import_source_type: "Vehicle"
 import_source_file: "Vehicle-Fighter Jet-b53.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 REF: F-35
 

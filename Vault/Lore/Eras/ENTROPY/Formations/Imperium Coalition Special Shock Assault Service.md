@@ -15,6 +15,9 @@ import_source_type: "Formation"
 import_source_file: "Formation-Imperium Coalition Special Shock Assault Service-217.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - ENTROPY
+  - Formations
 ---
 The ICSSAS
 

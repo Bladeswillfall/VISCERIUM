@@ -11,6 +11,9 @@ import_source_type: "Rank"
 import_source_file: "Rank-Mawtender-1c7.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Ranks
 ---
 A group of ghastly healers and alchemists who concoct noxious elixirs, utilising forbidden knowledge to harness the power of decay and disease. They seek to push the boundaries of the mortal form, transforming their brethren into grotesque, twisted beings in an attempt to please The Great Maw.
 

@@ -10,6 +10,10 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Barnomsk-a2e.md"
+tags:
+  - NEARSIGHT
+  - Locations
+  - Nations
 ---
 Southern neighbour of Tiumosk city
 

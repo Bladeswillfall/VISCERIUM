@@ -11,6 +11,9 @@ updated:
 tags:
   - story-entity
   - item
+  - CITADEL
+  - Items
+  - Weaponry
 ---
 
 The Maciejowski "Glaive"

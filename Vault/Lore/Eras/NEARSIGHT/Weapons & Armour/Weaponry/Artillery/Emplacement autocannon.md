@@ -12,6 +12,11 @@ import_source_type: Item
 import_source_file: Item-Emplacement autocannon-4ed.md
 era: NEARSIGHT
 item_type: weapon
+tags:
+  - NEARSIGHT
+  - Items
+  - Weaponry
+  - Artillery
 ---
 ref: OTO Melara 76 mm  
 [video](https://www.youtube.com/watch?v=Qr0OcXst59k)

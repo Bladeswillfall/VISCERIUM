@@ -8,6 +8,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Tpr. Ilya Artemiy Valerianovich-bd8.md"
+tags:
+  - ENTROPY
+  - Characters
 ---
 **Children**
 

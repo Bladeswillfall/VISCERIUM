@@ -42,6 +42,9 @@ import_source_file: "Person-Dr.Adrastus Delroy-8eb.md"
 import_issues:
   - "relationship-review"
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Characters
 ---
 > This project will be the salvation of Humanity. No longer will we have to live in fear. No longer will we have to fight every, single, day, just to survive!  
 > I believe with the successful completion of my design, we can thrive as a species once more and rid ourselves of this parasitic curse!

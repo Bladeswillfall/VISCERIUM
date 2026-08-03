@@ -8,6 +8,8 @@ development_level: "stub"
 era: "CITADEL"
 tags:
   - "Askalia"
+  - CITADEL
+  - Factions
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Senate - Askalia-73a.md"

@@ -16,6 +16,8 @@ sidebar:
 tableOfContents:
   minHeadingLevel: 2
   maxHeadingLevel: 3
+tags:
+  - Calendars
 ---
 
 This page provides the detailed Okse calendar route used by date badges:

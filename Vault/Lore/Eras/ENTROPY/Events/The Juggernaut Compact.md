@@ -32,9 +32,10 @@ participants:
   - "Fortress-Fleet Captains"
 outcome: "Mobile polities gained a common doctrine without surrendering sovereignty."
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "timeline-showcase"
   - "juggernauts"
+  - Events
 ---
 
 # The Juggernaut Compact

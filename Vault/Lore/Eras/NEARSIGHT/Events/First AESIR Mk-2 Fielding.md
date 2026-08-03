@@ -31,9 +31,10 @@ participants:
   - "Valkyr Section"
 outcome: "Powered infantry moved from experimental detachments into regular doctrine."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "aesir"
+  - Events
 ---
 
 # First AESIR Mk-2 Fielding

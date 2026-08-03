@@ -8,6 +8,9 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-LCpl. Akanni Balogun-811.md"
+tags:
+  - ENTROPY
+  - Characters
 ---
 **Children**
 

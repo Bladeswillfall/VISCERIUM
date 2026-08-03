@@ -11,6 +11,9 @@ import_source_type: Vehicle
 import_source_file: Vehicle-Banshee-097.md
 import_issues:
   - legacy-type-review
+tags:
+  - SMOG
+  - Transportation
 ---
 Ref: F4U - Corsair   Named "Bansee" for the ghostly whislte it produces near top-speed during flight.
 

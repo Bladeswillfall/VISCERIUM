@@ -11,6 +11,9 @@ import_source_type: "Formation"
 import_source_file: "Formation-Svartskjoldr-f1a.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - CITADEL
+  - Formations
 ---
 Defenders of oil infrastructure; industrial weaponry and coordination with Resonants.   Given oil’s critical role in the Dominion’s economy and warfare, the Svartskjoldr (Black Shield(s)) are specialised troops tasked with protecting oil fields, refineries, and convoys.  
 

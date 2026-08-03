@@ -39,9 +39,10 @@ participants:
   - "Blackout Response Commands"
 outcome: "Civilisation retained machines but lost confidence that its instruments described the same world."
 tags:
-  - "nearsight"
+  - "NEARSIGHT"
   - "timeline-showcase"
   - "blackout"
+  - Events
 ---
 
 # The Nearsight Blackout

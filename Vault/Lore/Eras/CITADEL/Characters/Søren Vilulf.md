@@ -9,6 +9,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Søren Vilulf-e01.md"
+tags:
+  - CITADEL
+  - Characters
 ---
 Ruler of Aldaness Søren - 'Stern'
 

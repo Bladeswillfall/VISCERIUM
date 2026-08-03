@@ -14,6 +14,9 @@ era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Wassermann family-f02.md"
+tags:
+  - CITADEL
+  - Factions
 ---
 German armour making family - well known, prestegious.
 

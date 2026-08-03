@@ -31,6 +31,10 @@ import_source_file: "Organization-Soloveyko Republic-6ec.md"
 import_issues:
   - "unresolved-legacy-links"
   - "missing-inline-assets"
+tags:
+  - NEARSIGHT
+  - Factions
+  - Nations
 ---
 > A free Soloveyko is a beautiful Soloveyko, so let all who would invade our lands hear this request: carry seeds in your pockets so they grow where you die.
 > 

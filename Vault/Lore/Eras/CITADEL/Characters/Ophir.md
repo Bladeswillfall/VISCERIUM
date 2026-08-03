@@ -34,6 +34,8 @@ tags:
   - "Ophir"
   - "wolf"
   - "aldaness"
+  - CITADEL
+  - Characters
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Ophir-060.md"

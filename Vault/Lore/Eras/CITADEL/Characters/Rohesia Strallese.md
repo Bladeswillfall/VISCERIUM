@@ -1,14 +1,17 @@
 ---
-title: "Rohesia Strallese"
-description: "Current Queen for the Kingdom of Satol"
+title: Rohesia Strallese
+description: Current Queen for the Kingdom of Satol
 updated:
-status: "draft"
-type: "character"
-development_level: "stub"
-era: "CITADEL"
-import_source: "worldanvil"
-import_source_type: "Person"
-import_source_file: "Person-Rohesia Strallese-4fb.md"
+status: draft
+type: character
+development_level: stub
+era: CITADEL
+import_source: worldanvil
+import_source_type: Person
+import_source_file: Person-Rohesia Strallese-4fb.md
+tags:
+  - CITADEL
+  - Characters
 ---
 Current Queen for the Kingdom of Satol
 

@@ -29,6 +29,9 @@ eras:
 import_source: worldanvil
 import_source_type: Species
 import_source_file: Species-Haglace Brake-55f.md
+tags:
+  - CITADEL
+  - Flora
 ---
 > It does not hunt quickly. It hunts thoroughly.
 > 

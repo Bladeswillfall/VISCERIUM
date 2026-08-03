@@ -34,6 +34,8 @@ tags:
   - "okse"
   - "frode"
   - "altoren"
+  - CITADEL
+  - Characters
 import_source: "worldanvil"
 import_source_type: "Person"
 import_source_file: "Person-Frode Altoren-0b5.md"

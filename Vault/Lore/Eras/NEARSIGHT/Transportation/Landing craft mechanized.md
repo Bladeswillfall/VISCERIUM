@@ -11,6 +11,9 @@ import_source_type: "Vehicle"
 import_source_file: "Vehicle-Landing craft mechanized-c0e.md"
 import_issues:
   - "legacy-type-review"
+tags:
+  - NEARSIGHT
+  - Transportation
 ---
 Used for transporting non-amphibious vehicles ashore.
 

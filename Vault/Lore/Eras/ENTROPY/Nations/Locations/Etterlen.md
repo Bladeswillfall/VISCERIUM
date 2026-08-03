@@ -10,6 +10,10 @@ era: "ENTROPY"
 import_source: "worldanvil"
 import_source_type: "Settlement"
 import_source_file: "Settlement-Etterlen-0fc.md"
+tags:
+  - ENTROPY
+  - Locations
+  - Nations
 ---
 A Destroyed city, yet to be placed.
 

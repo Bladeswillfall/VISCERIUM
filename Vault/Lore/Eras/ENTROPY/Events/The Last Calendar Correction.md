@@ -31,9 +31,10 @@ participants:
   - "Chronology Delegates"
 outcome: "A final shared date was established even though no authority could enforce future synchronisation."
 tags:
-  - "entropy"
+  - "ENTROPY"
   - "timeline-showcase"
   - "intercalary"
+  - Events
 ---
 
 # The Last Calendar Correction

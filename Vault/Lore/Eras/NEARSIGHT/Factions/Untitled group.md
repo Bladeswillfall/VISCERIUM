@@ -9,6 +9,9 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Untitled group-23a.md"
+tags:
+  - NEARSIGHT
+  - Factions
 ---
 Often deemed and described as an anarchist group, this inter-city organisation live by and fight for the notion that "Darkness cannot drive out darkness; only light can do that. Hate cannot drive out hate; only love can do that.” - This is often to the dismay and frustration of the ruling parties and enforcement agencies.  
   [Inspo from MLK Jr quotes.]

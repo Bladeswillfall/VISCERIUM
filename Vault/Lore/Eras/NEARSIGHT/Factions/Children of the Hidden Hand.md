@@ -9,6 +9,9 @@ era: "NEARSIGHT"
 import_source: "worldanvil"
 import_source_type: "Organization"
 import_source_file: "Organization-Children of the Hidden Hand-f9a.md"
+tags:
+  - NEARSIGHT
+  - Factions
 ---
 Evaxi, Nadir of Envy
 
