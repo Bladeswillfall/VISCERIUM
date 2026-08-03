@@ -154,7 +154,7 @@ function isExternalImage(reference) {
 }
 
 function isUrlReference(reference) {
-  return /^[a-z][a-z0-9+.-]*:/i.test(reference);
+  return /^[a-z][a-z0-9+.-]*:/i.test(reference) || reference.startsWith('//');
 }
 
 function isImageFile(file) {
