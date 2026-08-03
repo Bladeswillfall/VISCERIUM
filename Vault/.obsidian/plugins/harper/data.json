@@ -1,6 +1,6 @@
 {
-  "ignoredLints": "{\"context_hashes\":[16628215772356337553,11205883407841264260]}",
   "useWebWorker": true,
+  "lintEnabled": true,
   "lintSettings": {
     "ACoupleMore": null,
     "ALittleOfPractice": null,
@@ -239,7 +239,6 @@
     "ExpandCoordinate": null,
     "ExpandDecl": null,
     "ExpandDependencies": null,
-    "ExpandDeref": null,
     "ExpandDereference": null,
     "ExpandDirectory": null,
     "ExpandForward": null,
@@ -826,10 +825,5 @@
     "YourOutClauseAgreement": null,
     "YourPredicateAdjective": null,
     "Yourself": null
-  },
-  "userDictionary": [],
-  "dialect": 1,
-  "delay": -1,
-  "lintEnabled": true,
-  "useWebStyleLints": false
+  }
 }
