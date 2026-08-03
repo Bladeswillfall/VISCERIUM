@@ -146,6 +146,10 @@ function isExternalImage(reference) {
   return /^https:\/\//i.test(reference);
 }
 
+function isUrlReference(reference) {
+  return /^[a-z][a-z0-9+.-]*:/i.test(reference);
+}
+
 function isImageFile(file) {
   return Boolean(file?.extension && IMAGE_EXTENSIONS.has(String(file.extension).toLowerCase()));
 }
@@ -157,6 +161,7 @@ function resolveHeaderImage(app, value, sourcePath) {
   if (isExternalImage(reference)) {
     return { key: reference, src: reference, file: undefined };
   }
+  if (isUrlReference(reference)) return undefined;
 
   const direct = app.vault.getAbstractFileByPath(reference.replace(/^\/+/, ''));
   if (isImageFile(direct)) {
