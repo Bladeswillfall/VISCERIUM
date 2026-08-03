@@ -31,6 +31,17 @@ jobs:
       - run: npm ci --silent --no-audit --no-fund
       - run: npm run doctor:vault
 
+      - name: Materialize audited folder frontmatter
+        run: npm run frontmatter:folders:write
+
+      - name: Upload backfilled Myrkild source
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: backfilled-myrkild-source
+          path: Vault/Lore/Myrkildicary/Myrkild.md
+          if-no-files-found: error
+          retention-days: 1
+
       - name: Run unit tests
         run: |
           set -o pipefail
