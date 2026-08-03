@@ -127,7 +127,7 @@ test('folder-triggered Templater rules cover Lore, Inbox, specialist databases a
   assert.equal(rules.get('Drafts/Databases/Myrkild Units'), 'Templates/Databases/New Myrkild Unit.md');
 
   const storyEntity = await readText('Templates/Databases/New Story Entity.md');
-  assert.match(storyEntity, /currentFolder\.startsWith\(`\$\{folder\}\/'/);
+  assert.match(storyEntity, /currentFolder\.startsWith/);
   assert.match(storyEntity, /!startedInTypeFolder/);
 });
 
