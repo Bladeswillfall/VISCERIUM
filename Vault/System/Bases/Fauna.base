@@ -23,12 +23,6 @@ properties:
     displayName: Biomes
   rarity:
     displayName: Rarity
-  threat_level:
-    displayName: Threat
-  encounter_behaviour:
-    displayName: Encounter behaviour
-  human_relevance:
-    displayName: Why people care
   development_level:
     displayName: Development
   image:
@@ -62,13 +56,6 @@ views:
       - locations
       - biomes
       - rarity
-      - threat_level
-      - signs_of_presence
-      - encounter_behaviour
-      - ecology_summary
-      - human_relevance
-      - cultural_significance
-      - story_complication
       - development_level
       - status
       - file.mtime
