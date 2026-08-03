@@ -20,32 +20,15 @@
 .markdown-reading-view .vc-header-figure,
 .markdown-source-view.mod-cm6 .vc-header-figure {
   position: relative;
-  isolation: isolate;
   box-sizing: border-box;
   width: 100%;
   height: clamp(13rem, 34vw, 23rem);
   margin: 0 0 -2.75rem;
   overflow: hidden;
   border: 0;
-  background: var(--background-secondary);
+  background: transparent;
   pointer-events: none;
   user-select: none;
-}
-
-.markdown-reading-view .vc-header-figure::after,
-.markdown-source-view.mod-cm6 .vc-header-figure::after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  inset: 42% 0 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    color-mix(in srgb, var(--background-primary) 12%, transparent) 28%,
-    color-mix(in srgb, var(--background-primary) 48%, transparent) 56%,
-    color-mix(in srgb, var(--background-primary) 82%, transparent) 78%,
-    var(--background-primary) 100%
-  );
 }
 
 .markdown-reading-view .vc-header-image,
@@ -60,12 +43,44 @@
   object-fit: cover;
   object-position: center;
   background: transparent;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 54%,
+    rgb(0 0 0 / 99%) 60%,
+    rgb(0 0 0 / 96%) 65%,
+    rgb(0 0 0 / 89%) 70%,
+    rgb(0 0 0 / 78%) 75%,
+    rgb(0 0 0 / 64%) 80%,
+    rgb(0 0 0 / 48%) 85%,
+    rgb(0 0 0 / 31%) 90%,
+    rgb(0 0 0 / 16%) 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 54%,
+    rgb(0 0 0 / 99%) 60%,
+    rgb(0 0 0 / 96%) 65%,
+    rgb(0 0 0 / 89%) 70%,
+    rgb(0 0 0 / 78%) 75%,
+    rgb(0 0 0 / 64%) 80%,
+    rgb(0 0 0 / 48%) 85%,
+    rgb(0 0 0 / 31%) 90%,
+    rgb(0 0 0 / 16%) 95%,
+    transparent 100%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 
 .markdown-reading-view .vc-header-host > .mod-header,
 .markdown-source-view.mod-cm6 .vc-header-host .inline-title {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .markdown-reading-view .vc-header-host > .mod-header {
