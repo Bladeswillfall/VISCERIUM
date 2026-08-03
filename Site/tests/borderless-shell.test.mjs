@@ -33,7 +33,7 @@ test('structural borders are targeted without flattening article callouts, timel
 });
 
 test('the Okse Dominion source uses responsive two-column authoring blocks', () => {
-  const source = read('../../Vault/Lore/Eras/CITADEL/Okse Dominion.md');
+  const source = read('../../Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md');
   const columnBlocks = source.match(/^\[cols:1-1 gap=xl align=start\]$/gm) ?? [];
 
   assert.ok(columnBlocks.length >= 4, 'expected multiple editorial two-column sections');

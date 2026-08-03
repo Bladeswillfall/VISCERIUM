@@ -49,7 +49,7 @@ test('non-canon trade port provides a complete public location canary', async ()
 });
 
 test('Okse provides a canon-grounded faction Storyteller projection', async () => {
-  const source = matter(await readRepo('Vault/Lore/Eras/CITADEL/Okse Dominion.md'));
+  const source = matter(await readRepo('Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md'));
   const projection = buildStorytellerProjection(source.data);
 
   assert.ok(projection);
