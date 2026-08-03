@@ -1,6 +1,6 @@
 ---
 title: SMOG
-description: "The industrial and trench-war age, where generations are born into war and decades are born into industry."
+description: The industrial and trench-war age, where generations are born into war and decades are born into industry.
 status: published
 type: era
 eraId: smog
@@ -46,7 +46,7 @@ eraPrimer:
     src: /assets/images/errack.webp
     alt: Errack shown from orbit as a strategic reference for the industrial SMOG era.
     href: /maps/
-    eyebrow: 'SMOG: Errack'
+    eyebrow: "SMOG: Errack"
     label: Errack in the SMOG age
     action: Explore maps
   worldNow:
@@ -73,9 +73,9 @@ eraPrimer:
       body: Myrkild incursions, human rivalries and Resonant accidents are fought with the same machinery. Gas shells, sealed trains and mobile armour can destroy an outbreak, but contamination and altered survivors may remain long after official maps declare the ground secure.
   terms:
     - label: Resonance
-      tip: 'SMOG understanding: a measurable but incompletely understood force that can be classified, conscripted and engineered around, even when its deeper nature remains unknown.'
+      tip: "SMOG understanding: a measurable but incompletely understood force that can be classified, conscripted and engineered around, even when its deeper nature remains unknown."
     - label: Myrkild
-      tip: 'SMOG understanding: recurring biological or occult incursions whose forms can be catalogued and killed, though their larger organisation remains disputed.'
+      tip: "SMOG understanding: recurring biological or occult incursions whose forms can be catalogued and killed, though their larger organisation remains disputed."
     - label: Hollowed
       tip: Workers and soldiers who return altered, emptied or no longer wholly themselves; official explanations vary between disease, trauma, contamination and sedition.
       href: /eras/smog/events/the-hollowed-labour-panic/
@@ -102,7 +102,7 @@ eraPrimer:
     body: The timeline below follows the accords, strikes, disasters, inventions and wars that make SMOG possible. Its records are more numerous than CITADEL's, but quantity does not make them honest.
     eventsHref: /eras/smog/events/
     nextEraHref: /eras/nearsight/
-    nextEraLabel: 'Next era: NEARSIGHT'
+    nextEraLabel: "Next era: NEARSIGHT"
 ---
 
 # SMOG
