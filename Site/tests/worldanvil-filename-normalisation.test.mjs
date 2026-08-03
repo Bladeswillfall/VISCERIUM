@@ -73,3 +73,22 @@ test('skips collisions without blocking safe renames', async (t) => {
   assert.equal(await fs.readFile(path.join(vaultRoot, 'Lore/Characters/Person-Existing Name-abc.md'), 'utf8'), 'imported\n');
   assert.equal(await fs.readFile(path.join(vaultRoot, 'Lore/Characters/Steinnbendir.md'), 'utf8'), 'formation\n');
 });
+
+test('skips existing targets that differ only by case', async (t) => {
+  const vaultRoot = await fixtureVault();
+  t.after(() => fs.rm(vaultRoot, { recursive: true, force: true }));
+
+  await write(vaultRoot, 'Lore/Characters/Person-FOO-abc.md', 'imported\n');
+  await write(vaultRoot, 'Lore/Characters/foo.md', 'authoritative\n');
+
+  const report = await normaliseWorldAnvilFilenames({ vaultRoot, write: true });
+
+  assert.deepEqual(report.collisions, [{
+    source: 'Lore/Characters/Person-FOO-abc.md',
+    target: 'Lore/Characters/FOO.md',
+    reason: 'target-exists-case-insensitive',
+  }]);
+  assert.equal(await fs.readFile(path.join(vaultRoot, 'Lore/Characters/foo.md'), 'utf8'), 'authoritative\n');
+  assert.equal(await fs.readFile(path.join(vaultRoot, 'Lore/Characters/Person-FOO-abc.md'), 'utf8'), 'imported\n');
+  await assert.rejects(fs.access(path.join(vaultRoot, 'Lore/Characters/FOO.md')));
+});
