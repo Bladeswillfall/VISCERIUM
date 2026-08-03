@@ -344,7 +344,7 @@ Node version: 24
 Environment variable: SITE_URL=https://www.viscerium.co.uk
 ```
 
-Set `SITE_URL=https://www.viscerium.co.uk` before a production launch.
+Set `SITE_URL=https://www.viscerium.co.uk` in the production environment.
 
 The checked-in fallback uses the same canonical URL.
 
@@ -366,19 +366,41 @@ The static project must contain no private Worker secret.
 
 ## Configure optional integrations
 
-Enable an optional integration only after its owner-controlled identifier or URL exists.
+Enable or change an integration only after you verify its owner-controlled identifier, URL, and privacy requirements.
 
 ### Webmentions
 
 Use `www.viscerium.co.uk` as the intended identity.
 
-Keep Webmentions disabled until that domain is registered and verified with Webmention.io.
+The site enables Webmentions only when `PUBLIC_WEBMENTIONS_ENABLED=1` and an endpoint exists.
+
+Verify the domain with Webmention.io before you enable the integration.
 
 ### Giscus
 
-Use `Bladeswillfall/VISCERIUM` as the intended repository.
+The site is configured for repository `Bladeswillfall/VISCERIUM` and the `Comments` discussion category.
 
-Keep Giscus disabled until valid repository and category identifiers exist.
+Giscus is enabled by default when the configured repository and category identifiers are present.
+
+Set `PUBLIC_GISCUS_ENABLED=0` to disable it.
+
+Verify the GitHub Discussions repository, category, and identifiers before you change the defaults.
+
+### Contact form
+
+The private contact form requires all these values:
+
+```bash
+PUBLIC_CONTACT_FORM_ENABLED=1
+PUBLIC_CONTACT_FORM_ENDPOINT=https://example-worker.example.workers.dev/
+PUBLIC_TURNSTILE_SITE_KEY=example-public-site-key
+```
+
+Use a valid HTTPS Worker endpoint.
+
+Keep the Resend secret and Turnstile secret in the separate Worker.
+
+When the required values are absent, the contact page shows a paused-state message and directs public issues to GitHub.
 
 ### Support and social links
 
@@ -422,6 +444,8 @@ Complete the required consent and privacy review before analytics activation.
 ### Check the result
 
 The built site must emit no optional tracking script while its integration is disabled.
+
+The contact form must remain disabled when its endpoint or Turnstile key is invalid.
 
 No placeholder identifier can activate a service.
 
