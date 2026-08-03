@@ -10,7 +10,7 @@ headerImage: errack-header.webp
 image: errack.webp
 imageTitle: Errack
 artist: shinyman
-alt: "Errack shown as a detailed globe and within its broad ring system against a black sky."
+alt: Errack shown as a detailed globe and within its broad ring system against a black sky.
 tags:
   - errack
   - planet
