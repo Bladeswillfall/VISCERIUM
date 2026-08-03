@@ -36,3 +36,9 @@ Add a supported `[Calendar:block-id]` shortcode after defining the matching `cal
 ## Related
 
 Add links to cultures, events, eras, and other calendar pages that provide useful context.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->
