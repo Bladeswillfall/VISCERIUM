@@ -79,9 +79,15 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
   }
 
   function isStorytellerTitle(node) {
-    return node instanceof HTMLElement
-      && /^H[1-6]$/.test(node.tagName)
-      && node.textContent?.trim().toLowerCase() === 'storyteller view';
+    if (!(node instanceof HTMLElement)) return false;
+
+    const heading = /^H[1-6]$/.test(node.tagName)
+      ? node
+      : node.matches('.sl-heading-wrapper')
+        ? node.querySelector(':scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6')
+        : null;
+
+    return heading?.textContent?.trim().toLowerCase() === 'storyteller view';
   }
 
   function isMeaningfulStorytellerNode(node) {
