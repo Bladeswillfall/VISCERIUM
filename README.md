@@ -52,7 +52,7 @@ Code, documentation, accessibility, tooling, testing, and interface improvements
 
 ### Propose a creative collaboration
 
-For writing, artwork, games, animation, film, rights, credit, or other collaboration discussions, use the **[contact page](https://www.viscerium.co.uk/contact/)**.
+For writing, artwork, games, animation, film, rights, credit, or other collaboration discussions, use the **[contact page](https://www.viscerium.co.uk/contact/)**. If private contact is paused, use GitHub for non-sensitive proposals and keep confidential details out of public issues.
 
 VISCERIUM remains a curated setting. Suggestions and contributions are reviewed for continuity, quality, tone, and technical fit before they become part of the published Codex.
 
