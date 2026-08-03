@@ -167,7 +167,7 @@ Hannah appreciates Ilya's helpful nature, despite sometimes feeling like he sees
 
 Hannah deeply respects and admires May as a leader, valuing her strategic and calm approach, which provides a welcome contrast to the intensity of their work. May's maternal nature also puts Hannah at ease, allowing her to feel more supported in high-pressure situations. Despite May's occasional firmness, Hannah sees her as a kind of surrogate work-mom and May tends to share a gentler side of herself with Hannah compared to the other team members.  
 
-##### [[Lore/Eras/ENTROPY/Characters/Person-Tpr. Bailey Pittman-fe4]]
+##### [[Lore/Eras/ENTROPY/Characters/Tpr. Bailey Pittman]]
 
 While Hannah finds Bailey's use of humor to avoid serious topics frustrating, she appreciates her positive persona. Bailey's drive to protect the innocent resonates with Hannah's sense of morality, but her impulsive nature often clashes with Hannah's approach to problem-solving. Despite this, Hannah is willing to work with Bailey to achieve their common goals, and Bailey seemingly looks up to Hannah as a role model.  
 

@@ -53,7 +53,7 @@ import_issues:
 
 ## Personality
 
-Despite her anger and aggression, Mía is also a source of inspiration for her teammates. Her loud and brash personality, coupled with her boundless energy and strength, makes her a natural leader who can motivate others to push through tough situations. However, her rage can sometimes get the best of her, causing her to become trigger-happy and putting herself and her team at risk. In these moments, it is up to her teammates to reign her in and help her maintain her composure.   Struggling with Survivor's guilt after losing her limbs and witnessing the deaths of others during the attack that changed her life, Mía often feels like she could have done more to save others. Sometimes feeling like she does not deserve to be alive. However, for the most part, Mía is able to direct this pain into action and uses it to drive her forward with her goals. Succeeding for those she has lost along the way.   But Mía's life isn't all about the darkness in fighting demons and taking down enemies. She has a best friend, [[Lore/Eras/ENTROPY/Characters/Person-Tpr. Bailey Pittman-fe4]], who she met after her amputation. It was through Bailey that Mía was introduced to Delta Two, and she has never looked back since. Her loyalty to her team is unwavering, and she will do anything to protect them.   For Mía, keeping fit and strong is not just about being good at her job - it's also a way to stay in control of her life. She knows that she can't control everything that happens to her, but she can control her physical fitness and strength. It gives her a sense of agency and self-confidence that she carries with her on and off the battlefield.  
+Despite her anger and aggression, Mía is also a source of inspiration for her teammates. Her loud and brash personality, coupled with her boundless energy and strength, makes her a natural leader who can motivate others to push through tough situations. However, her rage can sometimes get the best of her, causing her to become trigger-happy and putting herself and her team at risk. In these moments, it is up to her teammates to reign her in and help her maintain her composure.   Struggling with Survivor's guilt after losing her limbs and witnessing the deaths of others during the attack that changed her life, Mía often feels like she could have done more to save others. Sometimes feeling like she does not deserve to be alive. However, for the most part, Mía is able to direct this pain into action and uses it to drive her forward with her goals. Succeeding for those she has lost along the way.   But Mía's life isn't all about the darkness in fighting demons and taking down enemies. She has a best friend, [[Lore/Eras/ENTROPY/Characters/Tpr. Bailey Pittman]], who she met after her amputation. It was through Bailey that Mía was introduced to Delta Two, and she has never looked back since. Her loyalty to her team is unwavering, and she will do anything to protect them.   For Mía, keeping fit and strong is not just about being good at her job - it's also a way to stay in control of her life. She knows that she can't control everything that happens to her, but she can control her physical fitness and strength. It gives her a sense of agency and self-confidence that she carries with her on and off the battlefield.  
 
 ### Morality and Philosophy
 
@@ -144,7 +144,7 @@ _During her time with Delta Two Two, Mía has grown into a skilled operator thro
 
 Mía and Akanni have a close mentor-mentee relationship. Despite his tough exterior, Akanni has taken Mía under his wing and mentored her to be a more effective operator. Mía greatly respects Akanni's experience and looks up to him as a role model.  
 
-##### [[Lore/Eras/ENTROPY/Characters/Person-Tpr. Hannah Moeko-860]]
+##### [[Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko]]
 
 Although Hannah is a bit more introverted than the rest of the team, Mía makes an effort to get to know her better and will often encourage Hannah to speak up more and share her valuable insights with the team. Mía knows that behind her quiet demeanour lies a determined and focused operator. Despite their different personalities, they both trust and rely on each other for support.  
 
@@ -158,7 +158,7 @@ Mía and Ilya share a friendly but somewhat competitive relationship. They often
 
 Mía has a lot of respect for May as a leader. She admires May's tactical mind and the way she handles herself in high-pressure situations. Although May can be quite serious at times, Mía knows that she can always turn to her for guidance and support should she need it.  
 
-##### [[Lore/Eras/ENTROPY/Characters/Person-Tpr. Bailey Pittman-fe4]]
+##### [[Lore/Eras/ENTROPY/Characters/Tpr. Bailey Pittman]]
 
 Mía and Bailey have a one-of-a-kind relationship where they complement each other perfectly. Bailey is the daring and spontaneous friend who helps Mía unwind and let go, while Mía is the sensible and reliable one who helps keep Bailey on track. In fact, Mía is often the only person who can get Bailey to confide in her and reveal her emotions. With an unwavering commitment to Bailey's wellbeing, Mía will stop at nothing to ensure that her friend is safe and content.  
 
