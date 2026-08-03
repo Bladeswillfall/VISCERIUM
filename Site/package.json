@@ -16,6 +16,8 @@
     "generate:relationships": "node scripts/generate-relationship-data.mjs",
     "generate:timelines": "node scripts/generate-timeline-data.mjs",
     "benchmark:timelines": "node scripts/benchmark-timelines.mjs",
+    "frontmatter:folders:audit": "node scripts/backfill-folder-frontmatter.mjs",
+    "frontmatter:folders:write": "node scripts/backfill-folder-frontmatter.mjs --write",
     "migration:sidebars": "node scripts/normalise-worldanvil-vehicle-sidebars.mjs && node scripts/normalise-worldanvil-sidebars.mjs",
     "migration:sidebars:write": "node scripts/normalise-worldanvil-vehicle-sidebars.mjs --write && node scripts/normalise-worldanvil-sidebars.mjs --write",
     "migration:worldanvil:integrate": "node scripts/integrate-worldanvil-import.mjs",
