@@ -1,0 +1,48 @@
+/*
+ * Article widths
+ *
+ * Ordinary Markdown notes should use the available pane without becoming
+ * edge-to-edge. This keeps Reading View and Live Preview aligned, gives article
+ * headers, properties, tables and images a substantially wider lane, and leaves
+ * the Home dashboard's purpose-built full-width layout untouched.
+ */
+
+.workspace-leaf-content[data-type="markdown"] {
+  --vc-article-max-width: 92rem;
+  --vc-article-gutter: clamp(1rem, 3%, 2.75rem);
+  --file-line-width: var(--vc-article-max-width);
+  --line-width-adaptive: var(--vc-article-max-width);
+  --line-width-wide: var(--vc-article-max-width);
+  --max-width: var(--vc-article-max-width);
+  --file-margins: var(--vc-article-gutter);
+}
+
+/* Keep the authored article lane identical in Reading View and Live Preview. */
+.markdown-preview-view:not(.viscerium-home) .markdown-preview-sizer,
+.markdown-source-view.mod-cm6:not(.viscerium-home) .cm-sizer {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: min(100%, var(--vc-article-max-width)) !important;
+  margin-inline: auto !important;
+}
+
+/* Baseline and Obsidian can retain narrower limits on inner render containers. */
+.markdown-preview-view:not(.viscerium-home) .markdown-preview-section,
+.markdown-preview-view:not(.viscerium-home) .markdown-preview-section > div,
+.markdown-source-view.mod-cm6:not(.viscerium-home) .cm-contentContainer,
+.markdown-source-view.mod-cm6:not(.viscerium-home) .cm-content {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.markdown-source-view.mod-cm6:not(.viscerium-home) .cm-line {
+  max-width: 100% !important;
+}
+
+/* Preserve deliberate breathing room when a pane becomes narrow or split. */
+@media (max-width: 700px) {
+  .workspace-leaf-content[data-type="markdown"] {
+    --vc-article-gutter: 1rem;
+  }
+}
