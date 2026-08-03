@@ -92,6 +92,11 @@ function decorateImageEmbed(wrapper) {
   if (!image) return false;
 
   const rawSpec = sourceSpec(wrapper, image);
+  if (wrapper.dataset.vcImageLayout === rawSpec && wrapper.classList.contains('vc-image-embed')) {
+    if (wrapper.classList.contains('vc-image-shape')) applyShapeSource(wrapper, image);
+    return true;
+  }
+
   const spec = parseImageSpec(rawSpec);
   clearImageLayout(wrapper);
   if (!spec.hasLayout) return false;
@@ -105,7 +110,9 @@ function decorateImageEmbed(wrapper) {
   if (spec.shape) {
     wrapper.classList.add('vc-image-shape');
     applyShapeSource(wrapper, image);
-    image.addEventListener('load', () => applyShapeSource(wrapper, image), { once: true });
+    if (!image.complete) {
+      image.addEventListener('load', () => applyShapeSource(wrapper, image), { once: true });
+    }
   }
 
   return true;
