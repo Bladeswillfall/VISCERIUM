@@ -158,5 +158,9 @@ export function inferNoteType(file, sourceDir) {
     if (type === 'era' && !(index === 0 && segments.length === 2)) continue;
     return type;
   }
-  return TYPE_BY_FOLDER.get(normaliseSourceSegment(segments[0])) ?? 'article';
+
+  if (segments.length === 1) {
+    return TYPE_BY_FOLDER.get(normaliseSourceSegment(segments[0])) ?? 'article';
+  }
+  return 'article';
 }
