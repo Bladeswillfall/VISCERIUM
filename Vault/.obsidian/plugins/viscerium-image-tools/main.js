@@ -143,7 +143,7 @@ function normaliseHeaderImageValue(value) {
 }
 
 function isExternalImage(reference) {
-  return /^https?:\/\//i.test(reference);
+  return /^https:\/\//i.test(reference);
 }
 
 function isImageFile(file) {
@@ -195,14 +195,14 @@ function removeHeaderImages(container) {
   for (const host of container.querySelectorAll(`.${HEADER_HOST_CLASS}`)) host.classList.remove(HEADER_HOST_CLASS);
 }
 
-function createHeaderFigure({ source, alt, decorative }) {
-  const figure = document.createElement('figure');
+function createHeaderFigure({ source, alt, decorative, ownerDocument = document }) {
+  const figure = ownerDocument.createElement('figure');
   figure.className = 'vc-header-figure';
   figure.dataset.vcHeaderImage = 'true';
   figure.dataset.vcHeaderSource = source.key;
   figure.contentEditable = 'false';
 
-  const image = document.createElement('img');
+  const image = ownerDocument.createElement('img');
   image.className = 'vc-header-image';
   image.src = source.src;
   image.alt = decorative ? '' : alt;
@@ -247,7 +247,12 @@ function renderHeaderImage({ app, container, file }) {
 
     if (!figure || !image || currentSource !== source.key || currentAlt !== expectedAlt) {
       figure?.remove();
-      figure = createHeaderFigure({ source, alt, decorative });
+      figure = createHeaderFigure({
+        source,
+        alt,
+        decorative,
+        ownerDocument: target.ownerDocument,
+      });
       target.insertBefore(figure, target.firstChild);
     } else if (target.firstChild !== figure) {
       target.insertBefore(figure, target.firstChild);
@@ -262,12 +267,17 @@ module.exports = class VisceriumImageToolsPlugin extends Plugin {
     let refreshTimer;
 
     const refreshWorkspace = () => {
-      let rendered = 0;
+      let decorated = 0;
+      let headers = 0;
+
       for (const leaf of this.app.workspace.getLeavesOfType('markdown')) {
         const view = leaf.view;
-        if (renderHeaderImage({ app: this.app, container: view?.containerEl, file: view?.file })) rendered += 1;
+        const container = view?.containerEl;
+        decorated += decorateImageEmbeds(container);
+        if (renderHeaderImage({ app: this.app, container, file: view?.file })) headers += 1;
       }
-      return rendered;
+
+      return { decorated, headers };
     };
 
     const scheduleRefresh = () => {
@@ -298,8 +308,7 @@ module.exports = class VisceriumImageToolsPlugin extends Plugin {
       id: 'refresh-article-image-layouts',
       name: 'Refresh article image layouts',
       callback: () => {
-        const decorated = decorateImageEmbeds(document);
-        const headers = refreshWorkspace();
+        const { decorated, headers } = refreshWorkspace();
         new Notice(
           `Refreshed ${decorated} VISCERIUM image layout${decorated === 1 ? '' : 's'} and ${headers} article header${headers === 1 ? '' : 's'}.`,
         );
@@ -308,6 +317,8 @@ module.exports = class VisceriumImageToolsPlugin extends Plugin {
   }
 
   onunload() {
-    removeHeaderImages(document);
+    for (const leaf of this.app.workspace.getLeavesOfType('markdown')) {
+      removeHeaderImages(leaf.view?.containerEl);
+    }
   }
 };
