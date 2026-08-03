@@ -90,6 +90,39 @@ The specialist Story Entity databases remain separate:
 
 Restart Obsidian after pulling changes to Templater settings or user scripts.
 
+## Backfill existing Lore articles
+
+Templater runs only when a note is created. Existing notes use a separate audit-first command.
+
+From `Site`, run:
+
+```bash
+npm run frontmatter:folders:audit
+```
+
+The audit scans Markdown notes beneath `Vault/Lore` and reports proposed additions for these path-derived fields:
+
+- `type`
+- `era`
+- `item_type`
+- `species_kind`
+
+Audit mode does not modify any file.
+
+Review every reported conflict or ambiguity. A conflict means an existing authored value disagrees with the folder path. The command leaves that value untouched. An ambiguous type means the folder path has no recognised semantic type; the command does not silently add `type: article`.
+
+After reviewing the audit, apply the safe additions with:
+
+```bash
+npm run frontmatter:folders:write
+```
+
+Write mode fills only fields that are absent, blank, `null`, or `~`. It never replaces a populated authored value, never creates frontmatter for a prose-only file, and leaves article prose unchanged.
+
+Run the audit again afterwards. A clean second run should report no proposed changes. Any remaining conflicts or notices are editorial decisions rather than mechanical backfill work.
+
+> **Why:** Folder placement is useful evidence, but an existing authored field may encode a deliberate exception. The backfill treats contradictions as review items rather than allowing directory names to overwrite canon.
+
 ## World Anvil imports
 
 Use [[World Anvil Migration SOP]] for the import queue.
@@ -156,6 +189,7 @@ Then run:
 
 ```bash
 cd Site
+npm run frontmatter:folders:audit
 npm run doctor:vault
 npm run build
 ```
