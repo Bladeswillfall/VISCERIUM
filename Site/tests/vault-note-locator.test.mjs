@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { findVaultNote } from './helpers/vault-note.mjs';
+import { findVaultNote, findVaultNoteRoute, vaultNoteRoute } from './helpers/vault-note.mjs';
 
 async function writeNote(root, relativePath, frontmatter, body = 'Body.') {
   const file = path.join(root, relativePath);
@@ -26,14 +26,26 @@ test('vault note locator follows moves by matching stable frontmatter', async (t
     era: 'CITADEL',
   }, 'The Dominion endures.');
 
-  const found = await findVaultNote({
+  const criteria = {
     title: 'Okse Dominion',
     type: 'faction',
     era: 'CITADEL',
-  }, { root });
+  };
+  const found = await findVaultNote(criteria, { root });
 
   assert.equal(found.relativePath, 'Eras/CITADEL/Nations/Okse Dominion.md');
   assert.match(found.content, /Dominion endures/);
+  assert.equal(await findVaultNoteRoute(criteria, { root }), '/eras/citadel/nations/okse-dominion/');
+});
+
+test('vault note route respects an explicit authored slug', () => {
+  assert.equal(
+    vaultNoteRoute({
+      relativePath: 'Eras/CITADEL/Nations/Okse Dominion.md',
+      data: { slug: '/eras/citadel/okse/' },
+    }),
+    '/eras/citadel/okse/',
+  );
 });
 
 test('vault note locator matches scalar criteria inside list properties', async (t) => {
