@@ -35,3 +35,9 @@ headerImage:
 ## Notes
 
 Chronos dates use its numeric ISO-like syntax. For canon events that must participate in registered VISCERIUM calendars, era validation, filters and generated timelines, create an event note from `Event Template.md` instead.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

@@ -1,16 +1,25 @@
 ---
 title: Demo Frontier Fort
-description: "NON-CANON military marker used to verify Atlas marker taxonomy and layer filtering."
+description: >-
+  NON-CANON military marker used to verify Atlas marker taxonomy and layer
+  filtering.
 status: published
 type: location
 icon: location
 era: CITADEL
 faction: Demo Concord
 region: West Testland
+location_kind: site
+site_origin: Built as a frontier fortification controlling the western approach.
+site_condition: Maintained and operational.
+current_use: Garrison post and checkpoint.
+access_conditions: Civilian entry is controlled by the Demo Concord garrison.
+notable_features: Elevated watch position and a defensible gate controlling the approach.
+defences: 'Permanent garrison, walls and controlled entry points.'
 map:
   id: exploration-demo-world
   x: 18
-  y: 62
+  'y': 62
   marker: military
   layer:
     - civilisation/fortifications
@@ -26,9 +35,12 @@ related:
   - Demo Gate City
 slug: demo/demo-frontier-fort
 eraStyle: e1
-links: ["demo/demo-concord/","demo/demo-gate-city/"]
-sourcePath: "Demo/Demo Frontier Fort.md"
-updated: "2026-07-23T17:48:26+01:00"
+links:
+  - demo/demo-concord/
+  - demo/demo-gate-city/
+giscus: true
+sourcePath: Demo/Demo Frontier Fort.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

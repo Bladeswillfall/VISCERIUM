@@ -1,6 +1,8 @@
 ---
-title: "The Vodr Signal Bloom"
-description: "A dormant Vodr artefact emitted a system-wide pattern interpreted as message, map and biological instruction."
+title: The Vodr Signal Bloom
+description: >-
+  A dormant Vodr artefact emitted a system-wide pattern interpreted as message,
+  map and biological instruction.
 status: published
 type: event
 era: ENTROPY
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 6
 location:
-  - "Vodr Reliquary V-6"
+  - Vodr Reliquary V-6
 faction:
-  - "Reliquary Custodians"
+  - Reliquary Custodians
 participants:
-  - "Bloom Interpreters"
-outcome: "Several populations began dreaming the same impossible coastline."
+  - Bloom Interpreters
+outcome: Several populations began dreaming the same impossible coastline.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "vodr"
+  - entropy
+  - timeline-showcase
+  - vodr
 slug: eras/entropy/events/the-vodr-signal-bloom
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Vodr Signal Bloom.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Vodr Signal Bloom.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A dormant Vodr artefact emitted a system-wide pattern interpreted as message, map and biological instruction.

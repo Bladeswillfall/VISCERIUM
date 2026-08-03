@@ -10,6 +10,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '../..');
 const vaultRoot = path.join(repoRoot, 'Vault');
 const require = createRequire(import.meta.url);
+const STORYTELLER_START = '<!-- viscerium:storyteller:start -->';
+const STORYTELLER_END = '<!-- viscerium:storyteller:end -->';
 
 async function readText(relativePath) {
   return fs.readFile(path.join(vaultRoot, relativePath), 'utf8');
@@ -72,9 +74,10 @@ const creatorTemplates = [
   'Templates/_Scripts/folder_entity_router.js',
 ];
 
-test('publishable Lore skeletons start safe and avoid duplicate rendered chrome', async () => {
+test('publishable Lore skeletons start safe and include one reusable Storyteller footer', async () => {
   for (const [relativePath, expectedType] of publicSkeletons) {
-    const parsed = matter(await readText(relativePath));
+    const source = await readText(relativePath);
+    const parsed = matter(source);
 
     assert.equal(parsed.data.title, '{{title}}', `${relativePath} should derive title from the note filename`);
     assert.equal(parsed.data.publish, undefined, `${relativePath} must not carry the legacy publish boolean`);
@@ -83,6 +86,10 @@ test('publishable Lore skeletons start safe and avoid duplicate rendered chrome'
     assert.doesNotMatch(parsed.content, /^#\s+\{\{title\}\}/m, `${relativePath} should not duplicate the note/page title as a body H1`);
     assert.doesNotMatch(parsed.content, /^##\s+Comments\s*$/m, `${relativePath} should not create an empty duplicate comments section`);
     assert.doesNotMatch(parsed.content, /viscerium-sidebar|```dataviewjs/i, `${relativePath} should stay portable and not render the retired Obsidian infobox`);
+    assert.equal(source.split(STORYTELLER_START).length - 1, 1, `${relativePath} should contain one Storyteller start marker`);
+    assert.equal(source.split(STORYTELLER_END).length - 1, 1, `${relativePath} should contain one Storyteller end marker`);
+    assert.match(parsed.content, /^## Storyteller View$/m, `${relativePath} should expose a foldable Storyteller heading in Obsidian`);
+    assert.ok(source.indexOf(STORYTELLER_START) < source.indexOf(STORYTELLER_END), `${relativePath} should order Storyteller boundaries correctly`);
 
     if (Object.hasOwn(parsed.data, 'tags')) {
       assert.ok(Array.isArray(parsed.data.tags), `${relativePath} tags should be an array, not YAML null`);
@@ -157,7 +164,7 @@ test('folder entity router selects the nearest semantic template and path-derive
   assert.equal(router.ROUTES.article.template, 'Templates/Lore/Article Template.md');
 });
 
-test('creator-facing and internal Templater workflows remain present after the template audit', async () => {
+test('creator-facing workflows author Storyteller material as Markdown rather than properties', async () => {
   for (const relativePath of creatorTemplates) {
     const content = await readText(relativePath);
     assert.ok(content.trim().length > 0, `${relativePath} should not be empty`);
@@ -169,14 +176,14 @@ test('creator-facing and internal Templater workflows remain present after the t
   const core = await readText('Templates/_Internals/Story Entity Core.md');
   const lore = await readText('Templates/Lore/New Lore Entity.md');
   const unit = await readText('Templates/Databases/New Myrkild Unit.md');
+  const unitProfile = await readText('Templates/Databases/Myrkild Unit Profile.md');
   const folderRouter = await readText('Templates/_Internals/Folder Entity Router.md');
 
   assert.match(wrapper, /Story Entity Core/);
-  assert.match(injector, /processFrontMatter/);
-  assert.match(injector, /\blocation:\s*\[/);
-  assert.match(injector, /\bfaction:\s*\[/);
-  assert.match(injector, /current_wants/);
-  assert.match(injector, /local_tension/);
+  assert.match(injector, /viscerium:storyteller:start/);
+  assert.match(injector, /viscerium:storyteller:end/);
+  assert.match(injector, /already contains a Storyteller section/);
+  assert.doesNotMatch(injector, /processFrontMatter|current_wants|local_tension/);
   assert.match(locationInjector, /type:\s*location/);
   assert.match(locationInjector, /location_kind/);
   assert.match(locationInjector, /settlement_scale/);
@@ -184,10 +191,17 @@ test('creator-facing and internal Templater workflows remain present after the t
   assert.match(locationInjector, /tp\.user\.reference_picker/);
   assert.match(core, /Stop when usable/);
   assert.match(core, /tp\.user\.reference_picker/);
+  assert.match(core, /storytellerSections/);
+  assert.match(core, /viscerium:storyteller:start/);
+  assert.doesNotMatch(core, /propertyOrder/);
   assert.match(lore, /tp\.user\.reference_picker/);
   assert.match(lore, /LOCATION_KINDS/);
   assert.match(lore, /Add Location Fields/);
+  assert.match(lore, /viscerium:storyteller:start/);
+  assert.doesNotMatch(lore, /Add Storyteller Fields/);
   assert.match(unit, /tp\.user\.reference_picker/);
+  assert.match(unitProfile, /viscerium:storyteller:start/);
+  assert.doesNotMatch(unitProfile, /\[\[Add Storyteller Fields\]\]/);
   assert.match(folderRouter, /tp\.user\.folder_entity_router/);
 });
 

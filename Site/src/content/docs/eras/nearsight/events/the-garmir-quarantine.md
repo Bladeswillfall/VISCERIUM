@@ -1,6 +1,8 @@
 ---
-title: "The Garmir Quarantine"
-description: "A mechanised exclusion cordon sealed the Garmir basin after instrument stations detected a moving subterranean signal."
+title: The Garmir Quarantine
+description: >-
+  A mechanised exclusion cordon sealed the Garmir basin after instrument
+  stations detected a moving subterranean signal.
 status: published
 type: event
 era: NEARSIGHT
@@ -32,22 +34,25 @@ timeline:
   era: auto
   order: 4
 location:
-  - "Garmir Basin"
+  - Garmir Basin
 faction:
-  - "TCSC"
-  - "Regional Civil Authority"
+  - TCSC
+  - Regional Civil Authority
 participants:
-  - "Garmir Quarantine Command"
-outcome: "The basin population was evacuated and the central anomaly was never publicly recovered."
+  - Garmir Quarantine Command
+outcome: >-
+  The basin population was evacuated and the central anomaly was never publicly
+  recovered.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "garmir"
-  - "myrkild"
+  - nearsight
+  - timeline-showcase
+  - garmir
+  - myrkild
 slug: eras/nearsight/events/the-garmir-quarantine
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/The Garmir Quarantine.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/The Garmir Quarantine.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A mechanised exclusion cordon sealed the Garmir basin after instrument stations detected a moving subterranean signal.

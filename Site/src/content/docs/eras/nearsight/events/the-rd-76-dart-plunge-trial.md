@@ -1,6 +1,8 @@
 ---
-title: "The RD-76 Dart Plunge Trial"
-description: "An RD-76 Dart completed a controlled near-orbital nose-down plunge and recovered under its own power."
+title: The RD-76 Dart Plunge Trial
+description: >-
+  An RD-76 Dart completed a controlled near-orbital nose-down plunge and
+  recovered under its own power.
 status: published
 type: event
 era: NEARSIGHT
@@ -25,20 +27,23 @@ timeline:
   era: auto
   order: 6
 location:
-  - "Karsk Test Range"
+  - Karsk Test Range
 faction:
-  - "Orbital Mobility Directorate"
+  - Orbital Mobility Directorate
 participants:
-  - "Dart Flight Seven"
-outcome: "Rapid orbital insertion became credible for cargo, troops and strategic recovery."
+  - Dart Flight Seven
+outcome: >-
+  Rapid orbital insertion became credible for cargo, troops and strategic
+  recovery.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "rd-76"
+  - nearsight
+  - timeline-showcase
+  - rd-76
 slug: eras/nearsight/events/the-rd-76-dart-plunge-trial
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/The RD-76 Dart Plunge Trial.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/The RD-76 Dart Plunge Trial.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 An RD-76 Dart completed a controlled near-orbital nose-down plunge and recovered under its own power.

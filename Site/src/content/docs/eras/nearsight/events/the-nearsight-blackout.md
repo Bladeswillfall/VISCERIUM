@@ -1,6 +1,8 @@
 ---
-title: "The Nearsight Blackout"
-description: "A coordinated systems failure blinded military, civic and orbital sensors across multiple continents."
+title: The Nearsight Blackout
+description: >-
+  A coordinated systems failure blinded military, civic and orbital sensors
+  across multiple continents.
 status: published
 type: event
 era: NEARSIGHT
@@ -32,20 +34,23 @@ timeline:
   era: auto
   order: 10
 location:
-  - "Errack"
+  - Errack
 faction:
-  - "Global Infrastructure Authorities"
+  - Global Infrastructure Authorities
 participants:
-  - "Blackout Response Commands"
-outcome: "Civilisation retained machines but lost confidence that its instruments described the same world."
+  - Blackout Response Commands
+outcome: >-
+  Civilisation retained machines but lost confidence that its instruments
+  described the same world.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "blackout"
+  - nearsight
+  - timeline-showcase
+  - blackout
 slug: eras/nearsight/events/the-nearsight-blackout
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/The Nearsight Blackout.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/The Nearsight Blackout.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A coordinated systems failure blinded military, civic and orbital sensors across multiple continents.

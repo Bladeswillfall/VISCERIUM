@@ -1,6 +1,8 @@
 ---
 title: Demo Concord
-description: "NON-CANON faction used to exercise reciprocal diplomacy and directed command relationships."
+description: >-
+  NON-CANON faction used to exercise reciprocal diplomacy and directed command
+  relationships.
 status: published
 type: faction
 icon: faction
@@ -12,12 +14,12 @@ relationships:
   allies:
     - target: Demo League
       since: 100
-      description: "A deliberately simple mutual alliance for graph testing."
+      description: A deliberately simple mutual alliance for graph testing.
   rivals:
     - target: Demo Directorate
       since: 120
       era: CITADEL
-      description: "A non-canon rivalry used to verify edge filtering and metadata."
+      description: A non-canon rivalry used to verify edge filtering and metadata.
 related:
   - Demo Frontier Fort
   - Demo Gate City
@@ -26,9 +28,12 @@ tags:
   - non-canon
 slug: demo/demo-concord
 eraStyle: e1
-links: ["demo/demo-frontier-fort/","demo/demo-gate-city/"]
-sourcePath: "Demo/Demo Concord.md"
-updated: "2026-07-23T17:49:32+01:00"
+links:
+  - demo/demo-frontier-fort/
+  - demo/demo-gate-city/
+giscus: true
+sourcePath: Demo/Demo Concord.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

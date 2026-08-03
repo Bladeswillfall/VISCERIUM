@@ -1,6 +1,8 @@
 ---
-title: "The Opening of the Bone Road"
-description: "The first guarded caravan crossed the ossuary causeway linking the Dominion interior to the western salt kingdoms."
+title: The Opening of the Bone Road
+description: >-
+  The first guarded caravan crossed the ossuary causeway linking the Dominion
+  interior to the western salt kingdoms.
 status: published
 type: event
 era: CITADEL
@@ -24,22 +26,23 @@ timeline:
   era: auto
   order: 3
 location:
-  - "Bone Road"
-  - "Western Salt Gate"
+  - Bone Road
+  - Western Salt Gate
 faction:
-  - "Okse Dominion"
-  - "Salt Crown Consortium"
+  - Okse Dominion
+  - Salt Crown Consortium
 participants:
-  - "Caravan of Nine Banners"
-outcome: "Long-distance salt and steel trade became reliable enough to tax."
+  - Caravan of Nine Banners
+outcome: Long-distance salt and steel trade became reliable enough to tax.
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "trade"
+  - citadel
+  - timeline-showcase
+  - trade
 slug: eras/citadel/events/the-opening-of-the-bone-road
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Opening of the Bone Road.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Opening of the Bone Road.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The first guarded caravan crossed the ossuary causeway linking the Dominion interior to the western salt kingdoms.

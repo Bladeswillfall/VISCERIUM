@@ -1,6 +1,8 @@
 ---
 title: Demo Rift Site
-description: "NON-CANON threat marker used to verify Myrkild-style Atlas layers and zoom-gated visibility."
+description: >-
+  NON-CANON threat marker used to verify Myrkild-style Atlas layers and
+  zoom-gated visibility.
 status: published
 type: location
 icon: location
@@ -9,7 +11,7 @@ region: South Testland
 map:
   id: exploration-demo-world
   x: 79
-  y: 73
+  'y': 73
   marker: myrkild
   layer:
     - threats/myrkild/rifts
@@ -20,8 +22,9 @@ tags:
 related: []
 slug: demo/demo-rift-site
 eraStyle: e1
-sourcePath: "Demo/Demo Rift Site.md"
-updated: "2026-07-23T17:48:46+01:00"
+sourcePath: Demo/Demo Rift Site.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 > [!caution]

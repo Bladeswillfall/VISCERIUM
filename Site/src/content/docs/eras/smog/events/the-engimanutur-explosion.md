@@ -1,6 +1,8 @@
 ---
-title: "The Engimanutur Explosion"
-description: "A leap-day pressure failure destroyed the experimental lower furnaces beneath Harkworks and opened a persistent Resonant scar."
+title: The Engimanutur Explosion
+description: >-
+  A leap-day pressure failure destroyed the experimental lower furnaces beneath
+  Harkworks and opened a persistent Resonant scar.
 status: published
 type: event
 era: SMOG
@@ -24,20 +26,23 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Harkworks"
+  - Harkworks
 faction:
-  - "Hark Industrial Combine"
+  - Hark Industrial Combine
 participants:
-  - "Third Furnace Shift"
-outcome: "The lower works were sealed and the surrounding district remained uninhabitable."
+  - Third Furnace Shift
+outcome: >-
+  The lower works were sealed and the surrounding district remained
+  uninhabitable.
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "intercalary"
+  - smog
+  - timeline-showcase
+  - intercalary
 slug: eras/smog/events/the-engimanutur-explosion
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Engimanutur Explosion.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Engimanutur Explosion.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A leap-day pressure failure destroyed the experimental lower furnaces beneath Harkworks and opened a persistent Resonant scar.

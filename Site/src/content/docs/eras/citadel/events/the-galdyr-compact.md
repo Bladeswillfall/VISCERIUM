@@ -1,6 +1,8 @@
 ---
-title: "The Galdyr Compact"
-description: "A month-long conclave bound rival smith-priests to shared measures for powder, steel and Resonant workmanship."
+title: The Galdyr Compact
+description: >-
+  A month-long conclave bound rival smith-priests to shared measures for powder,
+  steel and Resonant workmanship.
 status: published
 type: event
 era: CITADEL
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Galdyr Hall"
+  - Galdyr Hall
 faction:
-  - "Galdyr Guilds"
+  - Galdyr Guilds
 participants:
-  - "The Thirteen Measures"
-outcome: "Weapon and tool standards spread between otherwise hostile citadels."
+  - The Thirteen Measures
+outcome: Weapon and tool standards spread between otherwise hostile citadels.
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "galdyr"
+  - citadel
+  - timeline-showcase
+  - galdyr
 slug: eras/citadel/events/the-galdyr-compact
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Galdyr Compact.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Galdyr Compact.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A month-long conclave bound rival smith-priests to shared measures for powder, steel and Resonant workmanship.

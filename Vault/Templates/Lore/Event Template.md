@@ -60,3 +60,9 @@ State the lasting result, especially where it differs from what participants int
 ## Related
 
 Link the people, factions, locations, and other events that materially explain or inherit consequences from this event.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

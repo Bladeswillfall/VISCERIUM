@@ -1,6 +1,8 @@
 ---
-title: "TCSC Bastion Doctrine Adopted"
-description: "The TCSC formally adopted slow, mutually supporting armoured formations designed to become mobile walls."
+title: TCSC Bastion Doctrine Adopted
+description: >-
+  The TCSC formally adopted slow, mutually supporting armoured formations
+  designed to become mobile walls.
 status: published
 type: event
 era: NEARSIGHT
@@ -25,20 +27,23 @@ timeline:
   era: auto
   order: 5
 location:
-  - "TCSC General Staff College"
+  - TCSC General Staff College
 faction:
-  - "TCSC"
+  - TCSC
 participants:
-  - "Bastion Doctrine Board"
-outcome: "Heavy armour, engineering vehicles and infantry support were reorganised into persistent advance corridors."
+  - Bastion Doctrine Board
+outcome: >-
+  Heavy armour, engineering vehicles and infantry support were reorganised into
+  persistent advance corridors.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "tcsc"
+  - nearsight
+  - timeline-showcase
+  - tcsc
 slug: eras/nearsight/events/tcsc-bastion-doctrine-adopted
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/TCSC Bastion Doctrine Adopted.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/TCSC Bastion Doctrine Adopted.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The TCSC formally adopted slow, mutually supporting armoured formations designed to become mobile walls.

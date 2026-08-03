@@ -1,6 +1,8 @@
 ---
-title: "The Vacuum Siege of Satol Reach"
-description: "Naranor vessels isolated Satol Reach and fought a siege in which distance, momentum and memory became contested terrain."
+title: The Vacuum Siege of Satol Reach
+description: >-
+  Naranor vessels isolated Satol Reach and fought a siege in which distance,
+  momentum and memory became contested terrain.
 status: published
 type: event
 era: ENTROPY
@@ -32,21 +34,24 @@ timeline:
   era: auto
   order: 5
 location:
-  - "Satol Reach"
+  - Satol Reach
 faction:
-  - "Satol Defence Assemblies"
-  - "Naranor"
+  - Satol Defence Assemblies
+  - Naranor
 participants:
-  - "Reach Fleet"
-outcome: "The Reach survived, but three inhabited stations were removed from navigational history."
+  - Reach Fleet
+outcome: >-
+  The Reach survived, but three inhabited stations were removed from
+  navigational history.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "satol"
+  - entropy
+  - timeline-showcase
+  - satol
 slug: eras/entropy/events/the-vacuum-siege-of-satol-reach
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Vacuum Siege of Satol Reach.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Vacuum Siege of Satol Reach.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Naranor vessels isolated Satol Reach and fought a siege in which distance, momentum and memory became contested terrain.

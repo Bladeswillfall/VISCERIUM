@@ -1,6 +1,8 @@
 ---
 title: Demo League
-description: "NON-CANON faction used to verify reciprocal relationship deduplication and cross-link navigation."
+description: >-
+  NON-CANON faction used to verify reciprocal relationship deduplication and
+  cross-link navigation.
 status: published
 type: faction
 icon: faction
@@ -19,9 +21,13 @@ tags:
   - non-canon
 slug: demo/demo-league
 eraStyle: e1
-links: ["demo/demo-concord/","demo/demo-directorate/","demo/demo-trade-port/"]
-sourcePath: "Demo/Demo League.md"
-updated: "2026-07-23T17:49:41+01:00"
+links:
+  - demo/demo-concord/
+  - demo/demo-directorate/
+  - demo/demo-trade-port/
+giscus: true
+sourcePath: Demo/Demo League.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

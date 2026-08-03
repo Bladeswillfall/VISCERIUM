@@ -1,6 +1,8 @@
 ---
-title: "The Kraal Nine Signal Return"
-description: "The recovered Kraal Nine core transmitted a reply to a signal no monitoring station had recorded sending."
+title: The Kraal Nine Signal Return
+description: >-
+  The recovered Kraal Nine core transmitted a reply to a signal no monitoring
+  station had recorded sending.
 status: published
 type: event
 era: NEARSIGHT
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Kraal Nine Relay"
+  - Kraal Nine Relay
 faction:
-  - "KRG"
+  - KRG
 participants:
-  - "Jakkal Team"
-outcome: "The core was destroyed and all surviving telemetry became contested evidence."
+  - Jakkal Team
+outcome: The core was destroyed and all surviving telemetry became contested evidence.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "krg"
-  - "same-day"
+  - nearsight
+  - timeline-showcase
+  - krg
+  - same-day
 slug: eras/nearsight/events/the-kraal-nine-signal-return
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/The Kraal Nine Signal Return.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/The Kraal Nine Signal Return.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The recovered Kraal Nine core transmitted a reply to a signal no monitoring station had recorded sending.

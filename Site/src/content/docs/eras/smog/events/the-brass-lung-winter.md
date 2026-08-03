@@ -1,6 +1,8 @@
 ---
-title: "The Brass Lung Winter"
-description: "A four-year respiratory crisis spread through factory cities as coal smoke, metal dust and Resonant contamination combined."
+title: The Brass Lung Winter
+description: >-
+  A four-year respiratory crisis spread through factory cities as coal smoke,
+  metal dust and Resonant contamination combined.
 status: published
 type: event
 era: SMOG
@@ -32,20 +34,21 @@ timeline:
   era: auto
   order: 4
 location:
-  - "Eastern Foundry Belt"
+  - Eastern Foundry Belt
 faction:
-  - "Municipal Furnace Boards"
+  - Municipal Furnace Boards
 participants:
-  - "Brass Lung Clinics"
-outcome: "Respirators and municipal air sirens became ordinary features of urban life."
+  - Brass Lung Clinics
+outcome: Respirators and municipal air sirens became ordinary features of urban life.
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "public-health"
+  - smog
+  - timeline-showcase
+  - public-health
 slug: eras/smog/events/the-brass-lung-winter
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Brass Lung Winter.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Brass Lung Winter.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A four-year respiratory crisis spread through factory cities as coal smoke, metal dust and Resonant contamination combined.

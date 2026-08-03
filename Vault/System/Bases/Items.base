@@ -21,14 +21,6 @@ properties:
     displayName: Regions or markets
   rarity:
     displayName: Rarity
-  primary_use:
-    displayName: Use
-  limitations:
-    displayName: Limitations
-  availability:
-    displayName: Availability
-  common_users:
-    displayName: Common users
   development_level:
     displayName: Development
   image:
@@ -43,7 +35,6 @@ views:
       - item_type
       - origin
       - rarity
-      - primary_use
     sort:
       - property: title
         direction: ASC
@@ -61,14 +52,6 @@ views:
       - origin
       - locations
       - rarity
-      - primary_use
-      - limitations
-      - materials
-      - construction
-      - availability
-      - common_users
-      - cultural_significance
-      - story_complication
       - development_level
       - status
       - file.mtime

@@ -6,8 +6,7 @@
     "image": "/assets/maps/exploration-demo-city.svg",
     "width": 1200,
     "height": 900,
-    "defaultZoom": 0,
-    "minZoom": -1,
+    "minZoom": -3,
     "maxZoom": 3,
     "page": "/demo/demo-gate-city/",
     "markers": [
@@ -50,12 +49,11 @@
   "exploration-demo-world": {
     "id": "exploration-demo-world",
     "title": "Exploration Demo World",
-    "description": "NON-CANON placeholder map used to verify Atlas search, layers, marker types, zoom thresholds, and nested maps.",
-    "image": "/assets/maps/exploration-demo-world.svg",
-    "width": 1600,
-    "height": 900,
-    "defaultZoom": 0,
-    "minZoom": -1,
+    "description": "NON-CANON Atlas test overlay using the real CITADEL map of Errack to verify raster rendering, search, layers, marker types, zoom thresholds, nested maps, and plugin-backed visual authoring.",
+    "image": "/assets/maps/Errack-CITADEL.webp",
+    "width": 7680,
+    "height": 3840,
+    "minZoom": -6,
     "maxZoom": 3,
     "page": "/demo/exploration-demo-world/",
     "markers": [
@@ -98,7 +96,7 @@
         "title": "Demo Hidden Ruin",
         "description": "NON-CANON high-zoom ruin used to verify detail appearing only when the Atlas is zoomed in.",
         "x": 49,
-        "y": 28,
+        "y": 28.000000000000004,
         "marker": "ruin",
         "layers": [
           "civilisation/ruins"
@@ -145,5 +143,17 @@
         "page": "/demo/demo-trade-port/"
       }
     ]
+  },
+  "errack-citadel": {
+    "id": "errack-citadel",
+    "title": "Errack — CITADEL",
+    "description": "The canonical Atlas map of Errack during the CITADEL era, presented without the non-canon markers used by the exploration demo.",
+    "image": "/assets/maps/Errack-CITADEL.webp",
+    "width": 7680,
+    "height": 3840,
+    "minZoom": -6,
+    "maxZoom": 3,
+    "page": "/eras/citadel/errack-citadel-map/",
+    "markers": []
   }
 }

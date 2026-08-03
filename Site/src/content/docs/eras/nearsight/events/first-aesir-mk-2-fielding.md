@@ -1,6 +1,8 @@
 ---
-title: "First AESIR Mk-2 Fielding"
-description: "The AESIR Mk-2 exoskeleton entered operational service during a live border interception."
+title: First AESIR Mk-2 Fielding
+description: >-
+  The AESIR Mk-2 exoskeleton entered operational service during a live border
+  interception.
 status: published
 type: event
 era: NEARSIGHT
@@ -24,20 +26,21 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Hadrun Border Zone"
+  - Hadrun Border Zone
 faction:
-  - "ASTU"
+  - ASTU
 participants:
-  - "Valkyr Section"
-outcome: "Powered infantry moved from experimental detachments into regular doctrine."
+  - Valkyr Section
+outcome: Powered infantry moved from experimental detachments into regular doctrine.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "aesir"
+  - nearsight
+  - timeline-showcase
+  - aesir
 slug: eras/nearsight/events/first-aesir-mk-2-fielding
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/First AESIR Mk-2 Fielding.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/First AESIR Mk-2 Fielding.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The AESIR Mk-2 exoskeleton entered operational service during a live border interception.

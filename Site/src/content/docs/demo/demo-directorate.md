@@ -1,6 +1,6 @@
 ---
 title: Demo Directorate
-description: "NON-CANON faction used as the opposing node in the relationship explorer demo."
+description: NON-CANON faction used as the opposing node in the relationship explorer demo.
 status: published
 type: faction
 icon: faction
@@ -18,9 +18,13 @@ tags:
   - non-canon
 slug: demo/demo-directorate
 eraStyle: e1
-links: ["demo/demo-concord/","demo/demo-league/","demo/demo-rift-site/"]
-sourcePath: "Demo/Demo Directorate.md"
-updated: "2026-07-23T17:49:51+01:00"
+links:
+  - demo/demo-concord/
+  - demo/demo-league/
+  - demo/demo-rift-site/
+giscus: true
+sourcePath: Demo/Demo Directorate.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

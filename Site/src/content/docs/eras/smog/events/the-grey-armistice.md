@@ -1,6 +1,8 @@
 ---
-title: "The Grey Armistice"
-description: "The last continental trench fronts fell silent beneath an ash-coloured sky, ending the wars that consumed the late industrial age."
+title: The Grey Armistice
+description: >-
+  The last continental trench fronts fell silent beneath an ash-coloured sky,
+  ending the wars that consumed the late industrial age.
 status: published
 type: event
 era: SMOG
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 9
 location:
-  - "Grey Mile"
+  - Grey Mile
 faction:
-  - "Armistice Powers"
+  - Armistice Powers
 participants:
-  - "Grey Mile Delegations"
-outcome: "Formal war ended, but mobilisation systems and emergency governments remained."
+  - Grey Mile Delegations
+outcome: 'Formal war ended, but mobilisation systems and emergency governments remained.'
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "armistice"
+  - smog
+  - timeline-showcase
+  - armistice
 slug: eras/smog/events/the-grey-armistice
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Grey Armistice.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Grey Armistice.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 The last continental trench fronts fell silent beneath an ash-coloured sky, ending the wars that consumed the late industrial age.

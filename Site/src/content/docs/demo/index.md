@@ -6,6 +6,7 @@ slug: demo
 type: category
 pagefind: true
 tableOfContents: false
+giscus: false
 ---
 Browse every public Codex page filed beneath **Demo**.
 
@@ -66,7 +67,7 @@ Browse every public Codex page filed beneath **Demo**.
 <ul class="codex-alpha-index__items">
 <li class="codex-alpha-index__item">
 <div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/demo/exploration-demo-world/">Exploration Demo World</a><span class="codex-alpha-index__meta">map</span></div>
-<p class="codex-alpha-index__description">NON-CANON placeholder map used to verify Atlas search, layers, marker types, zoom thresholds, and nested maps.</p>
+<p class="codex-alpha-index__description">NON-CANON Atlas test overlay using the real CITADEL map of Errack to verify raster rendering, search, layers, marker types, zoom thresholds, nested maps, and plugin-backed visual authoring.</p>
 </li>
 <li class="codex-alpha-index__item">
 <div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/demo/exploration-demo/">Exploration Feature Demo</a></div>

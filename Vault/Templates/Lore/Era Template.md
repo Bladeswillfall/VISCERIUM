@@ -58,3 +58,9 @@ What does this era leave behind for later people to inherit, misunderstand, expl
 ## Related
 
 Link the strongest entry points into this era rather than attempting to reproduce its whole index.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

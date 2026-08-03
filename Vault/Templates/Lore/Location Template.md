@@ -61,3 +61,9 @@ Use structured frontmatter when a relationship itself matters to navigation or c
 ## Related
 
 Add only links that establish useful geographic, political, cultural, or narrative relationships.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

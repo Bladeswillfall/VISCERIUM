@@ -1,6 +1,8 @@
 ---
-title: "The Myrkild Amnesty Schism"
-description: "A proposal to recognise selected Myrkild intelligences as legal persons divided human governments and hunter orders."
+title: The Myrkild Amnesty Schism
+description: >-
+  A proposal to recognise selected Myrkild intelligences as legal persons
+  divided human governments and hunter orders.
 status: published
 type: event
 era: ENTROPY
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 7
 location:
-  - "Concordance Assembly"
+  - Concordance Assembly
 faction:
-  - "Continuity Assembly"
-  - "Old Hunter Orders"
+  - Continuity Assembly
+  - Old Hunter Orders
 participants:
-  - "Amnesty Delegates"
-outcome: "No universal amnesty passed, but local recognition regimes emerged."
+  - Amnesty Delegates
+outcome: 'No universal amnesty passed, but local recognition regimes emerged.'
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "myrkild"
+  - entropy
+  - timeline-showcase
+  - myrkild
 slug: eras/entropy/events/the-myrkild-amnesty-schism
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The Myrkild Amnesty Schism.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The Myrkild Amnesty Schism.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A proposal to recognise selected Myrkild intelligences as legal persons divided human governments and hunter orders.

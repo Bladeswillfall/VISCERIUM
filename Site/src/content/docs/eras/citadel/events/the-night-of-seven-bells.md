@@ -1,6 +1,8 @@
 ---
-title: "The Night of Seven Bells"
-description: "Seven citadel bells rang together without being struck, drawing thousands into the streets before dawn."
+title: The Night of Seven Bells
+description: >-
+  Seven citadel bells rang together without being struck, drawing thousands into
+  the streets before dawn.
 status: published
 type: event
 era: CITADEL
@@ -24,20 +26,21 @@ timeline:
   era: auto
   order: 1
 location:
-  - "Karn Vey"
+  - Karn Vey
 faction:
-  - "Bellwardens of Karn Vey"
+  - Bellwardens of Karn Vey
 participants:
-  - "Citizens of Karn Vey"
-outcome: "The city halted trade and opened every shrine until sunrise."
+  - Citizens of Karn Vey
+outcome: The city halted trade and opened every shrine until sunrise.
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "same-day"
+  - citadel
+  - timeline-showcase
+  - same-day
 slug: eras/citadel/events/the-night-of-seven-bells
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Night of Seven Bells.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Night of Seven Bells.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Seven citadel bells rang together without being struck, drawing thousands into the streets before dawn.

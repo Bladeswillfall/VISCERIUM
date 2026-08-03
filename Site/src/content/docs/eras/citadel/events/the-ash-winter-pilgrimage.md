@@ -1,6 +1,8 @@
 ---
-title: "The Ash-Winter Pilgrimage"
-description: "A disputed three-year migration in which Resonant penitents crossed the burned north and returned speaking in borrowed voices."
+title: The Ash-Winter Pilgrimage
+description: >-
+  A disputed three-year migration in which Resonant penitents crossed the burned
+  north and returned speaking in borrowed voices.
 status: published
 type: event
 era: CITADEL
@@ -32,21 +34,22 @@ timeline:
   era: auto
   order: 4
 location:
-  - "Ash March"
-  - "Northern Road"
+  - Ash March
+  - Northern Road
 faction:
-  - "Censer Brotherhood"
+  - Censer Brotherhood
 participants:
-  - "The Ash Pilgrims"
-outcome: "New Resonant cults spread through the northern keeps."
+  - The Ash Pilgrims
+outcome: New Resonant cults spread through the northern keeps.
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "resonance"
+  - citadel
+  - timeline-showcase
+  - resonance
 slug: eras/citadel/events/the-ash-winter-pilgrimage
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Ash-Winter Pilgrimage.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Ash-Winter Pilgrimage.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A disputed three-year migration in which Resonant penitents crossed the burned north and returned speaking in borrowed voices.

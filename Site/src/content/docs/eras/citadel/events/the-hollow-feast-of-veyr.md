@@ -1,6 +1,8 @@
 ---
-title: "The Hollow Feast of Veyr"
-description: "A legendary winter banquet at which an entire court is said to have eaten, spoken and departed without casting shadows."
+title: The Hollow Feast of Veyr
+description: >-
+  A legendary winter banquet at which an entire court is said to have eaten,
+  spoken and departed without casting shadows.
 status: published
 type: event
 era: CITADEL
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 6
 location:
-  - "Veyr Keep"
+  - Veyr Keep
 faction:
-  - "House Veyr"
+  - House Veyr
 participants:
-  - "The Hollow Guests"
-outcome: "House Veyr vanished from reliable records within a generation."
+  - The Hollow Guests
+outcome: House Veyr vanished from reliable records within a generation.
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "myrkild"
-  - "legend"
+  - citadel
+  - timeline-showcase
+  - myrkild
+  - legend
 slug: eras/citadel/events/the-hollow-feast-of-veyr
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Hollow Feast of Veyr.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Hollow Feast of Veyr.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A legendary winter banquet at which an entire court is said to have eaten, spoken and departed without casting shadows.

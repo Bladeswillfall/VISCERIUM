@@ -24,6 +24,8 @@
     "migration:worldanvil:prepare": "node scripts/prepare-worldanvil-import-frontmatter.mjs",
     "migration:worldanvil:prepare:write": "node scripts/prepare-worldanvil-import-frontmatter.mjs --write",
     "migration:worldanvil:integrate:write": "node scripts/integrate-worldanvil-import.mjs --write && node scripts/prepare-worldanvil-import-frontmatter.mjs --write && node scripts/apply-worldanvil-base-triage.mjs",
+    "migration:worldanvil:filenames": "node scripts/normalise-worldanvil-filenames.mjs",
+    "migration:worldanvil:filenames:write": "node scripts/normalise-worldanvil-filenames.mjs --write",
     "test:unit": "node --test tests/*.test.mjs",
     "prebuild": "node scripts/build-content.mjs --mode=build",
     "build": "astro build",

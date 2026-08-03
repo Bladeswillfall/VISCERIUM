@@ -21,12 +21,6 @@ properties:
     displayName: Biomes
   rarity:
     displayName: Rarity
-  growth_conditions:
-    displayName: Growth conditions
-  human_relevance:
-    displayName: Why people care
-  hazards:
-    displayName: Hazards
   development_level:
     displayName: Development
   image:
@@ -58,14 +52,6 @@ views:
       - locations
       - biomes
       - rarity
-      - identification
-      - signs_of_presence
-      - growth_conditions
-      - ecological_relationships
-      - human_relevance
-      - hazards
-      - cultural_significance
-      - story_complication
       - development_level
       - status
       - file.mtime

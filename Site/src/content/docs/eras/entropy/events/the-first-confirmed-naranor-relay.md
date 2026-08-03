@@ -1,6 +1,8 @@
 ---
-title: "The First Confirmed Naranor Relay"
-description: "A deep-range array identified an artificial relay whose geometry matched no human or Myrkild construction."
+title: The First Confirmed Naranor Relay
+description: >-
+  A deep-range array identified an artificial relay whose geometry matched no
+  human or Myrkild construction.
 status: published
 type: event
 era: ENTROPY
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 1
 location:
-  - "Outer Errack Relay Arc"
+  - Outer Errack Relay Arc
 faction:
-  - "Deep Range Survey"
+  - Deep Range Survey
 participants:
-  - "Relay Watch Twelve"
-outcome: "The Naranor threat shifted from hypothesis to strategic certainty."
+  - Relay Watch Twelve
+outcome: The Naranor threat shifted from hypothesis to strategic certainty.
 tags:
-  - "entropy"
-  - "timeline-showcase"
-  - "naranor"
+  - entropy
+  - timeline-showcase
+  - naranor
 slug: eras/entropy/events/the-first-confirmed-naranor-relay
 eraStyle: e4
-sourcePath: "Eras/ENTROPY/Events/The First Confirmed Naranor Relay.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/ENTROPY/Events/The First Confirmed Naranor Relay.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A deep-range array identified an artificial relay whose geometry matched no human or Myrkild construction.

@@ -1,6 +1,8 @@
 ---
-title: "Formation of ASTU"
-description: "Several threatened states combined specialist forces into the fast-moving Allied Special Tactics Union."
+title: Formation of ASTU
+description: >-
+  Several threatened states combined specialist forces into the fast-moving
+  Allied Special Tactics Union.
 status: published
 type: event
 era: NEARSIGHT
@@ -24,20 +26,21 @@ timeline:
   era: auto
   order: 1
 location:
-  - "Veylan Security Conference"
+  - Veylan Security Conference
 faction:
-  - "ASTU"
+  - ASTU
 participants:
-  - "Founding Delegations"
-outcome: "A permanent multinational rapid-response command entered service."
+  - Founding Delegations
+outcome: A permanent multinational rapid-response command entered service.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "astu"
+  - nearsight
+  - timeline-showcase
+  - astu
 slug: eras/nearsight/events/formation-of-astu
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/Formation of ASTU.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/Formation of ASTU.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Several threatened states combined specialist forces into the fast-moving Allied Special Tactics Union.

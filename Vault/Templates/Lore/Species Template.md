@@ -52,3 +52,9 @@ Add beliefs, symbols, rituals, taboos, or local names only where a specific cult
 ## Related
 
 Add links that help a reader understand the species in context.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

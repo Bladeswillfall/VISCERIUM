@@ -107,6 +107,24 @@ The import queue is excluded from Auto-Properties. The migration pass seeds `upd
 
 > **Why:** Moving a file preserves its filesystem creation time on common systems. A blank `created:` key would therefore invite Auto-Properties to lock in a false import-time date.
 
+### 5. Normalise filed import filenames
+
+From `Site`, audit the filed Lore corpus with:
+
+```bash
+npm run migration:worldanvil:filenames
+```
+
+Apply safe renames with:
+
+```bash
+npm run migration:worldanvil:filenames:write
+```
+
+This removes the World Anvil type prefix and trailing export ID from filed note names, for example `Organization-Drai Dynasty-40e.md` becomes `Drai Dynasty.md`. It preserves `import_source_file` inside the note and updates matching Obsidian wikilinks.
+
+The command compares proposed targets against existing notes using case-insensitive, Unicode-normalised paths. It reports and skips collisions rather than overwriting a note, including collisions such as `FOO.md` against `foo.md` that would be unsafe on Windows or macOS.
+
 ## Check the result
 
 Run:

@@ -6,6 +6,7 @@ slug: degel-system
 type: category
 pagefind: true
 tableOfContents: false
+giscus: false
 ---
 Browse every public Codex page filed beneath **Degel System**.
 
@@ -34,8 +35,8 @@ Browse every public Codex page filed beneath **Degel System**.
 <h3 id="pages-e" class="codex-alpha-index__letter">E</h3>
 <ul class="codex-alpha-index__items">
 <li class="codex-alpha-index__item">
-<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/degel-system/errack/">Errack</a></div>
-<p class="codex-alpha-index__description">The core-planet of tales in VISCERIUM.</p>
+<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/degel-system/errack/">Errack</a><span class="codex-alpha-index__meta">location</span></div>
+<p class="codex-alpha-index__description">The core planet of VISCERIUM&#39;s tales: a life-sustaining world of savage beauty, ecological extremes and enduring human civilisation.</p>
 </li>
 <li class="codex-alpha-index__item">
 <div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/degel-system/eye-of-visi/">Eye of Visi</a></div>

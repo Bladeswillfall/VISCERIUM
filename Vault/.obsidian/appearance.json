@@ -2,6 +2,7 @@
   "theme": "obsidian",
   "cssTheme": "Baseline",
   "enabledCssSnippets": [
+    "Article widths",
     "Bases",
     "Callout styling",
     "Checkbox styling",

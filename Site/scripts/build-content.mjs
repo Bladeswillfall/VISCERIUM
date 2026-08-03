@@ -7,7 +7,7 @@ import { generateTimelineData, reportTimelineError } from './generate-timeline-d
 import { validateGeneratedContent } from './validate-content.mjs';
 import { generateMapData } from './generate-map-data.mjs';
 import { generateRelationshipData } from './generate-relationship-data.mjs';
-import { generateStorytellerData } from './generate-storyteller-data.mjs';
+import { prepareStorytellerMarkers } from './prepare-storyteller-markers.mjs';
 import { generateReferencedIn } from './generate-referenced-in.mjs';
 import { applyGiscusPolicy } from './apply-giscus-policy.mjs';
 
@@ -80,7 +80,7 @@ if (!validModes.has(mode)) {
 
     await import('./sync-public-notes.mjs');
     await import('./strip-obsidian-plugin-blocks.mjs');
-    await generateStorytellerData();
+    await prepareStorytellerMarkers();
     await import('./transform-era-primer-shortcodes.mjs');
     await import('./transform-timeline-shortcodes.mjs');
 

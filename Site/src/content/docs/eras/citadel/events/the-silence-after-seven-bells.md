@@ -1,6 +1,8 @@
 ---
-title: "The Silence After Seven Bells"
-description: "On the morning after the bells rang, every child born within Karn Vey was silent until sunset."
+title: The Silence After Seven Bells
+description: >-
+  On the morning after the bells rang, every child born within Karn Vey was
+  silent until sunset.
 status: published
 type: event
 era: CITADEL
@@ -25,20 +27,21 @@ timeline:
   era: auto
   order: 2
 location:
-  - "Karn Vey"
+  - Karn Vey
 faction:
-  - "Bellwardens of Karn Vey"
+  - Bellwardens of Karn Vey
 participants:
-  - "Midwives of Karn Vey"
-outcome: "The event was omitted from civic records but preserved in midwives' rolls."
+  - Midwives of Karn Vey
+outcome: The event was omitted from civic records but preserved in midwives' rolls.
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "same-day"
+  - citadel
+  - timeline-showcase
+  - same-day
 slug: eras/citadel/events/the-silence-after-seven-bells
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Silence After Seven Bells.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Silence After Seven Bells.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 On the morning after the bells rang, every child born within Karn Vey was silent until sunset.

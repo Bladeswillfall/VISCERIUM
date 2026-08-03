@@ -62,3 +62,9 @@ Link places whose relationship with this faction matters to stories or world con
 ## Related
 
 Add only links that establish useful context or relationships.
+
+<!-- viscerium:storyteller:start -->
+
+## Storyteller View
+
+<!-- viscerium:storyteller:end -->

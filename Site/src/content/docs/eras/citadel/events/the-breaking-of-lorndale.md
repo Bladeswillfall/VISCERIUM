@@ -1,6 +1,8 @@
 ---
-title: "The Breaking of Lorndale"
-description: "Lorndale fell during a Resonant assault remembered as both a military victory and a spiritual catastrophe."
+title: The Breaking of Lorndale
+description: >-
+  Lorndale fell during a Resonant assault remembered as both a military victory
+  and a spiritual catastrophe.
 status: published
 type: event
 era: CITADEL
@@ -26,23 +28,24 @@ timeline:
   era: auto
   order: 1
 location:
-  - "Lorndale"
+  - Lorndale
 faction:
-  - "Okse Dominion"
-  - "Lorndale Host"
+  - Okse Dominion
+  - Lorndale Host
 participants:
-  - "The Baron Resonant"
-  - "Lorndale Garrison"
-outcome: "The fortress survived as a ruin, but the surrounding lordship ceased to exist."
+  - The Baron Resonant
+  - Lorndale Garrison
+outcome: 'The fortress survived as a ruin, but the surrounding lordship ceased to exist.'
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "lorndale"
-  - "resonance"
+  - citadel
+  - timeline-showcase
+  - lorndale
+  - resonance
 slug: eras/citadel/events/the-breaking-of-lorndale
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Breaking of Lorndale.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Breaking of Lorndale.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Lorndale fell during a Resonant assault remembered as both a military victory and a spiritual catastrophe.

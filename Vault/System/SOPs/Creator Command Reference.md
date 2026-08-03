@@ -35,7 +35,7 @@ Follow [[Documentation Writing Standard]] for operational wording.
 | Set a continuity identity | **VISCERIUM Creator Tools: Set continuity entity ID** |
 | Create another historical edition | **VISCERIUM Creator Tools: Create era edition from current note** |
 | Add location detail | **Templater: Insert template** → `Add Location Fields` |
-| Add or edit Storyteller data | **Templater: Insert template** → `Add Storyteller Fields` |
+| Add a Storyteller section to an older note | **Templater: Insert template** → `Add Storyteller Fields` |
 | Add public article sidebar facts | [[System/Frontmatter Schema#Article facts sidebar|Article facts sidebar]] |
 | Browse all Story Entities | Open [[Story Entities.base]] |
 | Check creator data | `cd Site` then `npm run doctor:vault` |
@@ -75,7 +75,7 @@ It does not assign keyboard shortcuts to those commands.
 | Create a Story Entity | **Templater: Create Databases/New Story Entity** | None stored |
 | Create a Lore Entity | **Templater: Create Lore/New Lore Entity** | None stored |
 | Create a Myrkild unit | **Templater: Create Databases/New Myrkild Unit** | None stored |
-| Add supported fields to an existing note | **Templater: Insert template** | None stored |
+| Insert an optional section into an existing note | **Templater: Insert template** | None stored |
 | Use the general creation fallback | **Templater: Create new note from template** | None stored |
 
 ### Check or assign a hotkey
@@ -124,7 +124,7 @@ Command: **Templater: Create Databases/New Myrkild Unit**
 
 Changes files: **Yes.**
 
-Creates a structured Myrkild unit draft with guided controlled fields.
+Creates a structured Myrkild unit draft with guided controlled fields and a marked Storyteller footer.
 
 ### Open creator context
 
@@ -142,13 +142,15 @@ Changes files: **Yes.**
 
 Adds only the location properties that you select and supply.
 
-### Add or edit Storyteller fields
+### Add a Storyteller section
 
 Command: **Templater: Insert template** → `Add Storyteller Fields`
 
 Changes files: **Yes.**
 
-Adds, changes or removes selected Storyteller source properties. See [[Storyteller View SOP]].
+Adds the standard Storyteller boundary comments and foldable heading to an older note. The retained filename is a compatibility name; the template no longer creates or edits Storyteller properties. It refuses to insert a second or partial marker set.
+
+New article templates already contain this footer. Edit their `## Storyteller View` section directly with ordinary Markdown. See [[Storyteller View SOP]].
 
 ## Era and continuity commands
 
@@ -298,7 +300,7 @@ Use **Templater: Create Lore/New Lore Entity** or **Templater: Create Databases/
 
 Copy only valid content into the new draft.
 
-#### Add controlled properties
+#### Add controlled properties and sections
 
 | Need | Exact action |
 | --- | --- |
@@ -306,11 +308,13 @@ Copy only valid content into the new draft.
 | Set continuity identity | **VISCERIUM Creator Tools: Set continuity entity ID** |
 | Create another historical edition | **VISCERIUM Creator Tools: Create era edition from current note** |
 | Add optional location facts | **Templater: Insert template** → `Add Location Fields` |
-| Add supported Storyteller facts | **Templater: Insert template** → `Add Storyteller Fields` |
+| Add a marked Storyteller footer | **Templater: Insert template** → `Add Storyteller Fields` |
 
 Run only the actions that the article needs.
 
-> **Why:** An absent optional property is clearer than an empty or invented value.
+An empty Storyteller footer is valid. Add content only when it provides practical scene or story guidance.
+
+> **Why:** An absent optional property or empty optional section is clearer than invented content.
 
 #### Add an article facts sidebar
 
@@ -328,11 +332,12 @@ Do not confuse article facts with [[System/Creator Sidebar|the Obsidian creator 
 2. Confirm that `era` is controlled or deliberately unresolved.
 3. Confirm that `entity_id` exists only when continuity requires it.
 4. Confirm that optional properties contain useful facts.
-5. Complete the note's **Import review** checklist.
-6. Move the note to its deliberate Drafts or Lore destination.
-7. Edit it once and confirm that Auto-Properties populates `updated`, `word_count`, and `open_task_count` as applicable.
-8. Confirm that `created` is authoritative or absent.
-9. Run `cd Site && npm run doctor:vault`.
+5. If a Storyteller footer exists, confirm that it contains exactly one ordered marker pair.
+6. Complete the note's **Import review** checklist.
+7. Move the note to its deliberate Drafts or Lore destination.
+8. Edit it once and confirm that Auto-Properties populates `updated`, `word_count`, and `open_task_count` as applicable.
+9. Confirm that `created` is authoritative or absent.
+10. Run `cd Site && npm run doctor:vault`.
 
 **Stop condition:** The import has current frontmatter, no unresolved structural decision, and a deliberate destination.
 

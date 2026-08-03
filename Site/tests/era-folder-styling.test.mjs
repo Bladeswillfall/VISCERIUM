@@ -47,7 +47,7 @@ test('eraStyle stays out of authored Obsidian frontmatter and appears in generat
     assert.doesNotMatch(sourceFrontmatter, /^eraStyle:/m, `${era} Vault source should not require presentation metadata`);
     assert.match(generatedPage, new RegExp(`era:\\s*${era}`), `${era} page should retain its inferred era`);
     assert.match(generatedPage, new RegExp(`eraStyle:\\s*${style}`), `${era} page should publish ${style}`);
-    assert.match(generatedPage, new RegExp(`sourcePath:\\s*"Eras/${era}/`), `${era} page should originate in the matching Vault folder`);
+    assert.match(generatedPage, new RegExp(`sourcePath:\\s*['"]?Eras/${era}/`), `${era} page should originate in the matching Vault folder`);
   }
 });
 

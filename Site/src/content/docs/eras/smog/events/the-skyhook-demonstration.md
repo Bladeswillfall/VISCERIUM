@@ -1,6 +1,8 @@
 ---
-title: "The Skyhook Demonstration"
-description: "An armoured observation gondola climbed above the smog ceiling on a tethered electric cable before a military audience."
+title: The Skyhook Demonstration
+description: >-
+  An armoured observation gondola climbed above the smog ceiling on a tethered
+  electric cable before a military audience.
 status: published
 type: event
 era: SMOG
@@ -25,20 +27,23 @@ timeline:
   era: auto
   order: 8
 location:
-  - "Kessel Aerodrome"
+  - Kessel Aerodrome
 faction:
-  - "Kessel Electrical Works"
+  - Kessel Electrical Works
 participants:
-  - "Skyhook Test Crew"
-outcome: "High-altitude observation became practical for artillery spotting and weather study."
+  - Skyhook Test Crew
+outcome: >-
+  High-altitude observation became practical for artillery spotting and weather
+  study.
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "aviation"
+  - smog
+  - timeline-showcase
+  - aviation
 slug: eras/smog/events/the-skyhook-demonstration
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Skyhook Demonstration.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Skyhook Demonstration.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 An armoured observation gondola climbed above the smog ceiling on a tethered electric cable before a military audience.

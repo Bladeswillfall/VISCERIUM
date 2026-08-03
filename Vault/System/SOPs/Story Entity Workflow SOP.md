@@ -34,13 +34,19 @@ Keep the Markdown note as the source of truth.
 2. Click **Create Story Entity**.
 3. Select **Fauna**, **Flora**, **Fungi**, or **Item**.
 4. Complete the common prompts.
-5. Select only the optional modules that you need now.
+5. Select only the optional Storyteller modules that you need now.
+
+Profile answers such as kind, size, origin and rarity become queryable properties.
+
+Story-facing answers become Markdown beneath the marked `Storyteller View` footer.
 
 ### Check the result
 
 Confirm that the note is in `Drafts/Databases/<Type>/`.
 
-> **Why:** The workflow uses the selected type to choose the correct folder and template.
+Confirm that the note contains one Storyteller start marker and one end marker.
+
+> **Why:** The workflow uses the selected type to choose the correct folder and template while keeping rich Storyteller content out of frontmatter.
 
 ## Create from a database folder
 
@@ -88,28 +94,28 @@ Do not type a new era name into a raw property field.
 
 If the subject needs historical versions, follow [[Era Edition Workflow SOP]].
 
-## Add or change Storyteller fields
-
-### Select the modules
+## Add or change Storyteller content
 
 1. Open the note.
+2. Scroll to `## Storyteller View` at the end of the article.
+3. Add, remove, rename or reorder headings according to the material the story actually needs.
+4. Write normal Markdown between the start and end markers.
+5. Keep both markers intact and in the correct order.
+
+Use headings, tables, images, lists, callouts, links and embeds as needed.
+
+Do not add Storyteller text to frontmatter merely to make it visible in a Base.
+
+### Add the section to an older note
+
+1. Put the cursor at the end of the note.
 2. Press **Ctrl/Cmd + P**.
 3. Run **Templater: Insert template**.
 4. Select `Add Storyteller Fields`.
-5. Select only the modules that you need.
 
-### Resolve each prompt
+The retained template name now inserts the marked Markdown section. It does not edit properties.
 
-| Goal | Action |
-| --- | --- |
-| Replace a free-text value | Edit the pre-filled value. |
-| Remove a free-text value | Submit a blank value. |
-| Keep a free-text value | Cancel the prompt. |
-| Keep or remove a controlled value | Select **Keep current** or **Clear value**. |
-
-Unselected modules remain unchanged.
-
-> **Why:** Explicit keep and clear choices prevent accidental data loss.
+Follow [[Storyteller View SOP]] for the admission test and public behaviour.
 
 ## Browse Story Entities
 
@@ -119,11 +125,11 @@ Open a type-specific Base for detailed comparison.
 
 Use **Cards** for browsing.
 
-Use **Database** or table views for structured editing.
+Use **Database** or table views for structured profile editing.
 
-Do not treat a Base as a second database.
+Do not treat a Base as a second database or force Storyteller prose back into properties.
 
-The Markdown note and its properties remain authoritative.
+The Markdown note remains authoritative. Its profile properties support filtering and comparison; its body holds Lore and Storyteller prose.
 
 ## Check structural health
 
@@ -138,7 +144,7 @@ Review notices when they identify a possible inconsistency.
 
 Vault Doctor does not measure creative completeness.
 
-An absent optional property is valid.
+An absent optional property or an empty Storyteller section is valid.
 
 ## Publish a Story Entity
 
@@ -193,6 +199,10 @@ Confirm that the note is directly inside one configured Story Entity folder.
 2. Remove extra parent-folder rules.
 3. Remove any `/` catch-all rule.
 
+### A public article has no Storyteller tab
+
+Confirm that useful content exists between the markers. A heading by itself is intentionally treated as empty.
+
 ### Vault Doctor reports an error
 
 Fix the structural conflict.
@@ -203,4 +213,4 @@ If the system rules changed intentionally, follow [[Schema Change SOP]].
 
 Stop when the note is valid and useful for the current creative work.
 
-Do not fill optional properties only because they exist.
+Do not fill optional properties or Storyteller headings only because they exist.

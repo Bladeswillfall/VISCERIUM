@@ -3,6 +3,8 @@ const ERAS = ["CITADEL", "SMOG", "NEARSIGHT", "ENTROPY"];
 const MYRKILD = ["Gluttony", "Envy", "Sloth", "Wrath", "Lust", "Pride", "Greed"];
 const ORIGINS = ["Purespawn", "Mutated"];
 const SIZES = ["Tiny", "Small", "Human-scale", "Large", "Massive", "Behemoth"];
+const STORYTELLER_START = "<!-- viscerium:storyteller:start -->";
+const STORYTELLER_END = "<!-- viscerium:storyteller:end -->";
 const title = String(await tp.system.prompt("Unit name", tp.file.title === "Untitled" ? "" : tp.file.title, true) ?? "").trim();
 if (title && title !== tp.file.title) await tp.file.rename(title);
 const era = await tp.system.suggester(ERAS, ERAS, true, "Era");
@@ -21,7 +23,28 @@ async function ensureFolder(folderPath) {
 const fm = ["---", `title: ${JSON.stringify(title)}`, `description: ${JSON.stringify("A WIP Myrkild unit profile.")}`, "created:", "updated:", "status: draft", "type: myrkild-unit", "unit_id: null", "source_id: null", `unit_name: ${JSON.stringify(title)}`, `era: ${JSON.stringify(era)}`, "species: Myrkild", `myrkild_species: ${JSON.stringify(myrkildSpecies)}`, `origin: ${JSON.stringify(origin)}`, "natural_host: null", "role: null"];
 if (size) fm.push(`size_class: ${JSON.stringify(size)}`); else fm.push("size_class: null");
 fm.push("threat_rating: null", "strain: null", "subtype: null", "rarity: null", `locations: ${yamlList(locations)}`, "biomes: []", "tactics: null", "weaknesses: null", "visual_notes: null", "image: null", "review_status: draft", "development_level: stub", "source: null", "source_sheet: null", "source_row: null", "source_species_entry: null", "tags: [myrkild, unit]", "---");
-const body = ["", "> [!tip] Stop when usable", "> Keep the structured profile focused on placement, battlefield behaviour and counterplay.", "", "## Battlefield profile", "", "## Tactics and behaviour", "", "## Weaknesses and counterplay", "", "## Visual notes", "", "## Availability notes", ""];
+const body = [
+  "",
+  "> [!tip] Stop when usable",
+  "> Keep the structured profile focused on placement, battlefield behaviour and counterplay. Put scene-facing guidance in the marked Storyteller footer.",
+  "",
+  "## Battlefield profile",
+  "",
+  "## Tactics and behaviour",
+  "",
+  "## Weaknesses and counterplay",
+  "",
+  "## Visual notes",
+  "",
+  "## Availability notes",
+  "",
+  STORYTELLER_START,
+  "",
+  "## Storyteller View",
+  "",
+  STORYTELLER_END,
+  ""
+];
 tR += `${fm.join("\n")}\n${body.join("\n")}`;
 const folder = `Drafts/Databases/Myrkild Units/${origin}/${era}`;
 await ensureFolder(folder);

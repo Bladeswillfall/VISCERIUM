@@ -1,6 +1,8 @@
 ---
-title: "The Verigoth Chain Census"
-description: "A six-year accounting of captives, debts and hereditary bondage conducted across the Verigoth chain-holds."
+title: The Verigoth Chain Census
+description: >-
+  A six-year accounting of captives, debts and hereditary bondage conducted
+  across the Verigoth chain-holds.
 status: published
 type: event
 era: CITADEL
@@ -32,20 +34,21 @@ timeline:
   era: auto
   order: 7
 location:
-  - "Verigoth Chain Holds"
+  - Verigoth Chain Holds
 faction:
-  - "Verigoth Factors"
+  - Verigoth Factors
 participants:
-  - "Chain Census Riders"
-outcome: "Bondage became a portable, enforceable commercial record."
+  - Chain Census Riders
+outcome: 'Bondage became a portable, enforceable commercial record.'
 tags:
-  - "citadel"
-  - "timeline-showcase"
-  - "verigoth"
+  - citadel
+  - timeline-showcase
+  - verigoth
 slug: eras/citadel/events/the-verigoth-chain-census
 eraStyle: e1
-sourcePath: "Eras/CITADEL/Events/The Verigoth Chain Census.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/CITADEL/Events/The Verigoth Chain Census.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 A six-year accounting of captives, debts and hereditary bondage conducted across the Verigoth chain-holds.

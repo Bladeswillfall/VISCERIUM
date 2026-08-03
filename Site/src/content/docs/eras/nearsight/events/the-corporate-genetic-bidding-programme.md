@@ -1,6 +1,8 @@
 ---
-title: "The Corporate Genetic Bidding Programme"
-description: "States auctioned exclusive enhancement contracts to corporations in exchange for population-scale genetic services."
+title: The Corporate Genetic Bidding Programme
+description: >-
+  States auctioned exclusive enhancement contracts to corporations in exchange
+  for population-scale genetic services.
 status: published
 type: event
 era: NEARSIGHT
@@ -33,21 +35,24 @@ timeline:
   era: auto
   order: 3
 location:
-  - "Continental Genetic Markets"
+  - Continental Genetic Markets
 faction:
-  - "National Enhancement Boards"
-  - "Corporate Gene Houses"
+  - National Enhancement Boards
+  - Corporate Gene Houses
 participants:
-  - "Bid Cohorts"
-outcome: "Genetic traits became strategic assets allocated through corporate concessions."
+  - Bid Cohorts
+outcome: >-
+  Genetic traits became strategic assets allocated through corporate
+  concessions.
 tags:
-  - "nearsight"
-  - "timeline-showcase"
-  - "genetics"
+  - nearsight
+  - timeline-showcase
+  - genetics
 slug: eras/nearsight/events/the-corporate-genetic-bidding-programme
 eraStyle: e3
-sourcePath: "Eras/NEARSIGHT/Events/The Corporate Genetic Bidding Programme.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/NEARSIGHT/Events/The Corporate Genetic Bidding Programme.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 States auctioned exclusive enhancement contracts to corporations in exchange for population-scale genetic services.

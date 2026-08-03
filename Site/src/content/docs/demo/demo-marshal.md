@@ -1,6 +1,8 @@
 ---
 title: Demo Marshal
-description: "NON-CANON character used to verify directed membership and command edges in hierarchy layout."
+description: >-
+  NON-CANON character used to verify directed membership and command edges in
+  hierarchy layout.
 status: published
 type: character
 icon: character
@@ -11,12 +13,12 @@ relationships:
   member-of:
     - target: Demo Concord
       directed: true
-      description: "Directed membership edge for hierarchy testing."
+      description: Directed membership edge for hierarchy testing.
   commands:
     - target: Demo Frontier Fort
       directed: true
       since: 130
-      description: "Directed command edge from character to location."
+      description: Directed command edge from character to location.
 related:
   - Demo Concord
   - Demo Frontier Fort
@@ -25,9 +27,12 @@ tags:
   - non-canon
 slug: demo/demo-marshal
 eraStyle: e1
-links: ["demo/demo-concord/","demo/demo-frontier-fort/"]
-sourcePath: "Demo/Demo Marshal.md"
-updated: "2026-07-23T17:50:01+01:00"
+links:
+  - demo/demo-concord/
+  - demo/demo-frontier-fort/
+giscus: true
+sourcePath: Demo/Demo Marshal.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

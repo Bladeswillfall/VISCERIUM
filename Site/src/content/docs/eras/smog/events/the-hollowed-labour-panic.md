@@ -1,6 +1,8 @@
 ---
-title: "The Hollowed Labour Panic"
-description: "Rumours that missing workers had returned altered spread across the industrial wards and triggered violent inspections."
+title: The Hollowed Labour Panic
+description: >-
+  Rumours that missing workers had returned altered spread across the industrial
+  wards and triggered violent inspections.
 status: published
 type: event
 era: SMOG
@@ -25,21 +27,22 @@ timeline:
   era: auto
   order: 7
 location:
-  - "South Stack District"
+  - South Stack District
 faction:
-  - "Municipal Watch"
-  - "Factory Mutual Societies"
+  - Municipal Watch
+  - Factory Mutual Societies
 participants:
-  - "Night Shift Workers"
-outcome: "Thousands were detained, branded or expelled without proof."
+  - Night Shift Workers
+outcome: 'Thousands were detained, branded or expelled without proof.'
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "myrkild"
+  - smog
+  - timeline-showcase
+  - myrkild
 slug: eras/smog/events/the-hollowed-labour-panic
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Hollowed Labour Panic.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Hollowed Labour Panic.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Rumours that missing workers had returned altered spread across the industrial wards and triggered violent inspections.

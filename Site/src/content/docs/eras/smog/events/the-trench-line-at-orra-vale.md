@@ -1,6 +1,8 @@
 ---
-title: "The Trench Line at Orra Vale"
-description: "Three winters of static warfare turned Orra Vale into the model for industrial fortification and generational siege."
+title: The Trench Line at Orra Vale
+description: >-
+  Three winters of static warfare turned Orra Vale into the model for industrial
+  fortification and generational siege.
 status: published
 type: event
 era: SMOG
@@ -32,21 +34,22 @@ timeline:
   era: auto
   order: 6
 location:
-  - "Orra Vale"
+  - Orra Vale
 faction:
-  - "Askalian Expeditionary Army"
-  - "Krass Dominion"
+  - Askalian Expeditionary Army
+  - Krass Dominion
 participants:
-  - "Orra Trench Armies"
-outcome: "Neither side gained the valley; both copied its defences."
+  - Orra Trench Armies
+outcome: Neither side gained the valley; both copied its defences.
 tags:
-  - "smog"
-  - "timeline-showcase"
-  - "trench-war"
+  - smog
+  - timeline-showcase
+  - trench-war
 slug: eras/smog/events/the-trench-line-at-orra-vale
 eraStyle: e2
-sourcePath: "Eras/SMOG/Events/The Trench Line at Orra Vale.md"
-updated: "2026-07-23T13:47:19Z"
+sourcePath: Eras/SMOG/Events/The Trench Line at Orra Vale.md
+updated: '2026-07-31T11:49:51+01:00'
+giscus: true
 ---
 
 Three winters of static warfare turned Orra Vale into the model for industrial fortification and generational siege.
