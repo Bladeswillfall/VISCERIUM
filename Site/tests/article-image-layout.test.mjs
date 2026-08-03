@@ -132,6 +132,15 @@ test('Obsidian renders frontmatter headerImage in Reading View and Live Preview'
   assert.match(runtime, /metadataCache\.on\('changed'/);
   assert.match(runtime, /return \/\^https:\\\/\\\//);
   assert.doesNotMatch(runtime, /return \/\^https\?:/);
+  assert.match(runtime, /function isUrlReference\(reference\)/);
+
+  const httpsBranch = runtime.indexOf('if (isExternalImage(reference))');
+  const rejectedUrlBranch = runtime.indexOf('if (isUrlReference(reference)) return undefined;');
+  const vaultLookup = runtime.indexOf('const direct = app.vault.getAbstractFileByPath');
+  assert.ok(httpsBranch >= 0);
+  assert.ok(rejectedUrlBranch > httpsBranch);
+  assert.ok(vaultLookup > rejectedUrlBranch);
+
   assert.match(runtime, /decorated \+= decorateImageEmbeds\(container\)/);
   assert.match(runtime, /ownerDocument:\s*target\.ownerDocument/);
   assert.match(runtime, /onunload\(\)[\s\S]*?getLeavesOfType\('markdown'\)[\s\S]*?removeHeaderImages\(leaf\.view\?\.containerEl\)/);
