@@ -2,6 +2,7 @@ const { Notice, Plugin } = require('obsidian');
 
 const ALIGNMENTS = new Set(['left', 'right', 'center', 'wide', 'full']);
 const SHAPE_FLAGS = new Set(['shape', 'contour']);
+const IMAGE_EXTENSIONS = new Set(['avif', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']);
 const IMAGE_CLASSES = [
   'vc-image-embed',
   'vc-image-left',
@@ -11,6 +12,8 @@ const IMAGE_CLASSES = [
   'vc-image-full',
   'vc-image-shape',
 ];
+const HEADER_SELECTOR = '[data-vc-header-image="true"]';
+const HEADER_HOST_CLASS = 'vc-header-host';
 
 function clampInteger(value, minimum, maximum) {
   const number = Number(value);
@@ -123,26 +126,188 @@ function decorateImageEmbeds(root) {
   return decorated;
 }
 
+function normaliseHeaderImageValue(value) {
+  let candidate = value;
+  if (Array.isArray(candidate)) candidate = candidate[0];
+  if (candidate && typeof candidate === 'object') {
+    candidate = candidate.path ?? candidate.link ?? candidate.file ?? candidate.value;
+  }
+
+  let text = String(candidate ?? '').trim();
+  if (!text) return '';
+
+  const wikilink = text.match(/^!?\[\[([\s\S]+?)\]\]$/);
+  if (wikilink) text = wikilink[1];
+
+  return text.split('|')[0].trim();
+}
+
+function isExternalImage(reference) {
+  return /^https?:\/\//i.test(reference);
+}
+
+function isImageFile(file) {
+  return Boolean(file?.extension && IMAGE_EXTENSIONS.has(String(file.extension).toLowerCase()));
+}
+
+function resolveHeaderImage(app, value, sourcePath) {
+  const reference = normaliseHeaderImageValue(value);
+  if (!reference) return undefined;
+
+  if (isExternalImage(reference)) {
+    return { key: reference, src: reference, file: undefined };
+  }
+
+  const direct = app.vault.getAbstractFileByPath(reference.replace(/^\/+/, ''));
+  if (isImageFile(direct)) {
+    return { key: direct.path, src: app.vault.getResourcePath(direct), file: direct };
+  }
+
+  const linked = app.metadataCache.getFirstLinkpathDest(reference, sourcePath);
+  if (isImageFile(linked)) {
+    return { key: linked.path, src: app.vault.getResourcePath(linked), file: linked };
+  }
+
+  const filename = reference.split('/').pop()?.toLowerCase();
+  if (!filename) return undefined;
+
+  const matches = app.vault.getFiles().filter((file) => (
+    file.path.startsWith('Assets/Images/')
+    && file.name.toLowerCase() === filename
+    && isImageFile(file)
+  ));
+
+  if (matches.length !== 1) return undefined;
+  const file = matches[0];
+  return { key: file.path, src: app.vault.getResourcePath(file), file };
+}
+
+function headerTargets(container) {
+  if (!container?.querySelectorAll) return [];
+  return [...container.querySelectorAll(
+    '.markdown-preview-view .markdown-preview-sizer, .markdown-source-view.mod-cm6 .cm-sizer',
+  )];
+}
+
+function removeHeaderImages(container) {
+  if (!container?.querySelectorAll) return;
+  for (const figure of container.querySelectorAll(HEADER_SELECTOR)) figure.remove();
+  for (const host of container.querySelectorAll(`.${HEADER_HOST_CLASS}`)) host.classList.remove(HEADER_HOST_CLASS);
+}
+
+function createHeaderFigure({ source, alt, decorative }) {
+  const figure = document.createElement('figure');
+  figure.className = 'vc-header-figure';
+  figure.dataset.vcHeaderImage = 'true';
+  figure.dataset.vcHeaderSource = source.key;
+  figure.contentEditable = 'false';
+
+  const image = document.createElement('img');
+  image.className = 'vc-header-image';
+  image.src = source.src;
+  image.alt = decorative ? '' : alt;
+  image.decoding = 'async';
+  image.draggable = false;
+  if (decorative) figure.setAttribute('aria-hidden', 'true');
+
+  figure.append(image);
+  return figure;
+}
+
+function renderHeaderImage({ app, container, file }) {
+  if (!container || !file) {
+    removeHeaderImages(container);
+    return false;
+  }
+
+  const frontmatter = app.metadataCache.getFileCache(file)?.frontmatter ?? {};
+  const source = resolveHeaderImage(app, frontmatter.headerImage, file.path);
+  const targets = headerTargets(container);
+
+  if (!source || targets.length === 0) {
+    removeHeaderImages(container);
+    return false;
+  }
+
+  const decorative = frontmatter.decorativeImage === true;
+  const alt = String(frontmatter.alt ?? `${file.basename} header image`).trim();
+  const expectedAlt = decorative ? '' : alt;
+  const targetSet = new Set(targets);
+
+  for (const figure of container.querySelectorAll(HEADER_SELECTOR)) {
+    if (!targetSet.has(figure.parentElement)) figure.remove();
+  }
+
+  for (const target of targets) {
+    target.classList.add(HEADER_HOST_CLASS);
+    let figure = target.querySelector(`:scope > ${HEADER_SELECTOR}`);
+    const image = figure?.querySelector('img');
+    const currentSource = figure?.dataset.vcHeaderSource;
+    const currentAlt = image?.getAttribute('alt') ?? '';
+
+    if (!figure || !image || currentSource !== source.key || currentAlt !== expectedAlt) {
+      figure?.remove();
+      figure = createHeaderFigure({ source, alt, decorative });
+      target.insertBefore(figure, target.firstChild);
+    } else if (target.firstChild !== figure) {
+      target.insertBefore(figure, target.firstChild);
+    }
+  }
+
+  return true;
+}
+
 module.exports = class VisceriumImageToolsPlugin extends Plugin {
   async onload() {
-    this.registerMarkdownPostProcessor((element) => {
-      decorateImageEmbeds(element);
-    });
+    let refreshTimer;
 
     const refreshWorkspace = () => {
-      window.requestAnimationFrame(() => decorateImageEmbeds(document));
+      let rendered = 0;
+      for (const leaf of this.app.workspace.getLeavesOfType('markdown')) {
+        const view = leaf.view;
+        if (renderHeaderImage({ app: this.app, container: view?.containerEl, file: view?.file })) rendered += 1;
+      }
+      return rendered;
     };
 
-    this.registerEvent(this.app.workspace.on('layout-change', refreshWorkspace));
-    this.registerEvent(this.app.workspace.on('active-leaf-change', refreshWorkspace));
+    const scheduleRefresh = () => {
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => {
+        window.requestAnimationFrame(refreshWorkspace);
+      }, 80);
+    };
+
+    this.register(() => window.clearTimeout(refreshTimer));
+
+    this.registerMarkdownPostProcessor((element) => {
+      decorateImageEmbeds(element);
+      scheduleRefresh();
+    });
+
+    this.registerEvent(this.app.workspace.on('layout-change', scheduleRefresh));
+    this.registerEvent(this.app.workspace.on('active-leaf-change', scheduleRefresh));
+    this.registerEvent(this.app.workspace.on('file-open', scheduleRefresh));
+    this.registerEvent(this.app.workspace.on('editor-change', scheduleRefresh));
+    this.registerEvent(this.app.metadataCache.on('changed', scheduleRefresh));
+    this.registerEvent(this.app.vault.on('rename', scheduleRefresh));
+    this.registerEvent(this.app.vault.on('delete', scheduleRefresh));
+
+    this.app.workspace.onLayoutReady(scheduleRefresh);
 
     this.addCommand({
       id: 'refresh-article-image-layouts',
       name: 'Refresh article image layouts',
       callback: () => {
         const decorated = decorateImageEmbeds(document);
-        new Notice(`Refreshed ${decorated} VISCERIUM image layout${decorated === 1 ? '' : 's'}.`);
+        const headers = refreshWorkspace();
+        new Notice(
+          `Refreshed ${decorated} VISCERIUM image layout${decorated === 1 ? '' : 's'} and ${headers} article header${headers === 1 ? '' : 's'}.`,
+        );
       },
     });
+  }
+
+  onunload() {
+    removeHeaderImages(document);
   }
 };
