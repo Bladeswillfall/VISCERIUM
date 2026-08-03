@@ -52,9 +52,43 @@ created:
 updated:
 ```
 
-This applies to Lore Entities, Story Entities, Myrkild Units, events, characters, factions, locations, eras, maps, image records, and timelines.
+This applies to general articles, characters, factions, locations, events, species, items, calendars, eras, maps, image records, timelines, Story Entities, and Myrkild Units.
 
 Do not type dates into a new note unless you are deliberately preserving a known source date.
+
+## Folder-aware templates
+
+Templater applies the internal folder router when you create a Markdown note anywhere beneath `Lore` or `Drafts/Inbox`.
+
+The router examines the folder path from the nearest folder outward. The nearest recognised semantic folder wins.
+
+| Folder examples | Template and `type` |
+| --- | --- |
+| `Characters`, `People`, `NPCs` | Character; `type: character` |
+| `Factions`, `Nations`, `Kingdoms`, `Orders`, `Cults`, `Corporations` | Faction; `type: faction` |
+| `Locations`, `Regions`, `Settlements`, `Cities`, `Wilderness`, `Ruins`, `Worlds` | Location; `type: location` |
+| `Events`, `Battles`, `Conflicts` | Event; `type: event` |
+| `Species`, `Fauna`, `Reptile`, `Mammals`, `Birds`, `Flora`, `Fungi`, `Myrkildicary` | Species; `type: species` |
+| `Items`, `Weapons`, `Weaponry`, `Armour`, `Equipment`, `Tools`, `Artefacts`, `Vehicles`, `Technology` | Item; `type: item` |
+| `Maps`, `Images`, `Timelines`, `Calendar` | The matching specialist template |
+| Directly beneath `Lore/Eras` | Era; `type: era` |
+| `Degel System` | General article; `type: article` |
+
+Historical era folders also seed the controlled scalar `era` value. For example, a note created in `Lore/Eras/CITADEL/Weapons & Armour/Weaponry` receives the Item template, `type: item`, `item_type: weapon`, and `era: CITADEL`.
+
+Biological subfolders seed `species_kind`. For example, a note created in a `Reptile` folder receives the Species template and `species_kind: reptile`.
+
+The router does not move the note. The folder you selected remains its location.
+
+When no folder has a recognised meaning, Templater asks which supported template to use rather than guessing silently.
+
+The specialist Story Entity databases remain separate:
+
+- Notes created beneath `Drafts/Databases/Fauna`, `Flora`, `Fungi`, or `Items` use the progressive Story Entity workflow.
+- Nested database folders inherit the parent Story Entity type and retain the nested folder.
+- Notes created beneath `Drafts/Databases/Myrkild Units` use the Myrkild Unit workflow.
+
+Restart Obsidian after pulling changes to Templater settings or user scripts.
 
 ## World Anvil imports
 
@@ -97,16 +131,26 @@ Create one test note with each Home action that you use:
 - **+ Story Entity**
 - **+ Myrkild Unit**
 
+Also create disposable notes directly inside representative semantic folders:
+
+- one beneath a `Weaponry` or `Armour` folder;
+- one beneath a `Reptile` folder;
+- one beneath a `Nations` folder.
+
 For each test note:
 
-1. Confirm that the template contains blank `created:` and `updated:` properties.
-2. Type a short sentence.
-3. Confirm that `created`, `updated`, and `word_count` populate.
-4. Add one unchecked task and confirm that `open_task_count` appears.
-5. Change `status` and `type` with Metadata Menu.
-6. Choose one `headerImage`.
-7. Set the era with VISCERIUM Creator Tools, not Metadata Menu.
-8. Close and reopen Obsidian. Confirm that the settings remain.
+1. Confirm that the expected template and `type` were applied.
+2. Confirm that a recognised item or species subfolder filled `item_type` or `species_kind`.
+3. Confirm that a historical era in the path filled `era`.
+4. Confirm that the note remained in the folder where you created it.
+5. Confirm that the template contains blank `created:` and `updated:` properties.
+6. Type a short sentence.
+7. Confirm that `created`, `updated`, and `word_count` populate.
+8. Add one unchecked task and confirm that `open_task_count` appears.
+9. Change `status` and `type` with Metadata Menu.
+10. Choose one `headerImage` where the template supports it.
+11. Set or change the era with VISCERIUM Creator Tools, not Metadata Menu.
+12. Close and reopen Obsidian. Confirm that the settings remain.
 
 Then run:
 
