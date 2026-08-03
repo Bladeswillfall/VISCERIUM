@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { transformCodexFormatting } from '../scripts/codex-formatting.mjs';
+import { findVaultNote } from './helpers/vault-note.mjs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
@@ -32,8 +33,12 @@ test('structural borders are targeted without flattening article callouts, timel
   assert.match(reset, /@media \(forced-colors: active\)/);
 });
 
-test('the Okse Dominion source uses responsive two-column authoring blocks', () => {
-  const source = read('../../Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md');
+test('the Okse Dominion source uses responsive two-column authoring blocks', async () => {
+  const { markdown: source } = await findVaultNote({
+    title: 'Okse Dominion',
+    type: 'faction',
+    era: 'CITADEL',
+  });
   const columnBlocks = source.match(/^\[cols:1-1 gap=xl align=start\]$/gm) ?? [];
 
   assert.ok(columnBlocks.length >= 4, 'expected multiple editorial two-column sections');
