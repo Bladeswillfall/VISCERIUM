@@ -17,6 +17,29 @@ function describeCriteria(criteria) {
     .join(', ');
 }
 
+function routeSegment(value) {
+  return String(value ?? '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^A-Za-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase();
+}
+
+export function vaultNoteRoute(note) {
+  if (!note || typeof note !== 'object') throw new TypeError('vaultNoteRoute requires a located Vault note.');
+
+  const explicitSlug = typeof note.data?.slug === 'string' ? note.data.slug.trim() : '';
+  if (explicitSlug) return `/${explicitSlug.replace(/^\/+|\/+$/g, '')}/`;
+
+  const sourcePath = String(note.relativePath ?? '').replace(/\\/g, '/').replace(/\.(?:md|mdx)$/i, '');
+  const segments = sourcePath.split('/').filter(Boolean).map(routeSegment).filter(Boolean);
+  if (!segments.length) throw new Error('Cannot derive a public route from an empty Vault note path.');
+
+  return `/${segments.join('/')}/`;
+}
+
 export async function findVaultNote(criteria, { root = DEFAULT_LORE_ROOT } = {}) {
   if (!criteria || typeof criteria !== 'object' || Array.isArray(criteria)) {
     throw new TypeError('findVaultNote requires a frontmatter criteria object.');
@@ -55,4 +78,8 @@ export async function findVaultNote(criteria, { root = DEFAULT_LORE_ROOT } = {})
   }
 
   return matches[0];
+}
+
+export async function findVaultNoteRoute(criteria, options) {
+  return vaultNoteRoute(await findVaultNote(criteria, options));
 }
