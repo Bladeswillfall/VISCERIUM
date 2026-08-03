@@ -83,6 +83,7 @@ World Anvil triage colour means migration state, not editorial importance:
 
 ### Reading and rendered content
 
+- Article widths
 - Heading hierarchy
 - Paragraph spacing
 - Link styling
@@ -98,6 +99,8 @@ World Anvil triage colour means migration state, not editorial importance:
 - Tag styling
 - Checkbox styling
 - Hover previews
+
+`Article widths` owns the responsive article lane for ordinary Markdown notes in Reading View and Live Preview. It widens the header image, Properties block, article body, tables, callouts and embeds together while preserving safe gutters. `Home dashboard` remains the owner for [[Home]].
 
 `Timeline styling` is the Obsidian presentation bridge for Chronos and the shared VISCERIUM timeline renderer. It does not introduce timeline syntax or duplicate chronology metadata.
 
@@ -133,9 +136,11 @@ Do not recreate one of these as another parallel override. Change the owning sub
 
 ## Article width
 
-Ordinary note width belongs to the active Obsidian theme. Do not add a second global `markdown-preview-sizer` width system in snippets.
+`Article widths.css` owns ordinary Markdown sizing. It applies the same centred, responsive lane to Reading View and Live Preview, with a `92rem` maximum and gutters that contract safely in narrow panes.
 
-[[Home]] is the deliberate exception because it is a dashboard rather than prose.
+Do not add competing global `markdown-preview-sizer`, `.cm-sizer`, readable-line-width or theme overrides in another snippet. Change `Article widths.css` when ordinary article sizing needs adjustment.
+
+[[Home]] is excluded because it is a dashboard rather than prose. `Home dashboard.css` owns that page's full-width layout.
 
 ## MySnippets plugin
 
