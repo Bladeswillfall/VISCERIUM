@@ -14,7 +14,6 @@
   --file-line-width: var(--vc-article-max-width);
   --line-width-adaptive: var(--vc-article-max-width);
   --line-width-wide: var(--vc-article-max-width);
-  --max-width: var(--vc-article-max-width);
   --file-margins: var(--vc-article-gutter);
 }
 
