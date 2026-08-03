@@ -11,37 +11,28 @@ async function source() {
   return fs.readFile(templatePath, 'utf8');
 }
 
-test('Storyteller workflow reviews populated modules instead of only missing fields', async () => {
+test('Storyteller insertion template creates one marked Markdown section', async () => {
   const template = await source();
 
-  assert.match(template, /modules\.map\(\(module\) => module\.id\)/);
-  assert.match(template, /populated.*module\.fields\.filter/s);
-  assert.match(template, /\$\{populated\}\/\$\{module\.fields\.length\} populated/);
-  assert.doesNotMatch(template, /const available = modules\.filter/);
+  assert.match(template, /<!-- viscerium:storyteller:start -->/);
+  assert.match(template, /## Storyteller View/);
+  assert.match(template, /<!-- viscerium:storyteller:end -->/);
+  assert.match(template, /tp\.file\.find_tfile/);
+  assert.match(template, /tp\.app\.vault\.read/);
 });
 
-test('Storyteller free-text editing prefills current values and distinguishes keep from clear', async () => {
+test('Storyteller insertion template refuses duplicate or partial marker sets', async () => {
   const template = await source();
 
-  assert.match(template, /populated \? displayValue\(existing\) : ""/);
-  assert.match(template, /Submit blank to clear this field\. Cancel to leave it unchanged\./);
-  assert.match(template, /if \(response === null\) continue/);
-  assert.match(template, /changes\[field\.key\] = \{ action: "clear" \}/);
+  assert.match(template, /current\.includes\(START\) \|\| current\.includes\(END\)/);
+  assert.match(template, /already contains a Storyteller section/);
+  assert.match(template, /tR = ""/);
 });
 
-test('Storyteller controlled fields expose explicit keep and clear choices', async () => {
+test('Storyteller insertion no longer edits frontmatter fields', async () => {
   const template = await source();
 
-  assert.match(template, /Keep current/);
-  assert.match(template, /Clear value/);
-  assert.match(template, /const KEEP = "__viscerium_keep__"/);
-  assert.match(template, /const CLEAR = "__viscerium_clear__"/);
-});
-
-test('clearing Storyteller data removes the property rather than writing empty canon', async () => {
-  const template = await source();
-
-  assert.match(template, /delete frontmatter\[key\]/);
-  assert.doesNotMatch(template, /frontmatter\[key\]\s*=\s*""/);
-  assert.match(template, /Storyteller saved:/);
+  assert.doesNotMatch(template, /processFrontMatter/);
+  assert.doesNotMatch(template, /frontmatter\[/);
+  assert.doesNotMatch(template, /current_wants|local_tension|story_complication/);
 });
