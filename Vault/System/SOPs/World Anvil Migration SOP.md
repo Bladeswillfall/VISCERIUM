@@ -107,23 +107,23 @@ The import queue is excluded from Auto-Properties. The migration pass seeds `upd
 
 > **Why:** Moving a file preserves its filesystem creation time on common systems. A blank `created:` key would therefore invite Auto-Properties to lock in a false import-time date.
 
-### 5. Clean filed filenames
+### 5. Normalise filed import filenames
 
-Audit filed Lore notes after a filing batch:
+From `Site`, audit the filed Lore corpus with:
 
 ```bash
 npm run migration:worldanvil:filenames
 ```
 
-Apply the safe renames when the audit reports no unresolved collision:
+Apply safe renames with:
 
 ```bash
 npm run migration:worldanvil:filenames:write
 ```
 
-The filename pass removes the World Anvil record prefix and trailing export ID. For example, `Organization-Drai Dynasty-40e.md` becomes `Drai Dynasty.md`. It updates matching Obsidian wikilinks and preserves `import_source_file` as migration provenance.
+This removes the World Anvil type prefix and trailing export ID from filed note names, for example `Organization-Drai Dynasty-40e.md` becomes `Drai Dynasty.md`. It preserves `import_source_file` inside the note and updates matching Obsidian wikilinks.
 
-The command never overwrites an existing target filename. Resolve any reported collision manually before rerunning it.
+The command compares proposed targets against existing notes using case-insensitive, Unicode-normalised paths. It reports and skips collisions rather than overwriting a note, including collisions such as `FOO.md` against `foo.md` that would be unsafe on Windows or macOS.
 
 ## Check the result
 
@@ -143,7 +143,6 @@ Confirm these conditions:
 4. The description is accurate enough for a card or public summary.
 5. No unresolved migration task remains hidden by a move.
 6. The note has a deliberate destination and status.
-7. Filed notes use readable filenames without World Anvil record prefixes or export IDs.
 
 ## Stop condition
 
