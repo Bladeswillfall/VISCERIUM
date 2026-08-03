@@ -5,6 +5,7 @@ updated: 2026-08-03
 status: published
 type: species
 development_level: stub
+species_kind: Myrkild
 tags:
   - cells
   - nadirs
