@@ -130,7 +130,7 @@ export async function normaliseWorldAnvilFilenames({ vaultRoot = DEFAULT_VAULT, 
     filesWithUpdatedLinks: [],
   };
 
-  if (!write || plan.collisions.length) return report;
+  if (!write) return report;
 
   const stemRenames = new Map(plan.renames.map(({ oldStem, newStem }) => [oldStem, newStem]));
   for (const relativePath of await markdownFiles(vaultRoot)) {
@@ -180,5 +180,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     write: args.includes('--write'),
   });
   printReport(report);
-  if (report.collisions.length) process.exitCode = 1;
+  if (report.collisions.length && !args.includes('--allow-collisions')) process.exitCode = 1;
 }
