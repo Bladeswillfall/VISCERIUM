@@ -39,6 +39,10 @@ function toPosix(value) {
   return String(value).replace(/\\/g, '/');
 }
 
+function collisionKey(value) {
+  return toPosix(value).normalize('NFC').toLocaleLowerCase('en');
+}
+
 function normalisedFilename(filename) {
   const match = String(filename).match(exportFilename);
   if (!match) return null;
@@ -73,6 +77,13 @@ function rewriteWikilinks(markdown, stemRenames) {
 export async function planWorldAnvilFilenameNormalisation({ vaultRoot = DEFAULT_VAULT } = {}) {
   const loreRoot = path.join(vaultRoot, 'Lore');
   const files = await markdownFiles(loreRoot);
+  const existingPaths = new Set(files.map(toPosix));
+  const existingPathIndex = new Map();
+  for (const relativePath of files) {
+    const key = collisionKey(relativePath);
+    if (!existingPathIndex.has(key)) existingPathIndex.set(key, toPosix(relativePath));
+  }
+
   const renames = [];
   const collisions = [];
   const targetIndex = new Map();
@@ -85,22 +96,23 @@ export async function planWorldAnvilFilenameNormalisation({ vaultRoot = DEFAULT_
     const source = path.join(loreRoot, relativePath);
     const targetRelativePath = path.join(path.dirname(relativePath), targetFilename);
     const target = path.join(loreRoot, targetRelativePath);
-    const key = toPosix(targetRelativePath).toLocaleLowerCase('en');
+    const sourcePath = toPosix(relativePath);
+    const targetPath = toPosix(targetRelativePath);
+    const sourceKey = collisionKey(sourcePath);
+    const key = collisionKey(targetPath);
     const duplicate = targetIndex.get(key);
+    const exactTargetExists = existingPaths.has(targetPath);
+    const caseInsensitiveTargetExists = existingPathIndex.has(key) && key !== sourceKey;
 
-    let targetExists = false;
-    try {
-      await fs.access(target);
-      targetExists = true;
-    } catch {
-      targetExists = false;
-    }
-
-    if (duplicate || targetExists) {
+    if (duplicate || exactTargetExists || caseInsensitiveTargetExists) {
       collisions.push({
         source: toPosix(path.relative(vaultRoot, source)),
         target: toPosix(path.relative(vaultRoot, target)),
-        reason: duplicate ? 'duplicate-planned-target' : 'target-exists',
+        reason: duplicate
+          ? 'duplicate-planned-target'
+          : exactTargetExists
+            ? 'target-exists'
+            : 'target-exists-case-insensitive',
       });
       continue;
     }
