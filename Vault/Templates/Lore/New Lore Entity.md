@@ -16,6 +16,8 @@ const LOCATION_KINDS = {
   route: "Route",
   site: "Site / ruin / landmark",
 };
+const STORYTELLER_START = "<!-- viscerium:storyteller:start -->";
+const STORYTELLER_END = "<!-- viscerium:storyteller:end -->";
 
 function slugify(value) {
   return String(value ?? "")
@@ -121,12 +123,26 @@ const bodies = {
 const guidance = type === "location"
   ? [
       "> [!tip] Grow locations progressively",
-      "> Record only the detail that makes this place usable. Later, use **Templater: Insert template → Add Location Fields** for settlement, wilderness, site or route detail, and **Add Storyteller Fields** for concise story-facing material.",
+      "> Record only the detail that makes this place usable. Later, use **Templater: Insert template → Add Location Fields** for settlement, wilderness, site or route detail. Put scene-facing material in the Storyteller View section at the foot of the note.",
       ""
     ]
   : [];
 
-const body = [...guidance, ...bodies[type], "", "## Related", "", "- [ ] Review this inbox draft and promote it deliberately when established.", ""];
+const body = [
+  ...guidance,
+  ...bodies[type],
+  "",
+  "## Related",
+  "",
+  "- [ ] Review this inbox draft and promote it deliberately when established.",
+  "",
+  STORYTELLER_START,
+  "",
+  "## Storyteller View",
+  "",
+  STORYTELLER_END,
+  ""
+];
 tR += `${frontmatter.join("\n")}\n\n${body.join("\n")}`;
 await ensureFolder(config.folder);
 if (tp.file.folder(true) !== config.folder) await tp.file.move(`${config.folder}/${title}`);
