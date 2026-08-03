@@ -1,6 +1,6 @@
 ---
 title: Okse Dominion
-description: "A harsh mountain dominion of the Oksmun, built on endurance, fortification, oil, slave labour, and old Vetruxi blood."
+description: A harsh mountain dominion of the Oksmun, built on endurance, fortification, oil, slave labour, and old Vetruxi blood.
 status: published
 type: faction
 era: CITADEL
@@ -14,7 +14,7 @@ image: 640faf5b8cd2814de13871ff58c900b6.webp
 headerImage: 1d6a04547df953b36f4d6f8ce73e91f2.webp
 imageTitle: Okse Heraldry
 artist: Fall
-alt: "A stark Oksmun heraldic mark for the Okse Dominion."
+alt: A stark Oksmun heraldic mark for the Okse Dominion.
 map:
   id:
   x:
