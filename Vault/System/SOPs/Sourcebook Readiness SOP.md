@@ -195,6 +195,10 @@ Use the CITADEL Okse Dominion as the first stress test.
 
 Use a society with different structures, such as Askalia, for a later comparison.
 
+## Verification checklist
+
+Use [[Checklists/011a - Sourcebook Reference Readiness Checklist|Sourcebook Reference Readiness Checklist]] after the product-scoped audit.
+
 ## Check the result
 
 1. Confirm that a future writer can understand how the subject functions.
