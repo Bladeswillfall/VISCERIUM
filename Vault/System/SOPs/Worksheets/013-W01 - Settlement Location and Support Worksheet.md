@@ -7,10 +7,10 @@ contributors:
     role: VISCERIUM adaptation and setting decisions
 sources:
   - source_id: SRC-001
+    evidence_role: practical-synthesis
     usage:
       - adapted-framework
       - adapted-heuristic
-      - practical-synthesis
 ---
 # Settlement Location and Support Worksheet
 
