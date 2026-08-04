@@ -12,7 +12,9 @@ The current authorship and provenance statement is:
 
 The current creative-rights notice is:
 
-> **VISCERIUM created by Fall. © Fall. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_CURRENT:START -->
+> **VISCERIUM created by Fall. © 2021–2026 Fall. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_CURRENT:END -->
 
 These statements identify the creator and current rights holder of original VISCERIUM creative material. They do not grant permission to use that material, and they do not claim ownership of third-party software or assets.
 
@@ -20,13 +22,21 @@ These statements identify the creator and current rights holder of original VISC
 
 NULL Holdings Ltd is the intended future IP-holding company for VISCERIUM. It has not yet been incorporated.
 
+The NULL concept and its foundational materials are presently owned by Fall:
+
+<!-- RIGHTS:NULL_MATERIALS:START -->
+> **NULL and its foundational materials © 2025–2026 Fall. All rights reserved.**
+<!-- RIGHTS:NULL_MATERIALS:END -->
+
 The planned role upon incorporation is:
 
 > **Fall — Founder and Creator of VISCERIUM; Founder and Group Creative Director of NULL Holdings Ltd.**
 
 After incorporation and a formal written assignment of the relevant rights, the intended creative-rights notice is:
 
-> **VISCERIUM created by Fall. © NULL Holdings Ltd. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_PLANNED:START -->
+> **VISCERIUM created by Fall. © 2021–2026 NULL Holdings Ltd. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_PLANNED:END -->
 
 Do not use that corporate ownership notice before both incorporation and written assignment have occurred.
 
