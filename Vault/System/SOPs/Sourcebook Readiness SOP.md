@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-011
+checklists:
+  - CHK-011a
+---
 # Sourcebook Readiness SOP
 
 > **Use this SOP when:** Canon may support a sourcebook, gazetteer, setting guide, or adventure product.
@@ -194,6 +200,10 @@ Example scope:
 Use the CITADEL Okse Dominion as the first stress test.
 
 Use a society with different structures, such as Askalia, for a later comparison.
+
+## Verification checklist
+
+Use [[Checklists/011a - Sourcebook Reference Readiness Checklist|Sourcebook Reference Readiness Checklist]] after the product-scoped audit.
 
 ## Check the result
 

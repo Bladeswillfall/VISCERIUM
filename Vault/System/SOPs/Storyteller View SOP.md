@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-010
+checklists:
+  - CHK-010a
+---
 # Storyteller View SOP
 
 > **Use this SOP when:** You add practical scene, encounter, location or story guidance to a Lore article.
@@ -120,6 +126,10 @@ The public build removes an empty marked section from the rendered Lore article.
 Storyteller mode uses the same route, article chrome, sidebar and Markdown rendering as Lore.
 
 Do not generate Storyteller content automatically from ordinary Lore text.
+
+## Verification checklist
+
+Use [[Checklists/010a - Storyteller Publication Checklist|Storyteller Publication Checklist]] before publication.
 
 ## Check the result
 

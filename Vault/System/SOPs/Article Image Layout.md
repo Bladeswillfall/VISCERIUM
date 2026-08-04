@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-005
+checklists:
+  - CHK-005a
+---
 # Article Image Layout
 
 > **Use image flags for ordinary illustrated prose.** Use `[cols]` when the page genuinely needs separate content regions.
@@ -110,6 +116,10 @@ npm run build
 ```
 
 10. Confirm the public article matches Obsidian and that layout flags do not appear in the image alt text.
+
+## Verification checklist
+
+Use [[Checklists/005a - Article Image Layout Publication Checklist|Article Image Layout Publication Checklist]] before publication.
 
 ## Stop conditions
 
