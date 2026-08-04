@@ -69,7 +69,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Image Converter](https://community.obsidian.md/plugins/image-converter) | xRyul | MIT |
 | [Editing Toolbar](https://community.obsidian.md/plugins/editing-toolbar) | pkm-er / cumany | MPL-2.0 |
 | [Breadcrumbs](https://community.obsidian.md/plugins/breadcrumbs) | Michael Porter; originally SkepticMystic | MIT |
-| [Templater](https://community.obsidian.md/plugins/templater-obsidian) | SilentVoid; maintained by Zachatoo | AGPL-3.0 |
+| [Templater](https://community.obsidian.md/plugins/templater-obsidian) | SilentVoid13; maintained by Zachatoo | AGPL-3.0 |
 | [Auto-Properties](https://community.obsidian.md/plugins/auto-properties) | Aaron Gillespie | MIT |
 | [Metadata Menu](https://community.obsidian.md/plugins/metadata-menu) | mdelobelle | MIT |
 | [MySnippets](https://community.obsidian.md/plugins/mysnippets-plugin) | Chetachi; compatibility work also credits Moyf | MPL-2.0 |
