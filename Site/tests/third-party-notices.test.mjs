@@ -60,7 +60,8 @@ test('the vendored MySnippets exception carries MPL source and modification noti
   const licence = read('LICENSES/MPL-2.0.txt');
   const thirdParty = read('THIRD_PARTY_NOTICES.md');
 
-  assert.match(runtime, /Mozilla Public License, v\. 2\.0/);
+  assert.match(runtime, /This Source Code Form is subject to the terms of the Mozilla Public/);
+  assert.match(runtime, /License, v\. 2\.0/);
   assert.match(runtime, /Additional compatibility work in this repository/);
   assert.match(notice, /Recorded VISCERIUM modifications/);
   assert.match(notice, /Source Code Form/);
