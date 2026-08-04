@@ -1,215 +1,121 @@
 # VISCERIUM
 
-This repository publishes the public VISCERIUM worldbuilding codex from an Obsidian vault into an Astro/Starlight site. Write lore in `Vault/`, mark finished public notes with frontmatter, and let the Astro/Starlight site in `Site/` build the Codex.
+> **One timeline. Four eras. Infinite stories.**
 
-The main Codex builds as a static Cloudflare Pages site. A private contact form can be enabled only after its separate Cloudflare Worker, Resend sender, and Turnstile widget have been configured.
+[![Creative IP: All Rights Reserved](https://img.shields.io/badge/Creative_IP-All_Rights_Reserved-8B1E1E?style=flat-square)](LICENSE.md)
+[![First-party code: MIT](https://img.shields.io/badge/First--party_Code-MIT-2E7D32?style=flat-square)](LICENSE-CODE.md)
+[![Third-party software: Upstream licences](https://img.shields.io/badge/Third--party_Software-Upstream_Licences-355C7D?style=flat-square)](THIRD_PARTY_NOTICES.md)
 
-## Folder structure
+[![Canon: No generative AI](https://img.shields.io/badge/Canon-No_Generative_AI-624A7B?style=flat-square)](ATTRIBUTION.md)
+[![Checks](https://github.com/Bladeswillfall/VISCERIUM/actions/workflows/checks.yml/badge.svg?branch=main)](https://github.com/Bladeswillfall/VISCERIUM/actions/workflows/checks.yml)
 
-- `Vault/` — open this folder in Obsidian. Your lore source lives here.
-- `Vault/Lore/` — only public/canon notes from this folder are published.
-- `Vault/Drafts/`, `Vault/Private/`, `Vault/Stories/`, `Vault/System/`, `Vault/Templates/` — never published by the sync script.
-- `Vault/Stories/` — private/offline narrative projects. StoryLine uses this as its project root; story files remain Markdown/YAML and are never Codex sources.
-- `Vault/Assets/Images/` and `Vault/Assets/Maps/` — source assets copied to `Site/public/assets/` when referenced.
-- `Site/` — Astro + Starlight website. Do not manually edit `Site/src/content/docs/` because it is regenerated.
+**Licensing summary:** VISCERIUM's creative universe is proprietary and all rights reserved. Original first-party software is open source under the MIT License. Third-party components remain governed by their respective upstream licences.
 
-## Write a public note
+VISCERIUM is a dark transmedia universe built across one continuous history.
 
-Add this frontmatter to a Markdown note inside `Vault/Lore/`:
+On Errack, within the shadow-veiled Degel System, humanity survives a world of lethal beauty, inherited warfare, occult power, and abominable incursions. Resonance can reshape matter and reality, but every use carries consequences. Kingdoms become republics. Rituals become sciences. Fortress walls become orbital defences.
 
-```yaml
----
-title: Example Title
-description: "A short SEO-safe page description."
-status: published
-type: article
----
-```
+**The world advances. The struggle does not.**
 
-The public route is derived from the note path relative to `Vault/Lore/`, so moving a note changes its URL. The build fails if a public note is missing `title` or `description`, or does not use `status: published`.
+## Four eras. One wounded history.
 
-## Typography
+| Era | The world at that moment |
+| --- | --- |
+| **[CITADEL](https://www.viscerium.co.uk/eras/citadel/)** | Steel, bone, siegecraft, and early gunpowder. Horrors are still mistaken for folklore. |
+| **[SMOG](https://www.viscerium.co.uk/eras/smog/)** | Industry, trenches, and occult machinery. Civilisation industrialises war faster than it learns from it. |
+| **[NEARSIGHT](https://www.viscerium.co.uk/eras/nearsight/)** | Satellites, exoskeletons, and cassette futurism. Humanity believes the world is finally observable. |
+| **[ENTROPY](https://www.viscerium.co.uk/eras/entropy/)** | Orbital war, altered flesh, and extinction pressure. The old struggle escapes the planet. |
 
-The codex typography layer lives in `Site/src/styles/typography.css`.
+These are not separate settings. Each era inherits the damage, discoveries, cultures, lies, and unfinished conflicts of the one before it.
 
-- Display / H1 / site title: `Cinzel`
-- Body prose: `Source Serif 4`
-- UI, metadata, captions, tables, and lower headings: `IBM Plex Sans`
-- Code, terminal fragments, and inline code: `IBM Plex Mono`
-- Mathematical notation: compile-time KaTeX output
+## Enter the Codex
 
-## Codex formatting tags
+The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of the setting: its peoples, creatures, factions, histories, technologies, mysteries, and connected timeline.
 
-The sync script supports a controlled set of BBCode-like tags for worldbuilding layouts. Tags must be written on their own lines. Normal Markdown tables, inline Markdown, and fenced code blocks are left alone.
+- **[Start Here](https://www.viscerium.co.uk/start-here/)**: the guided introduction to VISCERIUM and the Degel System.
+- **[Explore the timeline](https://www.viscerium.co.uk/timelines/super/)**: trace the events that connect all four eras.
+- **[Browse the Codex](https://www.viscerium.co.uk/)**: choose an era and enter the world directly.
 
-Equal columns:
+## What lives in this repository
 
-```md
-[cols]
-[col]
-Left content.
-[/col]
+This repository contains both the source archive and the machinery behind the public Codex.
 
-[col]
-Right content.
-[/col]
-[/cols]
-```
+- `Vault/` contains the Obsidian worldbuilding vault and source Lore.
+- `Site/` contains the Astro and Starlight website.
+- `Tools/` contains creator-facing tools and integrations.
+- `Architecture/` documents the systems that connect the vault, generators, and public site.
 
-Unequal columns:
+The public website is generated from reviewed, published source notes. The repository is therefore not only a website project; it is the working infrastructure for a growing fictional universe.
 
-```md
-[cols:2-1 gap=lg]
-[col]
-Wide main text.
-[/col]
+## Creation, authorship, and rights
 
-[col]
-Narrow sidebar.
-[/col]
-[/cols]
-```
+**Fall — Founder and Creator of VISCERIUM**
 
-Twelve-column responsive row:
+> **VISCERIUM was created and authored by Fall. Its canon was developed without generative AI.**
 
-```md
-[row]
-[col:12 md:8]
-Main article body.
-[/col]
+The current creative-rights notice is:
 
-[col:12 md:4]
-Sidebar body.
-[/col]
-[/row]
-```
+<!-- RIGHTS:VISCERIUM_CURRENT:START -->
+> **VISCERIUM created by Fall. © 2021–2026 Fall. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_CURRENT:END -->
 
-Cards:
+NULL Holdings Ltd is the intended future IP-holding company for VISCERIUM. It has not yet been incorporated, and no VISCERIUM rights have been assigned to it.
 
-```md
-[card:accent]
-Card content.
-[/card]
-```
+The planned role upon incorporation is:
 
-Use Starlight's native aside syntax for callouts:
+> **Fall — Founder and Creator of VISCERIUM; Founder and Group Creative Director of NULL Holdings Ltd.**
 
-```md
-:::note[Archivist note]
-Note content.
-:::
+After incorporation and a formal written assignment, the intended creative-rights notice is:
 
-:::caution[Content warning]
-Warning content.
-:::
+<!-- RIGHTS:VISCERIUM_PLANNED:START -->
+> **VISCERIUM created by Fall. © 2021–2026 NULL Holdings Ltd. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_PLANNED:END -->
 
-:::note[Recovered fragment]
-In-world quoted text.
-:::
+### Creative material
 
-<!-- Legacy drafts using these forms are still converted during sync. -->
-[note:title="Archivist note"]
-Note content.
-[/note]
-```
+VISCERIUM Lore, canon, fiction, articles, artwork, maps, characters, factions, branding, and other original creative material remain proprietary and all rights reserved.
 
-Equation panel:
+Public access does not place that material in the public domain or grant permission to reproduce, adapt, distribute, commercially exploit, or use it as generative-AI training material.
 
-````md
-[equation:title="Resonance decay model"]
-$$
-R(t)=R_0e^{-\lambda t}
-$$
-[/equation]
-````
+### Software
 
-Supported layout tags: `[cols]`, `[row]`, `[col]`, `[card]`, and `[equation]`. Legacy `[note]`, `[warning]`, and `[lore]` tags compile to native Starlight asides.
+Original first-party website code, build scripts, tests, and VISCERIUM creator-tool code are open source under the **[MIT License](LICENSE-CODE.md)**.
 
-## Mathematical notation
+That software licence does not grant rights to VISCERIUM's Lore, artwork, maps, branding, canon, or other creative assets processed or displayed by the software.
 
-The Markdown pipeline renders math at build time with `remark-math`, `rehype-katex`, and KaTeX. Use GitHub-style TeX delimiters in articles:
+Astro, Starlight, Obsidian integrations, map tools, graph tools, timeline libraries, search libraries, fonts, and other third-party components remain subject to their respective upstream licences. See **[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)**.
 
-Inline math:
+Read **[LICENSE.md](LICENSE.md)** for the full repository licence map and **[ATTRIBUTION.md](ATTRIBUTION.md)** for creator and contributor credit.
 
-```md
-Resonance decay can be represented as $R(t)=R_0e^{-\lambda t}$.
-```
+## Get involved
 
-Display math:
+VISCERIUM is intended to grow through readers, players, artists, writers, developers, and other collaborators who care about deep worlds and strong creative identity.
 
-```md
-$$
-R(t)=R_0e^{-\lambda t}
-$$
-```
+### Improve the Codex
 
-Complex display equation:
+Report typos, broken links, content corrections, site bugs, or feature ideas through **[GitHub Issues](https://github.com/Bladeswillfall/VISCERIUM/issues)** or the **[support page](https://www.viscerium.co.uk/support/)**.
 
-```md
-$$
-\begin{aligned}
-\mathcal{R}_{total}
-  &= \sum_{i=1}^{n} \alpha_i \psi_i(t) \\
-  &= \alpha_1 \psi_1(t) + \alpha_2 \psi_2(t) + \cdots + \alpha_n \psi_n(t)
-\end{aligned}
-$$
-```
+### Contribute to the repository
 
-## Local setup
+Code, documentation, accessibility, tooling, testing, and interface improvements are welcome through pull requests. Read **[CONTRIBUTING.md](CONTRIBUTING.md)** before changing the repository.
 
-```bash
-cd Site
-npm ci
-npm run sync
-npm run dev
-npm run build
-```
+Opening a pull request does not transfer copyright or make a contribution part of VISCERIUM canon. Accepted code contributions to MIT-covered paths are distributed under the repository's MIT software licence. Creative canon contributions require separate written contributor terms before acceptance.
 
-Use `npm run dev:sync` when you want to sync notes and start the local site in one command.
+### Propose a creative collaboration
 
-## Compression
+For writing, artwork, games, animation, film, rights, credit, or other collaboration discussions, use the **[contact page](https://www.viscerium.co.uk/contact/)**. If private contact is paused, use GitHub for non-sensitive proposals and keep confidential details out of public issues.
 
-Use the checked-in Obsidian Image Converter preset to create WebP artwork before publishing. Astro and Vite build the static assets, and Cloudflare Pages handles transfer compression when serving them. The build does not mutate source images or maintain parallel `.gz`/`.br` files. See [`Site/COMPRESSION.md`](Site/COMPRESSION.md).
+VISCERIUM remains a curated setting. Suggestions and contributions are reviewed for continuity, quality, tone, and technical fit before they become part of the published Codex.
 
-## Cloudflare Pages settings
+## Maintainer documentation
 
-```text
-Root directory: Site
-Build command: npm run build
-Build output directory: dist
-Node version: 24
-Environment variable: SITE_URL=https://www.viscerium.co.uk
-```
+Operational instructions have been moved out of this front page.
 
-Set `SITE_URL=https://www.viscerium.co.uk` in Cloudflare before production launch. The checked-in fallback uses the same canonical URL.
-
-No committed Wrangler file is required for the Pages deployment. Keep Resend and Turnstile secrets in the separate contact Worker, never in the static Pages project. See [`CLOUDFLARE_PAGES_SETUP.md`](CLOUDFLARE_PAGES_SETUP.md) and [`Site/CONTACT_FORM_SETUP.md`](Site/CONTACT_FORM_SETUP.md).
-
-## Optional community integrations
-
-- Webmentions: the intended identity is `www.viscerium.co.uk`. The integration remains disabled until that domain is registered and verified with Webmention.io.
-- Giscus comments: the intended repository is `Bladeswillfall/VISCERIUM`. The integration remains disabled until new repository and category IDs exist.
-- Ko-fi / Patreon / socials: placeholders live in `Site/src/config/supportLinks.mjs` and can be activated by adding real URLs.
-- Sitemap: `@astrojs/sitemap` is installed and configured in `Site/astro.config.mjs`; it uses `siteConfig.site`, which is controlled by `SITE_URL`.
-- Partytown: `@astrojs/partytown` is installed and configured in `Site/astro.config.mjs` with `dataLayer.push` forwarding for future GA4/GTM-style analytics.
-- GA4 and Cloudflare Web Analytics: add only genuine public identifiers through environment variables or Cloudflare settings.
-
-## Site integrations and analytics placeholders
-
-Installed Astro integrations are configured in `Site/astro.config.mjs`:
-
-- `@astrojs/sitemap` generates the site map from the canonical `site` value. Set `SITE_URL` before production launch so generated URLs use the real domain.
-- `@astrojs/partytown` is enabled only with GA4 and moves that third-party script off the main thread.
-
-GA4 and Cloudflare Web Analytics are disabled by default. Their code paths emit no tracking script unless the matching enable flag and a valid-looking identifier are both present.
-
-When proper GA4 tracking is ready, add the real public values in Cloudflare and local `Site/.env` files as needed:
-
-```bash
-PUBLIC_GA4_ENABLED=0
-PUBLIC_GA4_MEASUREMENT_ID=
-PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED=0
-PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=
-```
-
-Cloudflare's automatic Web Analytics injection and the repository-managed snippet must not both be enabled. Search Console verification is separate public metadata, configured with `PUBLIC_GOOGLE_SITE_VERIFICATION`. Consent and privacy requirements remain an owner decision before analytics is activated.
+- **[Repository licence map](LICENSE.md)**
+- **[Open-source code licence](LICENSE-CODE.md)**
+- **[Third-party notices](THIRD_PARTY_NOTICES.md)**
+- **[Attribution and creator credit](ATTRIBUTION.md)**
+- **[Standard Operating Procedures](Vault/System/SOPs/SOP%20Index.md)**
+- **[Codex Publishing and Deployment SOP](Vault/System/SOPs/Codex%20Publishing%20and%20Deployment%20SOP.md)**
+- **[Architecture Guide](Architecture/README.md)**
+- **[Contribution Guide](CONTRIBUTING.md)**

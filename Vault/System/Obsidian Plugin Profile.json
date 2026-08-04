@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "description": "Tested Obsidian plugin profile for the VISCERIUM creator vault. Install community plugins separately; the repository does not redistribute their upstream runtime payloads.",
+  "enabledPluginList": "Vault/.obsidian/community-plugins.json",
+  "setupGuide": "Vault/System/Obsidian Setup.md",
+  "plugins": [
+    {
+      "id": "image-converter",
+      "name": "Image Converter",
+      "testedVersion": "1.4.5",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/image-converter/data.json"
+    },
+    {
+      "id": "editing-toolbar",
+      "name": "Editing Toolbar",
+      "testedVersion": "4.0.11",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/editing-toolbar/data.json"
+    },
+    {
+      "id": "breadcrumbs",
+      "name": "Breadcrumbs",
+      "testedVersion": "4.21.9",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/breadcrumbs/data.json"
+    },
+    {
+      "id": "templater-obsidian",
+      "name": "Templater",
+      "testedVersion": "2.24.3",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/templater-obsidian/data.json"
+    },
+    {
+      "id": "auto-properties",
+      "name": "Auto-Properties",
+      "testedVersion": "2.3.0",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/auto-properties/data.json"
+    },
+    {
+      "id": "metadata-menu",
+      "name": "Metadata Menu",
+      "testedVersion": "0.8.12",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/metadata-menu/data.json"
+    },
+    {
+      "id": "mysnippets-plugin",
+      "name": "MySnippets",
+      "testedVersion": "1.2.4",
+      "source": "vendored-modified",
+      "sharedSettings": "Vault/.obsidian/plugins/mysnippets-plugin/data.json",
+      "note": "The repository tracks the compatibility runtime because it contains VISCERIUM-specific Obsidian compatibility work under MPL-2.0."
+    },
+    {
+      "id": "storyline",
+      "name": "StoryLine",
+      "testedVersion": "1.10.55",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/storyline/data.json",
+      "note": "The shared settings omit the active project path because StoryLine projects are private and device-local."
+    },
+    {
+      "id": "viscerium-timelines",
+      "name": "VISCERIUM Timelines",
+      "testedVersion": "1.2.0",
+      "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-timelines"
+    },
+    {
+      "id": "viscerium-creator-tools",
+      "name": "VISCERIUM Creator Tools",
+      "testedVersion": "0.2.0",
+      "source": "first-party",
+      "runtimePath": "Vault/.obsidian/plugins/viscerium-creator-tools"
+    },
+    {
+      "id": "viscerium-layout-tools",
+      "name": "VISCERIUM Layout Tools",
+      "testedVersion": "0.2.0",
+      "source": "first-party",
+      "runtimePath": "Vault/.obsidian/plugins/viscerium-layout-tools"
+    },
+    {
+      "id": "viscerium-image-tools",
+      "name": "VISCERIUM Image Tools",
+      "testedVersion": "0.2.1",
+      "source": "first-party",
+      "runtimePath": "Vault/.obsidian/plugins/viscerium-image-tools"
+    },
+    {
+      "id": "iconic",
+      "name": "Iconic",
+      "testedVersion": "1.1.10",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/iconic/data.json"
+    },
+    {
+      "id": "zoom-map",
+      "name": "TTRPG Tools - Maps",
+      "testedVersion": "2.1.9",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/zoom-map/data.json"
+    },
+    {
+      "id": "table-editor-obsidian",
+      "name": "Advanced Tables",
+      "testedVersion": "0.23.2",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/table-editor-obsidian/data.json"
+    },
+    {
+      "id": "chronos",
+      "name": "Chronos Timeline",
+      "testedVersion": "3.6.10",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/chronos/data.json",
+      "note": "The shared profile disables Chronos AI features."
+    },
+    {
+      "id": "dataview",
+      "name": "Dataview",
+      "testedVersion": "0.5.68",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/dataview/data.json"
+    },
+    {
+      "id": "obsidian-git",
+      "name": "Git",
+      "testedVersion": "2.38.6",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/obsidian-git/data.json"
+    },
+    {
+      "id": "obsidian-importer",
+      "name": "Importer",
+      "testedVersion": "1.8.12",
+      "source": "obsidian-community",
+      "sharedSettings": null
+    },
+    {
+      "id": "obsidian-style-settings",
+      "name": "Style Settings",
+      "testedVersion": "1.0.9",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/obsidian-style-settings/data.json"
+    },
+    {
+      "id": "harper",
+      "name": "Harper",
+      "testedVersion": "2.7.0",
+      "source": "obsidian-community",
+      "sharedSettings": null,
+      "note": "Harper caches and personal ignored-lint state are device-local and are not part of the shared profile."
+    }
+  ]
+}

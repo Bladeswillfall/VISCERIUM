@@ -24,28 +24,51 @@ Site/playwright-report/
 Tools/obsidian-viscerium-timelines/node_modules/
 Tools/obsidian-viscerium-timelines/dist/
 
-# Installed Obsidian community plugin bundles
-Vault/.obsidian/plugins/*/main.js
-Vault/.obsidian/plugins/*/styles.css
+# Installed Obsidian community plugins
+# Track enabled plugin IDs in Vault/.obsidian/community-plugins.json.
+# Track tested versions in Vault/System/Obsidian Plugin Profile.json.
+# Ignore upstream runtime code, manifests, maps, workers, binaries, and local state.
+Vault/.obsidian/plugins/*/*
 
-# Plugin-generated settings backups are device-local churn; keep the live config only.
-Vault/.obsidian/plugins/iconic/data.json.backup*
+# Intentional shared third-party plugin settings.
+# Add a new exception only after reviewing the file for secrets, caches, and device state.
+!Vault/.obsidian/plugins/image-converter/data.json
+!Vault/.obsidian/plugins/editing-toolbar/data.json
+!Vault/.obsidian/plugins/breadcrumbs/data.json
+!Vault/.obsidian/plugins/templater-obsidian/data.json
+!Vault/.obsidian/plugins/auto-properties/data.json
+!Vault/.obsidian/plugins/metadata-menu/data.json
+!Vault/.obsidian/plugins/storyline/data.json
+!Vault/.obsidian/plugins/iconic/data.json
+!Vault/.obsidian/plugins/zoom-map/data.json
+!Vault/.obsidian/plugins/table-editor-obsidian/data.json
+!Vault/.obsidian/plugins/chronos/data.json
+!Vault/.obsidian/plugins/dataview/data.json
+!Vault/.obsidian/plugins/obsidian-git/data.json
+!Vault/.obsidian/plugins/obsidian-style-settings/data.json
 
 # MySnippets is intentionally vendored because the community-store 1.2.3
 # bundle is incompatible with current Obsidian menu/toggle behaviour.
-!Vault/.obsidian/plugins/mysnippets-plugin/main.js
-!Vault/.obsidian/plugins/mysnippets-plugin/styles.css
+!Vault/.obsidian/plugins/mysnippets-plugin/
+!Vault/.obsidian/plugins/mysnippets-plugin/**
 
 # VISCERIUM Timelines is maintained in this repository. Track the runnable
 # bundle so the vault integration works immediately after pulling.
-!Vault/.obsidian/plugins/viscerium-timelines/main.js
-!Vault/.obsidian/plugins/viscerium-timelines/styles.css
+!Vault/.obsidian/plugins/viscerium-timelines/
+!Vault/.obsidian/plugins/viscerium-timelines/**
 
 # First-party VISCERIUM creator plugins also ship with their runnable bundles.
-!Vault/.obsidian/plugins/viscerium-creator-tools/main.js
-!Vault/.obsidian/plugins/viscerium-creator-tools/styles.css
-!Vault/.obsidian/plugins/viscerium-layout-tools/main.js
-!Vault/.obsidian/plugins/viscerium-layout-tools/styles.css
+!Vault/.obsidian/plugins/viscerium-creator-tools/
+!Vault/.obsidian/plugins/viscerium-creator-tools/**
+!Vault/.obsidian/plugins/viscerium-layout-tools/
+!Vault/.obsidian/plugins/viscerium-layout-tools/**
+!Vault/.obsidian/plugins/viscerium-image-tools/
+!Vault/.obsidian/plugins/viscerium-image-tools/**
+
+# Plugin-generated settings backups and caches are device-local churn.
+Vault/.obsidian/plugins/*/data.json.backup*
+Vault/.obsidian/plugins/*/cache/
+Vault/.obsidian/plugins/*/.cache/
 
 # Obsidian workspace state
 Vault/.obsidian/workspace.json
