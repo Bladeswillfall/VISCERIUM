@@ -7,9 +7,9 @@ contributors:
     role: VISCERIUM adaptation and setting decisions
 sources:
   - source_id: SRC-001
+    evidence_role: practical-synthesis
     usage:
       - adapted-framework
-      - practical-synthesis
 ---
 # Political System and Fracture Worksheet
 
