@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  migrate:
+  clean:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -26,14 +26,13 @@ jobs:
           cache: npm
           cache-dependency-path: Site/package-lock.json
 
+      - name: Restore generated content baseline
+        run: |
+          git fetch origin main --depth=1
+          git restore --source=origin/main -- Site/src/content/docs
+
       - name: Install dependencies
         run: npm --prefix Site ci --silent --no-audit --no-fund
-
-      - name: Apply migration
-        run: npm --prefix Site run migration:sidebar-wikilinks:write
-
-      - name: Regenerate public content
-        run: npm --prefix Site run sync
 
       - name: Run unit tests
         run: npm --prefix Site run test:unit
@@ -41,9 +40,9 @@ jobs:
       - name: Build site
         run: npm --prefix Site run build
 
-      - name: Commit validated migration
+      - name: Commit focused change set
         run: |
-          git fetch origin main --depth=1
+          git restore --source=origin/main -- Site/src/content/docs
           git show origin/main:.github/workflows/checks.yml > .github/workflows/checks.yml
           rm -f .github/workflows/sidebar-wikilink-migration.yml
           rm -f sidebar-migration-run.log sidebar-frontmatter-diagnostic.log sidebar-isolation.log
@@ -51,5 +50,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Migrate article sidebars to Obsidian links"
+          git commit -m "Keep sidebar migration changes focused"
           git push origin HEAD:fix/sidebar-wikilinks-all-articles
