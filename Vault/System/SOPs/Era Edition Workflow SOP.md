@@ -1,3 +1,7 @@
+---
+document_type: sop
+sop_id: SOP-006
+---
 # Era Edition Workflow SOP
 
 > **Use this SOP when:** One conceptual subject needs different reader-facing facts in different eras.
