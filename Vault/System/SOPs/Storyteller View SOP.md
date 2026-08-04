@@ -121,6 +121,10 @@ Storyteller mode uses the same route, article chrome, sidebar and Markdown rende
 
 Do not generate Storyteller content automatically from ordinary Lore text.
 
+## Verification checklist
+
+Use [[Checklists/010a - Storyteller Publication Checklist|Storyteller Publication Checklist]] before publication.
+
 ## Check the result
 
 1. Confirm that the note contains exactly one start marker and one end marker.
