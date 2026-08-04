@@ -99,6 +99,6 @@ test('package scripts and annual workflow protect notice freshness', () => {
   assert.match(annual, /workflow_dispatch:/);
   assert.match(annual, /cron: '17 3 1 1 \*'/);
   assert.match(annual, /timezone: 'Europe\/London'/);
-  assert.match(annual, /npm run rights:update/);
+  assert.match(annual, /npm --prefix Site run rights:update/);
   assert.match(annual, /gh pr create/);
 });
