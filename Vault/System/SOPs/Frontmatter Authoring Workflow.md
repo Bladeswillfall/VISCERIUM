@@ -196,6 +196,10 @@ npm run build
 
 Confirm that the selected header image copies to the generated site and that the build reports no metadata error.
 
+## Verification checklist
+
+Use [[Checklists/004a - Frontmatter Publication Checklist|Frontmatter Publication Checklist]] before changing a note to `status: published`.
+
 ## If header image selection fails
 
 Metadata Menu writes the selected image filename. The site sync accepts plain image filenames and resolves them against `Vault/Assets/Images`.
