@@ -16,12 +16,15 @@ export const GET: APIRoute = async ({ site }) => {
       const categories = [...new Set(entry.tags)]
         .map((tag) => `    <category term="${escapeXml(tag)}" />`)
         .join('\n');
+      const published = entry.created
+        ? `    <published>${entry.created.toISOString()}</published>\n`
+        : '';
 
       return `  <entry>
     <title>${escapeXml(entry.title)}</title>
     <link href="${escapeXml(entry.url)}" />
     <id>${escapeXml(entry.id)}</id>
-    <updated>${entry.updated.toISOString()}</updated>
+${published}    <updated>${entry.updated.toISOString()}</updated>
     <summary>${escapeXml(entry.description)}</summary>${categories ? `\n${categories}` : ''}
   </entry>`;
     })
