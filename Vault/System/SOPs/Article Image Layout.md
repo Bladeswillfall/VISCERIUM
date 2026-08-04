@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-005
+checklists:
+  - CHK-005a
+---
 # Article Image Layout
 
 > **Use image flags for ordinary illustrated prose.** Use `[cols]` when the page genuinely needs separate content regions.
