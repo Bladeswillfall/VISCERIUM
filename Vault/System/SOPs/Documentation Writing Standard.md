@@ -6,7 +6,7 @@
 >
 > **First action:** Decide whether the text gives instructions or reference information.
 
-Operational documentation includes SOPs, workflow guides, architecture notes, and help.
+Operational documentation includes SOPs, workflow guides, checklists, worksheets, architecture notes, references, and help.
 
 ## Reference
 
@@ -168,6 +168,16 @@ Use **Universal** only for the controlled era-independent scope.
 
 Use **published** for `status: published`.
 
+Use **SOP** for a repeatable procedure.
+
+Use **checklist** for an observable readiness test.
+
+Use **worksheet** for optional development or stress-testing work.
+
+Use **estimate** for a calculated planning result that is not yet canon.
+
+Use **research baseline** for an external historical, material, or practical starting point.
+
 Do not use **canon**, **public**, and **published** as interchangeable status values.
 
 ## UI and command format
@@ -186,6 +196,74 @@ Write exact Obsidian command names in bold.
 
 Example: **VISCERIUM Creator Tools: Set controlled era / Universal scope**
 
+## Operational document identifiers
+
+Assign every operational SOP one permanent identifier in the form `SOP-###`.
+
+Do not change an identifier when the title, folder, or sequence changes.
+
+Do not renumber documents to close a gap.
+
+Use these related identifiers:
+
+- `CHK-###a`, `CHK-###b`, and later letters for checklists;
+- `WKS-###-01`, `WKS-###-02`, and later numbers for worksheets;
+- `SRC-###` for external source records.
+
+New SOP filenames use `### - Title SOP.md`.
+
+New checklist filenames use `###a - Title Checklist.md`.
+
+New worksheet filenames use `###-W01 - Title Worksheet.md`.
+
+Retain an established compatibility filename when renaming it would create a disproportionate link, script, or architecture migration.
+
+Record the permanent identifier in frontmatter and in [[SOP Index]].
+
+## Document roles
+
+### SOP
+
+An SOP explains how to complete repeatable work.
+
+It owns the procedure, checks, limits, and stop condition.
+
+### Checklist
+
+A checklist tests observable results.
+
+Do not copy the SOP procedure into checklist form.
+
+Separate required checks from conditional checks.
+
+Allow **Not applicable** only when the reviewer records a reason.
+
+### Worksheet
+
+A worksheet develops, calculates, or stress-tests material.
+
+Do not make a worksheet a publication requirement unless the parent SOP states the condition.
+
+Do not treat a completed worksheet as canon.
+
+Transfer adopted decisions to the authoritative note.
+
+### Reference
+
+A reference records terminology, commands, evidence, or source provenance.
+
+Do not hide procedural requirements inside a reference-only document.
+
+## Readiness levels
+
+Use **Publication ready** when the article serves its intended public purpose.
+
+Use **Reference ready** when a story, sourcebook, collaborator, or continuity decision needs deeper system support.
+
+Do not require reference readiness for every published article.
+
+Record blocking findings separately from useful future development.
+
 ## SOP structure
 
 Use this structure when it applies:
@@ -198,9 +276,124 @@ Use this structure when it applies:
 
 Complete the structure with these sections:
 
+- **Verification checklist:** Link the applicable checklist when one exists.
 - **Check the result:** State what must be true.
 - **Stop condition:** State when no more work is required.
 - **Troubleshooting:** Give common failures and direct fixes.
+
+## Checklist structure
+
+Use this structure when it applies:
+
+1. Add `document_type`, `checklist_id`, `parent_sop`, and `readiness_level` to frontmatter.
+2. Link to the parent SOP near the start.
+3. Group checks by observable outcome.
+4. Add a final readiness decision.
+5. Keep reusable master checklists unchecked.
+
+Store durable completion records in the article task list, audit note, or project note.
+
+## Worksheet structure
+
+Add these properties to worksheet frontmatter:
+
+- `document_type: worksheet`
+- `worksheet_id`
+- `parent_sop`
+- `contributors`
+- `sources`
+
+End every worksheet with these sections:
+
+1. **Completion record**
+2. **Assumptions and confidence**
+3. **Departures from the research baseline**
+4. **Sources and adaptation notes**
+5. **Original VISCERIUM additions**
+
+A calculation worksheet must label its model status.
+
+A calculation worksheet must show formulas, units, assumptions, and sequential losses where applicable.
+
+## Source attribution
+
+Record an external source when it materially affects:
+
+- structure;
+- prompts;
+- terminology;
+- assumptions;
+- calculations;
+- historical context;
+- process;
+- visual vocabulary.
+
+Use [[System/References/Research Source Register|Research Source Register]] for source IDs and evidence roles.
+
+State how the source was used.
+
+Use one or more of these usage types:
+
+- `inspiration`
+- `visual-reference`
+- `process-reference`
+- `historical-reference`
+- `research-lead`
+- `adapted-framework`
+- `adapted-heuristic`
+- `adapted-calculation`
+
+State the evidence role when a reader could mistake the source for authority.
+
+For community discussions, cite the specific answer and author when practicable.
+
+For a research lead, follow and cite stronger underlying evidence when practicable.
+
+For a visual source, record the feature used and the original creator when known.
+
+Record incomplete attribution instead of guessing.
+
+## Calculation provenance
+
+Cite a borrowed value, range, ratio, formula, or sequence beside the calculation that depends on it.
+
+Record every changed assumption.
+
+Do not present a model output as measured fact.
+
+Use ranges, rounded values, or qualitative bands when precision is unsupported.
+
+Keep incompatible source assumptions separate.
+
+Do not create a false average only to obtain one answer.
+
+## Adaptation and permission
+
+Explain what came from the source.
+
+Explain what VISCERIUM changed.
+
+Explain what VISCERIUM added.
+
+Record the consequence of the departure.
+
+Attribution records provenance.
+
+Attribution does not grant permission to reproduce protected text, tables, worksheets, artwork, or media.
+
+Paraphrase, reorganise, and substantially adapt external frameworks.
+
+## Contributor records
+
+Record the person who adapted the worksheet.
+
+Record the person who completed it.
+
+Record the reviewer when the decision needs review.
+
+Record the date, project, assumptions, confidence, and canon destination.
+
+Do not imply sole authorship when several contributors or external frameworks shaped the document.
 
 ## Writing check
 
@@ -210,6 +403,7 @@ Complete the structure with these sections:
 2. Confirm that the normal route appears before alternatives.
 3. Split each action list that is too difficult to scan.
 4. Confirm that each procedure has a visible result check.
+5. Confirm that each operational relationship links in both directions where practical.
 
 ### Check the language
 
@@ -225,6 +419,8 @@ Complete the structure with these sections:
 2. Confirm each path against the current repository.
 3. Confirm that each `Why` note contains information only.
 4. Confirm that the rewrite does not change the technical meaning.
+5. Confirm that calculations expose assumptions and provenance.
+6. Confirm that attribution does not overstate evidence or permission.
 
 ## Scope
 
