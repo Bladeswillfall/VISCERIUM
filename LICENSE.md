@@ -10,7 +10,9 @@ Original first-party software is open source under the MIT License.
 
 Third-party software remains subject to its own licence terms.
 
-> **VISCERIUM created by Fall. © Fall. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_CURRENT:START -->
+> **VISCERIUM created by Fall. © 2021–2026 Fall. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_CURRENT:END -->
 
 ## Licence map
 
@@ -19,7 +21,7 @@ Third-party software remains subject to its own licence terms.
 | VISCERIUM Lore, canon, fiction, worldbuilding, characters, factions, creatures, histories, terminology, timelines as creative expression, and narrative material | All rights reserved |
 | Original artwork, maps, diagrams, logos, branding, visual identity, and source assets | All rights reserved unless a file states otherwise |
 | Original first-party website code, build scripts, components, styles, tests, and creator-tool code | MIT License under [`LICENSE-CODE.md`](LICENSE-CODE.md) |
-| MySnippets compatibility runtime at `Vault/.obsidian/plugins/mysnippets-plugin/main.js` | Mozilla Public License 2.0 |
+| MySnippets compatibility runtime at `Vault/.obsidian/plugins/mysnippets-plugin/main.js` | Mozilla Public License 2.0; see [`LICENSES/MPL-2.0.txt`](LICENSES/MPL-2.0.txt) and [`LICENSES/MySnippets-NOTICE.md`](LICENSES/MySnippets-NOTICE.md) |
 | Third-party packages, libraries, plugins, fonts, icons, and other external components | Their respective upstream terms; see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) |
 | Generated Codex articles and generated data derived from protected VISCERIUM source material | No broader rights than the protected source material |
 
@@ -99,7 +101,9 @@ NULL Holdings Ltd has not yet been incorporated. It is therefore not named here 
 
 After incorporation and a formal written assignment, the intended creative-rights notice is:
 
-> **VISCERIUM created by Fall. © NULL Holdings Ltd. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_PLANNED:START -->
+> **VISCERIUM created by Fall. © 2021–2026 NULL Holdings Ltd. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_PLANNED:END -->
 
 The software copyright notice in `LICENSE-CODE.md` and other rights documents must also be reviewed when that legal structure is established.
 
