@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-004
+checklists:
+  - CHK-004a
+---
 # Frontmatter Authoring Workflow
 
 > **Next action:** Install the two community plugins, restart Obsidian, then test one new draft.
