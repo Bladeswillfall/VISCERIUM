@@ -36,13 +36,13 @@ outcome: >-
   High-altitude observation became practical for artillery spotting and weather
   study.
 tags:
-  - SMOG
+  - smog
   - timeline-showcase
   - aviation
-  - Events
 slug: eras/smog/events/the-skyhook-demonstration
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Skyhook Demonstration.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

@@ -35,13 +35,13 @@ participants:
   - Amnesty Delegates
 outcome: 'No universal amnesty passed, but local recognition regimes emerged.'
 tags:
-  - ENTROPY
+  - entropy
   - timeline-showcase
   - myrkild
-  - Events
 slug: eras/entropy/events/the-myrkild-amnesty-schism
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Myrkild Amnesty Schism.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

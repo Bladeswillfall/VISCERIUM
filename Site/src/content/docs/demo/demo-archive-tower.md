@@ -20,7 +20,6 @@ map:
 tags:
   - demo
   - non-canon
-  - Locations
 related:
   - Demo Market Ward
 slug: demo/demo-archive-tower
@@ -29,6 +28,7 @@ links:
   - demo/demo-market-ward/
 giscus: true
 sourcePath: Demo/Demo Archive Tower.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

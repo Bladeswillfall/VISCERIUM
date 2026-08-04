@@ -33,13 +33,13 @@ participants:
   - Furnace Crews
 outcome: Production ceased for eleven hours and the union won recognition.
 tags:
-  - SMOG
+  - smog
   - timeline-showcase
   - same-day
-  - Events
 slug: eras/smog/events/the-nine-stack-strike
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Nine-Stack Strike.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

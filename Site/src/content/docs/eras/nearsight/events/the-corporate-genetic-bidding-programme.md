@@ -45,13 +45,13 @@ outcome: >-
   Genetic traits became strategic assets allocated through corporate
   concessions.
 tags:
-  - NEARSIGHT
+  - nearsight
   - timeline-showcase
   - genetics
-  - Events
 slug: eras/nearsight/events/the-corporate-genetic-bidding-programme
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Corporate Genetic Bidding Programme.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

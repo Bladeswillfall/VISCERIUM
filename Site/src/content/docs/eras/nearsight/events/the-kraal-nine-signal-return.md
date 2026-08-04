@@ -34,14 +34,14 @@ participants:
   - Jakkal Team
 outcome: The core was destroyed and all surviving telemetry became contested evidence.
 tags:
-  - NEARSIGHT
+  - nearsight
   - timeline-showcase
   - krg
   - same-day
-  - Events
 slug: eras/nearsight/events/the-kraal-nine-signal-return
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Kraal Nine Signal Return.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

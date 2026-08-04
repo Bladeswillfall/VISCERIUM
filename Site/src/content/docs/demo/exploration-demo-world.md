@@ -19,7 +19,6 @@ tags:
   - non-canon
   - atlas-test
   - ttrpg-maps
-  - Maps
 related:
   - Demo Gate City
   - Demo Frontier Fort
@@ -32,6 +31,7 @@ links:
   - demo/demo-rift-site/
 giscus: true
 sourcePath: Demo/Exploration Demo World.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

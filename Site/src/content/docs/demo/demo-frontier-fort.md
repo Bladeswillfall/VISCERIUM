@@ -28,7 +28,6 @@ map:
 tags:
   - demo
   - non-canon
-  - Locations
 relationships:
   controlled-by:
     - Demo Concord
@@ -41,6 +40,7 @@ links:
   - demo/demo-gate-city/
 giscus: true
 sourcePath: Demo/Demo Frontier Fort.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

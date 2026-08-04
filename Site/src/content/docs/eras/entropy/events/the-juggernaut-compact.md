@@ -34,13 +34,13 @@ participants:
   - Fortress-Fleet Captains
 outcome: Mobile polities gained a common doctrine without surrendering sovereignty.
 tags:
-  - ENTROPY
+  - entropy
   - timeline-showcase
   - juggernauts
-  - Events
 slug: eras/entropy/events/the-juggernaut-compact
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Juggernaut Compact.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

@@ -16,7 +16,6 @@ related:
 tags:
   - demo
   - non-canon
-  - Factions
 slug: demo/demo-directorate
 eraStyle: e1
 links:
@@ -25,6 +24,7 @@ links:
   - demo/demo-rift-site/
 giscus: true
 sourcePath: Demo/Demo Directorate.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

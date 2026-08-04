@@ -19,11 +19,11 @@ map:
 tags:
   - demo
   - non-canon
-  - Locations
 related: []
 slug: demo/demo-hidden-ruin
 eraStyle: e1
 sourcePath: Demo/Demo Hidden Ruin.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

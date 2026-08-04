@@ -44,14 +44,14 @@ outcome: >-
   The basin population was evacuated and the central anomaly was never publicly
   recovered.
 tags:
-  - NEARSIGHT
+  - nearsight
   - timeline-showcase
   - garmir
   - myrkild
-  - Events
 slug: eras/nearsight/events/the-garmir-quarantine
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Garmir Quarantine.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

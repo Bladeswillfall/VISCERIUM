@@ -34,13 +34,13 @@ participants:
   - Midwives of Karn Vey
 outcome: The event was omitted from civic records but preserved in midwives' rolls.
 tags:
-  - CITADEL
+  - citadel
   - timeline-showcase
   - same-day
-  - Events
 slug: eras/citadel/events/the-silence-after-seven-bells
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Silence After Seven Bells.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

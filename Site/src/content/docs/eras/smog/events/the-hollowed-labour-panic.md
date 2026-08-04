@@ -35,13 +35,13 @@ participants:
   - Night Shift Workers
 outcome: 'Thousands were detained, branded or expelled without proof.'
 tags:
-  - SMOG
+  - smog
   - timeline-showcase
   - myrkild
-  - Events
 slug: eras/smog/events/the-hollowed-labour-panic
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Hollowed Labour Panic.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

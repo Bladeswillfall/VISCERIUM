@@ -34,14 +34,14 @@ participants:
   - Jakkal Team
 outcome: The core was recovered before state forces reached the site.
 tags:
-  - NEARSIGHT
+  - nearsight
   - timeline-showcase
   - krg
   - same-day
-  - Events
 slug: eras/nearsight/events/krg-recovery-at-kraal-nine
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/KRG Recovery at Kraal Nine.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

@@ -36,13 +36,13 @@ outcome: >-
   Rapid orbital insertion became credible for cargo, troops and strategic
   recovery.
 tags:
-  - NEARSIGHT
+  - nearsight
   - timeline-showcase
   - rd-76
-  - Events
 slug: eras/nearsight/events/the-rd-76-dart-plunge-trial
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The RD-76 Dart Plunge Trial.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

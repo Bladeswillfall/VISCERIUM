@@ -13,13 +13,13 @@ width: 7680
 height: 3840
 maxZoom: 3
 tags:
-  - CITADEL
+  - citadel
   - errack
   - atlas
-  - Maps
 slug: eras/citadel/errack-citadel-map
 eraStyle: e1
 sourcePath: Eras/CITADEL/Errack CITADEL Map.md
+updated: '2026-08-03T11:13:08Z'
 giscus: true
 ---
 

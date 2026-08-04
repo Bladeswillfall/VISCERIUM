@@ -35,13 +35,13 @@ outcome: >-
   A final shared date was established even though no authority could enforce
   future synchronisation.
 tags:
-  - ENTROPY
+  - entropy
   - timeline-showcase
   - intercalary
-  - Events
 slug: eras/entropy/events/the-last-calendar-correction
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Last Calendar Correction.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

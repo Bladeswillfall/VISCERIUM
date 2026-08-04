@@ -19,7 +19,6 @@ related:
 tags:
   - demo
   - non-canon
-  - Factions
 slug: demo/demo-league
 eraStyle: e1
 links:
@@ -28,6 +27,7 @@ links:
   - demo/demo-trade-port/
 giscus: true
 sourcePath: Demo/Demo League.md
+updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

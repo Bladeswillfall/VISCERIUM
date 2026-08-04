@@ -36,13 +36,13 @@ outcome: >-
   Heavy armour, engineering vehicles and infantry support were reorganised into
   persistent advance corridors.
 tags:
-  - NEARSIGHT
+  - nearsight
   - timeline-showcase
   - tcsc
-  - Events
 slug: eras/nearsight/events/tcsc-bastion-doctrine-adopted
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/TCSC Bastion Doctrine Adopted.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

@@ -34,14 +34,14 @@ participants:
   - The Hollow Guests
 outcome: House Veyr vanished from reliable records within a generation.
 tags:
-  - CITADEL
+  - citadel
   - timeline-showcase
   - myrkild
   - legend
-  - Events
 slug: eras/citadel/events/the-hollow-feast-of-veyr
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Hollow Feast of Veyr.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

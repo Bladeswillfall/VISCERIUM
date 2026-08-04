@@ -35,13 +35,13 @@ outcome: >-
   The lower works were sealed and the surrounding district remained
   uninhabitable.
 tags:
-  - SMOG
+  - smog
   - timeline-showcase
   - intercalary
-  - Events
 slug: eras/smog/events/the-engimanutur-explosion
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Engimanutur Explosion.md
+updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 
