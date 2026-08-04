@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { parseSidebarWikilink } from '../lib/sidebar-links.mjs';
 import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfContents';
 import TableOfContents from 'virtual:starlight/components/TableOfContents';
 
@@ -91,8 +92,11 @@ function normaliseRoute(value) {
   const trimmed = value.trim();
   if (!trimmed) return undefined;
 
-  const wikilink = trimmed.match(/^\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]$/);
-  if (wikilink) return resolveSidebarTarget(wikilink[1]);
+  const wikilink = parseSidebarWikilink(trimmed);
+  if (wikilink) {
+    const route = resolveSidebarTarget(wikilink.target);
+    return route ? `${route}${wikilink.fragment}` : undefined;
+  }
 
   if (trimmed.startsWith('/') || trimmed.startsWith('#') || isExternalUrl(trimmed)) return trimmed;
   return `/${trimmed.replace(/^\/+|\/+$/g, '')}/`;
