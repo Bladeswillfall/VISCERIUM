@@ -1,3 +1,7 @@
+---
+document_type: sop
+sop_id: SOP-007
+---
 # Schema Change SOP
 
 > **Use this SOP when:** You add, change, or remove shared creator structure.
