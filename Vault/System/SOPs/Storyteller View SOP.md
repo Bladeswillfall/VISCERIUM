@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-010
+checklists:
+  - CHK-010a
+---
 # Storyteller View SOP
 
 > **Use this SOP when:** You add practical scene, encounter, location or story guidance to a Lore article.
