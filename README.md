@@ -32,9 +32,9 @@ These are not separate settings. Each era inherits the damage, discoveries, cult
 
 The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of the setting: its peoples, creatures, factions, histories, technologies, mysteries, and connected timeline.
 
-- **[Start Here](https://www.viscerium.co.uk/start-here/)** — the guided introduction to VISCERIUM and the Degel System.
-- **[Explore the timeline](https://www.viscerium.co.uk/timelines/super/)** — trace the events that connect all four eras.
-- **[Browse the Codex](https://www.viscerium.co.uk/)** — choose an era and enter the world directly.
+- **[Start Here](https://www.viscerium.co.uk/start-here/)**: the guided introduction to VISCERIUM and the Degel System.
+- **[Explore the timeline](https://www.viscerium.co.uk/timelines/super/)**: trace the events that connect all four eras.
+- **[Browse the Codex](https://www.viscerium.co.uk/)**: choose an era and enter the world directly.
 
 ## What lives in this repository
 
