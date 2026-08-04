@@ -49,6 +49,39 @@
     },
     "Lore/Eras/CITADEL/Nations": {
       "icon": "lucide-earth"
+    },
+    "Lore/Eras/CITADEL/Nations/Kingdom of Satol": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Krass Dominion": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Okse Dominion": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Okse Dominion/Customs": {
+      "icon": "lucide-flame-kindling"
+    },
+    "Lore/Eras/CITADEL/Nations/Okse Dominion/Organizations": {
+      "icon": "lucide-users"
+    },
+    "Lore/Eras/CITADEL/Nations/Okse Dominion/People": {
+      "icon": "lucide-user"
+    },
+    "Lore/Eras/CITADEL/Nations/Okse Dominion/Regions": {
+      "icon": "lucide-layout-grid"
+    },
+    "Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Landmarks": {
+      "icon": "lucide-map-pinned"
+    },
+    "Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements": {
+      "icon": "lucide-flag"
+    },
+    "Lore/Eras/CITADEL/Nations/Republic of Askalia": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Verazemia": {
+      "icon": "lucide-map"
     }
   },
   "bookmarkIcons": {},

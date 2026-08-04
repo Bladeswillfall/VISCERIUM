@@ -1,6 +1,6 @@
 {
   "storyLineRoot": "Stories",
-  "activeProjectFile": "",
+  "activeProjectFile": "Stories/My Trilogy/My Novel/My Novel.md",
   "defaultStatus": "idea",
   "autoGenerateSequence": true,
   "defaultTargetWordCount": 800,
@@ -85,6 +85,7 @@
   "sharedCodex": "",
   "extraFolders": [],
   "hiddenFields": {},
+  "hiddenCategories": {},
   "showFormattingToolbar": true,
   "focusDarkenAmount": 40,
   "focusBlurAmount": 1,
@@ -92,6 +93,7 @@
   "timelineDragScrollZone": 60,
   "sprintEndSound": true,
   "writeFieldsAsWikilinks": true,
+  "sortByFrequency": false,
   "universalFieldsMirrorTopLevel": true,
   "seriesArcView": false,
   "warnOnCrossBookMove": true,
@@ -99,6 +101,7 @@
   "excludeChecklistFromWordcount": false,
   "defaultProjectLanguage": "en",
   "defaultSceneFrontmatter": "",
+  "defaultPovCharacter": "",
   "exportSceneSeparatorType": "blank",
   "exportSceneSeparatorCustom": ""
 }
