@@ -12,8 +12,9 @@ Use these files as the exact version and installation records:
 
 - `Site/package-lock.json` — public Codex, maps, graphs, timelines, search, rendering, and build dependencies;
 - `Tools/obsidian-viscerium-timelines/package-lock.json` — first-party Obsidian timeline plugin dependencies;
-- `Vault/.obsidian/community-plugins.json` — enabled Obsidian community-plugin identifiers; and
-- `Vault/System/Obsidian Plugin Profile.json` — tested Obsidian plugin versions, installation sources, and shared-setting paths.
+- `Vault/.obsidian/community-plugins.json` — enabled Obsidian community-plugin identifiers;
+- `Vault/System/Obsidian Plugin Profile.json` — tested Obsidian plugin versions, installation sources, and shared-setting paths; and
+- `LICENSES/` — licence text and modification notices for third-party code intentionally redistributed by this repository.
 
 Transitive package versions and SPDX licence identifiers are recorded in the relevant npm lockfile. Release and distribution checks must preserve all licence files and notices supplied by installed packages.
 
@@ -29,19 +30,19 @@ Transitive package versions and SPDX licence identifiers are recorded in the rel
 | `starlight-site-graph` | Public site-graph integration | MIT |
 | `starlight-tags` | Tag pages and tag navigation | MIT |
 | `starlight-telescope` | Public search integration | MIT |
-| [Preact](https://github.com/preactjs/preact) | Client interface components | MIT |
-| [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) | Relationship and graph visualisation | MIT |
+| [Preact](https://github.com/preactjs/preact) (`preact`) | Client interface components | MIT |
+| [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) (`cytoscape`) | Relationship and graph visualisation | MIT |
 | [cytoscape-dagre](https://github.com/cytoscape/cytoscape.js-dagre) | Directed graph layout | MIT |
-| [Leaflet](https://github.com/Leaflet/Leaflet) | Public interactive maps | BSD-2-Clause |
-| [Leaflet.Control.Layers.Tree](https://github.com/jjimenezshaw/Leaflet.Control.Layers.Tree) | Hierarchical map-layer controls | BSD-3-Clause |
+| [Leaflet](https://github.com/Leaflet/Leaflet) (`leaflet`) | Public interactive maps | BSD-2-Clause |
+| [Leaflet.Control.Layers.Tree](https://github.com/jjimenezshaw/Leaflet.Control.Layers.Tree) (`leaflet.control.layers.tree`) | Hierarchical map-layer controls | BSD-3-Clause |
 | [vis-timeline](https://github.com/visjs/vis-timeline) | Interactive timeline rendering | Apache-2.0 OR MIT |
 | [chronos-timeline-md](https://github.com/clairefro/chronos-timeline-md) | Markdown-to-timeline parsing | ISC |
-| [Fuse.js](https://github.com/krisk/Fuse) | Fuzzy search | Apache-2.0 |
+| [Fuse.js](https://github.com/krisk/Fuse) (`fuse.js`) | Fuzzy search | Apache-2.0 |
 | [gray-matter](https://github.com/jonschlinkert/gray-matter) | Markdown frontmatter parsing | MIT |
-| [KaTeX](https://github.com/KaTeX/KaTeX) | Mathematical notation rendering | MIT |
+| [KaTeX](https://github.com/KaTeX/KaTeX) (`katex`) | Mathematical notation rendering | MIT |
 | [remark-math](https://github.com/remarkjs/remark-math) | Markdown mathematics parsing | MIT |
 | [rehype-katex](https://github.com/remarkjs/remark-math) | KaTeX output integration | MIT |
-| [Playwright](https://github.com/microsoft/playwright) | Browser and interface testing | Apache-2.0 |
+| [Playwright](https://github.com/microsoft/playwright) (`@playwright/test`) | Browser and interface testing | Apache-2.0 |
 | [esbuild](https://github.com/evanw/esbuild) | First-party Obsidian plugin bundling | MIT |
 | [Obsidian API](https://github.com/obsidianmd/obsidian-api) | Type definitions and API surface for first-party plugins | MIT |
 
@@ -95,6 +96,11 @@ The compatibility runtime is based on MySnippets by Chetachi and compatibility w
 
 That runtime remains under the Mozilla Public License 2.0. Its file header identifies the applicable licence and upstream work. The repository MIT licence does not apply to it.
 
+The complete local compliance record is:
+
+- [`LICENSES/MPL-2.0.txt`](LICENSES/MPL-2.0.txt) — official Mozilla Public License 2.0 text; and
+- [`LICENSES/MySnippets-NOTICE.md`](LICENSES/MySnippets-NOTICE.md) — upstream basis, covered files, recorded VISCERIUM modifications, and source-availability notice.
+
 ### First-party VISCERIUM plugins
 
 The following original VISCERIUM plugin code is licensed under `LICENSE-CODE.md`:
@@ -130,6 +136,16 @@ Use of a service is governed by that provider's terms. A service integration is 
 Astro, Starlight, Obsidian, GitHub, Cloudflare, Leaflet, Cytoscape, Preact, Playwright, and other product or project names may be trademarks of their respective owners.
 
 Their use here is descriptive attribution only.
+
+## Automated coverage checks
+
+The unit suite checks that:
+
+- every direct `Site/package.json` dependency is named or explicitly covered here;
+- every enabled non-first-party Obsidian plugin is represented here; and
+- the vendored MySnippets exception retains its MPL header, licence text, modification notice, and source-availability notice.
+
+These checks prevent silent attribution drift, but they do not replace a complete release audit of transitive dependencies and distributed artefacts.
 
 ## Maintenance rule
 
