@@ -1,15 +1,19 @@
 name: Sidebar wikilink migration
 
 on:
-  push:
+  pull_request:
     branches:
-      - fix/sidebar-wikilinks-all-articles
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
 
 concurrency:
-  group: sidebar-wikilink-migration
+  group: sidebar-wikilink-migration-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
