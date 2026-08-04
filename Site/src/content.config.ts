@@ -105,6 +105,7 @@ export const collections = {
         timelinePage: z.boolean().optional(),
         explorationPage: z.boolean().optional(),
         searchable: z.boolean().optional(),
+        created: frontmatterDate.optional(),
         date: frontmatterDate.optional(),
         published: frontmatterDate.optional(),
         updated: frontmatterDate.optional(),
