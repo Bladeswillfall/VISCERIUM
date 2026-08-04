@@ -176,6 +176,10 @@ Use plugin zoom settings only to make Obsidian authoring comfortable. Use the li
 
 The public marker opens the generated child Atlas page.
 
+## Verification checklist
+
+Use [[Checklists/009a - Atlas Publication Checklist|Atlas Publication Checklist]] before publication.
+
 ## Check the result
 
 ### In Obsidian
