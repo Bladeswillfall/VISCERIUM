@@ -23,6 +23,8 @@
     "frontmatter:folders:write": "node scripts/backfill-folder-frontmatter.mjs --write",
     "migration:sidebars": "node scripts/normalise-worldanvil-vehicle-sidebars.mjs && node scripts/normalise-worldanvil-sidebars.mjs",
     "migration:sidebars:write": "node scripts/normalise-worldanvil-vehicle-sidebars.mjs --write && node scripts/normalise-worldanvil-sidebars.mjs --write",
+    "migration:sidebar-wikilinks": "node scripts/migrate-sidebar-wikilinks.mjs",
+    "migration:sidebar-wikilinks:write": "node scripts/migrate-sidebar-wikilinks.mjs --write",
     "migration:worldanvil:integrate": "node scripts/integrate-worldanvil-import.mjs",
     "migration:worldanvil:prepare": "node scripts/prepare-worldanvil-import-frontmatter.mjs",
     "migration:worldanvil:prepare:write": "node scripts/prepare-worldanvil-import-frontmatter.mjs --write",
