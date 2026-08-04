@@ -10,9 +10,9 @@ permissions:
   contents: write
 
 jobs:
-  diagnose:
+  isolate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -29,20 +29,23 @@ jobs:
       - name: Install dependencies
         run: npm --prefix Site ci --silent --no-audit --no-fund
 
-      - name: Apply and diagnose migration
+      - name: Isolate migration checks
         run: |
-          npm --prefix Site run migration:sidebar-wikilinks:write > sidebar-frontmatter-diagnostic.log 2>&1
-          node Site/scripts/diagnose-sidebar-frontmatter.mjs >> sidebar-frontmatter-diagnostic.log 2>&1
-          npm --prefix Site run frontmatter:folders:audit >> sidebar-frontmatter-diagnostic.log 2>&1
+          npm --prefix Site run migration:sidebar-wikilinks:write > sidebar-isolation.log 2>&1
+          npm --prefix Site run sync >> sidebar-isolation.log 2>&1
+          npm --prefix Site run frontmatter:folders:audit >> sidebar-isolation.log 2>&1
+          cd Site
+          node --test tests/folder-frontmatter-backfill.test.mjs >> ../sidebar-isolation.log 2>&1
 
-      - name: Commit diagnostic output only
+      - name: Commit isolation log only
         run: |
           git fetch origin main --depth=1
           git show origin/main:.github/workflows/checks.yml > .github/workflows/checks.yml
-          rm -f .github/workflows/sidebar-wikilink-migration.yml sidebar-migration-run.log
-          git restore Vault Site/src/content/docs
+          rm -f .github/workflows/sidebar-wikilink-migration.yml sidebar-migration-run.log sidebar-frontmatter-diagnostic.log
+          git restore Vault Site/src/content/docs Site/public
+          rm -f Site/scripts/diagnose-sidebar-frontmatter.mjs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Diagnose sidebar migration output"
+          git commit -m "Isolate sidebar migration validation"
           git push origin HEAD:fix/sidebar-wikilinks-all-articles
