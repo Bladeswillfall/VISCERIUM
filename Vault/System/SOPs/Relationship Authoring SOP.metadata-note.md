@@ -1,1 +1,0 @@
-Temporary migration note. Remove after SOP-008 metadata is written to the existing Relationship Authoring SOP.

@@ -1,1 +1,0 @@
-Use GitHub's create_blob API for the encoded Relationship Authoring SOP content. This temporary pointer will be removed in the same review-fix pass.
