@@ -111,6 +111,10 @@ npm run build
 
 10. Confirm the public article matches Obsidian and that layout flags do not appear in the image alt text.
 
+## Verification checklist
+
+Use [[Checklists/005a - Article Image Layout Publication Checklist|Article Image Layout Publication Checklist]] before publication.
+
 ## Stop conditions
 
 Do not use shaped wrapping when:
