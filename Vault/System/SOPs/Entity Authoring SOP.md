@@ -119,6 +119,10 @@ Examples include:
 
 Do not use the number of properties to set the development level.
 
+## Verification checklist
+
+Use [[Checklists/002a - Entity Article Publication Checklist|Entity Article Publication Checklist]] when the note is being considered for publication.
+
 ## Check the result
 
 Confirm these statements:
