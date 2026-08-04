@@ -7,20 +7,22 @@ sidebar:
   sections:
     - title: Details
       fields:
-        - label: "Location: [Okse Dominion](/w/viscerium/a/okse-dominion-article)"
+        - label: 'Location: [Okse Dominion](/w/viscerium/a/okse-dominion-article)'
           value: Rulers (current)
         - label: Population
           value:
-            - "Overall: 46,682"
-            - "Population density: [TBD]"
-            - "Valenheim City Guard: 359"
-            - "Juggernaughts: 4"
+            - 'Overall: 46,682'
+            - 'Population density: [TBD]'
+            - 'Valenheim City Guard: 359'
+            - 'Juggernaughts: 4'
     - title: Places of note
       items:
-        - Rauthrbak min
+        - label: Rauthrbak min
+          href: '[[Rauthrbak Min]]'
         - Hofn Brattrstein
         - Hofn Fagrvatn
-        - Mestrvirki
+        - label: Mestrvirki
+          href: '[[Mestrvirki]]'
 title: Valenheim
 description: Valenheim is situated in a snowy valley flanked by a nigh-impenetrable mountain range that almost completely encircles it.
 updated:

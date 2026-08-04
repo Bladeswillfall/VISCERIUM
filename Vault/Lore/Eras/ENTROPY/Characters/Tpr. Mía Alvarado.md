@@ -2,35 +2,38 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Pronouns"
-      value: "She/Her"
-    - label: "Age"
-      value: "28"
-    - label: "Gender"
-      value: "Female"
+    - label: Pronouns
+      value: She/Her
+    - label: Age
+      value: '28'
+    - label: Gender
+      value: Female
   sections:
-    - title: "Appearance"
+    - title: Appearance
       fields:
-        - label: "Eyes"
-          value: "Brown, siren-eyed"
-        - label: "Hair"
-          value: "Black, half-long half-shaved pixie cut, straight"
-        - label: "Skin tone / pigmentation"
-          value: "Medium tan, rosy complexion"
-        - label: "Height"
-          value: "5'11\" (1.80m)"
-        - label: "Weight"
-          value: "235lbs (107kg)"
-        - label: "Physical traits"
-          value: "Muscular with an hour-glass body shape. Twin prosthetic arms and a prosthetic right-foot"
-    - title: "Membership"
+        - label: Eyes
+          value: 'Brown, siren-eyed'
+        - label: Hair
+          value: 'Black, half-long half-shaved pixie cut, straight'
+        - label: Skin tone / pigmentation
+          value: 'Medium tan, rosy complexion'
+        - label: Height
+          value: 5'11" (1.80m)
+        - label: Weight
+          value: 235lbs (107kg)
+        - label: Physical traits
+          value: >-
+            Muscular with an hour-glass body shape. Twin prosthetic arms and a
+            prosthetic right-foot
+    - title: Membership
       fields:
-        - label: "Former"
+        - label: Former
           value:
-            - "Pator City defence force"
-            - "Imperium Coalition Defence Force"
-        - label: "Current"
-          value: "Imperium Coalition Special Shock Assault Service"
+            - Pator City defence force
+            - Imperium Coalition Defence Force
+        - label: Current
+          value: Imperium Coalition Special Shock Assault Service
+          href: '[[Imperium Coalition Special Shock Assault Service]]'
 title: "Tpr. Mía Alvarado"
 description: "Mía Alvarado is a force to be reckoned with on the battlefield."
 updated:

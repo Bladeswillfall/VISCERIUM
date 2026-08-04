@@ -2,30 +2,31 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "City"
+    - label: Type
+      value: City
   sections:
-    - title: "Details"
+    - title: Details
       fields:
-        - label: "Continent"
-          value: "Nation"
-        - label: "Area"
-          value: "10.1km² (3.89miles²)"
-        - label: "Diameter"
-          value: "3.58km (2.22miles)"
-        - label: "Population"
-          value: "252,768"
-        - label: "Pop. Density"
-          value: "27,180/km² (70,400/sq mi)"
-    - title: "Membership"
+        - label: Continent
+          value: Nation
+        - label: Area
+          value: 10.1km² (3.89miles²)
+        - label: Diameter
+          value: 3.58km (2.22miles)
+        - label: Population
+          value: '252,768'
+        - label: Pop. Density
+          value: '27,180/km² (70,400/sq mi)'
+    - title: Membership
       fields:
-        - label: "Affiliation"
-          value: "Trans-Continental Socialist Confederation"
-    - title: "Places of note"
+        - label: Affiliation
+          value: Trans-Continental Socialist Confederation
+          href: '[[Trans-Continental Socialist Confederation]]'
+    - title: Places of note
       items:
-        - "Sector Cipher"
-        - "Icefield docks"
-        - "Black iron railway"
+        - Sector Cipher
+        - Icefield docks
+        - Black iron railway
 title: "Tiumosk city"
 description: "The winter city of Tiumosk is located in the great Obansk plains."
 updated:

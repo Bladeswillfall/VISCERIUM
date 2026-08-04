@@ -2,23 +2,29 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Special Forces"
+    - label: Type
+      value: Special Forces
   sections:
-    - title: "Members"
+    - title: Members
       items:
-        - "**Delta Two One**"
-        - "Cpl. May Zhang"
-        - label: "Tpr. Bailey Pittman"
-          href: "/w/viscerium/a/tpr-bailey-pittman-person"
-        - "Tpr. Tobi Schöler"
-        - "Tpr. Louis Hodari"
-        - "**Delta Two Two**"
-        - "LCpl. Akanni Balogun"
-        - label: "Tpr. Hannah Moeko"
-          href: "/w/viscerium/a/tpr-hannah-moeko-person"
-        - "Tpr. Mía Alvarado"
-        - "Tpr. Ilya Artemiy Valerianovich"
+        - '**Delta Two One**'
+        - label: Cpl. May Zhang
+          href: '[[Cpl. May Zhang]]'
+        - label: Tpr. Bailey Pittman
+          href: /w/viscerium/a/tpr-bailey-pittman-person
+        - label: Tpr. Tobi Schöler
+          href: '[[Tpr. Tobi Schöler]]'
+        - label: Tpr. Louis Hodari
+          href: '[[Tpr. Louis Hodari]]'
+        - '**Delta Two Two**'
+        - label: LCpl. Akanni Balogun
+          href: '[[LCpl. Akanni Balogun]]'
+        - label: Tpr. Hannah Moeko
+          href: /w/viscerium/a/tpr-hannah-moeko-person
+        - label: Tpr. Mía Alvarado
+          href: '[[Tpr. Mía Alvarado]]'
+        - label: Tpr. Ilya Artemiy Valerianovich
+          href: '[[Tpr. Ilya Artemiy Valerianovich]]'
 title: "Delta Two"
 description: "Serving as a covert special forces group split into two teams, Delta Two One currently consists of four members; Cpl."
 updated:

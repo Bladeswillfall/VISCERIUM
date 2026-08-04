@@ -41,31 +41,43 @@ sidebar:
       value: Geopolitical dominion / empire
     - label: Demonym
       value: Oksmun
+      href: '[[Oksmun]]'
     - label: Era
       value: CITADEL
+      href: '[[CITADEL]]'
     - label: Category
       value: Nation / Faction
     - label: Territory
       value: Halvmane Mountains and surrounding highlands
     - label: Capital
       value: Valenheim
+      href: '[[Valenheim]]'
   sections:
     - title: Leadership
       fields:
         - label: Kónungsson
           value: Erlend Nautleif
+          href: '[[Erlend Nautleif]]'
         - label: Kónungsdóttir
           value: Signy Gunnvidottir
+          href: '[[Signy Gunnvidottir]]'
         - label: Kóngr Eilífr
           value: Torrad Uxifadir
+          href: '[[Torrad Uxifadir]]'
     - title: Key holdings
       items:
-        - Valenheim — capital city
-        - Rauthrbak Min — capital prison
-        - Hjalliberg — city
-        - Aldaness — city
-        - Vagrvik — city
-        - Strondverdir — city
+        - label: Valenheim — capital city
+          href: '[[Valenheim]]'
+        - label: Rauthrbak Min — capital prison
+          href: '[[Rauthrbak Min]]'
+        - label: Hjalliberg — city
+          href: '[[Hjalliberg]]'
+        - label: Aldaness — city
+          href: '[[Aldaness]]'
+        - label: Vagrvik — city
+          href: '[[Vagrvik]]'
+        - label: Strondverdir — city
+          href: '[[Strondverdir]]'
     - title: Major exports
       items:
         - Ore and ingots
@@ -74,11 +86,16 @@ sidebar:
         - Oil and slave-supported industry
     - title: Related
       items:
-        - Krass Dominion
-        - Oksmun
-        - Juggernauts
+        - label: Krass Dominion
+          href: '[[Krass Dominion]]'
+        - label: Oksmun
+          href: '[[Oksmun]]'
+        - label: Juggernauts
+          href: '[[Juggernauts]]'
         - Resonants
-      note: All artwork that is not an original creation by Fall will be replaced with either original pieces or commissioned art.
+      note: >-
+        All artwork that is not an original creation by Fall will be replaced
+        with either original pieces or commissioned art.
 tags:
   - okse
   - dominion

@@ -2,17 +2,18 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Government"
-      value: "Democratic"
-    - label: "Driving ideology"
-      value: "Capitalism"
-    - label: "Currency"
-      value: "Quills and Knots"
+    - label: Government
+      value: Democratic
+    - label: Driving ideology
+      value: Capitalism
+    - label: Currency
+      value: Quills and Knots
   sections:
-    - title: "Succession"
+    - title: Succession
       fields:
-        - label: "Succeeded by"
-          value: "Alliance of Democratic Nations"
+        - label: Succeeded by
+          value: Alliance of Democratic Nations
+          href: '[[Alliance of Democratic Nations]]'
 title: "Aquillan Seas Trade Union"
 description: "The Aquillan Seas Trade Union, often referred to as the Union or simply ASTU, is an economical and political alliance of democratic nations located around the Aquillan(Northern) Seas."
 updated:

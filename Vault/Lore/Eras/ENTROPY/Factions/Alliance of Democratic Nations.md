@@ -2,17 +2,18 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Government"
-      value: "Democratic"
-    - label: "Driving ideology"
-      value: "Capitalism"
-    - label: "Currency"
-      value: "Quills and Knots"
+    - label: Government
+      value: Democratic
+    - label: Driving ideology
+      value: Capitalism
+    - label: Currency
+      value: Quills and Knots
   sections:
-    - title: "Details"
+    - title: Details
       fields:
-        - label: "Predacesor"
-          value: "Aquillan Seas Trade Union"
+        - label: Predacesor
+          value: Aquillan Seas Trade Union
+          href: '[[Aquillan Seas Trade Union]]'
 title: "Alliance of Democratic Nations"
 description: "Once simply an administrative body of a select few democratic nations based on treaties and trade deals known as the Aquillan Seas Trade Union, the Aliance of Democratic Nations swiftly grew to encompass almost every democratically…"
 updated:
