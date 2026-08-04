@@ -2,6 +2,15 @@
 
 > **One timeline. Four eras. Infinite stories.**
 
+[![Creative IP: All Rights Reserved](https://img.shields.io/badge/Creative_IP-All_Rights_Reserved-8B1E1E?style=flat-square)](LICENSE.md)
+[![First-party code: MIT](https://img.shields.io/badge/First--party_Code-MIT-2E7D32?style=flat-square)](LICENSE-CODE.md)
+[![Third-party software: Upstream licences](https://img.shields.io/badge/Third--party_Software-Upstream_Licences-355C7D?style=flat-square)](THIRD_PARTY_NOTICES.md)
+
+[![Canon: No generative AI](https://img.shields.io/badge/Canon-No_Generative_AI-624A7B?style=flat-square)](ATTRIBUTION.md)
+[![Checks](https://github.com/Bladeswillfall/VISCERIUM/actions/workflows/checks.yml/badge.svg?branch=main)](https://github.com/Bladeswillfall/VISCERIUM/actions/workflows/checks.yml)
+
+**Licensing summary:** VISCERIUM's creative universe is proprietary and all rights reserved. Original first-party software is open source under the MIT License. Third-party components remain governed by their respective upstream licences.
+
 VISCERIUM is a dark transmedia universe built across one continuous history.
 
 On Errack, within the shadow-veiled Degel System, humanity survives a world of lethal beauty, inherited warfare, occult power, and abominable incursions. Resonance can reshape matter and reality, but every use carries consequences. Kingdoms become republics. Rituals become sciences. Fortress walls become orbital defences.
@@ -46,7 +55,9 @@ The public website is generated from reviewed, published source notes. The repos
 
 The current creative-rights notice is:
 
-> **VISCERIUM created by Fall. © Fall. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_CURRENT:START -->
+> **VISCERIUM created by Fall. © 2021–2026 Fall. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_CURRENT:END -->
 
 NULL Holdings Ltd is the intended future IP-holding company for VISCERIUM. It has not yet been incorporated, and no VISCERIUM rights have been assigned to it.
 
@@ -56,7 +67,9 @@ The planned role upon incorporation is:
 
 After incorporation and a formal written assignment, the intended creative-rights notice is:
 
-> **VISCERIUM created by Fall. © NULL Holdings Ltd. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_PLANNED:START -->
+> **VISCERIUM created by Fall. © 2021–2026 NULL Holdings Ltd. All rights reserved.**
+<!-- RIGHTS:VISCERIUM_PLANNED:END -->
 
 ### Creative material
 
