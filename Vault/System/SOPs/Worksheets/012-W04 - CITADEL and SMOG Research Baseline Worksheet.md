@@ -7,14 +7,19 @@ contributors:
     role: VISCERIUM adaptation and canon decisions
 sources:
   - source_id: SRC-002
+    evidence_role: practical-synthesis
     usage: [historical-reference, adapted-heuristic]
   - source_id: SRC-003
-    usage: [research-lead, community-analysis]
+    evidence_role: community-analysis
+    usage: [research-lead]
   - source_id: SRC-004
-    usage: [adapted-calculation, practical-synthesis]
+    evidence_role: practical-synthesis
+    usage: [adapted-calculation]
   - source_id: SRC-005
+    evidence_role: reputable-reference
     usage: [historical-reference, research-lead]
   - source_id: SRC-006
+    evidence_role: visual-inspiration
     usage: [visual-reference, process-reference]
 ---
 # CITADEL and SMOG Research Baseline Worksheet
