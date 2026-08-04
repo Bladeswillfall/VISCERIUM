@@ -1,3 +1,7 @@
+---
+document_type: sop
+sop_id: SOP-001
+---
 # World Anvil Migration SOP
 
 > **Use this SOP when:** You integrate, triage, or file articles under `Drafts/WorldAnvil Import`.
