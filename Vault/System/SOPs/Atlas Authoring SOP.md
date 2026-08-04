@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-009
+checklists:
+  - CHK-009a
+---
 # Atlas Authoring SOP
 
 > **Use this SOP when:** You create an interactive map or place a lore note on one.
