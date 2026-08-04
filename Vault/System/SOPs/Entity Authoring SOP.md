@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-002
+checklists:
+  - CHK-002a
+---
 # Entity Authoring SOP
 
 > **Use this SOP when:** You add content to fauna, flora, fungi, items, or similar structured records.
