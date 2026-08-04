@@ -1,10 +1,13 @@
 ---
 import LocalIcon from './LocalIcon.astro';
 import siteConfig from '../../site.config.mjs';
+import { visceriumCreativeNotice } from '../config/rights.mjs';
+
+const creativeRightsNotice = visceriumCreativeNotice();
 ---
 
 <footer class="ion-codex-footer">
-  <strong>© VISCERIUM Codex</strong>
+  <strong>{creativeRightsNotice}</strong>
   <nav aria-label="Footer">
     <a href="/">Start Here</a>
     <a href="/calendar/">Calendar</a>

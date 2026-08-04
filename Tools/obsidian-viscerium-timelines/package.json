@@ -2,6 +2,7 @@
   "name": "obsidian-viscerium-timelines",
   "version": "1.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "node esbuild.config.mjs production",

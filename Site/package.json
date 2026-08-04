@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "node scripts/build-content.mjs --mode=dev && astro dev",
     "dev:sync": "npm run dev",
@@ -10,6 +11,8 @@
     "validate:vault": "node scripts/validate-vault-notes.mjs",
     "validate:timelines": "node scripts/generate-timeline-data.mjs --validate-only",
     "validate:icons": "node scripts/validate-icon-output.mjs",
+    "rights:update": "node scripts/update-rights-notices.mjs --write",
+    "rights:check": "node scripts/update-rights-notices.mjs --check",
     "sync": "node scripts/build-content.mjs --mode=sync",
     "validate": "node scripts/validate-content.mjs",
     "generate:maps": "node scripts/generate-map-data.mjs",
@@ -32,7 +35,7 @@
     "postbuild": "npm run validate:icons",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run doctor:vault && npm run test:unit && npm run build"
+    "test": "npm run doctor:vault && npm run rights:check && npm run test:unit && npm run build"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.2.1",

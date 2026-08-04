@@ -1,0 +1,83 @@
+name: Update rights year
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 1 1 *'
+      timezone: 'Europe/London'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-rights-year
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: main
+          fetch-depth: 1
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Update managed rights notices
+        run: npm --prefix Site run rights:update
+
+      - name: Detect changes
+        id: changes
+        shell: bash
+        run: |
+          if git diff --quiet -- README.md LICENSE.md LICENSE-CODE.md ATTRIBUTION.md; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Rights notices are already current."
+            exit 0
+          fi
+
+          year="$(date -u +%Y)"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "year=$year" >> "$GITHUB_OUTPUT"
+          echo "branch=automation/rights-year-$year" >> "$GITHUB_OUTPUT"
+
+      - name: Commit updated notices
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          branch="${{ steps.changes.outputs.branch }}"
+          year="${{ steps.changes.outputs.year }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$branch"
+          git add README.md LICENSE.md LICENSE-CODE.md ATTRIBUTION.md
+          git commit -m "Update rights notices for $year"
+          git push --force-with-lease origin "HEAD:$branch"
+
+      - name: Open annual review pull request
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          branch="${{ steps.changes.outputs.branch }}"
+          year="${{ steps.changes.outputs.year }}"
+          existing="$(gh pr list --head "$branch" --base main --state open --json number --jq '.[0].number // empty')"
+
+          if [ -n "$existing" ]; then
+            echo "Pull request #$existing already covers the $year notice update."
+            exit 0
+          fi
+
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "Update rights notices for $year" \
+            --body "Updates the managed VISCERIUM, NULL-material, and first-party-code year ranges for $year. Ownership remains unchanged. Normal repository checks must pass before merge."

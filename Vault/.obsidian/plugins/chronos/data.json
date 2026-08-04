@@ -4,7 +4,7 @@
   "clickToUse": false,
   "roundRanges": false,
   "useUtc": true,
-  "useAI": true,
+  "useAI": false,
   "showChangelogOnUpdate": true,
   "enableCaching": false,
   "basesPropNames": {
