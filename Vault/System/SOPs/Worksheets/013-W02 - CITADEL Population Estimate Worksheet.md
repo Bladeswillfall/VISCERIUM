@@ -8,13 +8,17 @@ contributors:
     role: VISCERIUM adaptation and canon decisions
 sources:
   - source_id: SRC-001
+    evidence_role: practical-synthesis
     usage: [adapted-calculation, adapted-framework]
   - source_id: SRC-002
+    evidence_role: practical-synthesis
     usage: [adapted-heuristic]
   - source_id: SRC-003
-    usage: [research-lead, community-analysis]
+    evidence_role: community-analysis
+    usage: [research-lead]
   - source_id: SRC-004
-    usage: [adapted-calculation, practical-synthesis]
+    evidence_role: practical-synthesis
+    usage: [adapted-calculation]
 ---
 # CITADEL Population Estimate Worksheet
 
@@ -113,11 +117,20 @@ farming households = productive area ÷ land per household
 rural population = farming households × average household size
 ```
 
-## 5. Estimate exportable food
+## 5. Estimate target-bound food
 
 Use local units or a consistent abstract food unit.
 
-| Zone | Gross output | Seed or breeding reserve | Producer subsistence | Tax, tithe, or extraction | Spoilage | Local non-farm use | Exportable amount |
+Record each extracted share by destination before calculating the amount available to the target settlement.
+
+| Extraction stream | Amount | Destination | Still feeds the target settlement? | Treatment in the formula |
+| --- | --- | --- | --- | --- |
+|  |  |  | Yes / No | Retain / subtract |
+|  |  |  | Yes / No | Retain / subtract |
+
+Subtract only extraction that leaves the target settlement's food system.
+
+| Zone | Gross output | Seed or breeding reserve | Producer subsistence | Extraction diverted elsewhere | Spoilage | Local non-farm use | Target-bound amount |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |
@@ -125,10 +138,10 @@ Use local units or a consistent abstract food unit.
 Formula:
 
 ```text
-exportable amount = gross output - reserves - subsistence - extraction - spoilage - local use
+target-bound amount = gross output - reserves - subsistence - extraction diverted elsewhere - spoilage - local use
 ```
 
-State whether extracted food still feeds the target settlement. Do not subtract it twice.
+A tax, tithe, rent, or institutional share remains in the total when its destination still supplies the target settlement.
 
 ## 6. Apply transport and storage losses
 
@@ -217,5 +230,5 @@ Do not present community answers or game-design heuristics as settled historical
 
 - Replaces one fixed bucket model with explicit local units and assumptions.
 - Adds VISCERIUM route types, Resonance, system failure, sensitivity testing, and canon-expression choices.
-- Prevents extraction from being subtracted twice when it still feeds the target settlement.
+- Tracks extracted food by destination so target-bound shares remain in the supply total.
 - Makes uncertainty and source dependence visible at every calculation stage.
