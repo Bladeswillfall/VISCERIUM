@@ -153,11 +153,13 @@ export function migrateSidebar(sidebar, context) {
 }
 
 function serializeField(keyName, value) {
-  return matter.stringify('', { [keyName]: value })
-    .replace(/\r\n/g, '\n')
-    .replace(/^---\n/, '')
-    .replace(/\n---\n?$/, '')
-    .trimEnd();
+  const serialized = matter.stringify('', { [keyName]: value }).replace(/\r\n/g, '\n');
+  const bodyStart = serialized.indexOf('---\n');
+  const bodyEnd = serialized.lastIndexOf('\n---');
+  if (bodyStart !== 0 || bodyEnd <= 4) {
+    throw new Error(`Unable to serialize frontmatter field "${keyName}".`);
+  }
+  return serialized.slice(4, bodyEnd).trimEnd();
 }
 
 function replaceTopLevelField(frontmatter, keyName, value) {
