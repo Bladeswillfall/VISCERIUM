@@ -82,3 +82,5 @@ jobs:
           git add Site/src/components/CodexPageSidebar.astro Site/src/lib/sidebar-links.mjs Site/tests/sidebar-wikilinks.test.mjs
           git commit -m "Preserve sidebar wikilink heading fragments"
           git push origin HEAD:fix/sidebar-wikilinks-all-articles
+
+# Triggered after creation so GitHub recognizes the workflow.
