@@ -1,3 +1,7 @@
+---
+document_type: sop
+sop_id: SOP-003
+---
 # Story Entity Workflow SOP
 
 > **Use this SOP when:** You create or maintain fauna, flora, fungi, or item notes.
