@@ -16,7 +16,7 @@ export const GET: APIRoute = async ({ site }) => {
       const categories = [...new Set(entry.tags)]
         .map((tag) => `      <category>${escapeXml(tag)}</category>`)
         .join('\n');
-      const pubDate = entry.date ? `      <pubDate>${entry.date.toUTCString()}</pubDate>\n` : '';
+      const pubDate = entry.created ? `      <pubDate>${entry.created.toUTCString()}</pubDate>\n` : '';
 
       return `    <item>
       <title>${escapeXml(entry.title)}</title>
@@ -27,6 +27,10 @@ ${pubDate}      <description>${escapeXml(entry.description)}</description>${cate
     })
     .join('\n');
 
+  const lastBuildDate = updated.valueOf() > 0
+    ? `    <lastBuildDate>${updated.toUTCString()}</lastBuildDate>\n`
+    : '';
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -35,8 +39,7 @@ ${pubDate}      <description>${escapeXml(entry.description)}</description>${cate
     <link>${escapeXml(siteUrl)}</link>
     <atom:link href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml" />
     <language>${escapeXml(siteConfig.feeds?.language ?? 'en')}</language>
-    <lastBuildDate>${updated.toUTCString()}</lastBuildDate>
-${items}
+${lastBuildDate}${items}
   </channel>
 </rss>`;
 

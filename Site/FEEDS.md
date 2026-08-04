@@ -33,13 +33,9 @@ PUBLIC_FEED_LANGUAGE=en
 PUBLIC_FEED_MAX_ITEMS=50
 ```
 
-## Date frontmatter
+## Authored dates
 
-Feed ordering uses the first available value from this priority order:
-
-1. `updated`
-2. `date`
-3. `published`
+Feed chronology comes only from note frontmatter. Build time, deployment time, file-system timestamps and the Git checkout date are never treated as article history.
 
 Recommended frontmatter:
 
@@ -49,12 +45,27 @@ title: Example Title
 description: "A short SEO-safe page description."
 status: published
 type: article
-published: 2026-07-08
-updated: 2026-07-08
+created: 2026-07-08
+updated: 2026-08-03
 ---
 ```
 
-Undated pages are still included, but they sort below dated pages and omit RSS item `pubDate`. Atom requires an `updated` value per entry, so undated pages use a safe fallback date instead of pretending to know real edit history.
+Use the fields as follows:
+
+- `created` is the date the public Codex page was first released. Keep it unchanged after publication.
+- `updated` is the date of the latest meaningful public content revision. Omit it until the page is revised.
+- When `updated` is absent, the feed uses `created` as the initial update date.
+- Legacy `published` and `date` values remain accepted as creation-date aliases, but new notes should use `created`.
+
+RSS uses `created` for each item’s `pubDate`. Atom emits `created` as `published` and emits the resolved modification date as `updated`.
+
+An `updated` value without a creation/publication date is deliberately ignored for feed chronology. This prevents generated files or shallow deployment checkouts from inventing article history.
+
+Undated pages remain available on the site and may remain present in the feed, but RSS omits their item-level `pubDate`. Atom requires an `updated` value, so genuinely undated entries use the stable Unix epoch fallback rather than the current build time. The RSS channel omits `lastBuildDate` when no authored dates are available.
+
+## Generated content
+
+Category generation must not add or rewrite `created` or `updated` fields on article pages. Generated category pages are excluded from the feeds.
 
 ## Discovery
 
