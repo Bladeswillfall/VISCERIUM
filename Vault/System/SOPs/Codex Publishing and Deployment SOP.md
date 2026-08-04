@@ -301,7 +301,6 @@ npm run build
 Run the normal repository confidence check before a pull request:
 
 ```bash
-cd Site
 npm ci
 npm test
 npm run benchmark:timelines
