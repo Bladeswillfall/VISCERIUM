@@ -1,47 +1,55 @@
 
+> viscerium@0.1.0 migration:sidebar-wikilinks:write
+> node scripts/migrate-sidebar-wikilinks.mjs --write
+
+Updated 16 sidebar file(s):
+- Vault/Lore/Degel System/Errack.md
+- Vault/Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md
+- Vault/Lore/Eras/CITADEL/Flora & Fungi/Haglace Brake.md
+- Vault/Lore/Eras/CITADEL/Nations/Locations/Aldaness.md
+- Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md
+- Vault/Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md
+- Vault/Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko.md
+- Vault/Lore/Eras/ENTROPY/Characters/Tpr. Mía Alvarado.md
+- Vault/Lore/Eras/ENTROPY/Factions/Alliance of Democratic Nations.md
+- Vault/Lore/Eras/ENTROPY/Factions/The Black Foundry.md
+- Vault/Lore/Eras/ENTROPY/Formations/Delta Two.md
+- Vault/Lore/Eras/ENTROPY/Nations/Locations/Kisara.md
+- Vault/Lore/Eras/NEARSIGHT/Characters/Dr.Adrastus Delroy.md
+- Vault/Lore/Eras/NEARSIGHT/Factions/Aquillan Seas Trade Union.md
+- Vault/Lore/Eras/NEARSIGHT/Nations/Locations/Tiumosk city.md
+- Vault/Lore/Eras/NEARSIGHT/Nations/Trans-Continental Socialist Confederation.md
+
 FILE: Vault/Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md
 {
-  "type": "faction",
-  "era": "CITADEL",
   "topLevelKeys": [
-    "sidebar",
-    "title",
-    "description",
-    "updated",
-    "status",
-    "type",
-    "development_level",
-    "era",
-    "tags",
-    "import_source",
-    "import_source_type",
-    "import_source_file",
-    "import_issues"
+    "sidebar"
   ],
   "sidebarKeys": [
     "replaceMeta",
     "meta",
     "sections"
   ],
-  "changes": {},
+  "changes": {
+    "type": "faction",
+    "era": "CITADEL"
+  },
   "conflicts": [],
   "notices": [],
-  "closingMarkerIndex": 865,
-  "firstLooseMarkerIndex": 865
+  "closingMarkerIndex": 319,
+  "firstLooseMarkerIndex": 319
 }
 FRONTMATTER TAIL:
-
-  - "worm"
-  - "cult"
-  - CITADEL
-  - Factions
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-House of the Hollow Worm-9dc.md"
-import_issues:
-  - "missing-inline-assets"
+s:
+    - title: Details
+      fields:
+        - label: Current Leader
+          value: Helminth Augur Merikh
+          href: '[[Helminth Augur Merikh]]'
+        - label: Deity
+          value: 'Boleth, Nadir of Gluttony'
 ---
-> Ste
+title
 
 FILE: Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md
 {
@@ -67,8 +75,7 @@ FILE: Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md
     "map",
     "relationships",
     "related",
-    "sidebar",
-    "tags"
+    "sidebar"
   ],
   "sidebarKeys": [
     "replaceMeta",
@@ -78,81 +85,76 @@ FILE: Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md
   "changes": {},
   "conflicts": [],
   "notices": [],
-  "closingMarkerIndex": 2208,
-  "firstLooseMarkerIndex": 2208
+  "closingMarkerIndex": 2695,
+  "firstLooseMarkerIndex": 2695
 }
 FRONTMATTER TAIL:
-s
-      note: All artwork that is not an original creation by Fall will be replaced with either original pieces or commissioned art.
-tags:
-  - okse
-  - dominion
-  - CITADEL
-  - nation
-  - faction
-  - Factions
-  - Nations
+bel: Juggernauts
+          href: '[[Juggernauts]]'
+        - Resonants
+      note: >-
+        All artwork that is not an original creation by Fall will be replaced
+        with either original pieces or commissioned art.
 ---
-
-:::c
+tags:
 
 FILE: Vault/Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md
 {
-  "type": "location",
-  "era": "CITADEL",
   "topLevelKeys": [
-    "sidebar",
-    "title",
-    "description",
-    "updated",
-    "status",
-    "type",
-    "development_level",
-    "location_kind",
-    "era",
-    "tags",
-    "import_source",
-    "import_source_type",
-    "import_source_file",
-    "import_issues"
+    "sidebar"
   ],
   "sidebarKeys": [
     "replaceMeta",
     "meta",
     "sections"
   ],
-  "changes": {},
+  "changes": {
+    "type": "location",
+    "era": "CITADEL"
+  },
   "conflicts": [],
   "notices": [],
-  "closingMarkerIndex": 1042,
-  "firstLooseMarkerIndex": 1042
+  "closingMarkerIndex": 657,
+  "firstLooseMarkerIndex": 657
 }
 FRONTMATTER TAIL:
-ITADEL
-tags:
-  - Okse
-import_source: worldanvil
-import_source_type: Settlement
-import_source_file: Settlement-Valenheim-323.md
-import_issues:
-  - existing-codex-match
-  - unresolved-legacy-links
-  - missing-inline-assets
+
+    - title: Places of note
+      items:
+        - label: Rauthrbak min
+          href: '[[Rauthrbak Min]]'
+        - Hofn Brattrstein
+        - Hofn Fagrvatn
+        - label: Mestrvirki
+          href: '[[Mestrvirki]]'
 ---
-> Val
+title
 
 > viscerium@0.1.0 frontmatter:folders:audit
 > node scripts/backfill-folder-frontmatter.mjs
 
 Folder frontmatter backfill (audit)
 Lore notes scanned: 281
-Would change: 0
-type fields: 0
-era fields: 0
+Would change: 13
+type fields: 12
+era fields: 13
 item_type fields: 0
 species_kind fields: 0
 Conflicts left untouched: 18
-Review notices: 0
+Review notices: 2
+  would update Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md: type=faction, era=CITADEL
+  would update Lore/Eras/CITADEL/Nations/Locations/Aldaness.md: type=location, era=CITADEL
+  would update Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md: type=location, era=CITADEL
+  would update Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko.md: type=character, era=ENTROPY
+  would update Lore/Eras/ENTROPY/Characters/Tpr. Mía Alvarado.md: type=character, era=ENTROPY
+  would update Lore/Eras/ENTROPY/Factions/Alliance of Democratic Nations.md: type=faction, era=ENTROPY
+  would update Lore/Eras/ENTROPY/Factions/The Black Foundry.md: type=faction, era=ENTROPY
+  would update Lore/Eras/ENTROPY/Formations/Delta Two.md: era=ENTROPY
+  would update Lore/Eras/ENTROPY/Nations/Locations/Kisara.md: type=location, era=ENTROPY
+  would update Lore/Eras/NEARSIGHT/Characters/Dr.Adrastus Delroy.md: type=character, era=NEARSIGHT
+  would update Lore/Eras/NEARSIGHT/Factions/Aquillan Seas Trade Union.md: type=faction, era=NEARSIGHT
+  would update Lore/Eras/NEARSIGHT/Nations/Locations/Tiumosk city.md: type=location, era=NEARSIGHT
+  would update Lore/Eras/NEARSIGHT/Nations/Trans-Continental Socialist Confederation.md: type=faction, era=NEARSIGHT
   conflict Lore/Degel System/Errack.md: type is "location", folder suggests "article"
   conflict Lore/Demo/Demo Archive Tower.md: type is "location", folder suggests "system"
   conflict Lore/Demo/Demo Concord.md: type is "faction", folder suggests "system"
@@ -171,3 +173,5 @@ Review notices: 0
   conflict Lore/Eras/CITADEL/Bestiary/Birds/Sigdfugl.md: type is "fauna", folder suggests "species"
   conflict Lore/Eras/CITADEL/Bestiary/Mammals/Voraegir.md: type is "fauna", folder suggests "species"
   conflict Lore/Eras/ENTROPY/Weapons & Armour/Weaponry/Explosives/CN47 Chaff Grenade.md: item_type is "Weapon, Explosive", folder suggests "weapon"
+  review Lore/Eras/CITADEL/Flora & Fungi/Haglace Brake.md: ambiguous-type
+  review Lore/Eras/ENTROPY/Formations/Delta Two.md: ambiguous-type
