@@ -25,6 +25,10 @@ test('sidebar wikilinks preserve heading fragments', () => {
     { target: 'Calendar/Okse', fragment: '#solmanuthur-16' },
   );
   assert.deepEqual(
+    parseSidebarWikilink('[[Calendar/Okse#solmanuthur-16]]'),
+    { target: 'Calendar/Okse', fragment: '#solmanuthur-16' },
+  );
+  assert.deepEqual(
     parseSidebarWikilink('[[Okse Dominion]]'),
     { target: 'Okse Dominion', fragment: '' },
   );
