@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-004
+checklists:
+  - CHK-004a
+---
 # Frontmatter Authoring Workflow
 
 > **Next action:** Install the two community plugins, restart Obsidian, then test one new draft.
@@ -195,6 +201,10 @@ npm run build
 ```
 
 Confirm that the selected header image copies to the generated site and that the build reports no metadata error.
+
+## Verification checklist
+
+Use [[Checklists/004a - Frontmatter Publication Checklist|Frontmatter Publication Checklist]] before changing a note to `status: published`.
 
 ## If header image selection fails
 

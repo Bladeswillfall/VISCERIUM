@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-009
+checklists:
+  - CHK-009a
+---
 # Atlas Authoring SOP
 
 > **Use this SOP when:** You create an interactive map or place a lore note on one.
@@ -175,6 +181,10 @@ Use plugin zoom settings only to make Obsidian authoring comfortable. Use the li
 5. Keep the child note's `map.id` pointed at the parent map ID.
 
 The public marker opens the generated child Atlas page.
+
+## Verification checklist
+
+Use [[Checklists/009a - Atlas Publication Checklist|Atlas Publication Checklist]] before publication.
 
 ## Check the result
 

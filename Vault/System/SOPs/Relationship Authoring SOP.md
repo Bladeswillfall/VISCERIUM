@@ -1,3 +1,7 @@
+---
+document_type: sop
+sop_id: SOP-008
+---
 # Relationship Authoring SOP
 
 > **Use this SOP when:** A relationship matters to navigation, continuity, or setting logic.

@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-002
+checklists:
+  - CHK-002a
+---
 # Entity Authoring SOP
 
 > **Use this SOP when:** You add content to fauna, flora, fungi, items, or similar structured records.
@@ -118,6 +124,10 @@ Examples include:
 | `developed` | Repeated use or narrative importance justifies deeper structure. |
 
 Do not use the number of properties to set the development level.
+
+## Verification checklist
+
+Use [[Checklists/002a - Entity Article Publication Checklist|Entity Article Publication Checklist]] when the note is being considered for publication.
 
 ## Check the result
 
