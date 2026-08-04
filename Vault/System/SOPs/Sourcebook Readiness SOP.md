@@ -1,3 +1,9 @@
+---
+document_type: sop
+sop_id: SOP-011
+checklists:
+  - CHK-011a
+---
 # Sourcebook Readiness SOP
 
 > **Use this SOP when:** Canon may support a sourcebook, gazetteer, setting guide, or adventure product.
