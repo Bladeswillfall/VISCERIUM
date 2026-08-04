@@ -5,12 +5,12 @@ import { docsSchema } from '@astrojs/starlight/schema';
 import { changelogsLoader } from 'starlight-changelogs/loader';
 import { pageSiteGraphSchema } from 'starlight-site-graph/schema';
 import { starlightTagsExtension } from 'starlight-tags/schema';
+import { frontmatterDate } from './lib/frontmatter-date.mjs';
 
 const stringOrStrings = z.union([z.string(), z.array(z.string())]);
 const eraValue = z.enum(['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY', 'Universal']);
 const eraOrEras = z.union([eraValue, z.array(eraValue)]);
 const looseRecord = z.record(z.unknown());
-const frontmatterDate = z.coerce.date();
 const optionalString = z.string().nullable().optional();
 const optionalNumber = z.number().nullable().optional();
 const calendarDateSchema = z.object({
