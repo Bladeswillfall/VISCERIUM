@@ -1,7 +1,6 @@
 import { getCollection } from 'astro:content';
 import siteConfig from '../../site.config.mjs';
-
-const FALLBACK_DATE = new Date('1970-01-01T00:00:00.000Z');
+import { getAuthoredFeedDates, latestFeedDate } from './feed-dates.mjs';
 
 export type FeedEntry = {
   title: string;
@@ -10,7 +9,7 @@ export type FeedEntry = {
   id: string;
   type?: string;
   tags: string[];
-  date: Date | null;
+  created: Date | null;
   updated: Date;
 };
 
@@ -33,19 +32,9 @@ function asArray(value: unknown): string[] {
   return [String(value)].filter(Boolean);
 }
 
-function readDate(value: unknown): Date | null {
-  if (!value) return null;
-  const date = value instanceof Date ? value : new Date(String(value));
-  return Number.isNaN(date.valueOf()) ? null : date;
-}
-
 function routeFromEntry(entry: { id: string; data: { slug?: string } }): string {
   const slug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/i, '');
   return slug === 'index' ? '/' : `/${String(slug).replace(/^\/+|\/+$/g, '')}/`;
-}
-
-function getEntryDate(data: Record<string, unknown>): Date | null {
-  return readDate(data.updated) ?? readDate(data.date) ?? readDate(data.published);
 }
 
 export async function getFeedEntries(base: URL | string = siteConfig.site): Promise<FeedEntry[]> {
@@ -57,7 +46,7 @@ export async function getFeedEntries(base: URL | string = siteConfig.site): Prom
 
   return docs
     .map((entry) => {
-      const date = getEntryDate(entry.data as Record<string, unknown>);
+      const { created, updated } = getAuthoredFeedDates(entry.data as Record<string, unknown>);
       return {
         title: entry.data.title,
         description: entry.data.description,
@@ -65,8 +54,8 @@ export async function getFeedEntries(base: URL | string = siteConfig.site): Prom
         id: absoluteUrl(routeFromEntry(entry), base),
         type: entry.data.type,
         tags: [...asArray(entry.data.type), ...asArray(entry.data.tags), ...asArray(entry.data.era), ...asArray(entry.data.faction)],
-        date,
-        updated: date ?? FALLBACK_DATE,
+        created,
+        updated,
       };
     })
     .sort((a, b) => {
@@ -78,5 +67,5 @@ export async function getFeedEntries(base: URL | string = siteConfig.site): Prom
 }
 
 export function getFeedUpdated(entries: FeedEntry[]): Date {
-  return entries.find((entry) => entry.date)?.updated ?? new Date();
+  return latestFeedDate(entries);
 }

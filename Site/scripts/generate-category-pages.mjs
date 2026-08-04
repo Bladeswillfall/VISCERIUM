@@ -1,20 +1,16 @@
 import path from 'node:path';
 import process from 'node:process';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import fs from 'node:fs/promises';
 import matter from 'gray-matter';
 import { cleanSlug, escapeHtml, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
 
-const execFileAsync = promisify(execFile);
 const siteRoot = process.cwd();
-const repoRoot = path.resolve(siteRoot, '..');
 const docsDir = process.env.VISCERIUM_DOCS_DIR
   ? path.resolve(process.env.VISCERIUM_DOCS_DIR)
   : path.resolve(siteRoot, 'src/content/docs');
-const loreRoot = 'Vault/Lore/';
 const markdownExtensions = /\.(md|mdx)$/i;
 const leadingArticlePattern = /^(?:the|an|a)\s+/i;
+
 function titleFromSegment(segment) {
   const known = new Map([
     ['citadel', 'CITADEL'],
@@ -34,15 +30,6 @@ function sourceRouteFromFile(file, data) {
   return cleanSlug(data.slug || relative);
 }
 
-function asDate(value) {
-  if (!value) return null;
-  const date = value instanceof Date ? value : new Date(String(value));
-  return Number.isNaN(date.valueOf()) ? null : date;
-}
-
-function entryDate(data) {
-  return asDate(data.updated) ?? asDate(data.date) ?? asDate(data.published);
-}
 function sortableTitle(value) {
   const title = String(value ?? '').trim();
   const withoutArticle = title.replace(leadingArticlePattern, '').trim();
@@ -163,58 +150,15 @@ function generatedCategorySection(descendants, childCategories) {
   return lines.join('\n');
 }
 
-function addFrontmatterField(raw, key, value) {
-  if (!value || new RegExp(`^${key}:`, 'm').test(raw)) return raw;
-  const closing = raw.indexOf('\n---', 4);
-  if (closing === -1) return raw;
-  return `${raw.slice(0, closing)}\n${key}: ${JSON.stringify(value)}${raw.slice(closing)}`;
-}
-
-async function gitUpdatedDates() {
-  try {
-    const { stdout } = await execFileAsync(
-      'git',
-      ['log', '--format=@@%cI', '--name-only', '--', 'Vault/Lore'],
-      { cwd: repoRoot, maxBuffer: 16 * 1024 * 1024 },
-    );
-    const updatedByPath = new Map();
-    let currentDate;
-    for (const rawLine of stdout.split(/\r?\n/)) {
-      const line = rawLine.trim();
-      if (line.startsWith('@@')) {
-        currentDate = line.slice(2).trim();
-        continue;
-      }
-      if (!currentDate || !line.startsWith(loreRoot)) continue;
-      const sourcePath = toPosixPath(line.slice(loreRoot.length));
-      if (!updatedByPath.has(sourcePath)) updatedByPath.set(sourcePath, currentDate);
-    }
-    return updatedByPath;
-  } catch (error) {
-    console.warn(`Could not read Git history for What's New dates: ${error.message}`);
-    return new Map();
-  }
-}
-
 const generatedFiles = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
   .map((file) => path.resolve(docsDir, file))
   .sort();
-const updatedBySourcePath = await gitUpdatedDates();
 const entries = [];
 
 for (const file of generatedFiles) {
-  let raw = await fs.readFile(file, 'utf8');
+  const raw = await fs.readFile(file, 'utf8');
   const parsed = matter(raw);
   if (parsed.data.status !== 'published' || parsed.data.type === 'category') continue;
-
-  if (!entryDate(parsed.data) && typeof parsed.data.sourcePath === 'string') {
-    const updated = updatedBySourcePath.get(toPosixPath(parsed.data.sourcePath));
-    if (updated) {
-      raw = addFrontmatterField(raw, 'updated', updated);
-      await fs.writeFile(file, raw, 'utf8');
-      parsed.data.updated = updated;
-    }
-  }
 
   const slug = sourceRouteFromFile(file, parsed.data);
   if (!slug || slug === 'index') continue;
