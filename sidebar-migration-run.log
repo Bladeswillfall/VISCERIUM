@@ -1,0 +1,981 @@
+
+===== Install dependencies =====
+
+PASSED: Install dependencies
+
+===== Apply migration =====
+
+> viscerium@0.1.0 migration:sidebar-wikilinks:write
+> node scripts/migrate-sidebar-wikilinks.mjs --write
+
+Updated 16 sidebar file(s):
+- Vault/Lore/Degel System/Errack.md
+- Vault/Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md
+- Vault/Lore/Eras/CITADEL/Flora & Fungi/Haglace Brake.md
+- Vault/Lore/Eras/CITADEL/Nations/Locations/Aldaness.md
+- Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md
+- Vault/Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md
+- Vault/Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko.md
+- Vault/Lore/Eras/ENTROPY/Characters/Tpr. Mía Alvarado.md
+- Vault/Lore/Eras/ENTROPY/Factions/Alliance of Democratic Nations.md
+- Vault/Lore/Eras/ENTROPY/Factions/The Black Foundry.md
+- Vault/Lore/Eras/ENTROPY/Formations/Delta Two.md
+- Vault/Lore/Eras/ENTROPY/Nations/Locations/Kisara.md
+- Vault/Lore/Eras/NEARSIGHT/Characters/Dr.Adrastus Delroy.md
+- Vault/Lore/Eras/NEARSIGHT/Factions/Aquillan Seas Trade Union.md
+- Vault/Lore/Eras/NEARSIGHT/Nations/Locations/Tiumosk city.md
+- Vault/Lore/Eras/NEARSIGHT/Nations/Trans-Continental Socialist Confederation.md
+
+PASSED: Apply migration
+
+===== Regenerate public content =====
+
+> viscerium@0.1.0 sync
+> node scripts/build-content.mjs --mode=sync
+
+Validated 282 vault source note(s).
+Validated 8 image assets: WebP-only raster policy satisfied.
+Validated 46 image assets: WebP-only raster policy satisfied.
+Validated 39 timeline event(s) and 4 era record(s).
+Published Calendar.md -> calendar.mdx
+Published Calendar/Okse.md -> calendar/okse.mdx
+Published Degel System/Crucibus.md -> degel-system/crucibus.md
+Published Degel System/Degel.md -> degel-system/degel.md
+Published Degel System/Errack.md -> degel-system/errack.mdx
+Published Degel System/Eye of Visi.md -> degel-system/eye-of-visi.md
+Published Degel System/Eye of Vordr.md -> degel-system/eye-of-vordr.md
+Published Degel System/The Shards.md -> degel-system/the-shards.md
+Published Demo/Demo Archive Tower.md -> demo/demo-archive-tower.md
+Published Demo/Demo Concord.md -> demo/demo-concord.md
+Published Demo/Demo Directorate.md -> demo/demo-directorate.md
+Published Demo/Demo Frontier Fort.md -> demo/demo-frontier-fort.md
+Published Demo/Demo Gate City.md -> demo/demo-gate-city.md
+Published Demo/Demo Hidden Ruin.md -> demo/demo-hidden-ruin.md
+Published Demo/Demo League.md -> demo/demo-league.md
+Published Demo/Demo Market Ward.md -> demo/demo-market-ward.md
+Published Demo/Demo Marshal.md -> demo/demo-marshal.md
+Published Demo/Demo Rift Site.md -> demo/demo-rift-site.md
+Published Demo/Demo Trade Port.md -> demo/demo-trade-port.md
+Published Demo/Exploration Demo World.md -> demo/exploration-demo-world.md
+Published Demo/Exploration Demo.md -> demo/exploration-demo.md
+Published Eras/CITADEL.md -> eras/citadel.md
+Published Eras/CITADEL/Errack CITADEL Map.md -> eras/citadel/errack-citadel-map.md
+Published Eras/CITADEL/Events/The Ash-Winter Pilgrimage.md -> eras/citadel/events/the-ash-winter-pilgrimage.md
+Published Eras/CITADEL/Events/The Breaking of Lorndale.md -> eras/citadel/events/the-breaking-of-lorndale.md
+Published Eras/CITADEL/Events/The First Crowning at Skallfast.md -> eras/citadel/events/the-first-crowning-at-skallfast.md
+Published Eras/CITADEL/Events/The Galdyr Compact.md -> eras/citadel/events/the-galdyr-compact.md
+Published Eras/CITADEL/Events/The Hollow Feast of Veyr.md -> eras/citadel/events/the-hollow-feast-of-veyr.md
+Published Eras/CITADEL/Events/The Night of Seven Bells.md -> eras/citadel/events/the-night-of-seven-bells.md
+Published Eras/CITADEL/Events/The Opening of the Bone Road.md -> eras/citadel/events/the-opening-of-the-bone-road.md
+Published Eras/CITADEL/Events/The Silence After Seven Bells.md -> eras/citadel/events/the-silence-after-seven-bells.md
+Published Eras/CITADEL/Events/The Verigoth Chain Census.md -> eras/citadel/events/the-verigoth-chain-census.md
+Published Eras/CITADEL/Nations/Okse Dominion.md -> eras/citadel/nations/okse-dominion.mdx
+Published Eras/ENTROPY.md -> eras/entropy.md
+Published Eras/ENTROPY/Events/GARMIR Gate Ignition.md -> eras/entropy/events/garmir-gate-ignition.md
+Published Eras/ENTROPY/Events/The Abberath Disclosure.md -> eras/entropy/events/the-abberath-disclosure.md
+Published Eras/ENTROPY/Events/The First Confirmed Naranor Relay.md -> eras/entropy/events/the-first-confirmed-naranor-relay.md
+Published Eras/ENTROPY/Events/The Gate Ignition Echo.md -> eras/entropy/events/the-gate-ignition-echo.md
+Published Eras/ENTROPY/Events/The Juggernaut Compact.md -> eras/entropy/events/the-juggernaut-compact.md
+Published Eras/ENTROPY/Events/The Last Calendar Correction.md -> eras/entropy/events/the-last-calendar-correction.md
+Published Eras/ENTROPY/Events/The Myrkild Amnesty Schism.md -> eras/entropy/events/the-myrkild-amnesty-schism.md
+Published Eras/ENTROPY/Events/The Pathfinder Exodus.md -> eras/entropy/events/the-pathfinder-exodus.md
+Published Eras/ENTROPY/Events/The Vacuum Siege of Satol Reach.md -> eras/entropy/events/the-vacuum-siege-of-satol-reach.md
+Published Eras/ENTROPY/Events/The Vodr Signal Bloom.md -> eras/entropy/events/the-vodr-signal-bloom.md
+Published Eras/NEARSIGHT.md -> eras/nearsight.md
+Published Eras/NEARSIGHT/Events/First AESIR Mk-2 Fielding.md -> eras/nearsight/events/first-aesir-mk-2-fielding.md
+Published Eras/NEARSIGHT/Events/First Jade Current Compact Deployment.md -> eras/nearsight/events/first-jade-current-compact-deployment.md
+Published Eras/NEARSIGHT/Events/Formation of ASTU.md -> eras/nearsight/events/formation-of-astu.md
+Published Eras/NEARSIGHT/Events/KRG Recovery at Kraal Nine.md -> eras/nearsight/events/krg-recovery-at-kraal-nine.md
+Published Eras/NEARSIGHT/Events/TCSC Bastion Doctrine Adopted.md -> eras/nearsight/events/tcsc-bastion-doctrine-adopted.md
+Published Eras/NEARSIGHT/Events/The Corporate Genetic Bidding Programme.md -> eras/nearsight/events/the-corporate-genetic-bidding-programme.md
+Published Eras/NEARSIGHT/Events/The Garmir Quarantine.md -> eras/nearsight/events/the-garmir-quarantine.md
+Published Eras/NEARSIGHT/Events/The Kraal Nine Signal Return.md -> eras/nearsight/events/the-kraal-nine-signal-return.md
+Published Eras/NEARSIGHT/Events/The Nearsight Blackout.md -> eras/nearsight/events/the-nearsight-blackout.md
+Published Eras/NEARSIGHT/Events/The RD-76 Dart Plunge Trial.md -> eras/nearsight/events/the-rd-76-dart-plunge-trial.md
+Published Eras/SMOG.md -> eras/smog.md
+Published Eras/SMOG/Events/The Black Furnace Accord.md -> eras/smog/events/the-black-furnace-accord.md
+Published Eras/SMOG/Events/The Brass Lung Winter.md -> eras/smog/events/the-brass-lung-winter.md
+Published Eras/SMOG/Events/The Engimanutur Explosion.md -> eras/smog/events/the-engimanutur-explosion.md
+Published Eras/SMOG/Events/The First Resonance Meter Standard.md -> eras/smog/events/the-first-resonance-meter-standard.md
+Published Eras/SMOG/Events/The Grey Armistice.md -> eras/smog/events/the-grey-armistice.md
+Published Eras/SMOG/Events/The Hollowed Labour Panic.md -> eras/smog/events/the-hollowed-labour-panic.md
+Published Eras/SMOG/Events/The Nine-Stack Lockout.md -> eras/smog/events/the-nine-stack-lockout.md
+Published Eras/SMOG/Events/The Nine-Stack Strike.md -> eras/smog/events/the-nine-stack-strike.md
+Published Eras/SMOG/Events/The Skyhook Demonstration.md -> eras/smog/events/the-skyhook-demonstration.md
+Published Eras/SMOG/Events/The Trench Line at Orra Vale.md -> eras/smog/events/the-trench-line-at-orra-vale.md
+Published Myrkildicary/Myrkild.md -> myrkildicary/myrkild.md
+Published Start Here.mdx -> start-here.mdx
+Stripped Obsidian-only plugin content from 2 published note(s).
+Prepared Storyteller markers for 2 public documents.
+Expanded Vault-owned era primer content in eras/citadel.mdx
+Expanded Vault-owned era primer content in eras/entropy.mdx
+Expanded Vault-owned era primer content in eras/nearsight.mdx
+Expanded Vault-owned era primer content in eras/smog.mdx
+Expanded timeline content in eras/citadel.mdx
+Expanded timeline content in eras/entropy.mdx
+Expanded timeline content in eras/nearsight.mdx
+Expanded timeline content in eras/smog.mdx
+Generated Referenced in index: 6 source article references across 6 pages.
+Generated 0 continuity hubs.
+Generated 99 era-scoped tag pages.
+Extended calendar.mdx with a generated category index.
+Generated category index degel-system/index.md.
+Generated category index demo/index.md.
+Generated category index eras/index.md.
+Extended eras/citadel.mdx with a generated category index.
+Generated category index eras/citadel/events/index.md.
+Generated category index eras/citadel/nations/index.md.
+Extended eras/entropy.mdx with a generated category index.
+Generated category index eras/entropy/events/index.md.
+Extended eras/nearsight.mdx with a generated category index.
+Generated category index eras/nearsight/events/index.md.
+Extended eras/smog.mdx with a generated category index.
+Generated category index eras/smog/events/index.md.
+Generated category index myrkildicary/index.md.
+Generated 14 category index pages.
+Applied Giscus policy to 172 generated pages; updated 157.
+Completed shared content pipeline in sync mode.
+
+PASSED: Regenerate public content
+
+===== Run unit tests =====
+
+> viscerium@0.1.0 test:unit
+> node --test tests/*.test.mjs
+
+✔ article editorial details retain approved visual treatments (1.632649ms)
+✔ shared article styling uses the approved editorial hierarchy (9.338885ms)
+✔ article editorial and media rules share one owned entrypoint (2.268896ms)
+✔ the grainy header fade remains part of the Codex title treatment (1.762853ms)
+✔ article headings use the shared Era Spine hierarchy without new colours (1.55237ms)
+✔ the bespoke landing page is excluded from the Era Spine hierarchy (0.337532ms)
+✔ era styles provide existing accents without restoring the old underline or ornament (0.441627ms)
+✔ Obsidian image flags parse in any order without polluting alt text (2.210599ms)
+✔ numeric-only image sizing remains a centred Obsidian-compatible layout (1.329949ms)
+✔ shape wrapping is rejected when an image is not floated (0.325204ms)
+✔ public image markup carries layout data while keeping accessible alt text clean (0.656957ms)
+✔ MDX image markup remains valid inside authored columns (0.319044ms)
+✔ image layout CSS contains floats without overriding hidden Storyteller panels (10.39124ms)
+✔ Obsidian loads the first-party image renderer and matching snippet rules (3.121644ms)
+✔ Obsidian renders frontmatter headerImage in Reading View and Live Preview (1.38503ms)
+✔ public sync preserves pipe flags and selects MDX-safe output for columns (1.38444ms)
+✔ article heading rhythm favours the text that follows each heading (1.454333ms)
+✔ authored grid layouts let gap own spacing between every direct cell (0.339536ms)
+✔ desktop article TOC is the sticky sidebar element rather than the whole sidebar (0.383882ms)
+✔ the borderless pass preserves the tested stylesheet registration graph (1.357319ms)
+✔ structural borders are targeted without flattening article callouts, timelines or the landing page (0.423159ms)
+✔ the Okse Dominion source uses responsive two-column authoring blocks (186.080598ms)
+✔ calendar source date round-trips through absolute world-time (31.711827ms)
+✔ negative absolute days round-trip (0.402839ms)
+✔ leap and intercalary rules are enforced (0.82023ms)
+✔ precision changes labels, never chronology (0.955922ms)
+✔ synthetic UTC dates preserve one world day without timezone drift (0.453054ms)
+✔ timeline-local synthetic origins keep distant world dates inside four-digit years (0.187699ms)
+✔ era membership includes boundaries and overlapping periods (0.405483ms)
+✔ super inclusion follows importance and explicit overrides (0.196462ms)
+✔ same-day sorting uses importance, editorial order, title and stable id (1.523406ms)
+✔ URL state rejects invalid calendars and remains shareable (0.954821ms)
+✔ missing timeline ranges remain undefined while explicit zero remains valid (0.488868ms)
+✔ calendar selection priority is query, storage, timeline, global (0.280398ms)
+✔ category generation never derives article dates from Git checkout history (6.894378ms)
+✔ category pages use alphabetically grouped responsive index markup (142.473479ms)
+✔ serializes canonical records through native Chronos syntax and parsing (6.236929ms)
+✔ lets Chronos create native groups from declared lanes without changing chronology (2.072123ms)
+✔ sanitizes parser delimiters while retaining canonical metadata (1.085105ms)
+✔ maps distant VISCERIUM dates into Chronos four-digit parser years (0.740171ms)
+✔ requires a VISCERIUM date formatter rather than exposing synthetic dates (0.561576ms)
+✔ uses native Starlight asides for authoring callouts (2.467672ms)
+✔ keeps responsive layouts with compact CSS variables (1.778747ms)
+✔ normalises compact inline container tags before emitting MDX (1.449707ms)
+✔ does not mistake inline-code examples for compact layout directives (0.214169ms)
+✔ does not transform authoring syntax inside fenced code (0.223372ms)
+✔ authored colours live in dedicated progressive palette files (49.87835ms)
+✔ canvas graph colours use only the RGB-safe variable adapter (2.851413ms)
+✔ the approved palette owns page and navigation surfaces (1.927678ms)
+✔ text and gamut variants derive from shared colour bases (1.241658ms)
+✔ content manifests cache parsed markdown until explicitly refreshed (21.475431ms)
+Generated 1 continuity hub.
+✔ published era editions generate one neutral continuity hub and switcher metadata (34.708079ms)
+✔ first-party creator plugin is syntactically valid and exposes era/continuity commands (3.611102ms)
+✔ creator tools provide disposable World Anvil review context in the right sidebar (0.301508ms)
+✔ World Anvil review tasks use the note checklist as source and keep generated issue mirrors aligned (0.264794ms)
+✔ World Anvil review context supports same-title comparison and priority queue navigation (0.317633ms)
+✔ multi-era imports remain in contextual review until their structural split is resolved (0.230452ms)
+✔ import review pane follows creator visual grammar (0.195121ms)
+✔ creator templates use the controlled era vocabulary and continuity IDs (0.383931ms)
+✔ Degel map objects use lightweight WebP placeholder paths (1.004735ms)
+✔ The Shards are Errack ring fortresses rather than an asteroid belt (0.304202ms)
+✔ Degel placeholder artwork is committed as valid WebP assets (8.400959ms)
+✔ Degel system map uses a 4K design grid with valid unique placements (1.414434ms)
+✔ Degel system explorer exposes equivalent map and list views with accessibility controls (6.309197ms)
+✔ Degel orbit guides bow toward the outer system (2.456975ms)
+✔ Degel category page mounts the explorer and suppresses the generated table of contents (2.434772ms)
+✔ Degel category releases the explorer from Starlight article width limits (3.533698ms)
+✔ Demo category group label is plain text (0.890024ms)
+✔ demo sidebar group stays plain text to avoid raw icon syntax in generated category output (0.856825ms)
+✔ font CDN origins are allowed by the report-only content security policy (1.530798ms)
+✔ optional third-party origins are declared by the report-only content security policy (0.420886ms)
+✔ the replacement public configuration uses the new identity (1.968128ms)
+✔ public site code cannot read Worker-only contact secrets (0.475066ms)
+✖ the checks workflow cannot create a follow-up repository commit (1.826858ms)
+✔ aggregated changelog headings have unique IDs (0.345123ms)
+✔ era links clear AA contrast and gain contrast on hover in both themes (1.782161ms)
+✔ era buttons maintain component separation, stronger hover separation, and readable labels (4.042093ms)
+✔ era identity colours use OKLCH and the shared P3 chroma multiplier (0.492974ms)
+✔ era four keeps teal navigation identity and brown control identity (0.426474ms)
+✔ era vocabulary is controlled and includes Universal without making it historical (1.86846ms)
+✔ entity ids are stable readable kebab-case identifiers (0.263071ms)
+✔ era links prefer same-era editions then Universal (0.321859ms)
+✔ context resolution never silently crosses to another historical era (0.281789ms)
+✔ unrelated same-title candidates remain unresolved (1.137713ms)
+✔ continuity families group editions by entity id and era (0.388418ms)
+✔ the content sync maps era folders to generated eraStyle metadata (1.696384ms)
+✔ eraStyle stays out of authored Obsidian frontmatter and appears in generated site frontmatter (1.181247ms)
+✔ Starlight exposes generated eraStyle as a DOM data attribute (1.308277ms)
+✔ era palette application lives in the Codex ion layer and wins interactive link states (0.689435ms)
+✔ CITADEL owns a valid era homepage primer (10.154559ms)
+✔ SMOG owns a valid era homepage primer (1.88179ms)
+✔ NEARSIGHT owns a valid era homepage primer (3.088144ms)
+✔ ENTROPY owns a valid era homepage primer (2.040086ms)
+✔ CITADEL homepage links to its canonical Atlas map rather than the WorldAnvil or demo map (4.484451ms)
+✔ transforms a Vault-owned era primer shortcode into Starlight MDX (107.077647ms)
+✔ Errack demonstrates rich Codex authoring without legacy World Anvil links (6.126075ms)
+✔ Errack Planetary Rings demonstrates the responsive text-and-image authoring pattern (1.790274ms)
+✔ pronunciation metadata is accepted and rendered beside Codex titles (3.026563ms)
+✔ Errack artwork is committed to the managed Vault image store (4.767173ms)
+✔ Atlas compiler preserves semantic layers, zoom visibility and nested maps (13.848474ms)
+✔ published Atlas demo uses a managed real WebP map with matching dimensions (6.211001ms)
+✔ relationship compiler deduplicates reciprocal edges and keeps directed metadata (2.302826ms)
+✔ relationship compiler reports unresolved explicit targets without inventing nodes (0.523328ms)
+✔ feed dates keep creation and modification timestamps separate (1.078194ms)
+✔ an authored creation date is also the initial update date (0.180669ms)
+✔ standalone update timestamps cannot establish article history (0.139958ms)
+✔ legacy publication fields remain valid creation-date aliases (0.185406ms)
+✔ feed-level update time is stable when no authored dates exist (0.244574ms)
+✔ plans missing item fields from weapon folders without rewriting prose (11.675671ms)
+✔ fills species kind and a blank era while preserving existing authored fields (3.719895ms)
+✔ reports contradictory authored values and never overwrites them (2.414522ms)
+✔ ambiguous folders are reported instead of silently becoming articles (2.762661ms)
+✔ audit mode is non-destructive; write mode is idempotent (18.796666ms)
+✔ notes without valid frontmatter are review-only (4.346337ms)
+✖ checked-in Lore has no pending safe folder-derived frontmatter additions (190.959527ms)
+✔ normal Codex pages remove inherited main bottom padding without touching the homepage (1.008771ms)
+✔ article metadata stays in Starlight Footer while the global rail is not nested there (0.340847ms)
+✔ PageFrame owns one global footer rail outside Starlight page content (0.321148ms)
+✔ the whole Starlight page is the raised deck (1.782137ms)
+✔ the global navigation rail uses literal underlay geometry without breakout units (0.503609ms)
+✔ print and forced-colour modes disable the reveal treatment (0.385924ms)
+✔ frontmatter plugins separate mechanical, authorial and continuity fields (8.625383ms)
+✔ all note-creation templates seed guarded blank timestamps (10.462416ms)
+✔ blank and null frontmatter dates remain missing (1.541614ms)
+✔ authored frontmatter dates are still coerced to Date values (0.513373ms)
+✔ Giscus uses the migrated public repository defaults without deploy variables (49.337274ms)
+✔ Giscus retains an explicit deployment off switch (41.384453ms)
+Applied Giscus policy to 4 generated pages; updated 2.
+✔ generated Giscus policy enables articles and disables structural pages (32.35642ms)
+✔ graph canvas colours are explicit, theme-aware and parser-safe (1.662724ms)
+✔ site graph uses tags, native interactions and a late canvas adapter (0.488066ms)
+✔ the dedicated graph page hydrates its production sitemap (0.220818ms)
+✔ Telescope owns search while the custom header stays enabled (1.617597ms)
+✔ the Codex header renders the Telescope search trigger, era context and theme controls (2.482914ms)
+✔ the Telescope plugin retains a hidden controller mount (0.458092ms)
+✔ global shell scripts are processed once instead of repeated inline (0.566733ms)
+✔ the top ribbon is visually flat, centred and free of GitHub branding (0.503609ms)
+✔ the complete header ribbon is borderless without removing focus indicators (0.473124ms)
+✔ theme controls are not duplicated inside the sidebar (0.273847ms)
+✔ Home brand uses Cinzel without changing normal article heading ownership (6.999203ms)
+✔ Needs Attention derives a four-level severity from the real issue count (1.42457ms)
+✔ Base styling escalates from amber to deep red on the Home dashboard (2.638956ms)
+✔ VISCERIUM layout tools expose safe visual indent and outdent commands (2.967996ms)
+✔ visual indents preserve parent quote depth so nested indents are structurally nested (0.267447ms)
+✔ Reading View uses a Markdown post-processor instead of relying on theme-sensitive CSS shape alone (0.266066ms)
+✔ Reading View renders compact Codex cols and col tags as responsive article columns (0.435568ms)
+✔ malformed nested indents from earlier versions are repaired in source (0.230452ms)
+✔ legacy collapsed visual indents are repaired and cannot hide their body (0.221279ms)
+✔ layout tools are enabled in the shared vault configuration (0.225275ms)
+✔ public Codex recognises visual indent markers without quotation chrome or scaffold labels (0.335169ms)
+✔ high-resolution maps get a compact-safe zoom-out floor (1.45828ms)
+✔ map zoom floors remain permissive when an author explicitly allows more zoom-out (0.232536ms)
+✔ marker zoom thresholds are not rewritten by the map zoom floor (0.501226ms)
+✔ mobile sidebar swipe plugin is fully removed (1.255058ms)
+✔ vendored MySnippets runtime is valid JavaScript (6.308896ms)
+✔ MySnippets runtime keeps modern and legacy CSS toggle paths (1.692328ms)
+✔ MySnippets manifest uses the compatibility baseline (1.920778ms)
+✔ infers an event from a nested Events folder (1.934198ms)
+✔ uses the nearest recognised source folder (0.18149ms)
+✔ infers items from weapon and armour taxonomy folders (1.079887ms)
+✔ infers species from biological taxonomy folders (0.200388ms)
+✔ infers factions and locations from semantic subfolders (0.255961ms)
+✔ only infers era for direct children of the Eras index folder (0.24906ms)
+✔ falls back to article outside recognised folders (0.213047ms)
+✔ Iconic owns explorer folder icons without a competing CSS layer (8.451935ms)
+✔ Home keeps DataviewJS lines at the code fence quote depth (3.248143ms)
+✔ Home working band keeps Continue beside a stacked Create and Writing column (2.500561ms)
+✔ File explorer owns Home placement and keeps it card-free (2.200353ms)
+✔ Obsidian plugin profile matches the enabled plugin list (2.744403ms)
+✔ shared plugin settings exist and do not contain known device-local state (2.552213ms)
+✔ ordinary third-party plugin directories contain only approved shared settings (0.988721ms)
+✔ gitignore protects plugin payload boundaries (0.391843ms)
+✔ enabled Obsidian CSS snippets exist as files (1.701462ms)
+✔ snippet filenames stay plain and modular (1.378101ms)
+✔ ordinary Obsidian articles use a responsive wide lane in both Markdown modes (0.447516ms)
+✔ article width documentation names the snippet owner and Home exception (0.364492ms)
+✔ all operational SOPs reference the shared documentation writing standard (3.21603ms)
+✔ the World Anvil migration guide gives exact novice-facing Obsidian actions (0.505732ms)
+✔ creator references record Templater, migration frontmatter, and sidebar actions (0.534605ms)
+✔ the architecture handoff documents current programs and workflows (0.727552ms)
+✔ the visual architecture map reflects the current search and era systems (0.350671ms)
+✔ standard lore entries retain article presentation (1.253726ms)
+✔ site landing pages are structural rather than standard articles (0.352795ms)
+✔ era homepages are structural regardless of exact route source (0.231835ms)
+✔ category, Start Here and composed utility pages are structural (0.315309ms)
+✔ Giscus defaults to standard articles while preserving explicit overrides (0.287567ms)
+✔ page headers render title, breadcrumbs, then calendar date (1.329368ms)
+✔ release breadcrumbs omit the changelog plugin virtual version segment (0.389069ms)
+✔ shared page headers own the grainy image fade implementation (1.353204ms)
+✔ per-page sidebars keep the TOC without rendering graph or backlink widgets (0.383751ms)
+✔ web fonts are discovered from the document head rather than a CSS import chain (5.232616ms)
+✔ static assets receive a useful repeat-visit cache lifetime (1.629404ms)
+✔ internal article links are indexed while embeds, external links, comments and code examples are ignored (3.027014ms)
+✔ referenced-in records are automatic, source-deduplicated and exclude generated navigation pages (0.629727ms)
+✔ reference indexing runs before generated navigation is appended (0.755984ms)
+✔ Referenced in is placed before contributors and uses the marginal index treatment (0.538181ms)
+✔ rights configuration keeps ownership transitions deliberate (1.151022ms)
+✔ year ranges are UTC-based, validated, and use an en dash (0.663106ms)
+✔ managed repository notices match the current rights configuration (1.499882ms)
+✔ Astro footer renders the managed creative-rights notice (0.294227ms)
+✔ README badges communicate the mixed licensing model (0.354137ms)
+✔ package scripts and annual workflow protect notice freshness (0.518111ms)
+✔ Codex noise source decodes to a WebP image (1.123251ms)
+✔ Codex shell and build pipeline agree on the noise asset URL (0.421547ms)
+✔ Universal sidebar scope follows era metadata instead of requiring a Universal folder (3.146621ms)
+✔ Universal route derivation respects explicit slugs and index pages (0.256391ms)
+✔ sidebar lists folders before articles at every level (94.846569ms)
+✔ desktop sidebar overlay uses an explicit unlayered state (1.181708ms)
+✔ desktop sidebar toggle lives in the sticky header while the sidebar runtime rebinds safely (0.766962ms)
+✔ mobile header uses thresholded fixed reveal and hide states (0.579262ms)
+✔ mobile table of contents follows the auto-hiding header without changing its functionality (0.390221ms)
+✔ mobile sidebar controls follow the auto-hiding header without being covered (0.455227ms)
+✔ homepage has no first-load reveal and still supports the sidebar rail (0.351323ms)
+✔ mobile page table of contents is owned by the responsive runtime (2.084752ms)
+✔ replacement defaults use the new repository and canonical domain (1.812406ms)
+✔ private integrations remain inert while Giscus uses public defaults (1.286864ms)
+✔ site identity and lore source support environment overrides (1.710625ms)
+✔ edge triggers keep the preferred top side but choose a safe horizontal alignment (2.292231ms)
+✔ a tooltip flips below the trigger when the upper safe zone is unavailable (0.304503ms)
+✔ right-edge triggers use end alignment instead of clamping a centred tooltip (0.30929ms)
+✔ the era primer opts into the reusable system and the page frame installs it globally (2.268966ms)
+✔ the SOP index assigns permanent identifiers and links readiness tools (1.301937ms)
+✔ new subject SOPs use the shared structure and link their tools (1.469496ms)
+✔ checklists have unique identifiers, parent links, and readiness decisions (0.901612ms)
+✔ worksheets preserve provenance, assumptions, departures, and VISCERIUM additions (0.864356ms)
+✔ the research register and source notes describe evidence and adaptation limits (0.753431ms)
+✔ estimation worksheets label models and expose source-dependent assumptions (0.311894ms)
+✔ established SOPs link to their new reciprocal checklists (0.878807ms)
+✔ every permanent SOP identifier resolves to one SOP file (5.192105ms)
+✔ worksheet sources separate evidence roles from usage types (1.277901ms)
+✔ population estimate preserves food extracted for the target settlement (0.310232ms)
+✔ the Codex defines explicit site-level stacking tiers (1.090863ms)
+✔ the raised page and underlay rail are siblings in the document stack (0.288499ms)
+✔ the two-column shell contains local application stacking (0.331473ms)
+✔ article-local footer breakout hacks are gone (0.23549ms)
+✔ global chrome uses the shared hierarchy (0.239776ms)
+✔ timeline z-indexes remain local ordering values inside the page stacking surface (0.330772ms)
+✔ parses StoryLine human-readable VISCERIUM dates (3.053563ms)
+✔ parses compact StoryLine dates and explicit calendar prefix (2.016249ms)
+✔ infers StoryLine project base from project and scene paths (0.382889ms)
+✔ builds a VISCERIUM timeline dataset directly from StoryLine scene metadata (1.6869ms)
+✔ StoryLine is rooted in the private Stories workspace (1.644316ms)
+✔ VISCERIUM Timelines is installed and enabled beside StoryLine (0.395739ms)
+✔ Codex source remains hard-gated to Lore (0.669596ms)
+✔ StoryLine timeline uses an in-memory adapter instead of duplicate source fields (0.372354ms)
+✔ synthetic StoryLine fixture is placeable on the VISCERIUM calendar (1.886216ms)
+✔ StoryLine bridge resolves the active project outside Markdown views (0.505242ms)
+✔ StoryLine bridge exposes a self-diagnostic command (0.337652ms)
+✔ Storyteller insertion template creates one marked Markdown section (6.084612ms)
+✔ Storyteller insertion template refuses duplicate or partial marker sets (1.549045ms)
+✔ Storyteller insertion no longer edits frontmatter fields (1.192945ms)
+✔ every static article template contains one ordered Storyteller boundary pair (15.573971ms)
+✔ every dynamic article generator emits the marked Storyteller footer (3.798572ms)
+✔ Storyteller markers become stable block-level public boundaries without flattening Markdown (0.992997ms)
+✔ malformed Storyteller boundaries fail instead of publishing an ambiguous view (0.507104ms)
+✔ Okse stores Storyteller guidance in the article footer rather than frontmatter (174.423901ms)
+✔ non-canon trade port remains a complete location canary in Markdown (1.213886ms)
+✔ public switcher keeps Lore default and moves rendered Markdown between the boundaries (1.216991ms)
+✔ shared content pipeline prepares marker sections and no longer generates Storyteller frontmatter (0.770616ms)
+✔ global Starlight styles keep their explicit registration order (6.818285ms)
+✔ graph integration loads after the third-party graph styles (1.668733ms)
+✔ homepage uses one directly imported stylesheet and retains its inline shell boundary (1.536846ms)
+✔ server-rendered timeline uses consolidated renderer entrypoints (1.82822ms)
+✔ hydrated timeline uses Chronicle and control entrypoints (2.328435ms)
+✔ Telescope is the only enabled search provider and VISCERIUM scopes it separately (1.846277ms)
+✔ the installed Telescope runtime still exposes the internals used by the scoped adapter (0.721504ms)
+✔ Telescope path helpers normalise catalogue keys consistently (1.352803ms)
+✔ historical Telescope scope contains only the active era plus Universal pages (1.544498ms)
+✔ all-era Telescope scope collapses continuity editions to their hub (0.439825ms)
+✔ routed Templater creators never move using stale tp.file.title (9.560153ms)
+✔ Lore and Myrkild creators route with their prompted title (2.122117ms)
+✔ Story Entity routing recovers the rendered frontmatter title before moving (2.141146ms)
+✔ every direct Site dependency is represented in third-party notices (1.631337ms)
+✔ every enabled Obsidian community plugin is represented in third-party notices (1.855431ms)
+✔ the vendored MySnippets exception carries MPL source and modification notices (0.433715ms)
+✔ the Preact island enhances only the existing timeline list panel (3.924459ms)
+✔ Chronicle masthead keeps a small timeline-only gap above its description (0.494185ms)
+✔ chronicle records include readable summaries, dossiers and graph/article actions (0.427646ms)
+✔ compiler generates five fixed datasets with chronology-derived membership (4.363171ms)
+✔ periods overlap every era they touch (0.970113ms)
+✔ unknown categories survive with deterministic sorting and multiple lanes (1.468465ms)
+✔ explicit global include and exclude override automatic super membership (0.597108ms)
+✔ compiler rejects missing start date (1.000188ms)
+✔ compiler rejects end before start (0.431131ms)
+✔ compiler rejects mismatched era (1.373663ms)
+✔ compiler rejects invalid importance (0.328569ms)
+✔ compiler rejects period without end (0.504451ms)
+✔ compiler rejects legacy timeline year (0.515888ms)
+✔ compiler rejects unintended era overlap and gaps (0.48365ms)
+✔ registers the official Preact renderer for Astro islands (1.943381ms)
+✔ TimelineApp delegates browser behaviour to a client-loaded island (2.297974ms)
+✔ the Preact island owns one forked Chronos mount, one hovercard and ordered cleanup (0.573133ms)
+✔ timeline startup uses the resolved viewport once and defers the minimap (0.689466ms)
+✔ large timeline runtime bounds graph, list, search and minimap work (0.61833ms)
+✔ group and item changes stay inside one forked Chronos instance (1.831234ms)
+✔ the fork owns axis and geometry while the site owns one non-layout hovercard (1.971092ms)
+✔ canonical timeline pages explicitly omit the right sidebar and release content width constraints (0.555646ms)
+✔ transforms native Chronos fences and canonical shortcodes into Starlight MDX (109.359237ms)
+✔ range index returns points and long periods that overlap the requested window (2.078232ms)
+✔ minimap density aggregation remains bounded while preserving event totals (14.417155ms)
+✔ search text is prepared once from all searchable event metadata (0.422799ms)
+✔ the Chronos fork owns timeline stacking without an injected SVG layer (2.348044ms)
+✔ the timeline island installs a scoped toolbar enhancement after existing behaviour (1.796033ms)
+✔ toolbar buttons retain visible labels, icons and accessible names (0.32301ms)
+✔ the Astro island mounts the local Chronos renderer fork without host patches (2.134896ms)
+✔ unified chronology keeps one canonical Chronos group without host remounting (1.414955ms)
+✔ the exact fictional-calendar axis and event rows share one stable fixed-height viewport (2.521521ms)
+✔ returns every individual calendar-year boundary in a visible range (2.226562ms)
+✔ selects readable legacy year labels from exact calendar boundaries (0.740311ms)
+✔ chooses 1-2-5 year scales from actual viewport density (1.02849ms)
+✔ descends from years through calendar months, weeks and days (0.430421ms)
+✔ uses hysteresis to prevent scale flicker around a zoom boundary (0.561295ms)
+✔ generates exact calendar boundaries for close zoom levels (4.302331ms)
+✔ supports negative years and retains exact legacy background item classes (2.160414ms)
+✔ the fork generates exact Okse boundaries instead of relabeling Gregorian ticks (21.926342ms)
+✔ the fork draws exact calendar labels and grid lines as native vis-timeline components (0.995241ms)
+✔ TTRPG Maps sidecars own geometry while linked notes own public meaning (2.840286ms)
+✔ TTRPG Maps marker sources load only from safe vault-relative paths (6.012405ms)
+✔ the real CITADEL demo is wired to a checked-in TTRPG Maps sidecar (4.653033ms)
+✔ SVG validation accepts ordinary vector markup (9.899318ms)
+▶ SVG validation rejects scriptable constructs
+  ✔ script (4.286918ms)
+  ✔ foreignObject (2.187054ms)
+  ✔ event handler (2.139603ms)
+  ✔ javascript URL (2.129849ms)
+  ✔ HTML data URL (2.3389ms)
+✔ SVG validation rejects scriptable constructs (14.380245ms)
+✔ asset validation rejects content that does not match its extension (2.300092ms)
+✔ asset validation accepts a matching WebP signature (2.003581ms)
+✔ asset validation rejects a valid PNG because raster artwork must be WebP (2.260513ms)
+✔ asset validation rejects JPEG even when its extension matches its signature (1.762683ms)
+✔ source tree does not include non-WebP raster files (9.591661ms)
+✔ valid ordinary entity passes without requiring optional detail (1.915751ms)
+✔ legacy publish booleans are rejected outside templates (0.350752ms)
+✔ templates are excluded from creator entity counts and diagnostics (0.997704ms)
+✔ folder and type contradictions are errors (0.395719ms)
+✔ ordinary entity era structure is validated without demanding an era (0.522607ms)
+✔ near matches to canonical titles are notices, not errors (0.97453ms)
+✔ loose root entities produce a notice but do not fail (0.210303ms)
+✔ Myrkild keep their specialised singular era and unique unit IDs (0.22182ms)
+✔ unknown development states and malformed list properties are errors (8.950747ms)
+✔ VISCERIUM Home is a compact creator dashboard rather than a manual (13.238311ms)
+✔ creator UI grammar keeps static surfaces square and controls lightly rounded (3.290957ms)
+✔ creator foundation overrides Baseline display-serif headings with the configured text face (1.847519ms)
+✔ Home dashboard uses pane width and hides duplicate document chrome in both modes (1.414024ms)
+✔ Home has one solid Focus action and quieter creation/workspace controls (2.652687ms)
+✔ Home uses restrained semantic colour cues rather than monochrome or full-card tinting (3.055977ms)
+✔ creator activity is local, rolling, responsive and non-gamified (2.132804ms)
+✔ creator task hub uses ordinary Markdown tasks without introducing a task plugin (1.090974ms)
+✔ retired overlapping snippets stay removed (3.516762ms)
+✔ vault note locator follows moves by matching stable frontmatter (21.551064ms)
+✔ vault note route respects an explicit authored slug (0.32968ms)
+✔ vault note locator matches scalar criteria inside list properties (4.753983ms)
+✔ vault note locator fails clearly when identity is missing or ambiguous (7.331097ms)
+Validated 1 vault source note(s).
+Validated 1 vault source note(s).
+✔ published notes allow inert examples inside code spans and fences (4.277464ms)
+▶ published notes reject active HTML and unsafe URL schemes
+  ✔ script tag (0.891727ms)
+  ✔ iframe tag (0.226457ms)
+  ✔ inline event handler (0.214569ms)
+  ✔ HTML javascript URL (0.24852ms)
+  ✔ Markdown javascript URL (0.186798ms)
+  ✔ HTML data document (0.159307ms)
+  ✔ remote MDX module (0.247328ms)
+  ✔ remote MDX side-effect import (0.27551ms)
+  ✔ remote MDX re-export (0.294809ms)
+  ✔ remote dynamic import (0.138035ms)
+✔ published notes reject active HTML and unsafe URL schemes (4.215071ms)
+✔ published notes reject World Anvil review scaffolding (0.347497ms)
+✔ published notes reject links into Drafts Inbox (0.234278ms)
+✔ published note routes are derived from their file paths (0.236242ms)
+✔ Lore rejects the retired publish boolean (0.324082ms)
+✔ Lore rejects the retired canon status (0.185766ms)
+✔ published era primer shortcodes reject shell-only source notes (0.452573ms)
+✔ published era primer shortcodes accept matching Vault-owned data (0.549758ms)
+✔ published era primer data cannot drift from its shortcode id (0.422309ms)
+✔ published era primer maps reject external destinations (0.282209ms)
+✔ publishable Lore skeletons start safe and include one reusable Storyteller footer (24.878765ms)
+✔ literal template frontmatter contains no duplicate top-level fields (8.442551ms)
+✔ interactive Templater script blocks parse as async JavaScript (5.097264ms)
+✔ folder-triggered Templater rules cover Lore, Inbox, specialist databases and nested folders (1.254356ms)
+✔ folder entity router selects the nearest semantic template and path-derived defaults (1.792176ms)
+✔ creator-facing workflows author Storyteller material as Markdown rather than properties (6.702843ms)
+✔ sourcebook location fields survive in representative non-canon location notes (4.466145ms)
+✔ sourcebook-readiness guidance stays progressive and avoids completion-by-metadata (1.1018ms)
+✔ ordinary article width has no competing retired global width or infobox snippets (1.775772ms)
+✔ era template never emits an unresolved custom template variable as a timeline shortcode (1.332773ms)
+✔ World Anvil triage Base generator prioritises editorial value without losing migration guidance (2.260534ms)
+✔ checked-in World Anvil Base retains editorial tiers and guided triage semantics after Obsidian reserialises it (7.790231ms)
+✔ removes export prefixes and IDs while preserving import provenance and wikilinks (27.862855ms)
+✔ skips collisions without blocking safe renames (15.299999ms)
+✔ skips existing targets that differ only by case (8.426157ms)
+✔ World Anvil preparation adds only safe mechanical frontmatter (2.862119ms)
+✔ World Anvil preparation fills a blank description without duplicating the property (0.882493ms)
+✔ World Anvil preparation excludes generated review tasks from descriptions (0.498982ms)
+✔ World Anvil preparation removes a stale task-based description (0.408919ms)
+✔ World Anvil preparation ignores checklist paragraphs before useful prose (0.294999ms)
+✔ World Anvil preparation preserves existing descriptions and dates (0.247419ms)
+World Anvil frontmatter preparation (audit)
+Imported notes: 2
+Would change: 1
+Descriptions added: 1
+Invalid task descriptions removed: 0
+Descriptions still unresolved: 1
+updated keys added: 1
+World Anvil frontmatter preparation (write)
+Imported notes: 2
+Changed: 1
+Descriptions added: 1
+Invalid task descriptions removed: 0
+Descriptions still unresolved: 1
+updated keys added: 1
+World Anvil frontmatter preparation (write)
+Imported notes: 2
+Changed: 0
+Descriptions added: 0
+Invalid task descriptions removed: 0
+Descriptions still unresolved: 1
+updated keys added: 0
+✔ World Anvil preparation reports unresolved descriptions in audit and write modes (28.193707ms)
+✔ prefers a unique current Codex note over its legacy import when converting links (1.774761ms)
+✔ only source article filenames enter the integration corpus (0.728034ms)
+✔ review tasks correspond to explicit migration issue flags (0.486324ms)
+World Anvil Obsidian integration (write)
+Imported notes: 1
+Changed: 1
+Links converted: 0
+Mechanically clean: 0
+With review flags: 1
+World Anvil Obsidian integration (write)
+Imported notes: 1
+Changed: 0
+Links converted: 0
+Mechanically clean: 0
+With review flags: 1
+✔ completed review tasks stay completed across integration runs (37.771592ms)
+✔ migration Base provides card browsing and actionable review views (0.345695ms)
+✔ extracts Asena-style person details into meta and Appearance (3.315102ms)
+✔ routes item specifications and options without treating Production as Origin (0.573273ms)
+✔ extracts settlement type, related history, leadership and places (0.666021ms)
+✔ preserves additional material fields instead of swallowing them into Origin (1.299643ms)
+✔ keeps medication administration fields separate (0.348789ms)
+✔ preserves active member lists as sidebar items (0.250182ms)
+✔ keeps largest-recorded measurements in their own section (0.299135ms)
+✔ removes an orphaned Details heading when its legacy fields are extracted (0.186227ms)
+✔ does not treat a lone prose label as a confident sidebar without legacy context (0.528947ms)
+✔ adds sidebar frontmatter without rewriting existing frontmatter (0.794993ms)
+✔ leaves notes with an existing sidebar untouched (0.233087ms)
+✔ sidebar YAML matches the current replaceMeta/meta/sections shape (0.188521ms)
+✔ extracts road vehicle dimensions, power plant and suspension (3.086673ms)
+✔ treats nested aircraft armament as a section instead of cross-pairing labels (0.431572ms)
+✔ drops empty and unit-only vehicle-template placeholders (1.85507ms)
+✔ normalised vehicles are then safe for the general pass to skip (0.647523ms)
+ℹ tests 416
+ℹ suites 0
+ℹ pass 414
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3014.852788
+
+✖ failing tests:
+
+test at tests/deployment-config.test.mjs:48:1
+✖ the checks workflow cannot create a follow-up repository commit (1.826858ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /contents:\s*write/. Input:
+  
+  'name: Checks\n' +
+    '\n' +
+    'on:\n' +
+    '  pull_request:\n' +
+    '  push:\n' +
+    '    branches: [main]\n' +
+    '\n' +
+    'permissions:\n' +
+    '  contents: read\n' +
+    '\n' +
+    'jobs:\n' +
+    '  migrate-sidebars:\n' +
+    "    if: github.event_name == 'pull_request' && github.actor != 'github-actions[bot]'\n" +
+    '    permissions:\n' +
+    '      contents: write\n' +
+    '    runs-on: ubuntu-latest\n' +
+    '    timeout-minutes: 20\n' +
+    '    steps:\n' +
+    '      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0\n' +
+    '        with:\n' +
+    '          ref: ${{ github.head_ref }}\n' +
+    '          fetch-depth: 1\n' +
+    '          show-progress: false\n' +
+    '\n' +
+    '      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n' +
+    '        with:\n' +
+    '          node-version: 24\n' +
+    '          cache: npm\n' +
+    '          cache-dependency-path: Site/package-lock.json\n' +
+    '\n' +
+    '      - name: Install dependencies\n' +
+    '        run: npm --prefix Site ci --silent --no-audit --no-fund\n' +
+    '\n' +
+    '      - name: Migrate sidebar references\n' +
+    '        run: npm --prefix Site run migration:sidebar-wikilinks:write\n' +
+    '\n' +
+    '      - name: Regenerate public content\n' +
+    '        run: npm --prefix Site run sync\n' +
+    '\n' +
+    '      - name: Run unit tests\n' +
+    '        run: npm --prefix Site run test:unit\n' +
+    '\n' +
+    '      - name: Build site\n' +
+    '        run: npm --prefix Site run build\n' +
+    '\n' +
+    '      - name: Commit migration output\n' +
+    '        shell: bash\n' +
+    '        run: |\n' +
+    '          git fetch origin main --depth=1\n' +
+    '          git show origin/main:.github/workflows/checks.yml > .github/workflows/checks.yml\n' +
+    '          rm -f .github/workflows/sidebar-wikilink-migration.yml\n' +
+    '          git config user.name "github-actions[bot]"\n' +
+    '          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n' +
+    '          git add -A\n' +
+    '          if git diff --cached --quiet; then\n' +
+    '            echo "Migration produced no repository changes."\n' +
+    '            exit 0\n' +
+    '          fi\n' +
+    '          git commit -m "Migrate article sidebars to Obsidian links"\n' +
+    '          git push origin HEAD:${{ github.head_ref }}\n' +
+    '\n' +
+    '  verify:\n' +
+    "    if: github.actor == 'github-actions[bot]' || github.event_name == 'push'\n" +
+    '    runs-on: ubuntu-latest\n' +
+    '    timeout-minutes: 25\n' +
+    '    defaults:\n' +
+    '      run:\n' +
+    '        working-directory: Site\n' +
+    '    steps:\n' +
+    '      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0\n' +
+    '        with:\n' +
+    '          fetch-depth: 500\n' +
+    '          persist-credentials: false\n' +
+    '          show-progress: false\n' +
+    '\n' +
+    '      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n' +
+    '        with:\n' +
+    '          node-version: 24\n' +
+    '          cache: npm\n' +
+    '          cache-dependency-path: Site/package-lock.json\n' +
+    '\n' +
+    '      - run: npm ci --silent --no-audit --no-fund\n' +
+    '      - run: npm run doctor:vault\n' +
+    '      - run: npm run rights:check\n' +
+    '\n' +
+    '      - name: Run unit tests\n' +
+    '        run: |\n' +
+    '          set -o pipefail\n' +
+    '          npm run test:unit 2>&1 | tee "$RUNNER_TEMP/unit-tests.log"\n' +
+    '\n' +
+    '      - name: Upload unit test log\n' +
+    '        if: always()\n' +
+    '        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1\n' +
+    '        with:\n' +
+    '          name: unit-test-log\n' +
+    '          path: ${{ runner.temp }}/unit-tests.log\n' +
+    '          if-no-files-found: warn\n' +
+    '          retention-days: 1\n' +
+    '\n' +
+    '      - run: npm run benchmark:timelines\n' +
+    '      - run: npm run build\n' +
+    '\n' +
+    '      - name: Build Obsidian timeline plugin\n' +
+    '        working-directory: Tools/obsidian-viscerium-timelines\n' +
+    '        run: |\n' +
+    '          npm ci --no-audit --no-fund\n' +
+    '          npm run build\n' +
+    "          grep -q 'open-storyline-project-timeline' dist/main.js\n" +
+    "          grep -q 'diagnose-storyline-integration' dist/main.js\n" +
+    '          cmp --silent dist/main.js ../../Vault/.obsidian/plugins/viscerium-timelines/main.js\n' +
+    '          cmp --silent dist/styles.css ../../Vault/.obsidian/plugins/viscerium-timelines/styles.css\n' +
+    '          cmp --silent dist/manifest.json ../../Vault/.obsidian/plugins/viscerium-timelines/manifest.json\n' +
+    '\n' +
+    '      - name: Upload Obsidian timeline plugin bundle\n' +
+    '        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1\n' +
+    '        with:\n' +
+    '          name: viscerium-timelines-plugin\n' +
+    '          path: Tools/obsidian-viscerium-timelines/dist/\n' +
+    '          if-no-files-found: error\n' +
+    '          retention-days: 1\n' +
+    '\n' +
+    '      - name: Install browser runtime\n' +
+    '        run: npx --no-install playwright install --with-deps chromium\n' +
+    '\n' +
+    '      - name: Start preview\n' +
+    '        run: |\n' +
+    '          npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &\n' +
+    '          for attempt in {1..30}; do\n' +
+    '            curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0\n' +
+    '            sleep 1\n' +
+    '          done\n' +
+    '          cat "$RUNNER_TEMP/viscerium-preview.log"\n' +
+    '          exit 1\n' +
+    '\n' +
+    '      - name: Run browser checks\n' +
+    '        run: |\n' +
+    '          set -o pipefail\n' +
+    '          npx --no-install playwright test tests/browser --reporter=line --workers=1 2>&1 | tee "$RUNNER_TEMP/playwright.log"\n' +
+    '\n' +
+    '      - name: Upload browser check log\n' +
+    '        if: always()\n' +
+    '        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1\n' +
+    '        with:\n' +
+    '          name: browser-check-log\n' +
+    '          path: ${{ runner.temp }}/playwright.log\n' +
+    '          if-no-files-found: warn\n' +
+    '          retention-days: 1\n'
+  
+      at TestContext.<anonymous> (file:///home/runner/work/VISCERIUM/VISCERIUM/Site/tests/deployment-config.test.mjs:51:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'name: Checks\n\non:\n  pull_request:\n  push:\n    branches: [main]\n\npermissions:\n  contents: read\n\njobs:\n  migrate-sidebars:\n    if: github.event_name == \'pull_request\' && github.actor != \'github-actions[bot]\'\n    permissions:\n      contents: write\n    runs-on: ubuntu-latest\n    timeout-minutes: 20\n    steps:\n      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0\n        with:\n          ref: ${{ github.head_ref }}\n          fetch-depth: 1\n          show-progress: false\n\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          cache: npm\n          cache-dependency-path: Site/package-lock.json\n\n      - name: Install dependencies\n        run: npm --prefix Site ci --silent --no-audit --no-fund\n\n      - name: Migrate sidebar references\n        run: npm --prefix Site run migration:sidebar-wikilinks:write\n\n      - name: Regenerate public content\n        run: npm --prefix Site run sync\n\n      - name: Run unit tests\n        run: npm --prefix Site run test:unit\n\n      - name: Build site\n        run: npm --prefix Site run build\n\n      - name: Commit migration output\n        shell: bash\n        run: |\n          git fetch origin main --depth=1\n          git show origin/main:.github/workflows/checks.yml > .github/workflows/checks.yml\n          rm -f .github/workflows/sidebar-wikilink-migration.yml\n          git config user.name "github-actions[bot]"\n          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"\n          git add -A\n          if git diff --cached --quiet; then\n            echo "Migration produced no repository changes."\n            exit 0\n          fi\n          git commit -m "Migrate article sidebars to Obsidian links"\n          git push origin HEAD:${{ github.head_ref }}\n\n  verify:\n    if: github.actor == \'github-actions[bot]\' || github.event_name == \'push\'\n    runs-on: ubuntu-latest\n    timeout-minutes: 25\n    defaults:\n      run:\n        working-directory: Site\n    steps:\n      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0\n        with:\n          fetch-depth: 500\n          persist-credentials: false\n          show-progress: false\n\n      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0\n        with:\n          node-version: 24\n          cache: npm\n          cache-dependency-path: Site/package-lock.json\n\n      - run: npm ci --silent --no-audit --no-fund\n      - run: npm run doctor:vault\n      - run: npm run rights:check\n\n      - name: Run unit tests\n        run: |\n          set -o pipefail\n          npm run test:unit 2>&1 | tee "$RUNNER_TEMP/unit-tests.log"\n\n      - name: Upload unit test log\n        if: always()\n        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1\n        with:\n          name: unit-test-log\n          path: ${{ runner.temp }}/unit-tests.log\n          if-no-files-found: warn\n          retention-days: 1\n\n      - run: npm run benchmark:timelines\n      - run: npm run build\n\n      - name: Build Obsidian timeline plugin\n        working-directory: Tools/obsidian-viscerium-timelines\n        run: |\n          npm ci --no-audit --no-fund\n          npm run build\n          grep -q \'open-storyline-project-timeline\' dist/main.js\n          grep -q \'diagnose-storyline-integration\' dist/main.js\n          cmp --silent dist/main.js ../../Vault/.obsidian/plugins/viscerium-timelines/main.js\n          cmp --silent dist/styles.css ../../Vault/.obsidian/plugins/viscerium-timelines/styles.css\n          cmp --silent dist/manifest.json ../../Vault/.obsidian/plugins/viscerium-timelines/manifest.json\n\n      - name: Upload Obsidian timeline plugin bundle\n        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1\n        with:\n          name: viscerium-timelines-plugin\n          path: Tools/obsidian-viscerium-timelines/dist/\n          if-no-files-found: error\n          retention-days: 1\n\n      - name: Install browser runtime\n        run: npx --no-install playwright install --with-deps chromium\n\n      - name: Start preview\n        run: |\n          npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &\n          for attempt in {1..30}; do\n            curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0\n            sleep 1\n          done\n          cat "$RUNNER_TEMP/viscerium-preview.log"\n          exit 1\n\n      - name: Run browser checks\n        run: |\n          set -o pipefail\n          npx --no-install playwright test tests/browser --reporter=line --workers=1 2>&1 | tee "$RUNNER_TEMP/playwright.log"\n\n      - name: Upload browser check log\n        if: always()\n        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1\n        with:\n          name: browser-check-log\n          path: ${{ runner.temp }}/playwright.log\n          if-no-files-found: warn\n          retention-days: 1\n',
+    expected: /contents:\s*write/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
+
+test at tests/folder-frontmatter-backfill.test.mjs:144:1
+✖ checked-in Lore has no pending safe folder-derived frontmatter additions (190.959527ms)
+  AssertionError [ERR_ASSERTION]: Run npm run frontmatter:folders:write and review these safe additions:
+  [
+    {
+      "path": "Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md",
+      "fields": {
+        "type": "faction",
+        "era": "CITADEL"
+      }
+    },
+    {
+      "path": "Lore/Eras/CITADEL/Nations/Locations/Aldaness.md",
+      "fields": {
+        "type": "location",
+        "era": "CITADEL"
+      }
+    },
+    {
+      "path": "Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md",
+      "fields": {
+        "type": "location",
+        "era": "CITADEL"
+      }
+    },
+    {
+      "path": "Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko.md",
+      "fields": {
+        "type": "character",
+        "era": "ENTROPY"
+      }
+    },
+    {
+      "path": "Lore/Eras/ENTROPY/Characters/Tpr. Mía Alvarado.md",
+      "fields": {
+        "type": "character",
+        "era": "ENTROPY"
+      }
+    },
+    {
+      "path": "Lore/Eras/ENTROPY/Factions/Alliance of Democratic Nations.md",
+      "fields": {
+        "type": "faction",
+        "era": "ENTROPY"
+      }
+    },
+    {
+      "path": "Lore/Eras/ENTROPY/Factions/The Black Foundry.md",
+      "fields": {
+        "type": "faction",
+        "era": "ENTROPY"
+      }
+    },
+    {
+      "path": "Lore/Eras/ENTROPY/Formations/Delta Two.md",
+      "fields": {
+        "era": "ENTROPY"
+      }
+    },
+    {
+      "path": "Lore/Eras/ENTROPY/Nations/Locations/Kisara.md",
+      "fields": {
+        "type": "location",
+        "era": "ENTROPY"
+      }
+    },
+    {
+      "path": "Lore/Eras/NEARSIGHT/Characters/Dr.Adrastus Delroy.md",
+      "fields": {
+        "type": "character",
+        "era": "NEARSIGHT"
+      }
+    },
+    {
+      "path": "Lore/Eras/NEARSIGHT/Factions/Aquillan Seas Trade Union.md",
+      "fields": {
+        "type": "faction",
+        "era": "NEARSIGHT"
+      }
+    },
+    {
+      "path": "Lore/Eras/NEARSIGHT/Nations/Locations/Tiumosk city.md",
+      "fields": {
+        "type": "location",
+        "era": "NEARSIGHT"
+      }
+    },
+    {
+      "path": "Lore/Eras/NEARSIGHT/Nations/Trans-Continental Socialist Confederation.md",
+      "fields": {
+        "type": "faction",
+        "era": "NEARSIGHT"
+      }
+    }
+  ]
+  + actual - expected
+  
+  + [
+  +   {
+  +     fields: {
+  +       era: 'CITADEL',
+  +       type: 'faction'
+  +     },
+  +     path: 'Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'CITADEL',
+  +       type: 'location'
+  +     },
+  +     path: 'Lore/Eras/CITADEL/Nations/Locations/Aldaness.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'CITADEL',
+  +       type: 'location'
+  +     },
+  +     path: 'Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'ENTROPY',
+  +       type: 'character'
+  +     },
+  +     path: 'Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'ENTROPY',
+  +       type: 'character'
+  +     },
+  +     path: 'Lore/Eras/ENTROPY/Characters/Tpr. Mía Alvarado.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'ENTROPY',
+  +       type: 'faction'
+  +     },
+  +     path: 'Lore/Eras/ENTROPY/Factions/Alliance of Democratic Nations.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'ENTROPY',
+  +       type: 'faction'
+  +     },
+  +     path: 'Lore/Eras/ENTROPY/Factions/The Black Foundry.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'ENTROPY'
+  +     },
+  +     path: 'Lore/Eras/ENTROPY/Formations/Delta Two.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'ENTROPY',
+  +       type: 'location'
+  +     },
+  +     path: 'Lore/Eras/ENTROPY/Nations/Locations/Kisara.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'NEARSIGHT',
+  +       type: 'character'
+  +     },
+  +     path: 'Lore/Eras/NEARSIGHT/Characters/Dr.Adrastus Delroy.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'NEARSIGHT',
+  +       type: 'faction'
+  +     },
+  +     path: 'Lore/Eras/NEARSIGHT/Factions/Aquillan Seas Trade Union.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'NEARSIGHT',
+  +       type: 'location'
+  +     },
+  +     path: 'Lore/Eras/NEARSIGHT/Nations/Locations/Tiumosk city.md'
+  +   },
+  +   {
+  +     fields: {
+  +       era: 'NEARSIGHT',
+  +       type: 'faction'
+  +     },
+  +     path: 'Lore/Eras/NEARSIGHT/Nations/Trans-Continental Socialist Confederation.md'
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///home/runner/work/VISCERIUM/VISCERIUM/Site/tests/folder-frontmatter-backfill.test.mjs:146:10)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ { path: 'Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md', fields: [Object] }, { path: 'Lore/Eras/CITADEL/Nations/Locations/Aldaness.md', fields: [Object] }, { path: 'Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md', fields: [Object] }, { path: 'Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko.md', fields: [Object] }, { path: 'Lore/Eras/ENTROPY/Characters/Tpr. Mía Alvarado.md', fields: [Object] }, { path: 'Lore/Eras/ENTROPY/Factions/Alliance of Democratic Nations.md', fields: [Object] }, { path: 'Lore/Eras/ENTROPY/Factions/The Black Foundry.md', fields: [Object] }, { path: 'Lore/Eras/ENTROPY/Formations/Delta Two.md', fields: [Object] }, { path: 'Lore/Eras/ENTROPY/Nations/Locations/Kisara.md', fields: [Object] }, { path: 'Lore/Eras/NEARSIGHT/Characters/Dr.Adrastus Delroy.md', fields: [Object] }, { path: 'Lore/Eras/NEARSIGHT/Factions/Aquillan Seas Trade Union.md', fields: [Object] }, { path: 'Lore/Eras/NEARSIGHT/Nations/Locations/Tiumosk city.md', fields: [Object] }, { path: 'Lore/Eras/NEARSIGHT/Nations/Trans-Continental Socialist Confederation.md', fields: [Object] } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+FAILED: Run unit tests (exit 1)
