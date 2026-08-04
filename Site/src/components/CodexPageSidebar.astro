@@ -1,9 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfContents';
 import TableOfContents from 'virtual:starlight/components/TableOfContents';
 
 const { starlightRoute } = Astro.locals;
 const entry = starlightRoute.entry.data;
+const docs = await getCollection('docs');
 
 function isPresent(value) {
   return value !== undefined && value !== null && value !== '' && (!Array.isArray(value) || value.length > 0);
@@ -25,10 +27,73 @@ function normaliseAssetPath(value, category = 'images') {
   return `/assets/${category}/${trimmed.split('/').pop()}`;
 }
 
+function sidebarLinkKey(value) {
+  return String(value ?? '')
+    .trim()
+    .replace(/\\/g, '/')
+    .replace(/\.mdx?$/i, '')
+    .replace(/^\.\//, '')
+    .replace(/^\/+|\/+$/g, '')
+    .toLowerCase();
+}
+
+function eraKey(value) {
+  return String(value ?? '').trim().toLowerCase().replace(/[\s_-]+/g, '');
+}
+
+function routeFromSlug(value) {
+  const slug = String(value ?? '').trim().replace(/^\/+|\/+$/g, '');
+  return slug ? `/${slug}/` : undefined;
+}
+
+const sidebarTargetIndex = new Map();
+
+function addSidebarTarget(rawKey, candidate) {
+  const normalized = sidebarLinkKey(rawKey);
+  if (!normalized) return;
+  const candidates = sidebarTargetIndex.get(normalized) ?? [];
+  if (!candidates.some((entry) => entry.route === candidate.route)) candidates.push(candidate);
+  sidebarTargetIndex.set(normalized, candidates);
+}
+
+for (const doc of docs) {
+  const slug = typeof doc.data.slug === 'string' && doc.data.slug.trim() ? doc.data.slug : doc.id;
+  const route = routeFromSlug(slug);
+  if (!route) continue;
+  const sourcePath = typeof doc.data.sourcePath === 'string' ? doc.data.sourcePath.replace(/\\/g, '/') : '';
+  const sourceNoExt = sourcePath.replace(/\.(md|mdx)$/i, '');
+  const basename = sourceNoExt.split('/').pop();
+  const candidate = {
+    route,
+    era: doc.data.era,
+  };
+
+  for (const key of [doc.data.title, doc.id, slug, sourceNoExt, basename, sourceNoExt ? `Lore/${sourceNoExt}` : undefined]) {
+    if (key) addSidebarTarget(key, candidate);
+  }
+}
+
+function resolveSidebarTarget(rawTarget) {
+  const target = String(rawTarget ?? '').trim();
+  if (!target) return undefined;
+  const candidates = sidebarTargetIndex.get(sidebarLinkKey(target)) ?? [];
+  if (candidates.length === 0) return undefined;
+  if (target.includes('/') && candidates.length === 1) return candidates[0].route;
+
+  const currentEra = eraKey(entry.era);
+  const sameEra = candidates.filter((candidate) => eraKey(candidate.era) === currentEra);
+  if (sameEra.length === 1) return sameEra[0].route;
+  return candidates.length === 1 ? candidates[0].route : undefined;
+}
+
 function normaliseRoute(value) {
   if (typeof value !== 'string') return undefined;
   const trimmed = value.trim();
   if (!trimmed) return undefined;
+
+  const wikilink = trimmed.match(/^\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]$/);
+  if (wikilink) return resolveSidebarTarget(wikilink[1]);
+
   if (trimmed.startsWith('/') || trimmed.startsWith('#') || isExternalUrl(trimmed)) return trimmed;
   return `/${trimmed.replace(/^\/+|\/+$/g, '')}/`;
 }
