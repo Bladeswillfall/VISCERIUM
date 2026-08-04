@@ -2,33 +2,35 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Pronouns"
-      value: "He/Him"
-    - label: "Age"
-      value: "48"
-    - label: "Gender"
-      value: "Male"
+    - label: Pronouns
+      value: He/Him
+    - label: Age
+      value: '48'
+    - label: Gender
+      value: Male
   sections:
-    - title: "Appearance"
+    - title: Appearance
       fields:
-        - label: "Eyes"
-          value: "Green"
-        - label: "Hair"
-          value: "Black and grey, short & thinning, comb-over"
-        - label: "Skin tone / pigmentation"
-          value: "Pale white, red undertones"
-        - label: "Height"
-          value: "5'6\" (167cm)"
-        - label: "Weight"
-          value: "110lbs (50kg)"
-        - label: "Physical traits"
-          value: "Slim with little muscle mass and a rectangular body shape"
-    - title: "Membership"
+        - label: Eyes
+          value: Green
+        - label: Hair
+          value: 'Black and grey, short & thinning, comb-over'
+        - label: Skin tone / pigmentation
+          value: 'Pale white, red undertones'
+        - label: Height
+          value: 5'6" (167cm)
+        - label: Weight
+          value: 110lbs (50kg)
+        - label: Physical traits
+          value: Slim with little muscle mass and a rectangular body shape
+    - title: Membership
       fields:
-        - label: "Former"
-          value: "Alliance of Democratic Nations"
-        - label: "Current"
-          value: "Children of the Hidden Hand"
+        - label: Former
+          value: Alliance of Democratic Nations
+          href: '[[Alliance of Democratic Nations]]'
+        - label: Current
+          value: Children of the Hidden Hand
+          href: '[[Children of the Hidden Hand]]'
 title: "Dr.Adrastus Delroy"
 description: "Acolyte of Evaxi, Nadir of Envy and project lead for The Lanza project, Dr.Adrastus Delroy would quickly become a famous name across Lore/Degel System/Errack."
 updated:

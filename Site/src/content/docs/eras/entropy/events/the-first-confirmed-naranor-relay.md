@@ -34,13 +34,13 @@ participants:
   - Relay Watch Twelve
 outcome: The Naranor threat shifted from hypothesis to strategic certainty.
 tags:
-  - entropy
+  - ENTROPY
   - timeline-showcase
   - naranor
+  - Events
 slug: eras/entropy/events/the-first-confirmed-naranor-relay
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The First Confirmed Naranor Relay.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

@@ -25,6 +25,7 @@ related:
 tags:
   - demo
   - non-canon
+  - Characters
 slug: demo/demo-marshal
 eraStyle: e1
 links:
@@ -32,7 +33,6 @@ links:
   - demo/demo-frontier-fort/
 giscus: true
 sourcePath: Demo/Demo Marshal.md
-updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

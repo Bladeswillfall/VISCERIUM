@@ -1,7 +1,7 @@
 ---
-title: '#nearsight — NEARSIGHT'
+title: '#NEARSIGHT — NEARSIGHT'
 description: >-
-  Pages tagged nearsight that are relevant to NEARSIGHT, including Universal
+  Pages tagged NEARSIGHT that are relevant to NEARSIGHT, including Universal
   material.
 status: published
 slug: eras/nearsight/tags/nearsight
@@ -11,8 +11,8 @@ searchable: false
 tableOfContents: false
 giscus: false
 ---
-Browse **#nearsight** within NEARSIGHT. Universal material is included because it is intentionally valid in every historical era.
-<div class="codex-alpha-index" data-index-kind="era-tag" aria-label="nearsight pages in NEARSIGHT">
+Browse **#NEARSIGHT** within NEARSIGHT. Universal material is included because it is intentionally valid in every historical era.
+<div class="codex-alpha-index" data-index-kind="era-tag" aria-label="NEARSIGHT pages in NEARSIGHT">
 <ul class="codex-alpha-index__items">
 <li class="codex-alpha-index__item">
 <div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/nearsight/events/first-aesir-mk-2-fielding/">First AESIR Mk-2 Fielding</a><span class="codex-alpha-index__meta">event</span></div>

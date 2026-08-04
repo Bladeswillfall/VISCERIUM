@@ -10,14 +10,15 @@ sidebar:
       fields:
         - label: Region
           value: CITADEL
+          href: '[[CITADEL]]'
         - label: Habitat
           value: Damp woodland / sinkholes / rift hollows
         - label: Threat
           value: Persistent entanglement
         - label: Utility
-          value: Adhesive, fibre, wound care
+          value: 'Adhesive, fibre, wound care'
         - label: Countermeasures
-          value: Ash powder, hooked poles, fire
+          value: 'Ash powder, hooked poles, fire'
 title: Haglace Brake
 status: draft
 type: flora

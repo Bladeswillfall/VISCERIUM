@@ -33,13 +33,13 @@ participants:
   - Citizens of Karn Vey
 outcome: The city halted trade and opened every shrine until sunrise.
 tags:
-  - citadel
+  - CITADEL
   - timeline-showcase
   - same-day
+  - Events
 slug: eras/citadel/events/the-night-of-seven-bells
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Night of Seven Bells.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

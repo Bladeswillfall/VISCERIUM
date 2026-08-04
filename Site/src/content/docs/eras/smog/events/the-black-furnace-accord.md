@@ -35,13 +35,13 @@ participants:
   - The Furnace Delegates
 outcome: Shared industrial standards enabled continental-scale mobilisation.
 tags:
-  - smog
+  - SMOG
   - timeline-showcase
   - industry
+  - Events
 slug: eras/smog/events/the-black-furnace-accord
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Black Furnace Accord.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

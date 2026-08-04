@@ -2,15 +2,16 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Religious, Cult"
+    - label: Type
+      value: 'Religious, Cult'
   sections:
-    - title: "Details"
+    - title: Details
       fields:
-        - label: "Current Leader"
-          value: "Helminth Augur Merikh"
-        - label: "Deity"
-          value: "Boleth, Nadir of Gluttony"
+        - label: Current Leader
+          value: Helminth Augur Merikh
+          href: '[[Helminth Augur Merikh]]'
+        - label: Deity
+          value: 'Boleth, Nadir of Gluttony'
 title: "House of the Hollow Worm"
 description: "In the depths of a desolate and decaying labyrinth, where the stench of fungus and rot intertwines, the House of the Hollow Worm lies, a sinister cult devoted to the insatiable deity Boleth, Nadir of Gluttony."
 updated:

@@ -2,23 +2,26 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Megalopolis"
+    - label: Type
+      value: Megalopolis
   sections:
-    - title: "Places of note"
+    - title: Places of note
       items:
-        - "Saishū no Kabe"
-        - "Space Elevator ___"
-        - "Pleasure Pit"
-        - "Korosseo"
-    - title: "Details"
+        - label: Saishū no Kabe
+          href: '[[Saishū no Kabe]]'
+        - Space Elevator ___
+        - label: Pleasure Pit
+          href: '[[Pleasure Pit]]'
+        - label: Korosseo
+          href: '[[Korosseo]]'
+    - title: Details
       fields:
-        - label: "Noteworthy Organizations"
+        - label: Noteworthy Organizations
           value:
-            - "The Black Foundry"
-            - "Helix Technica"
-            - "Kisara Armed Police"
-            - "[TBC] Defence Force"
+            - The Black Foundry
+            - Helix Technica
+            - Kisara Armed Police
+            - '[TBC] Defence Force'
 title: "Kisara"
 description: "It is not uncommon for the sky to turn blood-red in Kisara city during large battles."
 updated:

@@ -2,26 +2,27 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Large town"
+    - label: Type
+      value: Large town
   sections:
-    - title: "Related historical events"
+    - title: Related historical events
       items:
-        - "11203"
-        - label: "Test"
-          href: "/w/viscerium/h/29059480-bef3-4c7a-b0f9-15c1183e3a0b"
-    - title: "Leadership"
+        - '11203'
+        - label: Test
+          href: /w/viscerium/h/29059480-bef3-4c7a-b0f9-15c1183e3a0b
+    - title: Leadership
       fields:
-        - label: "Rulers"
+        - label: Rulers
           value:
-            - "Jarl - Søren Vilulf"
-            - "Frue - Asena Unfrid"
-    - title: "Places of note"
+            - Jarl - Søren Vilulf
+            - Frue - Asena Unfrid
+    - title: Places of note
       items:
-        - "Aldaborg fortress"
-        - "Jarl's Longhouse"
-        - "Salt Market"
-        - "Main Port"
+        - label: Aldaborg fortress
+          href: '[[Aldaborg fortress]]'
+        - Jarl's Longhouse
+        - Salt Market
+        - Main Port
 title: "Aldaness"
 description: "Aldaness is the largest fortified coastal city in the Lore/Eras/CITADEL/Okse Dominion."
 updated:

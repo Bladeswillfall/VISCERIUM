@@ -2,33 +2,37 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Pronouns"
-      value: "She/Her"
-    - label: "Age"
-      value: "25"
-    - label: "Gender"
-      value: "Female"
+    - label: Pronouns
+      value: She/Her
+    - label: Age
+      value: '25'
+    - label: Gender
+      value: Female
   sections:
-    - title: "Appearance"
+    - title: Appearance
       fields:
-        - label: "Eyes"
-          value: "Grey"
-        - label: "Hair"
-          value: "Black with silvery-pink face-framing highlights, long length, straight"
-        - label: "Skin tone / pigmentation"
-          value: "Light pale white, clear"
-        - label: "Height"
-          value: "5'3\" (1.62m)"
-        - label: "Weight"
-          value: "141lbs (64kg)"
-        - label: "Physical traits"
-          value: "Fit with a curvy hourglass body shape"
-    - title: "Membership"
+        - label: Eyes
+          value: Grey
+        - label: Hair
+          value: >-
+            Black with silvery-pink face-framing highlights, long length,
+            straight
+        - label: Skin tone / pigmentation
+          value: 'Light pale white, clear'
+        - label: Height
+          value: 5'3" (1.62m)
+        - label: Weight
+          value: 141lbs (64kg)
+        - label: Physical traits
+          value: Fit with a curvy hourglass body shape
+    - title: Membership
       fields:
-        - label: "Former"
-          value: "Imperium Coalition Defence Force"
-        - label: "Current"
-          value: "Imperium Coalition Special Shock Assault Service"
+        - label: Former
+          value: Imperium Coalition Defence Force
+          href: '[[Imperium Coalition Defence Force]]'
+        - label: Current
+          value: Imperium Coalition Special Shock Assault Service
+          href: '[[Imperium Coalition Special Shock Assault Service]]'
 title: "Tpr. Hannah Moeko"
 description: "Designated marksman for Delta Two Two, Hannah Moeko wields her intellect like a master craftsman."
 updated:

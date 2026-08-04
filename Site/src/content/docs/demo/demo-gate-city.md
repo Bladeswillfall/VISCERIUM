@@ -24,6 +24,7 @@ map:
 tags:
   - demo
   - non-canon
+  - Maps
 related:
   - Demo Market Ward
   - Demo Archive Tower
@@ -34,7 +35,6 @@ links:
   - demo/demo-archive-tower/
 giscus: true
 sourcePath: Demo/Demo Gate City.md
-updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

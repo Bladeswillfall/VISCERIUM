@@ -44,13 +44,13 @@ outcome: >-
   The Reach survived, but three inhabited stations were removed from
   navigational history.
 tags:
-  - entropy
+  - ENTROPY
   - timeline-showcase
   - satol
+  - Events
 slug: eras/entropy/events/the-vacuum-siege-of-satol-reach
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Vacuum Siege of Satol Reach.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

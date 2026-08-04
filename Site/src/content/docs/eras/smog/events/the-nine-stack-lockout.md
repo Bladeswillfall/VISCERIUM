@@ -34,13 +34,13 @@ participants:
   - Night Furnace Crews
 outcome: The strike became a siege and drew national attention.
 tags:
-  - smog
+  - SMOG
   - timeline-showcase
   - same-day
+  - Events
 slug: eras/smog/events/the-nine-stack-lockout
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Nine-Stack Lockout.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

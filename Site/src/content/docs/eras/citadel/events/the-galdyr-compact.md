@@ -34,13 +34,13 @@ participants:
   - The Thirteen Measures
 outcome: Weapon and tool standards spread between otherwise hostile citadels.
 tags:
-  - citadel
+  - CITADEL
   - timeline-showcase
   - galdyr
+  - Events
 slug: eras/citadel/events/the-galdyr-compact
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Galdyr Compact.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

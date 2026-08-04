@@ -26,6 +26,7 @@ related:
 tags:
   - demo
   - non-canon
+  - Factions
 slug: demo/demo-concord
 eraStyle: e1
 links:
@@ -33,7 +34,6 @@ links:
   - demo/demo-gate-city/
 giscus: true
 sourcePath: Demo/Demo Concord.md
-updated: "2026-07-31T11:49:51+01:00"
 ---
 
 > [!caution]

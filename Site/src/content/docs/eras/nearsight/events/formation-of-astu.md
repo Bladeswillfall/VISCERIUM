@@ -33,13 +33,13 @@ participants:
   - Founding Delegations
 outcome: A permanent multinational rapid-response command entered service.
 tags:
-  - nearsight
+  - NEARSIGHT
   - timeline-showcase
   - astu
+  - Events
 slug: eras/nearsight/events/formation-of-astu
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/Formation of ASTU.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

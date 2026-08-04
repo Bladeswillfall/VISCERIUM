@@ -2,15 +2,16 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Driving ideology"
-      value: "Socialism"
-    - label: "Currency"
-      value: "Marks and Stubs"
+    - label: Driving ideology
+      value: Socialism
+    - label: Currency
+      value: Marks and Stubs
   sections:
-    - title: "Succession"
+    - title: Succession
       fields:
-        - label: "Succeeded by"
-          value: "Popular Consortium Party"
+        - label: Succeeded by
+          value: Popular Consortium Party
+          href: '[[Popular Consortium Party]]'
 title: "Trans-Continental Socialist Confederation"
 description: "The Trans-Continental Socialist Confederation, often referred to as the TCSC or just \"the Confederation\" is a cross-continental political and economical aliance of socialist nations."
 updated:

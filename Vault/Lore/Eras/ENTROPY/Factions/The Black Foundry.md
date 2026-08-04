@@ -2,23 +2,24 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Corporation, Manufacturing"
+    - label: Type
+      value: 'Corporation, Manufacturing'
   sections:
-    - title: "Details"
+    - title: Details
       fields:
-        - label: "Industry"
-          value: "Defence"
-        - label: "Founded"
-          value: "1710"
-        - label: "Founder"
-          value: "[TBC]"
-        - label: "Headquaters"
-          value: "[TBC]"
-        - label: "Products"
-          value: "Arms and armour"
-        - label: "Previously"
-          value: "The Black Armoury"
+        - label: Industry
+          value: Defence
+        - label: Founded
+          value: '1710'
+        - label: Founder
+          value: '[TBC]'
+        - label: Headquaters
+          value: '[TBC]'
+        - label: Products
+          value: Arms and armour
+        - label: Previously
+          value: The Black Armoury
+          href: '[[The Black Armoury]]'
 title: "The Black Foundry"
 description: "The Black Foundry, once known as The Black Armoury was founded in [1710], with a history dating back into the early 1300's."
 updated:

@@ -34,14 +34,14 @@ participants:
   - Outer Listening Net
 outcome: The second signal was classified and the public ignition record was shortened.
 tags:
-  - entropy
+  - ENTROPY
   - timeline-showcase
   - garmir
   - same-day
+  - Events
 slug: eras/entropy/events/the-gate-ignition-echo
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Gate Ignition Echo.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 
