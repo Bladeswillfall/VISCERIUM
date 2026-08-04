@@ -10,9 +10,9 @@ permissions:
   contents: write
 
 jobs:
-  isolate:
+  migrate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -29,23 +29,27 @@ jobs:
       - name: Install dependencies
         run: npm --prefix Site ci --silent --no-audit --no-fund
 
-      - name: Isolate migration checks
-        run: |
-          npm --prefix Site run migration:sidebar-wikilinks:write > sidebar-isolation.log 2>&1
-          npm --prefix Site run sync >> sidebar-isolation.log 2>&1
-          npm --prefix Site run frontmatter:folders:audit >> sidebar-isolation.log 2>&1
-          cd Site
-          node --test tests/folder-frontmatter-backfill.test.mjs >> ../sidebar-isolation.log 2>&1
+      - name: Apply migration
+        run: npm --prefix Site run migration:sidebar-wikilinks:write
 
-      - name: Commit isolation log only
+      - name: Regenerate public content
+        run: npm --prefix Site run sync
+
+      - name: Run unit tests
+        run: npm --prefix Site run test:unit
+
+      - name: Build site
+        run: npm --prefix Site run build
+
+      - name: Commit validated migration
         run: |
           git fetch origin main --depth=1
           git show origin/main:.github/workflows/checks.yml > .github/workflows/checks.yml
-          rm -f .github/workflows/sidebar-wikilink-migration.yml sidebar-migration-run.log sidebar-frontmatter-diagnostic.log
-          git restore Vault Site/src/content/docs Site/public
+          rm -f .github/workflows/sidebar-wikilink-migration.yml
+          rm -f sidebar-migration-run.log sidebar-frontmatter-diagnostic.log sidebar-isolation.log
           rm -f Site/scripts/diagnose-sidebar-frontmatter.mjs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Isolate sidebar migration validation"
+          git commit -m "Migrate article sidebars to Obsidian links"
           git push origin HEAD:fix/sidebar-wikilinks-all-articles
