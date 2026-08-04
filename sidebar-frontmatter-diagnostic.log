@@ -1,0 +1,173 @@
+
+FILE: Vault/Lore/Eras/CITADEL/Factions/House of the Hollow Worm.md
+{
+  "type": "faction",
+  "era": "CITADEL",
+  "topLevelKeys": [
+    "sidebar",
+    "title",
+    "description",
+    "updated",
+    "status",
+    "type",
+    "development_level",
+    "era",
+    "tags",
+    "import_source",
+    "import_source_type",
+    "import_source_file",
+    "import_issues"
+  ],
+  "sidebarKeys": [
+    "replaceMeta",
+    "meta",
+    "sections"
+  ],
+  "changes": {},
+  "conflicts": [],
+  "notices": [],
+  "closingMarkerIndex": 865,
+  "firstLooseMarkerIndex": 865
+}
+FRONTMATTER TAIL:
+
+  - "worm"
+  - "cult"
+  - CITADEL
+  - Factions
+import_source: "worldanvil"
+import_source_type: "Organization"
+import_source_file: "Organization-House of the Hollow Worm-9dc.md"
+import_issues:
+  - "missing-inline-assets"
+---
+> Ste
+
+FILE: Vault/Lore/Eras/CITADEL/Nations/Okse Dominion.md
+{
+  "type": "faction",
+  "era": "CITADEL",
+  "topLevelKeys": [
+    "title",
+    "description",
+    "status",
+    "type",
+    "era",
+    "faction",
+    "region",
+    "territory",
+    "capital",
+    "population",
+    "climate",
+    "image",
+    "headerImage",
+    "imageTitle",
+    "artist",
+    "alt",
+    "map",
+    "relationships",
+    "related",
+    "sidebar",
+    "tags"
+  ],
+  "sidebarKeys": [
+    "replaceMeta",
+    "meta",
+    "sections"
+  ],
+  "changes": {},
+  "conflicts": [],
+  "notices": [],
+  "closingMarkerIndex": 2208,
+  "firstLooseMarkerIndex": 2208
+}
+FRONTMATTER TAIL:
+s
+      note: All artwork that is not an original creation by Fall will be replaced with either original pieces or commissioned art.
+tags:
+  - okse
+  - dominion
+  - CITADEL
+  - nation
+  - faction
+  - Factions
+  - Nations
+---
+
+:::c
+
+FILE: Vault/Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim.md
+{
+  "type": "location",
+  "era": "CITADEL",
+  "topLevelKeys": [
+    "sidebar",
+    "title",
+    "description",
+    "updated",
+    "status",
+    "type",
+    "development_level",
+    "location_kind",
+    "era",
+    "tags",
+    "import_source",
+    "import_source_type",
+    "import_source_file",
+    "import_issues"
+  ],
+  "sidebarKeys": [
+    "replaceMeta",
+    "meta",
+    "sections"
+  ],
+  "changes": {},
+  "conflicts": [],
+  "notices": [],
+  "closingMarkerIndex": 1042,
+  "firstLooseMarkerIndex": 1042
+}
+FRONTMATTER TAIL:
+ITADEL
+tags:
+  - Okse
+import_source: worldanvil
+import_source_type: Settlement
+import_source_file: Settlement-Valenheim-323.md
+import_issues:
+  - existing-codex-match
+  - unresolved-legacy-links
+  - missing-inline-assets
+---
+> Val
+
+> viscerium@0.1.0 frontmatter:folders:audit
+> node scripts/backfill-folder-frontmatter.mjs
+
+Folder frontmatter backfill (audit)
+Lore notes scanned: 281
+Would change: 0
+type fields: 0
+era fields: 0
+item_type fields: 0
+species_kind fields: 0
+Conflicts left untouched: 18
+Review notices: 0
+  conflict Lore/Degel System/Errack.md: type is "location", folder suggests "article"
+  conflict Lore/Demo/Demo Archive Tower.md: type is "location", folder suggests "system"
+  conflict Lore/Demo/Demo Concord.md: type is "faction", folder suggests "system"
+  conflict Lore/Demo/Demo Directorate.md: type is "faction", folder suggests "system"
+  conflict Lore/Demo/Demo Frontier Fort.md: type is "location", folder suggests "system"
+  conflict Lore/Demo/Demo Gate City.md: type is "map", folder suggests "system"
+  conflict Lore/Demo/Demo Hidden Ruin.md: type is "location", folder suggests "system"
+  conflict Lore/Demo/Demo League.md: type is "faction", folder suggests "system"
+  conflict Lore/Demo/Demo Market Ward.md: type is "location", folder suggests "system"
+  conflict Lore/Demo/Demo Marshal.md: type is "character", folder suggests "system"
+  conflict Lore/Demo/Demo Rift Site.md: type is "location", folder suggests "system"
+  conflict Lore/Demo/Demo Trade Port.md: type is "location", folder suggests "system"
+  conflict Lore/Demo/Exploration Demo World.md: type is "map", folder suggests "system"
+  conflict Lore/Demo/Exploration Demo.md: type is "article", folder suggests "system"
+  conflict Lore/Eras/CITADEL/Bestiary/Amphibians/Turlotl.md: type is "fauna", folder suggests "species"
+  conflict Lore/Eras/CITADEL/Bestiary/Birds/Sigdfugl.md: type is "fauna", folder suggests "species"
+  conflict Lore/Eras/CITADEL/Bestiary/Mammals/Voraegir.md: type is "fauna", folder suggests "species"
+  conflict Lore/Eras/ENTROPY/Weapons & Armour/Weaponry/Explosives/CN47 Chaff Grenade.md: item_type is "Weapon, Explosive", folder suggests "weapon"
