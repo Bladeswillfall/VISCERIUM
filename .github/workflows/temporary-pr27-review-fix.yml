@@ -1,0 +1,84 @@
+name: Temporary PR 27 review fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/temporary-pr27-review-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: fix/sidebar-wikilinks-all-articles
+          fetch-depth: 1
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Site/package-lock.json
+
+      - name: Apply review fix
+        shell: python
+        run: |
+          from pathlib import Path
+
+          component = Path('Site/src/components/CodexPageSidebar.astro')
+          source = component.read_text()
+          source = source.replace(
+              "import { getCollection } from 'astro:content';\n",
+              "import { getCollection } from 'astro:content';\nimport { parseSidebarWikilink } from '../lib/sidebar-links.mjs';\n",
+              1,
+          )
+          old = """  const wikilink = trimmed.match(/^\\[\\[([^\\]|#]+)(?:#[^\\]|]+)?(?:\\|[^\\]]+)?\\]\\]$/);\n  if (wikilink) return resolveSidebarTarget(wikilink[1]);\n"""
+          new = """  const wikilink = parseSidebarWikilink(trimmed);\n  if (wikilink) {\n    const route = resolveSidebarTarget(wikilink.target);\n    return route ? `${route}${wikilink.fragment}` : undefined;\n  }\n"""
+          if old not in source:
+              raise SystemExit('Expected sidebar wikilink block not found')
+          component.write_text(source.replace(old, new, 1))
+
+          helper = Path('Site/src/lib/sidebar-links.mjs')
+          helper.write_text("""export function parseSidebarWikilink(value) {\n  if (typeof value !== 'string') return null;\n  const match = value.trim().match(/^\\[\\[([^\\]|#]+)(#[^\\]|]+)?(?:\\|[^\\]]+)?\\]\\]$/);\n  if (!match) return null;\n  return {\n    target: match[1].trim(),\n    fragment: match[2] ?? '',\n  };\n}\n""")
+
+          test_file = Path('Site/tests/sidebar-wikilinks.test.mjs')
+          test_source = test_file.read_text()
+          test_source = test_source.replace(
+              "import { fileURLToPath } from 'node:url';\n",
+              "import { fileURLToPath } from 'node:url';\nimport { parseSidebarWikilink } from '../src/lib/sidebar-links.mjs';\n",
+              1,
+          )
+          marker = """test('the public sidebar resolves authored Obsidian wikilinks through the docs collection', async () => {\n"""
+          added = """test('sidebar wikilinks preserve heading fragments', () => {\n  assert.deepEqual(\n    parseSidebarWikilink('[[Calendar/Okse#solmanuthur-16|Solmanuthur 16]]'),\n    { target: 'Calendar/Okse', fragment: '#solmanuthur-16' },\n  );\n  assert.deepEqual(\n    parseSidebarWikilink('[[Okse Dominion]]'),\n    { target: 'Okse Dominion', fragment: '' },\n  );\n  assert.equal(parseSidebarWikilink('/calendar/okse/'), null);\n});\n\n"""
+          if marker not in test_source:
+              raise SystemExit('Expected sidebar test marker not found')
+          test_source = test_source.replace(marker, added + marker, 1)
+          test_source = test_source.replace(
+              "  assert.match(source, /const wikilink = trimmed\\.match/);\n",
+              "  assert.match(source, /parseSidebarWikilink\\(trimmed\\)/);\n  assert.match(source, /`\\$\\{route\\}\\$\\{wikilink\\.fragment\\}`/);\n",
+              1,
+          )
+          test_file.write_text(test_source)
+
+      - name: Install dependencies
+        run: npm --prefix Site ci --silent --no-audit --no-fund
+
+      - name: Run unit tests
+        run: npm --prefix Site run test:unit
+
+      - name: Build site
+        run: npm --prefix Site run build
+
+      - name: Commit review fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Site/src/components/CodexPageSidebar.astro Site/src/lib/sidebar-links.mjs Site/tests/sidebar-wikilinks.test.mjs
+          git commit -m "Preserve sidebar wikilink heading fragments"
+          git push origin HEAD:fix/sidebar-wikilinks-all-articles
