@@ -29,18 +29,20 @@ jobs:
       - name: Install dependencies
         run: npm --prefix Site ci --silent --no-audit --no-fund
 
-      - name: Diagnose frontmatter parsing
+      - name: Apply and diagnose migration
         run: |
-          node Site/scripts/diagnose-sidebar-frontmatter.mjs > sidebar-frontmatter-diagnostic.log 2>&1
+          npm --prefix Site run migration:sidebar-wikilinks:write > sidebar-frontmatter-diagnostic.log 2>&1
+          node Site/scripts/diagnose-sidebar-frontmatter.mjs >> sidebar-frontmatter-diagnostic.log 2>&1
           npm --prefix Site run frontmatter:folders:audit >> sidebar-frontmatter-diagnostic.log 2>&1
 
-      - name: Commit diagnostic output
+      - name: Commit diagnostic output only
         run: |
           git fetch origin main --depth=1
           git show origin/main:.github/workflows/checks.yml > .github/workflows/checks.yml
           rm -f .github/workflows/sidebar-wikilink-migration.yml sidebar-migration-run.log
+          git restore Vault Site/src/content/docs
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Diagnose sidebar frontmatter migration"
+          git commit -m "Diagnose sidebar migration output"
           git push origin HEAD:fix/sidebar-wikilinks-all-articles
