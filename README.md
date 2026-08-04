@@ -1,3 +1,4 @@
+[![VISCERIUM logomark](https://github.com/Bladeswillfall/VISCERIUM/blob/76ada1ff014568c1090567ce65ae95673563c897/Vault/Assets/Images/viscerium-banner.webp)
 # VISCERIUM
 
 > **One timeline. Four eras. Infinite stories.**
