@@ -152,6 +152,19 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
     gap: 0;
   }
 
+  /* These rows cross an unlayered Starlight boundary, so their hierarchy-owned
+     touch heights must be explicit rather than falling back to the folder size. */
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
+  .sidebar-content .codex-sidebar-layout .top-level > li > a,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group,
+  .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary {
+    min-block-size: var(--codex-sidebar-row-root) !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary {
+    min-block-size: var(--codex-sidebar-row-era) !important;
+  }
+
   .codex-sidebar-era-toolbar {
     display: none;
     min-block-size: var(--codex-sidebar-row-leaf, 2.25rem);
