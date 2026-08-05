@@ -2,7 +2,6 @@ import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
-import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import rehypeKatex from 'rehype-katex';
@@ -232,7 +231,6 @@ export default defineConfig({
     }),
   },
   integrations: [
-    preact(),
     starlight({
       title: siteConfig.title,
       description: siteConfig.description,

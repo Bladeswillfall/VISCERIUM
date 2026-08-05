@@ -13,7 +13,7 @@ const contactForm = siteConfig.contactForm;
       <p>
         {contactForm.enabled
           ? 'Use this form for collaboration, rights, credit, or sensitive concerns. Public site issues still belong on GitHub.'
-          : 'The private contact form is paused until its separate Cloudflare Worker has been configured. Public, trackable issues can still be opened through GitHub.'}
+          : 'Private messages are not available right now. Public, trackable issues can still be opened through GitHub.'}
       </p>
     </header>
 
@@ -30,7 +30,7 @@ const contactForm = siteConfig.contactForm;
       <section class="support-form-section codex-frame" aria-labelledby="private-message-title">
         <div>
           <h2 id="private-message-title">Send a private message</h2>
-          <p>All fields are required. The separate Worker validates Turnstile before sending the message.</p>
+          <p>All fields are required. Messages are checked before delivery.</p>
         </div>
         <form class="support-form" method="post" enctype="multipart/form-data" action={contactForm.endpoint}>
           <div class="support-form__field">
@@ -65,10 +65,7 @@ const contactForm = siteConfig.contactForm;
     ) : (
       <section class="support-note codex-frame">
         <h2>Private messages</h2>
-        <p>
-          Private contact will return after the Worker endpoint, Resend sender, and Turnstile widget have been configured
-          with real owner-controlled values.
-        </p>
+        <p>Private contact is currently unavailable. Use GitHub for public questions and keep sensitive details out of public issues.</p>
       </section>
     )}
   </section>

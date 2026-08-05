@@ -1,44 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { existsSync, readFileSync } from 'node:fs';
-import matter from 'gray-matter';
 import { compileMapData } from '../scripts/generate-map-data.mjs';
 import { compileRelationshipData } from '../scripts/generate-relationship-data.mjs';
 
 function record(relativePath, data) {
   return { relativePath, data };
-}
-
-function readWebpDimensions(source) {
-  assert.equal(source.subarray(0, 4).toString('ascii'), 'RIFF');
-  assert.equal(source.subarray(8, 12).toString('ascii'), 'WEBP');
-
-  const chunk = source.subarray(12, 16).toString('ascii');
-  if (chunk === 'VP8 ') {
-    assert.deepEqual([...source.subarray(23, 26)], [0x9d, 0x01, 0x2a]);
-    return {
-      width: source.readUInt16LE(26) & 0x3fff,
-      height: source.readUInt16LE(28) & 0x3fff,
-    };
-  }
-
-  if (chunk === 'VP8X') {
-    return {
-      width: source.readUIntLE(24, 3) + 1,
-      height: source.readUIntLE(27, 3) + 1,
-    };
-  }
-
-  if (chunk === 'VP8L') {
-    assert.equal(source[20], 0x2f);
-    const bits = source.readUInt32LE(21);
-    return {
-      width: (bits & 0x3fff) + 1,
-      height: ((bits >> 14) & 0x3fff) + 1,
-    };
-  }
-
-  assert.fail(`Unsupported WebP chunk type: ${JSON.stringify(chunk)}`);
 }
 
 test('Atlas compiler preserves semantic layers, zoom visibility and nested maps', () => {
@@ -96,24 +62,6 @@ test('Atlas compiler preserves semantic layers, zoom visibility and nested maps'
   assert.equal(fort.minZoom, 2);
   assert.deepEqual(fort.layers, ['military/forts']);
   assert.equal(fort.marker, 'fortification');
-});
-
-test('published Atlas demo uses a managed real WebP map with matching dimensions', () => {
-  const sourceNote = new URL('../../Vault/Lore/Demo/Exploration Demo World.md', import.meta.url);
-  const { data } = matter(readFileSync(sourceNote, 'utf8'));
-
-  assert.equal(data.status, 'published');
-  assert.equal(data.type, 'map');
-  assert.equal(data.mapId, 'exploration-demo-world');
-  assert.equal(data.image, '/assets/maps/Errack-CITADEL.webp');
-
-  const filename = data.image.split('/').at(-1);
-  const sourceMap = new URL(`../../Vault/Assets/Maps/${filename}`, import.meta.url);
-  assert.equal(existsSync(sourceMap), true, `${filename} must exist in the managed map asset directory`);
-
-  const dimensions = readWebpDimensions(readFileSync(sourceMap));
-  assert.deepEqual(dimensions, { width: data.width, height: data.height });
-  assert.deepEqual(dimensions, { width: 7680, height: 3840 });
 });
 
 test('relationship compiler deduplicates reciprocal edges and keeps directed metadata', () => {

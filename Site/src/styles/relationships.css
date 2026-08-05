@@ -216,9 +216,18 @@
   background: var(--codex-surface-raised);
 }
 
-.relationship-explorer__empty h2 {
-  margin-top: 0;
+body .sl-markdown-content .relationship-explorer__empty h2 {
+  display: block;
+  margin: 0 0 .5rem;
+  padding: 0;
   font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+body .sl-markdown-content .relationship-explorer__empty h2::before,
+body .sl-markdown-content .relationship-explorer__empty h2::after {
+  content: none;
+  display: none;
 }
 
 @media (max-width: 70rem) {

@@ -2,12 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 
-const execFileAsync = promisify(execFile);
 const testDir = path.dirname(fileURLToPath(import.meta.url));
 const configUrl = pathToFileURL(path.resolve(testDir, '../site.config.mjs')).href;
+let importSequence = 0;
 const giscusEnvironmentKeys = [
   'PUBLIC_GISCUS_ENABLED',
   'PUBLIC_GISCUS_REPO',
@@ -17,20 +15,18 @@ const giscusEnvironmentKeys = [
 ];
 
 async function readGiscusConfig(overrides = {}) {
-  const environment = { ...process.env };
-  for (const key of giscusEnvironmentKeys) delete environment[key];
-  Object.assign(environment, overrides);
-
-  const script = `
-    import config from ${JSON.stringify(configUrl)};
-    process.stdout.write(JSON.stringify(config.giscus));
-  `;
-  const { stdout } = await execFileAsync(
-    process.execPath,
-    ['--input-type=module', '--eval', script],
-    { env: environment },
-  );
-  return JSON.parse(stdout);
+  const saved = new Map(giscusEnvironmentKeys.map((key) => [key, process.env[key]]));
+  try {
+    for (const key of giscusEnvironmentKeys) delete process.env[key];
+    Object.assign(process.env, overrides);
+    const { default: config } = await import(`${configUrl}?test=${importSequence++}`);
+    return config.giscus;
+  } finally {
+    for (const [key, value] of saved) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
 }
 
 test('Giscus uses the migrated public repository defaults without deploy variables', async () => {

@@ -350,11 +350,6 @@
     transform: translateX(-50%);
   }
 
-  .atlas .leaflet-control-layers {
-    max-width: min(19rem, 78vw);
-    max-height: 52dvh;
-  }
-
   .relationship-list__item {
     grid-template-columns: 1fr;
     text-align: center;

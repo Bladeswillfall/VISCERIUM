@@ -4,8 +4,8 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-test('the Astro island mounts the local Chronos renderer fork without host patches', () => {
-  const island = read('../src/components/timeline/TimelineIsland.tsx');
+test('the Astro component mounts the local Chronos renderer fork without host patches', () => {
+  const app = read('../src/components/timeline/TimelineApp.astro');
   const renderer = read('../src/lib/timeline/chronos-native-renderer.mjs');
   const fork = read('../src/lib/chronos-fork/VisceriumChronosTimeline.mjs');
 
@@ -23,12 +23,9 @@ test('the Astro island mounts the local Chronos renderer fork without host patch
   assert.match(fork, /setOptions\(\{ queue: queueOptions \}\)/);
   assert.doesNotMatch(renderer, /ChronosTimeline\.prototype|_handleZoomWorkaround|MutationObserver|ResizeObserver/);
 
-  assert.match(island, /const cleanupTimeline = mountTimeline\(root, dataset, options\)/);
-  assert.match(island, /const cleanupHovercard = installTimelineHovercard\(root, dataset\)/);
-  assert.doesNotMatch(island, /prepareTimelineViewportGuard/);
-  assert.doesNotMatch(island, /installAdaptiveTimelineGrid/);
-  assert.doesNotMatch(island, /installTimelineTooltipContentSync/);
-  assert.doesNotMatch(island, /installCalendarYearAxisSync/);
+  assert.match(app, /mountTimeline\(mount, dataset, options\)/);
+  assert.match(app, /installTimelineHovercard\(mount, dataset\)/);
+  assert.doesNotMatch(app, /prepareTimelineViewportGuard|installAdaptiveTimelineGrid|installTimelineTooltipContentSync|installCalendarYearAxisSync/);
 });
 
 test('unified chronology keeps one canonical Chronos group without host remounting', () => {

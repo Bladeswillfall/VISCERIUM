@@ -30,10 +30,7 @@
     outline-offset: 3px;
   }
 
-  .codex-sidebar-toggle,
-  .social-icons a,
-  .codex-link-button,
-  .support-button {
+  :where(.codex-sidebar-toggle, .social-icons a, .codex-link-button, .support-button) {
     min-inline-size: 2.75rem;
     min-block-size: 2.75rem;
   }
@@ -52,11 +49,23 @@
   }
 
   @media (forced-colors: active) {
-    .codex-surface,
-    .codex-sidebar-card,
-    .codex-sidebar-section,
-    .cx-card {
-      border: 1px solid CanvasText;
+    :where(
+      .codex-surface,
+      .codex-sidebar-card,
+      .codex-sidebar-section,
+      .cx-card,
+      .calendar-module,
+      .calendar-month,
+      .calendar-day,
+      .support-section,
+      .world-map,
+      .codex-map,
+      button,
+      input,
+      select,
+      textarea
+    ) {
+      border: 1px solid CanvasText !important;
       background: Canvas;
       color: CanvasText;
     }

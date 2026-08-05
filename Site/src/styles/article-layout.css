@@ -2,31 +2,6 @@
 
 @layer starlight.core {
   /*
-   * Headings should introduce the material below them, not float between two
-   * equally large gaps. Keep the hierarchy spacious, but put most of the
-   * section break above the heading and tighten the heading-to-body join.
-   */
-  .sl-markdown-content:not(:has(.home-gateway)) h2 {
-    margin-block: 3.25rem .65rem;
-  }
-
-  .sl-markdown-content:not(:has(.home-gateway)) h3 {
-    margin-block: 2.55rem .4rem;
-  }
-
-  .sl-markdown-content:not(:has(.home-gateway)) h4 {
-    margin-block: 2.05rem .25rem;
-  }
-
-  .sl-markdown-content:not(:has(.home-gateway)) h5 {
-    margin-block: 1.65rem .25rem;
-  }
-
-  .sl-markdown-content:not(:has(.home-gateway)) h6 {
-    margin-block: 1.45rem .2rem;
-  }
-
-  /*
    * Article paragraphs should not add their own leading gap. Vertical rhythm
    * is owned by the element before them, which keeps headings visibly attached
    * to the prose they introduce and avoids doubled/collapsed top spacing.
@@ -59,36 +34,6 @@
 }
 
 @media (min-width: 72rem) {
-  /*
-   * The article metadata should scroll normally. Stretch the sidebar column to
-   * the article's height so the TOC can remain sticky for the full article.
-   */
-  .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) > .right-sidebar-container {
-    align-self: stretch;
-  }
-
-  .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) .right-sidebar {
-    position: relative;
-    top: auto;
-    block-size: 100%;
-    max-block-size: none;
-    max-height: none;
-    overflow: visible;
-  }
-
-  .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) :is(
-    .right-sidebar-panel,
-    .codex-page-sidebar,
-    .codex-page-sidebar > .sl-container
-  ) {
-    block-size: 100%;
-    min-block-size: 0;
-  }
-
-  .codex-page-sidebar > .sl-container {
-    align-content: start;
-  }
-
   /*
    * Pin only the article TOC. Image/reference metadata above it and backlinks
    * below it remain ordinary sidebar content and scroll away with the page.

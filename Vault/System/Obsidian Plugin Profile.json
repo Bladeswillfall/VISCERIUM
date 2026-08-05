@@ -59,8 +59,8 @@
       "name": "StoryLine",
       "testedVersion": "1.10.55",
       "source": "obsidian-community",
-      "sharedSettings": "Vault/.obsidian/plugins/storyline/data.json",
-      "note": "The shared settings omit the active project path because StoryLine projects are private and device-local."
+      "sharedSettings": null,
+      "note": "StoryLine settings, including the active private project, remain device-local."
     },
     {
       "id": "viscerium-timelines",

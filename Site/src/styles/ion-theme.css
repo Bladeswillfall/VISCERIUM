@@ -1,17 +1,6 @@
 @layer ion {
   /* Ion layout and type metrics. Core colour ownership lives in color-tokens.css; shell-specific theme overrides live here. */
-  :root {
-    --codex-radius: .75rem;
-    --sl-icon-size: 1.25rem;
-    --sl-text-body: .875rem;
-    --sl-text-body-sm: .8125rem;
-    --sl-text-4xl: 2rem;
-    --sl-text-3xl: 1.75rem;
-    --sl-text-2xl: 1.5rem;
-  }
-
   /* Navigation stays OLED black in both themes and owns its foreground scale. */
-  header.header,
   #starlight__sidebar {
     --codex-accent: var(--codex-nav-text);
     --codex-accent-high: var(--codex-nav-text);
@@ -36,12 +25,6 @@
   #starlight__sidebar {
     background-color: var(--sl-color-bg-sidebar);
     border-right: 1px solid var(--codex-nav-border);
-  }
-
-  /* Change background of header & add border */
-  header.header {
-    background-color: var(--sl-color-bg-nav);
-    border-bottom: 1px solid var(--codex-nav-border);
   }
 
   /* Remove the border for the theme selector since it is disabled */
@@ -71,11 +54,6 @@
     border-radius: 12px !important;
     padding: 1.5rem !important;
     transition: all 0.1s ease;
-  }
-
-  /* Keep the right sidebar predictable without forcing main content to shrink. */
-  .right-sidebar-panel {
-    width: var(--sl-sidebar-width);
   }
 
   .sl-container {
@@ -120,13 +98,6 @@
   /* Remove default padding... */
   .content-panel:has(footer) {
     padding: 0;
-  }
-
-  /* ... and instead add it to the content itself to allow for proper full-width borders */
-  .sl-markdown-content {
-    padding: 1.5rem var(--sl-content-pad-x);
-    padding-top: 0;
-    font-size: var(--sl-text-body);
   }
 
   /* Link styles */

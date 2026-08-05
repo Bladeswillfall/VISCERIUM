@@ -86,12 +86,15 @@
 
   /* Left navigation presentation. */
   .sidebar {
+    border: 0 !important;
+    border-radius: 0 !important;
     border-inline-end-color: var(--codex-border);
     background: var(--sl-color-bg-sidebar);
   }
 
   .sidebar-pane,
   .sidebar-content {
+    border-radius: 0 !important;
     background: transparent;
   }
 
@@ -113,17 +116,22 @@
   .codex-changelog-sidebar {
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid var(--codex-border);
+    border-top: 0;
   }
 
   .sidebar-content .top-level {
     display: grid;
     gap: .16rem;
+    padding-inline: .15rem .35rem !important;
+  }
+
+  .sidebar-content .top-level > li + li {
+    margin-top: .4rem !important;
   }
 
   .sidebar-content a,
   .sidebar-content summary {
-    border-radius: .7rem;
+    border-radius: 0;
   }
 
   .sidebar-content a:hover,
@@ -154,6 +162,34 @@
 
   .sidebar-content .large {
     min-width: 0;
+    color: var(--sl-color-gray-2) !important;
+    font-size: var(--sl-text-sm) !important;
+    letter-spacing: .03em;
+  }
+
+  .sidebar .ion-expandable-group {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .sidebar .ion-expandable-group > summary {
+    margin: .65rem 0 .1rem !important;
+    padding: .55rem .45rem .35rem !important;
+    border: 0 !important;
+    border-block-start: 1px solid color-mix(in oklch, var(--codex-accent) 12%, transparent) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  .sidebar .top-level > li:first-child + li .ion-expandable-group > summary,
+  .sidebar .top-level > li:first-child > .ion-expandable-group > summary {
+    border-block-start: 0 !important;
+  }
+
+  .sidebar ul ul li {
+    border-inline-start: 0;
   }
 
   .sidebar-content .caret {
@@ -186,7 +222,7 @@
 
   .codex-sidebar-toggle {
     position: fixed;
-    z-index: 1000;
+    z-index: var(--codex-z-control);
     inset-block-start: calc(var(--sl-nav-height, 3.5rem) + .75rem);
     inset-inline-start: calc(var(--codex-sidebar-overlay-width, 18rem) + .75rem);
     display: inline-flex;
@@ -194,7 +230,7 @@
     justify-content: center;
     width: 2.25rem;
     height: 2.25rem;
-    border: 1px solid var(--codex-accent-soft);
+    border: 0;
     border-radius: 999px;
     background: var(--codex-sidebar-toggle-bg);
     color: var(--codex-nav-text);
@@ -243,7 +279,7 @@ html[data-codex-desktop-sidebar] .sidebar > starlight-menu-button {
 html[data-codex-desktop-sidebar] #starlight__sidebar {
   --sl-sidebar-width: var(--codex-sidebar-overlay-width);
   position: fixed;
-  z-index: 60;
+  z-index: var(--codex-z-navigation) !important;
   visibility: visible;
   inset-block-start: var(--sl-nav-height, 3.5rem);
   inset-block-end: 0;
@@ -297,7 +333,7 @@ html[data-codex-desktop-sidebar] .codex-page-sidebar .sl-container {
 }
 
 @media (min-width: 800px) {
-  :root {
+  html[data-codex-desktop-sidebar] {
     --sl-mobile-toc-height: 0rem;
   }
 

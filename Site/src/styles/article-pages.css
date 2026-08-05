@@ -26,6 +26,19 @@
     --vc-editorial-rule-soft: color-mix(in oklch, var(--sl-color-accent-high) 18%, transparent);
   }
 
+  body:not(:has(.home-gateway)) :is(
+    .content-panel,
+    .codex-breadcrumbs,
+    .right-sidebar,
+    .right-sidebar-panel,
+    .codex-page-sidebar,
+    .codex-sidebar-card,
+    .codex-sidebar-section,
+    .codex-header-image
+  ) {
+    border: 0;
+  }
+
   /* Keep the article readable, but move away from the over-spaced documentation rhythm. */
   body:not(:has(.home-gateway)) .sl-markdown-content {
     line-height: 1.62;

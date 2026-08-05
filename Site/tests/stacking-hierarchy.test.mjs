@@ -5,6 +5,9 @@ import { readFileSync } from 'node:fs';
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
 const layers = read('../src/styles/ion-layers.css');
+const layout = read('../src/styles/layout.css');
+const navigation = read('../src/styles/navigation.css');
+const header = read('../src/styles/header-controls.css');
 const rail = read('../src/components/CodexFooterRail.astro');
 const pageFrame = read('../src/components/CodexPageFrame.astro');
 const timeline = read('../src/styles/timeline-canvas.css');
@@ -29,7 +32,7 @@ test('the raised page and underlay rail are siblings in the document stack', () 
 
 test('the two-column shell contains local application stacking', () => {
   assert.match(
-    layers,
+    layout,
     /\.codex-two-column-content\s*\{[\s\S]*?position:\s*relative[\s\S]*?isolation:\s*isolate[\s\S]*?z-index:\s*var\(--codex-z-page\)/,
   );
 
@@ -51,8 +54,10 @@ test('article-local footer breakout hacks are gone', () => {
 });
 
 test('global chrome uses the shared hierarchy', () => {
-  assert.match(layers, /html\[data-codex-desktop-sidebar\] #starlight__sidebar\s*\{[\s\S]*?z-index:\s*var\(--codex-z-navigation\)\s*!important/);
-  assert.match(layers, /\.codex-sidebar-toggle,[\s\S]*?#scroll-to-top-button\s*\{[\s\S]*?z-index:\s*var\(--codex-z-control\)\s*!important/);
+  assert.match(navigation, /html\[data-codex-desktop-sidebar\] #starlight__sidebar\s*\{[\s\S]*?z-index:\s*var\(--codex-z-navigation\)\s*!important/);
+  assert.match(navigation, /\.codex-sidebar-toggle\s*\{[\s\S]*?z-index:\s*var\(--codex-z-control\)/);
+  assert.match(header, /header\.header\s*\{[\s\S]*?z-index:\s*var\(--codex-z-navigation\)/);
+  assert.match(layers, /#scroll-to-top-button\s*\{[\s\S]*?z-index:\s*var\(--codex-z-control\)\s*!important/);
   assert.match(layers, /body::before\s*\{[\s\S]*?z-index:\s*var\(--codex-z-grain\)\s*!important/);
 });
 

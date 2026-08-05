@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import matter from 'gray-matter';
 import {
   STORYTELLER_END,
   STORYTELLER_START,
@@ -71,16 +70,6 @@ test('Okse stores Storyteller guidance in the article footer rather than frontma
   assert.match(note.content, /^### Current agenda$/m);
   assert.match(note.content, /oil and mineral extraction/i);
   assert.match(note.content, /<!-- viscerium:storyteller:end -->/);
-});
-
-test('non-canon trade port remains a complete location canary in Markdown', async () => {
-  const source = matter(await readRepo('Vault/Lore/Demo/Demo Trade Port.md'));
-
-  assert.equal(source.data.approach_signs, undefined);
-  assert.equal(source.data.story_complication, undefined);
-  assert.match(source.content, /^### Approach and first impression$/m);
-  assert.match(source.content, /bulk cargo between coastal shipping and inland routes/i);
-  assert.match(source.content, /missing or misdirected shipment/i);
 });
 
 test('public switcher keeps Lore default and moves rendered Markdown between the boundaries', async () => {

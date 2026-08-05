@@ -34,14 +34,14 @@ participants:
   - Ignition Crew One
 outcome: Human vessels crossed interstellar distance without conventional transit.
 tags:
-  - entropy
+  - ENTROPY
   - timeline-showcase
   - garmir
   - same-day
+  - Events
 slug: eras/entropy/events/garmir-gate-ignition
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/GARMIR Gate Ignition.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

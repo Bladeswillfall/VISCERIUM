@@ -5,7 +5,7 @@
   .codex-image-panel {
     margin-block: 1.5rem;
     overflow: hidden;
-    border: 1px solid var(--codex-border);
+    border: 0;
     border-radius: var(--codex-radius-lg);
     background: var(--codex-surface-raised);
   }
@@ -48,7 +48,7 @@
   .codex-gallery-card {
     min-width: 0;
     overflow: hidden;
-    border: 1px solid var(--codex-border);
+    border: 0;
     border-radius: var(--codex-radius);
     background: var(--codex-surface-raised);
   }
@@ -440,12 +440,14 @@
     min-height: 25rem;
   }
 
-  .atlas .leaflet-control-layers {
-    max-width: 68vw;
-    max-height: 48vh;
-  }
-
   .atlas__marker-index ul {
     columns: 1;
+  }
+}
+
+@media (max-width: 48rem) {
+  .atlas .leaflet-control-layers {
+    max-width: min(19rem, 78vw);
+    max-height: 52dvh;
   }
 }

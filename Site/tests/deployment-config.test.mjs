@@ -31,8 +31,9 @@ test('the replacement public configuration uses the new identity', () => {
 
   assert.match(publicConfiguration, /Bladeswillfall\/VISCERIUM/);
   assert.match(publicConfiguration, /https:\/\/www\.viscerium\.co\.uk/);
-  assert.match(publicConfiguration, /PUBLIC_GISCUS_REPO_ID=""/);
-  assert.match(publicConfiguration, /PUBLIC_GISCUS_CATEGORY_ID=""/);
+  assert.match(publicConfiguration, /PUBLIC_GISCUS_ENABLED="1"/);
+  assert.match(publicConfiguration, /PUBLIC_GISCUS_REPO_ID="R_kgDOTOiQ7g"/);
+  assert.match(publicConfiguration, /PUBLIC_GISCUS_CATEGORY_ID="DIC_kwDOTOiQ7s4DCYjH"/);
 });
 
 test('public site code cannot read Worker-only contact secrets', () => {

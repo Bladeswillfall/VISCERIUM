@@ -438,16 +438,7 @@
  * buttons; date fields, event cards and Chronos geometry remain untouched.
  */
 
-.vc-timeline-app {
-  --vc-timeline-button-radius: .55rem;
-}
-
-/*
- * The hydrated control stylesheet can be emitted before TimelineApp's parent
- * stylesheet after consolidation. Scope the affordance to the two action
- * surfaces with enough specificity to beat the parent's flat button reset,
- * regardless of Vite module-graph order.
- */
+/* Keep the shared affordance scoped to the two timeline action surfaces. */
 .vc-timeline-app :is(.vc-timeline-toolbar, .vc-timeline-filter-actions) button {
   border-radius: var(--vc-timeline-button-radius);
 }

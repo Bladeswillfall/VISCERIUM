@@ -15,7 +15,7 @@ The local plugin deliberately does not register a second `chronos` code-block pr
 From this directory:
 
 ```bash
-npm install
+npm ci
 npm run build
 ```
 

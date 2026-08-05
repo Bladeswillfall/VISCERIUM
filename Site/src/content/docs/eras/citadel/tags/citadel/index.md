@@ -1,7 +1,7 @@
 ---
-title: '#citadel — CITADEL'
+title: '#CITADEL — CITADEL'
 description: >-
-  Pages tagged citadel that are relevant to CITADEL, including Universal
+  Pages tagged CITADEL that are relevant to CITADEL, including Universal
   material.
 status: published
 slug: eras/citadel/tags/citadel
@@ -11,8 +11,8 @@ searchable: false
 tableOfContents: false
 giscus: false
 ---
-Browse **#citadel** within CITADEL. Universal material is included because it is intentionally valid in every historical era.
-<div class="codex-alpha-index" data-index-kind="era-tag" aria-label="citadel pages in CITADEL">
+Browse **#CITADEL** within CITADEL. Universal material is included because it is intentionally valid in every historical era.
+<div class="codex-alpha-index" data-index-kind="era-tag" aria-label="CITADEL pages in CITADEL">
 <ul class="codex-alpha-index__items">
 <li class="codex-alpha-index__item">
 <div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="/eras/citadel/">CITADEL</a><span class="codex-alpha-index__meta">era</span></div>

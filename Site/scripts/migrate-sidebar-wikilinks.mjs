@@ -233,6 +233,8 @@ for (const note of notes) {
   if (shouldWrite) await fs.writeFile(note.file, nextRaw, 'utf8');
 }
 
+export const sidebarMigrationCandidates = changed;
+
 if (changed.length === 0) {
   console.log('No sidebar article references require migration.');
 } else {

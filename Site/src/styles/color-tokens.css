@@ -19,16 +19,12 @@
     --codex-text-body: var(--codex-text-base);
     --codex-text-minor: var(--codex-text-base);
 
-    /* Reusable status and era bases. */
+    /* Reusable status colours. */
     --codex-danger-base: #ff8a9a;
     --codex-success-base: #7ee2a8;
     --codex-warning-base: #ffd166;
     --codex-info-base: #80d8ff;
     --codex-important-base: #d8a7ff;
-    --era-e1-base: var(--codex-danger-base);
-    --era-e2-base: #f0c36a;
-    --era-e3-base: #73d9e6;
-    --era-e4-base: #c5a3ff;
 
     /* Core surfaces and fixed navigation. */
     --codex-fixed-light: #fff;
@@ -52,6 +48,8 @@
     --codex-nav-muted: var(--codex-palette-mid);
     --codex-nav-border: var(--codex-palette-deep);
     --codex-nav-hover: var(--codex-palette-ink);
+    --codex-radius: 0;
+    --codex-radius-lg: 0;
 
     /* High-contrast status colours. */
     --codex-danger: var(--codex-danger-base);
@@ -107,24 +105,6 @@
     --calendar-leap: var(--codex-important);
     --calendar-holiday: var(--codex-danger);
     --calendar-marker: var(--codex-danger);
-
-    /* Era palette. */
-    --era-e1-accent: var(--era-e1-base);
-    --era-e1-accent-high: #ffc1d0;
-    --era-e1-heading: #f27f9c;
-    --era-e1-surface: #721c35;
-    --era-e2-accent: var(--era-e2-base);
-    --era-e2-accent-high: #ffe0a3;
-    --era-e2-heading: var(--era-e2-base);
-    --era-e2-surface: #665018;
-    --era-e3-accent: var(--era-e3-base);
-    --era-e3-accent-high: #b8f4fa;
-    --era-e3-heading: var(--era-e3-base);
-    --era-e3-surface: #175b64;
-    --era-e4-accent: var(--era-e4-base);
-    --era-e4-accent-high: #e6d7ff;
-    --era-e4-heading: var(--era-e4-base);
-    --era-e4-surface: #54357c;
 
     /* Timeline event palette. */
     --vc-event-ink: #17191b;
@@ -241,22 +221,6 @@
     --calendar-muted: var(--codex-text-minor);
     --calendar-marker: var(--codex-danger);
 
-    --era-e1-accent: #35000f;
-    --era-e1-accent-high: #000;
-    --era-e1-heading: #35000f;
-    --era-e1-surface: var(--era-e1-base);
-    --era-e2-accent: #201400;
-    --era-e2-accent-high: #000;
-    --era-e2-heading: #201400;
-    --era-e2-surface: var(--era-e2-base);
-    --era-e3-accent: #001b1f;
-    --era-e3-accent-high: #000;
-    --era-e3-heading: #001b1f;
-    --era-e3-surface: var(--era-e3-base);
-    --era-e4-accent: #240b35;
-    --era-e4-accent-high: #000;
-    --era-e4-heading: #240b35;
-    --era-e4-surface: var(--era-e4-base);
   }
 
   @supports (color: oklch(from red l c h)) {
@@ -279,9 +243,6 @@
       --codex-warning-base: oklch(88% calc(0.135 * var(--codex-chroma-scale)) 86.1);
       --codex-info-base: oklch(84.1% calc(0.101 * var(--codex-chroma-scale)) 228.4);
       --codex-important-base: oklch(80.4% calc(0.131 * var(--codex-chroma-scale)) 309.2);
-      --era-e2-base: oklch(83.9% calc(0.119 * var(--codex-chroma-scale)) 82.9);
-      --era-e3-base: oklch(82.9% calc(0.097 * var(--codex-chroma-scale)) 206.3);
-      --era-e4-base: oklch(78% calc(0.132 * var(--codex-chroma-scale)) 300.4);
 
       /* Alpha, elevation, and contrast variants derive from the bases above. */
       --codex-accent-soft: oklch(from var(--codex-accent) l c h / 0.18);
@@ -302,23 +263,6 @@
       --sl-color-purple-high: color-mix(in oklch, var(--codex-important-base) 50%, var(--codex-fixed-light));
 
       --calendar-surface-soft: oklch(from var(--codex-palette-deep) l c h / 0.4);
-
-      --era-e1-accent: var(--era-e1-base);
-      --era-e1-accent-high: color-mix(in oklch, var(--era-e1-base) 55%, var(--codex-fixed-light));
-      --era-e1-heading: var(--era-e1-base);
-      --era-e1-surface: oklch(from var(--era-e1-base) calc(l * 0.5) calc(c * 0.72) h);
-      --era-e2-accent: var(--era-e2-base);
-      --era-e2-accent-high: color-mix(in oklch, var(--era-e2-base) 55%, var(--codex-fixed-light));
-      --era-e2-heading: var(--era-e2-base);
-      --era-e2-surface: oklch(from var(--era-e2-base) calc(l * 0.5) calc(c * 0.72) h);
-      --era-e3-accent: var(--era-e3-base);
-      --era-e3-accent-high: color-mix(in oklch, var(--era-e3-base) 55%, var(--codex-fixed-light));
-      --era-e3-heading: var(--era-e3-base);
-      --era-e3-surface: oklch(from var(--era-e3-base) calc(l * 0.5) calc(c * 0.72) h);
-      --era-e4-accent: var(--era-e4-base);
-      --era-e4-accent-high: color-mix(in oklch, var(--era-e4-base) 55%, var(--codex-fixed-light));
-      --era-e4-heading: var(--era-e4-base);
-      --era-e4-surface: oklch(from var(--era-e4-base) calc(l * 0.5) calc(c * 0.72) h);
 
       /* Independent illustration colours share the gamut multiplier. */
       --vc-event-ink: oklch(21.2% calc(0.005 * var(--codex-chroma-scale)) 248.1);
@@ -383,22 +327,6 @@
       --sl-color-red-low: var(--codex-danger-base);
       --sl-color-purple-low: var(--codex-important-base);
 
-      --era-e1-accent: var(--codex-danger);
-      --era-e1-accent-high: var(--codex-palette-oled);
-      --era-e1-heading: var(--era-e1-accent);
-      --era-e1-surface: var(--era-e1-base);
-      --era-e2-accent: oklch(from var(--era-e2-base) calc(l * 0.25) calc(c * 0.6) h);
-      --era-e2-accent-high: var(--codex-palette-oled);
-      --era-e2-heading: var(--era-e2-accent);
-      --era-e2-surface: var(--era-e2-base);
-      --era-e3-accent: oklch(from var(--era-e3-base) calc(l * 0.25) calc(c * 0.6) h);
-      --era-e3-accent-high: var(--codex-palette-oled);
-      --era-e3-heading: var(--era-e3-accent);
-      --era-e3-surface: var(--era-e3-base);
-      --era-e4-accent: oklch(from var(--era-e4-base) calc(l * 0.25) calc(c * 0.6) h);
-      --era-e4-accent-high: var(--codex-palette-oled);
-      --era-e4-heading: var(--era-e4-accent);
-      --era-e4-surface: var(--era-e4-base);
     }
 
     @media (color-gamut: p3) {

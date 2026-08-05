@@ -43,13 +43,13 @@ outcome: >-
   Civilisation retained machines but lost confidence that its instruments
   described the same world.
 tags:
-  - nearsight
+  - NEARSIGHT
   - timeline-showcase
   - blackout
+  - Events
 slug: eras/nearsight/events/the-nearsight-blackout
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Nearsight Blackout.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

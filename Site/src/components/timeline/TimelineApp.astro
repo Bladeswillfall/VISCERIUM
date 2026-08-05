@@ -2,8 +2,9 @@
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 import '../../styles/chronos.css';
 import '../../styles/timeline-canvas.css';
+import '../../styles/timeline-chronicle.css';
+import '../../styles/timeline-controls.css';
 import { formatAbsoluteDay } from '../../lib/calendar/runtime.mjs';
-import TimelineIsland from './TimelineIsland';
 
 const {
   dataset,
@@ -25,13 +26,133 @@ const fallbackEvents = dataset?.events.map((event) => ({
   description: event.description,
   href: event.href,
 })) ?? [];
+const serializedDataset = JSON.stringify(dataset).replace(/</g, '\\u003c');
+const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
 ---
 
 {dataset ? (
-  <TimelineIsland
-    client:load
-    dataset={dataset}
-    options={options}
-    fallbackEvents={fallbackEvents}
-  />
+  <div class="vc-timeline-shell not-content" data-vc-timeline-island>
+    <div data-vc-timeline-mount aria-live="polite"></div>
+    <div
+      class:list={['vc-timeline-skeleton', { 'is-compact': compact }]}
+      data-vc-timeline-skeleton
+      aria-hidden="true"
+      hidden
+    >
+      <div class="vc-timeline-skeleton-toolbar">
+        <span class="vc-timeline-skeleton-field"></span>
+        <span class="vc-timeline-skeleton-field is-wide"></span>
+        <span class="vc-timeline-skeleton-field"></span>
+        <span class="vc-timeline-skeleton-actions"></span>
+      </div>
+      <div class="vc-timeline-skeleton-eras">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="vc-timeline-skeleton-stage">
+        <span class="vc-timeline-skeleton-axis"></span>
+        <div class="vc-timeline-skeleton-events">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      {showMinimap !== false && <span class="vc-timeline-skeleton-minimap"></span>}
+    </div>
+    <section class="vc-timeline-fallback" data-vc-fallback aria-label="Chronological list">
+      <h2>Chronological list</h2>
+      <p>This list remains available when the interactive timeline cannot run.</p>
+      <ol>
+        {fallbackEvents.map((event) => (
+          <li>
+            <p class="timeline-date">{event.date}</p>
+            <h3><a href={event.href}>{event.title}</a></h3>
+            <p>{event.description}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+    <script type="application/json" data-vc-timeline-data set:html={serializedDataset}></script>
+    <script type="application/json" data-vc-timeline-options set:html={serializedOptions}></script>
+  </div>
 ) : <p class="codex-warning">Timeline data is unavailable.</p>}
+
+<script>
+  import { installTimelineChronicle } from '../../lib/timeline/chronicle-view.mjs';
+  import { installTimelineHovercard } from '../../lib/timeline/hovercard.mjs';
+  import { installTimelineToolbar } from '../../lib/timeline/toolbar-ui.mjs';
+
+  type TimelineState = {
+    cancelled: boolean;
+    cleanups: Array<() => void>;
+  };
+
+  const timelineInstances = new WeakMap<Element, TimelineState>();
+
+  function runCleanups(state: TimelineState) {
+    for (const cleanup of state.cleanups.splice(0).reverse()) {
+      try {
+        cleanup();
+      } catch (error) {
+        console.error('Timeline cleanup failed.', error);
+      }
+    }
+  }
+
+  async function mountTimelineShell(shell: Element) {
+    shell.setAttribute('data-vc-timeline-bound', 'true');
+    const state = { cancelled: false, cleanups: [] };
+    timelineInstances.set(shell, state);
+
+    const mount = shell.querySelector('[data-vc-timeline-mount]');
+    const fallback = shell.querySelector('[data-vc-fallback]');
+    const skeleton = shell.querySelector('[data-vc-timeline-skeleton]');
+
+    try {
+      if (!(mount instanceof HTMLElement)) throw new Error('Timeline mount element is missing.');
+      const dataset = JSON.parse(shell.querySelector('[data-vc-timeline-data]')?.textContent || 'null');
+      const options = JSON.parse(shell.querySelector('[data-vc-timeline-options]')?.textContent || '{}');
+      if (!dataset) throw new Error('Timeline dataset is missing.');
+
+      mount.setAttribute('aria-busy', 'true');
+      if (fallback instanceof HTMLElement) fallback.hidden = true;
+      if (skeleton instanceof HTMLElement) skeleton.hidden = false;
+
+      const { mountTimeline } = await import('../../lib/timeline/chronos-native-renderer.mjs');
+      if (state.cancelled || !shell.isConnected || timelineInstances.get(shell) !== state) return;
+
+      state.cleanups.push(mountTimeline(mount, dataset, options));
+      state.cleanups.push(installTimelineHovercard(mount, dataset));
+      state.cleanups.push(installTimelineChronicle(mount, dataset));
+      state.cleanups.push(installTimelineToolbar(mount));
+
+      mount.setAttribute('data-vc-island-mounted', 'true');
+      mount.setAttribute('aria-busy', 'false');
+      if (skeleton instanceof HTMLElement) skeleton.hidden = true;
+    } catch (error) {
+      if (state.cancelled) return;
+      runCleanups(state);
+      mount?.replaceChildren();
+      mount?.removeAttribute('data-vc-island-mounted');
+      mount?.setAttribute('aria-busy', 'false');
+      if (skeleton instanceof HTMLElement) skeleton.hidden = true;
+      if (fallback instanceof HTMLElement) fallback.hidden = false;
+      console.error('VISCERIUM Chronos timeline failed to mount.', error);
+    }
+  }
+
+  function mountTimelines() {
+    for (const shell of document.querySelectorAll('[data-vc-timeline-island]:not([data-vc-timeline-bound])')) {
+      void mountTimelineShell(shell);
+    }
+  }
+
+  mountTimelines();
+  document.addEventListener('astro:page-load', mountTimelines);
+  document.addEventListener('astro:before-swap', () => {
+    for (const shell of document.querySelectorAll('[data-vc-timeline-island]')) {
+      const state = timelineInstances.get(shell);
+      if (!state) continue;
+      state.cancelled = true;
+      runCleanups(state);
+      timelineInstances.delete(shell);
+    }
+  });
+</script>

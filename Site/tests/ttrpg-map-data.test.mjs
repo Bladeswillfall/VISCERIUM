@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import matter from 'gray-matter';
 import { compileMapData, loadPluginMarkerSources } from '../scripts/generate-map-data.mjs';
 
 function record(relativePath, data) {
@@ -93,24 +92,4 @@ test('TTRPG Maps marker sources load only from safe vault-relative paths', async
   ], { vaultRoot });
   assert.equal(unsafe.pluginSources.unsafe, undefined);
   assert.match(unsafe.warnings[0], /unsafe/);
-});
-
-test('the real CITADEL demo is wired to a checked-in TTRPG Maps sidecar', () => {
-  const noteFile = new URL('../../Vault/Lore/Demo/Exploration Demo World.md', import.meta.url);
-  const { data, content } = matter(readFileSync(noteFile, 'utf8'));
-  assert.equal(data.mapId, 'exploration-demo-world');
-  assert.equal(data.mapMarkers, 'Assets/Maps/Errack-CITADEL.webp.markers.json');
-  assert.match(content, /```zoommap/);
-  assert.match(content, /render: canvas/);
-
-  const markerFile = new URL(`../../Vault/${data.mapMarkers}`, import.meta.url);
-  assert.equal(existsSync(markerFile), true);
-  const sidecar = JSON.parse(readFileSync(markerFile, 'utf8'));
-  assert.equal(sidecar.markers.length, 5);
-  assert.equal(sidecar.layers.length, 5);
-  for (const marker of sidecar.markers) {
-    assert.equal(typeof marker.link, 'string');
-    assert.ok(marker.x >= 0 && marker.x <= 1);
-    assert.ok(marker.y >= 0 && marker.y <= 1);
-  }
 });

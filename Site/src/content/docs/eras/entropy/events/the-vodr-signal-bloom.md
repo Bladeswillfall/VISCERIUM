@@ -34,13 +34,13 @@ participants:
   - Bloom Interpreters
 outcome: Several populations began dreaming the same impossible coastline.
 tags:
-  - entropy
+  - ENTROPY
   - timeline-showcase
   - vodr
+  - Events
 slug: eras/entropy/events/the-vodr-signal-bloom
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Vodr Signal Bloom.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

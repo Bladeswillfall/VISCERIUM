@@ -55,7 +55,7 @@ Use [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) as the repository's day-o
 - Cytoscape graph tooling;
 - Vis Timeline and Chronos timeline tooling;
 - Telescope and Fuse.js search tooling;
-- Preact, KaTeX, Playwright, and build dependencies;
+- KaTeX, Playwright, and build dependencies
 - open font families; and
 - other third-party components used by the Codex and creator environment.
 

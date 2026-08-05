@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { findVaultNoteRoute } from '../helpers/vault-note.mjs';
 
-const storytellerDemoUrl = 'http://127.0.0.1:4321/demo/demo-trade-port/';
 const okseDominionPath = await findVaultNoteRoute({
   title: 'Okse Dominion',
   type: 'faction',
@@ -13,8 +12,8 @@ const almostEqual = (left, right, tolerance = 1) => Math.abs(left - right) <= to
 
 test.use({ viewport: { width: 1280, height: 900 } });
 
-test('Lore is the default and Storyteller replaces the article body without becoming a second route', async ({ page }) => {
-  await page.goto(storytellerDemoUrl, { waitUntil: 'networkidle' });
+test('Lore is the default and Storyteller replaces the canonical article body without becoming a second route', async ({ page }) => {
+  await page.goto(okseDominionUrl, { waitUntil: 'networkidle' });
 
   const loreTab = page.getByRole('tab', { name: 'Lore' });
   const storytellerTab = page.getByRole('tab', { name: 'Storyteller' });
@@ -25,8 +24,9 @@ test('Lore is the default and Storyteller replaces the article body without beco
   await expect(loreTab).toHaveAttribute('aria-selected', 'true');
   await expect(storytellerTab).toHaveAttribute('aria-selected', 'false');
   await expect(loreBody).toBeVisible();
-  await expect(loreBody.getByRole('heading', { name: 'Port function' })).toBeVisible();
-  await expect(loreBody.getByRole('heading', { name: 'Approach and first impression' })).toHaveCount(0);
+  await expect(loreBody).toContainText('Iron roots, blood fruit.');
+  await expect(loreBody.getByRole('heading', { name: 'History' })).toBeVisible();
+  await expect(loreBody.getByRole('heading', { name: 'Current agenda' })).toHaveCount(0);
   await expect(storytellerPanel).toBeHidden();
   await expect(sidebar).toBeVisible();
 
@@ -37,13 +37,13 @@ test('Lore is the default and Storyteller replaces the article body without beco
   await expect(loreBody).toBeHidden();
   await expect(storytellerPanel).toBeVisible();
   await expect(storytellerPanel.getByRole('heading', { name: 'Storyteller View' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Approach and first impression' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Why people come' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'What outsiders know' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Current pressure' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Recognisable presence' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Current agenda' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Resources and limits' })).toBeVisible();
+  await expect(storytellerPanel.getByRole('heading', { name: 'Consequences of involvement' })).toBeVisible();
   await expect(sidebar).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-codex-article-view', 'storyteller');
-  await expect(page).toHaveURL(storytellerDemoUrl);
+  await expect(page).toHaveURL(okseDominionUrl);
 
   await loreTab.click();
   await expect(loreBody).toBeVisible();
@@ -53,7 +53,7 @@ test('Lore is the default and Storyteller replaces the article body without beco
 });
 
 test('Lore and Storyteller tabs support keyboard navigation', async ({ page }) => {
-  await page.goto(storytellerDemoUrl, { waitUntil: 'networkidle' });
+  await page.goto(okseDominionUrl, { waitUntil: 'networkidle' });
 
   const loreTab = page.getByRole('tab', { name: 'Lore' });
   const storytellerTab = page.getByRole('tab', { name: 'Storyteller' });
@@ -66,34 +66,6 @@ test('Lore and Storyteller tabs support keyboard navigation', async ({ page }) =
   await page.keyboard.press('Home');
   await expect(loreTab).toBeFocused();
   await expect(loreTab).toHaveAttribute('aria-selected', 'true');
-});
-
-test('Okse uses the same public switch with canon-grounded faction sections', async ({ page }) => {
-  await page.goto(okseDominionUrl, { waitUntil: 'networkidle' });
-
-  const loreTab = page.getByRole('tab', { name: 'Lore' });
-  const storytellerTab = page.getByRole('tab', { name: 'Storyteller' });
-  const loreBody = page.locator('#codex-lore-panel');
-  const storytellerPanel = page.locator('[data-codex-storyteller-panel]');
-  const sidebar = page.locator('.right-sidebar-container');
-
-  await expect(loreTab).toHaveAttribute('aria-selected', 'true');
-  await expect(loreBody).toContainText('Iron roots, blood fruit.');
-  await expect(loreBody.getByRole('heading', { name: 'Current agenda' })).toHaveCount(0);
-
-  await storytellerTab.click();
-
-  await expect(storytellerPanel).toBeVisible();
-  await expect(sidebar).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Storyteller View' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Recognisable presence' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Current agenda' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Resources and limits' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Internal tensions' })).toBeVisible();
-  await expect(storytellerPanel.getByRole('heading', { name: 'Consequences of involvement' })).toBeVisible();
-  await expect(storytellerPanel).toContainText('defensive self-sufficiency');
-  await expect(storytellerPanel).toContainText('Leysingi');
-  await expect(page).toHaveURL(okseDominionUrl);
 });
 
 test('CITADEL presents anchored chronicle tabs on a deliberate era-coloured page edge', async ({ page }) => {

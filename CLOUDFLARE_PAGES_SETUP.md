@@ -39,22 +39,22 @@ Only public build-time values belong in Pages.
 
 ### Giscus
 
-Giscus is disabled by default. After the new repository exists:
+Giscus is enabled by the repository defaults. Confirm GitHub Discussions and the configured category still exist:
 
 1. Enable GitHub Discussions.
 2. Create or select the discussion category.
 3. Obtain the real repository and category IDs.
-4. Configure:
+4. Keep or override these public values:
 
 ```text
 PUBLIC_GISCUS_ENABLED=1
 PUBLIC_GISCUS_REPO=Bladeswillfall/VISCERIUM
-PUBLIC_GISCUS_REPO_ID=<new repository ID>
-PUBLIC_GISCUS_CATEGORY=<new category name>
-PUBLIC_GISCUS_CATEGORY_ID=<new category ID>
+PUBLIC_GISCUS_REPO_ID=R_kgDOTOiQ7g
+PUBLIC_GISCUS_CATEGORY=Comments
+PUBLIC_GISCUS_CATEGORY_ID=DIC_kwDOTOiQ7s4DCYjH
 ```
 
-Do not reuse IDs from the previous repository. Existing discussion threads do not automatically move with the Git repository. Review and transfer or recreate any discussion that should continue.
+Set `PUBLIC_GISCUS_ENABLED=0` only when comments must be disabled. Existing discussion threads do not automatically move with a Git repository. Review and transfer or recreate any discussion that should continue.
 
 The migration audit on 2026-07-30 found one welcome announcement in the old repository, discussion 4, and no Giscus-backed page threads. Verify that result again immediately before cutover. Transfer or recreate the welcome announcement only if it is still wanted.
 

@@ -9,7 +9,7 @@
  * stacking can remain local without asking an article-column descendant to
  * behave like a viewport-wide underlay.
  */
-:root {
+:where(body) {
   --codex-z-underlay: -1;
   --codex-z-page: 0;
   --codex-z-surface: 1;
@@ -20,13 +20,6 @@
 }
 
 @layer ion {
-  /* Keep local application/timeline stacking contained to the page shell. */
-  .codex-two-column-content {
-    position: relative;
-    isolation: isolate;
-    z-index: var(--codex-z-page);
-  }
-
   body:not(:has(.home-gateway)) .codex-main-pane > main > .content-panel {
     position: relative;
     z-index: var(--codex-z-surface);
@@ -49,9 +42,6 @@
     margin-top: -20px !important;
   }
 
-  header.header {
-    z-index: var(--codex-z-navigation);
-  }
 }
 
 /*
@@ -59,11 +49,6 @@
  * cascade layers. Keep their site-level stack positions pinned to the shared
  * hierarchy so a later local stylesheet cannot accidentally reorder them.
  */
-html[data-codex-desktop-sidebar] #starlight__sidebar {
-  z-index: var(--codex-z-navigation) !important;
-}
-
-.codex-sidebar-toggle,
 #scroll-to-top-button {
   z-index: var(--codex-z-control) !important;
 }

@@ -41,13 +41,13 @@ participants:
   - Brass Lung Clinics
 outcome: Respirators and municipal air sirens became ordinary features of urban life.
 tags:
-  - smog
+  - SMOG
   - timeline-showcase
   - public-health
+  - Events
 slug: eras/smog/events/the-brass-lung-winter
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Brass Lung Winter.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

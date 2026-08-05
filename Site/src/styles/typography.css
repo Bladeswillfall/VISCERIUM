@@ -1,16 +1,28 @@
-:root {
+html {
   --vc-font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
   --vc-font-body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --vc-font-ui: 'IBM Plex Sans', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --vc-font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   --sl-font: var(--vc-font-ui);
   --sl-font-mono: var(--vc-font-mono);
+  --sl-icon-size: 1.25rem;
+  --sl-text-body: .875rem;
+  --sl-text-body-sm: .8125rem;
+  --sl-text-4xl: 2rem;
+  --sl-text-3xl: 1.75rem;
+  --sl-text-2xl: 1.5rem;
 }
 
 html,
-body,
-.sl-markdown-content {
+body {
   font-family: var(--vc-font-body);
+}
+
+.sl-markdown-content {
+  padding: 1.5rem var(--sl-content-pad-x);
+  padding-top: 0;
+  font-family: var(--vc-font-body);
+  font-size: var(--sl-text-body);
 }
 
 /* Cinzel is the Codex's restrained display face. Keep every current use at its native 400 weight and never synthesize a heavier variant. */
@@ -40,7 +52,6 @@ body,
   font-synthesis-weight: none;
 }
 
-.site-title,
 .header .site-title,
 .sl-markdown-content h1,
 .content-panel h1,
@@ -83,7 +94,7 @@ h1#_top {
 
 .sl-markdown-content:not(:has(.home-gateway)) h2 {
   position: relative;
-  margin-block: 3.5rem 1rem;
+  margin-block: 3.25rem .65rem;
   padding-inline-start: 1rem;
   border: 0;
   font-family: var(--vc-font-display);
@@ -105,7 +116,7 @@ h1#_top {
 }
 
 .sl-markdown-content:not(:has(.home-gateway)) h3 {
-  margin-block: 2.4rem .75rem;
+  margin-block: 2.55rem .4rem;
   color: var(--era-heading-accent, var(--sl-color-accent-high));
   font-family: var(--vc-font-ui);
   font-size: 1.08rem;
@@ -116,7 +127,7 @@ h1#_top {
 }
 
 .sl-markdown-content:not(:has(.home-gateway)) h4 {
-  margin-block: 1.9rem .55rem;
+  margin-block: 2.05rem .25rem;
   font-family: var(--vc-font-body);
   font-size: 1.1rem;
   font-style: italic;
@@ -126,7 +137,7 @@ h1#_top {
 }
 
 .sl-markdown-content:not(:has(.home-gateway)) h5 {
-  margin-block: 1.5rem .45rem;
+  margin-block: 1.65rem .25rem;
   color: var(--sl-color-gray-3);
   font-family: var(--vc-font-ui);
   font-size: .72rem;
@@ -137,7 +148,7 @@ h1#_top {
 }
 
 .sl-markdown-content:not(:has(.home-gateway)) h6 {
-  margin-block: 1.35rem .4rem;
+  margin-block: 1.45rem .2rem;
   color: var(--sl-color-gray-4);
   font-family: var(--vc-font-ui);
   font-size: .72rem;
@@ -157,21 +168,23 @@ main :where(p, blockquote, dd, figcaption),
   text-wrap: pretty;
 }
 
-nav,
-button,
-input,
-select,
-textarea,
-.header,
-.sidebar-pane,
-.right-sidebar,
-.pagination-links,
-.codex-sidebar-meta,
-.codex-breadcrumbs,
-.codex-warning,
-.ion-codex-footer,
-figcaption,
-table th {
+:where(
+  nav,
+  button,
+  input,
+  select,
+  textarea,
+  .header,
+  .sidebar-pane,
+  .right-sidebar,
+  .pagination-links,
+  .codex-sidebar-meta,
+  .codex-breadcrumbs,
+  .codex-warning,
+  .ion-codex-footer,
+  figcaption,
+  table th
+) {
   font-family: var(--vc-font-ui);
 }
 
@@ -184,13 +197,7 @@ table td,
   text-rendering: optimizeLegibility;
 }
 
-code,
-pre,
-kbd,
-samp,
-.expressive-code,
-.expressive-code pre,
-.expressive-code code {
+:where(code, pre, kbd, samp, .expressive-code, .expressive-code pre, .expressive-code code) {
   font-family: var(--vc-font-mono);
 }
 

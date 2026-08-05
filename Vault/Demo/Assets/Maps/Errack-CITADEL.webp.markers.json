@@ -1,0 +1,89 @@
+{
+  "size": {
+    "w": 7680,
+    "h": 3840
+  },
+  "layers": [
+    {
+      "id": "layer-settlements",
+      "name": "civilisation/settlements",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-fortifications",
+      "name": "civilisation/fortifications",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-ports",
+      "name": "civilisation/ports",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-ruins",
+      "name": "civilisation/ruins",
+      "visible": true,
+      "locked": false
+    },
+    {
+      "id": "layer-myrkild",
+      "name": "threats/myrkild/rifts",
+      "visible": true,
+      "locked": false
+    }
+  ],
+  "markers": [
+    {
+      "id": "marker-demo-gate-city",
+      "x": 0.31,
+      "y": 0.36,
+      "layer": "layer-settlements",
+      "link": "Demo/Lore/Exploration/Demo Gate City.md",
+      "iconKey": "pinBlue",
+      "tooltip": "Demo Gate City"
+    },
+    {
+      "id": "marker-demo-frontier-fort",
+      "x": 0.18,
+      "y": 0.62,
+      "layer": "layer-fortifications",
+      "link": "Demo/Lore/Exploration/Demo Frontier Fort.md",
+      "iconKey": "pinRed",
+      "tooltip": "Demo Frontier Fort"
+    },
+    {
+      "id": "marker-demo-trade-port",
+      "x": 0.61,
+      "y": 0.47,
+      "layer": "layer-ports",
+      "link": "Demo/Lore/Exploration/Demo Trade Port.md",
+      "iconKey": "pinBlue",
+      "tooltip": "Demo Trade Port"
+    },
+    {
+      "id": "marker-demo-hidden-ruin",
+      "x": 0.49,
+      "y": 0.28,
+      "layer": "layer-ruins",
+      "link": "Demo/Lore/Exploration/Demo Hidden Ruin.md",
+      "iconKey": "pinRed",
+      "tooltip": "Demo Hidden Ruin"
+    },
+    {
+      "id": "marker-demo-rift-site",
+      "x": 0.79,
+      "y": 0.73,
+      "layer": "layer-myrkild",
+      "link": "Demo/Lore/Exploration/Demo Rift Site.md",
+      "iconKey": "pinRed",
+      "tooltip": "Demo Rift Site"
+    }
+  ],
+  "panClamp": true,
+  "drawLayers": [],
+  "drawings": [],
+  "textLayers": []
+}

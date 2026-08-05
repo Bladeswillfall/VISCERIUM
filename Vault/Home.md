@@ -102,7 +102,11 @@ cssclasses:
 > > > const secondaryStrip = dv.container.createDiv({ cls: "vc-home-create-secondary" });
 > > > const secondary = [
 > > >   { label: "Creator Context", run: openCreatorContext },
-> > >   { label: "Story Timeline", id: "viscerium-timelines:open-storyline-project-timeline" },
+> > >   {
+> > >     label: "Story Timeline",
+> > >     id: "viscerium-timelines:open-storyline-project-timeline",
+> > >     unavailable: "VISCERIUM Timelines is unavailable. See Creator Command Reference.",
+> > >   },
 > > > ];
 > > > for (const action of secondary) {
 > > >   const button = secondaryStrip.createEl("button", {
@@ -110,7 +114,10 @@ cssclasses:
 > > >     cls: "vc-home-button vc-home-button-tertiary",
 > > >   });
 > > >   const exists = Boolean(action.run) || Boolean(app.commands.commands[action.id]);
-> > >   if (!exists) button.disabled = true;
+> > >   if (!exists) {
+> > >     button.disabled = true
+> > >     button.title = action.unavailable ?? "This action is unavailable. See Creator Command Reference."
+> > >   }
 > > >   else button.addEventListener("click", () => action.run ? action.run() : app.commands.executeCommandById(action.id));
 > > > }
 > > > ```

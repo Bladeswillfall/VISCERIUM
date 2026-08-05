@@ -23,8 +23,8 @@
     backgrounds. sRGB fallbacks come first; OKLCH-capable displays replace them
     below and inherit the shared P3 chroma multiplier from color-tokens.css.
   */
-  :root,
-  :root[data-theme='dark'] {
+  :where(html),
+  :where(html[data-theme='dark']) {
     /* Vivid identity anchors used by homepage, timeline, graph, and derived UI. */
     --era-e1-base: #dc143c;
     --era-e2-base: #a5b516;
@@ -68,7 +68,7 @@
     --era-button-text: #fff;
   }
 
-  :root[data-theme='light'] {
+  :where(html[data-theme='light']) {
     /*
       Keep the same era hue identities vivid against the warm #b9b4a9 page.
       Darker mid-tones clear AA without collapsing the accents toward black.
@@ -103,8 +103,8 @@
   }
 
   @supports (color: oklch(from red l c h)) {
-    :root,
-    :root[data-theme='dark'] {
+    :where(html),
+    :where(html[data-theme='dark']) {
       /* Original vivid identity hues, now participating in the shared P3 boost. */
       --era-e1-base: oklch(57.12% calc(0.2219 * var(--codex-chroma-scale)) 20.09);
       --era-e2-base: oklch(73.56% calc(0.1635 * var(--codex-chroma-scale)) 116.05);
@@ -146,7 +146,7 @@
       --era-e4-quotemarks: oklch(from var(--era-quote-warm-base) l c h / 0.24);
     }
 
-    :root[data-theme='light'] {
+    :where(html[data-theme='light']) {
       /* Saturated dark mid-tones preserve era identity while clearing AA on the light page. */
       --era-e1-accent: oklch(38% calc(0.14 * var(--codex-chroma-scale)) 11.35);
       --era-e1-accent-high: oklch(30% calc(0.14 * var(--codex-chroma-scale)) 20.09);

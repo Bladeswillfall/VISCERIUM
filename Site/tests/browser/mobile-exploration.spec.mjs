@@ -13,7 +13,7 @@ async function openMobile(page, path) {
 }
 
 test('mobile Atlas prioritises the map and uses native exploration controls', async ({ page }) => {
-  await openMobile(page, '/maps/exploration-demo-world/');
+  await openMobile(page, '/maps/errack-citadel/');
 
   const atlas = page.locator('[data-atlas]');
   const canvas = atlas.locator('[data-atlas-canvas]');
@@ -24,18 +24,15 @@ test('mobile Atlas prioritises the map and uses native exploration controls', as
   expect(frameBox?.y ?? 999).toBeLessThan(260);
   await expect(atlas.locator('.atlas__toolbar')).toBeHidden();
   await expect(atlas.locator('.atlas__surface-controls')).toBeVisible();
-  await expect(atlas.locator('.leaflet-control-layers')).toBeVisible();
+  await expect(atlas.locator('.leaflet-control-layers')).toHaveCount(0);
+  await expect(atlas.locator('.atlas__empty-note')).toContainText('no positioned markers have been published yet');
 
   await atlas.getByRole('button', { name: 'Search map' }).click();
-  const mobileSearch = page.locator('#atlas-exploration-demo-world-mobile-search');
+  const mobileSearch = page.locator('#atlas-errack-citadel-mobile-search');
   await expect(mobileSearch).toBeVisible();
-  await mobileSearch.getByRole('searchbox', { name: 'Search map' }).fill('Demo Gate City');
-  await mobileSearch.getByRole('button', { name: /Demo Gate City/i }).click();
-
-  const inspector = atlas.locator('[data-atlas-inspector]');
-  await expect(inspector).toBeVisible();
-  await expect(inspector).toContainText('Demo Gate City');
-  await inspector.getByRole('button', { name: 'Close location details' }).click();
+  await mobileSearch.getByRole('searchbox', { name: 'Search map' }).fill('unpublished place');
+  await expect(mobileSearch.locator('.atlas-search__empty')).toHaveText('No matching markers.');
+  await mobileSearch.getByRole('button', { name: 'Close search' }).click();
 
   await atlas.getByRole('button', { name: 'Enter focus mode' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-exploration-focus', '');
@@ -46,51 +43,26 @@ test('mobile Atlas prioritises the map and uses native exploration controls', as
 });
 
 test('landscape phone keeps Atlas inspection compact while preserving the map workspace', async ({ page }) => {
-  await openAtSize(page, '/maps/exploration-demo-world/', phoneLandscape);
+  await openAtSize(page, '/maps/errack-citadel/', phoneLandscape);
 
   const atlas = page.locator('[data-atlas]');
   await expect(atlas).toHaveAttribute('data-atlas-ready', 'true');
   await expect(atlas.locator('[data-atlas-canvas]')).toBeVisible();
   await expect(atlas.locator('.atlas__toolbar')).toBeVisible();
 
-  const layers = atlas.locator('.leaflet-control-layers');
-  await expect(layers).toBeVisible();
-  await expect(layers).not.toHaveClass(/leaflet-control-layers-expanded/);
+  await expect(atlas.locator('.leaflet-control-layers')).toHaveCount(0);
+  await expect(atlas.locator('.atlas__empty-note')).toContainText('no positioned markers have been published yet');
 
   const search = atlas.locator('.atlas__toolbar').getByRole('searchbox', { name: 'Find a place' });
-  await search.fill('Demo Gate City');
-  await atlas.locator('.atlas__toolbar').getByRole('button', { name: /Demo Gate City/i }).click();
-
-  const inspector = atlas.locator('[data-atlas-inspector]');
-  await expect(inspector).toBeVisible();
-  await expect(inspector).toContainText('Demo Gate City');
-  await inspector.getByRole('button', { name: 'Close location details' }).click();
+  await search.fill('unpublished place');
+  await expect(atlas.locator('.atlas__toolbar .atlas-search__empty')).toHaveText('No matching markers.');
 });
 
-test('mobile Relationships offers filters, list mode and focus mode', async ({ page }) => {
+test('mobile Relationships reports the real empty state', async ({ page }) => {
   await openMobile(page, '/relationships/');
 
-  const explorer = page.locator('[data-relationship-explorer]');
-  const canvas = explorer.locator('[data-relationship-canvas]');
-  await expect(canvas).toBeVisible();
-  await expect(explorer.locator('.relationship-explorer__toolbar')).toBeHidden();
-  await expect(explorer.locator('.relationship-explorer__mobile-controls')).toBeVisible();
-
-  await explorer.getByRole('button', { name: 'Filter relationships' }).click();
-  await expect(page.locator('#relationship-mobile-filters')).toBeVisible();
-  await page.locator('#relationship-mobile-filters').getByRole('button', { name: 'Close filters' }).click();
-
-  await explorer.getByRole('button', { name: 'Show relationship list' }).click();
-  await expect(explorer.locator('[data-relationship-list]')).toBeVisible();
-  await expect(canvas).toBeHidden();
-  await expect(explorer.getByRole('button', { name: 'Show relationship graph' })).toBeVisible();
-
-  await explorer.getByRole('button', { name: 'Show relationship graph' }).click();
-  await expect(canvas).toBeVisible();
-
-  await explorer.getByRole('button', { name: 'Enter focus mode' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-exploration-focus', '');
-  await expect(page.locator('.codex-header')).toBeHidden();
-  await expect(explorer.locator('.relationship-explorer__frame')).toBeVisible();
-  await explorer.getByRole('button', { name: 'Exit focus mode' }).click();
+  await expect(page.getByRole('heading', { name: 'No structured relationships published yet' })).toBeVisible();
+  await expect(page.locator('.relationship-explorer__empty')).toContainText('only uses explicit relationships: frontmatter');
+  await expect(page.locator('[data-relationship-canvas]')).toHaveCount(0);
+  await expect(page.locator('.pagination-links')).not.toContainText('[map]');
 });

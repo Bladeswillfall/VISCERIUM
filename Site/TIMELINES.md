@@ -256,7 +256,7 @@ The two plugins have separate responsibilities and can coexist. The VISCERIUM pl
 From `Site/`:
 
 ```bash
-npm install
+npm ci
 npm run sync
 npm run validate
 npm run generate:timelines

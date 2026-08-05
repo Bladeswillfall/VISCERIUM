@@ -1,6 +1,6 @@
 @layer starlight.core {
   .codex-surface {
-    border: 1px solid var(--codex-border);
+    border: 0;
     border-radius: var(--codex-radius);
     background: var(--codex-surface-raised);
   }
@@ -16,14 +16,14 @@
   }
 
   .codex-frame {
-    border: 1px solid var(--codex-border);
+    border: 0;
     border-radius: var(--codex-radius);
     background: var(--codex-surface);
   }
 
   .codex-kicker {
     margin: 0 0 .35rem;
-    color: var(--sl-color-accent-high);
+    color: var(--sl-color-white);
     font-size: var(--sl-text-xs);
     font-weight: 700;
     letter-spacing: .12em;
@@ -45,7 +45,7 @@
     gap: .4rem;
     min-height: 2.25rem;
     padding: .45rem .8rem;
-    border: 1px solid var(--codex-border);
+    border: 0;
     border-radius: 999px;
     background: var(--codex-surface);
     color: var(--sl-color-gray-2);
@@ -157,115 +157,4 @@
     }
   }
 
-  /*
-    Temporary borderless presentation pass. Keep authored article components and
-    data-visualisation marks intact; only flatten page chrome, controls, wrappers,
-    section dividers and feature surfaces. The bespoke landing page is excluded.
-  */
-  body:not(:has(.home-gateway)) :is(
-    header.header,
-    .codex-header,
-    .content-panel,
-    .codex-breadcrumbs,
-    #starlight__sidebar,
-    .sidebar,
-    .sidebar-pane,
-    .sidebar-content,
-    .codex-changelog-sidebar,
-    .sidebar .ion-expandable-group,
-    .sidebar .ion-expandable-group > summary,
-    .sidebar ul ul li,
-    .right-sidebar,
-    .right-sidebar-panel,
-    .codex-page-sidebar,
-    .codex-site-footer,
-    .ion-codex-footer,
-    .codex-sidebar-card,
-    .codex-sidebar-section,
-    .codex-header-image,
-    .codex-surface,
-    .codex-frame,
-    .codex-link-button,
-    .codex-sidebar-toggle,
-    .social-icons a,
-    .world-map,
-    .codex-map,
-    .map-panel,
-    .map-frame,
-    .codex-image-panel,
-    .map-card,
-    .codex-map-card,
-    .image-card,
-    .codex-gallery-card,
-    .calendar-module,
-    .calendar-module__facts,
-    .calendar-month,
-    .calendar-day,
-    .calendar-legend,
-    .calendar-date-badge,
-    .calendar-season,
-    .calendar-observance,
-    .support-hero,
-    .support-section,
-    .support-note,
-    .support-button,
-    .category-index,
-    .category-card,
-    .telescope__modal,
-    .telescope__close-button,
-    .telescope__tab,
-    .telescope__search-input,
-    .telescope__pin-button,
-    .telescope__tag,
-    .telescope__clear-btn,
-    .telescope__modal kbd,
-    dialog,
-    button[data-open-modal],
-    button[data-open-modal] > kbd,
-    .pagefind-ui__search-input,
-    .pagefind-ui__search-clear,
-    .pagefind-ui__button,
-    .pagefind-ui__result-title,
-    .pagefind-ui__result-nested,
-    .pagefind-ui__result-tag,
-    .pagefind-ui__filter-checkbox,
-    .sl-markdown-content h2
-  ) {
-    border: 0 !important;
-  }
-
-  /* Restore comfortable separation below section headings on normal content pages. */
-  body:not(:has(.home-gateway)) .sl-markdown-content h2 {
-    margin-bottom: 1rem;
-  }
-
-  /* The first calendar month should not sit flush against the content above it. */
-  section.calendar-month:nth-child(1) {
-    margin-top: var(--sl-content-gap-y);
-  }
-
-  /* Calendar ornament rims are decorative; colour and fill still carry state. */
-  body:not(:has(.home-gateway)) :is(.calendar-day--holiday::after) {
-    border: 0 !important;
-  }
-
-  @media (forced-colors: active) {
-    body:not(:has(.home-gateway)) :is(
-      .codex-surface,
-      .codex-sidebar-card,
-      .codex-sidebar-section,
-      .calendar-module,
-      .calendar-month,
-      .calendar-day,
-      .support-section,
-      .world-map,
-      .codex-map,
-      button,
-      input,
-      select,
-      textarea
-    ) {
-      border: 1px solid CanvasText !important;
-    }
-  }
 }

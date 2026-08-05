@@ -42,13 +42,13 @@ participants:
   - The Ash Pilgrims
 outcome: New Resonant cults spread through the northern keeps.
 tags:
-  - citadel
+  - CITADEL
   - timeline-showcase
   - resonance
+  - Events
 slug: eras/citadel/events/the-ash-winter-pilgrimage
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Ash-Winter Pilgrimage.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

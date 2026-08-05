@@ -36,13 +36,13 @@ outcome: >-
   A multinational force restored ports, power and security without assuming
   formal occupation.
 tags:
-  - nearsight
+  - NEARSIGHT
   - timeline-showcase
   - jade-current
+  - Events
 slug: eras/nearsight/events/first-jade-current-compact-deployment
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/First Jade Current Compact Deployment.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

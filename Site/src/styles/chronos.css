@@ -20,11 +20,13 @@
  * Chronos item geometry, range treatment, group layout or refit control.
  */
 
-.vc-timeline-app,
-.vc-chronos-embed,
-.vc-chronos-core.chronos-timeline-container,
-.vc-timeline-app .chronos-timeline-container,
-.vc-chronos-embed .chronos-timeline-container {
+:where(
+  .vc-timeline-app,
+  .vc-chronos-embed,
+  .vc-chronos-core.chronos-timeline-container,
+  .vc-timeline-app .chronos-timeline-container,
+  .vc-chronos-embed .chronos-timeline-container
+) {
   --chronos-bg-primary: var(--codex-bg);
   --chronos-bg-secondary: var(--codex-surface-raised-color);
   --chronos-canvas: color-mix(in oklch, var(--chronos-bg-primary) 90%, var(--codex-fixed-dark));
@@ -212,7 +214,6 @@
 }
 
 /* Let Chronos own item shapes and parser-assigned colours. */
-.vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item,
 .vc-chronos-embed .vis-item {
   border-radius: var(--chronos-radius-small, 3px);
   border-color: var(--chronos-accent);

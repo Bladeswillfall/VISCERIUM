@@ -34,13 +34,13 @@ participants:
   - The Glass Archive Leakers
 outcome: Public understanding of Resonance fractured into incompatible models.
 tags:
-  - entropy
+  - ENTROPY
   - timeline-showcase
   - abberath
+  - Events
 slug: eras/entropy/events/the-abberath-disclosure
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Abberath Disclosure.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

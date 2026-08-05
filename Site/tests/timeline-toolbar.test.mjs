@@ -4,20 +4,20 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-test('the timeline island installs a scoped toolbar enhancement after existing behaviour', () => {
-  const island = read('../src/components/timeline/TimelineIsland.tsx');
+test('the timeline component installs a scoped toolbar enhancement after existing behaviour', () => {
+  const app = read('../src/components/timeline/TimelineApp.astro');
   const toolbar = read('../src/lib/timeline/toolbar-ui.mjs');
   const styles = read('../src/styles/timeline-controls.css');
+  const canvasStyles = read('../src/styles/timeline-canvas.css');
   const containerStart = styles.indexOf('Origin: timeline-toolbar-container.css');
   const buttonsStart = styles.indexOf('Origin: timeline-buttons.css');
   const containerStyles = styles.slice(containerStart, buttonsStart);
   const buttonStyles = styles.slice(buttonsStart);
 
-  assert.match(island, /installTimelineToolbar/);
-  assert.match(island, /timeline-controls\.css/);
-  assert.doesNotMatch(island, /timeline-(?:toolbar|toolbar-container|buttons)\.css/);
-  assert.match(island, /const cleanupToolbar = installTimelineToolbar\(root\)/);
-  assert.match(island, /cleanupToolbar\(\);[\s\S]*cleanupChronicle\(\);[\s\S]*cleanupHovercard\(\);[\s\S]*cleanupTimeline\(\);/);
+  assert.match(app, /installTimelineToolbar/);
+  assert.match(app, /timeline-controls\.css/);
+  assert.doesNotMatch(app, /timeline-(?:toolbar|toolbar-container|buttons)\.css/);
+  assert.match(app, /installTimelineToolbar\(mount\)/);
 
   assert.match(toolbar, /vc-timeline-toolbar/);
   assert.match(toolbar, /vcToolbarEnhanced = 'true'/);
@@ -55,7 +55,7 @@ test('the timeline island installs a scoped toolbar enhancement after existing b
   assert.doesNotMatch(containerStyles, /\.vis-(?:timeline|panel|item|group|label|time-axis)/);
 
   assert.match(buttonStyles, /Origin: timeline-buttons\.css/);
-  assert.match(buttonStyles, /--vc-timeline-button-radius: \.55rem/);
+  assert.match(canvasStyles, /--vc-timeline-button-radius: \.55rem/);
   assert.match(buttonStyles, /\.vc-timeline-app :is\(\.vc-timeline-toolbar, \.vc-timeline-filter-actions\) button\s*\{[\s\S]*border-radius: var\(--vc-timeline-button-radius\)/);
   assert.doesNotMatch(buttonStyles, /\.vis-(?:timeline|panel|item|group|label|time-axis)/);
 });

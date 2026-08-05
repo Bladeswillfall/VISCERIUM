@@ -20,7 +20,6 @@
  * unchanged.
  */
 
-.vc-timeline-list[hidden],
 .vc-timeline-stage[hidden],
 .vc-timeline-minimap-wrap[hidden] {
   display: none !important;

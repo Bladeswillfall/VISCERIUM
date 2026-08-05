@@ -16,6 +16,9 @@
 
 /* Responsive page and right-sidebar geometry. */
 .codex-two-column-content {
+  position: relative;
+  isolation: isolate;
+  z-index: var(--codex-z-page);
   box-sizing: border-box;
   container-type: inline-size;
   inline-size: 100%;
@@ -46,6 +49,8 @@
 .codex-page-sidebar > .sl-container,
 .right-sidebar .sl-container {
   box-sizing: border-box;
+  display: grid;
+  gap: 1rem;
   width: 100% !important;
   inline-size: 100% !important;
   max-width: none !important;
@@ -58,6 +63,7 @@
 .codex-site-footer {
   box-sizing: border-box;
   max-width: none;
+  border: 0;
 }
 
 @media (min-width: 72rem) {
@@ -152,15 +158,18 @@
     inline-size: 100% !important;
     max-width: none !important;
     max-inline-size: none !important;
-    align-self: start;
+    align-self: stretch;
   }
 
   .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) .right-sidebar {
-    position: sticky;
-    top: var(--sl-nav-height);
+    position: relative;
+    top: auto;
     width: 100% !important;
     inline-size: 100% !important;
-    max-height: calc(100vh - var(--sl-nav-height));
+    block-size: 100%;
+    max-block-size: none;
+    max-height: none;
+    overflow: visible;
     border-inline-start: 1px solid var(--sl-color-hairline);
     padding-block-start: 1rem;
     padding-inline-start: 1rem;
@@ -170,9 +179,15 @@
   .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) .codex-page-sidebar,
   .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) .codex-page-sidebar > .sl-container {
     width: 100% !important;
+    block-size: 100%;
+    min-block-size: 0;
     inline-size: 100% !important;
     max-width: none !important;
     max-inline-size: none !important;
+  }
+
+  .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) .codex-page-sidebar > .sl-container {
+    align-content: start;
   }
 
   .main-frame > .codex-two-column-content > .codex-main-pane:has(> .right-sidebar-container) .codex-site-footer {
@@ -183,184 +198,6 @@
 }
 
 @layer starlight.core {
-  :root {
-    --codex-radius: 0 !important;
-    --codex-radius-lg: 0 !important;
-  }
-
-  /*
-    Global surface geometry. This deliberately reaches beyond lore articles so
-    calendars, maps, support, search, and changelogs inherit
-    the same flat visual language in both themes.
-  */
-  .content-panel,
-  .codex-surface,
-  .codex-frame,
-  .codex-sidebar-card,
-  .codex-sidebar-section,
-  .codex-header-image,
-  .world-map,
-  .codex-map,
-  .map-panel,
-  .map-frame,
-  .codex-image-panel,
-  .map-card,
-  .codex-map-card,
-  .image-card,
-  .codex-gallery-card,
-  .calendar-module,
-  .calendar-module__facts,
-  .calendar-month,
-  .calendar-day,
-  .calendar-day__number,
-  .calendar-day--holiday::after,
-  .calendar-legend,
-  .calendar-date-badge,
-  .calendar-season,
-  .calendar-observance,
-  .support-hero,
-  .support-section,
-  .support-note,
-  .support-button,
-  .sl-markdown-content blockquote,
-  .sl-markdown-content table,
-  .starlight-aside,
-  .card,
-  .sl-link-card,
-  .expressive-code figure.frame,
-  .cx-card,
-  .codex-link-button,
-  .codex-sidebar-toggle,
-  .social-icons a,
-  .telescope__modal,
-  .telescope__close-button,
-  .telescope__tab,
-  .telescope__search-input,
-  .telescope__pin-button,
-  .telescope__tag,
-  .telescope__clear-btn,
-  .telescope__modal kbd,
-  dialog,
-  button[data-open-modal],
-  button[data-open-modal] > kbd,
-  .pagefind-ui__search-input,
-  .pagefind-ui__search-clear,
-  .pagefind-ui__button,
-  .pagefind-ui__result-title,
-  .pagefind-ui__result-nested,
-  .pagefind-ui__result-tag,
-  .pagefind-ui__filter-checkbox {
-    border-radius: 0 !important;
-  }
-
-  .sl-badge,
-  span[data-shb-badge] {
-    border-radius: 0 !important;
-    box-shadow: none !important;
-  }
-
-  /*
-    Cards retain their surface and shadow for grouping, but redundant outlines
-    are removed to match the approved reference page.
-  */
-  .codex-sidebar-card,
-  .codex-sidebar-section {
-    border: 0;
-  }
-
-  .right-sidebar nav h2,
-  starlight-toc nav h2,
-  .codex-kicker {
-    color: var(--sl-color-white);
-  }
-
-  .sidebar,
-  #starlight__sidebar,
-  .sidebar-pane,
-  .sidebar-content {
-    border-radius: 0 !important;
-  }
-
-  .sidebar .top-level {
-    padding-inline: .15rem .35rem !important;
-  }
-
-  .sidebar .top-level > li + li {
-    margin-top: .4rem !important;
-  }
-
-  .sidebar .ion-expandable-group {
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-
-  .sidebar .ion-expandable-group > summary {
-    margin: .65rem 0 .1rem !important;
-    padding: .55rem .45rem .35rem !important;
-    border: 0 !important;
-    border-block-start: 1px solid color-mix(in oklch, var(--codex-accent) 12%, transparent) !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    color: var(--sl-color-gray-3) !important;
-  }
-
-  .sidebar .top-level > li:first-child + li .ion-expandable-group > summary,
-  .sidebar .top-level > li:first-child > .ion-expandable-group > summary {
-    border-block-start: 0 !important;
-  }
-
-  .sidebar .ion-expandable-group > summary:hover,
-  .sidebar .ion-expandable-group > summary:focus-visible {
-    background: color-mix(in oklch, var(--codex-accent) 8%, transparent) !important;
-    color: var(--sl-color-white) !important;
-  }
-
-  .sidebar .group-label,
-  .sidebar .flex-link {
-    min-width: 0;
-  }
-
-  .sidebar .large {
-    color: var(--sl-color-gray-2) !important;
-    font-size: var(--sl-text-sm) !important;
-    letter-spacing: .03em;
-    text-transform: none;
-  }
-
-  .sidebar a {
-    border-radius: 0 !important;
-    color: var(--sl-color-gray-3) !important;
-  }
-
-  .sidebar a:hover,
-  .sidebar a:focus-visible {
-    background: color-mix(in oklch, var(--codex-accent) 8%, transparent) !important;
-    color: var(--sl-color-white) !important;
-  }
-
-  .sidebar a[aria-current='page'] {
-    border-inline-start: 2px solid var(--sl-color-accent-high);
-    background: linear-gradient(
-      90deg,
-      color-mix(in oklch, var(--codex-accent) 22%, transparent),
-      color-mix(in oklch, var(--codex-accent) 6%, transparent)
-    ) !important;
-    color: var(--sl-color-white) !important;
-    padding-inline-start: calc(var(--sl-sidebar-item-padding-inline) - 2px) !important;
-  }
-
-  .sidebar a[aria-current='page'] .local-icon {
-    filter: drop-shadow(0 0 6px color-mix(in oklch, var(--codex-accent-high) 50%, transparent));
-  }
-
-  .sidebar ul ul li {
-    margin-inline-start: .55rem !important;
-    padding-inline-start: .55rem !important;
-    border-inline-start: 1px solid var(--codex-surface-accent);
-  }
-
   .codex-site-footer {
     margin-top: 1.5625rem;
   }

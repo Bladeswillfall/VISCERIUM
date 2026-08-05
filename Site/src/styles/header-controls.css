@@ -38,6 +38,42 @@ header.header *::after,
   border: 0 !important;
 }
 
+header.header {
+  --codex-accent: var(--codex-nav-text);
+  --codex-accent-high: var(--codex-nav-text);
+  --codex-border: var(--codex-nav-border);
+  --sl-color-text: var(--codex-nav-text);
+  --sl-color-accent: var(--codex-nav-text);
+  --sl-color-accent-high: var(--codex-nav-text);
+  --sl-color-white: var(--codex-nav-text);
+  --sl-color-gray-1: var(--codex-nav-text);
+  --sl-color-gray-2: var(--codex-nav-text);
+  --sl-color-gray-3: var(--codex-nav-muted);
+  --sl-color-gray-4: var(--codex-nav-muted);
+  --sl-color-gray-5: var(--codex-nav-border);
+  --sl-color-gray-6: var(--codex-nav-hover);
+  --sl-color-black: var(--codex-nav-bg);
+  --sl-color-hairline: var(--codex-nav-border);
+  --sl-color-hairline-light: var(--codex-nav-border);
+  --sl-border: var(--codex-nav-border);
+  z-index: var(--codex-z-navigation);
+  background-color: var(--sl-color-bg-nav);
+}
+
+:where(
+  #telescope-dialog,
+  .telescope__modal,
+  .telescope__close-button,
+  .telescope__tab,
+  .telescope__search-input,
+  .telescope__pin-button,
+  .telescope__tag,
+  .telescope__clear-btn,
+  .telescope__modal kbd
+) {
+  border: 0 !important;
+}
+
 .codex-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);

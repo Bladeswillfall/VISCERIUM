@@ -60,7 +60,7 @@ Use **VISCERIUM Timelines: Diagnose StoryLine integration** when troubleshooting
 
 StoryLine's executable bundle is managed normally by Obsidian Community Plugins. Its plugin ID is `storyline`.
 
-`Vault/.obsidian/plugins/storyline/data.json` is plugin-managed and may expand to contain StoryLine's complete settings after first use. The required invariant is:
+`Vault/.obsidian/plugins/storyline/data.json` is plugin-managed, device-local, and ignored by Git. It may expand to contain StoryLine's complete settings after first use. The required local invariant is:
 
 ```json
 {
@@ -68,7 +68,7 @@ StoryLine's executable bundle is managed normally by Obsidian Community Plugins.
 }
 ```
 
-The active project may also be stored there as `activeProjectFile`; VISCERIUM Timelines intentionally reads that value rather than asking authors to duplicate project selection elsewhere.
+The active project may also be stored there as `activeProjectFile`. VISCERIUM Timelines intentionally reads that value rather than asking authors to duplicate project selection elsewhere. Pulls and repository maintenance therefore leave each creator's active-project state untouched.
 
 VISCERIUM Timelines is maintained in this repository and its runnable bundle is tracked beneath:
 

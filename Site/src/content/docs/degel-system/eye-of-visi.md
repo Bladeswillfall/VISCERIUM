@@ -10,7 +10,6 @@ referencedIn:
     href: /degel-system/errack/
     type: location
     era: Universal
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

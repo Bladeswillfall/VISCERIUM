@@ -7,25 +7,25 @@ sidebar:
   sections:
     - title: Details
       fields:
-        - label: 'Location: [Okse Dominion](/w/viscerium/a/okse-dominion-article)'
+        - label: "Location: [Okse Dominion](/w/viscerium/a/okse-dominion-article)"
           value: Rulers (current)
         - label: Population
           value:
-            - 'Overall: 46,682'
-            - 'Population density: [TBD]'
-            - 'Valenheim City Guard: 359'
-            - 'Juggernaughts: 4'
+            - "Overall: 46,682"
+            - "Population density: [TBD]"
+            - "Valenheim City Guard: 359"
+            - "Juggernaughts: 4"
     - title: Places of note
       items:
         - label: Rauthrbak min
-          href: '[[Rauthrbak Min]]'
+          href: "[[Rauthrbak Min]]"
         - Hofn Brattrstein
         - Hofn Fagrvatn
         - label: Mestrvirki
-          href: '[[Mestrvirki]]'
+          href: "[[Mestrvirki]]"
 title: Valenheim
 description: Valenheim is situated in a snowy valley flanked by a nigh-impenetrable mountain range that almost completely encircles it.
-updated:
+updated: 2026-08-05
 status: draft
 type: location
 development_level: stub
@@ -37,9 +37,10 @@ import_source: worldanvil
 import_source_type: Settlement
 import_source_file: Settlement-Valenheim-323.md
 import_issues:
-  - existing-codex-match
   - unresolved-legacy-links
   - missing-inline-assets
+word_count: 896
+open_task_count: 2
 ---
 > Valenheim has three types of weather; cold and wet, cold and snowing or just _really fuckin'_ **cold**.
 > 
@@ -99,7 +100,7 @@ The people of Valenheim have grown quite accutsomed to the almost constant subze
 <!-- worldanvil-migration-review:start -->
 ## Import review
 
-- [ ] Reconcile this legacy import with the existing Codex note of the same title; preserve the current Codex as authoritative.
+- [x] Reconcile this legacy import with the existing Codex note of the same title; preserve the current Codex as authoritative.
 - [ ] Resolve the remaining legacy World Anvil links that could not be mapped safely to a unique Obsidian note.
 - [ ] Resolve legacy inline image references against `Assets/Images` / `Assets/Maps`; do not assume the absent export image is intentionally missing.
 <!-- worldanvil-migration-review:end -->

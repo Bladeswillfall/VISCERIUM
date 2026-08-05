@@ -29,7 +29,7 @@ Workflows in this repository use least-privilege token permissions where practic
 
 The Timeline system workflow retains `pull-requests: write` because it posts verification comments. If those comments are no longer useful, remove the commenting steps and reduce the workflow to `contents: read` only.
 
-The Obsidian plugin does not currently have a committed lockfile. Generate and review one from a trusted local environment, commit it, then replace its CI `npm install` command with `npm ci`.
+The Obsidian plugin has a committed lockfile, and CI installs it reproducibly with `npm ci` before comparing the generated bundle with the tracked runtime.
 
 ## Cloudflare Pages
 

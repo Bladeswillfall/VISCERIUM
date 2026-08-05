@@ -113,6 +113,9 @@ VISCERIUM remains a curated setting. Suggestions and contributions are reviewed 
 
 Operational instructions have been moved out of this front page.
 
+- **Creators:** start in **[`Vault/Home.md`](Vault/Home.md)**.
+- **Repository operations:** use the **[Creator Command Reference](Vault/System/SOPs/Creator%20Command%20Reference.md)** for exact commands and working directories.
+- **Contributors:** start with **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 - **[Repository licence map](LICENSE.md)**
 - **[Open-source code licence](LICENSE-CODE.md)**
 - **[Third-party notices](THIRD_PARTY_NOTICES.md)**
@@ -120,4 +123,3 @@ Operational instructions have been moved out of this front page.
 - **[Standard Operating Procedures](Vault/System/SOPs/SOP%20Index.md)**
 - **[Codex Publishing and Deployment SOP](Vault/System/SOPs/Codex%20Publishing%20and%20Deployment%20SOP.md)**
 - **[Architecture Guide](Architecture/README.md)**
-- **[Contribution Guide](CONTRIBUTING.md)**

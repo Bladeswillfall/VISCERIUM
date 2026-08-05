@@ -7,7 +7,7 @@ This Astro/Starlight app publishes selected Markdown notes from the sibling Obsi
 Run commands from this `Site/` directory.
 
 ```sh
-npm install
+npm ci
 npm run sync
 npm run dev
 npm run build
@@ -41,4 +41,4 @@ SITE_TITLE="VISCERIUM" SITE_URL="https://www.viscerium.co.uk" npm run build
 
 Set `SITE_URL` to the production origin used for sitemap generation. Use `LORE_SOURCE_DIR` only if your vault layout differs from the template.
 
-Giscus, Webmentions, analytics, and the Worker-backed contact form are disabled until complete owner-controlled values are supplied. Use `.env.example` as the public-variable reference. Never expose the Worker secrets listed in `CONTACT_FORM_SETUP.md`.
+Giscus is enabled by default for the configured public repository and can be disabled with `PUBLIC_GISCUS_ENABLED=0`. Webmentions, analytics, and private contact remain off until their public configuration is complete. Use `.env.example` as the public-variable reference.

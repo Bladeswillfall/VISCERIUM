@@ -107,7 +107,7 @@ Keep a `map:` block on the linked note for semantic public behaviour:
 
 ```yaml
 map:
-  id: exploration-demo-world
+  id: errack-citadel
   marker: city
   layer:
     - civilisation/settlements
@@ -211,11 +211,11 @@ Maps without `mapMarkers` continue to use note-owned percentage coordinates.
 
 This fallback exists for migration and portability. Do not add new manual `x` and `y` values to a plugin-backed map unless a temporary fallback is genuinely required.
 
-## Demo
+## Private fixture
 
-Use `Lore/Demo/Exploration Demo World.md` for the checked-in demonstration. It uses `Assets/Maps/Errack-CITADEL.webp` and `Assets/Maps/Errack-CITADEL.webp.markers.json`.
+The non-canon manual walkthrough lives under `Demo/Lore/Exploration/`. Its marker sidecar lives under `Demo/Assets/Maps/`, and it does not generate public routes or Atlas data.
 
-The demo markers are explicitly non-canon. Do not link public era homepages to the demo Atlas route.
+Use compiler fixtures for automated populated-map coverage. Do not link public era homepages to private fixture content.
 
 ## Stop condition
 

@@ -34,13 +34,13 @@ participants:
   - Committee of Eleven Needles
 outcome: 'Resonance became measurable enough to regulate, insure and weaponise.'
 tags:
-  - smog
+  - SMOG
   - timeline-showcase
   - science
+  - Events
 slug: eras/smog/events/the-first-resonance-meter-standard
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The First Resonance Meter Standard.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

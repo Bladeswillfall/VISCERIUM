@@ -4,16 +4,15 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-test('the Preact island enhances only the existing timeline list panel', () => {
-  const island = read('../src/components/timeline/TimelineIsland.tsx');
+test('the Astro timeline enhances only the existing timeline list panel', () => {
+  const app = read('../src/components/timeline/TimelineApp.astro');
   const chronicle = read('../src/lib/timeline/chronicle-view.mjs');
   const styles = read('../src/styles/timeline-chronicle.css');
   const renderer = read('../src/lib/timeline/chronos-native-renderer.mjs');
 
-  assert.match(island, /installTimelineChronicle/);
-  assert.match(island, /import '\.\.\/\.\.\/styles\/timeline-chronicle\.css'/);
-  assert.match(island, /const cleanupChronicle = installTimelineChronicle\(root, dataset\)/);
-  assert.match(island, /cleanupChronicle\(\);[\s\S]*cleanupHovercard\(\);[\s\S]*cleanupTimeline\(\);/);
+  assert.match(app, /installTimelineChronicle/);
+  assert.match(app, /import '\.\.\/\.\.\/styles\/timeline-chronicle\.css'/);
+  assert.match(app, /installTimelineChronicle\(mount, dataset\)/);
 
   assert.match(chronicle, /root\.querySelector\('\[data-vc-list-panel\]'\)/);
   assert.match(chronicle, /const plainList = listPanel\.querySelector\(':scope > ol'\)/);

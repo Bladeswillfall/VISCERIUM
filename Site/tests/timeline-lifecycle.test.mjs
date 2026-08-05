@@ -1,56 +1,30 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-test('registers the official Preact renderer for Astro islands', () => {
+test('timeline runtime uses Astro markup and native browser lifecycle events', () => {
   const packageJson = JSON.parse(read('../package.json'));
   const astroConfig = read('../astro.config.mjs');
   const tsconfig = JSON.parse(read('../tsconfig.json'));
-
-  assert.equal(packageJson.dependencies['@astrojs/preact'], '6.0.1');
-  assert.equal(packageJson.dependencies.preact, '10.29.7');
-  assert.match(astroConfig, /import preact from '@astrojs\/preact'/);
-  assert.match(astroConfig, /integrations:\s*\[\s*preact\(\)/);
-  assert.equal(tsconfig.compilerOptions.jsx, 'react-jsx');
-  assert.equal(tsconfig.compilerOptions.jsxImportSource, 'preact');
-});
-
-test('TimelineApp delegates browser behaviour to a client-loaded island', () => {
   const app = read('../src/components/timeline/TimelineApp.astro');
-  const canvasStyles = read('../src/styles/timeline-canvas.css');
 
-  assert.match(app, /import TimelineIsland from '\.\/TimelineIsland'/);
-  assert.match(app, /import '\.\.\/\.\.\/styles\/timeline-canvas\.css'/);
-  assert.match(canvasStyles, /Origin: timeline-loading\.css/);
-  assert.match(canvasStyles, /Origin: timeline-performance\.css/);
-  assert.match(canvasStyles, /Origin: chronos-calendar-axis\.css/);
-  assert.doesNotMatch(app, /timeline-(?:loading|performance|stacking|viewport|pages)\.css|chronos-calendar-axis\.css/);
-  assert.doesNotMatch(app, /timeline-scroll\.css/);
-  assert.match(app, /<TimelineIsland[\s\S]*client:load/);
-  assert.match(app, /fallbackEvents=\{fallbackEvents\}/);
-  assert.doesNotMatch(app, /<script>|astro:page-load|__visceriumTimelineRuntime|application\/json/);
-});
-
-test('the Preact island owns one forked Chronos mount, one hovercard and ordered cleanup', () => {
-  const island = read('../src/components/timeline/TimelineIsland.tsx');
-
-  assert.match(island, /useEffect\(/);
-  assert.match(island, /useRef<HTMLDivElement>/);
-  assert.match(island, /import \{ installTimelineHovercard \} from '\.\.\/\.\.\/lib\/timeline\/hovercard\.mjs'/);
-  assert.match(island, /await import\('\.\.\/\.\.\/lib\/timeline\/chronos-native-renderer\.mjs'\)/);
-  assert.match(island, /const cleanupTimeline = mountTimeline\(root, dataset, options\)/);
-  assert.match(island, /const cleanupHovercard = installTimelineHovercard\(root, dataset\)/);
-  assert.match(island, /cleanup = \(\) => \{[\s\S]*cleanupHovercard\(\);[\s\S]*cleanupTimeline\(\);/);
-  assert.match(island, /return \(\) => \{[\s\S]*cleanup\?\.\(\)/);
-  assert.match(island, /class="vc-timeline-fallback"/);
-  assert.match(island, /data-vc-timeline-skeleton/);
-  assert.match(island, /root\.setAttribute\('aria-busy', 'true'\)/);
-  assert.match(island, /fallbackRef\.current\.hidden = true/);
-  assert.match(island, /skeletonRef\.current\.hidden = false/);
-  assert.doesNotMatch(island, /prepareTimelineViewportGuard|installAdaptiveTimelineGrid|installCalendarYearAxisSync|installTimelineTooltipContentSync/);
-  assert.doesNotMatch(island, /astro:page-load|astro:before-swap|customElements|MutationObserver/);
+  assert.equal(packageJson.dependencies['@astrojs/preact'], undefined);
+  assert.equal(packageJson.dependencies.preact, undefined);
+  assert.doesNotMatch(astroConfig, /@astrojs\/preact|preact\(\)/);
+  assert.equal(tsconfig.compilerOptions, undefined);
+  assert.equal(existsSync(new URL('../src/components/timeline/TimelineIsland.tsx', import.meta.url)), false);
+  assert.match(app, /data-vc-timeline-data/);
+  assert.match(app, /class="vc-timeline-fallback"/);
+  assert.match(app, /await import\('\.\.\/\.\.\/lib\/timeline\/chronos-native-renderer\.mjs'\)/);
+  assert.match(app, /installTimelineHovercard/);
+  assert.match(app, /installTimelineChronicle/);
+  assert.match(app, /installTimelineToolbar/);
+  assert.match(app, /astro:page-load/);
+  assert.match(app, /astro:before-swap/);
+  assert.match(app, /state\.cancelled = true/);
+  assert.match(app, /runCleanups\(state\)/);
 });
 
 test('timeline startup uses the resolved viewport once and defers the minimap', () => {
@@ -101,7 +75,7 @@ test('group and item changes stay inside one forked Chronos instance', () => {
 });
 
 test('the fork owns axis and geometry while the site owns one non-layout hovercard', () => {
-  const island = read('../src/components/timeline/TimelineIsland.tsx');
+  const app = read('../src/components/timeline/TimelineApp.astro');
   const renderer = read('../src/lib/timeline/chronos-native-renderer.mjs');
   const fork = read('../src/lib/chronos-fork/VisceriumChronosTimeline.mjs');
   const hovercard = read('../src/lib/timeline/hovercard.mjs');
@@ -111,7 +85,7 @@ test('the fork owns axis and geometry while the site owns one non-layout hoverca
   assert.match(renderer, /createCalendarAxisFormatter/);
   assert.match(fork, /#installTooltipBridge\(\)/);
   assert.match(fork, /format: \{[\s\S]*minorLabels:[\s\S]*majorLabels:/);
-  assert.match(island, /installTimelineHovercard\(root, dataset\)/);
+  assert.match(app, /installTimelineHovercard\(mount, dataset\)/);
   assert.match(hovercard, /tooltip\.className = 'vis-tooltip vc-timeline-hovercard'/);
   assert.match(hovercard, /document\.body\.append\(tooltip\)/);
   assert.match(hovercard, /attributeFilter: \['title'\]/);
@@ -121,7 +95,7 @@ test('the fork owns axis and geometry while the site owns one non-layout hoverca
   assert.match(viewportStyles, /--vc-hovercard-text:\s*var\(--sl-color-text\)/);
   assert.doesNotMatch(viewportStyles, /:root\[data-theme='light'\] body > \.vc-timeline-hovercard/);
   assert.doesNotMatch(renderer, /MutationObserver|ResizeObserver|installTimelineDomGuards/);
-  assert.doesNotMatch(island, /MutationObserver|ResizeObserver/);
+  assert.doesNotMatch(app, /MutationObserver|ResizeObserver/);
 });
 
 test('canonical timeline pages explicitly omit the right sidebar and release content width constraints', () => {

@@ -70,21 +70,11 @@ test('server-rendered timeline uses consolidated renderer entrypoints', async ()
     'vis-timeline/styles/vis-timeline-graph2d.min.css',
     '../../styles/chronos.css',
     '../../styles/timeline-canvas.css',
+    '../../styles/timeline-chronicle.css',
+    '../../styles/timeline-controls.css',
   ];
   const positions = orderedImportPositions(app, imports);
 
   assert.ok(positions.every((position) => position >= 0), 'timeline renderer styles remain directly imported');
   assert.deepEqual([...positions].sort((a, b) => a - b), positions, 'timeline renderer style order is preserved');
-});
-
-test('hydrated timeline uses Chronicle and control entrypoints', async () => {
-  const island = await read('src/components/timeline/TimelineIsland.tsx');
-  const imports = [
-    '../../styles/timeline-chronicle.css',
-    '../../styles/timeline-controls.css',
-  ];
-  const positions = orderedImportPositions(island, imports);
-
-  assert.ok(positions.every((position) => position >= 0), 'hydrated timeline styles remain directly imported');
-  assert.deepEqual([...positions].sort((a, b) => a - b), positions, 'hydrated timeline style order is preserved');
 });

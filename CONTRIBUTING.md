@@ -2,6 +2,8 @@
 
 Thank you for helping to improve VISCERIUM.
 
+This file is the authoritative contributor entry point. Creators start in [`Vault/Home.md`](Vault/Home.md). Exact creator and repository commands live in the [Creator Command Reference](Vault/System/SOPs/Creator%20Command%20Reference.md).
+
 Use the [Architecture Guide](Architecture/README.md) before you change an unfamiliar system.
 
 Use the [Documentation Writing Standard](Vault/System/SOPs/Documentation%20Writing%20Standard.md) for operational documentation.
@@ -56,6 +58,8 @@ Ordinary third-party plugin payloads are not repository source. Do not commit th
 - downloaded support assets.
 
 Selected third-party `data.json` files may be tracked only when they define an intentional shared VISCERIUM workflow.
+
+StoryLine settings are always device-local because they contain private active-project and workspace state.
 
 Before you add or change a tracked plugin setting:
 
@@ -155,7 +159,7 @@ Do not add a second search provider without an architecture review.
 
 ## Validation before a pull request
 
-Run the normal confidence check from the repository root:
+Run each block from the repository root. Install from the lockfile before the normal confidence check:
 
 ```bash
 cd Site

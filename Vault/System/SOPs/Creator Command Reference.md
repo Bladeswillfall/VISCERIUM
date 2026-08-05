@@ -8,6 +8,8 @@
 
 Follow [[Documentation Writing Standard]] for operational wording.
 
+This page is the authoritative index for creator and repository operations. Open the repository root in a terminal before a command says `cd Site` or `cd Tools/...`. Run `npm ci` once in that target directory after cloning or whenever its lockfile changes.
+
 ## Use this reference
 
 1. Open [[Home]] for common creator actions.

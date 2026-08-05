@@ -25,6 +25,7 @@
   --vc-timeline-ink: var(--sl-color-white);
   --vc-timeline-muted: var(--sl-color-gray-3);
   --vc-timeline-accent: var(--sl-color-accent-high);
+  --vc-timeline-button-radius: .55rem;
   position: relative;
   min-width: 0;
 }
@@ -1074,7 +1075,11 @@
 .vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item {
   --vc-event-fill: var(--vc-event-unknown);
   --vc-event-outline: color-mix(in oklch, var(--vc-event-fill) 62%, var(--vc-event-ink));
+  border-radius: var(--chronos-radius-small, 3px);
+  border-color: var(--chronos-accent);
+  color: var(--chronos-text-on-accent);
   box-shadow: none !important;
+  font-family: inherit;
 }
 
 .vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.category-technology { --vc-event-fill: var(--vc-event-technology); }

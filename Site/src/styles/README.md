@@ -1,6 +1,6 @@
 # Codex stylesheet architecture
 
-The stylesheet directory is organised around feature ownership rather than one-file-per-fix fragments. Import order and import location remain application behaviour: do not move a stylesheet between Astro, Preact and Starlight entrypoints without running the unit, build and browser suites.
+The stylesheet directory is organised around feature ownership rather than one-file-per-fix fragments. Import order and import location remain application behaviour: do not move a stylesheet between Astro components and Starlight entrypoints without running the unit, build and browser suites.
 
 ## Global Starlight/Codex stack
 
@@ -32,7 +32,7 @@ Registered explicitly in `astro.config.mjs`:
 - `timeline-controls.css` — hydrated toolbar controls;
 - `timeline-chronicle.css` — Chronicle list view.
 
-Astro and hydrated Preact styles can be emitted in a different order from their source imports. Cross-entrypoint overrides must therefore use explicit feature scoping and sufficient selector specificity instead of relying only on concatenation order.
+Astro component and Starlight styles can be emitted in a different order from their source imports. Cross-entrypoint overrides must therefore use explicit feature scoping and sufficient selector specificity instead of relying only on concatenation order.
 
 ## Editing rules
 

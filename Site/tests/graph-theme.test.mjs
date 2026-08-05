@@ -8,8 +8,8 @@ test('graph canvas colours are explicit, theme-aware and parser-safe', () => {
   const themeStyles = read('../src/styles/graph.css');
   const canvasStyles = read('../src/styles/graph.css');
 
-  assert.match(themeStyles, /:root,\s*:root\[data-theme='dark'\]\s*\{/);
-  assert.match(themeStyles, /:root\[data-theme='light'\]\s*\{/);
+  assert.match(themeStyles, /\.slsg-graph-component\s*\{/);
+  assert.match(themeStyles, /:root\[data-theme='light'\] \.slsg-graph-component\s*\{/);
   assert.match(canvasStyles, /\.slsg-graph-component,\s*graph-component\s*\{/);
   assert.match(canvasStyles, /--slsg-node-color:\s*rgb\(var\(--vc-graph-node-rgb\)\)/);
   assert.match(canvasStyles, /--slsg-link-color:\s*rgb\(var\(--vc-graph-link-rgb\)\)/);

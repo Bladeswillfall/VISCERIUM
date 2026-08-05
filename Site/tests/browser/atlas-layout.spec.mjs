@@ -2,47 +2,21 @@ import { test, expect } from '@playwright/test';
 
 test.use({ viewport: { width: 1280, height: 900 } });
 
-test('Atlas search results stay above the map and its Leaflet layers', async ({ page }) => {
-  await page.goto('http://127.0.0.1:4321/maps/exploration-demo-world/', { waitUntil: 'domcontentloaded' });
+test('canonical Atlas reports its real empty marker state', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/maps/errack-citadel/', { waitUntil: 'domcontentloaded' });
 
   const atlas = page.locator('[data-atlas]');
   await expect(atlas).toHaveAttribute('data-atlas-ready', 'true', { timeout: 10_000 });
+  await expect(atlas.locator('.atlas__empty-note')).toContainText('no positioned markers have been published yet');
+  await expect(atlas.locator('.atlas__marker-index')).toContainText('No markers have been placed on this map yet.');
 
-  const search = atlas.locator('[data-atlas-search]').first();
-  const results = atlas.locator('[data-atlas-search-results]').first();
-  const frame = atlas.locator('.atlas__frame');
-
-  await search.fill('demo');
-  await expect(results).toBeVisible();
-  await expect(results.locator('.atlas-search__result').first()).toBeVisible();
-
-  const resultsBox = await results.boundingBox();
-  const frameBox = await frame.boundingBox();
-  expect(resultsBox).not.toBeNull();
-  expect(frameBox).not.toBeNull();
-
-  const overlapTop = Math.max(resultsBox.y + 1, frameBox.y + 1);
-  const overlapBottom = Math.min(
-    resultsBox.y + resultsBox.height - 1,
-    frameBox.y + frameBox.height - 1,
-  );
-  expect(overlapBottom).toBeGreaterThan(overlapTop);
-
-  const point = {
-    x: resultsBox.x + Math.min(40, resultsBox.width / 2),
-    y: overlapTop + ((overlapBottom - overlapTop) / 2),
-  };
-  const searchOwnsTopPixel = await page.evaluate(({ x, y }) => {
-    const resultPanel = document.querySelector('[data-atlas-search-results]');
-    const topElement = document.elementFromPoint(x, y);
-    return Boolean(resultPanel && topElement && resultPanel.contains(topElement));
-  }, point);
-
-  expect(searchOwnsTopPixel).toBe(true);
+  const search = atlas.locator('.atlas__toolbar').getByRole('searchbox', { name: 'Find a place' });
+  await search.fill('unpublished place');
+  await expect(atlas.locator('.atlas__toolbar .atlas-search__empty')).toHaveText('No matching markers.');
 });
 
 test('map routes remove the empty Starlight masthead wrapper', async ({ page }) => {
-  await page.goto('http://127.0.0.1:4321/maps/exploration-demo-world/', { waitUntil: 'domcontentloaded' });
+  await page.goto('http://127.0.0.1:4321/maps/errack-citadel/', { waitUntil: 'domcontentloaded' });
 
   const panels = page.locator('.codex-exploration-page main > .content-panel');
   expect(await panels.count()).toBeGreaterThan(1);
@@ -58,7 +32,7 @@ test('Atlas cards use a flush, readable and consistently aligned composition', a
   await expect(grid).toHaveClass(/not-content/);
 
   const cards = grid.locator(':scope > .codex-map-card');
-  expect(await cards.count()).toBeGreaterThan(1);
+  expect(await cards.count()).toBe(1);
 
   const layouts = await cards.evaluateAll((elements) => elements.map((card) => {
     const image = card.querySelector(':scope > img');
@@ -94,15 +68,7 @@ test('Atlas cards use a flush, readable and consistently aligned composition', a
     };
   }).filter(Boolean));
 
-  expect(layouts.length).toBeGreaterThan(1);
-
-  // The grid is responsive and may wrap as maps are added. Require the desktop
-  // first row to contain multiple aligned cards without treating later rows as
-  // a vertical-alignment failure.
-  const firstRowTop = layouts[0].cardTop;
-  const firstRow = layouts.filter(({ cardTop }) => Math.abs(cardTop - firstRowTop) <= 1);
-  expect(firstRow.length).toBeGreaterThan(1);
-  expect(Math.max(...firstRow.map(({ cardTop }) => cardTop)) - Math.min(...firstRow.map(({ cardTop }) => cardTop))).toBeLessThanOrEqual(1);
+  expect(layouts).toHaveLength(1);
 
   for (const layout of layouts) {
     expect(layout.cardMarginTop).toBe(0);

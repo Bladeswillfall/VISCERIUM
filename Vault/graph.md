@@ -14,4 +14,4 @@ The Astro/Starlight site is configured to use [`starlight-site-graph`](https://g
 - Add optional `tags` frontmatter to expose thematic groupings to the site graph.
 - Use the optional `links` frontmatter field for explicit extra graph links when a relationship should appear even if it is not linked in the note body.
 
-After pulling site updates, run `npm install` in `Site/`, then `npm run build` or `npm run dev:sync` to regenerate the published graph data.
+After pulling site updates, run `cd Site`, `npm ci`, then `npm run build` or `npm run dev:sync` from the repository root to regenerate the published graph data.

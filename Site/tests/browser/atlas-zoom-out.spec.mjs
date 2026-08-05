@@ -14,7 +14,7 @@ async function horizontalMapGap(viewport, image) {
 
 test('mobile Atlas starts width-fitted, resets to that framing and keeps zoom-out room', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('http://127.0.0.1:4321/maps/exploration-demo-world/', { waitUntil: 'networkidle' });
+  await page.goto('http://127.0.0.1:4321/maps/errack-citadel/', { waitUntil: 'networkidle' });
 
   const atlas = page.locator('[data-atlas]');
   const viewport = atlas.locator('[data-atlas-canvas]');

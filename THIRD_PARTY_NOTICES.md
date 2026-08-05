@@ -22,7 +22,7 @@ Transitive package versions and SPDX licence identifiers are recorded in the rel
 
 | Component | Role in VISCERIUM | Upstream licence |
 | --- | --- | --- |
-| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, Preact, sitemap, and Partytown integrations | MIT |
+| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, sitemap, and Partytown integrations | MIT |
 | [Starlight](https://github.com/withastro/starlight) | Documentation-site shell and content framework | MIT |
 | `starlight-changelogs` | Changelog presentation | MIT |
 | `starlight-giscus` | Giscus comments integration | MIT |
@@ -30,7 +30,6 @@ Transitive package versions and SPDX licence identifiers are recorded in the rel
 | `starlight-site-graph` | Public site-graph integration | MIT |
 | `starlight-tags` | Tag pages and tag navigation | MIT |
 | `starlight-telescope` | Public search integration | MIT |
-| [Preact](https://github.com/preactjs/preact) (`preact`) | Client interface components | MIT |
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) (`cytoscape`) | Relationship and graph visualisation | MIT |
 | [cytoscape-dagre](https://github.com/cytoscape/cytoscape.js-dagre) | Directed graph layout | MIT |
 | [Leaflet](https://github.com/Leaflet/Leaflet) (`leaflet`) | Public interactive maps | BSD-2-Clause |
@@ -133,7 +132,7 @@ Use of a service is governed by that provider's terms. A service integration is 
 
 ## Trademarks
 
-Astro, Starlight, Obsidian, GitHub, Cloudflare, Leaflet, Cytoscape, Preact, Playwright, and other product or project names may be trademarks of their respective owners.
+Astro, Starlight, Obsidian, GitHub, Cloudflare, Leaflet, Cytoscape, Playwright, and other product or project names may be trademarks of their respective owners.
 
 Their use here is descriptive attribution only.
 

@@ -33,13 +33,13 @@ participants:
   - Valkyr Section
 outcome: Powered infantry moved from experimental detachments into regular doctrine.
 tags:
-  - nearsight
+  - NEARSIGHT
   - timeline-showcase
   - aesir
+  - Events
 slug: eras/nearsight/events/first-aesir-mk-2-fielding
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/First AESIR Mk-2 Fielding.md
-updated: '2026-07-31T11:49:51+01:00'
 giscus: true
 ---
 

@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-test('Atlas demo renders the real CITADEL WebP map', async ({ page }) => {
+test('canonical Atlas renders the real CITADEL WebP map', async ({ page }) => {
   const imageResponsePromise = page.waitForResponse((response) => (
     response.url().endsWith('/assets/maps/Errack-CITADEL.webp')
   ));
 
-  await page.goto('http://127.0.0.1:4321/maps/exploration-demo-world/', { waitUntil: 'domcontentloaded' });
+  await page.goto('http://127.0.0.1:4321/maps/errack-citadel/', { waitUntil: 'domcontentloaded' });
 
   const imageResponse = await imageResponsePromise;
   expect(imageResponse.ok()).toBe(true);

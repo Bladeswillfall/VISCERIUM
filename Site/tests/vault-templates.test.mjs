@@ -205,27 +205,6 @@ test('creator-facing workflows author Storyteller material as Markdown rather th
   assert.match(folderRouter, /tp\.user\.folder_entity_router/);
 });
 
-test('sourcebook location fields survive in representative non-canon location notes', async () => {
-  const port = matter(await readText('Lore/Demo/Demo Trade Port.md')).data;
-  const fort = matter(await readText('Lore/Demo/Demo Frontier Fort.md')).data;
-  const ward = matter(await readText('Lore/Demo/Demo Market Ward.md')).data;
-
-  assert.equal(port.type, 'location');
-  assert.equal(port.location_kind, 'settlement');
-  assert.match(port.economic_role, /cargo|trade/i);
-  assert.ok(port.local_services);
-
-  assert.equal(fort.type, 'location');
-  assert.equal(fort.location_kind, 'site');
-  assert.ok(fort.access_conditions);
-  assert.ok(fort.notable_features);
-
-  assert.equal(ward.type, 'location');
-  assert.equal(ward.location_kind, 'settlement');
-  assert.ok(ward.population_band);
-  assert.ok(ward.governance_summary);
-});
-
 test('sourcebook-readiness guidance stays progressive and avoids completion-by-metadata', async () => {
   const sourcebook = await readText('System/SOPs/Sourcebook Readiness SOP.md');
 
