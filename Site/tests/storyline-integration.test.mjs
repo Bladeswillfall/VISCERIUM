@@ -12,9 +12,15 @@ function read(rel) {
   return fs.readFileSync(path.join(repo, rel), 'utf8');
 }
 
-test('StoryLine is rooted in the private Stories workspace', () => {
-  const config = JSON.parse(read('Vault/.obsidian/plugins/storyline/data.json'));
-  assert.equal(config.storyLineRoot, 'Stories');
+test('StoryLine is rooted in the private Stories workspace without tracking device-local settings', () => {
+  const plugin = read('Tools/obsidian-viscerium-timelines/main.ts');
+  assert.match(plugin, /storyLineRoot:\s*runtime\.storyLineRoot\s*\?\?\s*disk\.storyLineRoot\s*\?\?\s*'Stories'/);
+
+  const profile = JSON.parse(read('Vault/System/Obsidian Plugin Profile.json'));
+  const storyline = profile.plugins.find((entry) => entry.id === 'storyline');
+  assert.ok(storyline, 'StoryLine should remain in the tested plugin profile');
+  assert.equal(storyline.sharedSettings, null);
+  assert.equal(fs.existsSync(path.join(repo, 'Vault/.obsidian/plugins/storyline/data.json')), false);
 
   const plugins = JSON.parse(read('Vault/.obsidian/community-plugins.json'));
   assert.ok(plugins.includes('storyline'));
