@@ -138,8 +138,8 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
     align-items: center;
     justify-content: space-between;
     gap: .6rem;
-    margin: 0 .35rem .18rem !important;
-    padding: .08rem .38rem .3rem !important;
+    margin: 0 .35rem !important;
+    padding: .08rem .38rem .18rem !important;
     border: 0 !important;
   }
 
@@ -189,5 +189,11 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
   html[data-era-context='NEARSIGHT'] [data-era-sidebar-branch]:not([data-era-sidebar-branch='NEARSIGHT']),
   html[data-era-context='ENTROPY'] [data-era-sidebar-branch]:not([data-era-sidebar-branch='ENTROPY']) {
     display: none !important;
+  }
+
+  @media (max-width: 49.99rem) {
+    .codex-sidebar-era-toolbar {
+      margin-inline-end: 3.65rem !important;
+    }
   }
 </style>
