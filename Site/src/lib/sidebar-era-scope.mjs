@@ -1,41 +1,42 @@
-import { slugToRoute } from './codex-paths.mjs';
-import { normaliseEra } from './era-context.mjs';
+import { HISTORICAL_ERAS, normaliseEra } from './era-context.mjs';
+import { parseIconLabel } from './icon-spec.mjs';
 
-function normaliseRoute(value) {
-  const pathname = String(value ?? '').split(/[?#]/, 1)[0];
-  return slugToRoute(pathname);
+function sidebarLabel(entry) {
+  return parseIconLabel(entry?.label ?? '').label.trim();
 }
 
-export function routeForDocEntry(entry) {
-  const rawSlug = entry?.data?.slug ?? entry?.id ?? '';
-  const slug = String(rawSlug)
-    .replace(/\.(md|mdx)$/i, '')
-    .replace(/\/index$/i, '');
-  return normaliseRoute(slug);
+function historicalEra(value) {
+  const era = normaliseEra(value);
+  return era && HISTORICAL_ERAS.includes(era) ? era : undefined;
 }
 
-export function universalRoutesFromDocs(entries) {
-  return new Set((entries ?? [])
-    .filter((entry) => {
-      const declared = Array.isArray(entry?.data?.era) ? entry.data.era : [entry?.data?.era];
-      return declared.some((value) => normaliseEra(value) === 'Universal');
-    })
-    .map(routeForDocEntry));
-}
+/**
+ * Keep the complete Codex tree intact while marking the four historical era
+ * branches for contextual visibility. Universal and utility entries are never
+ * filtered or moved; an active era only hides its three historical siblings.
+ */
+export function scopeHistoricalEraBranches(entries, activeEra) {
+  const scopedEra = historicalEra(activeEra);
 
-export function filterSidebarByRoutes(entries, allowedRoutes) {
-  const allowed = allowedRoutes instanceof Set ? allowedRoutes : new Set(allowedRoutes ?? []);
-
-  return (entries ?? []).flatMap((entry) => {
-    if (entry?.type === 'link') {
-      return allowed.has(normaliseRoute(entry.href)) ? [entry] : [];
+  return (entries ?? []).map((entry) => {
+    if (entry?.type !== 'group' || sidebarLabel(entry).toLowerCase() !== 'eras') {
+      return entry;
     }
 
-    if (entry?.type === 'group') {
-      const children = filterSidebarByRoutes(entry.entries ?? [], allowed);
-      return children.length > 0 ? [{ ...entry, entries: children }] : [];
-    }
+    return {
+      ...entry,
+      collapsed: scopedEra ? false : entry.collapsed,
+      entries: (entry.entries ?? []).map((child) => {
+        const era = historicalEra(sidebarLabel(child));
+        if (!era) return child;
 
-    return [];
+        return {
+          ...child,
+          collapsed: scopedEra ? era !== scopedEra : child.collapsed,
+          sidebarEra: era,
+          sidebarHidden: Boolean(scopedEra && era !== scopedEra),
+        };
+      }),
+    };
   });
 }

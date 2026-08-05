@@ -75,14 +75,12 @@ test.describe('mobile era collision guards', () => {
     await expect(menuButton).toBeVisible();
     await menuButton.click();
 
-    const sidebarExit = page.locator('.codex-sidebar-era-scope[data-era-sidebar="CITADEL"] [data-era-exit]');
+    const sidebarExit = page.locator('[data-era-sidebar-toolbar] [data-era-exit]');
     await expect(sidebarExit).toBeVisible();
     await expect(menuButton).toBeVisible();
 
     const geometry = await page.evaluate(() => {
-      const exitNode = document.querySelector(
-        '.codex-sidebar-era-scope[data-era-sidebar="CITADEL"] [data-era-exit]'
-      );
+      const exitNode = document.querySelector('[data-era-sidebar-toolbar] [data-era-exit]');
       const closeNode = document.querySelector('.sidebar > starlight-menu-button button');
       if (!(exitNode instanceof HTMLElement) || !(closeNode instanceof HTMLElement)) {
         throw new Error('Missing mobile sidebar controls');

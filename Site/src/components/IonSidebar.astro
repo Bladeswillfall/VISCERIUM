@@ -1,43 +1,39 @@
 ---
-import { getCollection } from 'astro:content';
 import SidebarSublist from './IonSidebarSublist.astro';
 import { parseIconLabel } from '../lib/icon-spec.mjs';
 import { HISTORICAL_ERAS, eraFromPath, normaliseEra } from '../lib/era-context.mjs';
-import { filterSidebarByRoutes, universalRoutesFromDocs } from '../lib/sidebar-era-scope.mjs';
+import { scopeHistoricalEraBranches } from '../lib/sidebar-era-scope.mjs';
 
 const { sidebar, entry } = Astro.locals.starlightRoute;
 const changelogSidebarLabel = 'Releases';
 const labelOf = (entry: any) => parseIconLabel(entry?.label ?? '').label.trim();
 const isChangelogGroup = (entry: any) => entry.type === 'group' && labelOf(entry) === changelogSidebarLabel;
 const changelogSidebar = sidebar.filter(isChangelogGroup);
-const mainSidebar = sidebar.filter((entry: any) => !isChangelogGroup(entry));
-const mainGroups = mainSidebar.filter((entry: any) => entry.type === 'group');
-const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
-const erasGroup = mainGroups.find((entry: any) => labelOf(entry).toLowerCase() === 'eras');
-const eraEntry = (era: string) => erasGroup?.entries?.find((entry: any) => labelOf(entry).toUpperCase() === era);
-const childrenOf = (entry: any) => entry?.type === 'group' ? entry.entries ?? [] : entry ? [entry] : [];
-
-// Universal is a content scope, not a route/folder requirement. Build the shared
-// sidebar from page metadata so naturally filed material such as Degel System is
-// still visible inside every historical era context.
-const docs = await getCollection('docs');
-const universalRoutes = universalRoutesFromDocs(docs);
-const universalSidebar = filterSidebarByRoutes(mainSidebar, universalRoutes);
-const universalEntries = universalSidebar.flatMap((entry: any) =>
-  entry.type === 'group' && labelOf(entry).toLowerCase() === 'universal'
-    ? entry.entries ?? []
-    : [entry]
-);
 
 const pageData = entry.data;
 const pageSlug = String(pageData.slug ?? entry.id ?? '').replace(/\.(md|mdx)$/i, '');
 const rawEra = Array.isArray(pageData.era) ? pageData.era[0] : pageData.era;
 const routeEra = normaliseEra(rawEra) ?? eraFromPath(pageSlug);
 const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : undefined;
+
+// Era mode keeps the complete Codex navigation visible. Only the three sibling
+// historical era branches are hidden, so Universal material retains its normal
+// place in the hierarchy instead of being copied into a separate section.
+const mainSidebar = scopeHistoricalEraBranches(
+  sidebar.filter((entry: any) => !isChangelogGroup(entry)),
+  initialEra,
+);
+const mainGroups = mainSidebar.filter((entry: any) => entry.type === 'group');
+const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
 ---
 
 <div class="codex-sidebar-layout">
-  <div class="codex-sidebar-global" hidden={Boolean(initialEra)}>
+  <div class="codex-sidebar-era-toolbar" data-era-sidebar-toolbar hidden={!initialEra}>
+    <strong data-era-sidebar-label>{initialEra ?? ''}</strong>
+    <a href="/" data-era-exit>Exit · All eras</a>
+  </div>
+
+  <div class="codex-sidebar-tree">
     <div class="codex-sidebar-main">
       <SidebarSublist sublist={mainGroups} />
     </div>
@@ -48,39 +44,56 @@ const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : u
     )}
   </div>
 
-  {HISTORICAL_ERAS.map((era) => {
-    const scoped = childrenOf(eraEntry(era));
-    const eraSlug = era.toLowerCase();
-    return (
-      <div
-        class="codex-sidebar-era-scope"
-        data-era-sidebar={era}
-        hidden={initialEra !== era}
-      >
-        <div class="codex-sidebar-era-toolbar">
-          <strong>{era}</strong>
-          <a href="/" data-era-exit>Exit · All eras</a>
-        </div>
-        <nav class="codex-sidebar-era-explore" aria-label={`${era} exploration`}>
-          <a href={`/eras/${eraSlug}/relationships/`}>Relationships</a>
-        </nav>
-        {scoped.length > 0 ? <SidebarSublist sublist={scoped} /> : <p class="codex-sidebar-empty">No published {era} pages yet.</p>}
-        {universalEntries.length > 0 && (
-          <div class="codex-sidebar-universal">
-            <div class="codex-sidebar-universal__label">Universal</div>
-            <SidebarSublist sublist={universalEntries} />
-          </div>
-        )}
-      </div>
-    );
-  })}
-
   {changelogSidebar.length > 0 && (
     <aside class="codex-changelog-sidebar" aria-label="Releases">
       <SidebarSublist sublist={changelogSidebar} />
     </aside>
   )}
 </div>
+
+<script>
+  const sidebarEras = ['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY'];
+  const sidebarEraRuntime = window.__visceriumSidebarEraBranches ??= {};
+
+  const normaliseSidebarEra = (value) => sidebarEras.find(
+    (era) => era.toLowerCase() === String(value ?? '').trim().toLowerCase(),
+  ) ?? null;
+
+  const openActiveBranch = (branch) => {
+    const branchDetails = [...branch.children].find((child) => child instanceof HTMLDetailsElement);
+    const erasDetails = branch.parentElement?.closest('details');
+    if (branchDetails instanceof HTMLDetailsElement) branchDetails.open = true;
+    if (erasDetails instanceof HTMLDetailsElement) erasDetails.open = true;
+  };
+
+  sidebarEraRuntime.sync = (value) => {
+    const active = normaliseSidebarEra(value);
+
+    document.querySelectorAll('[data-era-sidebar-branch]').forEach((node) => {
+      const branchEra = normaliseSidebarEra(node.getAttribute('data-era-sidebar-branch'));
+      node.hidden = Boolean(active && branchEra !== active);
+      if (active && branchEra === active) openActiveBranch(node);
+    });
+
+    document.querySelectorAll('[data-era-sidebar-toolbar]').forEach((toolbar) => {
+      toolbar.hidden = !active;
+      const label = toolbar.querySelector('[data-era-sidebar-label]');
+      if (label) label.textContent = active ?? '';
+    });
+  };
+
+  if (!sidebarEraRuntime.bound) {
+    document.addEventListener('viscerium:era-context', (event) => {
+      sidebarEraRuntime.sync(event instanceof CustomEvent ? event.detail?.era : null);
+    });
+    document.addEventListener('astro:page-load', () => {
+      sidebarEraRuntime.sync(document.documentElement.getAttribute('data-era-context'));
+    });
+    sidebarEraRuntime.bound = true;
+  }
+
+  sidebarEraRuntime.sync(document.documentElement.getAttribute('data-era-context'));
+</script>
 
 <style>
   @layer starlight.core {
@@ -90,14 +103,9 @@ const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : u
       min-block-size: 100%;
       flex-direction: column;
     }
+    .codex-sidebar-tree,
     .codex-sidebar-main { flex: 0 0 auto; }
     .codex-sidebar-articles { margin-block-start: .35rem; }
-    .codex-sidebar-empty { padding-inline: .35rem; color: var(--sl-color-gray-3); font-size: .76rem; }
-    .codex-sidebar-era-explore { margin: 0 .2rem .4rem; }
-    .codex-sidebar-era-explore a { display: block; padding: .22rem .3rem; border-radius: .25rem; color: var(--era-link, var(--sl-color-accent-high)); font-size: .76rem; font-weight: 650; text-decoration: none; }
-    .codex-sidebar-era-explore a:hover, .codex-sidebar-era-explore a:focus-visible { background: color-mix(in oklch, var(--codex-accent) 6%, transparent); color: var(--era-link-hover, var(--sl-color-white)); }
-    .codex-sidebar-universal { margin-block-start: .5rem; padding-block-start: .4rem; border-top: 1px solid color-mix(in oklch, var(--codex-border) 72%, transparent); }
-    .codex-sidebar-universal__label { margin: 0 .3rem .25rem; color: var(--sl-color-gray-3); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
     .codex-changelog-sidebar {
       margin-block-start: .35rem;
       padding: .35rem 0 0;

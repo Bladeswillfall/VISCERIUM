@@ -98,47 +98,47 @@ test.describe('mobile era context', () => {
     expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
   });
 
-  test('remembered era keeps non-era routes inside the same scoped sidebar', async ({ page }) => {
+  test('remembered era hides only its three sibling era branches', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
     await expect(page.locator('html')).toHaveAttribute('data-era-context', 'CITADEL');
 
     await page.goto(`${preview}/calendar/okse/`, { waitUntil: 'networkidle' });
     await expect(page.locator('html')).toHaveAttribute('data-era-context', 'CITADEL');
-    await expect(page.locator('.codex-sidebar-global')).toHaveAttribute('hidden', '');
 
-    const activeScopes = await page.locator('.codex-sidebar-era-scope').evaluateAll((nodes) =>
-      nodes
-        .filter((node) => !node.hasAttribute('hidden'))
-        .map((node) => node.getAttribute('data-era-sidebar'))
+    const branchState = await page.locator('[data-era-sidebar-branch]').evaluateAll((nodes) =>
+      nodes.map((node) => ({
+        era: node.getAttribute('data-era-sidebar-branch'),
+        hidden: node.hasAttribute('hidden'),
+      }))
     );
-    expect(activeScopes).toEqual(['CITADEL']);
+
+    expect(branchState.filter((branch) => branch.era === 'CITADEL').every((branch) => !branch.hidden)).toBe(true);
+    expect(branchState.filter((branch) => branch.era !== 'CITADEL').every((branch) => branch.hidden)).toBe(true);
+    await expect(page.locator('.codex-sidebar-tree')).toBeAttached();
   });
 
-  test('sidebar exposes the active era plus Universal content and can exit back to the all-era Codex', async ({ page }) => {
+  test('sidebar keeps Universal content in place and hides only inactive eras', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
-
-    const initialScopes = await page.locator('.codex-sidebar-era-scope').evaluateAll((nodes) =>
-      nodes
-        .filter((node) => !node.hasAttribute('hidden'))
-        .map((node) => node.getAttribute('data-era-sidebar'))
-    );
-    expect(initialScopes).toEqual(['CITADEL']);
-    await expect(page.locator('.codex-sidebar-global')).toHaveAttribute('hidden', '');
 
     const menuButton = page.locator('.sidebar > starlight-menu-button button');
     await expect(menuButton).toBeVisible();
     await menuButton.click();
 
-    const citadelScope = page.locator('.codex-sidebar-era-scope[data-era-sidebar="CITADEL"]');
-    await expect(citadelScope).toBeVisible();
-    await expect(page.locator('.codex-sidebar-global')).toBeHidden();
-    await expect(page.locator('.codex-sidebar-era-scope[data-era-sidebar="SMOG"]')).toBeHidden();
-    await expect(page.locator('.codex-sidebar-era-scope[data-era-sidebar="NEARSIGHT"]')).toBeHidden();
-    await expect(page.locator('.codex-sidebar-era-scope[data-era-sidebar="ENTROPY"]')).toBeHidden();
-    await expect(citadelScope.getByText('Relationships', { exact: true })).toBeVisible();
-    await expect(citadelScope.locator('.codex-sidebar-universal__label')).toHaveText('Universal');
+    const tree = page.locator('.codex-sidebar-tree');
+    await expect(tree).toBeVisible();
+    await expect(page.locator('[data-era-sidebar-toolbar]')).toBeVisible();
+    await expect(page.locator('[data-era-sidebar-label]')).toHaveText('CITADEL');
 
-    const degelGroup = citadelScope
+    const branchState = await page.locator('[data-era-sidebar-branch]').evaluateAll((nodes) =>
+      nodes.map((node) => ({
+        era: node.getAttribute('data-era-sidebar-branch'),
+        hidden: node.hasAttribute('hidden'),
+      }))
+    );
+    expect(branchState.filter((branch) => branch.era === 'CITADEL').every((branch) => !branch.hidden)).toBe(true);
+    expect(branchState.filter((branch) => branch.era !== 'CITADEL').every((branch) => branch.hidden)).toBe(true);
+
+    const degelGroup = tree
       .locator('details.ion-expandable-group')
       .filter({ hasText: 'Degel System' })
       .first();
@@ -147,10 +147,10 @@ test.describe('mobile era context', () => {
       await degelGroup.locator(':scope > summary').click();
     }
 
-    await expect(citadelScope.getByRole('link', { name: 'Errack', exact: true })).toHaveAttribute('href', '/degel-system/errack/');
-    await expect(citadelScope.locator('[data-era-exit]')).toBeVisible();
+    await expect(tree.getByRole('link', { name: 'Errack', exact: true })).toHaveAttribute('href', '/degel-system/errack/');
+    await expect(page.locator('.codex-sidebar-universal__label')).toHaveCount(0);
 
-    await citadelScope.locator('[data-era-exit]').click();
+    await page.locator('[data-era-sidebar-toolbar] [data-era-exit]').click();
     await page.waitForURL(/\/$/);
     await expect(page.locator('html')).not.toHaveAttribute('data-era-context');
   });

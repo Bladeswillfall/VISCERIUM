@@ -1,6 +1,7 @@
 ---
 import { Badge } from '@astrojs/starlight/components';
-import { parseIconLabel } from '../lib/icon-spec.mjs';
+import { sidebarIconForLabel } from '../config/sidebar-taxonomy.mjs';
+import { parseIconLabel, parseIconSpec } from '../lib/icon-spec.mjs';
 import LocalIcon from './LocalIcon.astro';
 
 interface Props {
@@ -13,11 +14,25 @@ const { sublist, nested = false } = Astro.props;
 
 <ul class:list={{ 'top-level': !nested }}>
   {sublist.map((entry) => {
-    const { icon, label } = parseIconLabel(entry.label);
-    const { class: entryClass, ...attrs } = entry.attrs ?? {};
+    const parsed = parseIconLabel(entry.label);
+    const {
+      'data-sidebar-icon': attributeIcon,
+      class: entryClass,
+      ...attrs
+    } = entry.attrs ?? {};
+    const inferredIcon = sidebarIconForLabel(parsed.label);
+    const icon = parseIconSpec(attributeIcon)?.spec
+      ?? parsed.icon
+      ?? parseIconSpec(inferredIcon)?.spec;
+    const label = parsed.label;
+    const emptyGroup = entry.type === 'group' && (entry.entries?.length ?? 0) === 0;
 
     return (
-      <li class:list={{ active: entry.type === 'link' && entry.isCurrent, 'has-icon': icon }}>
+      <li
+        class:list={{ active: entry.type === 'link' && entry.isCurrent, 'has-icon': icon, 'is-empty-group': emptyGroup }}
+        data-era-sidebar-branch={entry.sidebarEra}
+        hidden={entry.sidebarHidden}
+      >
         {entry.type === 'link' ? (
           <a
             href={entry.href}
@@ -29,6 +44,14 @@ const { sublist, nested = false } = Astro.props;
             <span>{label}</span>
             {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
           </a>
+        ) : emptyGroup ? (
+          <div class="empty-group" aria-label={`${label}, no published entries`} title="No published entries yet">
+            <span class="group-label">
+              {icon && <LocalIcon name={icon} />}
+              <span class="large">{label}</span>
+              {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
+            </span>
+          </div>
         ) : (
           <details
             class="ion-expandable-group"
@@ -92,7 +115,8 @@ const { sublist, nested = false } = Astro.props;
     }
 
     summary,
-    a {
+    a,
+    .empty-group {
       padding: .12rem .3rem;
       border-radius: .25rem;
       color: inherit;
@@ -113,6 +137,11 @@ const { sublist, nested = false } = Astro.props;
     a {
       display: block;
       text-decoration: none;
+    }
+
+    .empty-group {
+      color: var(--sl-color-gray-4);
+      opacity: .72;
     }
 
     a:hover,
@@ -146,7 +175,8 @@ const { sublist, nested = false } = Astro.props;
     }
 
     .top-level > li > details > summary,
-    .top-level > li > a {
+    .top-level > li > a,
+    .top-level > li > .empty-group {
       padding-block: .1rem .22rem;
       background: transparent;
       color: var(--sl-color-gray-3);
@@ -156,7 +186,12 @@ const { sublist, nested = false } = Astro.props;
       text-transform: uppercase;
     }
 
-    .top-level > li > details > summary .large {
+    .top-level > li > .empty-group {
+      color: var(--sl-color-gray-4);
+    }
+
+    .top-level > li > details > summary .large,
+    .top-level > li > .empty-group .large {
       color: inherit;
       font-size: inherit;
       font-weight: inherit;
@@ -215,7 +250,8 @@ const { sublist, nested = false } = Astro.props;
     }
 
     :global(.sidebar-content) a,
-    :global(.sidebar-content) summary {
+    :global(.sidebar-content) summary,
+    :global(.sidebar-content) .empty-group {
       border-radius: .25rem;
     }
 
