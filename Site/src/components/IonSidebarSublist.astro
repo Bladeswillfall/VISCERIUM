@@ -1,18 +1,19 @@
 ---
 import { Badge } from '@astrojs/starlight/components';
 import { sidebarIconForLabel } from '../config/sidebar-taxonomy.mjs';
+import { HISTORICAL_ERAS } from '../lib/era-context.mjs';
 import { parseIconLabel, parseIconSpec } from '../lib/icon-spec.mjs';
 import LocalIcon from './LocalIcon.astro';
 
 interface Props {
   sublist: any[];
-  nested?: boolean;
+  depth?: number;
 }
 
-const { sublist, nested = false } = Astro.props;
+const { sublist, depth = 0 } = Astro.props;
 ---
 
-<ul class:list={{ 'top-level': !nested }}>
+<ul class:list={['sidebar-list', { 'top-level': depth === 0 }]} data-sidebar-depth={depth}>
   {sublist.map((entry) => {
     const parsed = parseIconLabel(entry.label);
     const {
@@ -25,19 +26,24 @@ const { sublist, nested = false } = Astro.props;
       ?? parsed.icon
       ?? parseIconSpec(inferredIcon)?.spec;
     const label = parsed.label;
+    const labelledEra = entry.type === 'group'
+      ? HISTORICAL_ERAS.find((era) => era === label.toUpperCase())
+      : undefined;
+    const branchEra = entry.sidebarEra ?? labelledEra;
     const emptyGroup = entry.type === 'group' && (entry.entries?.length ?? 0) === 0;
 
     return (
       <li
         class:list={{ active: entry.type === 'link' && entry.isCurrent, 'has-icon': icon, 'is-empty-group': emptyGroup }}
-        data-era-sidebar-branch={entry.sidebarEra}
+        data-sidebar-row={label}
+        data-era-sidebar-branch={branchEra}
         hidden={entry.sidebarHidden}
       >
         {entry.type === 'link' ? (
           <a
             href={entry.href}
             aria-current={entry.isCurrent ? 'page' : undefined}
-            class:list={['flex-link', { individual: !nested }, entryClass]}
+            class:list={['flex-link', { individual: depth === 0 }, entryClass]}
             {...attrs}
           >
             {icon && <LocalIcon name={icon} />}
@@ -45,7 +51,12 @@ const { sublist, nested = false } = Astro.props;
             {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
           </a>
         ) : emptyGroup ? (
-          <div class="empty-group" aria-label={`${label}, no published entries`} title="No published entries yet">
+          <div
+            class="empty-group"
+            aria-disabled="true"
+            aria-label={`${label}, no published entries`}
+            title="No published entries yet"
+          >
             <span class="group-label">
               {icon && <LocalIcon name={icon} />}
               <span class="large">{label}</span>
@@ -65,7 +76,7 @@ const { sublist, nested = false } = Astro.props;
                 <span class="caret" aria-hidden="true">›</span>
               </span>
             </summary>
-            <Astro.self sublist={entry.entries} nested />
+            <Astro.self sublist={entry.entries} depth={depth + 1} />
           </details>
         )}
       </li>
@@ -73,204 +84,182 @@ const { sublist, nested = false } = Astro.props;
   })}
 </ul>
 
-<style>
-  @layer starlight.core {
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      color: var(--sl-color-gray-2);
+<style is:global>
+  .codex-sidebar-layout .sidebar-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--sl-color-gray-2);
+  }
+
+  .codex-sidebar-layout .sidebar-list li {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .codex-sidebar-layout .sidebar-list li[hidden] {
+    display: none !important;
+  }
+
+  .codex-sidebar-layout .sidebar-list ul {
+    margin-inline-start: .72rem;
+    padding-inline-start: 0;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li + li {
+    margin-block-start: .04rem;
+  }
+
+  .sidebar-content .codex-sidebar-layout .top-level > li + li {
+    margin-block-start: .28rem !important;
+  }
+
+  .codex-sidebar-layout .sidebar-list summary,
+  .codex-sidebar-layout .sidebar-list a,
+  .codex-sidebar-layout .sidebar-list .empty-group {
+    box-sizing: border-box;
+    min-block-size: 1.7rem;
+    padding: .2rem .34rem;
+    border: 0;
+    border-radius: .2rem;
+    color: inherit;
+    line-height: 1.25;
+  }
+
+  .codex-sidebar-layout .sidebar-list summary {
+    display: block;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .codex-sidebar-layout .sidebar-list summary::marker,
+  .codex-sidebar-layout .sidebar-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .codex-sidebar-layout .sidebar-list a {
+    display: block;
+    text-decoration: none;
+  }
+
+  .codex-sidebar-layout .sidebar-list .empty-group {
+    color: var(--sl-color-gray-3);
+    cursor: default;
+    opacity: .84;
+  }
+
+  .codex-sidebar-layout .sidebar-list a:hover,
+  .codex-sidebar-layout .sidebar-list a:focus-visible,
+  .codex-sidebar-layout .sidebar-list summary:hover,
+  .codex-sidebar-layout .sidebar-list summary:focus-visible {
+    background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
+    color: var(--sl-color-white);
+  }
+
+  .codex-sidebar-layout .sidebar-list .group-label,
+  .codex-sidebar-layout .sidebar-list .flex-link {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: .4rem;
+  }
+
+  .codex-sidebar-layout .sidebar-list .group-label {
+    width: 100%;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list .large {
+    min-width: 0;
+    color: inherit !important;
+    font-size: .78rem !important;
+    font-weight: 620;
+    letter-spacing: 0;
+  }
+
+  .codex-sidebar-layout .sidebar-list a {
+    font-size: .76rem;
+  }
+
+  .sidebar-content .codex-sidebar-layout .ion-expandable-group > summary {
+    margin: 0 !important;
+    padding: .2rem .34rem !important;
+    border: 0 !important;
+    border-radius: .2rem !important;
+    background: transparent !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
+  .sidebar-content .codex-sidebar-layout .top-level > li > a,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group {
+    min-block-size: 1.95rem;
+    padding: .34rem .4rem !important;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    font-size: .72rem;
+    font-weight: 720;
+    letter-spacing: .065em;
+    text-transform: uppercase;
+  }
+
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .large,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .large {
+    color: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li > .ion-expandable-group > summary {
+    min-block-size: 1.85rem;
+    padding-block: .28rem !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li > .ion-expandable-group > summary .large {
+    font-size: .81rem !important;
+    font-weight: 680;
+  }
+
+  .codex-sidebar-layout .sidebar-list .caret {
+    flex-shrink: 0;
+    margin-inline-start: auto;
+    color: var(--sl-color-gray-4);
+    opacity: .76;
+    transition: transform .16s ease, color .16s ease;
+  }
+
+  .codex-sidebar-layout .sidebar-list details[open] > summary .caret {
+    transform: rotate(90deg);
+  }
+
+  [dir='rtl'] .codex-sidebar-layout .sidebar-list .caret {
+    transform: rotate(180deg);
+  }
+
+  [dir='rtl'] .codex-sidebar-layout .sidebar-list details[open] > summary .caret {
+    transform: rotate(90deg);
+  }
+
+  .codex-sidebar-layout .sidebar-list [aria-current='page'] {
+    background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
+    box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
+    color: var(--sl-color-accent-high);
+    font-weight: 650;
+  }
+
+  .codex-sidebar-layout .sidebar-list .codex-icon {
+    width: .9rem;
+    height: .9rem;
+    opacity: .78;
+  }
+
+  @media (max-width: 49.99rem) {
+    .codex-sidebar-layout .sidebar-list ul {
+      margin-inline-start: .68rem;
     }
 
-    li {
-      margin: 0;
-      overflow-wrap: anywhere;
-    }
-
-    /*
-      Keep descendants compact and shallow. The sidebar is a reference tree rather
-      than a list of large navigation buttons, so each nesting level only needs a
-      small horizontal shift to remain legible.
-    */
-    ul ul {
-      margin-inline-start: .8rem;
-      padding-inline-start: 0;
-    }
-
-    /*
-      True top-level entries act as chapter dividers. This is deliberately limited
-      to the root of each rendered sidebar list so deeper folders retain the dense
-      tree treatment instead of turning into a stack of headings.
-    */
-    .top-level > li {
-      margin-block-start: .35rem;
-      padding-block-start: .35rem;
-      border-block-start: 1px solid color-mix(in oklch, var(--codex-border) 72%, transparent);
-    }
-
-    .top-level > li:first-child {
-      margin-block-start: 0;
-      padding-block-start: 0;
-      border-block-start: 0;
-    }
-
-    summary,
-    a,
-    .empty-group {
-      padding: .12rem .3rem;
-      border-radius: .25rem;
-      color: inherit;
-      line-height: 1.25;
-    }
-
-    summary {
-      display: block;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    summary::marker,
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    a {
-      display: block;
-      text-decoration: none;
-    }
-
-    .empty-group {
-      color: var(--sl-color-gray-4);
-      opacity: .72;
-    }
-
-    a:hover,
-    a:focus-visible,
-    summary:hover,
-    summary:focus-visible {
-      background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
-      color: var(--sl-color-white);
-    }
-
-    .group-label,
-    .flex-link {
-      display: flex;
-      min-width: 0;
-      align-items: center;
-      gap: .35rem;
-    }
-
-    .group-label {
-      width: 100%;
-    }
-
-    .large {
-      font-size: .78rem;
-      font-weight: 600;
-    }
-
-    .individual,
-    a {
-      font-size: .76rem;
-    }
-
-    .top-level > li > details > summary,
-    .top-level > li > a,
-    .top-level > li > .empty-group {
-      padding-block: .1rem .22rem;
-      background: transparent;
-      color: var(--sl-color-gray-3);
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .11em;
-      text-transform: uppercase;
-    }
-
-    .top-level > li > .empty-group {
-      color: var(--sl-color-gray-4);
-    }
-
-    .top-level > li > details > summary .large,
-    .top-level > li > .empty-group .large {
-      color: inherit;
-      font-size: inherit;
-      font-weight: inherit;
-      letter-spacing: inherit;
-      text-transform: inherit;
-    }
-
-    .top-level > li > details > summary:hover,
-    .top-level > li > details > summary:focus-visible,
-    .top-level > li > a:hover,
-    .top-level > li > a:focus-visible {
-      background: transparent;
-      color: var(--sl-color-white);
-    }
-
-    .caret {
-      flex-shrink: 0;
-      margin-inline-start: auto;
-      opacity: .72;
-      transition: transform .16s ease;
-    }
-
-    details[open] > summary .caret {
-      transform: rotate(90deg);
-    }
-
-    :global([dir='rtl']) .caret {
-      transform: rotate(180deg);
-    }
-
-    :global([dir='rtl']) details[open] > summary .caret {
-      transform: rotate(90deg);
-    }
-
-    [aria-current='page'] {
-      background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
-      box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
-      color: var(--sl-color-accent-high);
-      font-weight: 650;
-    }
-
-    /*
-      navigation.css provides broad sidebar defaults. Keep this component's denser
-      treatment authoritative without increasing selector complexity everywhere
-      above, and keep the change isolated from non-sidebar navigation controls.
-    */
-    :global(.sidebar-content) .top-level {
-      display: block;
-      gap: 0;
-    }
-
-    :global(.sidebar-content) .group-label,
-    :global(.sidebar-content) .flex-link,
-    :global(.sidebar-content) .individual {
-      gap: .35rem;
-    }
-
-    :global(.sidebar-content) a,
-    :global(.sidebar-content) summary,
-    :global(.sidebar-content) .empty-group {
-      border-radius: .25rem;
-    }
-
-    :global(.sidebar-content) a:hover,
-    :global(.sidebar-content) a:focus-visible,
-    :global(.sidebar-content) summary:hover,
-    :global(.sidebar-content) summary:focus-visible {
-      background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
-    }
-
-    :global(.sidebar-content) a[aria-current='page'],
-    :global(.sidebar-content) .active > a {
-      background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
-      box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
-    }
-
-    :global(.sidebar-content) .codex-icon {
-      width: .875rem;
-      height: .875rem;
+    .sidebar-content .codex-sidebar-layout .top-level > li + li {
+      margin-block-start: .22rem !important;
     }
   }
 </style>
