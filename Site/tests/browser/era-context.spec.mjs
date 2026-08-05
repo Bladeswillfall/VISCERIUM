@@ -157,7 +157,7 @@ test.describe('mobile era context', () => {
     await expect(page.locator('html')).not.toHaveAttribute('data-era-context');
   });
 
-  test('sidebar rows keep a compact and consistent vertical rhythm', async ({ page }) => {
+  test('sidebar uses the golden-ratio hierarchy without sacrificing touch rhythm', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
 
     const menuButton = page.locator('.sidebar > starlight-menu-button button');
@@ -166,33 +166,65 @@ test.describe('mobile era context', () => {
 
     const geometry = await page.evaluate(() => {
       const toolbar = document.querySelector('[data-era-sidebar-toolbar]');
-      const firstTopLevel = document.querySelector('[data-sidebar-row="Degel System"] > details > summary');
-      const citadel = document.querySelector('[data-era-sidebar-branch="CITADEL"]');
+      const rootRow = document.querySelector('[data-sidebar-row="Degel System"] > details > summary');
+      const rootLabel = rootRow?.querySelector('.large');
+      const eraBranch = document.querySelector('[data-era-sidebar-branch="CITADEL"]');
+      const eraRow = eraBranch?.querySelector(':scope > details > summary');
+      const eraLabel = eraRow?.querySelector('.large');
+      const categoryRow = eraBranch?.querySelector('[data-sidebar-row="Events"] > details > summary');
+      const categoryLabel = categoryRow?.querySelector('.large');
+      const leafRow = eraBranch?.querySelector('[data-sidebar-row="Overview"] > a');
+
       if (!(toolbar instanceof HTMLElement)
-        || !(firstTopLevel instanceof HTMLElement)
-        || !(citadel instanceof HTMLElement)) {
-        throw new Error('Missing sidebar rhythm fixtures');
+        || !(rootRow instanceof HTMLElement)
+        || !(rootLabel instanceof HTMLElement)
+        || !(eraBranch instanceof HTMLElement)
+        || !(eraRow instanceof HTMLElement)
+        || !(eraLabel instanceof HTMLElement)
+        || !(categoryRow instanceof HTMLElement)
+        || !(categoryLabel instanceof HTMLElement)
+        || !(leafRow instanceof HTMLElement)) {
+        throw new Error('Missing sidebar hierarchy fixtures');
       }
 
-      const rows = [...citadel.querySelectorAll(':scope > details > .sidebar-list > li')]
+      const rows = [...eraBranch.querySelectorAll(':scope > details > .sidebar-list > li')]
         .filter((row) => row instanceof HTMLElement && getComputedStyle(row).display !== 'none')
         .map((row) => row.querySelector(':scope > a, :scope > details > summary, :scope > .empty-group'))
         .filter((row) => row instanceof HTMLElement);
       const rects = rows.map((row) => row.getBoundingClientRect());
       const gaps = rects.slice(1).map((rect, index) => rect.top - rects[index].bottom);
       const heights = rects.map((rect) => rect.height);
+      const fontSize = (node) => Number.parseFloat(getComputedStyle(node).fontSize);
 
       return {
-        toolbarGap: firstTopLevel.getBoundingClientRect().top - toolbar.getBoundingClientRect().bottom,
+        toolbarGap: rootRow.getBoundingClientRect().top - toolbar.getBoundingClientRect().bottom,
         maximumRowGap: Math.max(0, ...gaps),
         minimumRowHeight: Math.min(...heights),
         maximumRowHeight: Math.max(...heights),
+        rootRowHeight: rootRow.getBoundingClientRect().height,
+        eraRowHeight: eraRow.getBoundingClientRect().height,
+        categoryRowHeight: categoryRow.getBoundingClientRect().height,
+        leafRowHeight: leafRow.getBoundingClientRect().height,
+        rootFont: fontSize(rootLabel),
+        eraFont: fontSize(eraLabel),
+        categoryFont: fontSize(categoryLabel),
+        leafFont: fontSize(leafRow),
       };
     });
 
     expect(geometry.toolbarGap).toBeLessThanOrEqual(12);
     expect(geometry.maximumRowGap).toBeLessThanOrEqual(6);
-    expect(geometry.minimumRowHeight).toBeGreaterThanOrEqual(24);
-    expect(geometry.maximumRowHeight).toBeLessThanOrEqual(38);
+    expect(geometry.minimumRowHeight).toBeGreaterThanOrEqual(40);
+    expect(geometry.maximumRowHeight).toBeLessThanOrEqual(46);
+    expect(geometry.leafRowHeight).toBeGreaterThanOrEqual(40);
+    expect(geometry.categoryRowHeight).toBeGreaterThanOrEqual(44);
+    expect(geometry.eraRowHeight).toBeGreaterThanOrEqual(46);
+    expect(geometry.rootRowHeight).toBeGreaterThanOrEqual(48);
+
+    expect(geometry.leafFont).toBeGreaterThanOrEqual(14);
+    expect(geometry.leafFont).toBeLessThanOrEqual(14.1);
+    expect(geometry.categoryFont / geometry.leafFont).toBeCloseTo(1.272, 2);
+    expect(geometry.eraFont / geometry.leafFont).toBeCloseTo(1.435, 2);
+    expect(geometry.rootFont / geometry.leafFont).toBeCloseTo(1.618, 2);
   });
 });
