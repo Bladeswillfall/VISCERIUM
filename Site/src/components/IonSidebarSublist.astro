@@ -315,14 +315,14 @@ const { sublist, depth = 0 } = Astro.props;
       letter-spacing: .025em;
     }
 
-    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .ion-expandable-group > summary,
-    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .empty-group {
-      min-block-size: var(--codex-sidebar-row-category);
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .ion-expandable-group > summary,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .empty-group {
+      min-block-size: var(--codex-sidebar-row-category) !important;
       padding: .34rem .38rem !important;
     }
 
-    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .ion-expandable-group > summary .large,
-    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .empty-group .large {
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .ion-expandable-group > summary .large,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .empty-group .large {
       font-size: var(--codex-sidebar-font-category) !important;
       font-weight: 680;
     }
