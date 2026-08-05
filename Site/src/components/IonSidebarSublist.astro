@@ -85,6 +85,20 @@ const { sublist, depth = 0 } = Astro.props;
 </ul>
 
 <style is:global>
+  .codex-sidebar-layout {
+    /* The complete hierarchy spans one golden ratio, from 14px leaves to 20px roots on desktop. */
+    --codex-sidebar-font-leaf: .875rem;
+    --codex-sidebar-font-folder: .9375rem;
+    --codex-sidebar-font-category: 1.0625rem;
+    --codex-sidebar-font-era: 1.1875rem;
+    --codex-sidebar-font-root: 1.25rem;
+    --codex-sidebar-row-leaf: 2.25rem;
+    --codex-sidebar-row-folder: 2.4rem;
+    --codex-sidebar-row-category: 2.55rem;
+    --codex-sidebar-row-era: 2.7rem;
+    --codex-sidebar-row-root: 2.85rem;
+  }
+
   .codex-sidebar-layout .sidebar-list {
     display: block !important;
     gap: 0 !important;
@@ -112,12 +126,17 @@ const { sublist, depth = 0 } = Astro.props;
   .codex-sidebar-layout .sidebar-list a,
   .codex-sidebar-layout .sidebar-list .empty-group {
     box-sizing: border-box;
-    min-block-size: 1.7rem;
-    padding: .2rem .34rem;
+    min-block-size: var(--codex-sidebar-row-leaf);
+    padding: .28rem .38rem;
     border: 0;
     border-radius: .2rem;
     color: inherit;
     line-height: 1.25;
+  }
+
+  .codex-sidebar-layout .sidebar-list summary,
+  .codex-sidebar-layout .sidebar-list .empty-group {
+    min-block-size: var(--codex-sidebar-row-folder);
   }
 
   .codex-sidebar-layout .sidebar-list summary {
@@ -133,7 +152,7 @@ const { sublist, depth = 0 } = Astro.props;
 
   .codex-sidebar-layout .sidebar-list a {
     display: block;
-    font-size: .76rem;
+    font-size: var(--codex-sidebar-font-leaf);
     text-decoration: none;
   }
 
@@ -156,7 +175,7 @@ const { sublist, depth = 0 } = Astro.props;
     display: flex;
     min-width: 0;
     align-items: center;
-    gap: .4rem;
+    gap: .46rem;
   }
 
   .codex-sidebar-layout .sidebar-list .group-label {
@@ -166,7 +185,7 @@ const { sublist, depth = 0 } = Astro.props;
   .sidebar-content .codex-sidebar-layout .sidebar-list .large {
     min-width: 0;
     color: inherit !important;
-    font-size: .78rem !important;
+    font-size: var(--codex-sidebar-font-folder) !important;
     font-weight: 620;
     letter-spacing: 0;
   }
@@ -199,8 +218,8 @@ const { sublist, depth = 0 } = Astro.props;
   }
 
   .codex-sidebar-layout .sidebar-list .codex-icon {
-    width: .9rem;
-    height: .9rem;
+    width: .95rem;
+    height: .95rem;
     opacity: .78;
   }
 
@@ -210,6 +229,19 @@ const { sublist, depth = 0 } = Astro.props;
   }
 
   @media (max-width: 49.99rem) {
+    .codex-sidebar-layout {
+      /* phi^(1/4) steps: 14, 15.8, 17.8, 20.1 and 22.65px. */
+      --codex-sidebar-font-folder: .987rem;
+      --codex-sidebar-font-category: 1.113rem;
+      --codex-sidebar-font-era: 1.255rem;
+      --codex-sidebar-font-root: 1.416rem;
+      --codex-sidebar-row-leaf: 2.5rem;
+      --codex-sidebar-row-folder: 2.625rem;
+      --codex-sidebar-row-category: 2.75rem;
+      --codex-sidebar-row-era: 2.875rem;
+      --codex-sidebar-row-root: 3rem;
+    }
+
     .codex-sidebar-layout .sidebar-list ul {
       margin-inline-start: .68rem;
     }
@@ -237,13 +269,13 @@ const { sublist, depth = 0 } = Astro.props;
     }
 
     .sidebar-content .codex-sidebar-layout .top-level > li + li {
-      margin-top: .28rem !important;
-      margin-block-start: .28rem !important;
+      margin-top: .32rem !important;
+      margin-block-start: .32rem !important;
     }
 
     .sidebar .codex-sidebar-layout .ion-expandable-group > summary {
       margin: 0 !important;
-      padding: .2rem .34rem !important;
+      padding: .28rem .38rem !important;
       border: 0 !important;
       border-block-start: 0 !important;
       border-radius: .2rem !important;
@@ -253,13 +285,13 @@ const { sublist, depth = 0 } = Astro.props;
     .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
     .sidebar-content .codex-sidebar-layout .top-level > li > a,
     .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group {
-      min-block-size: 1.95rem;
-      padding: .34rem .4rem !important;
+      min-block-size: var(--codex-sidebar-row-root);
+      padding: .42rem .42rem !important;
       background: transparent;
       color: var(--sl-color-gray-2);
-      font-size: .72rem;
+      font-size: var(--codex-sidebar-font-root);
       font-weight: 720;
-      letter-spacing: .065em;
+      letter-spacing: .05em;
       text-transform: uppercase;
     }
 
@@ -272,20 +304,65 @@ const { sublist, depth = 0 } = Astro.props;
       text-transform: inherit;
     }
 
-    .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li > .ion-expandable-group > summary {
-      min-block-size: 1.85rem;
-      padding-block: .28rem !important;
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary {
+      min-block-size: var(--codex-sidebar-row-era);
+      padding: .38rem .4rem !important;
     }
 
-    .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li > .ion-expandable-group > summary .large {
-      font-size: .81rem !important;
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .large {
+      font-size: var(--codex-sidebar-font-era) !important;
       font-weight: 680;
+      letter-spacing: .025em;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .ion-expandable-group > summary,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .empty-group {
+      min-block-size: var(--codex-sidebar-row-category);
+      padding: .34rem .38rem !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .ion-expandable-group > summary .large,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list[data-sidebar-depth='2'] > li > .empty-group .large {
+      font-size: var(--codex-sidebar-font-category) !important;
+      font-weight: 680;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li:not([data-era-sidebar-branch]) > .ion-expandable-group > summary {
+      min-block-size: var(--codex-sidebar-row-folder);
+      padding-block: .32rem !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li:not([data-era-sidebar-branch]) > .ion-expandable-group > summary .large {
+      font-size: var(--codex-sidebar-font-folder) !important;
+      font-weight: 650;
+    }
+
+    .sidebar-content .codex-sidebar-layout .top-level > li > .codex-icon,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon {
+      width: 1.15rem;
+      height: 1.15rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+      width: 1.05rem;
+      height: 1.05rem;
     }
 
     @media (max-width: 49.99rem) {
       .sidebar-content .codex-sidebar-layout .top-level > li + li {
-        margin-top: .22rem !important;
-        margin-block-start: .22rem !important;
+        margin-top: .28rem !important;
+        margin-block-start: .28rem !important;
+      }
+
+      .sidebar-content .codex-sidebar-layout .top-level > li > .codex-icon,
+      .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon {
+        width: 1.3rem;
+        height: 1.3rem;
+      }
+
+      .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+        width: 1.18rem;
+        height: 1.18rem;
       }
     }
   }
