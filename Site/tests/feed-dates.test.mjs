@@ -23,6 +23,16 @@ test('publication date is also the initial update date when no later update exis
   assert.equal(dates.updated.toISOString(), '2026-07-01T00:00:00.000Z');
 });
 
+test('public modification date cannot predate publication', () => {
+  const dates = getAuthoredFeedDates({
+    published: '2026-08-06',
+    updated: '2026-08-05',
+  });
+
+  assert.equal(dates.published.toISOString(), '2026-08-06T00:00:00.000Z');
+  assert.equal(dates.updated.toISOString(), '2026-08-06T00:00:00.000Z');
+});
+
 test('creation date is internal provenance, not a publication-date alias', () => {
   const dates = getAuthoredFeedDates({
     created: '2026-06-01',
