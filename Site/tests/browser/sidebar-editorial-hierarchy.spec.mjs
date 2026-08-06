@@ -23,8 +23,8 @@ test.describe('desktop sidebar editorial hierarchy', () => {
       const leafRow = eraBranch?.querySelector('[data-sidebar-row="Relationships"] > a');
       const leafIcon = leafRow?.querySelector('.codex-icon');
       const eraList = eraBranch?.parentElement;
-      const categoryList = categoryRow?.parentElement;
-      const leafList = categoryRow?.querySelector(':scope + *');
+      const categoryList = categoryRow?.closest('li')?.parentElement;
+      const eventList = categoryRow?.closest('details')?.querySelector(':scope > .sidebar-list');
 
       if (!(sidebar instanceof HTMLElement)
         || !(rootRow instanceof HTMLElement)
@@ -40,17 +40,13 @@ test.describe('desktop sidebar editorial hierarchy', () => {
         || !(leafRow instanceof HTMLElement)
         || !(leafIcon instanceof HTMLElement)
         || !(eraList instanceof HTMLElement)
-        || !(categoryList instanceof HTMLElement)) {
+        || !(categoryList instanceof HTMLElement)
+        || !(eventList instanceof HTMLElement)) {
         throw new Error('Missing desktop sidebar hierarchy fixtures');
       }
 
       const style = (node) => getComputedStyle(node);
       const px = (value) => Number.parseFloat(value);
-      const eventList = categoryRow.parentElement?.querySelector(':scope > details > .sidebar-list');
-
-      if (!(eventList instanceof HTMLElement)) {
-        throw new Error('Missing event article list');
-      }
 
       return {
         sidebarWidth: sidebar.getBoundingClientRect().width,
