@@ -29,6 +29,7 @@ test('frontmatter plugins separate mechanical, authorial and continuity fields',
   assert.equal(automaticRules.get('created').autoadd, false);
   assert.equal(automaticRules.get('created').no_overwrite, true);
   assert.deepEqual(automaticRules.get('updated').trigger, ['modification']);
+  assert.ok(!automaticRules.has('published'), 'publication is an editorial event and must not be inferred from file timestamps');
   for (const rule of automaticRules.values()) {
     assert.ok(rule.whererun.includes('Lore'));
     assert.ok(rule.whererun.includes('Drafts'));
@@ -55,15 +56,19 @@ test('frontmatter plugins separate mechanical, authorial and continuity fields',
   }
 });
 
-test('all note-creation templates seed guarded blank timestamps', async () => {
+test('all note-creation templates seed authoring and publication dates', async () => {
   const templates = [
     'Templates/Lore/New Lore Entity.md',
     'Templates/Databases/New Story Entity.md',
     'Templates/Databases/New Myrkild Unit.md',
+    'Templates/Lore/Article Template.md',
     'Templates/Lore/Character Template.md',
     'Templates/Lore/Faction Template.md',
     'Templates/Lore/Location Template.md',
     'Templates/Lore/Event Template.md',
+    'Templates/Lore/Species Template.md',
+    'Templates/Lore/Item Template.md',
+    'Templates/Lore/Calendar Template.md',
     'Templates/Lore/Era Template.md',
     'Templates/Publishing/Map Template.md',
     'Templates/Publishing/Image Metadata Template.md',
@@ -75,6 +80,7 @@ test('all note-creation templates seed guarded blank timestamps', async () => {
   for (const template of templates) {
     const source = await readText(template);
     assert.match(source, /created:/, `${template} must seed the guarded created property`);
+    assert.match(source, /published:/, `${template} must seed the editorial published property`);
     assert.match(source, /updated:/, `${template} must seed the automatic updated property`);
   }
 });
