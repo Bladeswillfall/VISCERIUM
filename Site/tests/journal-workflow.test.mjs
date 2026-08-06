@@ -68,7 +68,7 @@ test('Daily Activity is configured as a quiet local event ledger', async () => {
 test("Seal Today's Activity opens today's journal and delegates safely", async () => {
   const plugin = await readVaultText('.obsidian/plugins/viscerium-journal-tools/main.js');
   const manifest = await readVaultJson('.obsidian/plugins/viscerium-journal-tools/manifest.json');
-  const workflow = await readVaultText('System/SOPs/Daily Journal Workflow.md');
+  const workflow = await readVaultText('System/SOPs/015 - Daily Journal Workflow SOP.md');
 
   assert.equal(manifest.id, 'viscerium-journal-tools');
   assert.equal(manifest.version, '0.1.0');
