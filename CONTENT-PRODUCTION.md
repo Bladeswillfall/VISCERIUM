@@ -14,6 +14,16 @@ Wherever practical, we use these tools to **learn rather than outsource**: to ex
 
 That principle shapes our approach: AI may explain, suggest, and assist, but it does not own the decision, the authorship, or the consequences. Those remain human responsibilities.
 
+## Human in the loop
+
+> **The human stays in the loop.**
+>
+> However much AI enters the process, final judgment never rests with a machine alone.
+
+VISCERIUM operates on a **human-in-the-loop** basis. AI-assisted tools may explain, suggest, produce technical options, or help identify problems, but a person reviews their output and decides what is accepted, revised, or rejected.
+
+No AI system is treated as an author, editor, authority, or final decision-maker. Human judgment remains present throughout the process, and responsibility for every published or implemented result rests with the people behind VISCERIUM.
+
 ## Creative content
 
 Generative AI has not been, and will not be, used to create VISCERIUM's published creative content. All articles, stories, lore, characters, places, artwork, and other creative material are conceived and made by people.
