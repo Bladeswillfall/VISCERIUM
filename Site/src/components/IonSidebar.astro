@@ -260,6 +260,11 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
   }
 
   @media (min-width: 50rem) {
+    .sidebar-content .codex-sidebar-layout {
+      --codex-sidebar-font-category: 1rem;
+      --codex-sidebar-font-era: 1.125rem;
+    }
+
     .sidebar-content .codex-sidebar-layout .sidebar-list ul {
       margin-inline-start: .875rem;
     }
