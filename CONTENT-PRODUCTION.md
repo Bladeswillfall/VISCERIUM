@@ -4,6 +4,16 @@ VISCERIUM uses AI-assisted tools in a limited, supporting role during technical 
 
 Wherever practical, we use these tools to **learn rather than outsource**: to explain unfamiliar concepts, suggest approaches, and help us improve our own skills. Any suggestions are reviewed, tested, and adapted by a person, who remains responsible for the result.
 
+---
+
+> ### “A computer can never be held accountable, therefore a computer must never make a management decision.”
+>
+> — *IBM training manual, 1979* ([via IBM](https://www.ibm.com/think/insights/ai-decision-making-where-do-businesses-draw-the-line))
+
+---
+
+That principle shapes our approach: AI may explain, suggest, and assist, but it does not own the decision, the authorship, or the consequences. Those remain human responsibilities.
+
 ## Creative content
 
 Generative AI has not been, and will not be, used to create VISCERIUM's published creative content. All articles, stories, lore, characters, places, artwork, and other creative material are conceived and made by people.
