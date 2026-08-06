@@ -30,7 +30,8 @@
 
 - [ ] No generated `Site/src/content/docs/` files were hand-edited.
 - [ ] Public notes do not expose private lore, credentials, or unreleased spoilers.
-- [ ] New public notes include `title`, `description`, `publish`, `status`, `slug`, and `type`.
+- [ ] New public notes include `title`, `description`, `status`, and `type`; first publication uses the authored `published` date when known.
+- [ ] `created`, `published`, and `updated` follow `Vault/System/Publication Date Rules.md`; no build/Git timestamp is being used as article history.
 - [ ] Image usage, credit, rights, and replacement notes are documented where relevant.
 
 ## Risks / follow-up
