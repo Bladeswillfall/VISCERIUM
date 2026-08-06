@@ -1,0 +1,55 @@
+---
+import { getPublicationDates } from '../lib/publication-dates.mjs';
+
+const data = Astro.locals.starlightRoute.entry.data;
+const { published, updated } = getPublicationDates(data);
+const sameDay = published && updated
+  ? published.toISOString().slice(0, 10) === updated.toISOString().slice(0, 10)
+  : false;
+const formatter = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+function dateTimeValue(date) {
+  return date.toISOString().slice(0, 10);
+}
+---
+
+{(published || updated) && (
+  <p class="codex-article-dates" aria-label="Article publication dates">
+    {published && (
+      <span>
+        Published <time datetime={dateTimeValue(published)}>{formatter.format(published)}</time>
+      </span>
+    )}
+    {published && updated && !sameDay && <span aria-hidden="true">·</span>}
+    {updated && !sameDay && (
+      <span>
+        Updated <time datetime={dateTimeValue(updated)}>{formatter.format(updated)}</time>
+      </span>
+    )}
+    {!published && updated && (
+      <span>
+        Updated <time datetime={dateTimeValue(updated)}>{formatter.format(updated)}</time>
+      </span>
+    )}
+  </p>
+)}
+
+<style>
+  .codex-article-dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.35rem 0 0.8rem;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  .codex-article-dates time {
+    font-variant-numeric: tabular-nums;
+  }
+</style>
