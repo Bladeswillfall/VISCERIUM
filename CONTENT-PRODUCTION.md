@@ -1,39 +1,37 @@
 # Content & Production Statement
 
-VISCERIUM uses AI-assisted tools in a limited, supporting role during technical development. This may include help with website code, site features, troubleshooting, automation, and customising our Obsidian workspace.
+## Creative content
 
-Wherever practical, we use these tools to **learn rather than outsource**: to explain unfamiliar concepts, suggest approaches, and help us improve our own skills. Any suggestions are reviewed, tested, and adapted by a person, who remains responsible for the result.
+VISCERIUM has not used, and will not use, generative AI to create published creative content.
 
----
+People create all articles, stories, lore, characters, places, artwork, and other creative material.
+
+## Technical assistance
+
+VISCERIUM may use AI-assisted tools during technical development. Uses can include code, site features, troubleshooting, automation, and Obsidian customisation.
+
+We use these tools to learn first. They can explain concepts, compare approaches, suggest technical options, and help identify problems.
+
+## Human in the loop
 
 > ### “A computer can never be held accountable, therefore a computer must never make a management decision.”
 >
 > — *IBM training manual, 1979* ([via IBM](https://www.ibm.com/think/insights/ai-decision-making-where-do-businesses-draw-the-line))
 
----
+VISCERIUM uses a **human-in-the-loop** process.
 
-That principle shapes our approach: AI may explain, suggest, and assist, but it does not own the decision, the authorship, or the consequences. Those remain human responsibilities.
+A person reviews and tests AI-assisted output. That person decides what VISCERIUM accepts, changes, rejects, publishes, or implements.
 
-## Human in the loop
+AI-assisted tools cannot approve work, claim authorship, or make the final decision. Responsibility remains with the person who approves the result.
 
-> **The human stays in the loop.**
->
-> However much AI enters the process, final judgment never rests with a machine alone.
+## Meaning of “human-made”
 
-VISCERIUM operates on a **human-in-the-loop** basis. AI-assisted tools may explain, suggest, produce technical options, or help identify problems, but a person reviews their output and decides what is accepted, revised, or rejected.
+When VISCERIUM describes content as **human-made**, the term applies to creative and editorial work.
 
-No AI system is treated as an author, editor, authority, or final decision-maker. Human judgment remains present throughout the process, and responsibility for every published or implemented result rests with the people behind VISCERIUM.
+It does not mean that every line of code or technical process was completed without AI assistance.
 
-## Creative content
+The third-party [Human Made icon](https://hinokodo.itch.io/human-made) has its own usage conditions. VISCERIUM will use it only when the intended meaning aligns with those conditions.
 
-Generative AI has not been, and will not be, used to create VISCERIUM's published creative content. All articles, stories, lore, characters, places, artwork, and other creative material are conceived and made by people.
+Any icon or label on the VISCERIUM website will link to this statement. VISCERIUM may use **Human-created content** when that wording is clearer.
 
-## What “human-made” means here
-
-Any reference to VISCERIUM's content as **human-made** applies specifically to its creative and editorial work. It is not a claim that every line of code or every technical process was completed without AI assistance.
-
-The third-party [Human Made icon](https://hinokodo.itch.io/human-made) has its own good-faith usage conditions, and its scope may be understood more broadly than creative content alone. We will only use that icon where we are satisfied that our use respects those conditions. Otherwise, we will use a clearer label such as **Human-created content**.
-
-Any such label or icon displayed on the VISCERIUM website should link to this statement so that its meaning and scope are clear.
-
-Technology helps us build the framework; the world within it remains human.
+Technology can help build the framework. People create the world within it.
