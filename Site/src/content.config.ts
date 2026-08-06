@@ -13,6 +13,22 @@ const eraOrEras = z.union([eraValue, z.array(eraValue)]);
 const looseRecord = z.record(z.unknown());
 const optionalString = z.string().nullable().optional();
 const optionalNumber = z.number().nullable().optional();
+const navigationSchema = z.object({
+  section: z.enum([
+    'relationships',
+    'events',
+    'nations',
+    'international-groups',
+    'professions',
+    'bestiary',
+    'flora-fungi',
+    'weapons-armour',
+    'transportation',
+  ]).optional(),
+  order: z.number().int().optional(),
+  parent: z.string().optional(),
+  hidden: z.boolean().optional(),
+});
 const calendarDateSchema = z.object({
   calendar: z.string(),
   year: z.number().int(),
@@ -96,6 +112,7 @@ export const collections = {
         eraId: optionalString,
         entity_id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
         continuity: looseRecord.optional(),
+        navigation: navigationSchema.optional(),
         calendarDate: calendarDateSchema.optional(),
         calendarEndDate: calendarDateSchema.nullable().optional(),
         calendarShowcase: calendarShowcaseSchema.optional(),

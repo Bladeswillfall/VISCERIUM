@@ -2,24 +2,68 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { buildSidebar } from '../sidebar.mjs';
+import { sidebarIconForLabel } from '../src/config/sidebar-taxonomy.mjs';
+import { parseIconLabel } from '../src/lib/icon-spec.mjs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
+const labelOf = (entry) => parseIconLabel(entry?.label ?? '').label;
 
-test('sidebar lists folders before articles at every level', async () => {
-  const assertFoldersFirst = (entries) => {
-    let foundArticle = false;
+function flattenSidebar(entries) {
+  return (entries ?? []).flatMap((entry) => [
+    entry,
+    ...flattenSidebar(entry.items),
+  ]);
+}
 
-    for (const entry of entries) {
-      if (entry.items) {
-        assert.equal(foundArticle, false, `${entry.label} appears after an article`);
-        assertFoldersFirst(entry.items);
-      } else {
-        foundArticle = true;
-      }
-    }
-  };
+test('sidebar follows the canonical global and era hierarchy', async () => {
+  const sidebar = await buildSidebar();
+  const groups = sidebar.filter((entry) => Array.isArray(entry.items));
+  const groupLabels = groups.map(labelOf);
 
-  assertFoldersFirst(await buildSidebar());
+  assert.deepEqual(groupLabels.slice(0, 6), [
+    'Degel System',
+    'Eras',
+    'The Wyrd',
+    'Naranoricon',
+    'Myrkildicary',
+    'Meta Content',
+  ]);
+  assert.equal(groupLabels.includes('Explore'), false);
+
+  const degel = groups.find((entry) => labelOf(entry) === 'Degel System');
+  assert.ok(degel);
+  assert.equal(degel.items.some((entry) => labelOf(entry) === 'Atlas' && entry.link === '/maps/'), true);
+
+  const eras = groups.find((entry) => labelOf(entry) === 'Eras');
+  assert.ok(eras);
+  const eraGroups = eras.items.filter((entry) => Array.isArray(entry.items));
+  assert.deepEqual(eraGroups.slice(0, 4).map(labelOf), ['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY']);
+
+  const citadel = eraGroups.find((entry) => labelOf(entry) === 'CITADEL');
+  assert.ok(citadel);
+  assert.deepEqual(citadel.items.slice(0, 2).map(labelOf), ['Overview', 'Relationships']);
+  assert.equal(citadel.items[1].link, '/eras/citadel/relationships/');
+
+  const citadelGroups = citadel.items.filter((entry) => Array.isArray(entry.items));
+  assert.deepEqual(citadelGroups.map(labelOf), [
+    'Events',
+    'Nations',
+    'International Groups',
+    'Professions',
+    'Bestiary',
+    'Flora & Fungi',
+    'Weapons & Armour',
+    'Transportation',
+  ]);
+
+  const nations = citadelGroups.find((entry) => labelOf(entry) === 'Nations');
+  assert.ok(nations);
+  assert.equal(nations.items.some((entry) => labelOf(entry) === 'Okse Dominion'), true);
+
+  assert.equal(citadel.items[1].attrs?.['data-sidebar-icon'], 'relationships');
+  assert.equal(sidebarIconForLabel(nations.label), 'faction');
+  assert.equal(sidebarIconForLabel('Naranoricon'), 'naranor');
+  assert.equal(flattenSidebar(sidebar).some((entry) => /\[Icon:/i.test(entry.label ?? '')), false);
 });
 
 test('desktop sidebar overlay uses an explicit unlayered state', () => {
