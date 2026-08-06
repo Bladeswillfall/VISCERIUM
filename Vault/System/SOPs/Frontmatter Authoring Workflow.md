@@ -8,7 +8,9 @@ checklists:
 
 > **Next action:** Install the two community plugins, restart Obsidian, then test one new draft.
 >
-> **Result:** Mechanical metadata updates itself, common fields use controlled editors, and era continuity remains protected.
+> **Result:** Mechanical metadata updates itself, public publication dates remain deliberate, common fields use controlled editors, and era continuity remains protected.
+>
+> **Date contract:** [[Publication Date Rules]]
 
 ## Before you start
 
@@ -25,12 +27,15 @@ checklists:
 | Tool | Fields or actions it owns |
 | --- | --- |
 | Auto-Properties | `created`, `updated`, `word_count`, `open_task_count` |
+| Editorial/native Obsidian Properties | `published` on the first genuine public release |
 | Metadata Menu | `status`, `type`, `headerImage`, `decorativeImage`, `tags`, `related`, `location`, `faction`, `participants` |
 | VISCERIUM Creator Tools | `era`, `entity_id`, era editions, continuity checks, World Anvil review |
 
 Do not add `era` to Metadata Menu.
 
-> **Why:** A normal dropdown cannot enforce continuity-family collisions or the Universal-versus-historical model.
+Do not add `published` to Auto-Properties. Publication is an editorial event, not a filesystem event.
+
+> **Why:** A normal dropdown cannot enforce continuity-family collisions or the Universal-versus-historical model. Likewise, no file creation/modification trigger can reliably prove when an article first became public.
 
 ## Automatic rules
 
@@ -51,16 +56,19 @@ Do not run **Auto-Properties: Update property values for every note in vault** d
 
 ## Creation templates
 
-The supported new-note creation paths seed both blank timestamp properties:
+The supported new-note creation paths seed three blank date properties:
 
 ```yaml
 created:
+published:
 updated:
 ```
 
 This applies to general articles, characters, factions, locations, events, species, items, calendars, eras, maps, image records, timelines, Story Entities, and Myrkild Units.
 
-Do not type dates into a new note unless you are deliberately preserving a known source date.
+`created` and `updated` remain compatible with the existing Auto-Properties rules. `published` deliberately stays blank during drafting. Set it to the real first-publication date when the article first changes to `status: published` for a genuine public release.
+
+Do not type a `created` date into a new note unless you are deliberately preserving a known source date. Do not pre-fill `published` while the note is still a draft.
 
 ## Folder-aware templates
 
@@ -141,13 +149,13 @@ npm run migration:worldanvil:integrate:write
 
 The command derives a working description from existing prose when possible, reports descriptions it cannot derive, and seeds a blank `updated:` key. It excludes generated import-review tasks from candidate descriptions.
 
-The command does not add `created:` to imported notes.
+The command does not add `created:` or `published:` to imported notes.
 
-> **Why:** A migrated file's filesystem creation time normally identifies when it was exported, copied, or imported. It is not a trustworthy article creation date.
+> **Why:** A migrated file's filesystem creation time normally identifies when it was exported, copied, or imported. It is not a trustworthy article creation date or first-publication date.
 
 After you move a resolved import to its final Drafts or Lore folder, edit it once and confirm that Auto-Properties fills `updated`, `word_count`, and `open_task_count` as applicable.
 
-Add `created` manually only when you have an authoritative source creation date. Otherwise leave it absent.
+Add `created` manually only when you have an authoritative source creation date. Add `published` manually only when you have an authoritative first-publication date. Otherwise leave either field absent/blank rather than inventing history.
 
 ## Edit controlled fields
 
@@ -157,8 +165,9 @@ Add `created` manually only when you have an authoritative source creation date.
 4. Use `headerImage` to choose a file from `Assets/Images`.
 5. Use the relationship fields to choose existing character, faction, or location notes.
 6. Use **VISCERIUM Creator Tools: Set controlled era / Universal scope** for `era`.
+7. On first genuine public publication, enter `published: YYYY-MM-DD` in Obsidian Properties before or alongside changing `status` to `published`.
 
-Metadata Menu does not manage automatic, continuity, chronology, migration, route, or generated fields.
+Metadata Menu does not manage automatic, continuity, chronology, migration, route, generated, or publication-date fields.
 
 The initial `status` list contains only `draft` and `published` because those are the states currently used by the publishing workflow. Extend the list only through a deliberate schema change.
 
@@ -182,14 +191,15 @@ For each test note:
 2. Confirm that a recognised item or species subfolder filled `item_type` or `species_kind`.
 3. Confirm that a historical era in the path filled `era`.
 4. Confirm that the note remained in the folder where you created it.
-5. Confirm that the template contains blank `created:` and `updated:` properties.
+5. Confirm that the template contains blank `created:`, `published:`, and `updated:` properties.
 6. Type a short sentence.
-7. Confirm that `created`, `updated`, and `word_count` populate.
+7. Confirm that `created`, `updated`, and `word_count` populate while `published` remains blank.
 8. Add one unchecked task and confirm that `open_task_count` appears.
 9. Change `status` and `type` with Metadata Menu.
 10. Choose one `headerImage` where the template supports it.
 11. Set or change the era with VISCERIUM Creator Tools, not Metadata Menu.
-12. Close and reopen Obsidian. Confirm that the settings remain.
+12. For a disposable publication test, set `published` manually and confirm later edits change `updated` without changing `published`.
+13. Close and reopen Obsidian. Confirm that the settings remain.
 
 Then run:
 
@@ -224,4 +234,5 @@ Stop when one representative note completes the full workflow without:
 - touching `System`, `Templates`, or the World Anvil import queue during normal editing;
 - changing `era` outside Creator Tools;
 - producing repeated Git changes while the note is idle;
+- deriving `published` from a filesystem/build event;
 - failing the vault doctor or site build.
