@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: era
@@ -33,7 +34,7 @@ tags:
 related: []
 ---
 
-%% Era boundaries use the same canonical calendar engine as events. Set allowGapAfter: true only when the historical gap before the next era is intentional. eraId is not an automatic template variable: assign it deliberately before adding a generated timeline block. %%
+%% Era boundaries use the same canonical calendar engine as events. Before first publication, set published to the date this article becomes public. Set allowGapAfter: true only when the historical gap before the next era is intentional. eraId is not an automatic template variable: assign it deliberately before adding a generated timeline block. %%
 
 ## Overview
 
