@@ -39,6 +39,7 @@ Do not renumber an existing SOP to close a gap.
 | `SOP-012` | Create or revise a nation, state, dominion, kingdom, republic, or comparable polity | [[012 - Nation Article Authoring SOP]] |
 | `SOP-013` | Create or revise a city, town, village, fort, port, or other settlement | [[013 - Settlement Article Authoring SOP]] |
 | `SOP-014` | Create or revise a political character whose role affects institutions or power | [[014 - Political Character Authoring SOP]] |
+| `SOP-015` | Capture a private dated creator journal and seal the day's vault activity | [[015 - Daily Journal Workflow SOP]] |
 
 ## Verification and development tools
 

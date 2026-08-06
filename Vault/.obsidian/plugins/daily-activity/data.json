@@ -1,0 +1,52 @@
+{
+  "insertLocation": "cursor",
+  "defaultLinkStyle": "link",
+  "includeHeader": false,
+  "headerStyle": "## Files {type} on {date}",
+  "excludeCurrentNote": true,
+  "includeRegex": [],
+  "excludeRegex": [],
+  "includePaths": [],
+  "excludePaths": [
+    "Private/Journal/",
+    "Templates/",
+    "Assets/",
+    ".obsidian/",
+    ".trash/"
+  ],
+  "showFilterDialog": false,
+  "enableActivityTracking": true,
+  "trackFileCreation": true,
+  "trackFileModification": true,
+  "trackFileDeletion": true,
+  "trackFileRename": true,
+  "contentTrackingDebounceInterval": 10000,
+  "dbWriteDebounceInterval": 60000,
+  "modifyBatchingEnabled": true,
+  "modifyInactivityThreshold": 60000,
+  "modifyMaxBatchDuration": 900000,
+  "activityTrackingIncludePaths": [],
+  "activityTrackingExcludePaths": [
+    "Private/Journal/",
+    "Templates/",
+    "Assets/",
+    ".obsidian/",
+    ".trash/"
+  ],
+  "defaultExportFormat": "csv",
+  "autoExportSchedule": "never",
+  "autoExportPath": "",
+  "exportFields": [
+    "timestamp",
+    "eventType",
+    "filePath",
+    "added",
+    "removed"
+  ],
+  "enableDashboard": false,
+  "dashboardPath": "Activity Dashboard.md",
+  "autoUpdateDashboard": false,
+  "dashboardUpdateInterval": 24,
+  "useChartsPlugin": false,
+  "logLevel": 0
+}
