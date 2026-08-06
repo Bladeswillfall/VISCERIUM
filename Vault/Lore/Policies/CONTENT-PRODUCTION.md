@@ -3,7 +3,6 @@ title: Content & Production Statement
 description: "How VISCERIUM handles human-created work, generative AI, technical assistance, authorship, and accountability."
 status: published
 type: article
-icon: "fa-solid fa-hand"
 tags:
   - policy
   - authorship
