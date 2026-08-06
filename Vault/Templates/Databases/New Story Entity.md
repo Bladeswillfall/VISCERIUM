@@ -109,9 +109,14 @@ rendered = rendered.replace(/^eras:\s*\[\s*("(?:CITADEL|SMOG|NEARSIGHT|ENTROPY|U
 if (!/^created:/m.test(rendered)) {
   rendered = rendered.replace(/^(development_level:\s*[^\r\n]+)$/m, "$1\ncreated:");
 }
-if (!/^updated:/m.test(rendered)) {
+if (!/^published:/m.test(rendered)) {
   rendered = /^created:/m.test(rendered)
-    ? rendered.replace(/^(created:[^\r\n]*)$/m, "$1\nupdated:")
+    ? rendered.replace(/^(created:[^\r\n]*)$/m, "$1\npublished:")
+    : rendered.replace(/^(development_level:\s*[^\r\n]+)$/m, "$1\npublished:");
+}
+if (!/^updated:/m.test(rendered)) {
+  rendered = /^published:/m.test(rendered)
+    ? rendered.replace(/^(published:[^\r\n]*)$/m, "$1\nupdated:")
     : rendered.replace(/^(development_level:\s*[^\r\n]+)$/m, "$1\nupdated:");
 }
 if (entityId && !/^entity_id:/m.test(rendered)) {

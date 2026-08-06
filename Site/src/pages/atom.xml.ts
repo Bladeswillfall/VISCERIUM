@@ -16,8 +16,8 @@ export const GET: APIRoute = async ({ site }) => {
       const categories = [...new Set(entry.tags)]
         .map((tag) => `    <category term="${escapeXml(tag)}" />`)
         .join('\n');
-      const published = entry.created
-        ? `    <published>${entry.created.toISOString()}</published>\n`
+      const published = entry.published
+        ? `    <published>${entry.published.toISOString()}</published>\n`
         : '';
 
       return `  <entry>

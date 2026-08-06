@@ -7,6 +7,7 @@ readiness_level: publication
 # Frontmatter Publication Checklist
 
 > **Parent workflow:** [[Frontmatter Authoring Workflow]]
+> **Date contract:** [[Publication Date Rules]]
 
 ## Required identity
 
@@ -17,10 +18,12 @@ readiness_level: publication
 
 ## Dates and automatic fields
 
-- [ ] `created` is authoritative or absent.
+- [ ] `created` is authoritative or absent; it is not being used as a substitute for first publication.
+- [ ] On first genuine public release, `published` records the real first-publication date in `YYYY-MM-DD` format; otherwise it remains authoritative or intentionally blank.
+- [ ] An existing `published` date has not been reset merely because the article was revised or redeployed.
 - [ ] `updated` reflects maintained authoring activity.
 - [ ] Automatic counts were not hand-authored as canon facts.
-- [ ] A migrated note does not use its import date as a false creation date.
+- [ ] A migrated note does not use its import date as a false creation or publication date.
 
 ## Images and relationships
 
