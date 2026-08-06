@@ -10,8 +10,10 @@ export function getPublicationDates(data = {}) {
   const created = readAuthoredDate(data.created);
   const published = readAuthoredDate(data.published)
     ?? readAuthoredDate(data.date);
-  const updated = readAuthoredDate(data.updated)
-    ?? published;
+  const explicitUpdated = readAuthoredDate(data.updated);
+  const updated = published && explicitUpdated && explicitUpdated.valueOf() < published.valueOf()
+    ? published
+    : explicitUpdated ?? published;
 
   return { created, published, updated };
 }
