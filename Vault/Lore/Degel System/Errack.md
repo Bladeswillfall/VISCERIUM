@@ -29,18 +29,18 @@ sidebar:
       value: ~11.76 m/s²
     - label: Atmospheric composition
       value:
-        - 'Nitrogen (N₂): 65%'
-        - 'Oxygen (O₂): 28%'
-        - 'Carbon dioxide (CO₂): 4%'
-        - 'Argon (Ar): 2%'
-        - 'Water vapour and other elements: >1%'
+        - "Nitrogen (N₂): 65%"
+        - "Oxygen (O₂): 28%"
+        - "Carbon dioxide (CO₂): 4%"
+        - "Argon (Ar): 2%"
+        - "Water vapour and other elements: >1%"
     - label: Satellites
       value:
         - Eye of Vordr
         - Eye of Visi
     - label: Local star
       value: Degel
-      href: '[[Degel]]'
+      href: "[[Degel]]"
 ---
 Nestled in the [[Degel System/Degel|Degel system]], Errack presents a paradox: a life-sustaining planet teeming with rich plant life and biodiversity, yet a world of savage beauty and unforgiving extremes. Towering mountains pierce skies above expansive jungles teeming with both vibrant life and lurking horrors, while arid deserts push the limits of ecological adaptation. Every corner of Errack showcases nature's ingenuity and ferocity, demanding respect and resilience from all who dare to inhabit it.
 

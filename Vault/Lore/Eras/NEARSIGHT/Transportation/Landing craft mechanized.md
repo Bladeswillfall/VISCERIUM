@@ -1,16 +1,16 @@
 ---
-title: "Landing craft mechanized"
-description: "Used for transporting non-amphibious vehicles ashore."
+title: Landing craft mechanized
+description: Used for transporting non-amphibious vehicles ashore.
 updated:
-status: "draft"
-type: "article"
-development_level: "stub"
-era: "NEARSIGHT"
-import_source: "worldanvil"
-import_source_type: "Vehicle"
-import_source_file: "Vehicle-Landing craft mechanized-c0e.md"
+status: draft
+type: article
+development_level: stub
+era: NEARSIGHT
+import_source: worldanvil
+import_source_type: Vehicle
+import_source_file: Vehicle-Landing craft mechanized-c0e.md
 import_issues:
-  - "legacy-type-review"
+  - legacy-type-review
 tags:
   - NEARSIGHT
   - Transportation

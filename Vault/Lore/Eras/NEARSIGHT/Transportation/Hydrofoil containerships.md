@@ -1,16 +1,16 @@
 ---
-title: "Hydrofoil containerships"
-description: "Hydrofoil containerships"
+title: Hydrofoil containerships
+description: Hydrofoil containerships
 updated:
-status: "draft"
-type: "article"
-development_level: "stub"
-era: "NEARSIGHT"
-import_source: "worldanvil"
-import_source_type: "Vehicle"
-import_source_file: "Vehicle-Hydrofoil containerships-65b.md"
+status: draft
+type: article
+development_level: stub
+era: NEARSIGHT
+import_source: worldanvil
+import_source_type: Vehicle
+import_source_file: Vehicle-Hydrofoil containerships-65b.md
 import_issues:
-  - "legacy-type-review"
+  - legacy-type-review
 tags:
   - NEARSIGHT
   - Transportation

@@ -1,14 +1,14 @@
 ---
-title: "Genetic Enhancement for National Empowerment"
-description: "As many Trans-Continental Socialist Confederation (TCSC) nations embraced socialist principles, the GENE program emerged as a cornerstone of their collective approach to societal progress."
+title: Genetic Enhancement for National Empowerment
+description: As many Trans-Continental Socialist Confederation (TCSC) nations embraced socialist principles, the GENE program emerged as a cornerstone of their collective approach to societal progress.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "NEARSIGHT"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Genetic Enhancement for National Empowerment-66c.md"
+status: draft
+type: faction
+development_level: stub
+era: NEARSIGHT
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Genetic Enhancement for National Empowerment-66c.md
 tags:
   - NEARSIGHT
   - Factions

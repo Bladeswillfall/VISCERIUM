@@ -11,24 +11,25 @@ sidebar:
       fields:
         - label: Succeeded by
           value: Popular Consortium Party
-          href: '[[Popular Consortium Party]]'
-title: "Trans-Continental Socialist Confederation"
-description: "The Trans-Continental Socialist Confederation, often referred to as the TCSC or just \"the Confederation\" is a cross-continental political and economical aliance of socialist nations."
-updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "NEARSIGHT"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Trans-Continental Socialist Confederation-148.md"
+          href: "[[Popular Consortium Party]]"
+title: Trans-Continental Socialist Confederation
+description: The Trans-Continental Socialist Confederation, often referred to as the TCSC or just "the Confederation" is a cross-continental political and economical aliance of socialist nations.
+updated: 2026-08-06
+status: draft
+type: faction
+development_level: stub
+era: NEARSIGHT
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Trans-Continental Socialist Confederation-148.md
 import_issues:
-  - "relationship-review"
-  - "missing-inline-assets"
+  - relationship-review
+  - missing-inline-assets
 tags:
   - NEARSIGHT
   - Factions
-  - Nations
+word_count: 791
+open_task_count: 2
 ---
 > Progressus per unitatem, unitatem per aequitatem  
 > _Translated: Progress through unity, unity through equity_
