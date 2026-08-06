@@ -73,6 +73,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Metadata Menu](https://community.obsidian.md/plugins/metadata-menu) | mdelobelle | MIT |
 | [MySnippets](https://community.obsidian.md/plugins/mysnippets-plugin) | Chetachi; compatibility work also credits Moyf | MPL-2.0 |
 | [StoryLine](https://community.obsidian.md/plugins/storyline) | Jan Sandström | MIT |
+| [Daily Activity](https://community.obsidian.md/plugins/daily-activity) | Trevor Rydalch / trydalch | No licence file published upstream; runtime is installed separately and is not redistributed here |
 | [Iconic](https://community.obsidian.md/plugins/iconic) | Holo / gfxholo | MIT-0; bundled icon and Unicode resources have separate notices upstream |
 | [TTRPG Tools - Maps](https://community.obsidian.md/plugins/zoom-map) | Johannes Schwartz / Jareika | MIT |
 | [Advanced Tables](https://community.obsidian.md/plugins/table-editor-obsidian) | Tony Grosinger | GPL-3.0 |
@@ -106,8 +107,9 @@ The following original VISCERIUM plugin code is licensed under `LICENSE-CODE.md`
 
 - VISCERIUM Timelines;
 - VISCERIUM Creator Tools;
-- VISCERIUM Layout Tools; and
-- VISCERIUM Image Tools, where original source or runtime files are present.
+- VISCERIUM Layout Tools;
+- VISCERIUM Image Tools, where original source or runtime files are present; and
+- VISCERIUM Journal Tools.
 
 These plugins use the Obsidian API under its MIT licence. The first-party MIT licence does not grant rights to VISCERIUM Lore or creative assets processed by those plugins.
 
