@@ -40,12 +40,12 @@
     "test": "npm run doctor:vault && npm run rights:check && npm run test:unit && npm run build"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "7.2.1",
+    "@astrojs/markdown-remark": "7.2.2",
     "@astrojs/mdx": "^7.0.3",
     "@astrojs/partytown": "^2.1.7",
     "@astrojs/sitemap": "3.7.3",
-    "@astrojs/starlight": "^0.41.3",
-    "astro": "^7.1.1",
+    "@astrojs/starlight": "^0.41.6",
+    "astro": "^7.1.6",
     "chronos-timeline-md": "1.1.0",
     "cytoscape": "3.34.0",
     "cytoscape-dagre": "4.0.0",
