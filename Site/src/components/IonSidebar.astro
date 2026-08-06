@@ -231,3 +231,98 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
     }
   }
 </style>
+
+<style is:global>
+  /* Editorial hierarchy: Cinzel marks world-scale chapters and historical eras;
+     UI sans remains reserved for categories, folders, and article destinations. */
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
+  .sidebar-content .codex-sidebar-layout .top-level > li > a,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group,
+  .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary {
+    font-family: var(--vc-font-display);
+    font-weight: 400 !important;
+    font-synthesis-weight: none;
+  }
+
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .large,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .large,
+  .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary .large {
+    font-family: inherit;
+    font-weight: inherit !important;
+    font-synthesis-weight: none;
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary,
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .large {
+    font-family: var(--vc-font-display);
+    font-weight: 400 !important;
+    font-synthesis-weight: none;
+  }
+
+  @media (min-width: 50rem) {
+    .sidebar-content .codex-sidebar-layout .sidebar-list ul {
+      margin-inline-start: .875rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .large {
+      font-size: 1.125rem !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .ion-expandable-group > summary .large,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .empty-group .large {
+      font-size: 1rem !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .sidebar-list .empty-group .codex-icon {
+      width: 1.0625rem;
+      height: 1.0625rem;
+      opacity: .9;
+    }
+
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .codex-icon,
+    .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary .codex-icon {
+      width: 1.1875rem;
+      height: 1.1875rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list a .codex-icon {
+      width: .875rem;
+      height: .875rem;
+      opacity: .78;
+    }
+  }
+
+  @media (max-width: 49.99rem) {
+    .sidebar-content .codex-sidebar-layout .sidebar-list summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .sidebar-list .empty-group .codex-icon {
+      width: 1.0625rem;
+      height: 1.0625rem;
+      opacity: .9;
+    }
+
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .codex-icon,
+    .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary .codex-icon {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+      width: 1.18rem;
+      height: 1.18rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list a .codex-icon {
+      width: .875rem;
+      height: .875rem;
+      opacity: .78;
+    }
+  }
+</style>
