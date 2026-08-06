@@ -1,34 +1,68 @@
 ---
 import { Badge } from '@astrojs/starlight/components';
-import { parseIconLabel } from '../lib/icon-spec.mjs';
+import { sidebarIconForLabel } from '../config/sidebar-taxonomy.mjs';
+import { HISTORICAL_ERAS } from '../lib/era-context.mjs';
+import { parseIconLabel, parseIconSpec } from '../lib/icon-spec.mjs';
 import LocalIcon from './LocalIcon.astro';
 
 interface Props {
   sublist: any[];
-  nested?: boolean;
+  depth?: number;
 }
 
-const { sublist, nested = false } = Astro.props;
+const { sublist, depth = 0 } = Astro.props;
 ---
 
-<ul class:list={{ 'top-level': !nested }}>
+<ul class:list={['sidebar-list', { 'top-level': depth === 0 }]} data-sidebar-depth={depth}>
   {sublist.map((entry) => {
-    const { icon, label } = parseIconLabel(entry.label);
-    const { class: entryClass, ...attrs } = entry.attrs ?? {};
+    const parsed = parseIconLabel(entry.label);
+    const {
+      'data-sidebar-icon': attributeIcon,
+      class: entryClass,
+      ...attrs
+    } = entry.attrs ?? {};
+    const inferredIcon = sidebarIconForLabel(parsed.label);
+    const icon = parseIconSpec(attributeIcon)?.spec
+      ?? parsed.icon
+      ?? parseIconSpec(inferredIcon)?.spec;
+    const label = parsed.label;
+    const labelledEra = entry.type === 'group'
+      ? HISTORICAL_ERAS.find((era) => era === label.toUpperCase())
+      : undefined;
+    const branchEra = entry.sidebarEra ?? labelledEra;
+    const emptyGroup = entry.type === 'group' && (entry.entries?.length ?? 0) === 0;
 
     return (
-      <li class:list={{ active: entry.type === 'link' && entry.isCurrent, 'has-icon': icon }}>
+      <li
+        class:list={{ active: entry.type === 'link' && entry.isCurrent, 'has-icon': icon, 'is-empty-group': emptyGroup }}
+        data-sidebar-row={label}
+        data-era-sidebar-branch={branchEra}
+        hidden={entry.sidebarHidden}
+      >
         {entry.type === 'link' ? (
           <a
             href={entry.href}
             aria-current={entry.isCurrent ? 'page' : undefined}
-            class:list={['flex-link', { individual: !nested }, entryClass]}
+            class:list={['flex-link', { individual: depth === 0 }, entryClass]}
             {...attrs}
           >
             {icon && <LocalIcon name={icon} />}
             <span>{label}</span>
             {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
           </a>
+        ) : emptyGroup ? (
+          <div
+            class="empty-group"
+            aria-disabled="true"
+            aria-label={`${label}, no published entries`}
+            title="No published entries yet"
+          >
+            <span class="group-label">
+              {icon && <LocalIcon name={icon} />}
+              <span class="large">{label}</span>
+              {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
+            </span>
+          </div>
         ) : (
           <details
             class="ion-expandable-group"
@@ -42,7 +76,7 @@ const { sublist, nested = false } = Astro.props;
                 <span class="caret" aria-hidden="true">›</span>
               </span>
             </summary>
-            <Astro.self sublist={entry.entries} nested />
+            <Astro.self sublist={entry.entries} depth={depth + 1} />
           </details>
         )}
       </li>
@@ -50,191 +84,286 @@ const { sublist, nested = false } = Astro.props;
   })}
 </ul>
 
-<style>
+<style is:global>
+  .codex-sidebar-layout {
+    /* The complete hierarchy spans one golden ratio, from 14px leaves to 20px roots on desktop. */
+    --codex-sidebar-font-leaf: .875rem;
+    --codex-sidebar-font-folder: .9375rem;
+    --codex-sidebar-font-category: 1.0625rem;
+    --codex-sidebar-font-era: 1.1875rem;
+    --codex-sidebar-font-root: 1.25rem;
+    --codex-sidebar-row-leaf: 2.25rem;
+    --codex-sidebar-row-folder: 2.4rem;
+    --codex-sidebar-row-category: 2.55rem;
+    --codex-sidebar-row-era: 2.7rem;
+    --codex-sidebar-row-root: 2.85rem;
+  }
+
+  .codex-sidebar-layout .sidebar-list {
+    display: block !important;
+    gap: 0 !important;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--sl-color-gray-2);
+  }
+
+  .codex-sidebar-layout .sidebar-list li {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .codex-sidebar-layout .sidebar-list li[hidden] {
+    display: none !important;
+  }
+
+  .codex-sidebar-layout .sidebar-list ul {
+    margin-inline-start: .72rem;
+    padding-inline-start: 0;
+  }
+
+  .codex-sidebar-layout .sidebar-list summary,
+  .codex-sidebar-layout .sidebar-list a,
+  .codex-sidebar-layout .sidebar-list .empty-group {
+    box-sizing: border-box;
+    min-block-size: var(--codex-sidebar-row-leaf);
+    padding: .28rem .38rem;
+    border: 0;
+    border-radius: .2rem;
+    color: inherit;
+    line-height: 1.25;
+  }
+
+  .codex-sidebar-layout .sidebar-list summary,
+  .codex-sidebar-layout .sidebar-list .empty-group {
+    min-block-size: var(--codex-sidebar-row-folder);
+  }
+
+  .codex-sidebar-layout .sidebar-list summary {
+    display: block;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .codex-sidebar-layout .sidebar-list summary::marker,
+  .codex-sidebar-layout .sidebar-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .codex-sidebar-layout .sidebar-list a {
+    display: block;
+    font-size: var(--codex-sidebar-font-leaf);
+    text-decoration: none;
+  }
+
+  .codex-sidebar-layout .sidebar-list .empty-group {
+    color: var(--sl-color-gray-3);
+    cursor: default;
+    opacity: .84;
+  }
+
+  .codex-sidebar-layout .sidebar-list a:hover,
+  .codex-sidebar-layout .sidebar-list a:focus-visible,
+  .codex-sidebar-layout .sidebar-list summary:hover,
+  .codex-sidebar-layout .sidebar-list summary:focus-visible {
+    background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
+    color: var(--sl-color-white);
+  }
+
+  .codex-sidebar-layout .sidebar-list .group-label,
+  .codex-sidebar-layout .sidebar-list .flex-link {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: .46rem;
+  }
+
+  .codex-sidebar-layout .sidebar-list .group-label {
+    width: 100%;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list .large {
+    min-width: 0;
+    color: inherit !important;
+    font-size: var(--codex-sidebar-font-folder) !important;
+    font-weight: 620;
+    letter-spacing: 0;
+  }
+
+  .codex-sidebar-layout .sidebar-list .caret {
+    flex-shrink: 0;
+    margin-inline-start: auto;
+    color: var(--sl-color-gray-4);
+    opacity: .76;
+    transition: transform .16s ease, color .16s ease;
+  }
+
+  .codex-sidebar-layout .sidebar-list details[open] > summary .caret {
+    transform: rotate(90deg);
+  }
+
+  [dir='rtl'] .codex-sidebar-layout .sidebar-list .caret {
+    transform: rotate(180deg);
+  }
+
+  [dir='rtl'] .codex-sidebar-layout .sidebar-list details[open] > summary .caret {
+    transform: rotate(90deg);
+  }
+
+  .codex-sidebar-layout .sidebar-list [aria-current='page'] {
+    background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
+    box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
+    color: var(--sl-color-accent-high);
+    font-weight: 650;
+  }
+
+  .codex-sidebar-layout .sidebar-list .codex-icon {
+    width: .95rem;
+    height: .95rem;
+    opacity: .78;
+  }
+
+  .sidebar-content .codex-sidebar-layout a:hover .codex-icon,
+  .sidebar-content .codex-sidebar-layout summary:hover .codex-icon {
+    transform: none;
+  }
+
+  @media (max-width: 49.99rem) {
+    .codex-sidebar-layout {
+      /* phi^(1/4) steps: 14, 15.8, 17.8, 20.1 and 22.65px. */
+      --codex-sidebar-font-folder: .987rem;
+      --codex-sidebar-font-category: 1.113rem;
+      --codex-sidebar-font-era: 1.255rem;
+      --codex-sidebar-font-root: 1.416rem;
+      --codex-sidebar-row-leaf: 2.5rem;
+      --codex-sidebar-row-folder: 2.625rem;
+      --codex-sidebar-row-category: 2.75rem;
+      --codex-sidebar-row-era: 2.875rem;
+      --codex-sidebar-row-root: 3rem;
+    }
+
+    .codex-sidebar-layout .sidebar-list ul {
+      margin-inline-start: .68rem;
+    }
+  }
+</style>
+
+<style is:global>
   @layer starlight.core {
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      color: var(--sl-color-gray-2);
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li,
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li > details,
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li > a,
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li > .empty-group {
+      margin-block: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
     }
 
-    li {
-      margin: 0;
-      overflow-wrap: anywhere;
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li > details {
+      padding-block: 0 !important;
     }
 
-    /*
-      Keep descendants compact and shallow. The sidebar is a reference tree rather
-      than a list of large navigation buttons, so each nesting level only needs a
-      small horizontal shift to remain legible.
-    */
-    ul ul {
-      margin-inline-start: .8rem;
-      padding-inline-start: 0;
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li + li {
+      margin-top: .04rem !important;
+      margin-block-start: .04rem !important;
     }
 
-    /*
-      True top-level entries act as chapter dividers. This is deliberately limited
-      to the root of each rendered sidebar list so deeper folders retain the dense
-      tree treatment instead of turning into a stack of headings.
-    */
-    .top-level > li {
-      margin-block-start: .35rem;
-      padding-block-start: .35rem;
-      border-block-start: 1px solid color-mix(in oklch, var(--codex-border) 72%, transparent);
+    .sidebar-content .codex-sidebar-layout .top-level > li + li {
+      margin-top: .32rem !important;
+      margin-block-start: .32rem !important;
     }
 
-    .top-level > li:first-child {
-      margin-block-start: 0;
-      padding-block-start: 0;
-      border-block-start: 0;
+    .sidebar .codex-sidebar-layout .ion-expandable-group > summary {
+      margin: 0 !important;
+      padding: .28rem .38rem !important;
+      border: 0 !important;
+      border-block-start: 0 !important;
+      border-radius: .2rem !important;
+      background: transparent !important;
     }
 
-    summary,
-    a {
-      padding: .12rem .3rem;
-      border-radius: .25rem;
-      color: inherit;
-      line-height: 1.25;
-    }
-
-    summary {
-      display: block;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    summary::marker,
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    a {
-      display: block;
-      text-decoration: none;
-    }
-
-    a:hover,
-    a:focus-visible,
-    summary:hover,
-    summary:focus-visible {
-      background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
-      color: var(--sl-color-white);
-    }
-
-    .group-label,
-    .flex-link {
-      display: flex;
-      min-width: 0;
-      align-items: center;
-      gap: .35rem;
-    }
-
-    .group-label {
-      width: 100%;
-    }
-
-    .large {
-      font-size: .78rem;
-      font-weight: 600;
-    }
-
-    .individual,
-    a {
-      font-size: .76rem;
-    }
-
-    .top-level > li > details > summary,
-    .top-level > li > a {
-      padding-block: .1rem .22rem;
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
+    .sidebar-content .codex-sidebar-layout .top-level > li > a,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group {
+      min-block-size: var(--codex-sidebar-row-root);
+      padding: .42rem .42rem !important;
       background: transparent;
-      color: var(--sl-color-gray-3);
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .11em;
+      color: var(--sl-color-gray-2);
+      font-size: var(--codex-sidebar-font-root);
+      font-weight: 720;
+      letter-spacing: .05em;
       text-transform: uppercase;
     }
 
-    .top-level > li > details > summary .large {
-      color: inherit;
-      font-size: inherit;
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .large,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .large {
+      color: inherit !important;
+      font-size: inherit !important;
       font-weight: inherit;
       letter-spacing: inherit;
       text-transform: inherit;
     }
 
-    .top-level > li > details > summary:hover,
-    .top-level > li > details > summary:focus-visible,
-    .top-level > li > a:hover,
-    .top-level > li > a:focus-visible {
-      background: transparent;
-      color: var(--sl-color-white);
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary {
+      min-block-size: var(--codex-sidebar-row-era);
+      padding: .38rem .4rem !important;
     }
 
-    .caret {
-      flex-shrink: 0;
-      margin-inline-start: auto;
-      opacity: .72;
-      transition: transform .16s ease;
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .large {
+      font-size: var(--codex-sidebar-font-era) !important;
+      font-weight: 680;
+      letter-spacing: .025em;
     }
 
-    details[open] > summary .caret {
-      transform: rotate(90deg);
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .ion-expandable-group > summary,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .empty-group {
+      min-block-size: var(--codex-sidebar-row-category) !important;
+      padding: .34rem .38rem !important;
     }
 
-    :global([dir='rtl']) .caret {
-      transform: rotate(180deg);
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .ion-expandable-group > summary .large,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .empty-group .large {
+      font-size: var(--codex-sidebar-font-category) !important;
+      font-weight: 680;
     }
 
-    :global([dir='rtl']) details[open] > summary .caret {
-      transform: rotate(90deg);
+    .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li:not([data-era-sidebar-branch]) > .ion-expandable-group > summary {
+      min-block-size: var(--codex-sidebar-row-folder);
+      padding-block: .32rem !important;
     }
 
-    [aria-current='page'] {
-      background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
-      box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
-      color: var(--sl-color-accent-high);
+    .sidebar-content .codex-sidebar-layout .sidebar-list[data-sidebar-depth='1'] > li:not([data-era-sidebar-branch]) > .ion-expandable-group > summary .large {
+      font-size: var(--codex-sidebar-font-folder) !important;
       font-weight: 650;
     }
 
-    /*
-      navigation.css provides broad sidebar defaults. Keep this component's denser
-      treatment authoritative without increasing selector complexity everywhere
-      above, and keep the change isolated from non-sidebar navigation controls.
-    */
-    :global(.sidebar-content) .top-level {
-      display: block;
-      gap: 0;
+    .sidebar-content .codex-sidebar-layout .top-level > li > .codex-icon,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon {
+      width: 1.15rem;
+      height: 1.15rem;
     }
 
-    :global(.sidebar-content) .group-label,
-    :global(.sidebar-content) .flex-link,
-    :global(.sidebar-content) .individual {
-      gap: .35rem;
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+      width: 1.05rem;
+      height: 1.05rem;
     }
 
-    :global(.sidebar-content) a,
-    :global(.sidebar-content) summary {
-      border-radius: .25rem;
-    }
+    @media (max-width: 49.99rem) {
+      .sidebar-content .codex-sidebar-layout .top-level > li + li {
+        margin-top: .28rem !important;
+        margin-block-start: .28rem !important;
+      }
 
-    :global(.sidebar-content) a:hover,
-    :global(.sidebar-content) a:focus-visible,
-    :global(.sidebar-content) summary:hover,
-    :global(.sidebar-content) summary:focus-visible {
-      background: color-mix(in oklch, var(--codex-accent) 6%, transparent);
-    }
+      .sidebar-content .codex-sidebar-layout .top-level > li > .codex-icon,
+      .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon {
+        width: 1.3rem;
+        height: 1.3rem;
+      }
 
-    :global(.sidebar-content) a[aria-current='page'],
-    :global(.sidebar-content) .active > a {
-      background: color-mix(in oklch, var(--codex-accent) 8%, transparent);
-      box-shadow: inset 2px 0 0 var(--sl-color-accent-high);
-    }
-
-    :global(.sidebar-content) .codex-icon {
-      width: .875rem;
-      height: .875rem;
+      .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+        width: 1.18rem;
+        height: 1.18rem;
+      }
     }
   }
 </style>

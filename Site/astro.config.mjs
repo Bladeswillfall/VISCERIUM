@@ -193,17 +193,9 @@ const searchVerificationHead = siteConfig.searchVerification?.google
 const { enabled: giscusEnabled, ...giscusConfig } = siteConfig.giscus;
 
 const sidebar = [
-  {
-    label: '[map] Explore',
-    collapsed: false,
-    items: [
-      { label: '[map] Atlas', link: '/maps/' },
-      { label: '[faction] Relationships', link: '/relationships/' },
-    ],
-  },
   ...(await buildSidebar()),
   {
-    label: '[event] Releases',
+    label: 'Releases',
     collapsed: false,
     items: [
       ...makeChangelogsSidebarLinks([
