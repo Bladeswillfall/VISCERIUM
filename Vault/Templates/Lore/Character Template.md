@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: character
@@ -25,7 +26,7 @@ relationships:
 related: []
 ---
 
-%% Before publishing: write a reader-safe description, establish the relevant era/context, and remove anything that should remain secret. Optional image fields are publishing metadata; leave them blank until useful. %%
+%% Before publishing: write a reader-safe description, establish the relevant era/context, set published to the date this article first becomes public, and remove anything that should remain secret. Optional image fields are publishing metadata; leave them blank until useful. %%
 
 ## Summary
 
