@@ -17,5 +17,6 @@
   "baseline-style@@nav-indentation-guide-color": "rgba(var(--mono-rgb-100), 0.12)",
   "baseline-style@@colorful-frame": false,
   "baseline-style@@focus-view": false,
-  "baseline-style@@banner-off": false
+  "baseline-style@@banner-off": false,
+  "baseline-style@@background-secondary@@dark": "#050505"
 }

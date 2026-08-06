@@ -2,44 +2,44 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Geopolitical, Kingdom"
+    - label: Type
+      value: Geopolitical, Kingdom
   sections:
-    - title: "Details"
+    - title: Details
       fields:
-        - label: "Demonym"
-          value: "Krassian"
-        - label: "Sister Nation"
-          value: "Okse Dominion"
-          href: "/w/viscerium/a/okse-dominion-article"
-        - label: "Rulers (current)"
-          value: "Kónungsdóttir - Lilja Ulfrikdottir"
-        - label: "Rulers (deceased)"
-          value: "Kóngr Eilífr - Torrad Uxifadir"
-    - title: "Places of note"
+        - label: Demonym
+          value: Krassian
+        - label: Sister Nation
+          value: Okse Dominion
+          href: /w/viscerium/a/okse-dominion-article
+        - label: Rulers (current)
+          value: Kónungsdóttir - Lilja Ulfrikdottir
+        - label: Rulers (deceased)
+          value: Kóngr Eilífr - Torrad Uxifadir
+    - title: Places of note
       items:
-        - "Capital City - Kemsvall"
-        - "City - Umestad"
-        - "City - Falsund"
-        - "City - Raumavall"
-title: "Krass Dominion"
-description: "The Krass Dominion is a land where the air itself conspires against life."
+        - Capital City - Kemsvall
+        - City - Umestad
+        - City - Falsund
+        - City - Raumavall
+title: Krass Dominion
+description: The Krass Dominion is a land where the air itself conspires against life.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "CITADEL"
+status: draft
+type: faction
+development_level: stub
+era: CITADEL
 tags:
-  - "Nations"
-  - "Krass"
+  - Nations
+  - Krass
   - CITADEL
   - Factions
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Krass Dominion-9da.md"
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Krass Dominion-9da.md
 import_issues:
-  - "relationship-review"
-  - "missing-inline-assets"
+  - relationship-review
+  - missing-inline-assets
 ---
 > The bone chimes rattle softly, hanging from the overgrown gnarled branches of a lone oak tree. Streams of colourful cloth wave in the gentle winds, bound to its branches, signaling the border of the Krass Dominion.  
 > The highland expanse stretches out into the overcast daylight, grand forests lay but a short distance away each hiding secrets within, whilst the feint smokestacks of broochs and sod-roofed outposts dot the vast, grassy plains.

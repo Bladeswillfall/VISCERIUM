@@ -1,14 +1,14 @@
 ---
-title: "Krassian Wolves"
-description: "The Krassian Wolves are a specialised group of raiders emboldened by Krassian witchcraft."
+title: Krassian Wolves
+description: The Krassian Wolves are a specialised group of raiders emboldened by Krassian witchcraft.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "CITADEL"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Krassian Wolves-ccf.md"
+status: draft
+type: faction
+development_level: stub
+era: CITADEL
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Krassian Wolves-ccf.md
 tags:
   - CITADEL
   - Factions

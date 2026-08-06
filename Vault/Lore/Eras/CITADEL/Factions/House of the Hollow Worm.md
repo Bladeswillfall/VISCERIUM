@@ -3,33 +3,33 @@ sidebar:
   replaceMeta: true
   meta:
     - label: Type
-      value: 'Religious, Cult'
+      value: Religious, Cult
   sections:
     - title: Details
       fields:
         - label: Current Leader
           value: Helminth Augur Merikh
-          href: '[[Helminth Augur Merikh]]'
+          href: "[[Helminth Augur Merikh]]"
         - label: Deity
-          value: 'Boleth, Nadir of Gluttony'
-title: "House of the Hollow Worm"
-description: "In the depths of a desolate and decaying labyrinth, where the stench of fungus and rot intertwines, the House of the Hollow Worm lies, a sinister cult devoted to the insatiable deity Boleth, Nadir of Gluttony."
+          value: Boleth, Nadir of Gluttony
+title: House of the Hollow Worm
+description: In the depths of a desolate and decaying labyrinth, where the stench of fungus and rot intertwines, the House of the Hollow Worm lies, a sinister cult devoted to the insatiable deity Boleth, Nadir of Gluttony.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "CITADEL"
+status: draft
+type: faction
+development_level: stub
+era: CITADEL
 tags:
-  - "hollow"
-  - "worm"
-  - "cult"
+  - hollow
+  - worm
+  - cult
   - CITADEL
   - Factions
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-House of the Hollow Worm-9dc.md"
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-House of the Hollow Worm-9dc.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 ---
 > Step aside magot. Cross me, and my pets shall feast on your wretched flesh, turning your bones to fertilizer for _The Great Maw_'s pit of decay. Your agony will be my symphony of malice.
 > 

@@ -1,19 +1,19 @@
 ---
-title: "Black Fox"
-description: "Yet to be determined..."
+title: Black Fox
+description: Yet to be determined...
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "CITADEL"
+status: draft
+type: faction
+development_level: stub
+era: CITADEL
 tags:
-  - "fox"
-  - "black"
+  - fox
+  - black
   - CITADEL
   - Factions
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Black Fox-e4e.md"
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Black Fox-e4e.md
 ---
 Yet to be determined...  
   Ideas:- Expeditionary force,

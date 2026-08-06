@@ -50,10 +50,37 @@
     "Lore/Eras/CITADEL/Nations": {
       "icon": "lucide-earth"
     },
+    "Lore/Eras/CITADEL/Nations/Alba": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Ampelotiri": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Anathyrate of Tashrum": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Angliath": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Dar al-Damm": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Khemetar": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Khoshut Khanate": {
+      "icon": "lucide-map"
+    },
     "Lore/Eras/CITADEL/Nations/Kingdom of Satol": {
       "icon": "lucide-map"
     },
     "Lore/Eras/CITADEL/Nations/Krass Dominion": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Locations": {
+      "icon": "lucide-pin"
+    },
+    "Lore/Eras/CITADEL/Nations/Luminous Caravanate": {
       "icon": "lucide-map"
     },
     "Lore/Eras/CITADEL/Nations/Okse Dominion": {
@@ -80,7 +107,25 @@
     "Lore/Eras/CITADEL/Nations/Republic of Askalia": {
       "icon": "lucide-map"
     },
+    "Lore/Eras/CITADEL/Nations/The Sirocco League of Maghara": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/The Zărava Voivodeships": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Tidemire Shogunate": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Uainetír": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/Uduma": {
+      "icon": "lucide-map"
+    },
     "Lore/Eras/CITADEL/Nations/Verazemia": {
+      "icon": "lucide-map"
+    },
+    "Lore/Eras/CITADEL/Nations/{POLAND} Zoravye": {
       "icon": "lucide-map"
     }
   },
