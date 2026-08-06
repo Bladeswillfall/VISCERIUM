@@ -63,6 +63,14 @@
       "note": "StoryLine settings, including the active private project, remain device-local."
     },
     {
+      "id": "daily-activity",
+      "name": "Daily Activity",
+      "testedVersion": "1.0.0",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/daily-activity/data.json",
+      "note": "Tracks local vault events. Private journal notes are excluded from tracking so the sealed timeline does not log itself."
+    },
+    {
       "id": "viscerium-timelines",
       "name": "VISCERIUM Timelines",
       "testedVersion": "1.2.0",
@@ -89,6 +97,13 @@
       "testedVersion": "0.2.1",
       "source": "first-party",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-image-tools"
+    },
+    {
+      "id": "viscerium-journal-tools",
+      "name": "VISCERIUM Journal Tools",
+      "testedVersion": "0.1.0",
+      "source": "first-party",
+      "runtimePath": "Vault/.obsidian/plugins/viscerium-journal-tools"
     },
     {
       "id": "iconic",
