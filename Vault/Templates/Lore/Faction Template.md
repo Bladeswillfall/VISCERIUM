@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: faction
@@ -25,7 +26,7 @@ relationships:
 related: []
 ---
 
-%% Before publishing: write a reader-safe description, establish the relevant era, and fill only metadata that improves navigation or understanding. %%
+%% Before publishing: write a reader-safe description, establish the relevant era, set published to the date this article first becomes public, and fill only metadata that improves navigation or understanding. %%
 
 ## Summary
 

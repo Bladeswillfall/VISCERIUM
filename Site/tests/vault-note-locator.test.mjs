@@ -20,7 +20,7 @@ test('vault note locator follows moves by matching stable frontmatter', async (t
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-vault-note-'));
   t.after(() => fs.rm(root, { recursive: true, force: true }));
 
-  await writeNote(root, 'Eras/CITADEL/Nations/Okse Dominion.md', {
+  await writeNote(root, 'Eras/CITADEL/Nations/Okse Dominion/Okse Dominion.md', {
     title: 'Okse Dominion',
     type: 'faction',
     era: 'CITADEL',
@@ -33,7 +33,7 @@ test('vault note locator follows moves by matching stable frontmatter', async (t
   };
   const found = await findVaultNote(criteria, { root });
 
-  assert.equal(found.relativePath, 'Eras/CITADEL/Nations/Okse Dominion.md');
+  assert.equal(found.relativePath, 'Eras/CITADEL/Nations/Okse Dominion/Okse Dominion.md');
   assert.match(found.content, /Dominion endures/);
   assert.equal(await findVaultNoteRoute(criteria, { root }), '/eras/citadel/nations/okse-dominion/');
 });

@@ -16,7 +16,7 @@ export const GET: APIRoute = async ({ site }) => {
       const categories = [...new Set(entry.tags)]
         .map((tag) => `      <category>${escapeXml(tag)}</category>`)
         .join('\n');
-      const pubDate = entry.created ? `      <pubDate>${entry.created.toUTCString()}</pubDate>\n` : '';
+      const pubDate = entry.published ? `      <pubDate>${entry.published.toUTCString()}</pubDate>\n` : '';
 
       return `    <item>
       <title>${escapeXml(entry.title)}</title>

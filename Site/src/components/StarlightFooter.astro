@@ -1,7 +1,7 @@
 ---
-import LastUpdated from 'virtual:starlight/components/LastUpdated';
 import Pagination from 'virtual:starlight/components/Pagination';
 import { classifyCodexPage } from '../lib/page-kind.mjs';
+import ArticleDates from './ArticleDates.astro';
 import CodexEditLink from './CodexEditLink.astro';
 import ContributorStrip from './ContributorStrip.astro';
 import ReferencedIn from './ReferencedIn.astro';
@@ -18,7 +18,7 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
   <div class="codex-site-footer sl-flex">
     <div class="meta sl-flex">
       <CodexEditLink />
-      <LastUpdated />
+      <ArticleDates />
     </div>
     {!pageKind.isEraHomepage && <Webmentions />}
     {!pageKind.isEraHomepage && <Pagination />}

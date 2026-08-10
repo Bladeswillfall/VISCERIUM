@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: event
@@ -31,7 +32,7 @@ tags: []
 related: []
 ---
 
-%% calendarDate is the single chronology source. Never add timeline.year, timeline.date, or timeline.id. Add calendarEndDate only for a real range; the compiler can then treat the entry as a period. %%
+%% calendarDate is the single chronology source. Never add timeline.year, timeline.date, or timeline.id. Before first publication, set published to the date this article becomes public. Add calendarEndDate only for a real range; the compiler can then treat the entry as a period. %%
 
 ## Summary
 

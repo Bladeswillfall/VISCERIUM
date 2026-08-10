@@ -2,13 +2,14 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: timeline
 headerImage:
 ---
 
-%% Native Chronos timeline. Use this for quick comparisons, scene chronology, research notes and editorial sketches. It is not automatically merged into canonical VISCERIUM era or super timelines. %%
+%% Native Chronos timeline. Use this for quick comparisons, scene chronology, research notes and editorial sketches. Before first publication, set published to the date this article becomes public. It is not automatically merged into canonical VISCERIUM era or super timelines. %%
 
 ```chronos
 > NOTODAY
