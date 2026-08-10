@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: species
@@ -19,7 +20,7 @@ tags: []
 related: []
 ---
 
-%% Before publishing: write a reader-safe description, establish the relevant era/context, and remove anything that should remain secret. Use species_kind for the broad biological or setting category inferred from the folder, such as reptile, mammal, plant, fungus, or Myrkild. %%
+%% Before publishing: write a reader-safe description, establish the relevant era/context, set published to the date this article first becomes public, and remove anything that should remain secret. Use species_kind for the broad biological or setting category inferred from the folder, such as reptile, mammal, plant, fungus, or Myrkild. %%
 
 ## Summary
 

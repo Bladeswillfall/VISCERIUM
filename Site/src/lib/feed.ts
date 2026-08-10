@@ -9,7 +9,7 @@ export type FeedEntry = {
   id: string;
   type?: string;
   tags: string[];
-  created: Date | null;
+  published: Date | null;
   updated: Date;
 };
 
@@ -46,7 +46,7 @@ export async function getFeedEntries(base: URL | string = siteConfig.site): Prom
 
   return docs
     .map((entry) => {
-      const { created, updated } = getAuthoredFeedDates(entry.data as Record<string, unknown>);
+      const { published, updated } = getAuthoredFeedDates(entry.data as Record<string, unknown>);
       return {
         title: entry.data.title,
         description: entry.data.description,
@@ -54,7 +54,7 @@ export async function getFeedEntries(base: URL | string = siteConfig.site): Prom
         id: absoluteUrl(routeFromEntry(entry), base),
         type: entry.data.type,
         tags: [...asArray(entry.data.type), ...asArray(entry.data.tags), ...asArray(entry.data.era), ...asArray(entry.data.faction)],
-        created,
+        published,
         updated,
       };
     })

@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: item
@@ -20,7 +21,7 @@ tags: []
 related: []
 ---
 
-%% Before publishing: write a reader-safe description, establish the relevant era/context, and remove anything that should remain secret. Use item_type for a broad practical class such as weapon, armour, tool, vehicle, technology, or artefact. %%
+%% Before publishing: write a reader-safe description, establish the relevant era/context, set published to the date this article first becomes public, and remove anything that should remain secret. Use item_type for a broad practical class such as weapon, armour, tool, vehicle, technology, or artefact. %%
 
 ## Summary
 

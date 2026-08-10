@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: article
@@ -16,7 +17,7 @@ tags: []
 related: []
 ---
 
-%% Use this general article only when a more specific character, faction, location, event, species, item, map, image, calendar, timeline, or era template does not fit. Before publishing, write a reader-safe description and establish the relevant era/context. %%
+%% Use this general article only when a more specific character, faction, location, event, species, item, map, image, calendar, timeline, or era template does not fit. Before publishing, write a reader-safe description, establish the relevant era/context, and set published to the date this article first becomes public. %%
 
 ## Summary
 

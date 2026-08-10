@@ -35,7 +35,7 @@ PUBLIC_FEED_MAX_ITEMS=50
 
 ## Authored dates
 
-Feed chronology comes only from note frontmatter. Build time, deployment time, file-system timestamps and the Git checkout date are never treated as article history.
+Feed chronology comes only from note frontmatter. Build time, deployment time, file-system timestamps and the Git checkout date are never treated as public article history.
 
 Recommended frontmatter:
 
@@ -43,29 +43,32 @@ Recommended frontmatter:
 ---
 title: Example Title
 description: "A short SEO-safe page description."
+created: 2026-06-18
+published: 2026-07-08
+updated: 2026-08-03
 status: published
 type: article
-created: 2026-07-08
-updated: 2026-08-03
 ---
 ```
 
 Use the fields as follows:
 
-- `created` is the date the public Codex page was first released. Keep it unchanged after publication.
-- `updated` is the date of the latest meaningful public content revision. Omit it until the page is revised.
-- When `updated` is absent, the feed uses `created` as the initial update date.
-- Legacy `published` and `date` values remain accepted as creation-date aliases, but new notes should use `created`.
+- `created` is internal authoring provenance: when the source note/article was originally created. Obsidian may populate it, and it must never be rewritten merely because the site is rebuilt or the article is published.
+- `published` is the date the Codex article first became public. Set it deliberately on first publication and keep it unchanged afterwards.
+- `updated` is the latest maintained content date. Obsidian Auto-Properties keeps it current during authoring; the site uses the authored value rather than Git or build timestamps.
+- Legacy `date` remains accepted as a publication-date alias for older content. New notes should use `published`.
 
-RSS uses `created` for each item’s `pubDate`. Atom emits `created` as `published` and emits the resolved modification date as `updated`.
+RSS uses `published` for each item’s `pubDate`. Atom emits `published` as `published` and emits the resolved modification date as `updated`.
 
-An `updated` value without a creation/publication date is deliberately ignored for feed chronology. This prevents generated files or shallow deployment checkouts from inventing article history.
+When `updated` is absent but `published` exists, the publication date is also used as the initial modification date. An older page with an authored `updated` date but no trustworthy publication date may still use that update date for ordering while omitting a false publication date.
 
 Undated pages remain available on the site and may remain present in the feed, but RSS omits their item-level `pubDate`. Atom requires an `updated` value, so genuinely undated entries use the stable Unix epoch fallback rather than the current build time. The RSS channel omits `lastBuildDate` when no authored dates are available.
 
 ## Generated content
 
-Category generation must not add or rewrite `created` or `updated` fields on article pages. Generated category pages are excluded from the feeds.
+Category generation must not add or rewrite `created`, `published`, or `updated` fields on article pages. Generated category pages are excluded from the feeds.
+
+The same authored dates also drive the public article date display, Article structured data, article time metadata, and sitemap `lastmod`. See `Vault/System/Publication Date Rules.md` for the canonical contract.
 
 ## Discovery
 
