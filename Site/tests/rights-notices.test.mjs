@@ -87,13 +87,15 @@ test('README badges communicate the mixed licensing model', () => {
   assert.match(readme, /Licensing summary:/);
 });
 
-test('package scripts and annual workflow protect notice freshness', () => {
+test('package scripts and workflows protect managed notice freshness', () => {
   const packageJson = JSON.parse(read('Site/package.json'));
-  assert.equal(packageJson.scripts['rights:update'], 'node scripts/update-rights-notices.mjs --write');
-  assert.equal(packageJson.scripts['rights:check'], 'node scripts/update-rights-notices.mjs --check');
+  assert.equal(packageJson.scripts['notices:update'], 'node scripts/update-rights-notices.mjs --write');
+  assert.equal(packageJson.scripts['notices:check'], 'node scripts/update-rights-notices.mjs --check');
+  assert.equal(packageJson.scripts['rights:update'], 'npm run notices:update');
+  assert.equal(packageJson.scripts['rights:check'], 'npm run notices:check');
 
   const checks = read('.github/workflows/checks.yml');
-  assert.match(checks, /npm run rights:check/);
+  assert.match(checks, /npm run notices:check/);
 
   const annual = read('.github/workflows/update-rights-year.yml');
   assert.match(annual, /workflow_dispatch:/);
