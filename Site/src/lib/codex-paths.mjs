@@ -22,7 +22,13 @@ export function vaultSourceSlug(value) {
   const nationsIndex = segments.indexOf('nations');
   const leaf = segments.at(-1);
   const parent = segments.at(-2);
-  if (nationsIndex >= 0 && leaf && parent && leaf === parent) segments.pop();
+  const isDirectSelfNamedNationArticle =
+    nationsIndex >= 0
+    && segments.length === nationsIndex + 3
+    && leaf
+    && parent
+    && leaf === parent;
+  if (isDirectSelfNamedNationArticle) segments.pop();
 
   return segments.join('/');
 }
