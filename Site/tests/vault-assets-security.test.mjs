@@ -64,6 +64,63 @@ test('SVG validation accepts ordinary vector markup', async () => {
   assert.deepEqual(result.errors, []);
 });
 
+test('SVG detection accepts XML declarations, repeated comments, and an SVG doctype', async () => {
+  const result = await validateFixture(`<?xml version="1.0" encoding="UTF-8"?>
+<!-- first comment -->
+<!-- second comment -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+  <path d="M0 0h10v10H0z" />
+</svg>`);
+
+  assert.equal(result.valid, true);
+  assert.deepEqual(result.errors, []);
+});
+
+test('SVG detection handles doctype internal subsets without ambiguous backtracking', async () => {
+  const result = await validateFixture(`<!DOCTYPE svg [
+  <!ENTITY safe "vector">
+]>
+<svg xmlns="http://www.w3.org/2000/svg"><text>&safe;</text></svg>`);
+
+  assert.equal(result.valid, true);
+  assert.deepEqual(result.errors, []);
+});
+
+test('SVG detection ignores subset brackets inside comments and processing instructions', async () => {
+  const result = await validateFixture(`<!DOCTYPE svg [
+  <!-- unmatched [ in a comment -->
+  <?viscerium brackets="[]]"?>
+  <!ELEMENT svg EMPTY>
+]>
+<svg xmlns="http://www.w3.org/2000/svg"/>`);
+
+  assert.equal(result.valid, true);
+  assert.deepEqual(result.errors, []);
+});
+
+test('SVG detection rejects unterminated doctype comments and processing instructions', async (t) => {
+  const cases = [
+    ['comment', '<!DOCTYPE svg [<!-- unmatched [><!ELEMENT svg EMPTY>]><svg/>'],
+    ['processing instruction', '<!DOCTYPE svg [<?viscerium unmatched=\"]\"<!ELEMENT svg EMPTY>]><svg/>'],
+  ];
+
+  for (const [name, source] of cases) {
+    await t.test(name, async () => {
+      const result = await validateFixture(source);
+      assert.equal(result.valid, false);
+      assert.match(result.errors.join('\n'), /does not match \.svg extension/);
+    });
+  }
+});
+
+test('SVG detection rejects malformed unterminated preambles', async () => {
+  const result = await validateFixture(`<?xml version="1.0" ${'x'.repeat(4000)}`);
+
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join('\n'), /does not match \.svg extension/);
+});
+
 test('SVG validation rejects scriptable constructs', async (t) => {
   const cases = [
     ['script', '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'],
