@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
+  "packageManager": "npm@11.18.0",
   "scripts": {
     "dev": "node scripts/build-content.mjs --mode=dev && astro dev",
     "dev:sync": "npm run dev",
@@ -11,8 +12,10 @@
     "validate:vault": "node scripts/validate-vault-notes.mjs",
     "validate:timelines": "node scripts/generate-timeline-data.mjs --validate-only",
     "validate:icons": "node scripts/validate-icon-output.mjs",
-    "rights:update": "node scripts/update-rights-notices.mjs --write",
-    "rights:check": "node scripts/update-rights-notices.mjs --check",
+    "notices:update": "node scripts/update-rights-notices.mjs --write",
+    "notices:check": "node scripts/update-rights-notices.mjs --check",
+    "rights:update": "npm run notices:update",
+    "rights:check": "npm run notices:check",
     "sync": "node scripts/build-content.mjs --mode=sync",
     "validate": "node scripts/validate-content.mjs",
     "generate:maps": "node scripts/generate-map-data.mjs",
@@ -37,7 +40,7 @@
     "postbuild": "npm run validate:icons",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run doctor:vault && npm run rights:check && npm run test:unit && npm run build"
+    "test": "npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.2.1",
@@ -67,6 +70,18 @@
   "engines": {
     "node": ">=24 <25"
   },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24 <25",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.17.0 <12",
+      "onFail": "error"
+    }
+  },
   "overrides": {
     "@ascorbic/loader-utils": {
       "astro": "$astro"
@@ -77,7 +92,9 @@
     "picomatch": "^4.0.3"
   },
   "allowScripts": {
-    "esbuild@0.28.1": true
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.2": true,
+    "fsevents@2.3.3": true
   },
   "devDependencies": {
     "@playwright/test": "1.62.1"
