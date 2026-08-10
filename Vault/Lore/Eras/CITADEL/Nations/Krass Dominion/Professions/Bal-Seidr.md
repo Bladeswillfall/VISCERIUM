@@ -4,61 +4,48 @@ description:
 created: 2026-08-06
 updated: 2026-08-06
 status: draft
-type: faction
-icon: faction
+type: article
 era: CITADEL
-capital:
-territory:
-leader:
-government:
-founding:
-image:
-imagePage:
-imageTitle:
-artist:
-headerImage:
-alt:
-tags: []
-relationships:
-  allies: []
-  rivals: []
+tags:
+  - CITADEL
+  - Professions
 related: []
-word_count: 182
+word_count: 131
 ---
 
 %% Before publishing: write a reader-safe description, establish the relevant era, and fill only metadata that improves navigation or understanding. %%
 
 ## Summary
 
-What story does this faction tell about itself, and what does an outsider notice first?
+What role does this profession serve within Krassian society, and what does an outsider notice first about its practitioners?
 
-## Culture
+## Practice
 
-Describe values, customs, contradictions, symbols, everyday assumptions, and the stories members use to justify the faction's place in the world.
+Describe the profession's core duties, methods, skills, and the situations in which a Bal-Seidr is expected to act.
 
-## Government
+## Training and Entry
 
-Explain who can actually make decisions, how authority is legitimised, and where formal structure differs from practical power.
+Explain how practitioners are selected or trained, what knowledge is restricted, and what obligations accompany the profession.
 
-## Military
+## Social Role
 
-Record doctrine, obligations, strengths, weaknesses, and the relationship between armed force and ordinary society where those details matter.
+Record how Bal-Seidr are regarded by ordinary Krassians, leaders, soldiers, and other specialists, including any taboos or privileges that matter.
 
-## Economy
+## Tools and Dress
 
-Focus on the resources, labour, trade, scarcity, or infrastructure that materially shape the faction.
+Document distinctive equipment, clothing, symbols, materials, or ritual objects where these improve recognition and world consistency.
+
+## Regional Variants
+
+Note meaningful local differences in practice without treating the profession as a political faction.
 
 ## History
 
-Include the events that explain current behaviour rather than attempting an exhaustive chronology.
+Include only the events or traditions that explain how the profession developed into its current form.
 
-## Important Members
+## Notable Practitioners
 
-Link people who materially change how the faction operates or is understood.
-
-## Related Locations
-
-Link places whose relationship with this faction matters to stories or world consistency.
+Link people whose actions materially shaped or exemplify the profession.
 
 ## Related
 
@@ -69,4 +56,3 @@ Add only links that establish useful context or relationships.
 ## Storyteller View
 
 <!-- viscerium:storyteller:end -->
-
