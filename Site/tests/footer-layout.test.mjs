@@ -41,13 +41,23 @@ test('the whole Starlight page is the raised deck', () => {
   assert.match(pageFrame, /\.page\s*\{[\s\S]*?position:\s*relative[\s\S]*?z-index:\s*var\(--codex-z-page,\s*0\)[\s\S]*?border-radius:\s*0 0 1\.25rem 1\.25rem[\s\S]*?background:\s*var\(--codex-page-bg\)[\s\S]*?box-shadow:/);
 });
 
-test('the global footer keeps a one-row 25/50/25 layout at every viewport width', () => {
+test('the global footer keeps its 25/50/25 underlay while using one authored wayfinder', () => {
   assert.match(rail, /<footer class="ion-codex-footer">/);
   assert.match(rail, /<div class="footer-grid">/);
   assert.match(rail, /grid-template-columns:\s*minmax\(0,\s*1fr\) minmax\(0,\s*2fr\) minmax\(0,\s*1fr\)/);
-  assert.match(rail, /\.footer-links\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(rail, /<nav class="footer-wayfinder" aria-label="Codex destinations">/);
+  assert.match(rail, /<a class="footer-wayfinder__primary" href="\/">Start Here<\/a>/);
+  assert.match(rail, /\.footer-wayfinder__routes\s*\{[\s\S]*?display:\s*flex[\s\S]*?flex-wrap:\s*wrap/);
+  assert.match(rail, /<span class="footer-signature" aria-hidden="true">VISCERIUM<\/span>/);
+  assert.doesNotMatch(rail, /footer-links__heading|footer-links__group/);
+  assert.doesNotMatch(rail, />Explore<|>Connect<|>Follow</);
   assert.doesNotMatch(rail, /@media[\s\S]*?\.footer-grid\s*\{[\s\S]*?grid-template-columns:\s*1fr/);
-  assert.doesNotMatch(rail, /@media[\s\S]*?\.footer-links\s*\{[\s\S]*?grid-template-columns:\s*1fr/);
+});
+
+test('footer interactions change tone without hover lift or animated underlines', () => {
+  assert.doesNotMatch(rail, /\.policy-link:hover[\s\S]*?translateY/);
+  assert.doesNotMatch(rail, /\.footer-wayfinder[^}]*text-decoration:\s*underline/);
+  assert.match(rail, /\.footer-wayfinder a:focus-visible,[\s\S]*?\.policy-link:focus-visible\s*\{[\s\S]*?outline:/);
 });
 
 test('the footer retains the page-level underlay geometry without breakout units', () => {
