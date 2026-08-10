@@ -1,0 +1,71 @@
+name: Temporary security lock refresh
+
+on:
+  push:
+    branches:
+      - security/clear-dependabot-codeql-alerts
+    paths:
+      - '.github/workflows/security-lock-refresh.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-lockfile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: Site
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: true
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Use repository npm version
+        working-directory: .
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - name: Refresh patched transitive dependencies
+        run: npm update nanoid js-yaml --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      - name: Verify patched versions
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const expected = new Map([
+            ['node_modules/nanoid', '3.3.17'],
+            ['node_modules/js-yaml', '4.3.1'],
+            ['node_modules/gray-matter/node_modules/js-yaml', '3.15.1'],
+          ]);
+          for (const [path, version] of expected) {
+            const actual = lock.packages?.[path]?.version;
+            if (actual !== version) throw new Error(`${path}: expected ${version}, found ${actual ?? 'missing'}`);
+          }
+          NODE
+
+      - name: Commit refreshed lockfile
+        working-directory: .
+        run: |
+          git diff --check
+          git diff --exit-code -- Site/package.json || {
+            echo 'package.json changed unexpectedly';
+            exit 1;
+          }
+          if git diff --quiet -- Site/package-lock.json; then
+            echo 'Expected security patch updates did not change the lockfile.'
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Site/package-lock.json
+          git commit -m "Patch vulnerable transitive dependencies"
+          git push origin HEAD:security/clear-dependabot-codeql-alerts
