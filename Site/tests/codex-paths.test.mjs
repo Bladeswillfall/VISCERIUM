@@ -19,6 +19,10 @@ test('nested nation content keeps meaningful path segments', () => {
     'eras/citadel/nations/okse-dominion/organisations/iron-circle',
   );
   assert.equal(
+    vaultSourceSlug('Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Halvmaneheimr.md'),
+    'eras/citadel/nations/okse-dominion/regions/halvmaneheimr/halvmaneheimr',
+  );
+  assert.equal(
     vaultSourceSlug('Eras/CITADEL/Organisations/House/House.md'),
     'eras/citadel/organisations/house/house',
   );
