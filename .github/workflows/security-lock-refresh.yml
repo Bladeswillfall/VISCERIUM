@@ -42,13 +42,24 @@ jobs:
           import fs from 'node:fs';
           const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
           const expected = new Map([
-            ['node_modules/nanoid', '3.3.17'],
-            ['node_modules/js-yaml', '4.3.1'],
-            ['node_modules/gray-matter/node_modules/js-yaml', '3.15.1'],
+            ['node_modules/nanoid', { minimum: '3.3.17', major: 3 }],
+            ['node_modules/js-yaml', { minimum: '4.3.1', major: 4 }],
+            ['node_modules/gray-matter/node_modules/js-yaml', { minimum: '3.15.1', major: 3 }],
           ]);
-          for (const [path, version] of expected) {
+          const compare = (left, right) => {
+            const a = left.split('.').map(Number);
+            const b = right.split('.').map(Number);
+            for (let index = 0; index < 3; index += 1) {
+              if (a[index] !== b[index]) return a[index] - b[index];
+            }
+            return 0;
+          };
+          for (const [path, { minimum, major }] of expected) {
             const actual = lock.packages?.[path]?.version;
-            if (actual !== version) throw new Error(`${path}: expected ${version}, found ${actual ?? 'missing'}`);
+            if (!actual || Number(actual.split('.')[0]) !== major || compare(actual, minimum) < 0) {
+              throw new Error(`${path}: expected >=${minimum} <${major + 1}.0.0, found ${actual ?? 'missing'}`);
+            }
+            console.log(`${path}: ${actual}`);
           }
           NODE
 
