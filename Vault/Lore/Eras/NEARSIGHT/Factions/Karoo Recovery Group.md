@@ -29,7 +29,7 @@ word_count: 380
 ---
 >_Leave nothing useful to ruin._
 >
->— Motto of the Karoo Recovery Group
+>- Motto of the Karoo Recovery Group
 
 The Karoo Recovery Group, commonly referred to as the KRG or simply “the Group”, is a state-chartered recovery, engineering, and security organisation operating throughout the Karoo territories and beyond. Formed through agreements between several neighbouring governments, industrial concerns and independent recovery companies, the KRG specialises in retrieving people, machinery, intelligence and strategic resources from places that conventional forces have abandoned.
 
