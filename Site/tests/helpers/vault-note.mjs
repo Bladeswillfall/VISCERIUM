@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
+import { slugToRoute, vaultSourceSlug } from '../../src/lib/codex-paths.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_LORE_ROOT = path.resolve(here, '../../../Vault/Lore');
@@ -17,27 +18,17 @@ function describeCriteria(criteria) {
     .join(', ');
 }
 
-function routeSegment(value) {
-  return String(value ?? '')
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/&/g, ' and ')
-    .replace(/[^A-Za-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .toLowerCase();
-}
-
 export function vaultNoteRoute(note) {
   if (!note || typeof note !== 'object') throw new TypeError('vaultNoteRoute requires a located Vault note.');
 
   const explicitSlug = typeof note.data?.slug === 'string' ? note.data.slug.trim() : '';
-  if (explicitSlug) return `/${explicitSlug.replace(/^\/+|\/+$/g, '')}/`;
+  if (explicitSlug) return slugToRoute(explicitSlug);
 
-  const sourcePath = String(note.relativePath ?? '').replace(/\\/g, '/').replace(/\.(?:md|mdx)$/i, '');
-  const segments = sourcePath.split('/').filter(Boolean).map(routeSegment).filter(Boolean);
-  if (!segments.length) throw new Error('Cannot derive a public route from an empty Vault note path.');
+  const sourcePath = String(note.relativePath ?? '').replace(/\\/g, '/');
+  const slug = vaultSourceSlug(sourcePath);
+  if (!slug) throw new Error('Cannot derive a public route from an empty Vault note path.');
 
-  return `/${segments.join('/')}/`;
+  return slugToRoute(slug);
 }
 
 export async function findVaultNote(criteria, { root = DEFAULT_LORE_ROOT } = {}) {
