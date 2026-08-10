@@ -51,7 +51,7 @@ test('frontmatter plugins separate mechanical, authorial and continuity fields',
   assert.ok(!presetFields.has('development_level'));
   assert.deepEqual(presetFields.get('headerImage').options.folders, ['Assets/Images']);
 
-  for (const fieldName of ['created', 'updated', 'era', 'entity_id', 'calendarDate', 'timeline', 'import_issues']) {
+  for (const fieldName of ['created', 'published', 'updated', 'era', 'entity_id', 'calendarDate', 'timeline', 'import_issues']) {
     assert.ok(metadataMenu.globallyIgnoredFields.includes(fieldName), `${fieldName} must not be edited through Metadata Menu`);
   }
 });

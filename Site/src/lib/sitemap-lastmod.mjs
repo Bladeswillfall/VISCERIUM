@@ -48,5 +48,5 @@ export async function buildSitemapLastmodMap(contentDir) {
 }
 
 export function sitemapPathname(url) {
-  return normalisePathname(new URL(url).pathname);
+  return normalisePathname(decodeURI(new URL(url).pathname));
 }

@@ -32,3 +32,16 @@ test('sitemap URL matching normalises trailing slashes', () => {
   assert.equal(sitemapPathname('https://www.viscerium.co.uk/eras/citadel/example'), '/eras/citadel/example/');
   assert.equal(sitemapPathname('https://www.viscerium.co.uk/'), '/');
 });
+
+test('sitemap URL matching decodes percent-encoded article paths', async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-sitemap-'));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+
+  await fs.writeFile(path.join(root, 'soren.md'), `---\nslug: people/søren-vilulf\npublished: 2026-07-08\nupdated: 2026-08-03\n---\n`);
+
+  const map = await buildSitemapLastmodMap(root);
+  const pathname = sitemapPathname('https://www.viscerium.co.uk/people/s%C3%B8ren-vilulf/');
+
+  assert.equal(pathname, '/people/søren-vilulf/');
+  assert.equal(map.get(pathname), '2026-08-03T00:00:00.000Z');
+});
