@@ -32,6 +32,78 @@ function extensionOf(file) {
   return path.extname(file).slice(1).toLowerCase();
 }
 
+function isWhitespace(character) {
+  return character !== undefined && /\s/.test(character);
+}
+
+function skipWhitespace(text, start) {
+  let index = start;
+  while (index < text.length && isWhitespace(text[index])) index += 1;
+  return index;
+}
+
+function startsWithIgnoreCase(text, start, value) {
+  return text.slice(start, start + value.length).toLowerCase() === value.toLowerCase();
+}
+
+function skipSvgDoctype(text, start) {
+  if (!startsWithIgnoreCase(text, start, '<!doctype')) return undefined;
+
+  let index = start + '<!doctype'.length;
+  if (!isWhitespace(text[index])) return undefined;
+  index = skipWhitespace(text, index);
+
+  if (!startsWithIgnoreCase(text, index, 'svg')) return undefined;
+  index += 'svg'.length;
+  if (/[A-Za-z0-9_]/.test(text[index] ?? '')) return undefined;
+
+  let quote;
+  let subsetDepth = 0;
+  for (; index < text.length; index += 1) {
+    const character = text[index];
+    if (quote) {
+      if (character === quote) quote = undefined;
+      continue;
+    }
+    if (character === '"' || character === "'") {
+      quote = character;
+    } else if (character === '[') {
+      subsetDepth += 1;
+    } else if (character === ']' && subsetDepth > 0) {
+      subsetDepth -= 1;
+    } else if (character === '>' && subsetDepth === 0) {
+      return index + 1;
+    }
+  }
+
+  return -1;
+}
+
+function startsWithSvgElement(text) {
+  let index = skipWhitespace(text, 0);
+
+  if (startsWithIgnoreCase(text, index, '<?xml')) {
+    const declarationEnd = text.indexOf('?>', index + '<?xml'.length);
+    if (declarationEnd === -1) return false;
+    index = skipWhitespace(text, declarationEnd + 2);
+  }
+
+  while (text.startsWith('<!--', index)) {
+    const commentEnd = text.indexOf('-->', index + '<!--'.length);
+    if (commentEnd === -1) return false;
+    index = skipWhitespace(text, commentEnd + 3);
+  }
+
+  if (startsWithIgnoreCase(text, index, '<!doctype')) {
+    const doctypeEnd = skipSvgDoctype(text, index);
+    if (doctypeEnd === undefined || doctypeEnd === -1) return false;
+    index = skipWhitespace(text, doctypeEnd);
+  }
+
+  if (!startsWithIgnoreCase(text, index, '<svg')) return false;
+  return !/[A-Za-z0-9_]/.test(text[index + '<svg'.length] ?? '');
+}
+
 function detectedImageType(source) {
   if (source.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
   if (source[0] === 0xff && source[1] === 0xd8 && source[2] === 0xff) return 'jpeg';
@@ -45,7 +117,7 @@ function detectedImageType(source) {
   }
 
   const text = source.subarray(0, 4096).toString('utf8').replace(/^\uFEFF/, '');
-  if (/^\s*(?:<\?xml[\s\S]*?\?>\s*)?(?:<!--[\s\S]*?-->\s*)*(?:<!DOCTYPE\s+svg[\s\S]*?>\s*)?<svg\b/i.test(text)) return 'svg';
+  if (startsWithSvgElement(text)) return 'svg';
   return undefined;
 }
 
