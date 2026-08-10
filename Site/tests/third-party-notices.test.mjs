@@ -15,9 +15,22 @@ function readJson(relativePath) {
   return JSON.parse(read(relativePath));
 }
 
-test('every direct Site dependency is represented in third-party notices', () => {
+function withoutManagedDependencyBlock(content) {
+  const start = '<!-- DEPENDENCIES:DIRECT:START -->';
+  const end = '<!-- DEPENDENCIES:DIRECT:END -->';
+  const startIndex = content.indexOf(start);
+  const endIndex = content.indexOf(end);
+
+  assert.notEqual(startIndex, -1, 'THIRD_PARTY_NOTICES.md must contain the managed dependency block start marker');
+  assert.notEqual(endIndex, -1, 'THIRD_PARTY_NOTICES.md must contain the managed dependency block end marker');
+  assert.ok(endIndex > startIndex, 'managed dependency block markers must be in the correct order');
+
+  return `${content.slice(0, startIndex)}${content.slice(endIndex + end.length)}`;
+}
+
+test('every direct Site dependency has human-authored third-party attribution', () => {
   const packageJson = readJson('Site/package.json');
-  const notices = read('THIRD_PARTY_NOTICES.md');
+  const notices = withoutManagedDependencyBlock(read('THIRD_PARTY_NOTICES.md'));
   const dependencies = {
     ...packageJson.dependencies,
     ...packageJson.devDependencies,
@@ -36,7 +49,7 @@ test('every direct Site dependency is represented in third-party notices', () =>
     const expected = aliases.get(dependency) ?? dependency;
     assert.ok(
       notices.includes(expected),
-      `${dependency} must be named or covered explicitly in THIRD_PARTY_NOTICES.md`,
+      `${dependency} must be named or covered explicitly outside the managed dependency block in THIRD_PARTY_NOTICES.md`,
     );
   }
 });

@@ -30,7 +30,7 @@ jobs:
 
       - run: npm ci --silent --no-audit --no-fund
       - run: npm run doctor:vault
-      - run: npm run rights:check
+      - run: npm run notices:check
 
       - name: Run unit tests
         run: |
