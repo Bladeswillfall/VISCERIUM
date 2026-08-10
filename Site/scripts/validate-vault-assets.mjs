@@ -67,7 +67,21 @@ function skipSvgDoctype(text, start) {
     }
     if (character === '"' || character === "'") {
       quote = character;
-    } else if (character === '[') {
+      continue;
+    }
+    if (text.startsWith('<!--', index)) {
+      const commentEnd = text.indexOf('-->', index + '<!--'.length);
+      if (commentEnd === -1) return -1;
+      index = commentEnd + '-->'.length - 1;
+      continue;
+    }
+    if (text.startsWith('<?', index)) {
+      const instructionEnd = text.indexOf('?>', index + '<?'.length);
+      if (instructionEnd === -1) return -1;
+      index = instructionEnd + '?>'.length - 1;
+      continue;
+    }
+    if (character === '[') {
       subsetDepth += 1;
     } else if (character === ']' && subsetDepth > 0) {
       subsetDepth -= 1;
