@@ -1,7 +1,7 @@
 <%*
 const source = tp.file.title;
-const month = window.moment(source, "YYYY-MM", true);
-const period = month.isValid() ? month : window.moment().startOf("month");
+const month = moment(source, "YYYY-MM", true);
+const period = month.isValid() ? month : moment().startOf("month");
 tR += `---\ntype: journal\nperiod: monthly\n---\n\n# ${period.format("MMMM YYYY")}\n`;
 %>
 
