@@ -1,7 +1,7 @@
 <%*
 const source = tp.file.title;
-const week = window.moment(source, "GGGG-[W]WW", true);
-const start = week.isValid() ? week.clone().startOf("isoWeek") : window.moment().startOf("isoWeek");
+const week = moment(source, "GGGG-[W]WW", true);
+const start = week.isValid() ? week.clone().startOf("isoWeek") : moment().startOf("isoWeek");
 const end = start.clone().endOf("isoWeek");
 const range = start.year() !== end.year()
   ? `${start.format("D MMMM YYYY")}–${end.format("D MMMM YYYY")}`
