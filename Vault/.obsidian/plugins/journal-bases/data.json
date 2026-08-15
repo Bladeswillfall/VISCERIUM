@@ -3,7 +3,7 @@
     "enabled": true,
     "folder": "Private/Journal/Daily",
     "format": "YYYY/YYYY-MM-DD",
-    "template": "Templates/Journal/Daily Note.md"
+    "template": "Templates/Journal/Daily Chronicle Note.md"
   },
   "weekly": {
     "enabled": true,
