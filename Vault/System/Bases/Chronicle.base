@@ -1,0 +1,51 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder("Private/Journal")
+properties:
+  file.name:
+    displayName: Period
+  period:
+    displayName: Layer
+  date:
+    displayName: Date
+  file.mtime:
+    displayName: Modified
+views:
+  - type: periodic-review
+    name: Review
+    showDaily: true
+    showWeekly: true
+    showMonthly: true
+    showQuarterly: false
+    showYearly: false
+  - type: periodic-notes
+    name: Daily
+    mode: daily
+    futurePeriods: 0
+    expandFirst: true
+    showMissing: true
+  - type: periodic-notes
+    name: Weekly
+    mode: weekly
+    futurePeriods: 0
+    expandFirst: true
+    showMissing: true
+  - type: periodic-notes
+    name: Monthly
+    mode: monthly
+    futurePeriods: 0
+    expandFirst: true
+    showMissing: true
+  - type: periodic-notes
+    name: Quarterly
+    mode: quarterly
+    futurePeriods: 0
+    expandFirst: true
+    showMissing: true
+  - type: periodic-notes
+    name: Yearly
+    mode: yearly
+    futurePeriods: 0
+    expandFirst: true
+    showMissing: true
