@@ -50,14 +50,41 @@
     "Lore/Eras/CITADEL/Nations": {
       "icon": "lucide-earth"
     },
+    "Lore/Eras/CITADEL/Nations/Alba": {
+      "icon": "lucide-mountain"
+    },
+    "Lore/Eras/CITADEL/Nations/Ampelotiri": {
+      "icon": "lucide-grape"
+    },
+    "Lore/Eras/CITADEL/Nations/Anathyrate of Tashrum": {
+      "icon": "lucide-sun"
+    },
+    "Lore/Eras/CITADEL/Nations/Angliath": {
+      "icon": "lucide-castle"
+    },
+    "Lore/Eras/CITADEL/Nations/Dar al-Damm": {
+      "icon": "lucide-droplets"
+    },
+    "Lore/Eras/CITADEL/Nations/Khemetar": {
+      "icon": "lucide-pyramid"
+    },
+    "Lore/Eras/CITADEL/Nations/Khoshut Khanate": {
+      "icon": "lucide-compass"
+    },
     "Lore/Eras/CITADEL/Nations/Kingdom of Satol": {
-      "icon": "lucide-map"
+      "icon": "lucide-wheat"
     },
     "Lore/Eras/CITADEL/Nations/Krass Dominion": {
-      "icon": "lucide-map"
+      "icon": "lucide-trees"
+    },
+    "Lore/Eras/CITADEL/Nations/Locations": {
+      "icon": "lucide-pin"
+    },
+    "Lore/Eras/CITADEL/Nations/Luminous Caravanate": {
+      "icon": "lucide-lamp"
     },
     "Lore/Eras/CITADEL/Nations/Okse Dominion": {
-      "icon": "lucide-map"
+      "icon": "lucide-shield"
     },
     "Lore/Eras/CITADEL/Nations/Okse Dominion/Customs": {
       "icon": "lucide-flame-kindling"
@@ -78,10 +105,28 @@
       "icon": "lucide-flag"
     },
     "Lore/Eras/CITADEL/Nations/Republic of Askalia": {
-      "icon": "lucide-map"
+      "icon": "lucide-coins"
+    },
+    "Lore/Eras/CITADEL/Nations/The Sirocco League of Maghara": {
+      "icon": "lucide-wind"
+    },
+    "Lore/Eras/CITADEL/Nations/The Zărava Voivodeships": {
+      "icon": "lucide-moon"
+    },
+    "Lore/Eras/CITADEL/Nations/Tidemire Shogunate": {
+      "icon": "lucide-waves"
+    },
+    "Lore/Eras/CITADEL/Nations/Uainetír": {
+      "icon": "lucide-anchor"
+    },
+    "Lore/Eras/CITADEL/Nations/Uduma": {
+      "icon": "lucide-sunrise"
     },
     "Lore/Eras/CITADEL/Nations/Verazemia": {
-      "icon": "lucide-map"
+      "icon": "lucide-gem"
+    },
+    "Lore/Eras/CITADEL/Nations/{POLAND} Zoravye": {
+      "icon": "lucide-snowflake"
     }
   },
   "bookmarkIcons": {},

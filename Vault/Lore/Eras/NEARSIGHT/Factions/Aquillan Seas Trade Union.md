@@ -13,20 +13,20 @@ sidebar:
       fields:
         - label: Succeeded by
           value: Alliance of Democratic Nations
-          href: '[[Alliance of Democratic Nations]]'
-title: "Aquillan Seas Trade Union"
-description: "The Aquillan Seas Trade Union, often referred to as the Union or simply ASTU, is an economical and political alliance of democratic nations located around the Aquillan(Northern) Seas."
+          href: "[[Alliance of Democratic Nations]]"
+title: Aquillan Seas Trade Union
+description: The Aquillan Seas Trade Union, often referred to as the Union or simply ASTU, is an economical and political alliance of democratic nations located around the Aquillan(Northern) Seas.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "NEARSIGHT"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Aquillan Seas Trade Union-8be.md"
+status: draft
+type: faction
+development_level: stub
+era: NEARSIGHT
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Aquillan Seas Trade Union-8be.md
 import_issues:
-  - "relationship-review"
-  - "missing-inline-assets"
+  - relationship-review
+  - missing-inline-assets
 tags:
   - NEARSIGHT
   - Factions

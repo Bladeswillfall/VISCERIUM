@@ -1,14 +1,14 @@
 ---
-title: "Council of nine"
-description: "a representative from each of the forms of Resonance.- Isen - Vindr - Bylga - Svar - Muld"
+title: Council of nine
+description: a representative from each of the forms of Resonance.- Isen - Vindr - Bylga - Svar - Muld
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "CITADEL"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Council of nine-10d.md"
+status: draft
+type: faction
+development_level: stub
+era: CITADEL
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Council of nine-10d.md
 tags:
   - CITADEL
   - Factions

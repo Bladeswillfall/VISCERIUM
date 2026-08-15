@@ -1,13 +1,13 @@
 ---
-title: "Celebrants of Debauchery"
+title: Celebrants of Debauchery
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "CITADEL"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Celebrants of Debauchery-0af.md"
+status: draft
+type: faction
+development_level: stub
+era: CITADEL
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Celebrants of Debauchery-0af.md
 tags:
   - CITADEL
   - Factions

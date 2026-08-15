@@ -1,16 +1,16 @@
 ---
-title: "WYRD"
-description: "Anti Myrkild, Naranor research and development group."
+title: WYRD
+description: Anti Myrkild, Naranor research and development group.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "NEARSIGHT"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-WYRD-bce.md"
+status: draft
+type: faction
+development_level: stub
+era: NEARSIGHT
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-WYRD-bce.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 tags:
   - NEARSIGHT
   - Factions

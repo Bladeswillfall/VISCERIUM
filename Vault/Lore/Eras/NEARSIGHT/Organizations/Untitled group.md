@@ -1,14 +1,14 @@
 ---
-title: "Untitled group"
-description: "Often deemed and described as an anarchist group, this inter-city organisation live by and fight for the notion that \"Darkness cannot drive out darkness; only light can do that."
+title: Untitled group
+description: Often deemed and described as an anarchist group, this inter-city organisation live by and fight for the notion that "Darkness cannot drive out darkness; only light can do that.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "NEARSIGHT"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Untitled group-23a.md"
+status: draft
+type: faction
+development_level: stub
+era: NEARSIGHT
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Untitled group-23a.md
 tags:
   - NEARSIGHT
   - Factions

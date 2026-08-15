@@ -1,18 +1,18 @@
 ---
-title: "Reavers"
-description: "Scattered all across Lore/Degel System/Errack, Reavers can be foun on almost every continent in varying sizes of communities."
+title: Reavers
+description: Scattered all across Lore/Degel System/Errack, Reavers can be foun on almost every continent in varying sizes of communities.
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "NEARSIGHT"
+status: draft
+type: faction
+development_level: stub
+era: NEARSIGHT
 tags:
-  - "reaver"
+  - reaver
   - NEARSIGHT
   - Factions
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-Reavers-560.md"
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-Reavers-560.md
 ---
 > Travellers, explorers, pillagers...  
 >   Throughout history people who live this lifestyle have taken on many names and there are many factions who live the life in different fashions. Some travel light and fast, taking what they need and nothing more. Some travel in massive packs stripping the land of anything they can take. Some, might even be friendly to outside trade.   And though they all flock under different banners and leaders, each group with their own morals and rules, all are tarred by one name... Reaver.

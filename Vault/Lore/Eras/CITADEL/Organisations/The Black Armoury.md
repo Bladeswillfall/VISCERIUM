@@ -2,20 +2,20 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Corporation, Manufacturing"
-title: "The Black Armoury"
-description: "The Black Armoury or BA for short was founded in [1323]."
+    - label: Type
+      value: Corporation, Manufacturing
+title: The Black Armoury
+description: The Black Armoury or BA for short was founded in [1323].
 updated:
-status: "draft"
-type: "faction"
-development_level: "stub"
-era: "CITADEL"
-import_source: "worldanvil"
-import_source_type: "Organization"
-import_source_file: "Organization-The Black Armoury-0ab.md"
+status: draft
+type: faction
+development_level: stub
+era: CITADEL
+import_source: worldanvil
+import_source_type: Organization
+import_source_file: Organization-The Black Armoury-0ab.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 tags:
   - CITADEL
   - Factions
