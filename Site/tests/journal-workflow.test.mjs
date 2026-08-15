@@ -20,16 +20,16 @@ async function readVaultJson(relativePath) {
   return JSON.parse(await readVaultText(relativePath));
 }
 
-test('daily notes use the private Chronicle source layer and shared template', async () => {
+test('daily notes use the private Chronicle source layer and shared core template', async () => {
   const config = await readVaultJson('.obsidian/daily-notes.json');
   const template = await readVaultText('Templates/Journal/Daily Note.md');
 
   assert.equal(config.folder, 'Private/Journal/Daily');
   assert.equal(config.format, 'YYYY/YYYY-MM-DD');
   assert.equal(config.template, 'Templates/Journal/Daily Note');
-  assert.match(template, /type: journal/);
-  assert.match(template, /period: daily/);
-  assert.match(template, /date: "/);
+  assert.match(template, /^type: journal$/m);
+  assert.match(template, /^period: daily$/m);
+  assert.match(template, /^date: "\{\{date:YYYY-MM-DD\}\}"$/m);
   assert.match(template, /^## Today's Focus$/m);
   assert.match(template, /^## Upcoming$/m);
   assert.match(template, /^## Decisions, Milestones & Developments$/m);
@@ -44,6 +44,7 @@ test('Journal Bases owns Chronicle period navigation without Periodic Notes over
   const settings = await readVaultJson('.obsidian/plugins/journal-bases/data.json');
   const profile = await readVaultJson('System/Obsidian Plugin Profile.json');
   const gitignore = await readText('.gitignore');
+  const dailyTemplater = await readVaultText('Templates/Journal/Daily Chronicle Note.md');
 
   assert.ok(enabled.includes('journal-bases'));
   assert.ok(!enabled.includes('periodic-notes'));
@@ -52,7 +53,7 @@ test('Journal Bases owns Chronicle period navigation without Periodic Notes over
     enabled: true,
     folder: 'Private/Journal/Daily',
     format: 'YYYY/YYYY-MM-DD',
-    template: 'Templates/Journal/Daily Note.md',
+    template: 'Templates/Journal/Daily Chronicle Note.md',
   });
   assert.deepEqual(settings.weekly, {
     enabled: true,
@@ -78,6 +79,9 @@ test('Journal Bases owns Chronicle period navigation without Periodic Notes over
     format: 'YYYY',
     template: 'Templates/Journal/Yearly Review.md',
   });
+  assert.match(dailyTemplater, /type: journal/);
+  assert.match(dailyTemplater, /period: daily/);
+  assert.match(dailyTemplater, /moment\(source, "YYYY-MM-DD", true\)/);
   assert.equal(settings.collapseFrontmatter, true);
   assert.equal(settings.rememberColumnState, true);
   assert.equal(settings.debugModeEnabled, false);
