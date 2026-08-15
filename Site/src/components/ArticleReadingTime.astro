@@ -1,13 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
+import { normalisePageSlug } from '../lib/page-kind.mjs';
 import { estimateReadingTime, isReadingTimeArticle } from '../lib/reading-time.mjs';
 
 const { starlightRoute } = Astro.locals;
 const entry = starlightRoute.entry.data;
 const fallbackId = starlightRoute.entry.id;
+const targetSlug = normalisePageSlug(entry.slug ?? fallbackId);
 const docs = await getCollection('docs');
 const sourceEntry = docs.find((doc) => doc.id === fallbackId)
-  ?? docs.find((doc) => String(doc.data.slug ?? doc.id).replace(/\.(md|mdx)$/i, '') === String(entry.slug ?? fallbackId).replace(/\.(md|mdx)$/i, ''));
+  ?? docs.find((doc) => normalisePageSlug(doc.data.slug ?? doc.id) === targetSlug);
 const readingTime = isReadingTimeArticle(entry, fallbackId) && sourceEntry?.body
   ? estimateReadingTime(sourceEntry.body)
   : null;
