@@ -77,11 +77,24 @@ function toMoment(value) {
   return parsed.isValid() ? parsed.startOf("day") : null;
 }
 
+function stripDelimitedBlocks(text, openToken, closeToken = openToken) {
+  let output = String(text ?? "");
+  if (!openToken || !closeToken) return output;
+
+  while (true) {
+    const start = output.indexOf(openToken);
+    if (start === -1) return output;
+
+    const end = output.indexOf(closeToken, start + openToken.length);
+    if (end === -1) return output.slice(0, start);
+
+    output = output.slice(0, start) + output.slice(end + closeToken.length);
+  }
+}
+
 function cleanSection(section) {
-  return section
-    .replace(/%%[\s\S]*?%%/g, "")
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .trim();
+  const withoutObsidianComments = stripDelimitedBlocks(section, "%%");
+  return stripDelimitedBlocks(withoutObsidianComments, "<!--", "-->").trim();
 }
 
 function extractSection(text, heading) {
