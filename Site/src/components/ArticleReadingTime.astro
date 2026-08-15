@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import { estimateReadingTime, isReadingTimeArticle } from '../lib/reading-time.mjs';
+
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+const fallbackId = starlightRoute.entry.id;
+const docs = await getCollection('docs');
+const sourceEntry = docs.find((doc) => doc.id === fallbackId)
+  ?? docs.find((doc) => String(doc.data.slug ?? doc.id).replace(/\.(md|mdx)$/i, '') === String(entry.slug ?? fallbackId).replace(/\.(md|mdx)$/i, ''));
+const readingTime = isReadingTimeArticle(entry, fallbackId) && sourceEntry?.body
+  ? estimateReadingTime(sourceEntry.body)
+  : null;
+---
+
+{readingTime && (
+  <p
+    class="codex-reading-time"
+    data-reading-time
+    aria-label={`Reading time: ${readingTime.minutes} minute${readingTime.minutes === 1 ? '' : 's'}`}
+  >
+    {readingTime.minutes} min read
+  </p>
+)}
+
+<style>
+  .codex-reading-time {
+    margin: .32rem 0 .72rem;
+    color: var(--sl-color-gray-4);
+    font-family: var(--vc-font-ui);
+    font-size: .72rem;
+    font-weight: 500;
+    letter-spacing: .025em;
+    line-height: 1.25;
+  }
+</style>
