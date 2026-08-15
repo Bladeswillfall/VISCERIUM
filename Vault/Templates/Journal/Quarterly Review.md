@@ -1,8 +1,8 @@
 <%*
 const match = tp.file.title.match(/^(\d{4})-Q([1-4])$/);
-const year = match ? Number(match[1]) : window.moment().year();
-const quarter = match ? Number(match[2]) : window.moment().quarter();
-const start = window.moment({ year, month: (quarter - 1) * 3, day: 1 }).startOf("month");
+const year = match ? Number(match[1]) : moment().year();
+const quarter = match ? Number(match[2]) : moment().quarter();
+const start = moment({ year, month: (quarter - 1) * 3, day: 1 }).startOf("month");
 const end = start.clone().add(2, "months").endOf("month");
 tR += `---\ntype: journal\nperiod: quarterly\n---\n\n# Q${quarter} · ${start.format("MMMM")}–${end.format("MMMM YYYY")}\n`;
 %>
