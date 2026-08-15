@@ -86,7 +86,7 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [Leaflet.Control.Layers.Tree](https://github.com/jjimenezshaw/Leaflet.Control.Layers.Tree) (`leaflet.control.layers.tree`) | Hierarchical map-layer controls | BSD-3-Clause |
 | [vis-timeline](https://github.com/visjs/vis-timeline) | Interactive timeline rendering | Apache-2.0 OR MIT |
 | [chronos-timeline-md](https://github.com/clairefro/chronos-timeline-md) | Markdown-to-timeline parsing | ISC |
-| [Fuse.js](https://github.com/krisk/Fuse) (`fuse.js`) | Fuzzy search | Apache-2.0 |
+| [Fuse.js](https://github.com/krisk/Fuse.js) (`fuse.js`) | Fuzzy search | Apache-2.0 |
 | [gray-matter](https://github.com/jonschlinkert/gray-matter) | Markdown frontmatter parsing | MIT |
 | [KaTeX](https://github.com/KaTeX/KaTeX) (`katex`) | Mathematical notation rendering | MIT |
 | [remark-math](https://github.com/remarkjs/remark-math) | Markdown mathematics parsing | MIT |
@@ -124,6 +124,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [MySnippets](https://community.obsidian.md/plugins/mysnippets-plugin) | Chetachi; compatibility work also credits Moyf | MPL-2.0 |
 | [StoryLine](https://community.obsidian.md/plugins/storyline) | Jan Sandström | MIT |
 | [Daily Activity](https://community.obsidian.md/plugins/daily-activity) | Trevor Rydalch / trydalch | No licence file published upstream; runtime is installed separately and is not redistributed here |
+| [Journal Bases](https://github.com/dsebastien/obsidian-journal-base) | Sébastien Dubois / dsebastien | MIT |
 | [Iconic](https://community.obsidian.md/plugins/iconic) | Holo / gfxholo | MIT-0; bundled icon and Unicode resources have separate notices upstream |
 | [TTRPG Tools - Maps](https://community.obsidian.md/plugins/zoom-map) | Johannes Schwartz / Jareika | MIT |
 | [Advanced Tables](https://community.obsidian.md/plugins/table-editor-obsidian) | Tony Grosinger | GPL-3.0 |

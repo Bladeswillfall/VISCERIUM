@@ -1,0 +1,36 @@
+{
+  "daily": {
+    "enabled": true,
+    "folder": "Private/Journal/Daily",
+    "format": "YYYY/YYYY-MM-DD",
+    "template": "Templates/Journal/Daily Chronicle Note.md"
+  },
+  "weekly": {
+    "enabled": true,
+    "folder": "Private/Journal/Weekly",
+    "format": "gggg/gggg-[W]ww",
+    "template": "Templates/Journal/Weekly Review.md"
+  },
+  "monthly": {
+    "enabled": true,
+    "folder": "Private/Journal/Monthly",
+    "format": "YYYY/YYYY-MM",
+    "template": "Templates/Journal/Monthly Review.md"
+  },
+  "quarterly": {
+    "enabled": true,
+    "folder": "Private/Journal/Quarterly",
+    "format": "YYYY/YYYY-[Q]Q",
+    "template": "Templates/Journal/Quarterly Review.md"
+  },
+  "yearly": {
+    "enabled": true,
+    "folder": "Private/Journal/Yearly",
+    "format": "YYYY",
+    "template": "Templates/Journal/Yearly Review.md"
+  },
+  "donePropertyName": "periodic_review_completed",
+  "collapseFrontmatter": true,
+  "rememberColumnState": true,
+  "debugModeEnabled": false
+}

@@ -71,6 +71,14 @@
       "note": "Tracks local vault events. Private journal notes are excluded from tracking so the sealed timeline does not log itself."
     },
     {
+      "id": "journal-bases",
+      "name": "Journal Bases",
+      "testedVersion": "1.16.0",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/journal-bases/data.json",
+      "note": "Provides Chronicle periodic-note and review Base views. Review completion controls are not part of the VISCERIUM workflow."
+    },
+    {
       "id": "viscerium-timelines",
       "name": "VISCERIUM Timelines",
       "testedVersion": "1.2.0",

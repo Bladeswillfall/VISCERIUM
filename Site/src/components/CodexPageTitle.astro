@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import '../styles/storyteller-view.css';
+import ArticleReadingTime from './ArticleReadingTime.astro';
 import CalendarDateBadge from './calendar/CalendarDateBadge.astro';
 import CodexIcon from './CodexIcon.astro';
 import ContinuitySwitcher from './ContinuitySwitcher.astro';
@@ -184,6 +185,7 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
     {entry.pronunciation && <span class="codex-title-pronunciation">{entry.pronunciation}</span>}
   </h1>
 )}
+{!isExplorationPage && <ArticleReadingTime />}
 {!isExplorationPage && breadcrumbs.length > 0 && (
   <nav class="codex-breadcrumbs" aria-label="Breadcrumbs">
     <a href="/" class="codex-breadcrumb-item">

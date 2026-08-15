@@ -4,9 +4,11 @@
 >
 > **Result:** The day's creator memory lives in one private note, and file activity can be sealed into it once the session is ending.
 >
-> **First action:** Run **Open today's daily note** or **VISCERIUM Journal Tools: Seal Today's Activity**.
+> **First action:** Open [[System/Chronicle|Chronicle]], run **Open today's daily note**, or run **VISCERIUM Journal Tools: Seal Today's Activity**.
 
 Daily notes are dated capture surfaces, not mandatory attendance records. Create one only when the date needs a note.
+
+Daily notes are the atomic source layer for [[016 - Chronicle Workflow SOP|Chronicle]]. Higher-period notes derive evidence from them and store only new reflection.
 
 ## Storage and privacy
 
@@ -24,11 +26,16 @@ The template remains under `Templates/Journal/Daily Note.md` so the structure is
 
 Use the daily note for:
 
-- up to three deliberate tasks under **Today**;
+- up to three deliberate tasks under **Today's Focus**;
 - undeveloped thoughts under **Ideas**;
 - links and source observations under **References**;
-- general process memory under **Notes**; and
-- future posts, events, challenges, or deadlines under **Planned**.
+- general process memory under **Notes**;
+- future events, dates, or context under **Upcoming**; and
+- important decisions, milestones, breakthroughs, reversals, or other changes under **Decisions, Milestones & Developments**.
+
+**Today's Focus** is a working shortlist. It is not the project backlog.
+
+**Upcoming** is temporal context. If an item is an action, keep the checkbox in the note where its context belongs and add a scheduled or due date when useful.
 
 Plain bullets are observations. Markdown checkboxes are deliberate future actions and will appear in [[System/Creator Tasks|Creator Tasks]]. Do not turn every idea into a task.
 
@@ -48,6 +55,8 @@ The command changes the private daily note. It does not change Lore, publish mat
 
 > [!warning] Snapshot, not live feed
 > Seal once when wrapping up. The journal stores a readable snapshot while Daily Activity remains the live local event record.
+
+Chronicle can derive higher-period activity evidence from these sealed snapshots. The derived activity views describe tracked vault work only. They do not measure work completed outside the vault.
 
 ## Tracked and excluded paths
 

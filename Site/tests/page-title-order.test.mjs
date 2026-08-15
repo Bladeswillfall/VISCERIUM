@@ -4,16 +4,27 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-test('page headers render title, breadcrumbs, then calendar date', () => {
+test('page headers render title, reading time, breadcrumbs, then calendar date', () => {
   const pageTitle = read('../src/components/CodexPageTitle.astro');
 
   const titleIndex = pageTitle.indexOf('<h1 id="_top"');
+  const readingTimeIndex = pageTitle.indexOf('<ArticleReadingTime />');
   const breadcrumbsIndex = pageTitle.indexOf('<nav class="codex-breadcrumbs"');
   const calendarIndex = pageTitle.indexOf('<CalendarDateBadge');
 
   assert.ok(titleIndex >= 0, 'page title must be present');
-  assert.ok(breadcrumbsIndex > titleIndex, 'breadcrumbs must follow the title');
+  assert.ok(readingTimeIndex > titleIndex, 'reading time must follow the title');
+  assert.ok(breadcrumbsIndex > readingTimeIndex, 'breadcrumbs must follow reading time');
   assert.ok(calendarIndex > breadcrumbsIndex, 'calendar date must follow breadcrumbs');
+});
+
+test('reading time stays visually quiet and uses the Codex UI face', () => {
+  const readingTime = read('../src/components/ArticleReadingTime.astro');
+
+  assert.match(readingTime, /\{readingTime\.minutes\} min read/);
+  assert.match(readingTime, /font-family:\s*var\(--vc-font-ui\)/);
+  assert.match(readingTime, /color:\s*var\(--sl-color-gray-4\)/);
+  assert.doesNotMatch(readingTime, /<svg|CodexIcon|border:/);
 });
 
 test('release breadcrumbs omit the changelog plugin virtual version segment', () => {

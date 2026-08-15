@@ -46,6 +46,7 @@ Vault/.obsidian/plugins/*/*
 !Vault/.obsidian/plugins/obsidian-git/data.json
 !Vault/.obsidian/plugins/obsidian-style-settings/data.json
 !Vault/.obsidian/plugins/daily-activity/data.json
+!Vault/.obsidian/plugins/journal-bases/data.json
 
 # MySnippets is intentionally vendored because the community-store 1.2.3
 # bundle is incompatible with current Obsidian menu/toggle behaviour.

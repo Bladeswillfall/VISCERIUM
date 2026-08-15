@@ -1,10 +1,9 @@
----
-type: journal
-period: daily
-date: "{{date:YYYY-MM-DD}}"
----
-
-# {{date:dddd, D MMMM YYYY}}
+<%*
+const source = tp.file.title;
+const parsed = moment(source, "YYYY-MM-DD", true);
+const date = parsed.isValid() ? parsed : moment();
+tR += `---\ntype: journal\nperiod: daily\ndate: "${date.format("YYYY-MM-DD")}"\n---\n\n# ${date.format("dddd, D MMMM YYYY")}\n`;
+%>
 
 ## Today's Focus
 
