@@ -1,7 +1,7 @@
 <%*
 const source = tp.file.title;
-const parsed = window.moment(source, "YYYY-MM-DD", true);
-const date = parsed.isValid() ? parsed : window.moment();
+const parsed = moment(source, "YYYY-MM-DD", true);
+const date = parsed.isValid() ? parsed : moment();
 tR += `---\ntype: journal\nperiod: daily\ndate: "${date.format("YYYY-MM-DD")}"\n---\n\n# ${date.format("dddd, D MMMM YYYY")}\n`;
 %>
 
