@@ -1,6 +1,6 @@
 <%*
 const yearMatch = tp.file.title.match(/^(\d{4})$/);
-const year = yearMatch ? Number(yearMatch[1]) : window.moment().year();
+const year = yearMatch ? Number(yearMatch[1]) : moment().year();
 tR += `---\ntype: journal\nperiod: yearly\n---\n\n# ${year}\n`;
 %>
 
