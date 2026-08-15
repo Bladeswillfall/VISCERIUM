@@ -1,9 +1,18 @@
+import { classifyCodexPage } from './page-kind.mjs';
+
 export const DEFAULT_READING_WORDS_PER_MINUTE = 225;
 
+const NON_READING_TYPES = new Set(['image', 'map']);
 const STORYTELLER_BLOCK = /<!--\s*viscerium:storyteller:start\s*-->[\s\S]*?<!--\s*viscerium:storyteller:end\s*-->/gi;
 const OBSIDIAN_COMMENT = /%%[\s\S]*?%%/g;
 const HTML_COMMENT = /<!--[\s\S]*?-->/g;
 const FENCED_CODE = /(^|\n)\s*(```|~~~)[^\n]*\n[\s\S]*?\n\s*\2(?=\n|$)/g;
+
+export function isReadingTimeArticle(entry = {}, fallbackId = '') {
+  if (!classifyCodexPage(entry, fallbackId).isStandardArticle) return false;
+  const type = String(entry.type ?? '').trim().toLowerCase();
+  return !NON_READING_TYPES.has(type);
+}
 
 export function readableMarkdownText(markdown = '') {
   return String(markdown)
