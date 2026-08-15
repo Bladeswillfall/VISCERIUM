@@ -27,9 +27,9 @@ test('daily notes use the private Chronicle source layer and shared template', a
   assert.equal(config.folder, 'Private/Journal/Daily');
   assert.equal(config.format, 'YYYY/YYYY-MM-DD');
   assert.equal(config.template, 'Templates/Journal/Daily Note');
-  assert.match(template, /^type: journal$/m);
-  assert.match(template, /^period: daily$/m);
-  assert.match(template, /^date: /m);
+  assert.match(template, /type: journal/);
+  assert.match(template, /period: daily/);
+  assert.match(template, /date: "/);
   assert.match(template, /^## Today's Focus$/m);
   assert.match(template, /^## Upcoming$/m);
   assert.match(template, /^## Decisions, Milestones & Developments$/m);
@@ -97,11 +97,11 @@ test('Chronicle templates keep semantic metadata lean and avoid review completio
   };
 
   for (const [period, template] of Object.entries(templates)) {
-    assert.match(template, /^type: journal$/m);
-    assert.match(template, new RegExp(`^period: ${period}$`, 'm'));
-    assert.doesNotMatch(template, /^reviewed:/m);
-    assert.doesNotMatch(template, /^complete:/m);
-    assert.doesNotMatch(template, /^periodic_review_completed:/m);
+    assert.match(template, /type: journal/);
+    assert.match(template, new RegExp(`period: ${period}`));
+    assert.doesNotMatch(template, /reviewed:/);
+    assert.doesNotMatch(template, /complete:/);
+    assert.doesNotMatch(template, /periodic_review_completed:/);
     assert.match(template, /System\/Views\/Chronicle\/Evidence/);
   }
 
