@@ -1,11 +1,14 @@
----
-type: journal
-date: "{{date:YYYY-MM-DD}}"
----
+<%*
+const source = tp.file.title;
+const parsed = window.moment(source, "YYYY-MM-DD", true);
+const date = parsed.isValid() ? parsed : window.moment();
+tR += `---\ntype: journal\nperiod: daily\ndate: "${date.format("YYYY-MM-DD")}"\n---\n\n# ${date.format("dddd, D MMMM YYYY")}\n`;
+%>
 
-# {{date:dddd, D MMMM YYYY}}
+## Today's Focus
 
-## Today
+%% Select up to three things that need your attention today.
+Do not use this section as a backlog. %%
 
 - [ ]
 - [ ]
@@ -23,7 +26,17 @@ date: "{{date:YYYY-MM-DD}}"
 
 -
 
-## Planned
+## Upcoming
+
+%% Record future events, dates, or context that you want to remember.
+Use a scheduled or due date on a task when the item is an action. %%
+
+-
+
+## Decisions, Milestones & Developments
+
+%% Record decisions, milestones, breakthroughs, reversals, or other important changes from this date.
+Leave this section blank if nothing significant occurred. %%
 
 -
 
