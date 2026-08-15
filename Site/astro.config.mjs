@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
@@ -12,8 +14,12 @@ import starlightScrollToTop from 'starlight-scroll-to-top';
 import siteGraph from 'starlight-site-graph/integration';
 import starlightTags from 'starlight-tags';
 import starlightTelescope from 'starlight-telescope';
+import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
 import { buildSidebar } from './sidebar.mjs';
 import siteConfig from './site.config.mjs';
+
+const siteDir = path.dirname(fileURLToPath(import.meta.url));
+const sitemapLastmodByPathname = await buildSitemapLastmodMap(path.join(siteDir, 'src/content/docs'));
 
 const feedHead = [
   {
@@ -193,17 +199,9 @@ const searchVerificationHead = siteConfig.searchVerification?.google
 const { enabled: giscusEnabled, ...giscusConfig } = siteConfig.giscus;
 
 const sidebar = [
-  {
-    label: '[map] Explore',
-    collapsed: false,
-    items: [
-      { label: '[map] Atlas', link: '/maps/' },
-      { label: '[faction] Relationships', link: '/relationships/' },
-    ],
-  },
   ...(await buildSidebar()),
   {
-    label: '[event] Releases',
+    label: 'Releases',
     collapsed: false,
     items: [
       ...makeChangelogsSidebarLinks([
@@ -235,6 +233,7 @@ export default defineConfig({
       title: siteConfig.title,
       description: siteConfig.description,
       pagefind: false,
+      routeMiddleware: './src/route-data.ts',
       customCss: [
         'katex/dist/katex.min.css',
         './src/styles/ion-layers.css',
@@ -326,7 +325,13 @@ export default defineConfig({
         },
       },
     }),
-    sitemap(),
+    sitemap({
+      serialize(item) {
+        const lastmod = sitemapLastmodByPathname.get(sitemapPathname(item.url));
+        if (lastmod) item.lastmod = lastmod;
+        return item;
+      },
+    }),
     mdx(),
     ...(ga4Enabled
       ? [

@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: map
@@ -27,7 +28,7 @@ relationships: {}
 related: []
 ---
 
-%% Before publishing: write a reader-safe description, assign a unique mapId, point image at a public map path such as /assets/maps/example.webp, and set mapMarkers to the matching vault-relative TTRPG Maps sidecar such as Assets/Maps/example.webp.markers.json. Width and height should match the source image when known. Leave defaultZoom/minZoom/maxZoom blank until the public Atlas has been tested with the real source raster. Use TTRPG Tools - Maps: Insert new map... to create the Obsidian authoring block in this note. Leave the map: block empty unless this map should appear as a clickable nested map on a parent Atlas. %%
+%% Before publishing: write a reader-safe description, set published to the date this article first becomes public, assign a unique mapId, point image at a public map path such as /assets/maps/example.webp, and set mapMarkers to the matching vault-relative TTRPG Maps sidecar such as Assets/Maps/example.webp.markers.json. Width and height should match the source image when known. Leave defaultZoom/minZoom/maxZoom blank until the public Atlas has been tested with the real source raster. Use TTRPG Tools - Maps: Insert new map... to create the Obsidian authoring block in this note. Leave the map: block empty unless this map should appear as a clickable nested map on a parent Atlas. %%
 
 ## Overview
 

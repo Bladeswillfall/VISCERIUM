@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: timeline
@@ -15,7 +16,7 @@ timelineBlocks:
     showMinimap: true
 ---
 
-%% Generated VISCERIUM timelines compile canonical event notes from calendarDate/calendarEndDate. Native Chronos blocks remain available for quick note-local timelines and editorial comparisons. %%
+%% Generated VISCERIUM timelines compile canonical event notes from calendarDate/calendarEndDate. Before first publication, set published to the date this article becomes public. Native Chronos blocks remain available for quick note-local timelines and editorial comparisons. %%
 
 ## Canonical Timeline
 

@@ -1,0 +1,32 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    paths:
+      - 'Site/package.json'
+      - 'Site/package-lock.json'
+      - 'Site/.npmrc'
+      - 'Tools/obsidian-viscerium-timelines/package.json'
+      - 'Tools/obsidian-viscerium-timelines/package-lock.json'
+      - 'Tools/obsidian-viscerium-timelines/.npmrc'
+      - '.github/workflows/dependency-review.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: moderate
+          fail-on-scopes: runtime, development, unknown
+          show-patched-versions: true

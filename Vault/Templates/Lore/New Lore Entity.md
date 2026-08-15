@@ -104,7 +104,7 @@ if (type === "event") {
 }
 
 const yamlValue = (value) => Array.isArray(value) ? `[${value.map((item) => JSON.stringify(item)).join(", ")}]` : JSON.stringify(value);
-const frontmatter = ["---", `title: ${JSON.stringify(title)}`, `description: ${JSON.stringify(description)}`, "created:", "updated:", "status: draft", `type: ${type}`, "development_level: stub"];
+const frontmatter = ["---", `title: ${JSON.stringify(title)}`, `description: ${JSON.stringify(description)}`, "created:", "published:", "updated:", "status: draft", `type: ${type}`, "development_level: stub"];
 if (entityId) frontmatter.push(`entity_id: ${JSON.stringify(entityId)}`);
 if (era) frontmatter.push(`era: ${JSON.stringify(era)}`);
 for (const [key, value] of Object.entries(data)) {

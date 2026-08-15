@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: image
@@ -23,7 +24,7 @@ tags: []
 related: []
 ---
 
-%% Image metadata notes are provenance records. Store raster artwork in Vault/Assets/Images/ as .webp; genuine vector artwork may remain .svg. Keep PNG/JPEG or other archival originals outside the repository. Use `asset` for the stored filename and `image` when another Codex surface needs the same asset as its display image. Before publishing, provide meaningful alt text and enough rights/provenance information to know whether the artwork may be used. %%
+%% Image metadata notes are provenance records. Store raster artwork in Vault/Assets/Images/ as .webp; genuine vector artwork may remain .svg. Keep PNG/JPEG or other archival originals outside the repository. Use `asset` for the stored filename and `image` when another Codex surface needs the same asset as its display image. Before publishing, set published to the date this article first becomes public, provide meaningful alt text, and include enough rights/provenance information to know whether the artwork may be used. %%
 
 ## Description
 

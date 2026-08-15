@@ -45,6 +45,7 @@ Vault/.obsidian/plugins/*/*
 !Vault/.obsidian/plugins/dataview/data.json
 !Vault/.obsidian/plugins/obsidian-git/data.json
 !Vault/.obsidian/plugins/obsidian-style-settings/data.json
+!Vault/.obsidian/plugins/daily-activity/data.json
 
 # MySnippets is intentionally vendored because the community-store 1.2.3
 # bundle is incompatible with current Obsidian menu/toggle behaviour.
@@ -63,6 +64,8 @@ Vault/.obsidian/plugins/*/*
 !Vault/.obsidian/plugins/viscerium-layout-tools/**
 !Vault/.obsidian/plugins/viscerium-image-tools/
 !Vault/.obsidian/plugins/viscerium-image-tools/**
+!Vault/.obsidian/plugins/viscerium-journal-tools/
+!Vault/.obsidian/plugins/viscerium-journal-tools/**
 
 # Plugin-generated settings backups and caches are device-local churn.
 Vault/.obsidian/plugins/*/data.json.backup*

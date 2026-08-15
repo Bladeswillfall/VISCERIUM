@@ -10,18 +10,24 @@ A public note must live beneath `Vault/Lore/` and have:
 ---
 title: Example Title
 description: "A short, reader-safe description for search and link previews."
+published: 2026-08-06
 status: published
 type: article
 ---
 ```
 
+`published` is the first genuine public-release date, not the note creation date. Existing articles with no authoritative historical publication date may leave it blank until that date can be established; do not invent one from Git, filesystem, build, deployment, export, or import timestamps. See [[Publication Date Rules]].
+
 The sync script derives the public route from the note path relative to `Vault/Lore/`. Do not add `slug` frontmatter, and treat file moves as URL changes. Treat `Vault/Lore/` as the source of truth; never manually maintain generated files in `Site/src/content/docs/`.
 
 ## Recommended frontmatter
 
-Use fields that support sidebars, the graph, maps, timelines, feeds and social cards:
+Use fields that support sidebars, the graph, maps, timelines, feeds, search metadata and social cards:
 
 ```yaml
+created: 2026-07-14
+published: 2026-08-06
+updated: 2026-08-06
 icon: "fa-solid fa-book-skull"
 sidebarIcon: "fa-solid fa-book"
 titleIcon: "fa-solid fa-book-skull"
@@ -43,6 +49,18 @@ imagePage: /eras/citadel/images/example-banner/
 alt: "Describe the image for screen readers."
 credit: Artist Name / Rights Holder
 ```
+
+## Publication dates
+
+The canonical date fields have distinct meanings:
+
+- `created`: internal source-note creation provenance. Obsidian may fill this once; it is not a public publication date.
+- `published`: first date the article became public. Set deliberately on first publication and never reset for later revisions.
+- `updated`: latest maintained authoring/content change. Obsidian Auto-Properties keeps this current.
+
+Public article dates, structured data, feeds and sitemap `lastmod` use `published`/`updated`, not Git history or the site build date. The legacy top-level `date` field remains accepted as a publication-date alias for older content, but new authoring should use `published`.
+
+Astro incremental static builds may be adopted once that feature is stable. Incremental rebuild/cache state remains a build concern and must never become article chronology.
 
 ## Links and graph data
 

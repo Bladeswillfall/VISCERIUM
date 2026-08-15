@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: calendar
@@ -11,7 +12,7 @@ tags: []
 related: []
 ---
 
-%% Before publishing: write a reader-safe description and add only validated calendar block data. Calendar definitions remain under Site/src/data/calendars; this note provides reader-facing explanation and rendered calendar blocks rather than redefining calendar mathematics in prose. %%
+%% Before publishing: write a reader-safe description, set published to the date this article first becomes public, and add only validated calendar block data. Calendar definitions remain under Site/src/data/calendars; this note provides reader-facing explanation and rendered calendar blocks rather than redefining calendar mathematics in prose. %%
 
 ## Overview
 

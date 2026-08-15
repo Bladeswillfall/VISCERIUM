@@ -2,6 +2,7 @@
 title: "{{title}}"
 description:
 created:
+published:
 updated:
 status: draft
 type: location
@@ -28,7 +29,7 @@ relationships: {}
 related: []
 ---
 
-%% Before publishing: write a reader-safe description, establish the relevant era, and only keep map metadata when this place belongs on a configured map. Layer names may use `/` to create nested Atlas controls. Use minZoom/maxZoom only when the marker should appear at a particular map scale. %%
+%% Before publishing: write a reader-safe description, establish the relevant era, set published to the date this article first becomes public, and only keep map metadata when this place belongs on a configured map. Layer names may use `/` to create nested Atlas controls. Use minZoom/maxZoom only when the marker should appear at a particular map scale. %%
 
 ## Summary
 

@@ -113,6 +113,7 @@
   "displayFieldsInContextMenu": true,
   "globallyIgnoredFields": [
     "created",
+    "published",
     "updated",
     "word_count",
     "open_task_count",

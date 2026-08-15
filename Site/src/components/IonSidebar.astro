@@ -1,43 +1,41 @@
 ---
-import { getCollection } from 'astro:content';
 import SidebarSublist from './IonSidebarSublist.astro';
 import { parseIconLabel } from '../lib/icon-spec.mjs';
 import { HISTORICAL_ERAS, eraFromPath, normaliseEra } from '../lib/era-context.mjs';
-import { filterSidebarByRoutes, universalRoutesFromDocs } from '../lib/sidebar-era-scope.mjs';
+import { scopeHistoricalEraBranches } from '../lib/sidebar-era-scope.mjs';
 
 const { sidebar, entry } = Astro.locals.starlightRoute;
 const changelogSidebarLabel = 'Releases';
 const labelOf = (entry: any) => parseIconLabel(entry?.label ?? '').label.trim();
 const isChangelogGroup = (entry: any) => entry.type === 'group' && labelOf(entry) === changelogSidebarLabel;
 const changelogSidebar = sidebar.filter(isChangelogGroup);
-const mainSidebar = sidebar.filter((entry: any) => !isChangelogGroup(entry));
-const mainGroups = mainSidebar.filter((entry: any) => entry.type === 'group');
-const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
-const erasGroup = mainGroups.find((entry: any) => labelOf(entry).toLowerCase() === 'eras');
-const eraEntry = (era: string) => erasGroup?.entries?.find((entry: any) => labelOf(entry).toUpperCase() === era);
-const childrenOf = (entry: any) => entry?.type === 'group' ? entry.entries ?? [] : entry ? [entry] : [];
-
-// Universal is a content scope, not a route/folder requirement. Build the shared
-// sidebar from page metadata so naturally filed material such as Degel System is
-// still visible inside every historical era context.
-const docs = await getCollection('docs');
-const universalRoutes = universalRoutesFromDocs(docs);
-const universalSidebar = filterSidebarByRoutes(mainSidebar, universalRoutes);
-const universalEntries = universalSidebar.flatMap((entry: any) =>
-  entry.type === 'group' && labelOf(entry).toLowerCase() === 'universal'
-    ? entry.entries ?? []
-    : [entry]
-);
 
 const pageData = entry.data;
 const pageSlug = String(pageData.slug ?? entry.id ?? '').replace(/\.(md|mdx)$/i, '');
 const rawEra = Array.isArray(pageData.era) ? pageData.era[0] : pageData.era;
 const routeEra = normaliseEra(rawEra) ?? eraFromPath(pageSlug);
 const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : undefined;
+
+// Era mode keeps the complete Codex navigation visible. Only the three sibling
+// historical era branches are hidden, so Universal material retains its normal
+// place in the hierarchy instead of being copied into a separate section.
+const mainSidebar = scopeHistoricalEraBranches(
+  sidebar.filter((entry: any) => !isChangelogGroup(entry)),
+  initialEra,
+);
+const mainGroups = mainSidebar.filter((entry: any) => entry.type === 'group');
+const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
 ---
 
 <div class="codex-sidebar-layout">
-  <div class="codex-sidebar-global" hidden={Boolean(initialEra)}>
+  <div class="codex-sidebar-era-toolbar" data-era-sidebar-toolbar aria-label="Active era context">
+    <strong>
+      {HISTORICAL_ERAS.map((era) => <span data-era-sidebar-label={era}>{era}</span>)}
+    </strong>
+    <a href="/" data-era-exit>Exit · All eras</a>
+  </div>
+
+  <div class="codex-sidebar-tree">
     <div class="codex-sidebar-main">
       <SidebarSublist sublist={mainGroups} />
     </div>
@@ -48,39 +46,50 @@ const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : u
     )}
   </div>
 
-  {HISTORICAL_ERAS.map((era) => {
-    const scoped = childrenOf(eraEntry(era));
-    const eraSlug = era.toLowerCase();
-    return (
-      <div
-        class="codex-sidebar-era-scope"
-        data-era-sidebar={era}
-        hidden={initialEra !== era}
-      >
-        <div class="codex-sidebar-era-toolbar">
-          <strong>{era}</strong>
-          <a href="/" data-era-exit>Exit · All eras</a>
-        </div>
-        <nav class="codex-sidebar-era-explore" aria-label={`${era} exploration`}>
-          <a href={`/eras/${eraSlug}/relationships/`}>Relationships</a>
-        </nav>
-        {scoped.length > 0 ? <SidebarSublist sublist={scoped} /> : <p class="codex-sidebar-empty">No published {era} pages yet.</p>}
-        {universalEntries.length > 0 && (
-          <div class="codex-sidebar-universal">
-            <div class="codex-sidebar-universal__label">Universal</div>
-            <SidebarSublist sublist={universalEntries} />
-          </div>
-        )}
-      </div>
-    );
-  })}
-
   {changelogSidebar.length > 0 && (
     <aside class="codex-changelog-sidebar" aria-label="Releases">
       <SidebarSublist sublist={changelogSidebar} />
     </aside>
   )}
 </div>
+
+<script>
+  const sidebarEras = ['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY'];
+  const sidebarEraRuntime = window.__visceriumSidebarEraBranches ??= {};
+
+  const normaliseSidebarEra = (value) => sidebarEras.find(
+    (era) => era.toLowerCase() === String(value ?? '').trim().toLowerCase(),
+  ) ?? null;
+
+  const openActiveBranch = (branch) => {
+    const branchDetails = [...branch.children].find((child) => child instanceof HTMLDetailsElement);
+    const erasDetails = branch.parentElement?.closest('details');
+    if (branchDetails instanceof HTMLDetailsElement) branchDetails.open = true;
+    if (erasDetails instanceof HTMLDetailsElement) erasDetails.open = true;
+  };
+
+  sidebarEraRuntime.sync = (value) => {
+    const active = normaliseSidebarEra(value);
+
+    document.querySelectorAll('[data-era-sidebar-branch]').forEach((node) => {
+      const branchEra = normaliseSidebarEra(node.getAttribute('data-era-sidebar-branch'));
+      node.hidden = Boolean(active && branchEra !== active);
+      if (active && branchEra === active) openActiveBranch(node);
+    });
+  };
+
+  if (!sidebarEraRuntime.bound) {
+    document.addEventListener('viscerium:era-context', (event) => {
+      sidebarEraRuntime.sync(event instanceof CustomEvent ? event.detail?.era : null);
+    });
+    document.addEventListener('astro:page-load', () => {
+      sidebarEraRuntime.sync(document.documentElement.getAttribute('data-era-context'));
+    });
+    sidebarEraRuntime.bound = true;
+  }
+
+  sidebarEraRuntime.sync(document.documentElement.getAttribute('data-era-context'));
+</script>
 
 <style>
   @layer starlight.core {
@@ -90,19 +99,14 @@ const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : u
       min-block-size: 100%;
       flex-direction: column;
     }
+    .codex-sidebar-tree,
     .codex-sidebar-main { flex: 0 0 auto; }
-    .codex-sidebar-articles { margin-block-start: .35rem; }
-    .codex-sidebar-empty { padding-inline: .35rem; color: var(--sl-color-gray-3); font-size: .76rem; }
-    .codex-sidebar-era-explore { margin: 0 .2rem .4rem; }
-    .codex-sidebar-era-explore a { display: block; padding: .22rem .3rem; border-radius: .25rem; color: var(--era-link, var(--sl-color-accent-high)); font-size: .76rem; font-weight: 650; text-decoration: none; }
-    .codex-sidebar-era-explore a:hover, .codex-sidebar-era-explore a:focus-visible { background: color-mix(in oklch, var(--codex-accent) 6%, transparent); color: var(--era-link-hover, var(--sl-color-white)); }
-    .codex-sidebar-universal { margin-block-start: .5rem; padding-block-start: .4rem; border-top: 1px solid color-mix(in oklch, var(--codex-border) 72%, transparent); }
-    .codex-sidebar-universal__label { margin: 0 .3rem .25rem; color: var(--sl-color-gray-3); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .codex-sidebar-articles { margin-block-start: .28rem; }
     .codex-changelog-sidebar {
-      margin-block-start: .35rem;
-      padding: .35rem 0 0;
+      margin-block-start: .5rem;
+      padding: .45rem 0 0;
       border: 0;
-      border-top: 1px solid color-mix(in oklch, var(--codex-border) 72%, transparent);
+      border-top: 1px solid color-mix(in oklch, var(--codex-border) 60%, transparent);
       border-radius: 0;
       background: transparent;
       box-shadow: none;
@@ -113,13 +117,217 @@ const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : u
     }
     .codex-changelog-sidebar :global(.top-level) { margin: 0; }
     .codex-changelog-sidebar :global(.top-level > li) { margin: 0; padding: 0; border: 0; }
-    .codex-changelog-sidebar :global(summary) { margin: 0 0 .1rem; border-top: 0; padding: .1rem .3rem .22rem; color: var(--sl-color-gray-3); }
-    .codex-changelog-sidebar :global(.group-label),
-    .codex-changelog-sidebar :global(.flex-link) { gap: .35rem; }
-    .codex-changelog-sidebar :global(.large) { color: var(--sl-color-gray-3); font-size: .68rem; letter-spacing: .11em; text-transform: uppercase; }
+    .codex-changelog-sidebar :global(summary) {
+      min-block-size: var(--codex-sidebar-row-root);
+      margin: 0;
+      padding: .42rem !important;
+      border-top: 0;
+      color: var(--sl-color-gray-3);
+    }
+    .codex-changelog-sidebar :global(.large) {
+      color: var(--sl-color-gray-3);
+      font-size: var(--codex-sidebar-font-root) !important;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
     .codex-changelog-sidebar :global(.caret) { color: var(--sl-color-gray-3); opacity: .65; }
-    .codex-changelog-sidebar :global(a) { padding-block: .12rem; border: 0; background: transparent; color: var(--sl-color-gray-3); font-size: .72rem; opacity: .82; }
+    .codex-changelog-sidebar :global(a) {
+      display: flex;
+      min-block-size: var(--codex-sidebar-row-leaf);
+      align-items: center;
+      border: 0;
+      background: transparent;
+      color: var(--sl-color-gray-3);
+      font-size: var(--codex-sidebar-font-leaf);
+      opacity: .82;
+    }
     .codex-changelog-sidebar :global(a:hover),
     .codex-changelog-sidebar :global(a:focus) { background: transparent; color: var(--sl-color-accent-high); opacity: 1; text-decoration: none; }
+  }
+</style>
+
+<style is:global>
+  .sidebar-content .codex-sidebar-layout {
+    display: flex;
+    gap: 0;
+  }
+
+  /* These rows cross an unlayered Starlight boundary, so their hierarchy-owned
+     touch heights must be explicit rather than falling back to the folder size. */
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
+  .sidebar-content .codex-sidebar-layout .top-level > li > a,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group,
+  .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary {
+    min-block-size: var(--codex-sidebar-row-root) !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary {
+    min-block-size: var(--codex-sidebar-row-era) !important;
+  }
+
+  .codex-sidebar-era-toolbar {
+    display: none;
+    min-block-size: var(--codex-sidebar-row-leaf, 2.25rem);
+    align-items: center;
+    justify-content: space-between;
+    gap: .7rem;
+    margin: 0 .35rem !important;
+    padding: .18rem .4rem !important;
+    border: 0 !important;
+  }
+
+  html[data-era-context='CITADEL'] .codex-sidebar-era-toolbar,
+  html[data-era-context='SMOG'] .codex-sidebar-era-toolbar,
+  html[data-era-context='NEARSIGHT'] .codex-sidebar-era-toolbar,
+  html[data-era-context='ENTROPY'] .codex-sidebar-era-toolbar {
+    display: flex;
+  }
+
+  .codex-sidebar-era-toolbar [data-era-sidebar-label] {
+    display: none;
+  }
+
+  html[data-era-context='CITADEL'] .codex-sidebar-era-toolbar [data-era-sidebar-label='CITADEL'],
+  html[data-era-context='SMOG'] .codex-sidebar-era-toolbar [data-era-sidebar-label='SMOG'],
+  html[data-era-context='NEARSIGHT'] .codex-sidebar-era-toolbar [data-era-sidebar-label='NEARSIGHT'],
+  html[data-era-context='ENTROPY'] .codex-sidebar-era-toolbar [data-era-sidebar-label='ENTROPY'] {
+    display: inline;
+  }
+
+  .codex-sidebar-era-toolbar strong {
+    color: var(--era-link, var(--sl-color-accent-high));
+    font-size: var(--codex-sidebar-font-folder, .9375rem);
+    font-weight: 720;
+    letter-spacing: .055em;
+  }
+
+  .codex-sidebar-era-toolbar a {
+    padding: .18rem 0;
+    color: var(--sl-color-gray-3);
+    font-size: var(--codex-sidebar-font-leaf, .875rem);
+    text-decoration: none;
+  }
+
+  .codex-sidebar-era-toolbar a:hover,
+  .codex-sidebar-era-toolbar a:focus-visible {
+    color: var(--sl-color-white);
+  }
+
+  [data-era-sidebar-branch][hidden] {
+    display: none !important;
+  }
+
+  html[data-era-context='CITADEL'] [data-era-sidebar-branch]:not([data-era-sidebar-branch='CITADEL']),
+  html[data-era-context='SMOG'] [data-era-sidebar-branch]:not([data-era-sidebar-branch='SMOG']),
+  html[data-era-context='NEARSIGHT'] [data-era-sidebar-branch]:not([data-era-sidebar-branch='NEARSIGHT']),
+  html[data-era-context='ENTROPY'] [data-era-sidebar-branch]:not([data-era-sidebar-branch='ENTROPY']) {
+    display: none !important;
+  }
+
+  @media (max-width: 49.99rem) {
+    .codex-sidebar-era-toolbar {
+      min-block-size: var(--codex-sidebar-row-leaf, 2.5rem);
+      margin-inline-end: 3.65rem !important;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Editorial hierarchy: Cinzel marks world-scale chapters and historical eras;
+     UI sans remains reserved for categories, folders, and article destinations. */
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
+  .sidebar-content .codex-sidebar-layout .top-level > li > a,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group,
+  .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary {
+    font-family: var(--vc-font-display);
+    font-weight: 400 !important;
+    font-synthesis-weight: none;
+  }
+
+  .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .large,
+  .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .large,
+  .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary .large {
+    font-family: inherit;
+    font-weight: inherit !important;
+    font-synthesis-weight: none;
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary,
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .large {
+    font-family: var(--vc-font-display);
+    font-weight: 400 !important;
+    font-synthesis-weight: none;
+  }
+
+  @media (min-width: 50rem) {
+    .sidebar-content .codex-sidebar-layout {
+      --codex-sidebar-font-category: 1rem;
+      --codex-sidebar-font-era: 1.125rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list ul {
+      margin-inline-start: .875rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .large {
+      font-size: 1.125rem !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .ion-expandable-group > summary .large,
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > .sidebar-list > li > .empty-group .large {
+      font-size: 1rem !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .sidebar-list .empty-group .codex-icon {
+      width: 1.0625rem;
+      height: 1.0625rem;
+      opacity: .9;
+    }
+
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .codex-icon,
+    .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary .codex-icon {
+      width: 1.1875rem;
+      height: 1.1875rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list a .codex-icon {
+      width: .875rem;
+      height: .875rem;
+      opacity: .78;
+    }
+  }
+
+  @media (max-width: 49.99rem) {
+    .sidebar-content .codex-sidebar-layout .sidebar-list summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .sidebar-list .empty-group .codex-icon {
+      width: 1.0625rem;
+      height: 1.0625rem;
+      opacity: .9;
+    }
+
+    .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary .codex-icon,
+    .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group .codex-icon,
+    .sidebar-content .codex-changelog-sidebar .top-level > li > .ion-expandable-group > summary .codex-icon {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch] > .ion-expandable-group > summary .codex-icon {
+      width: 1.18rem;
+      height: 1.18rem;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list a .codex-icon {
+      width: .875rem;
+      height: .875rem;
+      opacity: .78;
+    }
   }
 </style>

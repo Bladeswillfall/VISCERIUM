@@ -3,7 +3,7 @@ import process from 'node:process';
 import fs from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';
 import matter from 'gray-matter';
-import { cleanSlug, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
+import { slugToRoute, toPosixPath, vaultSourceSlug } from '../src/lib/codex-paths.mjs';
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
@@ -30,8 +30,7 @@ const eraStyleByEra = new Map([
 ]);
 
 function slugFromFile(file) {
-  const rel = toPosixPath(path.relative(sourceDir, file)).replace(/\.(md|mdx)$/i, '');
-  return rel.split('/').map((segment) => cleanSlug(segment).replace(/\s+/g, '-')).join('/');
+  return vaultSourceSlug(path.relative(sourceDir, file));
 }
 
 function inferEra(file) {
