@@ -275,6 +275,7 @@ cssclasses:
 >   {
 >     title: "TOOLS",
 >     links: [
+>       ["Chronicle", "System/Chronicle"],
 >       ["SOP Index", "System/SOPs/SOP Index"],
 >       ["Publishing Rules", "System/Publishing Rules"],
 >       ["Creator UX", "System/SOPs/Creator UX Specification"],
