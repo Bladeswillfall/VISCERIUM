@@ -33,7 +33,9 @@ body.viscerium-list-guides .markdown-rendered li > :is(ul, ol)::before {
   position: absolute;
   inset-block: 0.2em 0.25em;
   inset-inline-start: -0.78em;
-  border-inline-start: 1px solid color-mix(in srgb, var(--text-faint) 38%, transparent);
+  width: 1px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-faint) 38%, transparent);
   pointer-events: none;
 }
 
