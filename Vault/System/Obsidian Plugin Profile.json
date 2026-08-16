@@ -177,6 +177,14 @@
       "source": "obsidian-community",
       "sharedSettings": null,
       "note": "Harper caches and personal ignored-lint state are device-local and are not part of the shared profile."
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar",
+      "testedVersion": "1.5.10",
+      "source": "obsidian-community",
+      "sharedSettings": null,
+      "note": "Optional visual navigation for daily notes. Chronicle remains canonical for periodic-note creation and review."
     }
   ]
 }
