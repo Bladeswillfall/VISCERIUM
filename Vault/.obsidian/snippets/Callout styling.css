@@ -3,13 +3,48 @@
  * Callout colour communicates admonition type; the static container stays square.
  */
 
+/* @settings
+name: VISCERIUM · Callouts
+id: viscerium-callouts
+settings:
+  - id: viscerium-callout-style
+    title: Callout edge
+    description: Adjust how strongly callout colour is expressed without changing callout semantics.
+    type: class-select
+    allowEmpty: false
+    default: viscerium-callouts-balanced
+    options:
+      - label: Balanced
+        value: viscerium-callouts-balanced
+      - label: Strong edge
+        value: viscerium-callouts-strong-edge
+      - label: Bar only
+        value: viscerium-callouts-bar-only
+*/
+
 .callout {
+  --vc-callout-border-mix: 28%;
+  --vc-callout-bg-mix: 5%;
+  --vc-callout-edge-width: 3px;
   margin-block: 0.85rem 1rem;
-  border: 1px solid color-mix(in srgb, rgb(var(--callout-color)) 28%, var(--background-modifier-border));
-  border-left-width: 3px;
+  border: 1px solid color-mix(in srgb, rgb(var(--callout-color)) var(--vc-callout-border-mix), var(--background-modifier-border));
+  border-left-width: var(--vc-callout-edge-width);
   border-radius: 0;
-  background: color-mix(in srgb, rgb(var(--callout-color)) 5%, var(--background-primary));
+  background: color-mix(in srgb, rgb(var(--callout-color)) var(--vc-callout-bg-mix), var(--background-primary));
   box-shadow: none;
+}
+
+body.viscerium-callouts-strong-edge .callout {
+  --vc-callout-border-mix: 36%;
+  --vc-callout-bg-mix: 7%;
+  --vc-callout-edge-width: 5px;
+}
+
+body.viscerium-callouts-bar-only .callout {
+  --vc-callout-bg-mix: 3%;
+  border-width: 0 0 0 4px;
+  border-left-style: solid;
+  border-left-color: rgb(var(--callout-color));
 }
 
 .callout-title {
