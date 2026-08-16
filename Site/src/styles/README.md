@@ -1,45 +1,62 @@
 # Codex stylesheet architecture
 
-The stylesheet directory is organised around feature ownership rather than one-file-per-fix fragments. Import order and import location remain application behaviour: do not move a stylesheet between Astro components and Starlight entrypoints without running the unit, build and browser suites.
+Styles are owned by the narrowest stable entry point that needs them. Import location and order are application behaviour, so run unit, production build, and browser checks after changing a boundary.
 
-## Global Starlight/Codex stack
+## Exact global cascade
 
-Registered explicitly in `astro.config.mjs`:
+`astro.config.mjs` registers this order:
 
-- `ion-layers.css` — cascade declarations and site-level stacking hierarchy;
-- `color-tokens.css` — shared palettes and semantic variables;
-- `ion-theme.css` — broad Starlight adaptation;
-- `ion-expressive-code.css` — code-block integration;
-- `typography.css` — typefaces and baseline prose rhythm;
-- `article-pages.css` — editorial articles, reference sidebars and media;
-- `codex-ui.css` — reusable surfaces and authoring utilities;
-- `navigation.css` — left navigation and overlays;
-- `header-controls.css` — desktop and mobile header actions;
-- feature sheets for maps, relationships, exploration pages, calendars, category indexes and support;
-- `layout.css` — page geometry, authored indents and late structural overrides;
-- `a11y.css` — focus, reduced motion, forced colours and target sizing;
-- `era-styles.css` — era palettes, context controls and era-aware search;
-- `graph.css` — loaded after the third-party graph sheets because its canvas adapter must win the final cascade.
+1. `katex/dist/katex.min.css`: third-party maths foundation.
+2. `ion-layers.css`: cascade layers, stacking tokens, and the shared `image-layout.css` import.
+3. `color-tokens.css`: shared palettes and semantic variables.
+4. `ion-theme.css`: broad Starlight theme adaptation.
+5. `ion-expressive-code.css`: code-block theme adaptation.
+6. `typography.css`: type and baseline text rhythm.
+7. `article-pages.css`: editorial article presentation.
+8. `layout.css`: article geometry and structural overrides.
+9. `codex-ui.css`: shared components and authoring utilities.
+10. `header-controls.css`: shared desktop and mobile header controls.
+11. `navigation.css`: shared navigation and overlays.
+12. `category-index.css`: generated Markdown category pages, which have no stable component entry point.
+13. `a11y.css`: focus, target sizing, forced colours, and reduced motion.
+14. `era-styles.css`: final era-specific token and component overrides.
 
-## Page and component entrypoints
+The order is deliberate: layers and tokens, theme, typography, article layout, shared components, navigation, accessibility, then era overrides. Feature routes do not belong in this list.
 
-- `homepage.css` — public homepage;
-- `start-here-pages.css` — guided Start Here experience;
-- `era-primer-pages.css` — era primers;
-- `degel-system.css` — Degel explorer;
-- `chronos.css` — native Chronos embeds and renderer adaptation;
-- `timeline-canvas.css` — server-rendered timeline application and routes;
-- `timeline-controls.css` — hydrated toolbar controls;
-- `timeline-chronicle.css` — Chronicle list view.
+## Stylesheet ownership
 
-Astro component and Starlight styles can be emitted in a different order from their source imports. Cross-entrypoint overrides must therefore use explicit feature scoping and sufficient selector specificity instead of relying only on concatenation order.
+| Stylesheet | Owner and load boundary |
+| --- | --- |
+| `ion-layers.css`, `color-tokens.css` | Global cascade foundation in `astro.config.mjs` |
+| `ion-theme.css`, `ion-expressive-code.css`, `typography.css` | Global Starlight and text theme in `astro.config.mjs` |
+| `article-pages.css`, `layout.css` | Shared article and structural layout in `astro.config.mjs` |
+| `codex-ui.css`, `header-controls.css`, `navigation.css` | Shared controls and navigation in `astro.config.mjs` |
+| `category-index.css` | Global exception for generated Markdown category pages |
+| `a11y.css`, `era-styles.css` | Final global accessibility and era overrides |
+| `maps.css` | `WorldMap.astro` and the Atlas index route |
+| `relationships.css` | `RelationshipGraph.astro` |
+| `exploration-pages.css` | `WorldMap.astro` and `RelationshipGraph.astro` |
+| `support.css` | Support and contact routes |
+| `graph.css` and `starlight-site-graph` package styles | Graph route, with `graph.css` last |
+| `calendar-date-badge.css` | `CalendarDateBadge.astro` |
+| `calendar-year.css` | `CalendarYear.astro` |
+| `homepage.css` | Public homepage route |
+| `start-here-pages.css` | `StartHerePrimer.astro` |
+| `era-primer-pages.css` | `EraPrimer.astro` |
+| `degel-system.css` | `DegelSystemExplorer.astro` |
+| `storyteller-view.css` | Shared page-title Storyteller switcher boundary |
+| `chronos.css`, `timeline-canvas.css`, `timeline-chronicle.css`, `timeline-controls.css` | `TimelineApp.astro`, while `chronos.css` also serves the Obsidian plugin |
+| `smart-tooltips.css` | Components that install shared tooltip behaviour |
+| `image-layout.css` | Shared article-image rules imported by `ion-layers.css` |
 
-## Editing rules
+Astro component and Starlight styles can be emitted in a different order from their source imports. Cross-entrypoint overrides need explicit feature scoping and sufficient selector specificity instead of relying only on concatenation order.
 
-1. Keep selectors in the stylesheet that owns their feature.
-2. Keep shared colours in `color-tokens.css`.
-3. Keep broad geometry and deliberate late overrides in `layout.css`.
-4. Preserve section provenance comments inside consolidated files.
-5. Explain non-obvious cascade requirements, third-party overrides and intentionally unlayered rules.
-6. Avoid CSS `@import` aggregators. Consolidated files contain the rules directly.
-7. Run unit tests, the production build and browser regression tests after changing stylesheet boundaries.
+## Placement rules
+
+- Shared rules used across unrelated routes belong in a named global foundation or shared-component sheet.
+- Route-specific rules belong to the route or its stable feature component.
+- Component-local rules belong in that component's `<style>` block when no other entry point consumes them.
+- Era-specific tokens and overrides belong in `era-styles.css`, loaded last globally.
+- Keep a feature in one clearly named sheet unless it has a genuine shared and full-interface split, as the calendar does.
+- Keep shared colours in `color-tokens.css` and section provenance comments inside consolidated files.
+- Explain non-obvious third-party and cascade requirements. Do not add CSS `@import` aggregators.

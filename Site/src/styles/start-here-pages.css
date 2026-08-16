@@ -323,10 +323,10 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: border-color .15s ease, background .15s ease, translate .15s ease;
+  transition: border-color .15s ease, background .15s ease;
 }
 .start-choice:hover,
-.start-choice:focus-visible { border-color: var(--start-accent); translate: 0 -.1rem; }
+.start-choice:focus-visible { border-color: var(--start-accent); }
 .start-choice.is-selected { border-color: var(--start-accent); background: color-mix(in oklch, var(--start-accent) 9%, var(--start-bg)); }
 .start-choice strong { color: var(--start-text); font-family: var(--vc-font-ui); font-size: .82rem; }
 .start-choice span { margin-top: .15rem; color: var(--start-muted); font-size: .72rem; line-height: 1.3; }

@@ -11,6 +11,7 @@ import { parseObsidianImageEmbed, renderArticleImage } from './image-layout.mjs'
 import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';
 import { resolveGiscusForPage } from '../src/lib/page-kind.mjs';
+import { stringifyGeneratedFrontmatter } from './sync-frontmatter.mjs';
 
 const siteRoot = process.cwd();
 const sourceDir = path.resolve(siteRoot, siteConfig.loreSourceDir);
@@ -106,31 +107,6 @@ function parseFrontmatter(raw, file) {
     frontmatter,
     content: parsed.content.replace(/^\r?\n/, ''),
   };
-}
-
-function stringifyFrontmatter(frontmatter, generated) {
-  const lines = frontmatter.split(/\r?\n/);
-
-  function setField(key, value) {
-    if (value === undefined || value === null || value === '') return;
-    const line = `${key}: ${value}`;
-    const index = lines.findIndex((entry) => entry.startsWith(`${key}:`));
-    if (index === -1) lines.push(line);
-    else lines[index] = line;
-  }
-
-  setField('slug', generated.slug);
-  setField('type', generated.type);
-  setField('era', generated.era);
-  setField('eraStyle', generated.eraStyle);
-  for (const [key, value] of Object.entries(generated.assets ?? {})) setField(key, value);
-  if (generated.links?.length && !lines.some((line) => line.startsWith('links:'))) {
-    lines.push(`links: ${JSON.stringify(generated.links)}`);
-  setField('giscus', generated.giscus);
-  }
-  setField('sourcePath', JSON.stringify(generated.sourcePath));
-
-  return `---\n${lines.join('\n')}\n---\n\n`;
 }
 
 async function pathExists(file) {
@@ -491,7 +467,7 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
   }
   if (parsed.data.asset && parsed.data.type === 'image') await copyAsset('Images', parsed.data.asset);
   const result = await convertContent(parsed.content, file, parsed, outFile, extension === '.mdx');
-  await fs.writeFile(outFile, `${stringifyFrontmatter(parsed.frontmatter, {
+  await fs.writeFile(outFile, `${stringifyGeneratedFrontmatter(parsed.frontmatter, {
     slug,
     type: parsed.data.type,
     era: parsed.data.era,

@@ -105,7 +105,19 @@ test('breadcrumb choices keep consistent geometry while era choices carry distin
   expect(new Set(choiceGeometry.map(({ border }) => border)).size).toBeGreaterThan(1);
   expect(new Set(choiceGeometry.map(({ background }) => background)).size).toBe(4);
 
-  await page.locator('[data-breadcrumb-group="era"] [data-value="citadel"]').click();
+  const citadelChoice = page.locator('[data-breadcrumb-group="era"] [data-value="citadel"]');
+  const restingBorder = await citadelChoice.evaluate((element) => getComputedStyle(element).borderTopColor);
+  await citadelChoice.hover();
+  const hoverState = await citadelChoice.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { border: style.borderTopColor, transform: style.transform, translate: style.translate };
+  });
+  expect(hoverState.border).not.toBe(restingBorder);
+  expect(hoverState.transform).toBe('none');
+  expect(hoverState.translate).toBe('none');
+
+  await citadelChoice.click();
+  await expect(citadelChoice).toHaveAttribute('aria-pressed', 'true');
   await page.locator('[data-breadcrumb-group="world"] [data-value="danger"]').click();
   await page.locator('[data-breadcrumb-group="thread"] [data-value="resonance"]').click();
 

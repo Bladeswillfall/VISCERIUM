@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { parseSidebarWikilink } from '../lib/sidebar-links.mjs';
+import { isExternalNavigationReference, resolveFrontmatterReference } from '../lib/frontmatter-reference.mjs';
 import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfContents';
 import TableOfContents from 'virtual:starlight/components/TableOfContents';
 
@@ -14,18 +14,6 @@ function isPresent(value) {
 
 function isPlainObject(value) {
   return value && typeof value === 'object' && !Array.isArray(value);
-}
-
-function isExternalUrl(value) {
-  return typeof value === 'string' && /^[a-z][a-z0-9+.-]*:/i.test(value);
-}
-
-function normaliseAssetPath(value, category = 'images') {
-  if (typeof value !== 'string') return undefined;
-  const trimmed = value.trim();
-  if (!trimmed) return undefined;
-  if (trimmed.startsWith('/') || isExternalUrl(trimmed)) return trimmed;
-  return `/assets/${category}/${trimmed.split('/').pop()}`;
 }
 
 function sidebarLinkKey(value) {
@@ -88,18 +76,14 @@ function resolveSidebarTarget(rawTarget) {
 }
 
 function normaliseRoute(value) {
-  if (typeof value !== 'string') return undefined;
-  const trimmed = value.trim();
-  if (!trimmed) return undefined;
+  return resolveFrontmatterReference(value, {
+    resolveWikilink: resolveSidebarTarget,
+  });
+}
 
-  const wikilink = parseSidebarWikilink(trimmed);
-  if (wikilink) {
-    const route = resolveSidebarTarget(wikilink.target);
-    return route ? `${route}${wikilink.fragment}` : undefined;
-  }
-
-  if (trimmed.startsWith('/') || trimmed.startsWith('#') || isExternalUrl(trimmed)) return trimmed;
-  return `/${trimmed.replace(/^\/+|\/+$/g, '')}/`;
+function navigationValue(value) {
+  if (typeof value !== 'string' || !/^(?:https?|mailto):/i.test(value.trim())) return undefined;
+  return normaliseRoute(value);
 }
 
 function formatValue(value) {
@@ -148,7 +132,7 @@ function normaliseSidebarSection(section) {
 }
 
 const rawImageSource = entry.image ?? (entry.type === 'image' ? entry.asset : undefined);
-const sidebarImage = normaliseAssetPath(rawImageSource);
+const sidebarImage = resolveFrontmatterReference(rawImageSource, { kind: 'asset' });
 const imageDetailHref = normaliseRoute(entry.imagePage);
 const isDecorativeImage = entry.decorativeImage === true;
 const imageAlt = isDecorativeImage ? '' : imageTextAlternative(entry.alt ?? `${entry.title} image`, entry.imageText);
@@ -230,8 +214,9 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
               {sidebarFields.length > 0 && (
                 <dl class="codex-sidebar-meta">
                   {sidebarFields.map(({ label, value, href }) => {
-                    const linkedExternally = href && isExternalUrl(href);
-                    const valueIsExternal = !href && isExternalUrl(value);
+                    const linkedExternally = href && isExternalNavigationReference(href);
+                    const valueHref = !href ? navigationValue(value) : undefined;
+                    const valueLinkedExternally = valueHref && isExternalNavigationReference(valueHref);
                     return (
                       <div>
                         <dt>{label}</dt>
@@ -240,8 +225,10 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
                             <a href={href} target={linkedExternally ? '_blank' : undefined} rel={linkedExternally ? 'noreferrer' : undefined}>
                               {formatValue(value)}{linkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
                             </a>
-                          ) : valueIsExternal ? (
-                            <a href={value} target="_blank" rel="noreferrer">Open {label}<span class="codex-sr-only">{externalNotice(true)}</span></a>
+                          ) : valueHref ? (
+                            <a href={valueHref} target={valueLinkedExternally ? '_blank' : undefined} rel={valueLinkedExternally ? 'noreferrer' : undefined}>
+                              Open {label}{valueLinkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
+                            </a>
                           ) : formatValue(value)}
                         </dd>
                       </div>
@@ -257,8 +244,9 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
                       {section.fields.length > 0 && (
                         <dl class="codex-sidebar-meta codex-sidebar-meta-compact">
                           {section.fields.map(({ label, value, href }) => {
-                            const linkedExternally = href && isExternalUrl(href);
-                            const valueIsExternal = !href && isExternalUrl(value);
+                            const linkedExternally = href && isExternalNavigationReference(href);
+                            const valueHref = !href ? navigationValue(value) : undefined;
+                            const valueLinkedExternally = valueHref && isExternalNavigationReference(valueHref);
                             return (
                               <div>
                                 <dt>{label}</dt>
@@ -267,8 +255,10 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
                                     <a href={href} target={linkedExternally ? '_blank' : undefined} rel={linkedExternally ? 'noreferrer' : undefined}>
                                       {formatValue(value)}{linkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
                                     </a>
-                                  ) : valueIsExternal ? (
-                                    <a href={value} target="_blank" rel="noreferrer">Open {label}<span class="codex-sr-only">{externalNotice(true)}</span></a>
+                                  ) : valueHref ? (
+                                    <a href={valueHref} target={valueLinkedExternally ? '_blank' : undefined} rel={valueLinkedExternally ? 'noreferrer' : undefined}>
+                                      Open {label}{valueLinkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
+                                    </a>
                                   ) : formatValue(value)}
                                 </dd>
                               </div>
@@ -279,7 +269,7 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
                       {section.items.length > 0 && (
                         <ul class="codex-sidebar-list">
                           {section.items.map((item) => {
-                            const linkedExternally = item.href && isExternalUrl(item.href);
+                            const linkedExternally = item.href && isExternalNavigationReference(item.href);
                             return <li>{item.href ? <a href={item.href} target={linkedExternally ? '_blank' : undefined} rel={linkedExternally ? 'noreferrer' : undefined}>{item.label}{linkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}</a> : item.label}</li>;
                           })}
                         </ul>

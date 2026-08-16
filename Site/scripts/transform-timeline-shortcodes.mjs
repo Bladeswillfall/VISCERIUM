@@ -2,7 +2,7 @@ import path from 'node:path';
 import process from 'node:process';
 import fs from 'node:fs/promises';
 import matter from 'gray-matter';
-import { LANE_MODES, TIMELINE_IDS } from '../src/lib/timeline/core.mjs';
+import { resolveTimelineOptions } from '../src/lib/timeline/options.mjs';
 
 const siteRoot = process.cwd();
 const docsDir = process.env.VISCERIUM_DOCS_DIR
@@ -10,45 +10,6 @@ const docsDir = process.env.VISCERIUM_DOCS_DIR
   : path.resolve(siteRoot, 'src/content/docs');
 const timelineComponentPath = path.resolve(siteRoot, 'src/components/timeline/TimelineEmbed.astro');
 const chronosComponentPath = path.resolve(siteRoot, 'src/components/timeline/ChronosEmbed.astro');
-
-function parseBoolean(value, fallback) {
-  if (value === undefined) return fallback;
-  if (typeof value === 'boolean') return value;
-  if (String(value).toLowerCase() === 'true') return true;
-  if (String(value).toLowerCase() === 'false') return false;
-  return fallback;
-}
-
-function parseInlineSpec(id, spec) {
-  const block = { timeline: id };
-  for (const pair of String(spec ?? '').matchAll(/([a-z][\w-]*)=(?:"([^"]*)"|'([^']*)'|([^\s]+))/gi)) {
-    const key = pair[1].toLowerCase();
-    const value = pair[2] ?? pair[3] ?? pair[4] ?? '';
-    if (key === 'timeline') block.timeline = value;
-    if (key === 'calendar') block.defaultCalendar = value;
-    if (key === 'lane' || key === 'lanemode') block.laneMode = value;
-    if (key === 'filters' || key === 'showfilters') block.showFilters = parseBoolean(value, true);
-    if (key === 'minimap' || key === 'showminimap') block.showMinimap = parseBoolean(value, true);
-    if (key === 'legend' || key === 'showlegend') block.showLegend = parseBoolean(value, true);
-    if (key === 'compact') block.compact = parseBoolean(value, false);
-  }
-  return block;
-}
-
-function normalizeBlock(value) {
-  if (!value || typeof value !== 'object') return null;
-  if (!TIMELINE_IDS.includes(value.timeline)) return null;
-  const laneMode = LANE_MODES.includes(value.laneMode) ? value.laneMode : 'unified';
-  return {
-    timeline: value.timeline,
-    defaultCalendar: typeof value.defaultCalendar === 'string' ? value.defaultCalendar : undefined,
-    laneMode,
-    showFilters: parseBoolean(value.showFilters, true),
-    showMinimap: parseBoolean(value.showMinimap, true),
-    showLegend: parseBoolean(value.showLegend, true),
-    compact: parseBoolean(value.compact, false),
-  };
-}
 
 function relativeImport(file, componentPath) {
   let relative = path.relative(path.dirname(file), componentPath).replace(/\\/g, '/');
@@ -133,8 +94,7 @@ for (const file of files) {
     }
 
     const id = match[1];
-    const inline = parseInlineSpec(id, match[2]);
-    const block = normalizeBlock(blocks[id]) ?? normalizeBlock(inline);
+    const block = resolveTimelineOptions(id, match[2], blocks[id]);
     if (!block) {
       output.push(warning(`No valid timeline block found for '${id}'.`));
       continue;

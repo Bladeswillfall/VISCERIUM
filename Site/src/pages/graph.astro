@@ -1,6 +1,10 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import { PageGraph } from 'starlight-site-graph/components';
+import 'starlight-site-graph/styles/layers.css';
+import 'starlight-site-graph/styles/common.css';
+import 'starlight-site-graph/styles/starlight.css';
+import '../styles/graph.css';
 ---
 <StarlightPage frontmatter={{ title: 'World Graph', description: 'Public links and relationships generated from the Obsidian vault.' }}>
   <div class="world-graph">

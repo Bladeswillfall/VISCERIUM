@@ -1,11 +1,16 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import siteConfig from '../../site.config.mjs';
+import supportStylesHref from '../styles/support.css?url&no-inline';
 
 const contactForm = siteConfig.contactForm;
 ---
 
-<StarlightPage frontmatter={{ title: 'Contact', description: 'Contact options for the VISCERIUM Codex.' }}>
+<StarlightPage frontmatter={{
+  title: 'Contact',
+  description: 'Contact options for the VISCERIUM Codex.',
+  head: [{ tag: 'link', attrs: { rel: 'stylesheet', href: supportStylesHref } }],
+}}>
   <section class="support-page support-page--contact">
     <header class="support-hero codex-frame">
       <p class="codex-kicker">Private contact</p>

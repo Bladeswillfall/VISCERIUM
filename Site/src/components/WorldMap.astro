@@ -1,4 +1,7 @@
 ---
+import '../styles/maps.css';
+import '../styles/exploration-pages.css';
+
 const { map } = Astro.props;
 const payload = JSON.stringify(map ?? {}).replace(/</g, '\\u003c');
 const positionedMarkers = map?.markers?.filter((marker) => Number.isFinite(marker.x) && Number.isFinite(marker.y)) ?? [];

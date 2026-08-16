@@ -43,6 +43,28 @@ test('toolbar buttons align to one height without a large top gutter', async ({ 
   expect(geometry.firstCommand).toBe(true);
 });
 
+test('toolbar buttons change tone without hover or focus movement', async ({ page }) => {
+  await openTimeline(page);
+  const command = page.locator('[data-vc-reset]');
+  const restingBackground = await command.evaluate((button) => getComputedStyle(button).background);
+
+  await command.hover();
+  await expect.poll(() => command.evaluate((button) => getComputedStyle(button).background)).not.toBe(restingBackground);
+  const hoverState = await command.evaluate((button) => {
+    const style = getComputedStyle(button);
+    return { transform: style.transform, translate: style.translate, scale: style.scale };
+  });
+  expect(hoverState).toEqual({ transform: 'none', translate: 'none', scale: 'none' });
+
+  await command.focus();
+  const focusState = await command.evaluate((button) => {
+    const style = getComputedStyle(button);
+    return { outline: style.outlineStyle, transform: style.transform, translate: style.translate, scale: style.scale };
+  });
+  expect(focusState.outline).not.toBe('none');
+  expect(focusState).toMatchObject({ transform: 'none', translate: 'none', scale: 'none' });
+});
+
 test('chronicle control retains its icon and mode label', async ({ page }) => {
   await openTimeline(page);
   const toggle = page.locator('[data-vc-list]');

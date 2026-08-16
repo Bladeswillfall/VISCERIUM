@@ -437,68 +437,6 @@
     line-height: 1;
   }
 
-  .calendar-date-badge {
-    margin-block: .75rem 1rem;
-    padding: .85rem 1rem;
-    border: 0;
-  }
-
-  .calendar-date-badge dl {
-    display: grid;
-    gap: .75rem;
-    margin: 0;
-  }
-
-  .calendar-date-badge div {
-    display: grid;
-    gap: .35rem;
-  }
-
-  .calendar-date-badge dt {
-    color: var(--sl-color-gray-3);
-    font-size: var(--sl-text-xs);
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-
-  .calendar-date-badge dd {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .35rem .55rem;
-    align-items: center;
-    margin: 0;
-  }
-
-  .calendar-date-badge a {
-    color: var(--sl-color-accent-high);
-    text-decoration: none;
-  }
-
-  .calendar-date-badge a:hover {
-    color: var(--sl-color-white);
-    text-decoration: underline;
-  }
-
-  .calendar-season,
-  .calendar-observance {
-    display: inline-flex;
-    align-items: center;
-    min-height: 1.35rem;
-    padding: .15rem .45rem;
-    border: 0;
-    border-radius: 999px;
-    color: var(--sl-color-gray-2);
-    font-size: var(--sl-text-xs);
-    line-height: 1;
-    text-transform: capitalize;
-  }
-
-  .calendar-observance--holiday {
-    border-color: color-mix(in oklch, var(--codex-danger) 50%, transparent);
-    color: var(--codex-danger-high);
-  }
-
   @supports not selector(:has(*)) {
     .calendar-day a:hover {
       outline: 2px solid var(--sl-color-accent-high);
