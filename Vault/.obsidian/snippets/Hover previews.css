@@ -3,9 +3,46 @@
  * Gives page-preview popovers a readable size and calmer frame.
  */
 
+/* @settings
+name: VISCERIUM · Hover previews
+id: viscerium-hover-previews
+settings:
+  - id: viscerium-hover-preview-size
+    title: Preview size
+    description: Choose the desktop size of page-preview popovers. Mobile remains viewport constrained.
+    type: class-select
+    allowEmpty: false
+    default: viscerium-hover-comfortable
+    options:
+      - label: Compact
+        value: viscerium-hover-compact
+      - label: Comfortable
+        value: viscerium-hover-comfortable
+      - label: Large
+        value: viscerium-hover-large
+*/
+
+body {
+  --vc-hover-preview-width: 42rem;
+  --vc-hover-preview-height: 72vh;
+  --vc-hover-preview-height-cap: 44rem;
+}
+
+body.viscerium-hover-compact {
+  --vc-hover-preview-width: 32rem;
+  --vc-hover-preview-height: 62vh;
+  --vc-hover-preview-height-cap: 36rem;
+}
+
+body.viscerium-hover-large {
+  --vc-hover-preview-width: 52rem;
+  --vc-hover-preview-height: 80vh;
+  --vc-hover-preview-height-cap: 52rem;
+}
+
 .popover.hover-popover {
-  width: min(42rem, calc(100vw - 2rem));
-  max-height: min(72vh, 44rem);
+  width: min(var(--vc-hover-preview-width), calc(100vw - 2rem));
+  max-height: min(var(--vc-hover-preview-height), var(--vc-hover-preview-height-cap));
   border: 1px solid var(--background-modifier-border);
   border-radius: 10px;
   box-shadow: var(--shadow-s);
@@ -19,4 +56,16 @@
 .popover.hover-popover .markdown-preview-sizer {
   max-width: 100%;
   margin-inline: auto;
+}
+
+@media (max-width: 620px) {
+  .popover.hover-popover {
+    width: calc(100vw - 1rem);
+    max-height: min(78vh, 42rem);
+    border-radius: 8px;
+  }
+
+  .popover.hover-popover .markdown-preview-view {
+    padding: 0.9rem 1rem;
+  }
 }
