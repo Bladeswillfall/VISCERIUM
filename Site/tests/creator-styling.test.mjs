@@ -63,6 +63,17 @@ test('tag styling keeps Compact as fallback and Pretty Pills explicitly opt-in',
   assert.doesNotMatch(css, /\.cm-s-obsidian/);
 });
 
+test('tag styling covers native Properties and Bases tag pills without styling every list property', async () => {
+  const css = await readVaultText('.obsidian/snippets/Tag styling.css');
+
+  assert.match(css, /\.metadata-property\[data-property-key="tags" i\] \.multi-select-pill/);
+  assert.match(css, /\.bases-metadata-value\[data-property-type="tags" i\] \.multi-select-pill/);
+  assert.match(css, /\.metadata-property\[data-property-key="tags" i\] \.multi-select-pill-remove-button/);
+  assert.match(css, /body\.viscerium-tags-pretty \.metadata-property\[data-property-key="tags" i\] \.multi-select-pill/);
+  assert.match(css, /body\.viscerium-tags-pretty \.bases-metadata-value\[data-property-type="tags" i\] \.multi-select-pill/);
+  assert.doesNotMatch(css, /^\s*\.multi-select-pill(?:\s|,|\{)/m);
+});
+
 test('existing callout and hover owners expose scoped variants with responsive fallbacks', async () => {
   const callouts = await readVaultText('.obsidian/snippets/Callout styling.css');
   const hover = await readVaultText('.obsidian/snippets/Hover previews.css');

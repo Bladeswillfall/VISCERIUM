@@ -8,6 +8,8 @@ Use **MySnippets** to toggle files while testing the creator UI.
 
 Use **Settings → Style Settings** for deliberate variants exposed by an enabled snippet. Shared VISCERIUM defaults are tracked in `.obsidian/plugins/obsidian-style-settings/data.json`; do not create a parallel snippet just to represent another appearance of the same component.
 
+After pulling a change that adds a new snippet file while Obsidian is already open, use **Settings → Appearance → CSS snippets → Reload snippets** once so Obsidian discovers the new file. Existing enabled snippets continue to update from disk normally.
+
 Read [[System/SOPs/Creator UX Specification|Creator UX Specification]] before adding or substantially changing presentation rules.
 
 ## Visual grammar
@@ -108,7 +110,7 @@ World Anvil triage colour means migration state, not editorial importance:
 
 `Article widths` owns the responsive article lane for ordinary Markdown notes in Reading View and Live Preview. It widens the header image, Properties block, article body, tables, callouts and embeds together while preserving safe gutters. `Home dashboard` remains the owner for [[Home]].
 
-`Tag styling` defaults to **Compact** and also exposes **Pretty Pills** and **Minimal** appearances in Style Settings. Pretty Pills remains available for intentional use but is not the repository-wide fallback. The implementation follows Baseline/Obsidian colour variables and covers Reading View plus CM6 Live Preview; do not add another hashtag/pill snippet alongside it.
+`Tag styling` defaults to **Compact** and also exposes **Pretty Pills** and **Minimal** appearances in Style Settings. Pretty Pills remains available for intentional use but is not the repository-wide fallback. The implementation covers Reading View hashtags, CM6 Live Preview hashtags, the native `tags` property pills and tag-valued cells in Bases; do not add another hashtag/pill snippet alongside it.
 
 `Callout styling` exposes **Balanced**, **Strong edge** and **Bar only** variants. `Hover previews` exposes **Compact**, **Comfortable** and **Large** desktop sizes while retaining explicit narrow-pane constraints.
 
