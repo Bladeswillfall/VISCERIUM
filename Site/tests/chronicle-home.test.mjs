@@ -35,3 +35,31 @@ test('compact Chronicle reuses the shared hub and links to the full workspace', 
   assert.match(css, /grid-template-columns: repeat\(5, minmax\(0, 1fr\)\)/);
   assert.match(css, /@container viscerium-home/);
 });
+
+test('compact Chronicle is one tonal strip rather than repeated accent cards', async () => {
+  const css = await readVaultText('System/Views/Chronicle/Hub/view.css');
+  const compactPeriod = css.match(
+    /\.vc-chronicle-hub\.is-compact \.vc-chronicle-period \{([\s\S]*?)\n\}/,
+  )?.[1] ?? '';
+  const compactGrid = css.match(
+    /\.vc-chronicle-hub\.is-compact \.vc-chronicle-period-grid \{([\s\S]*?)\n\}/,
+  )?.[1] ?? '';
+
+  assert.match(compactPeriod, /border: 0;/);
+  assert.match(compactPeriod, /background: transparent;/);
+  assert.match(compactGrid, /background: var\(--background-secondary\);/);
+  assert.doesNotMatch(compactPeriod, /border-left/);
+});
+
+test('compact Chronicle restores a touch-safe action height on narrow layouts', async () => {
+  const css = await readVaultText('System/Views/Chronicle/Hub/view.css');
+
+  assert.match(
+    css,
+    /@container viscerium-home \(max-width: 30rem\)[\s\S]*?\.vc-chronicle-hub\.is-compact \.vc-chronicle-period-action \{\s*min-height: 36px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width: 620px\)[\s\S]*?\.vc-chronicle-period-action,\s*\.vc-chronicle-hub\.is-compact \.vc-chronicle-period-action \{\s*min-height: 36px;/,
+  );
+});
