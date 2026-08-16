@@ -55,6 +55,11 @@ test('tag styling keeps Compact as fallback and Pretty Pills explicitly opt-in',
   assert.match(css, /body\.viscerium-tags-pretty \.markdown-rendered a\.tag/);
   assert.match(css, /body\.viscerium-tags-pretty[\s\S]*border-radius: 999px/);
   assert.match(css, /\.markdown-rendered a\.tag \{[\s\S]*border-radius: 4px/);
+
+  const firstPillRadius = css.indexOf('border-radius: 999px');
+  const prettyScope = css.indexOf('body.viscerium-tags-pretty');
+  assert.ok(prettyScope >= 0 && firstPillRadius > prettyScope, 'pill radius must remain inside the Pretty opt-in section');
+  assert.doesNotMatch(css, /default: viscerium-tags-pretty/);
   assert.doesNotMatch(css, /\.cm-s-obsidian/);
 });
 
