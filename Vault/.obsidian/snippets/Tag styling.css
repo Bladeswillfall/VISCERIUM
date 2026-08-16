@@ -123,11 +123,9 @@ body.viscerium-tags-pretty .bases-metadata-value[data-property-type="tags" i] .m
   --vc-tag-text: var(--text-normal);
 }
 
-/* Minimal keeps hashtags readable without treating them as controls. */
+/* Minimal keeps inline hashtags readable without treating them as controls. */
 body.viscerium-tags-minimal .markdown-rendered a.tag,
-body.viscerium-tags-minimal .markdown-source-view.mod-cm6 .cm-hashtag,
-body.viscerium-tags-minimal .metadata-property[data-property-key="tags" i] .multi-select-pill,
-body.viscerium-tags-minimal .bases-metadata-value[data-property-type="tags" i] .multi-select-pill {
+body.viscerium-tags-minimal .markdown-source-view.mod-cm6 .cm-hashtag {
   border: 0;
   border-radius: 0;
   padding: 0;
@@ -137,9 +135,13 @@ body.viscerium-tags-minimal .bases-metadata-value[data-property-type="tags" i] .
   font-weight: 500;
 }
 
-/* Keep the remove affordance usable when Minimal strips the pill container. */
+/* Property tags retain native spacing so the remove affordance remains easy to use. */
 body.viscerium-tags-minimal .metadata-property[data-property-key="tags" i] .multi-select-pill,
 body.viscerium-tags-minimal .bases-metadata-value[data-property-type="tags" i] .multi-select-pill {
-  gap: 0.2em;
-  padding-inline: 0.1em;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-accent);
+  font-size: 0.9em;
+  font-weight: 500;
 }
