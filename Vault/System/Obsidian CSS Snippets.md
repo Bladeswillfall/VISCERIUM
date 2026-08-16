@@ -18,7 +18,7 @@ The creator vault follows one shared rule:
 
 `Creator UI foundation` owns the shared spacing, radius, surface and semantic-colour vocabulary. Other snippets should consume those variables rather than inventing near-duplicate values.
 
-Static VISCERIUM surfaces such as callouts, tables, embeds, image frames and code blocks are square. Interactive controls/cards may use the small control radius. Hashtags are an intentional exception: the default Pretty Pills treatment presents them as compact interactive metadata, while Style Settings also exposes Compact and Minimal variants.
+Static VISCERIUM surfaces such as callouts, tables, embeds, image frames and code blocks are square. Interactive controls/cards may use the small control radius. Hashtags stay restrained by default with the Compact treatment; the fully rounded Pretty Pills treatment is an explicit Style Settings option rather than a vault-wide metadata default.
 
 ## Snippet ownership
 
@@ -108,7 +108,7 @@ World Anvil triage colour means migration state, not editorial importance:
 
 `Article widths` owns the responsive article lane for ordinary Markdown notes in Reading View and Live Preview. It widens the header image, Properties block, article body, tables, callouts and embeds together while preserving safe gutters. `Home dashboard` remains the owner for [[Home]].
 
-`Tag styling` defaults to **Pretty Pills** and also exposes **Compact** and **Minimal** appearances in Style Settings. The implementation follows Baseline/Obsidian colour variables and covers Reading View plus CM6 Live Preview; do not add another hashtag/pill snippet alongside it.
+`Tag styling` defaults to **Compact** and also exposes **Pretty Pills** and **Minimal** appearances in Style Settings. Pretty Pills remains available for intentional use but is not the repository-wide fallback. The implementation follows Baseline/Obsidian colour variables and covers Reading View plus CM6 Live Preview; do not add another hashtag/pill snippet alongside it.
 
 `Callout styling` exposes **Balanced**, **Strong edge** and **Bar only** variants. `Hover previews` exposes **Compact**, **Comfortable** and **Large** desktop sizes while retaining explicit narrow-pane constraints.
 
