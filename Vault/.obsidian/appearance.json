@@ -28,5 +28,6 @@
   ],
   "accentColor": "#b1a98c",
   "showViewHeader": true,
-  "showRibbon": true
+  "showRibbon": true,
+  "nativeMenus": false
 }
