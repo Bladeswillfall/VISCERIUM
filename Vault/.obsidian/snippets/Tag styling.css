@@ -1,20 +1,105 @@
 /*
  * Tag styling
- * Keeps tags compact and secondary to article content.
+ * Keeps tag presentation owned in one place and exposes a few deliberate variants.
  */
 
+/* @settings
+name: VISCERIUM · Tags
+id: viscerium-tags
+settings:
+  - id: viscerium-tag-style
+    title: Tag appearance
+    description: Choose how hashtags appear in Reading View and Live Preview.
+    type: class-select
+    allowEmpty: false
+    default: viscerium-tags-pretty
+    options:
+      - label: Pretty pills
+        value: viscerium-tags-pretty
+      - label: Compact
+        value: viscerium-tags-compact
+      - label: Minimal
+        value: viscerium-tags-minimal
+*/
+
+/* Pretty pills are the resilient fallback if Style Settings is unavailable. */
 .markdown-rendered a.tag,
-.cm-s-obsidian span.cm-hashtag {
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 4px;
-  padding: 0.06em 0.3em;
-  background: color-mix(in srgb, var(--background-secondary) 72%, transparent);
-  color: var(--text-muted);
-  font-size: 0.9em;
+.markdown-source-view.mod-cm6 .cm-hashtag {
+  --vc-tag-border: color-mix(in srgb, var(--interactive-accent) 38%, var(--background-modifier-border));
+  --vc-tag-bg: color-mix(in srgb, var(--interactive-accent) 11%, var(--background-secondary));
+  --vc-tag-text: color-mix(in srgb, var(--interactive-accent) 58%, var(--text-normal));
+  background: var(--vc-tag-bg);
+  color: var(--vc-tag-text);
+  font-size: 0.88em;
+  font-weight: 600;
   text-decoration: none;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
-.markdown-rendered a.tag:hover {
-  border-color: var(--interactive-accent);
-  color: var(--text-normal);
+.markdown-rendered a.tag {
+  display: inline-block;
+  border: 1px solid var(--vc-tag-border);
+  border-radius: 999px;
+  padding: 0.08em 0.55em;
+}
+
+/* Live Preview splits the leading # and tag text into separate CM6 spans. */
+.markdown-source-view.mod-cm6 .cm-hashtag {
+  border-block: 1px solid var(--vc-tag-border);
+}
+
+.markdown-source-view.mod-cm6 .cm-hashtag-begin {
+  border-left: 1px solid var(--vc-tag-border);
+  border-radius: 999px 0 0 999px;
+  padding-left: 0.45em;
+}
+
+.markdown-source-view.mod-cm6 .cm-hashtag-end {
+  border-right: 1px solid var(--vc-tag-border);
+  border-radius: 0 999px 999px 0;
+  padding-right: 0.45em;
+}
+
+.markdown-rendered a.tag:hover,
+.markdown-source-view.mod-cm6 .cm-hashtag:hover {
+  --vc-tag-border: color-mix(in srgb, var(--interactive-accent) 72%, var(--background-modifier-border));
+  --vc-tag-bg: color-mix(in srgb, var(--interactive-accent) 22%, var(--background-secondary));
+  --vc-tag-text: var(--text-normal);
+}
+
+/* Compact preserves the previous VISCERIUM treatment. */
+body.viscerium-tags-compact .markdown-rendered a.tag,
+body.viscerium-tags-compact .markdown-source-view.mod-cm6 .cm-hashtag {
+  --vc-tag-border: var(--background-modifier-border);
+  --vc-tag-bg: color-mix(in srgb, var(--background-secondary) 72%, transparent);
+  --vc-tag-text: var(--text-muted);
+  font-size: 0.9em;
+  font-weight: 400;
+}
+
+body.viscerium-tags-compact .markdown-rendered a.tag {
+  border-radius: 4px;
+  padding: 0.06em 0.3em;
+}
+
+body.viscerium-tags-compact .markdown-source-view.mod-cm6 .cm-hashtag-begin {
+  border-radius: 4px 0 0 4px;
+  padding-left: 0.25em;
+}
+
+body.viscerium-tags-compact .markdown-source-view.mod-cm6 .cm-hashtag-end {
+  border-radius: 0 4px 4px 0;
+  padding-right: 0.25em;
+}
+
+/* Minimal keeps hashtags readable without treating them as controls. */
+body.viscerium-tags-minimal .markdown-rendered a.tag,
+body.viscerium-tags-minimal .markdown-source-view.mod-cm6 .cm-hashtag {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text-accent);
+  font-size: 0.9em;
+  font-weight: 500;
 }
