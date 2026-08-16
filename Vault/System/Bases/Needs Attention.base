@@ -6,6 +6,7 @@ filters:
         - file.inFolder("Drafts/WorldAnvil Import")
 formulas:
   display_title: if(title.isEmpty(), file.name, title)
+  note_link: file.asLink(formula.display_title)
   area: if(file.inFolder("Lore"), "CANON", "IMPORT")
   era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
   era_count: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))
@@ -17,7 +18,7 @@ formulas:
   attention_severity: if(formula.issue_count >= 4, "critical", if(formula.issue_count == 3, "urgent", if(formula.issue_count == 2, "elevated", "notice")))
   attention: html("<span class=\"attention-state attention-state--" + formula.attention_severity + "\" data-issues=\"" + formula.issue_count.toString() + "\">" + formula.attention_text + "</span>")
 properties:
-  formula.display_title:
+  formula.note_link:
     displayName: Note
   formula.area:
     displayName: Area
@@ -42,7 +43,7 @@ views:
       and:
         - formula.issue_count > 0
     order:
-      - formula.display_title
+      - formula.note_link
       - formula.area
       - formula.attention
       - file.mtime
@@ -58,7 +59,7 @@ views:
       and:
         - formula.issue_count > 0
     order:
-      - formula.display_title
+      - formula.note_link
       - formula.area
       - formula.attention
       - formula.issue_count
@@ -78,7 +79,7 @@ views:
       and:
         - description.isEmpty()
     order:
-      - formula.display_title
+      - formula.note_link
       - formula.area
       - type
       - formula.era_context
@@ -93,7 +94,7 @@ views:
       and:
         - type.isEmpty()
     order:
-      - formula.display_title
+      - formula.note_link
       - formula.area
       - formula.era_context
       - status
@@ -107,7 +108,7 @@ views:
       and:
         - formula.needs_era
     order:
-      - formula.display_title
+      - formula.note_link
       - formula.area
       - type
       - status
@@ -121,7 +122,7 @@ views:
       and:
         - formula.migration_issue_count > 0
     order:
-      - formula.display_title
+      - formula.note_link
       - type
       - formula.era_context
       - import_issues
