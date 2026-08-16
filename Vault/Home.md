@@ -32,6 +32,11 @@ cssclasses:
 >
 > → [[System/Creator Tasks|All creator tasks]]
 
+> [!home-navigate] CHRONICLE
+> ```dataviewjs
+> await dv.view("System/Views/Chronicle/Hub", { compact: true })
+> ```
+
 > [!home-workspace]
 > > [!home-continue] CONTINUE
 > > ![[System/Bases/Lore Registry.base#Recently edited]]

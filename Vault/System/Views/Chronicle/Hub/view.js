@@ -1,3 +1,4 @@
+const compact = Boolean(input?.compact);
 const now = window.moment();
 const today = now.clone().startOf("day");
 const weekStart = now.clone().startOf("isoWeek");
@@ -48,7 +49,9 @@ const periods = [
   },
 ];
 
-const root = dv.container.createDiv({ cls: "vc-chronicle-hub" });
+const root = dv.container.createDiv({
+  cls: `vc-chronicle-hub${compact ? " is-compact" : ""}`,
+});
 const grid = root.createDiv({ cls: "vc-chronicle-period-grid" });
 
 for (const period of periods) {
@@ -82,19 +85,21 @@ for (const period of periods) {
   }
 }
 
+const footerTarget = compact ? "System/Chronicle" : "System/Bases/Chronicle.base";
+const footerLabel = compact ? "Open Chronicle →" : "Open review workspace →";
 const footer = root.createDiv({ cls: "vc-chronicle-footer" });
 const review = footer.createEl("a", {
-  text: "Open review workspace →",
+  text: footerLabel,
   cls: "internal-link vc-chronicle-review-link",
   attr: {
-    href: "System/Bases/Chronicle.base",
-    "data-href": "System/Bases/Chronicle.base",
+    href: footerTarget,
+    "data-href": footerTarget,
   },
 });
 review.addEventListener("click", (event) => {
   event.preventDefault();
   app.workspace.openLinkText(
-    "System/Bases/Chronicle.base",
+    footerTarget,
     dv.current().file.path,
     event.ctrlKey || event.metaKey,
   );

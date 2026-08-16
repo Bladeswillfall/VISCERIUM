@@ -73,6 +73,74 @@
   text-decoration: none;
 }
 
+/* Home reuses the same hub logic as one compact, pane-responsive period strip. */
+.vc-chronicle-hub.is-compact {
+  gap: var(--vc-space-2, 8px);
+  margin: 0;
+}
+
+.vc-chronicle-hub.is-compact .vc-chronicle-period-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  padding: 4px 6px;
+  background: var(--background-secondary);
+}
+
+.vc-chronicle-hub.is-compact .vc-chronicle-period {
+  gap: 7px;
+  border: 0;
+  padding: 7px 8px;
+  background: transparent;
+}
+
+.vc-chronicle-hub.is-compact .vc-chronicle-period:not(.is-primary) .vc-chronicle-period-label {
+  color: var(--chronicle-muted);
+  font-weight: 650;
+}
+
+.vc-chronicle-hub.is-compact .vc-chronicle-period-label {
+  font-size: 0.8rem;
+}
+
+.vc-chronicle-hub.is-compact .vc-chronicle-period-detail {
+  font-size: 0.65rem;
+}
+
+.vc-chronicle-hub.is-compact .vc-chronicle-period-action {
+  min-width: auto;
+  min-height: 1.8rem;
+  padding-inline: 0.5rem;
+  font-size: 0.68rem;
+}
+
+.vc-chronicle-hub.is-compact .vc-chronicle-footer {
+  padding-top: 5px;
+}
+
+@container viscerium-home (max-width: 64rem) {
+  .vc-chronicle-hub.is-compact .vc-chronicle-period-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container viscerium-home (max-width: 42rem) {
+  .vc-chronicle-hub.is-compact .vc-chronicle-period-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container viscerium-home (max-width: 30rem) {
+  .vc-chronicle-hub.is-compact .vc-chronicle-period-grid {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 6px;
+  }
+
+  .vc-chronicle-hub.is-compact .vc-chronicle-period-action {
+    min-height: 36px;
+  }
+}
+
 @media (max-width: 620px) {
   .vc-chronicle-period-grid {
     grid-template-columns: 1fr;
@@ -82,7 +150,8 @@
     padding: 9px 10px;
   }
 
-  .vc-chronicle-period-action {
+  .vc-chronicle-period-action,
+  .vc-chronicle-hub.is-compact .vc-chronicle-period-action {
     min-height: 36px;
   }
 }

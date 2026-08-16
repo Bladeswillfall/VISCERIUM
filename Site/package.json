@@ -8,6 +8,8 @@
   "scripts": {
     "dev": "node scripts/build-content.mjs --mode=dev && astro dev",
     "dev:sync": "npm run dev",
+    "baseline:check": "node scripts/check-repository-baseline.mjs",
+    "hooks:install": "node scripts/install-git-hooks.mjs",
     "doctor:vault": "node scripts/vault-doctor.mjs && node scripts/validate-vault-assets.mjs",
     "validate:vault": "node scripts/validate-vault-notes.mjs",
     "validate:timelines": "node scripts/generate-timeline-data.mjs --validate-only",
@@ -40,7 +42,7 @@
     "postbuild": "npm run validate:icons",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build"
+    "test": "npm run baseline:check && npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.2.1",
