@@ -28,43 +28,43 @@ A visual variant belongs inside its existing component owner where possible. `Ta
 
 ### Foundation
 
-- **Creator UI foundation** — shared spacing, radii and semantic colours.
+- **Creator UI foundation** - shared spacing, radii and semantic colours.
 
 ### Workspace
 
-- **File explorer** — explorer density, hierarchy, root role markers/labels, active-file state and Home placement.
-- **Compact tabs** — tab density.
-- **Scrollbars** — scrollbar treatment.
-- **Outline panel** — outline density/presentation.
-- **Search results** — search-result presentation.
+- **File explorer** - explorer density, hierarchy, root role markers/labels, active-file state and Home placement.
+- **Compact tabs** - tab density.
+- **Scrollbars** - scrollbar treatment.
+- **Outline panel** - outline density/presentation.
+- **Search results** - search-result presentation.
 
 Folder icons are owned by **Iconic**, not CSS.
 
 The explorer uses location colour only where it adds information:
 
-- Lore — cyan marker / `CANON`;
-- Stories — orange marker / `WRITING`;
-- Drafts — amber marker / `WIP`;
-- Private — rose marker / `PRIVATE`;
-- System — violet marker / `TOOLS`;
-- Templates — mint marker / `REUSE`.
+- Lore - cyan marker / `CANON`;
+- Stories - orange marker / `WRITING`;
+- Drafts - amber marker / `WIP`;
+- Private - rose marker / `PRIVATE`;
+- System - violet marker / `TOOLS`;
+- Templates - mint marker / `REUSE`.
 
 Nested folders and ordinary files are neutral. The active file may reuse its root location colour as one small edge/background cue. Article-wide descendant tinting is deliberately removed.
 
 ### Home
 
-- **Home dashboard** — all Home layout, hierarchy, responsive behaviour, controls and compact activity strip.
+- **Home dashboard** - all Home layout, hierarchy, responsive behaviour, controls and compact activity strip.
 
 [[Home]] is an interface rather than long-form prose, so this snippet also lets it use the available pane width and suppresses the duplicate inline title/Properties chrome in both Reading View and Live Preview.
 
 Home currently contains:
 
-1. **Focus** — the current high-value body of work;
-2. **Continue** — recent creator notes;
-3. **Create** — creation controls;
-4. **Writing** — active StoryLine project context;
-5. **Creator Activity** — a thin 52-week local activity history;
-6. **Navigate** — persistent quick links that act as the dashboard footer.
+1. **Focus** - the current high-value body of work;
+2. **Continue** - recent creator notes;
+3. **Create** - creation controls;
+4. **Writing** - active StoryLine project context;
+5. **Creator Activity** - a thin 52-week local activity history;
+6. **Navigate** - persistent quick links that act as the dashboard footer.
 
 Focus is the only strong panel. Continue, Create, Writing, Creator Activity and Navigate should rely on headings, rules and spacing rather than repeated boxed cards.
 
@@ -72,18 +72,18 @@ The activity strip is not a streak, score or completion metric. It records disti
 
 ### Bases
 
-- **Bases** — generic compact cards and dense table views.
-- **World Anvil Import triage** — migration-specific state presentation.
+- **Bases** - generic compact cards and dense table views.
+- **World Anvil Import triage** - migration-specific state presentation.
 
 Use tables for comparison/editing and cards when visual recognition is genuinely useful.
 
 World Anvil triage colour means migration state, not editorial importance:
 
-- red — conflict;
-- amber — structural decision;
-- blue — reference/link repair;
-- green — ready;
-- neutral — ordinary/low-priority review.
+- red - conflict;
+- amber - structural decision;
+- blue - reference/link repair;
+- green - ready;
+- neutral - ordinary/low-priority review.
 
 ### Reading and rendered content
 
@@ -120,7 +120,7 @@ The old Obsidian-only Dataview infobox/sidebar remains removed. Templates should
 
 ### Behavioural
 
-- **Autohide properties** — collapses the ordinary Live Preview Properties block until hovered/focused.
+- **Autohide properties** - collapses the ordinary Live Preview Properties block until hovered/focused.
 
 Home explicitly opts out of this behaviour because its document chrome is hidden entirely.
 
