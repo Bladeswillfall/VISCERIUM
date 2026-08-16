@@ -7,6 +7,16 @@
   max-width: 78ch;
 }
 
+.relationship-page .atlas__eyebrow {
+  margin: 0;
+  color: var(--codex-accent);
+  font-family: var(--vc-font-ui);
+  font-size: var(--sl-text-xs);
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
 .relationship-explorer {
   --relationship-canvas: color-mix(in oklch, var(--codex-page-bg) 88%, var(--codex-surface-raised));
   --relationship-node-bg: color-mix(in oklch, var(--codex-surface-raised) 86%, var(--codex-page-bg));
