@@ -31,10 +31,10 @@ test('shared creator styling enables only the two new ownership modules', async 
   assert.ok(!enabled.has('Bigger Popovers'));
 });
 
-test('Style Settings pins Pretty Pills while keeping optional accents conservative', async () => {
+test('Style Settings pins restrained defaults while keeping optional accents conservative', async () => {
   const settings = await readVaultJson('.obsidian/plugins/obsidian-style-settings/data.json');
 
-  assert.equal(settings['viscerium-tags@@viscerium-tag-style'], 'viscerium-tags-pretty');
+  assert.equal(settings['viscerium-tags@@viscerium-tag-style'], 'viscerium-tags-compact');
   assert.equal(settings['viscerium-callouts@@viscerium-callout-style'], 'viscerium-callouts-balanced');
   assert.equal(settings['viscerium-hover-previews@@viscerium-hover-preview-size'], 'viscerium-hover-comfortable');
   assert.equal(settings['viscerium-lists@@viscerium-list-guides'], false);
@@ -43,15 +43,18 @@ test('Style Settings pins Pretty Pills while keeping optional accents conservati
   assert.equal(settings['viscerium-text-accents@@viscerium-compact-footnotes'], false);
 });
 
-test('tag styling provides Pretty, Compact and Minimal variants with CM6 selectors', async () => {
+test('tag styling keeps Compact as fallback and Pretty Pills explicitly opt-in', async () => {
   const css = await readVaultText('.obsidian/snippets/Tag styling.css');
 
   assert.match(css, /name: VISCERIUM · Tags/);
+  assert.match(css, /default: viscerium-tags-compact/);
   assert.match(css, /value: viscerium-tags-pretty/);
   assert.match(css, /value: viscerium-tags-compact/);
   assert.match(css, /value: viscerium-tags-minimal/);
   assert.match(css, /\.markdown-source-view\.mod-cm6 \.cm-hashtag/);
-  assert.match(css, /border-radius: 999px/);
+  assert.match(css, /body\.viscerium-tags-pretty \.markdown-rendered a\.tag/);
+  assert.match(css, /body\.viscerium-tags-pretty[\s\S]*border-radius: 999px/);
+  assert.match(css, /\.markdown-rendered a\.tag \{[\s\S]*border-radius: 4px/);
   assert.doesNotMatch(css, /\.cm-s-obsidian/);
 });
 
