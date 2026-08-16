@@ -1,0 +1,74 @@
+/*
+ * Text accents
+ * Optional article-level emphasis without changing VISCERIUM's core typography.
+ */
+
+/* @settings
+name: VISCERIUM · Text accents
+id: viscerium-text-accents
+settings:
+  - id: viscerium-highlight-style
+    title: Highlight appearance
+    description: Choose how ==highlighted text== is presented in Reading View and Live Preview.
+    type: class-select
+    allowEmpty: false
+    default: viscerium-highlights-default
+    options:
+      - label: Theme default
+        value: viscerium-highlights-default
+      - label: Soft
+        value: viscerium-highlights-soft
+      - label: Marker
+        value: viscerium-highlights-marker
+  - id: viscerium-compact-footnotes
+    title: Compact footnotes
+    description: Reduce footnote scale and spacing for long-form lore and source-heavy notes.
+    type: class-toggle
+    default: false
+*/
+
+body.viscerium-highlights-soft .markdown-rendered mark,
+body.viscerium-highlights-soft .markdown-source-view.mod-cm6 .cm-highlight {
+  background: color-mix(in srgb, var(--text-highlight-bg) 78%, transparent);
+  border-radius: 0.2em;
+  padding-inline: 0.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+body.viscerium-highlights-marker .markdown-rendered mark,
+body.viscerium-highlights-marker .markdown-source-view.mod-cm6 .cm-highlight {
+  background: linear-gradient(
+    to bottom,
+    transparent 14%,
+    color-mix(in srgb, var(--text-highlight-bg) 88%, transparent) 14%,
+    color-mix(in srgb, var(--text-highlight-bg) 88%, transparent) 88%,
+    transparent 88%
+  );
+  border-radius: 0.12em;
+  padding-inline: 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+body.viscerium-compact-footnotes .markdown-rendered section.footnotes,
+body.viscerium-compact-footnotes .markdown-rendered .footnotes {
+  color: var(--text-muted);
+  font-size: 0.86em;
+  line-height: 1.45;
+}
+
+body.viscerium-compact-footnotes .markdown-rendered section.footnotes hr,
+body.viscerium-compact-footnotes .markdown-rendered .footnotes hr {
+  margin-block: 0.8rem;
+}
+
+body.viscerium-compact-footnotes .markdown-rendered section.footnotes li,
+body.viscerium-compact-footnotes .markdown-rendered .footnotes li {
+  margin-block: 0.22em;
+}
+
+body.viscerium-compact-footnotes .markdown-rendered section.footnotes p,
+body.viscerium-compact-footnotes .markdown-rendered .footnotes p {
+  margin-block: 0.18em;
+}
