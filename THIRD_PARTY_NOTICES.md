@@ -134,6 +134,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Importer](https://community.obsidian.md/plugins/obsidian-importer) | Obsidian and contributors | MIT |
 | [Style Settings](https://community.obsidian.md/plugins/obsidian-style-settings) | mgmeyers / obsidian-community | GPL-3.0 |
 | [Harper](https://community.obsidian.md/plugins/harper) | Automattic and Harper contributors | Apache-2.0 |
+| [Calendar](https://github.com/liamcain/obsidian-calendar-plugin) | Liam Cain | MIT |
 
 ### Vendored MySnippets compatibility runtime
 
