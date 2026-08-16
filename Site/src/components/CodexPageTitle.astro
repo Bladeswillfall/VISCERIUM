@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import '../styles/storyteller-view.css';
+import { resolveFrontmatterReference } from '../lib/frontmatter-reference.mjs';
 import ArticleReadingTime from './ArticleReadingTime.astro';
 import CalendarDateBadge from './calendar/CalendarDateBadge.astro';
 import CodexIcon from './CodexIcon.astro';
@@ -28,18 +29,6 @@ const breadcrumbGroupIcons = {
   smog: 'status',
 };
 
-function isExternalUrl(value) {
-  return typeof value === 'string' && /^[a-z][a-z0-9+.-]*:/i.test(value);
-}
-
-function normaliseAssetPath(value, category = 'images') {
-  if (typeof value !== 'string') return undefined;
-  const trimmed = value.trim();
-  if (!trimmed) return undefined;
-  if (trimmed.startsWith('/') || isExternalUrl(trimmed)) return trimmed;
-  return `/assets/${category}/${trimmed.split('/').pop()}`;
-}
-
 function imageTextAlternative(base, text) {
   return [base, text ? `Text shown in image: ${text}` : undefined].filter(Boolean).join(' — ');
 }
@@ -56,7 +45,7 @@ function breadcrumbIconForSegment(segment) {
 }
 
 const imageSource = entry.headerImage ?? entry.image ?? (entry.type === 'image' ? entry.asset : undefined);
-const headerImage = normaliseAssetPath(imageSource);
+const headerImage = resolveFrontmatterReference(imageSource, { kind: 'asset' });
 const isDecorativeImage = entry.decorativeImage === true;
 const headerAlt = isDecorativeImage ? '' : imageTextAlternative(entry.alt ?? `${entry.title} header image`, entry.imageText);
 const headerDescription = [entry.imageDescription, entry.imageText ? `Text shown in image: ${entry.imageText}` : undefined]

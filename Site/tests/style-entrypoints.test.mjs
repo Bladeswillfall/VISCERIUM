@@ -22,16 +22,11 @@ test('global Starlight styles keep their explicit registration order', async () 
     './src/styles/ion-expressive-code.css',
     './src/styles/typography.css',
     './src/styles/article-pages.css',
-    './src/styles/codex-ui.css',
-    './src/styles/navigation.css',
-    './src/styles/header-controls.css',
-    './src/styles/maps.css',
-    './src/styles/relationships.css',
-    './src/styles/exploration-pages.css',
-    './src/styles/calendar.css',
-    './src/styles/category-index.css',
-    './src/styles/support.css',
     './src/styles/layout.css',
+    './src/styles/codex-ui.css',
+    './src/styles/header-controls.css',
+    './src/styles/navigation.css',
+    './src/styles/category-index.css',
     './src/styles/a11y.css',
     './src/styles/era-styles.css',
   ];
@@ -39,22 +34,55 @@ test('global Starlight styles keep their explicit registration order', async () 
 
   assert.ok(positions.every((position) => position >= 0), 'all global styles remain explicitly registered');
   assert.deepEqual([...positions].sort((a, b) => a - b), positions, 'global style order is preserved');
+  assert.doesNotMatch(customCss, /(?:maps|relationships|exploration-pages|support|calendar(?:-date-badge|-year)?|graph)\.css/);
+  assert.doesNotMatch(customCss, /starlight-site-graph\/styles/);
   assert.doesNotMatch(customCss, /\.\/src\/styles\/(?:codex|global|bundle)\.css/);
 });
 
-test('graph integration loads after the third-party graph styles', async () => {
-  const config = await read('astro.config.mjs');
-  const customCss = config.match(/customCss:\s*\[([\s\S]*?)\],\n\s*components:/)?.[1] ?? '';
+test('route-owned feature styles load only from their stable entry points', async () => {
+  const [worldMap, atlasIndex, relationshipGraph, support, contact] = await Promise.all([
+    read('src/components/WorldMap.astro'),
+    read('src/pages/maps/index.astro'),
+    read('src/components/RelationshipGraph.astro'),
+    read('src/pages/support.astro'),
+    read('src/pages/contact.astro'),
+  ]);
+
+  assert.match(worldMap, /import '\.\.\/styles\/maps\.css';/);
+  assert.match(worldMap, /import '\.\.\/styles\/exploration-pages\.css';/);
+  assert.match(atlasIndex, /import '\.\.\/\.\.\/styles\/maps\.css';/);
+  assert.match(relationshipGraph, /import '\.\.\/styles\/relationships\.css';/);
+  assert.match(relationshipGraph, /import '\.\.\/styles\/exploration-pages\.css';/);
+  for (const page of [support, contact]) {
+    assert.match(page, /import supportStylesHref from '\.\.\/styles\/support\.css\?url&no-inline';/);
+    assert.match(page, /head: \[\{ tag: 'link', attrs: \{ rel: 'stylesheet', href: supportStylesHref \} \}\]/);
+  }
+});
+
+test('graph route loads its package styles before the RGB-safe adapter', async () => {
+  const graphPage = await read('src/pages/graph.astro');
   const graphOrder = [
     'starlight-site-graph/styles/layers.css',
     'starlight-site-graph/styles/common.css',
     'starlight-site-graph/styles/starlight.css',
-    './src/styles/graph.css',
+    '../styles/graph.css',
   ];
-  const positions = graphOrder.map((stylePath) => customCss.indexOf(`'${stylePath}'`));
+  const positions = orderedImportPositions(graphPage, graphOrder);
 
   assert.ok(positions.every((position) => position >= 0), 'graph styles are registered');
   assert.deepEqual([...positions].sort((a, b) => a - b), positions, 'the RGB-safe graph adapter remains post-plugin');
+});
+
+test('calendar components own the smallest applicable stylesheet', async () => {
+  const [badge, year] = await Promise.all([
+    read('src/components/calendar/CalendarDateBadge.astro'),
+    read('src/components/calendar/CalendarYear.astro'),
+  ]);
+
+  assert.match(badge, /import '\.\.\/\.\.\/styles\/calendar-date-badge\.css';/);
+  assert.doesNotMatch(badge, /calendar-year\.css/);
+  assert.match(year, /import '\.\.\/\.\.\/styles\/calendar-year\.css';/);
+  assert.doesNotMatch(year, /calendar-date-badge\.css/);
 });
 
 test('homepage uses one directly imported stylesheet and retains its inline shell boundary', async () => {

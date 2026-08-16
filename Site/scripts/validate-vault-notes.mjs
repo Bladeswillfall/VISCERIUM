@@ -1,6 +1,7 @@
 import path from 'node:path';
 import process from 'node:process';
 import { parseIconSpec } from '../src/lib/icon-spec.mjs';
+import { findInvalidFrontmatterReferences } from '../src/lib/frontmatter-reference.mjs';
 import { validateEraPrimerData } from '../src/lib/era-primer-data.mjs';
 import {
   ERA_VALUES,
@@ -129,6 +130,10 @@ export function validateVaultNotes(manifest) {
     }
 
     if (data.status !== 'published') continue;
+
+    for (const reference of findInvalidFrontmatterReferences(data)) {
+      fail(`Invalid frontmatter ${reference.kind} reference "${reference.field}" in ${relative(file)}: ${JSON.stringify(reference.value)}`);
+    }
 
     if (migrationReviewScaffolding.test(content)) {
       fail(`Published note contains World Anvil migration review scaffolding: ${relative(file)}`);

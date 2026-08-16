@@ -29,12 +29,13 @@ const representativePages = {
 
 test('the content sync maps era folders to generated eraStyle metadata', () => {
   const sync = read('../scripts/sync-public-notes.mjs');
+  const frontmatter = read('../scripts/sync-frontmatter.mjs');
 
   assert.match(sync, /\['citadel',\s*'e1'\]/);
   assert.match(sync, /\['smog',\s*'e2'\]/);
   assert.match(sync, /\['nearsight',\s*'e3'\]/);
   assert.match(sync, /\['entropy',\s*'e4'\]/);
-  assert.match(sync, /setField\('eraStyle', generated\.eraStyle\)/);
+  assert.match(frontmatter, /setField\('eraStyle', generated\.eraStyle\)/);
   assert.match(sync, /eraStyle:\s*parsed\.data\.eraStyle/);
 });
 

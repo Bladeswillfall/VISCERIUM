@@ -3,23 +3,13 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 import '../../Site/src/styles/timeline-canvas.css';
 import '../../Site/src/styles/chronos.css';
 import { compileTimelineRecords, TimelineCompilationError } from '../../Site/src/lib/timeline/compiler.mjs';
-import { LANE_MODES, TIMELINE_IDS } from '../../Site/src/lib/timeline/core.mjs';
 import { mountTimeline } from '../../Site/src/lib/timeline/chronos-native-renderer.mjs';
+import { resolveTimelineOptions } from '../../Site/src/lib/timeline/options.mjs';
 import {
   buildStoryLineTimelineDataset,
   inferStoryLineProjectBase,
   parseStoryLineDate,
 } from '../../Site/src/lib/timeline/storyline-adapter.mjs';
-
-type TimelineBlock = {
-  timeline: string;
-  defaultCalendar?: string;
-  laneMode?: string;
-  showFilters?: boolean;
-  showMinimap?: boolean;
-  showLegend?: boolean;
-  compact?: boolean;
-};
 
 type CompiledResult = ReturnType<typeof compileTimelineRecords>;
 type StoryLineSettingsSnapshot = {
@@ -34,51 +24,10 @@ type StoryLineResolution = {
 
 const STORY_TIMELINE_VIEW_TYPE = 'viscerium-storyline-timeline';
 
-function parseBoolean(value: unknown, fallback: boolean): boolean {
-  if (value === undefined) return fallback;
-  if (typeof value === 'boolean') return value;
-  const normalized = String(value).toLowerCase();
-  if (normalized === 'true') return true;
-  if (normalized === 'false') return false;
-  return fallback;
-}
-
 function asNonEmptyString(value: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
   const trimmed = value.trim();
   return trimmed || undefined;
-}
-
-function parseInlineBlock(id: string, specification = ''): TimelineBlock {
-  const block: TimelineBlock = { timeline: id };
-  const pairs = String(specification).matchAll(/([a-z][\w-]*)=(?:"([^"]*)"|'([^']*)'|([^\s]+))/gi);
-  for (const pair of pairs) {
-    const key = pair[1].toLowerCase();
-    const value = pair[2] ?? pair[3] ?? pair[4] ?? '';
-    if (key === 'timeline') block.timeline = value;
-    if (key === 'calendar') block.defaultCalendar = value;
-    if (key === 'lane' || key === 'lanemode') block.laneMode = value;
-    if (key === 'filters' || key === 'showfilters') block.showFilters = parseBoolean(value, true);
-    if (key === 'minimap' || key === 'showminimap') block.showMinimap = parseBoolean(value, true);
-    if (key === 'legend' || key === 'showlegend') block.showLegend = parseBoolean(value, true);
-    if (key === 'compact') block.compact = parseBoolean(value, false);
-  }
-  return block;
-}
-
-function normalizeBlock(value: unknown): TimelineBlock | null {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-  const raw = value as Record<string, unknown>;
-  if (typeof raw.timeline !== 'string' || !TIMELINE_IDS.includes(raw.timeline)) return null;
-  return {
-    timeline: raw.timeline,
-    defaultCalendar: typeof raw.defaultCalendar === 'string' ? raw.defaultCalendar : undefined,
-    laneMode: typeof raw.laneMode === 'string' && LANE_MODES.includes(raw.laneMode) ? raw.laneMode : 'unified',
-    showFilters: parseBoolean(raw.showFilters, true),
-    showMinimap: parseBoolean(raw.showMinimap, true),
-    showLegend: parseBoolean(raw.showLegend, true),
-    compact: parseBoolean(raw.compact, false),
-  };
 }
 
 function cleanSegment(segment: string): string {
@@ -249,7 +198,7 @@ export default class VisceriumTimelinesPlugin extends Plugin {
         const match = (paragraph.textContent ?? '').match(/^\s*\[Timeline:([^\]\s]+)(?:\s+([^\]]+))?\]\s*$/i);
         if (!match) continue;
         const id = match[1];
-        const block = normalizeBlock(configuredBlocks[id]) ?? normalizeBlock(parseInlineBlock(id, match[2]));
+        const block = resolveTimelineOptions(id, match[2], configuredBlocks[id]);
         const mount = document.createElement('div');
         mount.className = 'vc-obsidian-timeline-mount';
         paragraph.replaceWith(mount);

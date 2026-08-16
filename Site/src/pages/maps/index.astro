@@ -1,6 +1,7 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import maps from '../../data/maps.json';
+import '../../styles/maps.css';
 
 const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeCompare(String(b.title ?? '')));
 ---

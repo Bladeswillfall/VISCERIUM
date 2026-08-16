@@ -5,11 +5,11 @@ status: published
 type: article
 slug: degel-system/eye-of-visi
 sourcePath: Degel System/Eye of Visi.md
+giscus: true
 referencedIn:
   - title: Errack
     href: /degel-system/errack/
     type: location
     era: Universal
-giscus: true
 ---
 

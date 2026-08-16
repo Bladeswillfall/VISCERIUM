@@ -24,6 +24,7 @@ test('graph canvas colours are explicit, theme-aware and parser-safe', () => {
 
 test('site graph uses tags, native interactions and a late canvas adapter', () => {
   const astroConfig = read('../astro.config.mjs');
+  const graphPage = read('../src/pages/graph.astro');
 
   assert.match(astroConfig, /siteGraph\(\{[\s\S]*overridePageSidebar:\s*false/);
   assert.match(astroConfig, /graphConfig:\s*\{[\s\S]*tagRenderMode:\s*'node'/);
@@ -34,9 +35,10 @@ test('site graph uses tags, native interactions and a late canvas adapter', () =
   assert.match(astroConfig, /nodeCurrentStyle:\s*\{[\s\S]*shapeColor:\s*'nodeColorCurrent'/);
   assert.match(astroConfig, /tagDefaultStyle:\s*\{[\s\S]*shapeColor:\s*'nodeColorTag'/);
   assert.match(
-    astroConfig,
-    /starlight-site-graph\/styles\/starlight\.css',[\s\S]*\.\/src\/styles\/graph\.css'/,
+    graphPage,
+    /starlight-site-graph\/styles\/starlight\.css';[\s\S]*\.\.\/styles\/graph\.css';/,
   );
+  assert.doesNotMatch(astroConfig, /starlight-site-graph\/styles|src\/styles\/graph\.css/);
 });
 
 test('the dedicated graph page hydrates its production sitemap', () => {

@@ -35,8 +35,8 @@ test('the public sidebar resolves authored Obsidian wikilinks through the docs c
 
   assert.match(source, /getCollection\('docs'\)/);
   assert.match(source, /function resolveSidebarTarget\(rawTarget\)/);
-  assert.match(source, /parseSidebarWikilink\(trimmed\)/);
-  assert.match(source, /`\$\{route\}\$\{wikilink\.fragment\}`/);
+  assert.match(source, /resolveFrontmatterReference\(value/);
+  assert.match(source, /resolveWikilink:\s*resolveSidebarTarget/);
   assert.match(source, /sameEra\.length === 1/);
 });
 

@@ -146,15 +146,7 @@
     linear-gradient(180deg, color-mix(in oklch, var(--codex-fixed-light) 2.5%, transparent), transparent),
     var(--vc-timeline-surface-deep);
   box-shadow: inset 0 1px 0 color-mix(in oklch, var(--codex-fixed-light) 3%, transparent);
-  transition: translate 120ms ease, border-color 120ms ease, background-color 120ms ease;
-}
-
-.vc-timeline-toolbar-enhanced .vc-timeline-command:hover {
-  translate: 0 -1px;
-}
-
-.vc-timeline-toolbar-enhanced .vc-timeline-command:active {
-  translate: 0 0;
+  transition: border-color 120ms ease, background-color 120ms ease;
 }
 
 .vc-timeline-toolbar-enhanced .vc-timeline-command .vc-timeline-control-icon {

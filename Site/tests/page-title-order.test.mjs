@@ -35,13 +35,13 @@ test('release breadcrumbs omit the changelog plugin virtual version segment', ()
 
 test('shared page headers own the grainy image fade implementation', () => {
   const pageTitle = read('../src/components/CodexPageTitle.astro');
-  const preview = read('../src/pages/header-image-fade-preview.astro');
+  const publishedArticle = read('../src/content/docs/degel-system/errack.mdx');
 
   assert.match(pageTitle, /id="codex-header-bottom-fade"/);
   assert.match(pageTitle, /filter:\s*url\('#codex-header-bottom-fade'\)/);
   assert.match(pageTitle, /mask-image:\s*url\('#codex-header-inner-fade'\)/);
   assert.match(pageTitle, /\.codex-header-figure \+ h1/);
-  assert.doesNotMatch(preview, /id="codex-header-bottom-fade"/);
+  assert.match(publishedArticle, /^headerImage:\s*\/assets\/images\/errack-header\.webp$/m);
 });
 
 test('per-page sidebars keep the TOC without rendering graph or backlink widgets', () => {

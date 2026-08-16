@@ -1,4 +1,7 @@
 ---
+import '../styles/relationships.css';
+import '../styles/exploration-pages.css';
+
 const { graph } = Astro.props;
 const payload = JSON.stringify(graph ?? { nodes: [], edges: [], relationTypes: [] }).replace(/</g, '\\u003c');
 const hasGraph = (graph?.nodes?.length ?? 0) > 0 && (graph?.edges?.length ?? 0) > 0;
