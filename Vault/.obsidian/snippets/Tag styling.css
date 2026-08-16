@@ -33,7 +33,6 @@ settings:
   font-size: 0.88em;
   font-weight: 600;
   text-decoration: none;
-  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
 .markdown-rendered a.tag {
@@ -41,6 +40,7 @@ settings:
   border: 1px solid var(--vc-tag-border);
   border-radius: 999px;
   padding: 0.08em 0.55em;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
 /* Live Preview splits the leading # and tag text into separate CM6 spans. */
@@ -60,8 +60,8 @@ settings:
   padding-right: 0.45em;
 }
 
-.markdown-rendered a.tag:hover,
-.markdown-source-view.mod-cm6 .cm-hashtag:hover {
+/* Hover feedback stays in Reading View because CM6 renders a tag as multiple spans. */
+.markdown-rendered a.tag:hover {
   --vc-tag-border: color-mix(in srgb, var(--interactive-accent) 72%, var(--background-modifier-border));
   --vc-tag-bg: color-mix(in srgb, var(--interactive-accent) 22%, var(--background-secondary));
   --vc-tag-text: var(--text-normal);
