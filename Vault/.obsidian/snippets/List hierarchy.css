@@ -1,0 +1,62 @@
+/*
+ * List hierarchy
+ * Optional visual structure for deeply nested worldbuilding lists.
+ */
+
+/* @settings
+name: VISCERIUM · Lists
+id: viscerium-lists
+settings:
+  - id: viscerium-list-guides
+    title: Nested list guides
+    description: Show subtle vertical relationship lines for nested lists in Reading View and strengthen Obsidian's editor indentation guides.
+    type: class-toggle
+    default: false
+  - id: viscerium-list-bullets
+    title: Vary nested bullets
+    description: Use disc, circle and square markers to make nested unordered-list levels easier to scan in Reading View.
+    type: class-toggle
+    default: false
+*/
+
+body.viscerium-list-guides {
+  --indentation-guide-color: color-mix(in srgb, var(--text-faint) 42%, transparent);
+  --indentation-guide-color-active: color-mix(in srgb, var(--interactive-accent) 52%, var(--text-faint));
+}
+
+body.viscerium-list-guides .markdown-rendered li > :is(ul, ol) {
+  position: relative;
+}
+
+body.viscerium-list-guides .markdown-rendered li > :is(ul, ol)::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.2em 0.25em;
+  inset-inline-start: -0.78em;
+  width: 1px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-faint) 38%, transparent);
+  pointer-events: none;
+}
+
+body.viscerium-list-bullets .markdown-rendered ul {
+  list-style-type: disc;
+}
+
+body.viscerium-list-bullets .markdown-rendered ul ul {
+  list-style-type: circle;
+}
+
+body.viscerium-list-bullets .markdown-rendered ul ul ul {
+  list-style-type: square;
+}
+
+body.viscerium-list-bullets .markdown-rendered ul ul ul ul {
+  list-style-type: disc;
+}
+
+@media (max-width: 620px) {
+  body.viscerium-list-guides .markdown-rendered li > :is(ul, ol)::before {
+    inset-inline-start: -0.62em;
+  }
+}

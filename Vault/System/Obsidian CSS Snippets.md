@@ -6,6 +6,8 @@ The vault keeps Obsidian presentation tweaks in:
 
 Use **MySnippets** to toggle files while testing the creator UI.
 
+Use **Settings → Style Settings** for deliberate variants exposed by an enabled snippet. Shared VISCERIUM defaults are tracked in `.obsidian/plugins/obsidian-style-settings/data.json`; do not create a parallel snippet just to represent another appearance of the same component.
+
 Read [[System/SOPs/Creator UX Specification|Creator UX Specification]] before adding or substantially changing presentation rules.
 
 ## Visual grammar
@@ -16,11 +18,13 @@ The creator vault follows one shared rule:
 
 `Creator UI foundation` owns the shared spacing, radius, surface and semantic-colour vocabulary. Other snippets should consume those variables rather than inventing near-duplicate values.
 
-Static VISCERIUM surfaces such as callouts, tables, embeds, image frames and code blocks are square. Interactive controls/cards may use the small control radius.
+Static VISCERIUM surfaces such as callouts, tables, embeds, image frames and code blocks are square. Interactive controls/cards may use the small control radius. Hashtags stay restrained by default with the Compact treatment; the fully rounded Pretty Pills treatment is an explicit Style Settings option rather than a vault-wide metadata default.
 
 ## Snippet ownership
 
 Prefer one owner per visible subsystem. Do not split one component across several toggles unless the behaviours are genuinely independent.
+
+A visual variant belongs inside its existing component owner where possible. `Tag styling`, `Callout styling` and `Hover previews` therefore own their Style Settings variants rather than relying on separate Pretty Tags, Strong Callouts or Bigger Popovers files.
 
 ### Foundation
 
@@ -99,8 +103,16 @@ World Anvil triage colour means migration state, not editorial importance:
 - Tag styling
 - Checkbox styling
 - Hover previews
+- List hierarchy
+- Text accents
 
 `Article widths` owns the responsive article lane for ordinary Markdown notes in Reading View and Live Preview. It widens the header image, Properties block, article body, tables, callouts and embeds together while preserving safe gutters. `Home dashboard` remains the owner for [[Home]].
+
+`Tag styling` defaults to **Compact** and also exposes **Pretty Pills** and **Minimal** appearances in Style Settings. Pretty Pills remains available for intentional use but is not the repository-wide fallback. The implementation follows Baseline/Obsidian colour variables and covers Reading View plus CM6 Live Preview; do not add another hashtag/pill snippet alongside it.
+
+`Callout styling` exposes **Balanced**, **Strong edge** and **Bar only** variants. `Hover previews` exposes **Compact**, **Comfortable** and **Large** desktop sizes while retaining explicit narrow-pane constraints.
+
+`List hierarchy` owns the optional nested-list relationship guides and bullet-level variation. Both are disabled by default. `Text accents` owns optional Soft/Marker highlights and compact footnotes; theme-default highlights and normal footnotes remain the shared defaults.
 
 `Timeline styling` is the Obsidian presentation bridge for Chronos and the shared VISCERIUM timeline renderer. It does not introduce timeline syntax or duplicate chronology metadata.
 
