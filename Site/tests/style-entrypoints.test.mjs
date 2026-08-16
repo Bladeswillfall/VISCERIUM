@@ -59,6 +59,18 @@ test('route-owned feature styles load only from their stable entry points', asyn
   }
 });
 
+test('relationship routes retain their eyebrow treatment without map CSS', async () => {
+  const relationshipStyles = await read('src/styles/relationships.css');
+  const eyebrowRule = relationshipStyles.match(/\.relationship-page \.atlas__eyebrow\s*\{([\s\S]*?)\}/)?.[1] ?? '';
+
+  assert.ok(eyebrowRule, 'relationship CSS owns the route eyebrow selector');
+  assert.match(eyebrowRule, /margin:\s*0;/);
+  assert.match(eyebrowRule, /color:\s*var\(--codex-accent\);/);
+  assert.match(eyebrowRule, /font-family:\s*var\(--vc-font-ui\);/);
+  assert.match(eyebrowRule, /font-size:\s*var\(--sl-text-xs\);/);
+  assert.match(eyebrowRule, /text-transform:\s*uppercase;/);
+});
+
 test('graph route loads its package styles before the RGB-safe adapter', async () => {
   const graphPage = await read('src/pages/graph.astro');
   const graphOrder = [
