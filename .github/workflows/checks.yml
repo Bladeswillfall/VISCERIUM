@@ -77,15 +77,15 @@ jobs:
         working-directory: Tools/obsidian-viscerium-timelines
         run: |
           cmp --silent dist/main.js ../../Vault/.obsidian/plugins/viscerium-timelines/main.js || {
-            echo "::error file=Vault/.obsidian/plugins/viscerium-timelines/main.js::Checked-in timeline plugin JavaScript is stale. Rebuild Tools/obsidian-viscerium-timelines and commit dist/main.js to the Vault plugin payload."
+            echo "::error file=Vault/.obsidian/plugins/viscerium-timelines/main.js::Checked-in timeline plugin JavaScript is stale. Run 'cd Tools/obsidian-viscerium-timelines && npm run build:sync', then commit the updated Vault plugin payload."
             exit 1
           }
           cmp --silent dist/styles.css ../../Vault/.obsidian/plugins/viscerium-timelines/styles.css || {
-            echo "::error file=Vault/.obsidian/plugins/viscerium-timelines/styles.css::Checked-in timeline plugin CSS is stale. Rebuild Tools/obsidian-viscerium-timelines and commit dist/styles.css to the Vault plugin payload."
+            echo "::error file=Vault/.obsidian/plugins/viscerium-timelines/styles.css::Checked-in timeline plugin CSS is stale. Run 'cd Tools/obsidian-viscerium-timelines && npm run build:sync', then commit the updated Vault plugin payload."
             exit 1
           }
           cmp --silent dist/manifest.json ../../Vault/.obsidian/plugins/viscerium-timelines/manifest.json || {
-            echo "::error file=Vault/.obsidian/plugins/viscerium-timelines/manifest.json::Checked-in timeline plugin manifest is stale. Rebuild Tools/obsidian-viscerium-timelines and commit dist/manifest.json to the Vault plugin payload."
+            echo "::error file=Vault/.obsidian/plugins/viscerium-timelines/manifest.json::Checked-in timeline plugin manifest is stale. Run 'cd Tools/obsidian-viscerium-timelines && npm run build:sync', then commit the updated Vault plugin payload."
             exit 1
           }
 
