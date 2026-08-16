@@ -7,10 +7,11 @@ filters:
     - '!file.inFolder("Demo")'
 formulas:
   display_title: 'if(title.isEmpty(), file.name, title)'
+  note_link: 'file.asLink(formula.display_title)'
   area: 'if(file.inFolder("Lore"), "CANON", if(file.inFolder("Stories"), "WRITING", if(file.inFolder("Drafts"), "WIP", if(file.inFolder("Private"), "PRIVATE", "NOTE"))))'
   era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
 properties:
-  formula.display_title:
+  formula.note_link:
     displayName: Note
   formula.area:
     displayName: Area
@@ -31,7 +32,7 @@ views:
     name: Recently edited
     limit: 6
     order:
-      - formula.display_title
+      - formula.note_link
       - formula.area
       - type
       - status
@@ -46,7 +47,7 @@ views:
       and:
         - file.inFolder("Lore")
     order:
-      - formula.display_title
+      - formula.note_link
       - type
       - formula.era_context
       - status
@@ -65,7 +66,7 @@ views:
       property: formula.era_context
       direction: ASC
     order:
-      - formula.display_title
+      - formula.note_link
       - type
       - status
       - development_level
@@ -82,7 +83,7 @@ views:
       property: type
       direction: ASC
     order:
-      - formula.display_title
+      - formula.note_link
       - formula.era_context
       - status
       - development_level
@@ -96,7 +97,7 @@ views:
       and:
         - file.inFolder("Drafts")
     order:
-      - formula.display_title
+      - formula.note_link
       - type
       - formula.era_context
       - status
@@ -113,7 +114,7 @@ views:
         - file.inFolder("Lore")
         - status == "published"
     order:
-      - formula.display_title
+      - formula.note_link
       - type
       - formula.era_context
       - development_level
