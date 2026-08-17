@@ -26,8 +26,9 @@ import EraContextControls from './EraContextControls.astro';
   </div>
 
   <!--
-    Telescope injects its hidden controller into `.right-group`; CodexSearch
-    provides the visible header trigger. Keep this class stable.
+    Telescope adds a hidden controller inside `.right-group`.
+    `CodexSearch` provides the visible search button.
+    Keep the `.right-group` class because Telescope uses it.
   -->
   <div class="right-group codex-header-controls print:hidden" data-codex-header-controls>
     <EraContextControls />
@@ -39,7 +40,7 @@ import EraContextControls from './EraContextControls.astro';
 </div>
 
 <style is:global>
-  /* Restored pre-background-stack grain treatment. */
+  /* Draws the grain texture above the page content. */
   body::before {
     content: '';
     position: fixed;
