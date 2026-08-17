@@ -1,14 +1,14 @@
 ---
-title: "_ Sanctuary"
+title: _ Sanctuary
 updated:
-status: "draft"
-type: "location"
-development_level: "stub"
-location_kind: "site"
-era: "CITADEL"
-import_source: "worldanvil"
-import_source_type: "Landmark"
-import_source_file: "Landmark-_ Sanctuary-06d.md"
+status: draft
+type: location
+development_level: stub
+location_kind: site
+era: CITADEL
+import_source: worldanvil
+import_source_type: Landmark
+import_source_file: Landmark-_ Sanctuary-06d.md
 tags:
   - CITADEL
   - Locations

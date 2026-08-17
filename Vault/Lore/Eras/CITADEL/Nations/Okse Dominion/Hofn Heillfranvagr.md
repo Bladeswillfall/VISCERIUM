@@ -2,26 +2,26 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Seaport"
-title: "Hofn Heillfranvagr"
-description: "Hofn (Port) Heillfranvagr (Safe from sea), is the largest port in the entirety of the Lore/Eras/CITADEL/Okse Dominion and is directly connected to the east-west sea that divides the north and south lands."
+    - label: Type
+      value: Seaport
+title: Hofn Heillfranvagr
+description: Hofn (Port) Heillfranvagr (Safe from sea), is the largest port in the entirety of the Lore/Eras/CITADEL/Okse Dominion and is directly connected to the east-west sea that divides the north and south lands.
 updated:
-status: "draft"
-type: "location"
-development_level: "stub"
-location_kind: "site"
-era: "CITADEL"
+status: draft
+type: location
+development_level: stub
+location_kind: site
+era: CITADEL
 tags:
-  - "Okse"
+  - Okse
   - CITADEL
   - Locations
   - Nations
-import_source: "worldanvil"
-import_source_type: "Landmark"
-import_source_file: "Landmark-Hofn Heillfranvagr-f6e.md"
+import_source: worldanvil
+import_source_type: Landmark
+import_source_file: Landmark-Hofn Heillfranvagr-f6e.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 ---
 Hofn (Port) Heillfranvagr (Safe from sea), is the largest port in the entirety of the [[Okse Dominion]] and is directly connected to the east-west sea that divides the north and south lands.   Housing many docks for fishing boats and seafaring ships alike. Heillfranvagr acts as an important transfer point from Sea to river and land caravans. The use of multiple treadwheel cranes and crude warehouses make unloading and loading the multitude of ships a relatively easy task and daily occurrence.   The sounds of sea-birds squawking for scraps and fresh fish fill the skies from sunrise to sunset whilst the smell of salty waters is a constant reminder of the wide-open ocean beyond the horizon.
 

@@ -1,13 +1,13 @@
 ---
-title: "Sverd trolla gulf"
+title: Sverd trolla gulf
 updated:
-status: "draft"
-type: "location"
-development_level: "stub"
-era: "CITADEL"
-import_source: "worldanvil"
-import_source_type: "Location"
-import_source_file: "Location-Sverd trolla gulf-3c5.md"
+status: draft
+type: location
+development_level: stub
+era: CITADEL
+import_source: worldanvil
+import_source_type: Location
+import_source_file: Location-Sverd trolla gulf-3c5.md
 tags:
   - CITADEL
   - Locations

@@ -2,26 +2,26 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "City"
-title: "Vagrvik"
-description: "Vagrvik is a bustling trade city nestled between two rivers to the south of Valenheim, the main river to it's east - Issvatn, allows for a direct connection to Valenheim."
+    - label: Type
+      value: City
+title: Vagrvik
+description: Vagrvik is a bustling trade city nestled between two rivers to the south of Valenheim, the main river to it's east - Issvatn, allows for a direct connection to Valenheim.
 updated:
-status: "draft"
-type: "location"
-development_level: "stub"
-location_kind: "settlement"
-era: "CITADEL"
+status: draft
+type: location
+development_level: stub
+location_kind: settlement
+era: CITADEL
 tags:
-  - "Okse"
+  - Okse
   - CITADEL
   - Locations
   - Nations
-import_source: "worldanvil"
-import_source_type: "Settlement"
-import_source_file: "Settlement-Vagrvik-18c.md"
+import_source: worldanvil
+import_source_type: Settlement
+import_source_file: Settlement-Vagrvik-18c.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 ---
 Vagrvik is a bustling trade city nestled between two rivers to the south of Valenheim, the main river to it's east - _Issvatn_, allows for a direct connection to Valenheim.  
 Housing the largest port in the [[Okse Dominion]] - Hofn Heillfranvagr, Vagrvik is constantly buzzing with traders, sailers and workers alike.

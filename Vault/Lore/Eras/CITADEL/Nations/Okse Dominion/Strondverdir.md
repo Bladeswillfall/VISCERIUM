@@ -2,26 +2,26 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "City"
-title: "Strondverdir"
-description: "Strondverdir is a coastal city within the Lore/Eras/CITADEL/Okse Dominion."
+    - label: Type
+      value: City
+title: Strondverdir
+description: Strondverdir is a coastal city within the Lore/Eras/CITADEL/Okse Dominion.
 updated:
-status: "draft"
-type: "location"
-development_level: "stub"
-location_kind: "settlement"
-era: "CITADEL"
+status: draft
+type: location
+development_level: stub
+location_kind: settlement
+era: CITADEL
 tags:
-  - "Okse"
+  - Okse
   - CITADEL
   - Locations
   - Nations
-import_source: "worldanvil"
-import_source_type: "Settlement"
-import_source_file: "Settlement-Strondverdir-94b.md"
+import_source: worldanvil
+import_source_type: Settlement
+import_source_file: Settlement-Strondverdir-94b.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 ---
 Strondverdir is a coastal city within the [[Okse Dominion]].   The city holds a deffensive status against the western gulf that seperates the [[Okse Dominion]] and the Republic of Askal. On the eastern side of the city, a north-south road runs along the coastal mountains, shielded by the cliffs and mountains of the Dominion's central mountain range.
 

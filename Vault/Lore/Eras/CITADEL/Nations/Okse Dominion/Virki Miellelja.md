@@ -1,22 +1,22 @@
 ---
-title: "Virki Miellelja"
-description: "Virki (fort) Miellelja is one of the Lore/Eras/CITADEL/Okse Dominion's most depressing military training camps."
+title: Virki Miellelja
+description: Virki (fort) Miellelja is one of the Lore/Eras/CITADEL/Okse Dominion's most depressing military training camps.
 updated:
-status: "draft"
-type: "location"
-location_kind: "site"
-development_level: "stub"
-era: "CITADEL"
+status: draft
+type: location
+location_kind: site
+development_level: stub
+era: CITADEL
 tags:
-  - "Okse"
+  - Okse
   - CITADEL
   - Locations
   - Nations
-import_source: "worldanvil"
-import_source_type: "Article"
-import_source_file: "Article-Virki Miellelja-906.md"
+import_source: worldanvil
+import_source_type: Article
+import_source_file: Article-Virki Miellelja-906.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 ---
 Virki (fort) Miellelja is one of the [[Okse Dominion]]'s most depressing military training camps. Originally, Miellelja was simple just a training camp but over the years, a dedicated fort was constructed to defend the trainees and simultaneously secure the local land.   Located on the western coast, this fort is almost constantly in a flux of cold wind, and icy rain - perfect for hardening recruits and whitteling out the weak.
 

@@ -1,19 +1,21 @@
 ---
-title: "Halvmaneheimr"
-description: "Realm of the Half-Moon."
+title: "Hells Cauldron"
 updated:
 status: "draft"
 type: "location"
 development_level: "stub"
-era: "CITADEL"
 import_source: "worldanvil"
 import_source_type: "Location"
-import_source_file: "Location-Halvmaneheimr-b82.md"
-tags:
-  - CITADEL
-  - Locations
-  - Nations
+import_source_file: "Location-Hells Cauldron-4f1.md"
+import_issues:
+  - "needs-era"
 ---
-Realm of the Half-Moon. Home to the Halvmane Mountains, Valenheim, and the great wall Mestrvirki.
+Arctic circle
 
 _All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+
+<!-- worldanvil-migration-review:start -->
+## Import review
+
+- [ ] Place this import in the correct VISCERIUM era or eras if its chronology is established.
+<!-- worldanvil-migration-review:end -->

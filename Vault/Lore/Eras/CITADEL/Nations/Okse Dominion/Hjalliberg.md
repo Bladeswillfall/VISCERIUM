@@ -2,26 +2,26 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "City"
-title: "Hjalliberg"
-description: "Hjalliberg is an ancient, mountain side city."
+    - label: Type
+      value: City
+title: Hjalliberg
+description: Hjalliberg is an ancient, mountain side city.
 updated:
-status: "draft"
-type: "location"
-development_level: "stub"
-location_kind: "settlement"
-era: "CITADEL"
+status: draft
+type: location
+development_level: stub
+location_kind: settlement
+era: CITADEL
 tags:
-  - "Okse"
+  - Okse
   - CITADEL
   - Locations
   - Nations
-import_source: "worldanvil"
-import_source_type: "Settlement"
-import_source_file: "Settlement-Hjalliberg-ad4.md"
+import_source: worldanvil
+import_source_type: Settlement
+import_source_file: Settlement-Hjalliberg-ad4.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 ---
 Hjalliberg is an ancient, mountain side city.   This city is located west of Valenheim and acts as a gatekeeper for travlers headed to Valenheim from the western coast or the north-western nation of Askalia.   Hjalliberg is located on the edge of a mountain range between three mountains. These mountains form a V-shape securing the city's flanks.   Fortunately for the denizens of Hjalliberg, the city is close to a lucious temperate rainforest just beyond the City's local tundra biome. This allows the city to be rather rich in game, furs and wood.
 

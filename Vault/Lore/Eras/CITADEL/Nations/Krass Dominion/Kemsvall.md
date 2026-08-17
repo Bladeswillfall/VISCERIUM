@@ -2,26 +2,26 @@
 sidebar:
   replaceMeta: true
   meta:
-    - label: "Type"
-      value: "Capital"
-title: "Kemsvall"
-description: "Nestled amid the rugged embrace of the Krass Dominion, the city of Kemsvall beckons travelers with a unique blend of resilience, tradition, and natural beauty."
+    - label: Type
+      value: Capital
+title: Kemsvall
+description: Nestled amid the rugged embrace of the Krass Dominion, the city of Kemsvall beckons travelers with a unique blend of resilience, tradition, and natural beauty.
 updated:
-status: "draft"
-type: "location"
-development_level: "stub"
-location_kind: "settlement"
-era: "CITADEL"
+status: draft
+type: location
+development_level: stub
+location_kind: settlement
+era: CITADEL
 tags:
-  - "Krass"
+  - Krass
   - CITADEL
   - Locations
   - Nations
-import_source: "worldanvil"
-import_source_type: "Settlement"
-import_source_file: "Settlement-Kemsvall-d9d.md"
+import_source: worldanvil
+import_source_type: Settlement
+import_source_file: Settlement-Kemsvall-d9d.md
 import_issues:
-  - "missing-inline-assets"
+  - missing-inline-assets
 ---
 Nestled amid the rugged embrace of the Krass Dominion, the city of Kemsvall beckons travelers with a unique blend of resilience, tradition, and natural beauty. The city has a large fishing community and it's people aren't unfamiliar with harsher weather.   Surrounded by mist-shrouded highlands and the tranquil expanse of Lake Skjold, Kemsvall's cobblestone and dirt pathways wind through neighborhoods where modest homes sit alongside artisan shops, reflecting the city's contrasting fortunes.  
 

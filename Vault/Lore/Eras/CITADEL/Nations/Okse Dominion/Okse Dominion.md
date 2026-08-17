@@ -41,43 +41,43 @@ sidebar:
       value: Geopolitical dominion / empire
     - label: Demonym
       value: Oksmun
-      href: '[[Oksmun]]'
+      href: "[[Oksmun]]"
     - label: Era
       value: CITADEL
-      href: '[[CITADEL]]'
+      href: "[[CITADEL]]"
     - label: Category
       value: Nation / Faction
     - label: Territory
       value: Halvmane Mountains and surrounding highlands
     - label: Capital
       value: Valenheim
-      href: '[[Valenheim]]'
+      href: "[[Valenheim]]"
   sections:
     - title: Leadership
       fields:
         - label: Kónungsson
           value: Erlend Nautleif
-          href: '[[Erlend Nautleif]]'
+          href: "[[Erlend Nautleif]]"
         - label: Kónungsdóttir
           value: Signy Gunnvidottir
-          href: '[[Signy Gunnvidottir]]'
+          href: "[[Signy Gunnvidottir]]"
         - label: Kóngr Eilífr
           value: Torrad Uxifadir
-          href: '[[Torrad Uxifadir]]'
+          href: "[[Torrad Uxifadir]]"
     - title: Key holdings
       items:
         - label: Valenheim — capital city
-          href: '[[Valenheim]]'
+          href: "[[Valenheim]]"
         - label: Rauthrbak Min — capital prison
-          href: '[[Rauthrbak Min]]'
+          href: "[[Rauthrbak Min]]"
         - label: Hjalliberg — city
-          href: '[[Hjalliberg]]'
+          href: "[[Hjalliberg]]"
         - label: Aldaness — city
-          href: '[[Aldaness]]'
+          href: "[[Aldaness]]"
         - label: Vagrvik — city
-          href: '[[Vagrvik]]'
+          href: "[[Vagrvik]]"
         - label: Strondverdir — city
-          href: '[[Strondverdir]]'
+          href: "[[Strondverdir]]"
     - title: Major exports
       items:
         - Ore and ingots
@@ -87,15 +87,13 @@ sidebar:
     - title: Related
       items:
         - label: Krass Dominion
-          href: '[[Krass Dominion]]'
+          href: "[[Krass Dominion]]"
         - label: Oksmun
-          href: '[[Oksmun]]'
+          href: "[[Oksmun]]"
         - label: Juggernauts
-          href: '[[Juggernauts]]'
+          href: "[[Juggernauts]]"
         - Resonants
-      note: >-
-        All artwork that is not an original creation by Fall will be replaced
-        with either original pieces or commissioned art.
+      note: All artwork that is not an original creation by Fall will be replaced with either original pieces or commissioned art.
 tags:
   - okse
   - dominion
