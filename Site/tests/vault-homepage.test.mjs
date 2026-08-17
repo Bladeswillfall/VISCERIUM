@@ -17,13 +17,23 @@ async function readJson(relativePath) {
   return JSON.parse(await readText(relativePath));
 }
 
-test('VISCERIUM Home is a compact creator dashboard rather than a manual', async () => {
+test('VISCERIUM Home is a modular creator dashboard rather than a manual', async () => {
   const home = matter(await readText('Home.md'));
   const appearance = await readJson('.obsidian/appearance.json');
   const templater = await readJson('.obsidian/plugins/templater-obsidian/data.json');
+  const hero = await readText('System/Views/Home/Hero/view.js');
+  const continuing = await readText('System/Views/Home/Continue/view.js');
+  const attention = await readText('System/Views/Home/Attention/view.js');
+  const chronicle = await readText('System/Views/Home/Chronicle/view.js');
+  const activity = await readText('System/Views/Home/Activity/view.js');
+  const navigate = await readText('System/Views/Home/Navigate/view.js');
 
   assert.equal(home.data.publish, undefined, 'Home must not carry the legacy publish boolean');
   assert.ok(home.data.cssclasses?.includes('viscerium-home'));
+  assert.equal(home.data.headerImage, 'Assets/Images/errack-header.webp');
+  assert.equal(home.data.focusTitle, 'World Anvil Migration');
+  assert.equal(home.data.focusPrimary, 'System/Bases/World Anvil Import.base');
+
   for (const snippet of ['Creator UI foundation', 'File explorer', 'Bases', 'Home dashboard']) {
     assert.ok(appearance.enabledCssSnippets.includes(snippet), `${snippet} should be enabled`);
   }
@@ -31,47 +41,50 @@ test('VISCERIUM Home is a compact creator dashboard rather than a manual', async
   assert.ok(templater.enabled_templates_hotkeys.includes('Templates/Databases/New Story Entity.md'));
   assert.ok(templater.startup_templates.includes('Templates/_Startup/Open VISCERIUM Home.md'));
 
-  assert.match(home.content, /FOCUS/);
-  assert.match(home.content, /World Anvil Migration/);
-  assert.match(home.content, /Open Review First/);
-  assert.match(home.content, /home-workspace/);
-  assert.match(home.content, /CONTINUE/);
-  assert.match(home.content, /System\/Bases\/Lore Registry\.base#Recently edited/);
-  assert.match(home.content, /Open the full Lore Registry/);
-  assert.match(home.content, /CREATE/);
-  assert.match(home.content, /vc-home-create-primary/);
-  assert.match(home.content, /WRITING/);
-  assert.match(home.content, /activeProjectFile/);
-  assert.match(home.content, /PROJECT STATUS/);
-  assert.match(home.content, /System\/Bases\/Needs Attention\.base#Homepage/);
-  assert.match(home.content, /System\/Bases\/Publishing\.base#Homepage/);
-  assert.match(home.content, /CREATOR ACTIVITY/);
-  assert.match(home.content, /vc-home-heatmap/);
-  assert.match(home.content, /viscerium-creator-activity:v2/);
-  assert.match(home.content, /NAVIGATE/);
-  assert.match(home.content, /vc-home-nav-grid/);
-  assert.match(home.content, /System\/Creator Tasks/);
-
-  const creatorTemplatePaths = [
-    'Templates/Databases/New Story Entity.md',
-    'Templates/Lore/New Lore Entity.md',
-    'Templates/Databases/New Myrkild Unit.md',
-  ];
-  for (const templatePath of creatorTemplatePaths) {
-    assert.ok(templater.enabled_templates_hotkeys.includes(templatePath));
-    assert.ok(home.content.includes(`templaterCreateCommand(\"${templatePath}\")`));
+  for (const view of ['Hero', 'Continue', 'Attention', 'Chronicle', 'Activity', 'Navigate']) {
+    assert.match(home.content, new RegExp(`await dv\\.view\\(\"System/Views/Home/${view}\"\\)`));
   }
+  assert.doesNotMatch(home.content, /dv\.current\(\)\.file/);
+  assert.doesNotMatch(home.content, /SYSTEM HEALTH|HOW THIS VAULT WORKS|VISCERIUM AT A GLANCE/);
 
-  assert.match(home.content, /viscerium-timelines:open-storyline-project-timeline/);
-  assert.doesNotMatch(home.content, /viscerium-timelines:diagnose-storyline-integration/);
-  assert.doesNotMatch(home.content, /Creator Activity\.json/);
-  assert.doesNotMatch(home.content, /SYSTEM HEALTH/);
-  assert.doesNotMatch(home.content, /HOW THIS VAULT WORKS/);
-  assert.doesNotMatch(home.content, /VISCERIUM AT A GLANCE/);
-  assert.doesNotMatch(home.content, /dv\.table\(/);
+  assert.match(hero, /dv\.currentFilePath \|\| "Home\.md"/);
+  assert.match(hero, /metadataCache\.getFileCache/);
+  assert.match(hero, /CURRENT FOCUS · MANUAL/);
+  assert.match(hero, /Create new/);
+  assert.match(hero, /vc-home-create-panel/);
+  assert.match(hero, /templaterCreateCommand\("Templates\/Lore\/New Lore Entity\.md"\)/);
+  assert.match(hero, /templaterCreateCommand\("Templates\/Databases\/New Story Entity\.md"\)/);
+  assert.match(hero, /templaterCreateCommand\("Templates\/Databases\/New Myrkild Unit\.md"\)/);
+  assert.match(hero, /viscerium-timelines:open-storyline-project-timeline/);
+  assert.doesNotMatch(hero, /diagnose-storyline-integration/);
+
+  assert.match(continuing, /Loading recent work…/);
+  assert.match(continuing, /dv\.index\?\.initialized/);
+  assert.match(continuing, /activeProjectFile/);
+  assert.match(continuing, /System\/Bases\/Lore Registry\.base/);
+  assert.match(continuing, /Show all recent work/);
+
+  assert.match(attention, /Checking project state…/);
+  assert.match(attention, /dv\.index\?\.initialized/);
+  assert.match(attention, /requestIdleCallback/);
+  assert.match(attention, /System\/Bases\/Needs Attention\.base/);
+  assert.match(attention, /System\/Bases\/Publishing\.base/);
+
+  assert.match(chronicle, /journal-bases:open-current-daily/);
+  assert.match(chronicle, /journal-bases:open-current-weekly/);
+  assert.match(chronicle, /journal-bases:open-current-monthly/);
+  assert.match(chronicle, /journal-bases:open-current-yearly/);
+
+  assert.match(activity, /viscerium-creator-activity:v2/);
+  assert.match(activity, /index < 182/);
+  assert.match(activity, /vc-home-heatmap/);
+
+  assert.match(navigate, /System\/Creator Tasks/);
+  assert.match(navigate, /System\/Bases\/Needs Attention\.base/);
+  assert.match(navigate, /vc-home-nav-grid/);
 });
 
-test('creator UI grammar keeps static surfaces square and controls lightly rounded', async () => {
+test('creator UI grammar keeps page chrome flat and creator controls deliberately rounded', async () => {
   const foundation = await readText('.obsidian/snippets/Creator UI foundation.css');
   const homeCss = await readText('.obsidian/snippets/Home dashboard.css');
   const callouts = await readText('.obsidian/snippets/Callout styling.css');
@@ -79,14 +92,14 @@ test('creator UI grammar keeps static surfaces square and controls lightly round
 
   assert.match(foundation, /--vc-radius-static:\s*0/);
   assert.match(foundation, /--vc-radius-control:\s*4px/);
-  assert.match(homeCss, /border-radius:\s*0/);
+  assert.match(homeCss, /--vc-home-control-radius:\s*7px/);
+  assert.match(homeCss, /--vc-home-radius:\s*10px/);
   assert.match(homeCss, /button\.vc-home-button/);
-  assert.match(homeCss, /var\(--vc-radius-control/);
+  assert.match(homeCss, /border-radius:\s*var\(--vc-home-control-radius\)/);
+  assert.match(homeCss, /inset 0 -3px 0/);
+  assert.match(homeCss, /vc-home-create-panel/);
   assert.match(callouts, /border-radius:\s*0/);
   assert.match(bases, /bases-view\[data-view-type="table"\][\s\S]*?border-radius:\s*0/);
-  assert.match(bases, /bases-cards-item[\s\S]*?var\(--vc-radius-control/);
-  assert.doesNotMatch(homeCss, /linear-gradient\(/);
-  assert.doesNotMatch(homeCss, /radial-gradient\(/);
 });
 
 test('creator foundation overrides Baseline display-serif headings with the configured heading face', async () => {
@@ -104,46 +117,58 @@ test('creator foundation overrides Baseline display-serif headings with the conf
   assert.match(headings, /color-mix\(in srgb, var\(--vc-accent/);
 });
 
-test('Home dashboard uses pane width and hides duplicate document chrome in both modes', async () => {
+test('Home dashboard uses pane width, a fixed hero artwork layer and responsive two-column bands', async () => {
   const homeCss = await readText('.obsidian/snippets/Home dashboard.css');
 
   assert.match(homeCss, /--line-width-adaptive:\s*300em/);
+  assert.match(homeCss, /--vc-home-hero-art-height:\s*380px/);
   assert.match(homeCss, /@container\s+viscerium-home/);
   assert.match(homeCss, /markdown-preview-view\.viscerium-home \.metadata-container/);
   assert.match(homeCss, /markdown-source-view\.mod-cm6\.viscerium-home \.metadata-container/);
   assert.match(homeCss, /markdown-source-view\.mod-cm6\.viscerium-home \.inline-title/);
-  assert.match(homeCss, /grid-template-columns:\s*minmax\(0,\s*1\.65fr\)\s+minmax\(18rem,\s*1fr\)/);
+  assert.match(homeCss, /vc-home-launch[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto/);
+  assert.match(homeCss, /vc-home-continue-grid[\s\S]*?grid-template-columns:\s*1fr\s+1fr/);
+  assert.match(homeCss, /home-secondary[\s\S]*?grid-template-columns:\s*1fr\s+1fr/);
+  assert.match(homeCss, /@container viscerium-home \(max-width: 760px\)/);
   assert.match(homeCss, /vc-home-nav-grid/);
 });
 
-test('Home has one solid Focus action and quieter creation/workspace controls', async () => {
-  const home = matter(await readText('Home.md'));
+test('Home keeps one primary focus action and one-level creation disclosure', async () => {
+  const hero = await readText('System/Views/Home/Hero/view.js');
   const homeCss = await readText('.obsidian/snippets/Home dashboard.css');
 
-  assert.equal((home.content.match(/vc-home-button-primary/g) ?? []).length, 1);
-  assert.match(home.content, /vc-home-button-create/);
-  assert.match(home.content, /vc-home-button-tertiary/);
-  assert.match(home.content, /Creator Context/);
-  assert.match(home.content, /Story Timeline/);
-  assert.match(homeCss, /vc-home-button-create/);
-  assert.match(homeCss, /vc-home-button-tertiary/);
+  assert.match(hero, /addLaunchButton\(page\.focusPrimaryLabel, page\.focusPrimary, true, "play"\)/);
+  assert.match(hero, /addLaunchButton\("Create new", null, false, "plus"\)/);
+  assert.match(hero, /createToggle\.setAttribute\("aria-expanded", "false"\)/);
+  assert.match(hero, /panel\.hidden = true/);
+  assert.match(hero, /Create something new/);
+  assert.match(hero, /Worldbuilding/);
+  assert.match(hero, /Story/);
+  assert.match(hero, /Myrkild/);
+  assert.match(hero, /Chronicle/);
+  assert.match(homeCss, /vc-home-button-primary/);
+  assert.match(homeCss, /vc-home-button-secondary/);
+  assert.match(homeCss, /vc-home-button-action/);
 });
 
-test('Home uses restrained semantic colour cues rather than monochrome or full-card tinting', async () => {
+test('Home uses restrained semantic colour cues for lore, story, progress and intervention states', async () => {
   const homeCss = await readText('.obsidian/snippets/Home dashboard.css');
   const propertiesCss = await readText('.obsidian/snippets/Compact properties.css');
 
-  assert.match(homeCss, /home-writing[^\n]*--vc-home-section-accent:\s*var\(--vc-writing/);
-  assert.match(homeCss, /home-activity[^\n]*--vc-home-section-accent:\s*var\(--vc-activity/);
-  assert.match(homeCss, /home-navigate[^\n]*--vc-home-section-accent:\s*var\(--vc-tools/);
-  assert.match(homeCss, /border-bottom:\s*1px solid color-mix/);
+  assert.match(homeCss, /--vc-home-story:\s*#b87f62/);
+  assert.match(homeCss, /--vc-home-lore:\s*#758fa0/);
+  assert.match(homeCss, /--vc-home-green:\s*#7e9a79/);
+  assert.match(homeCss, /--vc-home-red:\s*#cf6c5b/);
+  assert.match(homeCss, /vc-home-area-canon[^\n]*var\(--vc-home-lore\)/);
+  assert.match(homeCss, /vc-home-area-writing[^\n]*var\(--vc-home-story\)/);
+  assert.match(homeCss, /vc-home-attention-severity[\s\S]*?var\(--vc-home-red\)/);
+  assert.match(homeCss, /vc-home-ready-count[\s\S]*?var\(--vc-home-green\)/);
   assert.match(propertiesCss, /metadata-properties-heading[\s\S]*?color-mix/);
-  assert.doesNotMatch(homeCss, /background:\s*var\(--vc-writing/);
 });
 
 test('creator activity is local, rolling, responsive and non-gamified', async () => {
   const startup = await readText('Templates/_Startup/Open VISCERIUM Home.md');
-  const home = matter(await readText('Home.md'));
+  const activity = await readText('System/Views/Home/Activity/view.js');
   const homeCss = await readText('.obsidian/snippets/Home dashboard.css');
 
   assert.match(startup, /ACTIVITY_KEY/);
@@ -154,13 +179,17 @@ test('creator activity is local, rolling, responsive and non-gamified', async ()
   assert.match(startup, /pruneDays/);
   assert.doesNotMatch(startup, /Creator Activity\.json/);
   assert.doesNotMatch(startup, /adapter\.write/);
-  assert.match(home.content, /52 weeks/);
-  assert.doesNotMatch(home.content, /streak|score|completion percentage/i);
-  assert.match(homeCss, /grid-template-columns:\s*repeat\(52,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(homeCss, /grid-template-rows:\s*repeat\(7,\s*minmax\(0,\s*1fr\)\)/);
-  assert.match(homeCss, /aspect-ratio:\s*52\s*\/\s*7/);
-  assert.doesNotMatch(homeCss, /grid-auto-columns:\s*6px/);
-  assert.doesNotMatch(homeCss, /vc-home-activity-scroll[\s\S]{0,180}overflow-x:\s*auto/);
+
+  assert.match(activity, /viscerium-creator-activity:v2/);
+  assert.match(activity, /25 \* 7/);
+  assert.match(activity, /index < 182/);
+  assert.match(activity, /active days/);
+  assert.match(activity, /changed files/);
+  assert.doesNotMatch(activity, /streak|score|completion percentage/i);
+
+  assert.match(homeCss, /vc-home-heatmap[\s\S]*?grid-template-rows:\s*repeat\(7,\s*7px\)/);
+  assert.match(homeCss, /vc-home-heatmap[\s\S]*?grid-auto-columns:\s*7px/);
+  assert.match(homeCss, /vc-home-heatmap[\s\S]*?overflow:\s*hidden/);
 });
 
 test('creator task hub uses ordinary Markdown tasks without introducing a task plugin', async () => {
