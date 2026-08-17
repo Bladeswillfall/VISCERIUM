@@ -15,8 +15,8 @@
    -------------------------------------------------------------------------- */
 
 /*
- * Timeline toolbar hierarchy and control affordances. This file is scoped to
- * the enhanced toolbar and does not style Chronos or the timeline viewport.
+ * Owns the enhanced timeline toolbar hierarchy, filters, fields, actions and
+ * control affordances. Chronos and viewport presentation use their dedicated styles.
  */
 
 .vc-timeline-toolbar.vc-timeline-toolbar-enhanced {
@@ -258,7 +258,7 @@
 
 /*
  * Starlight's prose flow can add block margins to adjacent toolbar children.
- * Reset those margins here so the controls align to the toolbar's own grid.
+ * These resets align the controls to the toolbar's own grid.
  */
 .vc-timeline-toolbar.vc-timeline-toolbar-enhanced {
   align-content: start;
@@ -328,8 +328,8 @@
 
 /*
  * Container-aware toolbar layout. The toolbar can be much narrower than the
- * browser viewport when Starlight's navigation sidebar is open, so these
- * breakpoints respond to a toolbar-only wrapper rather than the page.
+ * browser viewport when Starlight's navigation sidebar is open, so the
+ * breakpoints follow the toolbar wrapper's actual component width.
  */
 
 .vc-timeline-toolbar-container {
@@ -426,8 +426,8 @@
    -------------------------------------------------------------------------- */
 
 /*
- * Shared affordance for timeline actions. This only changes native timeline
- * buttons; date fields, event cards and Chronos geometry remain untouched.
+ * Shared affordance for native timeline action buttons. Date fields, event cards
+ * and Chronos geometry use their dedicated style owners.
  */
 
 /* Keep the shared affordance scoped to the two timeline action surfaces. */
