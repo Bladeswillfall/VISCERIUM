@@ -140,7 +140,8 @@ body {
 
 /* Quotes get a quieter bookish serif; existing blockquote spacing/colors stay intact. */
 .markdown-rendered blockquote,
-.markdown-source-view.mod-cm6 .HyperMD-quote {
+.markdown-source-view.mod-cm6 .HyperMD-quote,
+.callout[data-callout="quote"] .callout-content {
   font-family: var(--vc-font-quote);
 }
 
