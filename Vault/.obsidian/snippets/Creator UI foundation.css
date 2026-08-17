@@ -1,6 +1,6 @@
 /*
  * Creator UI foundation
- * Shared spacing, typography and semantic-colour vocabulary for VISCERIUM creator surfaces.
+ * Defines shared spacing, typography, and status colors for VISCERIUM creator interfaces.
  */
 
 :root {
@@ -38,9 +38,9 @@
 }
 
 /*
- * Baseline 3.x assigns a bundled display serif to --h1-font through --h6-font.
- * The creator vault deliberately keeps article headings on the configured body-text face.
- * Using --font-text preserves any user-selected Obsidian text font rather than hard-coding a family.
+ * Baseline 3.x sets its display serif through --h1-font to --h6-font.
+ * This vault sets article headings to --font-text. This variable follows the
+ * text font that the user selects in Obsidian.
  */
 body {
   --h1-font: var(--font-text);
