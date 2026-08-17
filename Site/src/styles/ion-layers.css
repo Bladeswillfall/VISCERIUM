@@ -5,9 +5,8 @@
 /*
  * Site-level stacking hierarchy.
  *
- * The final navigation rail now lives at PageFrame level, so page/component
- * stacking can remain local without asking an article-column descendant to
- * behave like a viewport-wide underlay.
+ * PageFrame owns the final navigation rail, while page and component stacking
+ * stays local to the surfaces that participate in the shared hierarchy.
  */
 :where(body) {
   --codex-z-underlay: -1;
@@ -45,15 +44,15 @@
 }
 
 /*
- * These elements are authored by component/plugin styles outside the Codex
- * cascade layers. Keep their site-level stack positions pinned to the shared
- * hierarchy so a later local stylesheet cannot accidentally reorder them.
+ * Component and plugin styles author these elements outside the Codex cascade
+ * layers. The shared hierarchy pins their site-level stack positions across
+ * later local stylesheet changes.
  */
 #scroll-to-top-button {
   z-index: var(--codex-z-control) !important;
 }
 
-/* Film grain has been restored to its pre-background-stack behaviour. */
+/* Film grain renders at the shared grain layer above the page stack. */
 body::before {
   z-index: var(--codex-z-grain) !important;
 }
