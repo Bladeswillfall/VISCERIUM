@@ -17,15 +17,15 @@
 /*
   Persistent top-ribbon controls.
 
-  Keep this file unlayered. Astro 7 currently emits the base rules but drops the
-  responsive media block from the built Starlight stylesheet. CodexHeader therefore
-  owns a matchMedia-backed root attribute and these selectors consume that state.
+  Keep this file unlayered. Astro 7 currently carries the base rules into the
+  built Starlight stylesheet; CodexHeader owns the responsive state through a
+  matchMedia-backed root attribute and these selectors consume that state.
 */
 
 /*
-  The complete header ribbon is intentionally borderless. Include descendants and
-  pseudo-elements so Starlight and injected plugins cannot reintroduce dividers,
-  button rims or keyboard-key borders through their own component styles.
+  The complete header ribbon is intentionally borderless. Descendant and
+  pseudo-element overrides keep Starlight and injected plugin controls within
+  the same borderless presentation contract.
 */
 header.header,
 header.header *,
@@ -121,9 +121,8 @@ header.header {
 }
 
 /*
-  Starlight fixes the header and reserves its height inside `.main-frame` by default.
-  On wide displays the Codex deliberately returns the header to normal flow as a
-  sticky ribbon, so remove that otherwise duplicated navigation-height offset.
+  Wide displays return the header to normal flow as a sticky Codex ribbon.
+  Main-frame then reserves the mobile TOC height as its active top offset.
 */
 html[data-codex-wide-header] header.header {
   position: sticky !important;
@@ -135,9 +134,9 @@ html[data-codex-wide-header] .main-frame {
 }
 
 /*
-  Mobile keeps Starlight's fixed-header geometry, but the ribbon can translate out
-  of view. Main-frame retains Starlight's normal nav-height padding, preventing
-  layout movement when the fixed ribbon hides or returns.
+  Mobile keeps Starlight's fixed-header geometry while the ribbon translates in
+  and out of view. Main-frame retains the normal nav-height padding, preserving
+  stable document geometry through both header states.
 */
 html[data-codex-mobile-header] header.header {
   position: fixed !important;
@@ -154,10 +153,9 @@ html[data-codex-mobile-header][data-codex-mobile-header-hidden] header.header {
 }
 
 /*
-  Keep Starlight's mobile On-this-page control fixed and functionally unchanged,
-  but let it occupy the space directly beneath whichever header state is active.
-  When the header hides, the TOC rises to the viewport edge; when the header returns,
-  both surfaces move together using the same timing curve.
+  Starlight's mobile On-this-page control follows the active header state while
+  retaining its fixed behaviour. The TOC rises to the viewport edge with the
+  hidden header and returns beneath it using the same timing curve.
 */
 html[data-codex-mobile-header] mobile-starlight-toc > nav {
   top: calc(var(--sl-nav-height, 3.5rem) - 1px) !important;
@@ -170,10 +168,10 @@ html[data-codex-mobile-header][data-codex-mobile-header-hidden] mobile-starlight
 }
 
 /*
-  Starlight's mobile menu button is independently fixed near the top edge. When the
-  Codex header is visible, move that floating bubble and the sidebar pane down by
-  the same navigation height so the returning header never covers the control.
-  They use the same easing as the header, making all three surfaces travel together.
+  Starlight's mobile menu button is independently fixed near the top edge. The
+  visible Codex header moves the menu bubble and sidebar pane down by the same
+  navigation height, keeping the control fully visible. All three surfaces use
+  the same easing and travel together.
 */
 html[data-codex-mobile-header] .sidebar > starlight-menu-button button {
   transform: translateY(var(--sl-nav-height, 3.5rem));
@@ -328,9 +326,9 @@ html[data-codex-wide-header] .codex-header-search button[data-open-modal] > kbd 
 /*
  * Mobile-only collision guards for the persistent era controls.
  *
- * Keep these rules unlayered: Starlight's header/menu controls are component-scoped
- * and the Codex shell needs deterministic geometry rather than relying on cascade
- * order inside the theme layers.
+ * Keep these rules unlayered: Starlight's header/menu controls are component-scoped,
+ * while the Codex shell uses the unlayered declarations for deterministic geometry
+ * across the theme cascade.
  */
 html[data-codex-mobile-header] .codex-header-search button[data-open-modal] {
   width: max-content !important;
@@ -377,8 +375,8 @@ html[data-codex-mobile-header] .codex-theme-control {
 
 /*
  * The mobile drawer's own close bubble occupies the upper-right corner. Reserve
- * that lane so the scoped "Exit · All eras" action is always fully visible and
- * remains the element receiving pointer input at its centre.
+ * that lane so the scoped "Exit · All eras" action stays fully visible and
+ * receives pointer input at its centre.
  */
 html[data-codex-mobile-header] .codex-sidebar-era-toolbar {
   box-sizing: border-box;
