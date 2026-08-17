@@ -3,12 +3,12 @@ filters:
     - file.ext == "md"
     - file.inFolder("Lore")
 formulas:
-  display_title: 'if(title.isEmpty(), file.name, title)'
-  note_link: 'file.asLink(formula.display_title)'
-  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
-  missing_required: 'if(title.isEmpty(), 1, 0) + if(description.isEmpty(), 1, 0) + if(type.isEmpty(), 1, 0) + if(status.isEmpty(), 1, 0)'
-  blockers: 'if(title.isEmpty(), "Missing title · ", "") + if(description.isEmpty(), "Missing description · ", "") + if(type.isEmpty(), "Missing type · ", "") + if(status.isEmpty(), "Missing status", "")'
-  publication_state: 'if(status == "published" && formula.missing_required > 0, html("<span class=\"publish-state publish-state--blocked\">BLOCKED</span>"), if(status == "published", html("<span class=\"publish-state publish-state--published\">PUBLISHED</span>"), if(formula.missing_required > 0, html("<span class=\"publish-state publish-state--incomplete\">INCOMPLETE</span>"), html("<span class=\"publish-state publish-state--ready\">STRUCTURALLY READY</span>"))))'
+  display_title: if(title.isEmpty(), file.name, title)
+  note_link: file.asLink(formula.display_title)
+  era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
+  missing_required: if(title.isEmpty(), 1, 0) + if(description.isEmpty(), 1, 0) + if(type.isEmpty(), 1, 0) + if(status.isEmpty(), 1, 0)
+  blockers: if(title.isEmpty(), "Missing title · ", "") + if(description.isEmpty(), "Missing description · ", "") + if(type.isEmpty(), "Missing type · ", "") + if(status.isEmpty(), "Missing status", "")
+  publication_state: if(status == "published" && formula.missing_required > 0, html("<span class=\"publish-state publish-state--blocked\">BLOCKED</span>"), if(status == "published", html("<span class=\"publish-state publish-state--published\">PUBLISHED</span>"), if(formula.missing_required > 0, html("<span class=\"publish-state publish-state--incomplete\">INCOMPLETE</span>"), html("<span class=\"publish-state publish-state--ready\">STRUCTURALLY READY</span>"))))
 properties:
   formula.note_link:
     displayName: Article
@@ -33,7 +33,6 @@ properties:
 views:
   - type: table
     name: Homepage
-    limit: 5
     filters:
       and:
         - status != "published"
@@ -48,6 +47,7 @@ views:
     sort:
       - property: file.mtime
         direction: DESC
+    limit: 5
   - type: table
     name: Structurally ready
     filters:

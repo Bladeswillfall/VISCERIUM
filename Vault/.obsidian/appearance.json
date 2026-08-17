@@ -27,10 +27,14 @@
     "Timeline styling",
     "World Anvil Import triage",
     "Heading hierarchy",
-    "Tag styling"
+    "Tag styling",
+    "Paragraph spacing",
+    "Blockquote styling",
+    "Autohide properties"
   ],
   "accentColor": "#b1a98c",
   "showViewHeader": true,
   "showRibbon": true,
-  "nativeMenus": false
+  "nativeMenus": false,
+  "baseFontSize": 18
 }
