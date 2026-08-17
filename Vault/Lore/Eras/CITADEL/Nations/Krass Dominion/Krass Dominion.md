@@ -9,6 +9,7 @@ sidebar:
       fields:
         - label: Demonym
           value: Krassian
+          href: '[[Krassian]]'
         - label: Sister Nation
           value: Okse Dominion
           href: /w/viscerium/a/okse-dominion-article
