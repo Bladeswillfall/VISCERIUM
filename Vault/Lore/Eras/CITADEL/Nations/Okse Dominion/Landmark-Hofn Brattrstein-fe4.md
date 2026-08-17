@@ -9,6 +9,7 @@ description: Hofn (Port) Brattrstein (Steep stone) This port is situated within 
 updated:
 status: draft
 type: location
+era: CITADEL
 development_level: stub
 location_kind: site
 tags:
