@@ -6,10 +6,10 @@ filters:
     - '!file.inFolder("Templates")'
     - '!file.inFolder("Demo")'
 formulas:
-  display_title: 'if(title.isEmpty(), file.name, title)'
-  note_link: 'file.asLink(formula.display_title)'
-  area: 'if(file.inFolder("Lore"), "CANON", if(file.inFolder("Stories"), "WRITING", if(file.inFolder("Drafts"), "WIP", if(file.inFolder("Private"), "PRIVATE", "NOTE"))))'
-  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
+  display_title: if(title.isEmpty(), file.name, title)
+  note_link: file.asLink(formula.display_title)
+  area: if(file.inFolder("Lore"), "CANON", if(file.inFolder("Stories"), "WRITING", if(file.inFolder("Drafts"), "WIP", if(file.inFolder("Private"), "PRIVATE", "NOTE"))))
+  era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
 properties:
   formula.note_link:
     displayName: Note
@@ -30,7 +30,6 @@ properties:
 views:
   - type: table
     name: Recently edited
-    limit: 6
     order:
       - formula.note_link
       - formula.area
@@ -41,6 +40,7 @@ views:
     sort:
       - property: file.mtime
         direction: DESC
+    limit: 6
   - type: table
     name: All lore
     filters:
