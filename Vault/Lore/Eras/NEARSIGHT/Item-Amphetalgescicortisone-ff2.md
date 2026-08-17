@@ -18,6 +18,7 @@ status: draft
 type: item
 description: Amphetalgescicortisone or simply "AMP", is a nasally inhaled aerosol developed by Helix Technica as a general purpose "combat enhancement" drug.
 updated:
+era: NEARSIGHT
 development_level: stub
 item_type: Medical
 eras:
