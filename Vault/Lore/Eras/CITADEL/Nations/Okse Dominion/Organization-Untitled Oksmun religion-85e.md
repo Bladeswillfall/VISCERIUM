@@ -8,6 +8,7 @@ title: Untitled Oksmun religion
 updated:
 status: draft
 type: faction
+era: CITADEL
 development_level: stub
 tags:
   - Okse
