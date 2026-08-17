@@ -1,17 +1,16 @@
 /* ==========================================================================
    World graph integration
 
-   Consolidated from graph.css, graph-canvas.css. Section order is intentional:
-   later sections may refine or override earlier ownership layers. Keep the
-   provenance comments when moving rules so cascade-sensitive behaviour remains
-   understandable in isolation.
+   This file combines the graph page and canvas styles. Later sections can
+   override earlier rules. Keep the Origin comments with moved rules because
+   CSS order affects the result.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Graph shell and tokens
+   Graph layout and colors
    Origin: graph.css
 
-   Styles the graph page and owns its RGB-safe variables.
+   Styles the graph page and defines RGB color values.
    -------------------------------------------------------------------------- */
 
 @layer starlight.core {
@@ -22,12 +21,11 @@
 }
 
 /*
- * Canvas graph colours resolve to RGB. The progressive colour transform leaves
- * rgb(var(...)) intact, supplying Pixi/chroma with concrete RGB values and a
- * stable parse path.
+ * Canvas graph colors use RGB because Pixi/chroma can parse these values reliably.
+ * The color transform leaves `rgb(var(...))` unchanged.
  *
- * Keep these rules unlayered: unlayered author styles outrank the plugin's
- * `sitegraph` layer even though graph.css is registered before the plugin CSS.
+ * Keep these rules outside the CSS layers. They must take priority over the
+ * plugin's `sitegraph` layer, which loads later.
  */
 .slsg-graph-component {
   --vc-graph-bg-rgb: 16, 16, 16;
@@ -127,16 +125,13 @@
 }
 
 /* --------------------------------------------------------------------------
-   Post-plugin canvas adapter
+   Canvas values after the graph plugin loads
    Origin: graph-canvas.css
 
-   Overrides third-party canvas variables after starlight-site-graph loads.
+   Replaces the plugin canvas color values after `starlight-site-graph` loads.
    -------------------------------------------------------------------------- */
 
-/*
- * The World Graph uses a visual-workspace layout with the shell's available
- * viewport width and desktop sidebar-aware gutters. Scope this to the graph page.
- */
+/* The World Graph uses the available page width and keeps desktop sidebar spacing. */
 .main-frame:has(.world-graph) main > .content-panel:has(.world-graph) {
   padding: 0 !important;
 }
@@ -163,9 +158,9 @@
 }
 
 /*
- * starlight-site-graph defines several canvas colours directly on its component.
- * The RGB-safe adapter applies at the same scope after the plugin stylesheet,
- * supplying Pixi/chroma with concrete, parseable values.
+ * `starlight-site-graph` sets several canvas colors on its component.
+ * Apply these RGB values after the plugin stylesheet so Pixi/chroma receives
+ * values that it can parse.
  */
 .slsg-graph-component,
 graph-component {
