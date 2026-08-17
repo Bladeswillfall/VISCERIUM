@@ -1,6 +1,6 @@
 /*
  * Horizontal rules
- * Uses a subtle centered divider instead of a heavy full-width line.
+ * Draws a subtle centered divider with faded ends.
  */
 
 .markdown-rendered hr {
