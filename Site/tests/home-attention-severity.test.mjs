@@ -15,13 +15,19 @@ async function readVault(relativePath) {
 test('Home brand uses Cinzel without changing normal article heading ownership', async () => {
   const headings = await readVault('.obsidian/snippets/Heading hierarchy.css');
   const foundation = await readVault('.obsidian/snippets/Creator UI foundation.css');
+  const typography = await readVault('.obsidian/snippets/Typography.css');
 
   assert.match(
     headings,
     /markdown-preview-view\.viscerium-home[\s\S]*?home-header[\s\S]*?font-family:\s*"Cinzel",\s*serif/,
   );
   assert.match(headings, /markdown-source-view\.mod-cm6\.viscerium-home \.HyperMD-header-1/);
-  assert.match(foundation, /--h1-font:\s*var\(--font-text\)/);
+  assert.match(foundation, /--h1-font:\s*var\(--vc-font-heading,\s*var\(--font-text\)\)/);
+  assert.match(typography, /\.markdown-rendered:not\(\.viscerium-home\),/);
+  assert.match(
+    typography,
+    /\.markdown-source-view\.mod-cm6:not\(\.viscerium-home\) \.cm-content/,
+  );
 });
 
 test('Needs Attention derives a four-level severity from the real issue count', async () => {

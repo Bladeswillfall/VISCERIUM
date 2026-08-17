@@ -89,12 +89,15 @@ test('creator UI grammar keeps static surfaces square and controls lightly round
   assert.doesNotMatch(homeCss, /radial-gradient\(/);
 });
 
-test('creator foundation overrides Baseline display-serif headings with the configured text face', async () => {
+test('creator foundation overrides Baseline display-serif headings with the configured heading face', async () => {
   const foundation = await readText('.obsidian/snippets/Creator UI foundation.css');
   const headings = await readText('.obsidian/snippets/Heading hierarchy.css');
 
   for (let level = 1; level <= 6; level += 1) {
-    assert.match(foundation, new RegExp(`--h${level}-font:\\s*var\\(--font-text\\)`));
+    assert.match(
+      foundation,
+      new RegExp(`--h${level}-font:\\s*var\\(--vc-font-heading,\\s*var\\(--font-text\\)\\)`),
+    );
   }
   assert.doesNotMatch(foundation, /Instrument Serif/);
   assert.match(headings, /--vc-accent-line/);

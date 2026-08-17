@@ -167,7 +167,7 @@ These plugins use the Obsidian API under its MIT licence. The first-party MIT li
 
 ## Fonts
 
-The Codex typography uses open font families under the SIL Open Font License 1.1:
+The Codex typography uses open font families under the SIL Open Font License 1.1. The creator vault also bundles a renamed, subset derivative of Lora for offline reading and writing:
 
 | Font family | Copyright project | Licence |
 | --- | --- | --- |
@@ -175,6 +175,9 @@ The Codex typography uses open font families under the SIL Open Font License 1.1
 | [Source Serif 4](https://github.com/adobe-fonts/source-serif) | Adobe and Source Serif project authors | OFL-1.1 |
 | [IBM Plex Sans](https://github.com/IBM/plex) | IBM and IBM Plex project authors | OFL-1.1 |
 | [IBM Plex Mono](https://github.com/IBM/plex) | IBM and IBM Plex project authors | OFL-1.1 |
+| Viscerium Reading Serif (derived from [Lora](https://github.com/cyrealtype/Lora-Cyrillic)) | Lora Project Authors | OFL-1.1 |
+
+`Viscerium Reading Serif` is a VISCERIUM-specific WOFF2 derivative of Lora. The upstream family reserves the name `Lora`, so these modified subsets use a different primary family name. See [`LICENSES/OFL-1.1-Lora.txt`](LICENSES/OFL-1.1-Lora.txt) and [`LICENSES/Viscerium-Reading-Serif-NOTICE.md`](LICENSES/Viscerium-Reading-Serif-NOTICE.md).
 
 Font names, reserved font names, copyright notices, and licence files must be preserved as required by the respective font packages.
 
