@@ -1,13 +1,12 @@
-/* Presentation-only layout helpers for VISCERIUM authoring. */
+/* Defines layout styles used while authoring VISCERIUM notes. */
 
 :root {
   --vc-layout-indent-step: 2.25rem;
 }
 
 /*
- * Any renderer path that the plugin has positively identified as a VISCERIUM
- * layout indent gets this class. It is deliberately stronger than theme and
- * blockquote snippets: this is ordinary document flow with a left offset.
+ * The plugin adds this class after it identifies a VISCERIUM visual indent.
+ * These rules remove blockquote and callout styling and apply a left margin.
  */
 .vc-layout-indent-rendered,
 .markdown-rendered .vc-layout-indent-rendered,
@@ -75,7 +74,7 @@
   margin-bottom: 0 !important;
 }
 
-/* Primary path before the Markdown post-processor runs. */
+/* Apply the indent before the Markdown post-processor adds its class. */
 .callout[data-callout="vc-indent"],
 .markdown-rendered .callout[data-callout="vc-indent"] {
   margin-block: 0.75em !important;
@@ -91,20 +90,20 @@
   line-height: inherit !important;
 }
 
-/* Legacy blocks used collapsed-callout syntax. Never allow that state to hide layout content. */
+/* Legacy blocks can use collapsed-callout syntax. Show their layout content. */
 .callout[data-callout="vc-indent"].is-collapsed > .callout-content {
   display: block !important;
 }
 
-/* Repeated visual indents deliberately compound rather than turning into list nesting. */
+/* Each nested visual indent adds another indent step. */
 .vc-layout-indent-rendered .vc-layout-indent-rendered,
 .callout[data-callout="vc-indent"] .callout[data-callout="vc-indent"] {
   margin-inline-start: var(--vc-layout-indent-step) !important;
 }
 
 /*
- * CSS fallback for a correctly-authored indent before the post-processor has
- * tagged it. The post-processor is authoritative for malformed legacy nesting.
+ * These rules style a correctly authored indent before the post-processor adds
+ * its class. The post-processor repairs malformed legacy nesting separately.
  */
 .markdown-rendered blockquote:has(.vc-layout-indent-marker),
 .markdown-preview-view blockquote:has(.vc-layout-indent-marker) {
@@ -142,7 +141,7 @@
   display: none !important;
 }
 
-/* Responsive [cols] / [col] authoring preview for Obsidian Reading View. */
+/* Adjust [cols] and [col] previews to the Reading View width. */
 .markdown-preview-sizer,
 .markdown-rendered {
   container-type: inline-size;
