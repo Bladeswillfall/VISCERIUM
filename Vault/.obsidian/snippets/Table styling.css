@@ -1,6 +1,6 @@
 /*
  * Table styling
- * Clear hierarchy with square static surfaces and compact cells.
+ * Uses compact cells, square corners, and a distinct header row.
  */
 
 .markdown-rendered table {
