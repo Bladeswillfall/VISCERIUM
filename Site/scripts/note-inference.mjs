@@ -207,8 +207,8 @@ export function inferRecognisedNoteType(file, sourceDir) {
     const type = TYPE_BY_FOLDER.get(normaliseSourceSegment(segments[index]));
     if (!type) continue;
 
-    // "Eras" identifies only direct era index notes. It must not turn an
-    // otherwise untyped descendant of Lore/Eras/<ERA>/ into type: era.
+    // Use type `era` only for direct notes under `Lore/Eras`.
+    // Descendant notes keep their own type.
     if (type === 'era' && !(index === 0 && segments.length === 2)) continue;
     return type;
   }
