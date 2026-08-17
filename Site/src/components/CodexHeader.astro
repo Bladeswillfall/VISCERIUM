@@ -26,9 +26,9 @@ import EraContextControls from './EraContextControls.astro';
   </div>
 
   <!--
-    Telescope adds a hidden controller inside `.right-group`.
+    Telescope injects its hidden controller into `.right-group`.
     `CodexSearch` provides the visible search button.
-    Keep the `.right-group` class because Telescope uses it.
+    Keep `.right-group` because Telescope uses this class to attach the controller.
   -->
   <div class="right-group codex-header-controls print:hidden" data-codex-header-controls>
     <EraContextControls />
