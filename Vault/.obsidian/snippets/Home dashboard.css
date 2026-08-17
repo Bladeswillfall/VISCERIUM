@@ -1,28 +1,47 @@
 /*
  * VISCERIUM Home dashboard
- * Homepage-specific hierarchy, layout, controls and responsive behaviour.
- * Article header artwork is supplied by VISCERIUM Image Tools via `headerImage`.
+ * Editorial creator-home treatment based on the approved HTML prototype.
+ * Home uses its `headerImage` frontmatter property as a frontmatter-driven masthead.
  */
 
 .markdown-preview-view.viscerium-home,
 .markdown-source-view.mod-cm6.viscerium-home {
-  --vc-home-border: var(--vc-border, var(--background-modifier-border));
-  --vc-home-border-soft: color-mix(in srgb, var(--vc-home-border) 72%, transparent);
-  --vc-home-surface: color-mix(in srgb, var(--background-secondary) 68%, transparent);
-  --vc-home-surface-strong: color-mix(in srgb, var(--background-secondary-alt) 78%, transparent);
-  --vc-home-muted: var(--text-muted);
-  --vc-home-radius: 7px;
-  --vc-home-content: 1480px;
-  --file-margins: clamp(.8rem, 2vw, 2rem);
+  --vc-home-bg: #151515;
+  --vc-home-bg-deep: #0c0c0c;
+  --vc-home-panel: #1c1c1b;
+  --vc-home-panel-2: #20201f;
+  --vc-home-panel-3: #262522;
+  --vc-home-line: #34322f;
+  --vc-home-line-soft: #292826;
+  --vc-home-text: #d9d4cb;
+  --vc-home-strong: #f0ece3;
+  --vc-home-muted: #958f87;
+  --vc-home-muted-2: #6f6b65;
+  --vc-home-paper: #c8b99b;
+  --vc-home-paper-soft: #a69880;
+  --vc-home-story: #b87f62;
+  --vc-home-lore: #758fa0;
+  --vc-home-green: #7e9a79;
+  --vc-home-red: #cf6c5b;
+  --vc-home-red-bg: #251c1a;
+  --vc-home-focus-ring: #ddd0b7;
+  --vc-home-button-edge: #0a0a09;
+  --vc-home-button-face: #24231f;
+  --vc-home-button-hover: #2e2b26;
+  --vc-home-radius: 10px;
+  --vc-home-control-radius: 7px;
+  --vc-home-max: 1180px;
+  --file-margins: clamp(1rem, 2.8vw, 2rem);
   --line-width-adaptive: 300em;
   --line-width-wide: 300em;
   --max-width: 100%;
   --file-line-width: 100%;
+  color: var(--vc-home-text);
   container-name: viscerium-home;
   container-type: inline-size;
 }
 
-/* Home owns its title and hides Obsidian's duplicate title/properties UI. */
+/* Home owns the visible page title and keeps the workspace chrome quiet. */
 .markdown-preview-view.viscerium-home .inline-title,
 .markdown-preview-view.viscerium-home .metadata-container,
 .markdown-source-view.mod-cm6.viscerium-home .inline-title,
@@ -33,15 +52,11 @@
 .markdown-preview-view.viscerium-home .markdown-preview-sizer,
 .markdown-preview-view.viscerium-home.is-readable-line-width .markdown-preview-sizer,
 .markdown-source-view.mod-cm6.viscerium-home .cm-sizer {
-  width: 100% !important;
-  max-width: var(--vc-home-content) !important;
+  width: min(var(--vc-home-max), calc(100% - (var(--file-margins) * 2))) !important;
+  max-width: var(--vc-home-max) !important;
   margin-inline: auto !important;
+  padding-inline: 0 !important;
   box-sizing: border-box;
-}
-
-.markdown-preview-view.viscerium-home .markdown-preview-sizer,
-.markdown-preview-view.viscerium-home.is-readable-line-width .markdown-preview-sizer {
-  padding-inline: var(--file-margins) !important;
 }
 
 .markdown-preview-view.viscerium-home .markdown-preview-section,
@@ -55,27 +70,15 @@
   box-sizing: border-box;
 }
 
-/* Reuse the article-image fade, but give Home a larger, full-bleed masthead. */
-.viscerium-home .vc-header-figure {
-  width: calc(100% + var(--file-margins) + var(--file-margins));
-  height: clamp(15rem, 31vw, 27rem);
-  margin-inline: calc(0px - var(--file-margins));
-  margin-bottom: -3.5rem;
-}
-
-.viscerium-home .vc-header-image {
-  object-position: center;
-}
+/* Home renders its own masthead from the same frontmatter image reference. */
+.viscerium-home .vc-header-figure { display: none !important; }
 
 /* -------------------------------------------------------------------------- */
-/* Callout reset and section hierarchy                                        */
+/* Shared callout reset                                                       */
 /* -------------------------------------------------------------------------- */
 
 .viscerium-home .callout:is(
   [data-callout="home-hero"],
-  [data-callout="home-priority"],
-  [data-callout="home-focus"],
-  [data-callout="home-create"],
   [data-callout="home-continue"],
   [data-callout="home-attention"],
   [data-callout="home-secondary"],
@@ -91,46 +94,367 @@
   box-shadow: none;
 }
 
-.viscerium-home .callout:is(
-  [data-callout="home-hero"],
-  [data-callout="home-priority"],
-  [data-callout="home-secondary"]
-) > .callout-title {
+.viscerium-home .callout:is([data-callout="home-hero"], [data-callout="home-secondary"]) > .callout-title {
   display: none;
 }
 
-.viscerium-home .callout:is(
-  [data-callout="home-hero"],
-  [data-callout="home-priority"],
-  [data-callout="home-secondary"]
-) > .callout-content {
+.viscerium-home .callout:is([data-callout="home-hero"], [data-callout="home-secondary"]) > .callout-content {
   padding: 0;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Hero / creator invitation                                                  */
+/* -------------------------------------------------------------------------- */
+
+.viscerium-home .callout[data-callout="home-hero"] {
+  position: relative;
+  min-height: 380px;
+  margin-inline: -18px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  border-bottom: 1px solid #2b2926;
+  isolation: isolate;
+}
+
+.viscerium-home .callout[data-callout="home-hero"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-image: var(--vc-home-hero-image, linear-gradient(135deg, #25231f, #10100f));
+  background-position: var(--vc-home-hero-position, 50% 46%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(.76) contrast(1.07) brightness(.72);
+  opacity: .92;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 54%, rgb(0 0 0 / 78%) 68%, rgb(0 0 0 / 28%) 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 54%, rgb(0 0 0 / 78%) 68%, rgb(0 0 0 / 28%) 84%, transparent 100%);
+}
+
+.viscerium-home .callout[data-callout="home-hero"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgb(16 16 15 / 86%) 0%, rgb(16 16 15 / 46%) 38%, rgb(16 16 15 / 8%) 75%),
+    linear-gradient(to bottom, rgb(15 15 14 / 16%), rgb(21 21 21 / 12%) 58%, var(--background-primary) 98%);
+}
+
+.viscerium-home .vc-home-hero-content {
+  min-height: 380px;
+  padding: 72px 30px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.viscerium-home .vc-home-eyebrow {
+  margin-bottom: 9px;
+  color: #b5aa98;
+  font-family: var(--font-interface);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.viscerium-home .vc-home-hero-content > h1 {
+  margin: 0;
+  color: #f1ede4;
+  font-family: var(--vc-font-body, "Viscerium Reading Serif", Georgia, serif);
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 500;
+  letter-spacing: .015em;
+  line-height: .96;
+  text-shadow: 0 3px 20px rgb(0 0 0 / 42%);
+}
+
+.viscerium-home .vc-home-creative-line {
+  max-width: 650px;
+  margin: 15px 0 27px;
+  color: #c7c0b5;
+  font-family: var(--vc-font-quote, var(--vc-font-body, Georgia, serif));
+  font-size: 17px;
+  font-style: italic;
+}
+
+.viscerium-home .vc-home-launch {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: end;
+  padding: 18px 18px 17px;
+  border: 1px solid rgb(196 182 157 / 20%);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgb(30 29 27 / 90%), rgb(24 24 23 / 83%));
+  box-shadow: 0 18px 42px rgb(0 0 0 / 25%);
+  backdrop-filter: blur(10px);
+}
+
+.viscerium-home .vc-home-launch-focus { min-width: 0; }
+
+.viscerium-home .vc-home-focus-kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8f877b;
+  font-family: var(--font-interface);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.viscerium-home .vc-home-kicker-icon,
+.viscerium-home .vc-home-kicker-icon svg {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  color: var(--vc-home-green);
+}
+
+.viscerium-home .vc-home-focus-title {
+  margin: 3px 0 4px;
+  color: #ede8de;
+  font-family: var(--vc-font-body, "Viscerium Reading Serif", Georgia, serif);
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.viscerium-home .vc-home-focus-description {
+  max-width: 620px;
+  color: #a9a39a;
+  font-size: 12px;
+}
+
+.viscerium-home .vc-home-launch-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Buttons: raised face, dark lower/right edge, pressed inset state            */
+/* -------------------------------------------------------------------------- */
+
+.viscerium-home button.vc-home-button {
+  min-height: 44px;
+  margin: 0;
+  padding: 0 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid var(--vc-home-button-edge);
+  border-right-color: #050504;
+  border-bottom-color: #050504;
+  border-radius: var(--vc-home-control-radius);
+  background: var(--vc-home-button-face);
+  color: #e3ddd2;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 7%), inset 0 -3px 0 rgb(0 0 0 / 34%), 0 1px 0 rgb(255 255 255 / 2.5%);
+  font-family: var(--font-interface);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .01em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: background .1s ease, color .1s ease, transform .08s ease, box-shadow .08s ease, border-color .08s ease;
+}
+
+.viscerium-home button.vc-home-button:hover:not(:disabled) {
+  background: var(--vc-home-button-hover);
+  color: #f2ede4;
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 9%), inset 0 -3px 0 rgb(0 0 0 / 38%), 0 2px 3px rgb(0 0 0 / 22%);
+}
+
+.viscerium-home button.vc-home-button:active:not(:disabled),
+.viscerium-home button.vc-home-button.is-open {
+  background: #1d1c19;
+  border-top-color: #050504;
+  border-right-color: #171512;
+  border-bottom-color: #171512;
+  color: #f1ece3;
+  box-shadow: inset 0 3px 4px rgb(0 0 0 / 58%), inset 0 -1px 0 rgb(255 255 255 / 2.5%), 0 1px 0 rgb(255 255 255 / 1.8%);
+  transform: translateY(1px);
+}
+
+.viscerium-home button.vc-home-button-primary {
+  border-color: #171613;
+  border-right-color: #6f654f;
+  border-bottom-color: #6f654f;
+  background: var(--vc-home-paper);
+  color: #171613;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 32%), inset 0 -3px 0 #978a72, 0 1px 0 rgb(255 255 255 / 4%);
+}
+
+.viscerium-home button.vc-home-button-primary:hover:not(:disabled) {
+  border-right-color: #756a53;
+  border-bottom-color: #756a53;
+  background: #d6c8ad;
+  color: #111;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 38%), inset 0 -3px 0 #9f9278, 0 2px 3px rgb(0 0 0 / 22%);
+}
+
+.viscerium-home button.vc-home-button-primary:active:not(:disabled) {
+  border-top-color: #6f654f;
+  border-right-color: #171613;
+  border-bottom-color: #171613;
+  background: #b8aa8e;
+  box-shadow: inset 0 3px 4px rgb(83 74 57 / 54%), inset 0 -1px 0 rgb(255 255 255 / 13%), 0 1px 0 rgb(255 255 255 / 2.5%);
+}
+
+.viscerium-home button.vc-home-button-secondary,
+.viscerium-home button.vc-home-button-action {
+  border-color: #4b4b47;
+  border-right-color: #171715;
+  border-bottom-color: #171715;
+  background: #24231f;
+}
+
+.viscerium-home button.vc-home-button:focus-visible,
+.viscerium-home .vc-home-quiet-button:focus-visible,
+.viscerium-home a:focus-visible {
+  outline: 2px solid var(--vc-home-focus-ring);
+  outline-offset: 3px;
+}
+
+.viscerium-home button.vc-home-button:disabled,
+.viscerium-home .vc-home-chronicle-period:disabled {
+  cursor: not-allowed;
+  opacity: .42;
+}
+
+.viscerium-home .vc-home-button-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: currentColor;
+}
+
+.viscerium-home button.vc-home-button-primary .vc-home-button-icon { color: #171613; }
+
+/* Create expansion lives inside the hero card: no second navigation level. */
+.viscerium-home .vc-home-create-panel {
+  grid-column: 1 / -1;
+  margin-top: 1px;
+  padding-top: 16px;
+  border-top: 1px solid rgb(196 182 157 / 14%);
+}
+
+.viscerium-home .vc-home-create-panel[hidden] { display: none !important; }
+
+.viscerium-home .vc-home-create-panel-title {
+  color: #e7e1d7;
+  font-family: var(--vc-font-body, "Viscerium Reading Serif", Georgia, serif);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.viscerium-home .vc-home-create-panel-copy {
+  margin: 2px 0 14px;
+  color: #817c75;
+  font-size: 10px;
+}
+
+.viscerium-home .vc-home-create-sections {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+}
+
+.viscerium-home .vc-home-create-group {
+  min-width: 0;
+  padding: 0 16px;
+  border-right: 1px solid #35322e;
+}
+
+.viscerium-home .vc-home-create-group:first-child { padding-left: 0; }
+.viscerium-home .vc-home-create-group:last-child { padding-right: 0; border-right: 0; }
+
+.viscerium-home .vc-home-create-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 9px;
+  color: #b9aa91;
+  font-family: var(--font-interface);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+
+.viscerium-home .vc-home-create-heading-icon,
+.viscerium-home .vc-home-create-heading-icon svg {
+  width: 15px;
+  height: 15px;
+  color: #b9aa91;
+}
+
+.viscerium-home .vc-home-create-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.viscerium-home .vc-home-create-actions .vc-home-button {
+  min-height: 38px;
+  padding-inline: 11px;
+  font-size: 10px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Editorial section headings                                                 */
+/* -------------------------------------------------------------------------- */
+
 .viscerium-home .callout:is(
-  [data-callout="home-focus"],
-  [data-callout="home-create"],
+  [data-callout="home-continue"],
+  [data-callout="home-attention"],
+  [data-callout="home-chronicle"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) {
+  margin-top: 28px;
+}
+
+.viscerium-home .callout:is(
   [data-callout="home-continue"],
   [data-callout="home-attention"],
   [data-callout="home-chronicle"],
   [data-callout="home-activity"],
   [data-callout="home-navigate"]
 ) > .callout-title {
-  margin: 0;
-  padding: 0 0 .55rem;
-  border-bottom: 1px solid var(--vc-home-border-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
   background: transparent;
-  color: var(--text-muted);
-  font-family: var(--font-interface);
-  font-size: .66rem;
-  font-weight: 850;
-  letter-spacing: .13em;
-  text-transform: uppercase;
+  color: #e7e2d9;
 }
 
 .viscerium-home .callout:is(
-  [data-callout="home-focus"],
-  [data-callout="home-create"],
+  [data-callout="home-continue"],
+  [data-callout="home-attention"],
+  [data-callout="home-chronicle"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) > .callout-title::after {
+  content: "";
+  height: 1px;
+  flex: 1 1 auto;
+  margin-left: 4px;
+  background: #2d2b28;
+}
+
+.viscerium-home .callout:is(
   [data-callout="home-continue"],
   [data-callout="home-attention"],
   [data-callout="home-chronicle"],
@@ -141,672 +465,618 @@
 }
 
 .viscerium-home .callout:is(
-  [data-callout="home-focus"],
-  [data-callout="home-create"],
+  [data-callout="home-continue"],
+  [data-callout="home-attention"],
+  [data-callout="home-chronicle"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) > .callout-title .callout-title-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #e7e2d9;
+  font-family: var(--vc-font-body, "Viscerium Reading Serif", Georgia, serif);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.15;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.viscerium-home .callout:is(
+  [data-callout="home-continue"],
+  [data-callout="home-attention"],
+  [data-callout="home-chronicle"],
+  [data-callout="home-activity"],
+  [data-callout="home-navigate"]
+) > .callout-title .callout-title-inner::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  background: var(--vc-home-paper-soft);
+  -webkit-mask: var(--vc-home-section-icon) center / contain no-repeat;
+  mask: var(--vc-home-section-icon) center / contain no-repeat;
+}
+
+.viscerium-home .callout[data-callout="home-continue"] { --vc-home-section-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3a9 9 0 1 1-8.3 5.5L1 6v7h7L5.3 10.3A7 7 0 1 0 12 5V3Zm-1 4h2v5.2l3.4 2-1 1.7L11 13.3V7Z'/%3E%3C/svg%3E"); }
+.viscerium-home .callout[data-callout="home-attention"] { --vc-home-section-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 1 21h22L12 2Zm-1 7h2v6h-2V9Zm0 8h2v2h-2v-2Z'/%3E%3C/svg%3E"); }
+.viscerium-home .callout[data-callout="home-chronicle"] { --vc-home-section-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 3h2v2h10V3h2v2h2v16H3V5h2V3Zm0 7v9h14v-9H5Z'/%3E%3C/svg%3E"); }
+.viscerium-home .callout[data-callout="home-activity"] { --vc-home-section-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 14h4v7H4v-7Zm6-5h4v12h-4V9Zm6-6h4v18h-4V3Z'/%3E%3C/svg%3E"); }
+.viscerium-home .callout[data-callout="home-navigate"] { --vc-home-section-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 4 8 6 2-6 2-4 8-4-8-6-2 6-2 4-8Zm0 6-2 4 2 4 2-4-2-4Z'/%3E%3C/svg%3E"); }
+
+.viscerium-home .callout[data-callout="home-attention"] > .callout-title .callout-title-inner::before { background: var(--vc-home-red); }
+
+.viscerium-home .callout:is(
   [data-callout="home-continue"],
   [data-callout="home-attention"],
   [data-callout="home-chronicle"],
   [data-callout="home-activity"],
   [data-callout="home-navigate"]
 ) > .callout-content {
-  padding: .8rem 0 0;
+  padding: 0;
 }
 
-/* Hero text sits in the transparent end of the article-image fade. */
-.viscerium-home .callout[data-callout="home-hero"] {
-  position: relative;
-  z-index: 2;
-  margin-bottom: clamp(1.8rem, 3vw, 2.8rem);
-  pointer-events: none;
-}
-
-.viscerium-home .callout[data-callout="home-hero"] > .callout-content {
-  min-height: 3.8rem;
-}
-
-.viscerium-home .callout[data-callout="home-hero"] h1 {
-  margin: 0;
-  color: var(--text-normal);
-  font-family: var(--font-interface);
-  font-size: clamp(2rem, 4.4vw, 3.8rem);
-  font-weight: 900;
-  letter-spacing: .09em;
-  line-height: .95;
-  text-shadow: 0 2px 18px rgb(0 0 0 / .5);
-}
-
-.viscerium-home .callout[data-callout="home-hero"] p {
-  margin: .45rem 0 0;
-  color: color-mix(in srgb, var(--text-muted) 86%, var(--text-normal));
-  font-family: var(--font-interface);
-  font-size: .68rem;
-  letter-spacing: .15em;
-}
-
-.viscerium-home .callout[data-callout="home-hero"] strong {
-  font-weight: 800;
-}
-
-/* The only strong composition above the fold: focus + creation. */
-.viscerium-home .callout[data-callout="home-priority"] > .callout-content {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .85fr);
-  gap: clamp(1rem, 2vw, 2rem);
-  align-items: start;
-}
-
-.viscerium-home .callout[data-callout="home-priority"] > .callout-content > p,
-.viscerium-home .callout[data-callout="home-secondary"] > .callout-content > p {
-  display: none;
-}
-
-.viscerium-home .callout[data-callout="home-focus"] {
-  border: 1px solid var(--vc-home-border-soft);
-  border-left: 3px solid var(--interactive-accent);
-  border-radius: var(--vc-home-radius);
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--background-secondary) 75%, transparent),
-    color-mix(in srgb, var(--background-primary) 84%, transparent)
-  );
-  padding: 1rem 1.05rem;
-}
-
-.viscerium-home .callout[data-callout="home-focus"] > .callout-title {
-  color: color-mix(in srgb, var(--interactive-accent) 50%, var(--text-muted));
-  border-bottom-color: color-mix(in srgb, var(--interactive-accent) 22%, var(--vc-home-border));
-}
-
-.viscerium-home .callout[data-callout="home-create"] {
-  padding: 1rem 0 0;
-}
-
-.viscerium-home .callout[data-callout="home-continue"],
-.viscerium-home .callout[data-callout="home-attention"],
-.viscerium-home .callout[data-callout="home-secondary"],
-.viscerium-home .callout[data-callout="home-navigate"] {
-  margin-top: clamp(1.8rem, 3.6vw, 3.4rem);
+.viscerium-home .vc-home-section-copy {
+  margin: -7px 0 14px;
+  color: #817c75;
+  font-size: 11px;
 }
 
 /* -------------------------------------------------------------------------- */
-/* Buttons                                                                    */
+/* Continue working                                                           */
 /* -------------------------------------------------------------------------- */
 
-.viscerium-home button.vc-home-button,
-.viscerium-home .vc-chronicle-period-action {
-  min-height: 2.05rem;
-  margin: 0;
-  padding: .38rem .72rem;
-  border: 1px solid var(--background-modifier-border);
-  border-top-color: rgb(255 255 255 / .12);
-  border-left-color: rgb(255 255 255 / .085);
-  border-right-color: rgb(0 0 0 / .52);
-  border-bottom-color: rgb(0 0 0 / .62);
-  border-radius: var(--vc-home-radius);
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--background-modifier-hover) 88%, var(--background-primary)),
-    color-mix(in srgb, var(--background-secondary) 88%, var(--background-primary))
-  );
-  color: var(--text-normal);
-  font-family: var(--font-interface);
-  font-size: .74rem;
-  font-weight: 760;
-  line-height: 1;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / .055),
-    inset 0 -2px 0 rgb(0 0 0 / .25),
-    0 2px 0 rgb(0 0 0 / .24);
-  transform: translateY(0);
-  transition: border-color 100ms ease, background 100ms ease, box-shadow 100ms ease, transform 80ms ease;
-}
-
-.viscerium-home button.vc-home-button:hover:not(:disabled),
-.viscerium-home .vc-chronicle-period-action:hover:not(:disabled) {
-  border-top-color: rgb(255 255 255 / .18);
-  border-left-color: rgb(255 255 255 / .13);
-  color: var(--text-normal);
-  filter: brightness(1.05);
-}
-
-.viscerium-home button.vc-home-button:active:not(:disabled),
-.viscerium-home button.vc-home-button.is-open,
-.viscerium-home .vc-chronicle-period-action:active:not(:disabled) {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 2px 0 rgb(0 0 0 / .34),
-    inset 0 -1px 0 rgb(255 255 255 / .035);
-}
-
-.viscerium-home button.vc-home-button-primary {
-  border-top-color: color-mix(in srgb, white 24%, var(--interactive-accent));
-  border-left-color: color-mix(in srgb, white 16%, var(--interactive-accent));
-  border-right-color: color-mix(in srgb, black 45%, var(--interactive-accent));
-  border-bottom-color: color-mix(in srgb, black 56%, var(--interactive-accent));
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--interactive-accent) 92%, white),
-    color-mix(in srgb, var(--interactive-accent) 80%, black)
-  );
-  color: var(--text-on-accent);
-}
-
-.viscerium-home button.vc-home-button-secondary {
-  background: transparent;
-  color: var(--text-muted);
-}
-
-.viscerium-home button.vc-home-button:disabled,
-.viscerium-home .vc-chronicle-period-action:disabled {
-  cursor: not-allowed;
-  opacity: .38;
-}
-
-.viscerium-home .vc-home-button-icon {
-  width: .9rem;
-  height: .9rem;
-  flex: 0 0 .9rem;
-}
-
-.viscerium-home .vc-home-button-action,
-.viscerium-home .vc-home-create-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: .48rem;
-}
-
-.viscerium-home .vc-home-inline-link {
-  color: var(--text-muted);
-  font-family: var(--font-interface);
-  font-size: .69rem;
-  font-weight: 680;
-  text-decoration: none;
-}
-
-.viscerium-home .vc-home-inline-link:hover {
-  color: var(--text-normal);
-}
-
-/* -------------------------------------------------------------------------- */
-/* Focus + Create                                                             */
-/* -------------------------------------------------------------------------- */
-
-.viscerium-home .vc-home-focus-title {
-  margin-bottom: .35rem;
-  color: var(--text-normal);
-  font-size: clamp(1.08rem, 1.7vw, 1.38rem);
-  font-weight: 800;
-}
-
-.viscerium-home .vc-home-focus-description {
-  max-width: 68ch;
-  color: var(--text-muted);
-  font-size: .82rem;
-  line-height: 1.5;
-}
-
-.viscerium-home .vc-home-focus-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .55rem;
-  margin-top: .85rem;
-}
-
-.viscerium-home .vc-home-create-root {
-  min-width: 0;
-}
-
-.viscerium-home .vc-home-create-toggle {
-  min-width: 8.5rem;
-}
-
-.viscerium-home .vc-home-create-toggle .vc-home-button-icon {
-  transition: transform 120ms ease;
-}
-
-.viscerium-home .vc-home-create-root.is-open .vc-home-create-toggle .vc-home-button-icon {
-  transform: rotate(45deg);
-}
-
-.viscerium-home .vc-home-create-panel[hidden] {
-  display: none;
-}
-
-.viscerium-home .vc-home-create-panel {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem 1.15rem;
-  margin-top: .9rem;
-  padding-top: .9rem;
-  border-top: 1px solid var(--vc-home-border-soft);
-}
-
-.viscerium-home .vc-home-create-heading,
-.viscerium-home .vc-home-nav-heading {
-  margin-bottom: .42rem;
-  color: var(--text-faint);
-  font-family: var(--font-interface);
-  font-size: .58rem;
-  font-weight: 850;
-  letter-spacing: .12em;
-}
-
-.viscerium-home .vc-home-create-grid {
-  display: grid;
-  gap: .38rem;
-}
-
-.viscerium-home .vc-home-button-action {
-  width: 100%;
-  min-width: 0;
-  min-height: 1.95rem;
-  padding-inline: .58rem;
-  font-size: .69rem;
-}
-
-.viscerium-home .vc-home-create-footer {
-  grid-column: 1 / -1;
-  padding-top: .1rem;
-}
-
-/* -------------------------------------------------------------------------- */
-/* Continue Working                                                           */
-/* -------------------------------------------------------------------------- */
+.viscerium-home .callout[data-callout="home-continue"] { margin-bottom: 36px; }
 
 .viscerium-home .vc-home-continue-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-.viscerium-home .vc-home-continue-column {
+.viscerium-home .vc-home-recent-card {
   min-width: 0;
+  overflow: hidden;
+  border: 1px solid #302f2c;
+  border-radius: 10px;
+  background: #191918;
 }
 
-.viscerium-home .vc-home-continue-column:first-child {
-  padding-right: clamp(.8rem, 1.7vw, 1.5rem);
-  border-right: 1px solid var(--vc-home-border-soft);
-}
-
-.viscerium-home .vc-home-continue-column:last-child {
-  padding-left: clamp(.8rem, 1.7vw, 1.5rem);
-}
-
-.viscerium-home .vc-home-column-heading,
-.viscerium-home .vc-home-activity-header {
+.viscerium-home .vc-home-column-heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: .7rem;
-  margin-bottom: .55rem;
+  gap: 12px;
+  padding: 14px 15px 11px;
+  border-bottom: 1px solid #2d2c29;
 }
 
 .viscerium-home .vc-home-column-title {
-  color: var(--text-normal);
-  font-family: var(--font-interface);
-  font-size: .86rem;
-  font-weight: 790;
+  color: #ddd7cd;
+  font-family: var(--vc-font-body, "Viscerium Reading Serif", Georgia, serif);
+  font-size: 18px;
+  font-weight: 600;
 }
 
-.viscerium-home .vc-home-column-kicker,
-.viscerium-home .vc-home-activity-summary,
-.viscerium-home .vc-home-row-time {
-  color: var(--text-faint);
+.viscerium-home .vc-home-column-kicker {
+  color: #6f6b65;
   font-family: var(--font-interface);
-  font-size: .62rem;
+  font-size: 9px;
   white-space: nowrap;
 }
 
-.viscerium-home .vc-home-recent-list {
-  border-top: 1px solid var(--vc-home-border-soft);
-}
+.viscerium-home .vc-home-recent-list { padding: 0 14px; }
 
-.viscerium-home .vc-home-recent-row,
-.viscerium-home .vc-home-story-project {
+.viscerium-home .vc-home-recent-row {
+  min-height: 54px;
+  padding: 9px 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: .75rem;
-  min-height: 2.25rem;
-  padding: .48rem 0;
-  border-bottom: 1px solid var(--vc-home-border-soft);
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid #292826;
 }
 
-.viscerium-home .vc-home-story-project {
-  background: linear-gradient(to right, color-mix(in srgb, var(--vc-writing, var(--color-orange)) 4%, transparent), transparent 65%);
-}
+.viscerium-home .vc-home-recent-row:last-child { border-bottom: 0; }
+.viscerium-home .vc-home-recent-copy { min-width: 0; }
 
-.viscerium-home .vc-home-recent-main,
-.viscerium-home .vc-home-attention-main {
-  display: flex;
-  align-items: baseline;
-  min-width: 0;
-  gap: .5rem;
-}
-
-.viscerium-home .vc-home-row-link {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--text-normal);
-  font-size: .78rem;
-  font-weight: 630;
-  text-overflow: ellipsis;
+.viscerium-home .vc-home-row-link,
+.viscerium-home .vc-home-attention-note,
+.viscerium-home .vc-home-active-story-title {
+  color: #ded9d0;
   text-decoration: none;
-  white-space: nowrap;
 }
 
 .viscerium-home .vc-home-row-link-strong {
-  font-weight: 800;
+  display: block;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.viscerium-home .vc-home-area,
-.viscerium-home .vc-home-attention-severity {
+.viscerium-home .vc-home-recent-meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 3px;
+  min-width: 0;
+  color: #77726c;
+  font-size: 9px;
+}
+
+.viscerium-home .vc-home-area {
   flex: 0 0 auto;
   font-family: var(--font-interface);
-  font-size: .54rem;
-  font-weight: 880;
+  font-size: 8px;
+  font-weight: 850;
   letter-spacing: .08em;
 }
 
-.viscerium-home .vc-home-area-canon { color: var(--vc-canon, var(--color-cyan)); }
-.viscerium-home .vc-home-area-wip { color: var(--vc-wip, var(--color-yellow)); }
-.viscerium-home .vc-home-area-writing { color: var(--vc-writing, var(--color-orange)); }
+.viscerium-home .vc-home-area-canon { color: var(--vc-home-lore); }
+.viscerium-home .vc-home-area-wip { color: #a7896d; }
+.viscerium-home .vc-home-area-writing { color: var(--vc-home-story); }
 
-.viscerium-home .vc-home-column-footer {
-  padding-top: .58rem;
+.viscerium-home .vc-home-row-time {
+  color: #6f6b65;
+  font-family: var(--font-interface);
+  font-size: 9px;
+  white-space: nowrap;
 }
+
+.viscerium-home .vc-home-card-footer {
+  padding: 10px 14px 12px;
+  border-top: 1px solid #292826;
+}
+
+.viscerium-home .vc-home-inline-link,
+.viscerium-home .vc-home-story-continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #aaa398;
+  font-family: var(--font-interface);
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.viscerium-home .vc-home-inline-link::after,
+.viscerium-home .vc-home-story-continue::after { content: "→"; }
+
+.viscerium-home .vc-home-inline-link:hover,
+.viscerium-home .vc-home-story-continue:hover { color: #ece6dc; }
+
+.viscerium-home .vc-home-active-story {
+  margin: 12px 0 5px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid rgb(184 127 98 / 22%);
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgb(50 35 30 / 58%), rgb(31 26 24 / 70%));
+}
+
+.viscerium-home .vc-home-active-story-title {
+  display: block;
+  margin-top: 2px;
+  color: #e2d9d1;
+  font-family: var(--vc-font-body, Georgia, serif);
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.viscerium-home .vc-home-active-story-meta {
+  margin-top: 2px;
+  color: #806f68;
+  font-size: 9px;
+}
+
+.viscerium-home .vc-home-story-continue { color: #c09a86; white-space: nowrap; }
 
 .viscerium-home .vc-home-empty {
-  padding: .7rem 0;
-  color: var(--text-faint);
-  font-size: .75rem;
+  padding: 16px 0;
+  color: #77726c;
+  font-size: 10px;
 }
 
+.viscerium-home .vc-home-recent-toggle-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 9px;
+}
+
+.viscerium-home .vc-home-quiet-button {
+  min-height: 32px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #8f887e;
+  font-family: var(--font-interface);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.viscerium-home .vc-home-quiet-button::after { content: "  ↓"; }
+.viscerium-home .vc-home-quiet-button[aria-expanded="true"]::after { content: "  ↑"; }
+.viscerium-home .vc-home-quiet-button:hover { color: #ddd6cc; background: transparent; }
+
+.viscerium-home .vc-home-recent-drawer {
+  max-height: 320px;
+  margin-top: 9px;
+  overflow: auto;
+  border-top: 1px solid #2d2b28;
+  scrollbar-width: thin;
+}
+
+.viscerium-home .vc-home-recent-drawer[hidden] { display: none !important; }
+
+.viscerium-home .vc-home-recent-all-row {
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 90px auto;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid #292826;
+}
+
+.viscerium-home .vc-home-recent-all-area { color: #77726c; font-size: 9px; }
+
 /* -------------------------------------------------------------------------- */
-/* Needs Attention                                                            */
+/* Needs attention                                                            */
 /* -------------------------------------------------------------------------- */
+
+.viscerium-home .callout[data-callout="home-attention"] {
+  margin-top: 0;
+  margin-bottom: 38px;
+  overflow: hidden;
+  border: 1px solid #4b302b;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #251c1a, #1d1918);
+}
+
+.viscerium-home .callout[data-callout="home-attention"] > .callout-title {
+  padding: 17px 18px 0;
+  margin: 0;
+}
+
+.viscerium-home .callout[data-callout="home-attention"] > .callout-title::after { background: #3b2824; }
+.viscerium-home .callout[data-callout="home-attention"] > .callout-title .callout-title-inner { color: #e3d7d2; }
 
 .viscerium-home .vc-home-attention-summary {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: .7rem;
+  padding: 5px 18px 16px;
+  border-bottom: 1px solid #3b2824;
 }
 
-.viscerium-home .vc-home-attention-stats,
-.viscerium-home .vc-home-attention-actions {
+.viscerium-home .vc-home-attention-summary .vc-home-section-copy {
+  margin: 0;
+  color: #967f78;
+}
+
+.viscerium-home .vc-home-attention-stats {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: .55rem 1rem;
+  gap: 8px;
 }
 
 .viscerium-home .vc-home-stat {
-  display: inline-flex;
+  min-width: 82px;
+  padding: 8px 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 7px;
   align-items: baseline;
-  gap: .28rem;
-  font-family: var(--font-interface);
+  border: 1px solid #49302b;
+  border-radius: 8px;
+  background: rgb(12 10 10 / 22%);
 }
 
 .viscerium-home .vc-home-stat-value {
-  color: var(--text-normal);
-  font-size: .98rem;
+  color: #e59079;
+  font-family: var(--font-interface);
+  font-size: 18px;
   font-weight: 850;
 }
 
 .viscerium-home .vc-home-stat-label {
-  color: var(--text-faint);
-  font-size: .62rem;
-  font-weight: 680;
+  color: #8f7770;
+  font-size: 9px;
+  white-space: nowrap;
 }
 
-.viscerium-home .vc-home-stat.is-critical .vc-home-stat-value { color: var(--color-red); }
-.viscerium-home .vc-home-stat.is-attention .vc-home-stat-value { color: var(--color-orange); }
-.viscerium-home .vc-home-stat.is-ready .vc-home-stat-value { color: var(--color-green); }
-.viscerium-home .vc-home-stat.is-quiet { opacity: .58; }
+.viscerium-home .vc-home-stat.is-critical .vc-home-stat-value { color: #ef755f; }
 
-.viscerium-home .vc-home-attention-list {
-  border-top: 1px solid var(--vc-home-border-soft);
-}
+.viscerium-home .vc-home-attention-list { padding-inline: 13px; }
 
 .viscerium-home .vc-home-attention-row {
+  min-height: 48px;
+  padding: 8px 5px;
   display: grid;
-  grid-template-columns: minmax(12rem, .8fr) minmax(0, 1.2fr);
-  align-items: baseline;
-  gap: 1rem;
-  padding: .52rem 0;
-  border-bottom: 1px solid var(--vc-home-border-soft);
+  grid-template-columns: 72px minmax(130px, .85fr) minmax(0, 1.8fr) auto;
+  gap: 13px;
+  align-items: center;
+  border-bottom: 1px solid #30221f;
 }
 
-.viscerium-home .vc-home-attention-row[data-severity="critical"] .vc-home-attention-severity { color: var(--color-red); }
-.viscerium-home .vc-home-attention-row[data-severity="urgent"] .vc-home-attention-severity { color: var(--color-orange); }
-.viscerium-home .vc-home-attention-row[data-severity="elevated"] .vc-home-attention-severity { color: var(--color-yellow); }
-.viscerium-home .vc-home-attention-row[data-severity="notice"] .vc-home-attention-severity { color: var(--text-muted); }
+.viscerium-home .vc-home-attention-row:last-child { border-bottom: 0; }
+.viscerium-home .vc-home-attention-row:hover { background: #271d1b; }
 
-.viscerium-home .vc-home-attention-detail {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--text-muted);
-  font-size: .72rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.viscerium-home .vc-home-attention-severity {
+  color: var(--vc-home-red);
+  font-family: var(--font-interface);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.viscerium-home .vc-home-attention-note { font-weight: 700; }
+.viscerium-home .vc-home-attention-detail { color: #a28d86; font-size: 10px; }
+
+.viscerium-home .vc-home-attention-state {
+  padding: 3px 7px;
+  border: 1px solid #5b3831;
+  border-radius: 999px;
+  color: #b17668;
+  font-family: var(--font-interface);
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.viscerium-home .vc-home-attention-footer {
+  min-height: 45px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid #3b2824;
 }
 
 .viscerium-home .vc-home-ready-note {
   display: flex;
-  gap: .7rem;
-  margin-top: .65rem;
-  color: var(--text-faint);
-  font-size: .67rem;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 0;
 }
 
 .viscerium-home .vc-home-ready-count {
-  color: color-mix(in srgb, var(--color-green) 68%, var(--text-muted));
+  color: var(--vc-home-green);
   font-family: var(--font-interface);
-  font-weight: 790;
+  font-size: 9px;
+  font-weight: 850;
+  white-space: nowrap;
 }
 
+.viscerium-home .vc-home-ready-copy { color: #7f746f; font-size: 9px; }
+.viscerium-home .vc-home-attention-actions { display: flex; gap: 14px; white-space: nowrap; }
+.viscerium-home .vc-home-inline-link-muted { color: #7f746f; }
+
 /* -------------------------------------------------------------------------- */
-/* Chronicle + Creator Progress                                               */
+/* Chronicle + Progress                                                       */
 /* -------------------------------------------------------------------------- */
 
 .viscerium-home .callout[data-callout="home-secondary"] > .callout-content {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(1rem, 2vw, 2rem);
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-.viscerium-home .vc-chronicle-period-grid {
-  display: grid !important;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  gap: .42rem !important;
+.viscerium-home .callout[data-callout="home-secondary"] > .callout-content > p { display: none; }
+
+.viscerium-home .callout:is([data-callout="home-chronicle"], [data-callout="home-activity"]) {
+  margin-top: 0;
+  padding: 17px 17px 15px;
+  border: 1px solid #302f2c;
+  border-radius: 10px;
+  background: #191918;
 }
 
-.viscerium-home .vc-chronicle-period {
-  min-width: 0;
-  padding: .48rem !important;
-  border: 1px solid var(--vc-home-border-soft) !important;
-  border-radius: var(--vc-home-radius) !important;
-  background: transparent !important;
+.viscerium-home .callout:is([data-callout="home-chronicle"], [data-callout="home-activity"]) > .callout-title {
+  margin-bottom: 8px;
 }
 
-.viscerium-home .vc-chronicle-period-label {
-  font-size: .69rem !important;
-  font-weight: 760 !important;
+.viscerium-home .callout:is([data-callout="home-chronicle"], [data-callout="home-activity"]) > .callout-title::after { display: none; }
+
+.viscerium-home .callout:is([data-callout="home-chronicle"], [data-callout="home-activity"]) > .callout-title .callout-title-inner {
+  font-size: 19px;
+  color: #ddd7cd;
 }
 
-.viscerium-home .vc-chronicle-period-detail {
-  color: var(--text-faint) !important;
-  font-size: .56rem !important;
+.viscerium-home .callout:is([data-callout="home-chronicle"], [data-callout="home-activity"]) > .callout-title .callout-title-inner::before {
+  width: 17px;
+  height: 17px;
+  background: #a79c8a;
 }
 
-.viscerium-home .vc-chronicle-period-action {
-  width: 100%;
-  min-height: 1.7rem;
-  margin-top: .45rem !important;
-  padding: .25rem .38rem;
-  font-size: .61rem;
+.viscerium-home .callout:is([data-callout="home-chronicle"], [data-callout="home-activity"]) .vc-home-section-copy {
+  margin: -4px 0 14px;
+  font-size: 10px;
 }
 
-.viscerium-home .vc-chronicle-footer {
-  margin-top: .55rem !important;
+.viscerium-home .vc-home-chronicle-prompt {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #35322d;
+  border-radius: 8px;
+  background: #1f1e1c;
 }
 
-.viscerium-home .vc-home-activity-root {
-  min-width: 0;
+.viscerium-home .vc-home-chronicle-prompt-title { color: #d7d0c5; font-size: 11px; font-weight: 750; }
+.viscerium-home .vc-home-chronicle-prompt-date { margin-top: 2px; color: #77726c; font-size: 9px; }
+.viscerium-home .vc-home-chronicle-prompt .vc-home-button { min-height: 38px; font-size: 10px; }
+
+.viscerium-home .vc-home-chronicle-periods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-top: 9px;
 }
 
-.viscerium-home .vc-home-activity-scroll {
-  overflow-x: auto;
-  padding-bottom: .25rem;
-  scrollbar-width: thin;
+.viscerium-home .vc-home-chronicle-period {
+  min-height: 50px;
+  padding: 7px 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border: 1px solid #302f2c;
+  border-radius: 7px;
+  background: #171716;
+  color: #bdb6ac;
+  cursor: pointer;
 }
+
+.viscerium-home .vc-home-chronicle-period:hover:not(:disabled) { border-color: #4a4640; background: #1e1d1b; }
+.viscerium-home .vc-home-chronicle-period-label { font-family: var(--font-interface); font-size: 10px; font-weight: 800; }
+.viscerium-home .vc-home-chronicle-period-detail { margin-top: 2px; color: #6f6b65; font-size: 8px; }
+
+.viscerium-home .vc-home-activity-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-bottom: 13px;
+}
+
+.viscerium-home .vc-home-activity-metric {
+  padding: 9px 10px;
+  border: 1px solid #302f2c;
+  border-radius: 7px;
+  background: #171716;
+}
+
+.viscerium-home .vc-home-activity-metric-value {
+  display: block;
+  color: #d8d0c4;
+  font-family: var(--font-interface);
+  font-size: 18px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.viscerium-home .vc-home-activity-metric-label { display: block; margin-top: 4px; color: #77726c; font-size: 8px; }
 
 .viscerium-home .vc-home-heatmap {
   display: grid;
-  grid-template-rows: repeat(7, 8px);
+  grid-template-rows: repeat(7, 7px);
   grid-auto-flow: column;
-  grid-auto-columns: 8px;
-  gap: 2px;
-  width: max-content;
+  grid-auto-columns: 7px;
+  gap: 3px;
+  overflow: hidden;
 }
 
 .viscerium-home .vc-home-heatmap-cell {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
+  display: block;
   border-radius: 2px;
-  background: color-mix(in srgb, var(--background-modifier-border) 72%, transparent);
+  background: #2b2a28;
 }
 
-.viscerium-home .vc-home-heatmap-cell[data-level="1"] { background: color-mix(in srgb, var(--color-green) 24%, var(--background-primary)); }
-.viscerium-home .vc-home-heatmap-cell[data-level="2"] { background: color-mix(in srgb, var(--color-green) 42%, var(--background-primary)); }
-.viscerium-home .vc-home-heatmap-cell[data-level="3"] { background: color-mix(in srgb, var(--color-green) 62%, var(--background-primary)); }
-.viscerium-home .vc-home-heatmap-cell[data-level="4"] { background: color-mix(in srgb, var(--color-green) 82%, var(--background-primary)); }
+.viscerium-home .vc-home-heatmap-cell[data-level="1"] { background: #3f4a3e; }
+.viscerium-home .vc-home-heatmap-cell[data-level="2"] { background: #566552; }
+.viscerium-home .vc-home-heatmap-cell[data-level="3"] { background: #70816b; }
+.viscerium-home .vc-home-heatmap-cell[data-level="4"] { background: #8d9d85; }
 
 /* -------------------------------------------------------------------------- */
 /* Navigate                                                                   */
 /* -------------------------------------------------------------------------- */
 
+.viscerium-home .callout[data-callout="home-navigate"] { margin: 34px 0 64px; }
+
 .viscerium-home .vc-home-nav-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(.8rem, 2vw, 2rem);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 3px 2px 0;
 }
 
-.viscerium-home .vc-home-nav-group {
-  min-width: 0;
+.viscerium-home .vc-home-nav-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  color: #777168;
+  font-family: var(--font-interface);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
-.viscerium-home .vc-home-nav-links {
-  display: grid;
-  gap: .22rem;
-}
+.viscerium-home .vc-home-nav-heading svg { width: 12px; height: 12px; flex: 0 0 auto; color: #777168; }
+.viscerium-home .vc-home-nav-links { display: grid; gap: 5px; }
 
 .viscerium-home .vc-home-nav-link {
-  width: fit-content;
-  color: var(--text-muted);
-  font-size: .72rem;
-  font-weight: 620;
+  color: #aaa49b;
+  font-size: 10px;
   text-decoration: none;
 }
 
-.viscerium-home .vc-home-nav-link:hover {
-  color: var(--text-normal);
-}
+.viscerium-home .vc-home-nav-link:hover { color: #ebe5dc; }
+
+/* Neutralise Dataview's paragraph margins inside the custom components. */
+.viscerium-home .block-language-dataviewjs,
+.viscerium-home .block-language-dataviewjs > div { margin-block: 0; }
 
 /* -------------------------------------------------------------------------- */
 /* Responsive                                                                 */
 /* -------------------------------------------------------------------------- */
 
-@container viscerium-home (max-width: 980px) {
-  .viscerium-home .callout[data-callout="home-priority"] > .callout-content,
-  .viscerium-home .callout[data-callout="home-secondary"] > .callout-content {
-    grid-template-columns: 1fr;
-  }
-
-  .viscerium-home .callout[data-callout="home-create"] {
-    padding-top: 0;
-  }
-
-  .viscerium-home .vc-home-nav-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .viscerium-home .vc-chronicle-period-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
+@container viscerium-home (max-width: 760px) {
+  .viscerium-home .vc-home-launch { grid-template-columns: 1fr; align-items: start; }
+  .viscerium-home .vc-home-launch-actions { justify-content: flex-start; }
+  .viscerium-home .vc-home-create-sections { grid-template-columns: 1fr 1fr; row-gap: 18px; }
+  .viscerium-home .vc-home-create-group:nth-child(2) { border-right: 0; padding-right: 0; }
+  .viscerium-home .vc-home-create-group:nth-child(3) { padding-left: 0; }
+  .viscerium-home .vc-home-continue-grid,
+  .viscerium-home .callout[data-callout="home-secondary"] > .callout-content { grid-template-columns: 1fr; }
+  .viscerium-home .vc-home-attention-row { grid-template-columns: 62px minmax(0, 1fr) auto; }
+  .viscerium-home .vc-home-attention-detail { grid-column: 2 / -1; margin-top: -4px; }
+  .viscerium-home .vc-home-nav-grid { grid-template-columns: 1fr 1fr; gap: 22px 26px; }
 }
 
-@container viscerium-home (max-width: 720px) {
-  .viscerium-home .vc-header-figure {
-    height: clamp(11rem, 47vw, 17rem);
-    margin-bottom: -2.35rem;
-  }
-
-  .viscerium-home .callout[data-callout="home-hero"] h1 {
-    font-size: clamp(1.8rem, 9vw, 2.65rem);
-  }
-
-  .viscerium-home .vc-home-continue-grid {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-
-  .viscerium-home .vc-home-continue-column:first-child {
-    padding-right: 0;
-    padding-bottom: 1.1rem;
+@container viscerium-home (max-width: 600px) {
+  .viscerium-home .callout[data-callout="home-hero"] { margin-inline: 0; min-height: 350px; }
+  .viscerium-home .vc-home-hero-content { min-height: 350px; padding: 55px 16px 22px; }
+  .viscerium-home .vc-home-hero-content > h1 { font-size: clamp(40px, 15vw, 58px); }
+  .viscerium-home .vc-home-creative-line { margin-bottom: 20px; font-size: 15px; }
+  .viscerium-home .vc-home-launch { padding: 14px; }
+  .viscerium-home .vc-home-launch-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+  .viscerium-home button.vc-home-button { width: 100%; }
+  .viscerium-home .vc-home-create-sections { grid-template-columns: 1fr; }
+  .viscerium-home .vc-home-create-group,
+  .viscerium-home .vc-home-create-group:first-child,
+  .viscerium-home .vc-home-create-group:nth-child(3) {
+    padding: 0 0 14px;
     border-right: 0;
-    border-bottom: 1px solid var(--vc-home-border-soft);
+    border-bottom: 1px solid #35322e;
   }
-
-  .viscerium-home .vc-home-continue-column:last-child {
-    padding-left: 0;
-  }
-
-  .viscerium-home .vc-home-attention-summary {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .viscerium-home .vc-home-attention-row {
-    grid-template-columns: 1fr;
-    gap: .2rem;
-  }
-
-  .viscerium-home .vc-home-attention-detail {
-    white-space: normal;
-  }
-
-  .viscerium-home .vc-home-create-panel,
-  .viscerium-home .vc-home-nav-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .viscerium-home .vc-chronicle-period-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@container viscerium-home (max-width: 460px) {
-  .viscerium-home .vc-home-recent-row,
-  .viscerium-home .vc-home-story-project {
-    grid-template-columns: minmax(0, 1fr);
-    gap: .12rem;
-  }
-
-  .viscerium-home .vc-home-row-time {
-    padding-left: 2.7rem;
-  }
-
-  .viscerium-home .vc-home-focus-actions,
-  .viscerium-home .vc-home-attention-actions {
-    width: 100%;
-  }
-
-  .viscerium-home .vc-home-focus-actions .vc-home-button {
-    flex: 1 1 auto;
-  }
+  .viscerium-home .vc-home-create-group:last-child { padding-bottom: 0; border-bottom: 0; }
+  .viscerium-home .callout:is([data-callout="home-continue"], [data-callout="home-attention"], [data-callout="home-navigate"]) > .callout-title .callout-title-inner { font-size: 21px; }
+  .viscerium-home .vc-home-attention-summary { grid-template-columns: 1fr; }
+  .viscerium-home .vc-home-attention-stats { justify-content: flex-start; }
+  .viscerium-home .vc-home-attention-row { grid-template-columns: 58px minmax(0, 1fr); gap: 8px; }
+  .viscerium-home .vc-home-attention-detail { grid-column: 2; }
+  .viscerium-home .vc-home-attention-state { display: none; }
+  .viscerium-home .vc-home-attention-footer { align-items: flex-start; flex-direction: column; }
+  .viscerium-home .vc-home-ready-note { align-items: flex-start; flex-direction: column; gap: 3px; }
+  .viscerium-home .vc-home-chronicle-prompt { grid-template-columns: 1fr; }
+  .viscerium-home .vc-home-chronicle-periods { grid-template-columns: 1fr 1fr 1fr; }
+  .viscerium-home .vc-home-nav-grid { grid-template-columns: 1fr 1fr; gap: 22px 18px; }
+  .viscerium-home .vc-home-recent-all-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .viscerium-home .vc-home-recent-all-area { display: none; }
 }
