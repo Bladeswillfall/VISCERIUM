@@ -139,7 +139,7 @@
   background: color-mix(in srgb, var(--explorer-active-color, var(--interactive-accent)) 12%, transparent);
 }
 
-/* Home appears first in the root explorer. */
+/* Home is the first route in the root explorer. */
 .workspace-leaf-content[data-type="file-explorer"] :is(.nav-files-container, .nav-folder-children):has(> .nav-file > .nav-file-title[data-path="Home.md"]) {
   display: flex !important;
   flex-direction: column;
