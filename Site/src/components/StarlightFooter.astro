@@ -26,7 +26,7 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
 </div>
 
 <style>
-  /* Prevent an open-sidebar flash before the desktop runtime claims the shell. */
+  /* On desktop, the sidebar stays hidden until the shell script sets its state. */
   @media (min-width: 800px) {
     :global(html:not([data-codex-desktop-sidebar]) #starlight__sidebar) {
       visibility: hidden;
@@ -42,10 +42,9 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
     }
 
     /*
-      Referenced-in, contributor information, edit metadata, webmentions, and
-      pagination remain in Starlight's article footer. The global navigation rail
-      belongs to the PageFrame, so this wrapper no longer owns page-level reveal
-      geometry.
+      The article footer contains references, contributors, edit information,
+      webmentions, and pagination. `PageFrame` controls the global navigation rail
+      and the page-level reveal layout.
     */
     .codex-page-deck {
       position: relative;
@@ -90,7 +89,8 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
       padding: 1.5rem var(--sl-content-pad-x);
     }
 
-    /* Era landing pages are navigation/orientation surfaces, not discussion articles. */
+    /* Era landing pages provide navigation and orientation. The footer hides
+       article discussion features on these pages. */
     :global(body:has(.codex-page-classifier--era-homepage) :is(
       .codex-contributors,
       .codex-webmentions,
