@@ -1,6 +1,6 @@
 /*
  * Compact tabs
- * Reduces tab-bar height and padding without changing tab behaviour.
+ * Makes tabs shorter by reducing their height and padding.
  */
 
 .workspace-tab-header-container {
