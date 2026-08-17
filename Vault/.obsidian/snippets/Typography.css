@@ -127,9 +127,9 @@ body {
   --vc-font-quote: Palatino, "Palatino Linotype", "Book Antiqua", "Viscerium Reading Serif", Georgia, serif;
 }
 
-/* Note prose only: do not restyle Obsidian's chrome or creator controls. */
-.markdown-rendered,
-.markdown-source-view.mod-cm6 .cm-content {
+/* Note prose only: keep the Home dashboard on its established interface typography. */
+.markdown-rendered:not(.viscerium-home),
+.markdown-source-view.mod-cm6:not(.viscerium-home) .cm-content {
   font-family: var(--vc-font-body);
 }
 
