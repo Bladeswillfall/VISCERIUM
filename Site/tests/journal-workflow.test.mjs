@@ -133,6 +133,7 @@ test('Chronicle hub and Base stay compact, on-demand, and period-aware', async (
   const hubCss = await readVaultText('System/Views/Chronicle/Hub/view.css');
   const base = await readVaultText('System/Bases/Chronicle.base');
   const home = await readVaultText('Home.md');
+  const homeNavigate = await readVaultText('System/Views/Home/Navigate/view.js');
 
   assert.match(hub, /Daily captures\. Weekly interprets\. Monthly assesses\. Quarterly steers\. Yearly records\./);
   assert.match(hub, /System\/Views\/Chronicle\/Hub/);
@@ -146,7 +147,8 @@ test('Chronicle hub and Base stay compact, on-demand, and period-aware', async (
   assert.match(base, /type: periodic-review/);
   assert.equal((base.match(/type: periodic-notes/g) ?? []).length, 5);
   assert.equal((base.match(/futurePeriods: 0/g) ?? []).length, 5);
-  assert.match(home, /\["Chronicle", "System\/Chronicle"\]/);
+  assert.match(home, /System\/Views\/Home\/Chronicle/);
+  assert.match(homeNavigate, /\["Chronicle", "System\/Chronicle"\]/);
 });
 
 test('Chronicle evidence derives tasks, developments, and descriptive activity views', async () => {

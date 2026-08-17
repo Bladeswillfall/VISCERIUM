@@ -12,16 +12,25 @@ async function readVaultText(relativePath) {
   return fs.readFile(path.join(vaultRoot, relativePath), 'utf8');
 }
 
-test('Home surfaces the compact Chronicle controls directly below Focus', async () => {
+test('Home places the bespoke Chronicle view in the secondary creator band', async () => {
   const home = await readVaultText('Home.md');
-  const focusIndex = home.indexOf('[!home-focus] FOCUS');
-  const chronicleIndex = home.indexOf('[!home-navigate] CHRONICLE');
-  const workspaceIndex = home.indexOf('[!home-workspace]');
+  const attentionIndex = home.indexOf('[!home-attention] Needs attention');
+  const secondaryIndex = home.indexOf('[!home-secondary]');
+  const chronicleIndex = home.indexOf('[!home-chronicle] Chronicle');
+  const activityIndex = home.indexOf('[!home-activity] Progress');
 
-  assert.ok(focusIndex >= 0, 'Home should keep the Focus section');
-  assert.ok(chronicleIndex > focusIndex, 'Chronicle should follow Focus');
-  assert.ok(workspaceIndex > chronicleIndex, 'Chronicle should precede the main workspace');
-  assert.match(home, /await dv\.view\("System\/Views\/Chronicle\/Hub", \{ compact: true \}\)/);
+  assert.ok(attentionIndex >= 0, 'Home should keep the intervention surface');
+  assert.ok(secondaryIndex > attentionIndex, 'Secondary creator tools should follow Needs attention');
+  assert.ok(chronicleIndex > secondaryIndex, 'Chronicle should live inside the secondary creator band');
+  assert.ok(activityIndex > chronicleIndex, 'Progress should sit beside Chronicle');
+  assert.match(home, /await dv\.view\("System\/Views\/Home\/Chronicle"\)/);
+
+  const chronicle = await readVaultText('System/Views/Home/Chronicle/view.js');
+  assert.match(chronicle, /journal-bases:open-current-daily/);
+  assert.match(chronicle, /journal-bases:open-current-weekly/);
+  assert.match(chronicle, /journal-bases:open-current-monthly/);
+  assert.match(chronicle, /journal-bases:open-current-yearly/);
+  assert.match(chronicle, /System\/Chronicle/);
 });
 
 test('compact Chronicle reuses the shared hub and links to the full workspace', async () => {

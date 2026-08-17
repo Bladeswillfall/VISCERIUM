@@ -8,6 +8,7 @@ title: Epsilon Zero Zero
 updated:
 status: draft
 type: article
+era: NEARSIGHT
 development_level: stub
 import_source: worldanvil
 import_source_type: Formation

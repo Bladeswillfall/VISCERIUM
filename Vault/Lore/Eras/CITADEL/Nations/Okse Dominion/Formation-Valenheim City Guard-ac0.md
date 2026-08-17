@@ -8,6 +8,7 @@ title: "Valenheim City Guard"
 updated:
 status: "draft"
 type: "article"
+era: CITADEL
 development_level: "stub"
 tags:
   - "Okse"

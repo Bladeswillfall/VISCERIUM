@@ -51,28 +51,33 @@ test('Home keeps DataviewJS lines at the code fence quote depth', async () => {
     index = cursor;
   }
 
-  assert.ok(blocks >= 5, 'Home should retain its compact interactive dashboard widgets around the native Bases views');
+  assert.ok(blocks >= 5, 'Home should retain its compact interactive dashboard widgets');
 });
 
-test('Home working band keeps Continue beside a stacked Create and Writing column', async () => {
+test('Home composes the modular creator views in the approved hierarchy', async () => {
   const home = await readText('Home.md');
-  const lines = home.split(/\r?\n/);
+  const sections = [
+    ['[!home-hero]', 'System/Views/Home/Hero'],
+    ['[!home-continue] Continue working', 'System/Views/Home/Continue'],
+    ['[!home-attention] Needs attention', 'System/Views/Home/Attention'],
+    ['[!home-secondary]', null],
+    ['[!home-chronicle] Chronicle', 'System/Views/Home/Chronicle'],
+    ['[!home-activity] Progress', 'System/Views/Home/Activity'],
+    ['[!home-navigate] Navigate', 'System/Views/Home/Navigate'],
+  ];
 
-  const workspaceIndex = lines.findIndex((line) => line.includes('[!home-workspace]'));
-  const continueIndex = lines.findIndex((line) => line.includes('[!home-continue]'));
-  const sideIndex = lines.findIndex((line) => line.includes('[!home-side]'));
-  const createIndex = lines.findIndex((line) => line.includes('[!home-create]'));
-  const writingIndex = lines.findIndex((line) => line.includes('[!home-writing]'));
+  let previousIndex = -1;
+  for (const [marker, viewPath] of sections) {
+    const index = home.indexOf(marker);
+    assert.ok(index > previousIndex, `${marker} should follow the previous Home section`);
+    previousIndex = index;
+    if (viewPath) {
+      assert.match(home, new RegExp(`await dv\\.view\\(\"${viewPath.replaceAll('/', '\\/')}\"\\)`));
+    }
+  }
 
-  assert.ok(workspaceIndex >= 0);
-  assert.ok(continueIndex > workspaceIndex);
-  assert.ok(sideIndex > continueIndex);
-  assert.ok(createIndex > sideIndex);
-  assert.ok(writingIndex > createIndex);
-  assert.equal(quoteDepth(lines[continueIndex]), 2);
-  assert.equal(quoteDepth(lines[sideIndex]), 2);
-  assert.equal(quoteDepth(lines[createIndex]), 3);
-  assert.equal(quoteDepth(lines[writingIndex]), 3);
+  assert.doesNotMatch(home, /dv\.current\(\)\.file/);
+  assert.doesNotMatch(home, /home-workspace|home-side|home-writing|home-create/);
 });
 
 test('File explorer owns Home placement and keeps it card-free', async () => {

@@ -4,6 +4,7 @@ description: The largest and most prestegious fighting arena on the continent.
 updated:
 status: draft
 type: location
+era: CITADEL
 development_level: stub
 location_kind: site
 tags:
