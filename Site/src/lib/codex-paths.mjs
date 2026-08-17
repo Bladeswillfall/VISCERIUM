@@ -1,4 +1,4 @@
-// Shared, dependency-free path and escaping helpers for build scripts and browser bundles.
+// Provides shared path and HTML escaping functions. Build scripts and browser code can use this file without extra packages.
 export function cleanSlug(value) {
   return String(value ?? '').trim().replace(/^\/+|\/+$/g, '').toLowerCase();
 }
