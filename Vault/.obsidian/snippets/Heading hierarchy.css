@@ -1,7 +1,7 @@
 /*
  * Heading hierarchy
  * Makes long notes easier to scan in Reading View and Live Preview.
- * Typography comes from Creator UI foundation; colour is a restrained hierarchy cue.
+ * Creator UI foundation sets the typeface. Heading levels use small color differences.
  */
 
 .markdown-rendered h1,
@@ -10,7 +10,7 @@
   line-height: 1.12;
 }
 
-/* The creator dashboard brand mark is intentionally distinct from article headings. */
+/* The creator dashboard title uses a separate typeface from article headings. */
 .markdown-preview-view.viscerium-home .callout[data-callout="home-header"] h1,
 .markdown-source-view.mod-cm6.viscerium-home .HyperMD-header-1 {
   font-family: "Cinzel", serif;
