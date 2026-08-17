@@ -19,8 +19,10 @@ sidebar:
       items:
         - label: Rauthrbak min
           href: "[[Rauthrbak Min]]"
-        - Hofn Brattrstein
-        - Hofn Fagrvatn
+        - label: Hofn Brattrstein
+          href: "[[Hofn Brattrstein]]"
+        - label: Hofn Fagrvatn
+          href: "[[Hofn Fagrvatn]]"
         - label: Mestrvirki
           href: "[[Mestrvirki]]"
 title: Valenheim
