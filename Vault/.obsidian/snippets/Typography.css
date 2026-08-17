@@ -1,0 +1,151 @@
+/*
+ * Typography
+ * Offline-first reading and writing fonts for VISCERIUM notes.
+ * Keeps Obsidian's monospace stack untouched for code and technical text.
+ */
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Regular-symbols.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0020-0040, U+005B-0060, U+007B-007F, U+2000-206F, U+20AC, U+2122, U+2190-21FF, U+2212;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Regular-letters.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0041-005A, U+0061-007A;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Regular-latin-1.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+00A0-00FF;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Regular-latin-ext-a.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0100-017F;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-0041-004D.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0041-004D;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-004E-005A.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+004E-005A;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-lowercase.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0061-007A;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-00A0-00AF.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+00A0-00AF;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-00B0-00BF.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+00B0-00BF;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-00C0-00CF.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+00C0-00CF;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-00D0-00DF.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+00D0-00DF;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-00E0-00EF.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+00E0-00EF;
+}
+
+@font-face {
+  font-family: "Viscerium Reading Serif";
+  src: url("./fonts/VisceriumReadingSerif-Italic-00F0-00FF.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+00F0-00FF;
+}
+
+body {
+  --vc-font-body: "Viscerium Reading Serif", "Palatino Linotype", Palatino, Georgia, serif;
+  --vc-font-heading: "Helvetica Neue", Helvetica, Arial, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  --vc-font-quote: Palatino, "Palatino Linotype", "Book Antiqua", "Viscerium Reading Serif", Georgia, serif;
+}
+
+/* Note prose only: do not restyle Obsidian's chrome or creator controls. */
+.markdown-rendered,
+.markdown-source-view.mod-cm6 .cm-content {
+  font-family: var(--vc-font-body);
+}
+
+/* Keep note titles aligned with the heading family without changing hierarchy. */
+.inline-title {
+  font-family: var(--vc-font-heading);
+}
+
+/* Quotes get a quieter bookish serif; existing blockquote spacing/colors stay intact. */
+.markdown-rendered blockquote,
+.markdown-source-view.mod-cm6 .HyperMD-quote {
+  font-family: var(--vc-font-quote);
+}
+
+/* Explicitly preserve the existing monospace stack. */
+.markdown-rendered :is(code, pre),
+.markdown-source-view.mod-cm6 :is(.cm-inline-code, .HyperMD-codeblock) {
+  font-family: var(--font-monospace);
+}
