@@ -21,7 +21,7 @@ test('Home brand uses Cinzel without changing normal article heading ownership',
     /markdown-preview-view\.viscerium-home[\s\S]*?home-header[\s\S]*?font-family:\s*"Cinzel",\s*serif/,
   );
   assert.match(headings, /markdown-source-view\.mod-cm6\.viscerium-home \.HyperMD-header-1/);
-  assert.match(foundation, /--h1-font:\s*var\(--font-text\)/);
+  assert.match(foundation, /--h1-font:\s*var\(--vc-font-heading,\s*var\(--font-text\)\)/);
 });
 
 test('Needs Attention derives a four-level severity from the real issue count', async () => {
