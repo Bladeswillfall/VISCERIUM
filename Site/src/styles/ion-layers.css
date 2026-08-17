@@ -3,10 +3,9 @@
 @layer starlight, ion;
 
 /*
- * Site-level stacking hierarchy.
- *
- * PageFrame owns the final navigation rail, while page and component stacking
- * stays local to the surfaces that participate in the shared hierarchy.
+ * Shared z-index values for the site.
+ * `PageFrame` places the final navigation area behind the main page.
+ * Page and component elements use the other values below.
  */
 :where(body) {
   --codex-z-underlay: -1;
@@ -25,7 +24,7 @@
     background-color: var(--codex-page-bg);
   }
 
-  /* Sticky page sidebars sit above local article/application surfaces. */
+  /* Place sticky page sidebars above article and application content. */
   body:not(:has(.home-gateway)) .codex-main-pane > .right-sidebar-container {
     position: relative;
     z-index: var(--codex-z-elevated-surface);
@@ -44,15 +43,14 @@
 }
 
 /*
- * Component and plugin styles author these elements outside the Codex cascade
- * layers. The shared hierarchy pins their site-level stack positions across
- * later local stylesheet changes.
+ * Component and plugin styles place these elements outside the Codex CSS layers.
+ * These z-index values keep their site positions consistent when local styles change.
  */
 #scroll-to-top-button {
   z-index: var(--codex-z-control) !important;
 }
 
-/* Film grain renders at the shared grain layer above the page stack. */
+/* Place film grain above the other page layers. */
 body::before {
   z-index: var(--codex-z-grain) !important;
 }
