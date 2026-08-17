@@ -101,10 +101,9 @@ function totalOverflow(overflow) {
 }
 
 /**
- * Place a floating surface inside the intersection of the viewport and an
- * optional component boundary. It tries centred placement first, then start
- * and end alignment, before flipping sides. This makes the common case feel
- * stable while still avoiding clipped edge tooltips.
+ * Place a floating element inside the visible viewport and optional component boundary.
+ * Try center alignment first, then start and end alignment, then the other sides.
+ * Use the position with the least overflow.
  */
 export function computeSafeFloatingPosition({
   anchorRect,

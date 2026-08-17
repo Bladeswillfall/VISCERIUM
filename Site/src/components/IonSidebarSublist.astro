@@ -86,7 +86,8 @@ const { sublist, depth = 0 } = Astro.props;
 
 <style is:global>
   .codex-sidebar-layout {
-    /* The complete hierarchy spans one golden ratio, from 14px leaves to 20px roots on desktop. */
+    /* Desktop text sizes use a golden-ratio scale. Article links use 14 px.
+       Top-level groups use 20 px. */
     --codex-sidebar-font-leaf: .875rem;
     --codex-sidebar-font-folder: .9375rem;
     --codex-sidebar-font-category: 1.0625rem;
@@ -230,7 +231,7 @@ const { sublist, depth = 0 } = Astro.props;
 
   @media (max-width: 49.99rem) {
     .codex-sidebar-layout {
-      /* phi^(1/4) steps: 14, 15.8, 17.8, 20.1 and 22.65px. */
+      /* Mobile text sizes use smaller golden-ratio steps to keep the hierarchy clear. */
       --codex-sidebar-font-folder: .987rem;
       --codex-sidebar-font-category: 1.113rem;
       --codex-sidebar-font-era: 1.255rem;

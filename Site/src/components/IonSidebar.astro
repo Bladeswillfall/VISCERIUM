@@ -16,9 +16,8 @@ const rawEra = Array.isArray(pageData.era) ? pageData.era[0] : pageData.era;
 const routeEra = normaliseEra(rawEra) ?? eraFromPath(pageSlug);
 const initialEra = routeEra && HISTORICAL_ERAS.includes(routeEra) ? routeEra : undefined;
 
-// Era mode keeps the complete Codex navigation visible. Only the three sibling
-// historical era branches are hidden, so Universal material retains its normal
-// place in the hierarchy instead of being copied into a separate section.
+// Era mode keeps the full Codex navigation. It hides the historical era branches
+// that are outside the active era. Universal material stays in its normal place.
 const mainSidebar = scopeHistoricalEraBranches(
   sidebar.filter((entry: any) => !isChangelogGroup(entry)),
   initialEra,
@@ -152,8 +151,8 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
     gap: 0;
   }
 
-  /* These rows cross an unlayered Starlight boundary, so their hierarchy-owned
-     touch heights must be explicit rather than falling back to the folder size. */
+  /* Starlight styles these rows outside this CSS layer. Explicit touch heights
+     keep the navigation hierarchy sizes consistent. */
   .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
   .sidebar-content .codex-sidebar-layout .top-level > li > a,
   .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group,
@@ -233,8 +232,8 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
 </style>
 
 <style is:global>
-  /* Editorial hierarchy: Cinzel marks world-scale chapters and historical eras;
-     UI sans remains reserved for categories, folders, and article destinations. */
+  /* Cinzel identifies world-scale chapters and historical eras. The UI sans-serif
+     font identifies categories, folders, and article links. */
   .sidebar-content .codex-sidebar-layout .top-level > li > .ion-expandable-group > summary,
   .sidebar-content .codex-sidebar-layout .top-level > li > a,
   .sidebar-content .codex-sidebar-layout .top-level > li > .empty-group,

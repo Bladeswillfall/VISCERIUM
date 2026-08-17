@@ -1,10 +1,9 @@
 /*
  * Article widths
  *
- * Ordinary Markdown notes should use the available pane without becoming
- * edge-to-edge. This keeps Reading View and Live Preview aligned, gives article
- * headers, properties, tables and images a substantially wider lane, and leaves
- * the Home dashboard's purpose-built full-width layout untouched.
+ * Ordinary Markdown notes use most of the pane and keep side margins.
+ * Reading View and Live Preview use the same width. Article headers, properties,
+ * tables and images can use a wider area. The Home dashboard keeps its full-width layout.
  */
 
 .markdown-preview-view:not(.viscerium-home),
@@ -17,7 +16,7 @@
   --file-margins: var(--vc-article-gutter);
 }
 
-/* Keep the authored article lane identical in Reading View and Live Preview. */
+/* Use the same article width in Reading View and Live Preview. */
 .markdown-preview-view:not(.viscerium-home) .markdown-preview-sizer,
 .markdown-source-view.mod-cm6:not(.viscerium-home) .cm-sizer {
   box-sizing: border-box;
@@ -26,7 +25,7 @@
   margin-inline: auto !important;
 }
 
-/* Baseline and Obsidian can retain narrower limits on inner render containers. */
+/* Remove narrower width limits from inner render containers. */
 .markdown-preview-view:not(.viscerium-home) .markdown-preview-section,
 .markdown-preview-view:not(.viscerium-home) .markdown-preview-section > div,
 .markdown-source-view.mod-cm6:not(.viscerium-home) .cm-contentContainer,
@@ -40,7 +39,7 @@
   max-width: 100% !important;
 }
 
-/* Preserve deliberate breathing room when the whole app is narrow. */
+/* Use a 1rem side margin when the app window is narrow. */
 @media (max-width: 700px) {
   .markdown-preview-view:not(.viscerium-home),
   .markdown-source-view.mod-cm6:not(.viscerium-home) {

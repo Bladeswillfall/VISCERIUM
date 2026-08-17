@@ -41,8 +41,7 @@ export function filterTelescopePages(pages, metadata = {}, era) {
     if (meta?.searchable === false) return false;
 
     if (historicalEra) {
-      // Unknown metadata is excluded inside an era. It is safer for a scoped search
-      // to omit an unclassified page than to leak another era into the result set.
+      // When an era is active, hide pages that have no metadata because their era cannot be verified.
       if (!meta) return false;
       if (meta.type === 'continuity') return false;
       const pageEra = normaliseEra(meta.era);
@@ -50,7 +49,7 @@ export function filterTelescopePages(pages, metadata = {}, era) {
     }
 
     // In the all-era Codex, one continuity hub represents a conceptual entity.
-    // Hide its individual editions only when a generated hub actually exists.
+    // Hide individual editions only when that continuity hub exists.
     if (
       meta
       && meta.type !== 'continuity'

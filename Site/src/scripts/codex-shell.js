@@ -84,7 +84,7 @@
       remembered = null;
     }
 
-    // Global exploration stays inside the remembered era until explicitly exited.
+    // If an era is remembered, open the relationships page for that era.
     if (remembered && !fromPath && !declared && location.pathname === '/relationships/') {
       location.replace(`/eras/${remembered.toLowerCase()}/relationships/`);
       return;

@@ -48,9 +48,9 @@ const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
 <style is:global>
   @layer ion {
     /*
-     * The navigation rail is a true page-level underlay, not an article-column
-     * descendant. Keep the negative layer local to the document so it remains
-     * above the body background while the raised Starlight page paints over it.
+     * The page-level navigation rail sits behind the main page.
+     * `body` sets the local layer order.
+     * This places the rail above the body background and below the Starlight page.
      */
     body {
       position: relative;

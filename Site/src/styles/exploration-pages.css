@@ -1,4 +1,4 @@
-/* Atlas and semantic relationship routes are application surfaces, not prose articles. */
+/* Atlas and semantic relationship routes use full-width application surfaces. */
 .main-frame:has(> .codex-exploration-page) {
   box-sizing: border-box;
   grid-column: 1 / -1 !important;
@@ -34,7 +34,7 @@
   max-width: none;
 }
 
-/* Cytoscape still owns edge labels; these tokens only make its native label treatment readable. */
+/* Cytoscape owns edge labels; these tokens provide its native labels with readable contrast. */
 .codex-exploration-page .relationship-explorer {
   --relationship-label-bg: var(--relationship-canvas);
   --relationship-edge-label: var(--sl-color-white);
@@ -44,7 +44,7 @@
   --relationship-edge-label: var(--codex-text-body);
 }
 
-/* Keep headings and controls comfortably inset while the actual tools use the full viewport. */
+/* Keep headings and controls comfortably inset while the interactive tools span the viewport. */
 .codex-exploration-page .atlas__header,
 .codex-exploration-page .atlas__toolbar,
 .codex-exploration-page .atlas__marker-index,
@@ -54,7 +54,7 @@
   margin-inline: clamp(.85rem, 1.8vw, 2.25rem);
 }
 
-/* Break the interactive surface out of any residual Starlight/content container gutter. */
+/* Interactive surfaces span the viewport beyond residual Starlight/content gutters. */
 .codex-exploration-page .atlas__frame,
 .codex-exploration-page .relationship-explorer__frame {
   position: relative;
@@ -74,7 +74,7 @@
   min-height: min(68rem, calc(100dvh - 14rem));
 }
 
-/* Shared exploration controls: deliberately small DOM primitives rather than another UI framework. */
+/* Shared exploration controls use deliberately small native DOM primitives. */
 .exploration-surface-controls {
   display: none;
   align-items: center;
@@ -368,7 +368,7 @@
   }
 }
 
-/* Focus mode belongs to the exploration surface rather than the browser Fullscreen API. */
+/* Focus mode is a surface-owned layout state for immersive exploration. */
 html[data-exploration-focus] {
   overflow: hidden;
 }

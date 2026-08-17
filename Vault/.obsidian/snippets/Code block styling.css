@@ -1,6 +1,6 @@
 /*
  * Code block styling
- * Code remains distinct, but static code surfaces are square.
+ * Separates code visually from article text. Static code areas use square corners.
  */
 
 .markdown-rendered code,

@@ -1,6 +1,6 @@
 /*
  * Bases
- * One owner for compact card browsing and dense table editing.
+ * Controls compact card browsing and dense table editing.
  */
 
 .bases-view {
@@ -11,7 +11,7 @@
   --bases-cards-shadow-hover: none;
 }
 
-/* Cards are interactive selection surfaces, so they retain the small control radius. */
+/* Cards are interactive controls, so they use the small control corner radius. */
 .bases-cards-group {
   gap: 0.65rem;
   padding: 0.35rem 0.2rem 0.9rem;
@@ -49,7 +49,7 @@
   text-transform: uppercase;
 }
 
-/* Tables are static comparison/editing shells and stay square. */
+/* Tables are static comparison and editing areas, so they use square corners. */
 .bases-view[data-view-type="table"] .bases-table {
   border: 1px solid var(--background-modifier-border);
   border-radius: 0;
@@ -82,7 +82,7 @@
   background: var(--background-modifier-hover);
 }
 
-/* Needs Attention uses semantic severity rather than one undifferentiated warning colour. */
+/* Needs Attention uses a different color for each severity level. */
 .attention-state {
   --vc-attention-color: var(--vc-state-warning, var(--color-yellow));
   display: inline-flex;
@@ -128,7 +128,7 @@
   font-weight: 800;
 }
 
-/* Project Status labels frame the embedded Bases without turning them into card panels. */
+/* Project Status labels separate the embedded Bases from the surrounding content. */
 .viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:first-of-type strong,
 .viscerium-home .callout[data-callout="home-navigate"]:has(.bases-view) > .callout-content > p:nth-of-type(3) strong {
   display: block;
@@ -146,7 +146,7 @@
   color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 56%, var(--text-normal));
 }
 
-/* Homepage rows become progressively more insistent as their issue count rises. */
+/* Homepage row emphasis increases with the issue count. */
 .viscerium-home .bases-tr:has(.attention-state--notice) .bases-td {
   background: color-mix(in srgb, var(--vc-state-warning, var(--color-yellow)) 4%, transparent);
 }

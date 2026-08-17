@@ -263,9 +263,8 @@
 
 /*
   The overlay state is intentionally unlayered. Starlight's sidebar pane is
-  component-scoped inside its own cascade layer; keeping these critical layout
-  declarations outside a layer ensures the Codex state wins without relying on
-  brittle selector or stylesheet ordering.
+  component-scoped inside its own cascade layer; these critical layout
+  declarations therefore give Codex state deterministic cascade precedence.
 */
 html[data-codex-desktop-sidebar] {
   --codex-sidebar-overlay-width: 18rem;
@@ -299,7 +298,7 @@ html[data-codex-desktop-sidebar] #starlight__sidebar {
     box-shadow .2s ease;
 }
 
-/* Keep the document outside the open rail's hit area. */
+/* The open rail reserves its interaction lane from the document frame. */
 html[data-codex-desktop-sidebar]:not(.codex-sidebar-collapsed) .main-frame {
   box-sizing: border-box;
   padding-inline-start: var(--codex-sidebar-overlay-width);

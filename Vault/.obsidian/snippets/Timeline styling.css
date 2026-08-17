@@ -1,7 +1,7 @@
 /*
  * Timeline styling
- * Makes Chronos and VISCERIUM timelines feel native to the creator workspace.
- * Static timeline surfaces are flat/square; controls retain the small interaction radius.
+ * Gives Chronos and VISCERIUM timelines the same visual style as the creator workspace.
+ * Timeline panels use square corners. Interactive controls use small rounded corners.
  */
 
 :root {
@@ -25,7 +25,7 @@
   --vc-font-ui: var(--font-interface);
 }
 
-/* Ordinary Chronos blocks are supporting timeline surfaces, not cards. */
+/* Ordinary Chronos blocks display as supporting timeline sections. */
 .block-language-chronos {
   position: relative;
   margin-block: 0.9rem;
@@ -124,7 +124,7 @@
   border-radius: 0;
 }
 
-/* Inputs and buttons are interactive, so they may keep the small control radius. */
+/* Inputs and buttons use the small corner radius for interactive controls. */
 .vc-obsidian-timeline-mount .vc-timeline-field :is(input, select),
 .vc-storyline-timeline-view .vc-timeline-field :is(input, select),
 .vc-obsidian-timeline-mount .vc-timeline-app button,

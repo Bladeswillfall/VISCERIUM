@@ -1,6 +1,6 @@
 /*
  * World Anvil Import triage
- * Priority stays typographic; colour is reserved for migration state.
+ * Font weight shows priority. Color shows migration state.
  */
 
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .bases-cards-item {
@@ -73,7 +73,7 @@
   font-weight: 750;
 }
 
-/* Conflict: red. */
+/* Red marks a conflict. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--conflict) {
   border-color: color-mix(in srgb, var(--vc-state-danger, var(--color-red)) 45%, var(--background-modifier-border));
@@ -83,7 +83,7 @@
   color: var(--vc-state-danger, var(--color-red));
 }
 
-/* Pending structural decisions: amber. */
+/* Amber marks pending structural decisions. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--type),
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
@@ -100,7 +100,7 @@
   color: var(--vc-state-warning, var(--color-yellow));
 }
 
-/* Link repair is a reference/navigation problem: blue. */
+/* Blue marks link repair and navigation work. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--links) {
   border-color: color-mix(in srgb, var(--vc-state-reference, var(--color-blue)) 42%, var(--background-modifier-border));
@@ -110,7 +110,7 @@
   color: var(--vc-state-reference, var(--color-blue));
 }
 
-/* Low-priority review/artwork stays neutral. */
+/* Low-priority review and artwork use a neutral color. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--assets),
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
@@ -122,7 +122,7 @@
   color: var(--text-muted);
 }
 
-/* Ready: green. */
+/* Green marks a ready item. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--ready) {
   border-color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 38%, var(--background-modifier-border));

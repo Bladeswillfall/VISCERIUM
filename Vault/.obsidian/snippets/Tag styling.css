@@ -1,6 +1,6 @@
 /*
  * Tag styling
- * Keeps tag presentation owned in one place and exposes a few deliberate variants.
+ * Controls tag appearance in one file and provides Compact, Pretty Pills, and Minimal styles.
  */
 
 /* @settings
@@ -22,7 +22,7 @@ settings:
         value: viscerium-tags-minimal
 */
 
-/* Compact is the restrained fallback when Style Settings is unavailable. */
+/* Compact is the default style when Style Settings is unavailable. */
 .markdown-rendered a.tag,
 .markdown-source-view.mod-cm6 .cm-hashtag,
 .metadata-property[data-property-key="tags" i] .multi-select-pill,
@@ -45,7 +45,7 @@ settings:
   transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
-/* Properties and Bases use removable multi-select pills for tag values. */
+/* Properties and Bases display tag values as removable multi-select items. */
 .metadata-property[data-property-key="tags" i] .multi-select-pill,
 .bases-metadata-value[data-property-type="tags" i] .multi-select-pill {
   border: 1px solid var(--vc-tag-border);
@@ -57,7 +57,7 @@ settings:
   color: inherit;
 }
 
-/* Live Preview splits the leading # and tag text into separate CM6 spans. */
+/* In Live Preview, CodeMirror 6 places the leading # and tag text in separate spans. */
 .markdown-source-view.mod-cm6 .cm-hashtag {
   border-block: 1px solid var(--vc-tag-border);
 }
@@ -74,7 +74,7 @@ settings:
   padding-right: 0.25em;
 }
 
-/* Hover feedback stays tonal and does not move the tag. */
+/* Hover changes the tag colors. */
 .markdown-rendered a.tag:hover,
 .metadata-property[data-property-key="tags" i] .multi-select-pill:hover,
 .bases-metadata-value[data-property-type="tags" i] .multi-select-pill:hover {
@@ -83,7 +83,7 @@ settings:
   --vc-tag-text: var(--text-normal);
 }
 
-/* Pretty Pills remain available deliberately, rather than applied to every tag by default. */
+/* Pretty Pills is an optional rounded tag style. */
 body.viscerium-tags-pretty .markdown-rendered a.tag,
 body.viscerium-tags-pretty .markdown-source-view.mod-cm6 .cm-hashtag,
 body.viscerium-tags-pretty .metadata-property[data-property-key="tags" i] .multi-select-pill,
@@ -123,7 +123,7 @@ body.viscerium-tags-pretty .bases-metadata-value[data-property-type="tags" i] .m
   --vc-tag-text: var(--text-normal);
 }
 
-/* Minimal keeps inline hashtags readable without treating them as controls. */
+/* Minimal displays hashtags as plain inline text. */
 body.viscerium-tags-minimal .markdown-rendered a.tag,
 body.viscerium-tags-minimal .markdown-source-view.mod-cm6 .cm-hashtag {
   border: 0;
@@ -135,7 +135,7 @@ body.viscerium-tags-minimal .markdown-source-view.mod-cm6 .cm-hashtag {
   font-weight: 500;
 }
 
-/* Property tags retain native spacing so the remove affordance remains easy to use. */
+/* Property tags keep Obsidian's normal spacing so the remove button is easy to select. */
 body.viscerium-tags-minimal .metadata-property[data-property-key="tags" i] .multi-select-pill,
 body.viscerium-tags-minimal .bases-metadata-value[data-property-type="tags" i] .multi-select-pill {
   border: 0;

@@ -18,7 +18,7 @@
   /*
     Shared long-form article presentation.
     Keep authoring semantic: Markdown headings, lists, titleIcon/headerImage/image,
-    and sidebar metadata remain the source of truth. This layer only composes them.
+    and sidebar metadata remain the source of truth. This layer composes them.
   */
   body:not(:has(.home-gateway)) {
     --vc-reading-text: color-mix(in oklch, var(--sl-color-text) 86%, var(--sl-color-white) 14%);
@@ -39,7 +39,7 @@
     border: 0;
   }
 
-  /* Keep the article readable, but move away from the over-spaced documentation rhythm. */
+  /* Use a compact editorial rhythm for readable long-form articles. */
   body:not(:has(.home-gateway)) .sl-markdown-content {
     line-height: 1.62;
   }
@@ -50,7 +50,7 @@
 
   /*
     Starlight applies margin-top: var(--sl-content-gap-y) to ordinary flow content.
-    Paragraphs opt out so headings can sit directly against their following copy.
+    Paragraphs reset that margin so headings can sit directly against following copy.
   */
   body:not(:has(.home-gateway)) .sl-markdown-content p {
     margin-block-start: 0;
@@ -158,8 +158,8 @@
   }
 
   /*
-    Right sidebar = reference material, not a second article introduction.
-    Artwork remains the visual anchor; the metadata begins after one restrained rule.
+    The right sidebar presents compact reference material. Artwork remains the
+    visual anchor; metadata begins after one restrained rule.
   */
   body:not(:has(.home-gateway)) .codex-sidebar-card {
     background: transparent !important;
@@ -205,7 +205,7 @@
     border-block-start: 1px solid var(--vc-editorial-rule-soft);
   }
 
-  /* The article title and description already exist in the main column. */
+  /* The main column owns article identity; the sidebar begins with reference metadata. */
   body:not(:has(.home-gateway)) .codex-sidebar-body > :is(.codex-sidebar-kicker, h2, .codex-sidebar-description) {
     display: none;
   }
@@ -302,7 +302,7 @@ body:not(:has(.home-gateway)) .sl-markdown-content p {
   margin-block: 0 .72rem;
 }
 
-/* A restrained geometric marker gives unordered reference lists a Codex identity without ornament. */
+/* Restrained geometric markers give unordered reference lists a Codex identity. */
 body:not(:has(.home-gateway)) .sl-markdown-content ul > li::marker {
   content: '◆  ';
   color: var(--sl-color-accent-high);
@@ -313,7 +313,7 @@ body:not(:has(.home-gateway)) .sl-markdown-content ul ul > li::marker {
   content: '◇  ';
 }
 
-/* Starlight wraps Markdown headings; section spacing belongs to the wrapper, not the heading. */
+/* Starlight's heading wrapper owns section spacing; headings reset local margins. */
 body:not(:has(.home-gateway)) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
   margin-block: 2.75rem .42rem;
 }
@@ -341,7 +341,7 @@ body:not(:has(.home-gateway)) .sl-markdown-content h2 {
 /*
   The negative H2 tuck is an article-only editorial treatment. Structural pages such as
   era homepages, Start Here, category indexes, continuity hubs and calendar/exploration
-  pages need ordinary positive separation because their headings introduce composed UI.
+  pages use ordinary positive separation because their headings introduce composed UI.
 */
 body:has(.codex-page-classifier--article) .sl-markdown-content h2 {
   margin-bottom: -1.5rem;
@@ -402,9 +402,8 @@ body:not(:has(.home-gateway)) .sl-markdown-content > :is(.sl-heading-wrapper.lev
 }
 
 /*
-  Plugin/generated pages can render headings directly inside .sl-markdown-content instead of using
-  Starlight's .sl-heading-wrapper geometry. They keep the Codex visual hierarchy and accent colours,
-  but always retain positive flow spacing.
+  Plugin/generated pages can render headings directly inside .sl-markdown-content.
+  Direct headings retain the Codex visual hierarchy, accent colours and positive flow spacing.
 */
 body:not(:has(.home-gateway)) .sl-markdown-content > h2 {
   margin-block: 2.75rem .68rem;
@@ -415,7 +414,7 @@ body:not(:has(.home-gateway)) .sl-markdown-content > h3 {
   color: var(--era-heading-accent, var(--sl-color-accent-high));
 }
 
-/* Sidebar artwork should read as a free-standing figure rather than a card-within-a-card. */
+/* Sidebar artwork presents as a free-standing figure within the reference column. */
 body:not(:has(.home-gateway)) .codex-sidebar-artwork {
   border-block-end: 0;
 }
@@ -430,8 +429,8 @@ body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
 @media (max-width: 48rem) {
   /*
     Mobile article composition deliberately starts higher beneath Starlight's compact toolbar.
-    Only hero-bearing articles opt into the pull-up; utility/plugin pages retain normal flow.
-    Keep the prose inset, but let the cinematic page-title artwork bleed to the viewport edges.
+    Hero-bearing articles opt into the pull-up; utility/plugin pages retain normal flow.
+    The prose stays inset while cinematic page-title artwork bleeds to the viewport edges.
   */
   body:not(:has(.home-gateway)):has(.content-panel > .sl-container > .codex-header-figure) .sl-markdown-content {
     margin-top: -4rem;
@@ -467,8 +466,7 @@ body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
 }
 
 /* Generic Markdown media safety.
-   Keeps images from escaping the article lane when demo/content pages use remote images
-   or Obsidian-resolved assets. */
+   Constrains remote images and Obsidian-resolved assets to the article lane. */
 .sl-markdown-content img,
 .sl-markdown-content picture,
 .sl-markdown-content video,

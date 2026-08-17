@@ -88,9 +88,8 @@
 }
 
 /*
- * The Atlas is an application surface rather than article prose. Keep these
- * rules outside the Starlight layer so they can reliably skin Leaflet's own
- * unlayered plugin CSS without resorting to !important everywhere.
+ * The Atlas uses an application-surface presentation. These unlayered rules
+ * reliably skin Leaflet's own unlayered plugin CSS with normal cascade priority.
  */
 .atlas {
   margin-block: 1rem 2rem;
