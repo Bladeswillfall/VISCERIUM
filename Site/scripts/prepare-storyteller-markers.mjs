@@ -6,8 +6,8 @@ import { walk } from './lib/walk.mjs';
 export const STORYTELLER_START = '<!-- viscerium:storyteller:start -->';
 export const STORYTELLER_END = '<!-- viscerium:storyteller:end -->';
 
-// Use block elements so Markdown renders both boundaries as direct siblings of
-// the article content rather than wrapping each inline marker in its own <p>.
+// Use block elements so both boundaries become direct children of the article content.
+// This avoids extra paragraph wrappers around the markers.
 const START_BOUNDARY = '<div data-codex-storyteller-boundary="start" hidden></div>';
 const END_BOUNDARY = '<div data-codex-storyteller-boundary="end" hidden></div>';
 
