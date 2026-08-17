@@ -64,9 +64,8 @@ export default {
     google: env.PUBLIC_GOOGLE_SITE_VERIFICATION?.trim() ?? '',
   },
   giscus: {
-    // Match the proven deployment behaviour from the previous Codex: the public
-    // integration is available without dashboard variables, with an explicit
-    // value of 0 retained as an emergency off switch.
+    // Enable Giscus by default for the repository values below.
+    // Set PUBLIC_GISCUS_ENABLED=0 to disable it.
     enabled:
       env.PUBLIC_GISCUS_ENABLED !== '0'
       && giscusRepo === 'Bladeswillfall/VISCERIUM'
@@ -79,8 +78,8 @@ export default {
     reactions: env.PUBLIC_GISCUS_REACTIONS_ENABLED !== '0',
     inputPosition: env.PUBLIC_GISCUS_INPUT_POSITION ?? 'bottom',
     theme: {
-      // Use Giscus-hosted themes so local, preview, and CI builds do not depend
-      // on the production domain or its certificate being available.
+      // Use Giscus-hosted themes. Local, preview, and CI builds can then load
+      // comments without the production domain.
       dark: env.PUBLIC_GISCUS_DARK_THEME ?? env.PUBLIC_GISCUS_THEME ?? 'noborder_dark',
       light: 'noborder_light',
       auto: 'preferred_color_scheme',
