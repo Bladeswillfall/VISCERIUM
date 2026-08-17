@@ -4,6 +4,7 @@ description: Hofn Fagrvatn (Port Beautiful waterway) is an idyllic and calm port
 updated:
 status: draft
 type: location
+era: CITADEL
 development_level: stub
 location_kind: site
 tags:
