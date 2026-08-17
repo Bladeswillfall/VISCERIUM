@@ -22,7 +22,7 @@ function triggerForTarget(root, target) {
   return undefined;
 }
 
-/** Install one delegated, body-level tooltip surface for the supplied root. */
+/** Install one tooltip element for all matching controls inside the supplied root. */
 export function installSmartTooltips(root = document) {
   const doc = root instanceof Document ? root : root.ownerDocument;
   if (!doc?.body) return () => {};
