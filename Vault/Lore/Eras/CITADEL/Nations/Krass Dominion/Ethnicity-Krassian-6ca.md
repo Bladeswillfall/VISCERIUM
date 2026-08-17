@@ -4,6 +4,7 @@ description: Natives of the Krass Dominion
 updated:
 status: draft
 type: article
+era: CITADEL
 development_level: stub
 import_source: worldanvil
 import_source_type: Ethnicity
