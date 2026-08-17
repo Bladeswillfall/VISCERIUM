@@ -31,6 +31,7 @@
   --vc-home-radius: 10px;
   --vc-home-control-radius: 7px;
   --vc-home-max: 1180px;
+  --vc-home-hero-art-height: 380px;
   --file-margins: clamp(1rem, 2.8vw, 2rem);
   --line-width-adaptive: 300em;
   --line-width-wide: 300em;
@@ -108,7 +109,7 @@
 
 .viscerium-home .callout[data-callout="home-hero"] {
   position: relative;
-  min-height: 380px;
+  min-height: var(--vc-home-hero-art-height);
   margin-inline: -18px;
   margin-bottom: 30px;
   overflow: hidden;
@@ -119,7 +120,10 @@
 .viscerium-home .callout[data-callout="home-hero"]::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: var(--vc-home-hero-art-height);
   z-index: -3;
   background-image: var(--vc-home-hero-image, linear-gradient(135deg, #25231f, #10100f));
   background-position: var(--vc-home-hero-position, 50% 46%);
@@ -134,7 +138,10 @@
 .viscerium-home .callout[data-callout="home-hero"]::after {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: var(--vc-home-hero-art-height);
   z-index: -2;
   pointer-events: none;
   background:
@@ -143,11 +150,11 @@
 }
 
 .viscerium-home .vc-home-hero-content {
-  min-height: 380px;
+  min-height: var(--vc-home-hero-art-height);
   padding: 72px 30px 32px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .viscerium-home .vc-home-eyebrow {
@@ -519,9 +526,12 @@
 }
 
 .viscerium-home .vc-home-section-copy {
-  margin: -7px 0 14px;
+  display: block;
+  margin: 0 0 14px;
+  overflow: visible;
   color: #817c75;
   font-size: 11px;
+  line-height: 1.45;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -900,7 +910,7 @@
 }
 
 .viscerium-home .callout:is([data-callout="home-chronicle"], [data-callout="home-activity"]) .vc-home-section-copy {
-  margin: -4px 0 14px;
+  margin: 0 0 14px;
   font-size: 10px;
 }
 
@@ -1050,7 +1060,7 @@
 }
 
 @container viscerium-home (max-width: 600px) {
-  .viscerium-home .callout[data-callout="home-hero"] { margin-inline: 0; min-height: 350px; }
+  .viscerium-home .callout[data-callout="home-hero"] { --vc-home-hero-art-height: 350px; margin-inline: 0; min-height: var(--vc-home-hero-art-height); }
   .viscerium-home .vc-home-hero-content { min-height: 350px; padding: 55px 16px 22px; }
   .viscerium-home .vc-home-hero-content > h1 { font-size: clamp(40px, 15vw, 58px); }
   .viscerium-home .vc-home-creative-line { margin-bottom: 20px; font-size: 15px; }
