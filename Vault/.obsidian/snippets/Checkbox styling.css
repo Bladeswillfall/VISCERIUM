@@ -1,6 +1,6 @@
 /*
  * Checkbox styling
- * Styles standard Markdown task checkboxes only; no custom task syntax.
+ * Styles standard Markdown task checkboxes.
  */
 
 .markdown-rendered input[type="checkbox"],
