@@ -1,6 +1,6 @@
 /*
  * Embed styling
- * Supporting note panels are static surfaces: square, restrained, and clearly separated.
+ * Styles supporting note embeds as square panels with a clear border.
  */
 
 .markdown-rendered .markdown-embed:not(.image-embed) {
