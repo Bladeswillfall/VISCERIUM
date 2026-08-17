@@ -24,8 +24,8 @@
  * Canvas graph colors use RGB because Pixi/chroma can parse these values reliably.
  * The color transform leaves `rgb(var(...))` unchanged.
  *
- * Keep these rules outside the CSS layers. They must take priority over the
- * plugin's `sitegraph` layer, which loads later.
+ * Keep these rules unlayered. Unlayered rules take priority over the plugin's
+ * `sitegraph` CSS layer, even when the plugin loads later.
  */
 .slsg-graph-component {
   --vc-graph-bg-rgb: 16, 16, 16;
