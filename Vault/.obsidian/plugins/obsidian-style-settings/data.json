@@ -19,11 +19,11 @@
   "baseline-style@@focus-view": false,
   "baseline-style@@banner-off": false,
   "baseline-style@@background-secondary@@dark": "#050505",
+  "viscerium-tags@@viscerium-tag-style": "viscerium-tags-compact",
   "viscerium-callouts@@viscerium-callout-style": "viscerium-callouts-balanced",
   "viscerium-hover-previews@@viscerium-hover-preview-size": "viscerium-hover-comfortable",
-  "viscerium-lists@@viscerium-list-guides": true,
-  "viscerium-lists@@viscerium-list-bullets": true,
-  "viscerium-text-accents@@viscerium-highlight-style": "viscerium-highlights-soft",
-  "viscerium-text-accents@@viscerium-compact-footnotes": false,
-  "viscerium-tags@@viscerium-tag-style": "viscerium-tags-compact"
+  "viscerium-lists@@viscerium-list-guides": false,
+  "viscerium-lists@@viscerium-list-bullets": false,
+  "viscerium-text-accents@@viscerium-highlight-style": "viscerium-highlights-default",
+  "viscerium-text-accents@@viscerium-compact-footnotes": false
 }
