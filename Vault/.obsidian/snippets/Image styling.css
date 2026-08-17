@@ -1,16 +1,16 @@
 /*
  * Image styling
  *
- * VISCERIUM image flags mirror the public Codex:
+ * VISCERIUM image flags match the public Codex:
  * ![[image.webp|left|320]]
  * ![[image.webp|right|320|shape|gap=16]]
  * ![[image.webp|center|480]]
  * ![[image.webp|wide]]
  *
- * The VISCERIUM Image Tools plugin adds the vc-image-* classes and resolves the
- * image URL required by CSS shape-outside. It also renders the canonical
- * frontmatter `headerImage` as a non-authored banner in Reading View and Live
- * Preview. Unflagged body embeds retain the ordinary centred treatment below.
+ * The VISCERIUM Image Tools plugin adds the vc-image-* classes and provides the
+ * image URL that CSS shape-outside uses. The plugin also displays the frontmatter
+ * `headerImage` as a generated banner in Reading View and Live Preview.
+ * Body images without flags use the centered style below.
  */
 
 /* -------------------------------------------------------------------------- */
@@ -191,7 +191,7 @@
   background: transparent;
 }
 
-/* The rendered article and every authored column own their floats. */
+/* Floated images stay inside their article or authored column. */
 .markdown-reading-view .markdown-preview-section,
 .markdown-reading-view .vc-layout-col-rendered,
 .markdown-source-view.mod-cm6 .vc-layout-col-rendered {
