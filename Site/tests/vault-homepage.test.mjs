@@ -38,7 +38,13 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
     assert.ok(appearance.enabledCssSnippets.includes(snippet), `${snippet} should be enabled`);
   }
 
-  assert.ok(templater.enabled_templates_hotkeys.includes('Templates/Databases/New Story Entity.md'));
+  for (const templatePath of [
+    'Templates/Databases/New Story Entity.md',
+    'Templates/Lore/New Lore Entity.md',
+    'Templates/Databases/New Myrkild Unit.md',
+  ]) {
+    assert.ok(templater.enabled_templates_hotkeys.includes(templatePath), `${templatePath} should stay registered as a Templater creation command`);
+  }
   assert.ok(templater.startup_templates.includes('Templates/_Startup/Open VISCERIUM Home.md'));
 
   for (const view of ['Hero', 'Continue', 'Attention', 'Chronicle', 'Activity', 'Navigate']) {
