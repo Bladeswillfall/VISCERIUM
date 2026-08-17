@@ -1,7 +1,7 @@
 /*
  * File explorer
- * One owner for explorer density, hierarchy, root roles, active state and Home placement.
- * Colour identifies top-level vault location only; descendant names stay neutral.
+ * Controls explorer spacing, hierarchy, root-folder labels, active-file state, and Home position.
+ * Color identifies the top-level vault folder. Descendant names use the normal text color.
  */
 
 :root {
@@ -47,13 +47,13 @@
   opacity: 0.9;
 }
 
-/* Folder weight softens with depth. */
+/* Folder font weight decreases with folder depth. */
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-title { font-weight: 600; }
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-children .nav-folder-title { font-weight: 550; }
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-children .nav-folder-children .nav-folder-title { font-weight: 500; }
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-children .nav-folder-children .nav-folder-children .nav-folder-children .nav-folder-title { font-weight: 450; }
 
-/* Root role markers and labels. */
+/* Set colors and labels for root folders. */
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Lore"] { --explorer-folder-color: var(--explorer-lore); }
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Drafts"] { --explorer-folder-color: var(--explorer-drafts); }
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Private"] { --explorer-folder-color: var(--explorer-private); }
@@ -120,7 +120,7 @@
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="System"] .nav-folder-title-content::after { content: "TOOLS"; }
 .workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Templates"] .nav-folder-title-content::after { content: "REUSE"; }
 
-/* Active file gets one location-coloured cue; ordinary descendants remain neutral. */
+/* The active file uses the color of its top-level folder. */
 .workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Lore/"] { --explorer-active-color: var(--explorer-lore); }
 .workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Drafts/"] { --explorer-active-color: var(--explorer-drafts); }
 .workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path^="Private/"] { --explorer-active-color: var(--explorer-private); }
@@ -139,7 +139,7 @@
   background: color-mix(in srgb, var(--explorer-active-color, var(--interactive-accent)) 12%, transparent);
 }
 
-/* Home is the first route in the root explorer, not a separate card. */
+/* Home appears first in the root explorer. */
 .workspace-leaf-content[data-type="file-explorer"] :is(.nav-files-container, .nav-folder-children):has(> .nav-file > .nav-file-title[data-path="Home.md"]) {
   display: flex !important;
   flex-direction: column;
