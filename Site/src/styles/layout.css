@@ -240,7 +240,7 @@
 /*
  * The hidden marker can be emitted either inside the callout-label paragraph or
  * as its own sibling node by the MDX/Markdown renderer. In both shapes the
- * first paragraph is authoring scaffold (`[!vc-indent]`), never article copy.
+ * first paragraph carries the `[!vc-indent]` authoring scaffold.
  */
 .sl-markdown-content blockquote:has(.vc-layout-indent-marker) > p:first-child {
   display: none;
