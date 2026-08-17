@@ -22,9 +22,9 @@
 }
 
 /*
- * Canvas graph colours must resolve to RGB. The progressive colour transform
- * intentionally cannot rewrite rgb(var(...)), which prevents Pixi/chroma from
- * receiving OKLCH or color-mix tokens and silently falling back to black.
+ * Canvas graph colours resolve to RGB. The progressive colour transform leaves
+ * rgb(var(...)) intact, supplying Pixi/chroma with concrete RGB values and a
+ * stable parse path.
  *
  * Keep these rules unlayered: unlayered author styles outrank the plugin's
  * `sitegraph` layer even though graph.css is registered before the plugin CSS.
@@ -134,9 +134,8 @@
    -------------------------------------------------------------------------- */
 
 /*
- * The World Graph is a visual workspace rather than a reading-width article.
- * Let its graph panel use the shell's available viewport width while preserving
- * the desktop sidebar-aware gutters. Scope this to the graph page only.
+ * The World Graph uses a visual-workspace layout with the shell's available
+ * viewport width and desktop sidebar-aware gutters. Scope this to the graph page.
  */
 .main-frame:has(.world-graph) main > .content-panel:has(.world-graph) {
   padding: 0 !important;
@@ -165,8 +164,8 @@
 
 /*
  * starlight-site-graph defines several canvas colours directly on its component.
- * Apply the RGB-safe adapter at the same scope after the plugin stylesheet so
- * Pixi/chroma receives concrete, parseable values rather than OKLCH tokens.
+ * The RGB-safe adapter applies at the same scope after the plugin stylesheet,
+ * supplying Pixi/chroma with concrete, parseable values.
  */
 .slsg-graph-component,
 graph-component {
