@@ -50,7 +50,10 @@ else if (rawImage) {
   const file = direct?.extension ? direct : app.metadataCache.getFirstLinkpathDest(rawImage, sourcePath);
   if (file?.extension) heroSource = app.vault.getResourcePath(file);
 }
-if (heroCallout && heroSource) heroCallout.style.setProperty("--vc-home-hero-image", `url("${heroSource.replace(/"/g, '\\"')}")`);
+if (heroCallout && heroSource) {
+  const heroImageValue = `url(${JSON.stringify(heroSource)})`;
+  heroCallout.style.setProperty("--vc-home-hero-image", heroImageValue);
+}
 if (heroCallout) heroCallout.style.setProperty("--vc-home-hero-position", String(page.homeImagePosition));
 
 root.createDiv({ text: "CREATOR VAULT · ERRACK", cls: "vc-home-eyebrow" });
