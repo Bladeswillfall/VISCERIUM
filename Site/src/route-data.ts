@@ -1,6 +1,7 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
 import siteConfig from '../site.config.mjs';
 import { getPublicationDates, toIsoDate } from './lib/publication-dates.mjs';
+import { buildArticleStructuredData, canonicalUrlForPath } from './lib/structured-data.mjs';
 
 export const onRequest = defineRouteMiddleware((context) => {
   const route = context.locals.starlightRoute;
@@ -13,18 +14,16 @@ export const onRequest = defineRouteMiddleware((context) => {
   const updatedIso = toIsoDate(updated);
 
   if (updated) route.lastUpdated = updated;
-  if (!publishedIso && !updatedIso) return;
 
-  const canonicalUrl = new URL(context.url.pathname, siteConfig.site).href;
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: String(data.title ?? route.entry.id),
-    ...(data.description ? { description: String(data.description) } : {}),
-    mainEntityOfPage: canonicalUrl,
-    ...(publishedIso ? { datePublished: publishedIso } : {}),
-    ...(updatedIso ? { dateModified: updatedIso } : {}),
-  };
+  const canonicalUrl = canonicalUrlForPath(context.url.pathname, siteConfig.site);
+  const structuredData = buildArticleStructuredData({
+    title: data.title ?? route.entry.id,
+    description: data.description,
+    canonicalUrl,
+    publishedIso,
+    updatedIso,
+    keywords: Array.isArray(data.tags) ? data.tags : undefined,
+  });
 
   if (publishedIso) {
     route.head.push({
