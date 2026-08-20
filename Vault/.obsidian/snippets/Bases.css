@@ -1,12 +1,14 @@
 /*
  * Bases
- * Controls compact card browsing and dense table editing.
+ * Current Obsidian Bases controls with the VISCERIUM tactile UI language.
  *
- * The toolbar follows the Home dashboard's tactile control language:
- * clear labels, raised faces, dark lower/right edges, and a pressed state.
- * Data surfaces remain comparatively quiet so the controls are easy to find.
+ * Controls and cards use raised faces, a darker lower/right edge, and purposeful
+ * pressed feedback. Tables keep Obsidian's native geometry so virtualized rows
+ * remain readable. Current .bases-toolbar* selectors are primary; the older
+ * .query-toolbar* names remain only as a compatibility fallback.
  */
 
+.bases-header,
 .bases-view,
 .bases-embed {
   --vc-bases-control-radius: 7px;
@@ -17,47 +19,96 @@
   --vc-bases-control-edge-deep: color-mix(in srgb, var(--background-modifier-border) 18%, #000);
   --vc-bases-control-highlight: color-mix(in srgb, var(--text-normal) 8%, transparent);
   --vc-bases-focus-ring: color-mix(in srgb, var(--interactive-accent) 64%, var(--text-normal));
+  --vc-bases-card-face: color-mix(in srgb, var(--background-secondary) 92%, var(--text-normal) 3%);
+  --vc-bases-card-hover: color-mix(in srgb, var(--background-secondary) 84%, var(--text-normal) 7%);
+  --vc-bases-card-cover: color-mix(in srgb, var(--background-primary-alt) 84%, #000 16%);
   --bases-toolbar-label-display: inline;
   --bases-toolbar-badge-display: inline-flex;
 }
 
-.bases-view {
-  --bases-cards-background: var(--background-secondary);
-  --bases-cards-cover-background: var(--background-primary-alt);
-  --bases-cards-border: 1px solid var(--background-modifier-border);
-  --bases-cards-shadow: none;
-  --bases-cards-shadow-hover: none;
-}
-
-/* -------------------------------------------------------------------------- */
-/* Toolbar: clear, chunky, tactile controls                                   */
-/* -------------------------------------------------------------------------- */
-
 .bases-header {
-  min-height: 48px;
-  padding: 6px 8px;
+  --bases-header-height: 52px;
+  --bases-header-padding-start: 8px;
+  --bases-header-padding-end: 8px;
+  --bases-header-border-width: 1px;
+
+  min-height: var(--bases-header-height);
+  padding: 6px var(--bases-header-padding-end) 6px var(--bases-header-padding-start);
   border-bottom-color: var(--background-modifier-border);
   background: color-mix(in srgb, var(--background-primary) 94%, var(--background-secondary));
 }
 
-.bases-header .query-toolbar {
-  gap: 8px;
+.bases-view {
+  --bases-cards-container-background: transparent;
+  --bases-cards-background: var(--vc-bases-card-face);
+  --bases-cards-cover-background: var(--vc-bases-card-cover);
+  --bases-cards-group-padding: 8px 6px 16px;
+  --bases-cards-border-width: 1px;
+  --bases-cards-shadow: none;
+  --bases-cards-shadow-hover: none;
+
+  /* Keep table dimensions native. These variables are cosmetic only. */
+  --bases-table-container-border-width: 1px;
+  --bases-table-container-border-radius: 0;
+  --bases-table-header-weight: 750;
+  --bases-table-header-color: var(--text-muted);
+  --bases-table-header-background: var(--background-secondary);
+  --bases-table-header-background-hover: var(--background-modifier-hover);
+  --bases-table-border-color: var(--background-modifier-border);
+  --bases-table-column-border-width: 1px;
+  --bases-table-row-border-width: 1px;
+  --bases-table-row-background-hover: var(--background-modifier-hover);
+  --bases-table-text-size: var(--font-ui-smaller);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Toolbar: current Obsidian Bases DOM                                        */
+/* -------------------------------------------------------------------------- */
+
+.bases-header :is(.bases-toolbar, .query-toolbar) {
+  width: 100%;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   overflow-x: auto;
   overflow-y: hidden;
+  flex-wrap: nowrap;
   scrollbar-width: none;
 }
 
-.bases-header .query-toolbar::-webkit-scrollbar {
+.bases-header :is(.bases-toolbar, .query-toolbar)::-webkit-scrollbar {
   display: none;
 }
 
 /*
- * Query toolbar items are the Base's primary controls: views, filters,
- * properties, sorting, search and related actions. Styling the item wrapper
- * avoids leaking the chunky button language into editable table cells.
+ * Current Bases uses .bases-toolbar-item. The result count is information,
+ * not an action, so it deliberately stays quiet while the interactive items
+ * get the tactile Home-style face.
  */
-.bases-header .query-toolbar-item {
+.bases-header .bases-toolbar-item {
+  flex: 0 0 auto;
+  min-width: 0;
+  overflow: visible;
+}
+
+.bases-header .bases-toolbar-item.bases-toolbar-result-count {
+  min-height: 0;
+  margin-inline-end: 2px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  box-shadow: none;
+  font-size: var(--font-ui-smaller);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+) {
   min-height: 38px;
   padding: 0 11px;
   display: inline-flex;
@@ -65,6 +116,7 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
+  overflow: visible;
   border: 1px solid var(--vc-bases-control-edge);
   border-right-color: var(--vc-bases-control-edge-deep);
   border-bottom-color: var(--vc-bases-control-edge-deep);
@@ -88,7 +140,10 @@
     color 100ms ease;
 }
 
-.bases-header .query-toolbar-item:hover {
+.bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+):hover {
   background: var(--vc-bases-control-hover);
   color: var(--text-normal);
   box-shadow:
@@ -97,10 +152,11 @@
     0 2px 3px color-mix(in srgb, #000 20%, transparent);
 }
 
-.bases-header .query-toolbar-item:active,
-.bases-header .query-toolbar-item.is-active,
-.bases-header .query-toolbar-item[aria-pressed="true"],
-.bases-header .query-toolbar-item[aria-expanded="true"] {
+.bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+):is(:active, .is-active, [aria-pressed="true"], [aria-expanded="true"]),
+.bases-header .bases-toolbar-item:not(.bases-toolbar-result-count):has(> :is(:active, [aria-pressed="true"], [aria-expanded="true"])) {
   border-top-color: var(--vc-bases-control-edge-deep);
   border-right-color: var(--vc-bases-control-edge);
   border-bottom-color: var(--vc-bases-control-edge);
@@ -111,37 +167,79 @@
   transform: translateY(1px);
 }
 
-.bases-header .query-toolbar-item:focus-visible,
+/* Keep keyboard focus visible inside the toolbar's vertically clipped scrollport. */
+.bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+):focus-visible,
+.bases-header .bases-toolbar-item:not(.bases-toolbar-result-count):has(> :focus-visible) {
+  outline: 2px solid var(--vc-bases-focus-ring);
+  outline-offset: -3px;
+}
+
 .bases-search-row input:focus-visible {
   outline: 2px solid var(--vc-bases-focus-ring);
   outline-offset: 2px;
 }
 
-/* Prevent Obsidian's nested icon buttons from creating a second button face. */
-.bases-header .query-toolbar-item .clickable-icon,
-.bases-header .query-toolbar-item button,
-.bases-header .query-toolbar-item .dropdown {
-  min-width: 0;
-  min-height: 0;
-  margin: 0;
+/*
+ * Current toolbar items commonly wrap the real clickable control. When they
+ * do, the child owns all interior padding so the visible face and the actual
+ * pointer/touch target are the same size. Directly-clickable toolbar items keep
+ * the padding from the shared rule above.
+ */
+.bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+):has(> :is(.text-icon-button, .clickable-icon, button, .dropdown)) {
   padding: 0;
+}
+
+.bases-header :is(.bases-toolbar-item:not(.bases-toolbar-result-count), .query-toolbar-item)
+  > :is(.text-icon-button, .clickable-icon, button, .dropdown),
+.bases-header .query-toolbar-item :is(.clickable-icon, button, .dropdown) {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  margin: 0;
+  padding: 0 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   border: 0;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
   color: inherit;
+  font: inherit;
+  overflow: visible;
 }
 
-.bases-header .query-toolbar-item svg {
+.bases-header .bases-toolbar-views-menu,
+.bases-header .bases-toolbar-views-menu > .text-icon-button,
+.bases-header .bases-toolbar-views-menu .text-button-label {
+  overflow: visible;
+  max-width: none;
+}
+
+.bases-header .bases-toolbar .text-button-label {
+  display: var(--bases-toolbar-label-display, inline);
+  overflow: visible;
+  max-width: none;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.bases-header :is(.bases-toolbar-item, .query-toolbar-item) svg {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
 }
 
 /* Small counts/status badges read as inset counters inside the raised control. */
-.bases-header .query-toolbar-item .query-toolbar-item-badge,
-.bases-header .query-toolbar-item .bases-toolbar-badge,
-.bases-header .query-toolbar-item .badge {
+.bases-header :is(.bases-toolbar-item, .query-toolbar-item)
+  :is(.query-toolbar-item-badge, .bases-toolbar-badge, .badge) {
   min-width: 19px;
   height: 19px;
   padding-inline: 5px;
@@ -157,7 +255,7 @@
   line-height: 1;
 }
 
-/* Search is visually part of the same control strip without pretending to be a button. */
+/* Search is part of the same strip, but stays visibly recessed rather than button-like. */
 .bases-search-row {
   min-height: 44px;
   padding: 5px 8px;
@@ -175,42 +273,75 @@
   color: var(--text-normal);
 }
 
-/* Embedded Bases get the same calm framed-panel treatment as Home modules. */
+/* Embedded Bases use the same calm framed-panel treatment as Home modules. */
 .bases-embed {
   --bases-embed-border-width: 1px;
   --bases-embed-border-color: var(--background-modifier-border);
   --bases-embed-border-radius: 10px;
 }
 
-/* Cards are interactive controls, so they use the tactile control radius. */
+/* -------------------------------------------------------------------------- */
+/* Cards: raised tactile tiles, stationary hover                              */
+/* -------------------------------------------------------------------------- */
+
 .bases-cards-group {
-  gap: 0.65rem;
-  padding: 0.35rem 0.2rem 0.9rem;
+  gap: 0.72rem;
+  padding: var(--bases-cards-group-padding, 8px 6px 16px);
 }
 
 .bases-cards-item {
+  --vc-bases-card-accent: transparent;
+  border: 1px solid var(--vc-bases-control-edge);
+  border-right-color: var(--vc-bases-control-edge-deep);
+  border-bottom-color: var(--vc-bases-control-edge-deep);
   border-radius: var(--vc-bases-control-radius, var(--vc-radius-control, 4px));
+  background: var(--vc-bases-card-face);
   overflow: hidden;
-  box-shadow: none;
-  transition: border-color 100ms ease, background-color 100ms ease;
+  box-shadow:
+    inset 0 1px 0 var(--vc-bases-control-highlight),
+    inset 0 -3px 0 color-mix(in srgb, #000 24%, transparent),
+    inset 3px 0 0 var(--vc-bases-card-accent),
+    0 1px 0 color-mix(in srgb, var(--text-normal) 2%, transparent);
+  transition:
+    background-color 100ms ease,
+    border-color 100ms ease,
+    box-shadow 100ms ease;
 }
 
 .bases-cards-item:hover {
-  border-color: color-mix(in srgb, var(--interactive-accent) 55%, var(--background-modifier-border));
+  border-color: color-mix(in srgb, var(--interactive-accent) 28%, var(--vc-bases-control-edge));
+  border-right-color: var(--vc-bases-control-edge-deep);
+  border-bottom-color: var(--vc-bases-control-edge-deep);
+  background: var(--vc-bases-card-hover);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--text-normal) 10%, transparent),
+    inset 0 -3px 0 color-mix(in srgb, #000 29%, transparent),
+    inset 3px 0 0 var(--vc-bases-card-accent),
+    0 2px 3px color-mix(in srgb, #000 18%, transparent);
 }
 
-.bases-cards-cover { background: var(--bases-cards-cover-background); }
-.bases-cards-property { padding-inline: 0.6rem; }
+.bases-cards-cover {
+  border-bottom: 1px solid color-mix(in srgb, var(--vc-bases-control-edge) 82%, transparent);
+  background: var(--bases-cards-cover-background);
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--text-normal) 3%, transparent);
+}
+
+.bases-cards-property {
+  padding-inline: 0.68rem;
+}
+
 .bases-cards-property.mod-title {
-  padding-top: 0.55rem;
+  padding-top: 0.62rem;
   font-size: 0.98em;
-  font-weight: 750;
+  font-weight: 800;
   line-height: 1.2;
 }
+
 .bases-cards-property:not(.mod-title) {
   color: var(--text-muted);
   font-size: 0.84em;
 }
+
 .bases-cards-label {
   color: var(--text-faint);
   font-size: 0.66em;
@@ -219,37 +350,31 @@
   text-transform: uppercase;
 }
 
-/* Tables are static comparison and editing areas, so they stay quiet and square. */
+/* -------------------------------------------------------------------------- */
+/* Tables: style the surface, never the virtualized row geometry              */
+/* -------------------------------------------------------------------------- */
+
 .bases-view[data-view-type="table"] .bases-table {
-  border: 1px solid var(--background-modifier-border);
+  border: var(--bases-table-container-border-width, 1px) solid var(--bases-table-border-color, var(--background-modifier-border));
   border-radius: 0;
   overflow: hidden;
   box-shadow: none;
 }
 
-.bases-view[data-view-type="table"] .bases-thead { background: var(--background-secondary); }
-
-.bases-view[data-view-type="table"] .bases-th,
-.bases-view[data-view-type="table"] .bases-td {
-  min-height: 1.75rem;
-  box-shadow: inset -1px -1px 0 var(--background-modifier-border);
+.bases-view[data-view-type="table"] .bases-thead {
+  background: var(--bases-table-header-background, var(--background-secondary));
 }
 
 .bases-view[data-view-type="table"] .bases-th .bases-table-cell {
-  color: var(--text-muted);
+  color: var(--bases-table-header-color, var(--text-muted));
   font-size: 0.72em;
-  font-weight: 750;
+  font-weight: var(--bases-table-header-weight, 750);
   letter-spacing: 0.055em;
   text-transform: uppercase;
 }
 
-.bases-view[data-view-type="table"] .bases-td .bases-table-cell {
-  padding-block: 0.24rem;
-  font-size: 0.87em;
-}
-
 .bases-view[data-view-type="table"] .bases-tr:hover .bases-td {
-  background: var(--background-modifier-hover);
+  background: var(--bases-table-row-background-hover, var(--background-modifier-hover));
 }
 
 /* Needs Attention uses a different color for each severity level. */
@@ -349,18 +474,52 @@
   background: color-mix(in srgb, var(--color-red) 18%, var(--background-modifier-hover));
 }
 
-/* Touch devices keep the same labels and gain a full 44px target. */
-body.is-mobile .bases-header {
-  min-height: 54px;
+/* Mobile keeps labels readable and makes the whole toolbar horizontally scrollable. */
+.is-mobile .bases-header {
+  --bases-header-height: 58px;
+  min-height: var(--bases-header-height);
 }
 
-body.is-mobile .bases-header .query-toolbar-item {
+.is-mobile .bases-header :is(.bases-toolbar, .query-toolbar) {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.is-mobile .bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+) {
+  min-height: 44px;
+  padding-inline: 13px;
+  flex-shrink: 0;
+}
+
+.is-mobile .bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+):has(> :is(.text-icon-button, .clickable-icon, button, .dropdown)) {
+  padding-inline: 0;
+}
+
+.is-mobile .bases-header :is(.bases-toolbar-item:not(.bases-toolbar-result-count), .query-toolbar-item)
+  > :is(.text-icon-button, .clickable-icon, button, .dropdown) {
   min-height: 44px;
   padding-inline: 13px;
 }
 
+.is-mobile .bases-header .bases-toolbar-views-menu,
+.is-mobile .bases-header .bases-toolbar-views-menu > .text-icon-button,
+.is-mobile .bases-header .bases-toolbar-views-menu .text-button-label {
+  overflow: visible;
+  max-width: none;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .bases-header .query-toolbar-item,
+  .bases-header :is(.bases-toolbar-item, .query-toolbar-item),
   .bases-cards-item {
     transition: none;
   }
