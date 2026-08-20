@@ -31,6 +31,22 @@ test('Bases styles the current Obsidian toolbar DOM and official variables', asy
   assert.doesNotMatch(css, /--bases-cards-border\s*:/);
 });
 
+test('Bases button faces match the real nested click targets', async () => {
+  const css = await readVaultText('.obsidian/snippets/Bases.css');
+
+  assert.match(css, /:has\(> :is\(\.text-icon-button, \.clickable-icon, button, \.dropdown\)\) \{\s*padding:\s*0;/);
+
+  const nestedControlRule = css.match(
+    /> :is\(\.text-icon-button, \.clickable-icon, button, \.dropdown\),[\s\S]*?\.query-toolbar-item :is\(\.clickable-icon, button, \.dropdown\) \{([\s\S]*?)\n\}/,
+  );
+  assert.ok(nestedControlRule, 'Expected nested toolbar controls to own the visible face interior');
+  assert.match(nestedControlRule[1], /width:\s*100%/);
+  assert.match(nestedControlRule[1], /min-height:\s*38px/);
+  assert.match(nestedControlRule[1], /padding:\s*0 11px/);
+
+  assert.match(css, /\.is-mobile[\s\S]*?> :is\(\.text-icon-button, \.clickable-icon, button, \.dropdown\) \{[\s\S]*?min-height:\s*44px;[\s\S]*?padding-inline:\s*13px;/);
+});
+
 test('Bases toolbar keeps hover stationary and reserves movement for a press', async () => {
   const css = await readVaultText('.obsidian/snippets/Bases.css');
   const hoverRule = css.match(/\.bases-header :is\([\s\S]*?\.query-toolbar-item[\s\S]*?\):hover \{([\s\S]*?)\n\}/);
