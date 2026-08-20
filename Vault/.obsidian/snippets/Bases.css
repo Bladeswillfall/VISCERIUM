@@ -165,11 +165,16 @@
   transform: translateY(1px);
 }
 
+/* Keep keyboard focus visible inside the toolbar's vertically clipped scrollport. */
 .bases-header :is(
   .bases-toolbar-item:not(.bases-toolbar-result-count),
   .query-toolbar-item
 ):focus-visible,
-.bases-header .bases-toolbar-item:not(.bases-toolbar-result-count):has(> :focus-visible),
+.bases-header .bases-toolbar-item:not(.bases-toolbar-result-count):has(> :focus-visible) {
+  outline: 2px solid var(--vc-bases-focus-ring);
+  outline-offset: -3px;
+}
+
 .bases-search-row input:focus-visible {
   outline: 2px solid var(--vc-bases-focus-ring);
   outline-offset: 2px;
