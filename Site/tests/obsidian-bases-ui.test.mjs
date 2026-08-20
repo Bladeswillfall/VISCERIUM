@@ -79,11 +79,12 @@ test('Bases cards use the tactile VISCERIUM face rather than the native flat car
 
 test('Bases leaves Obsidian table row geometry native', async () => {
   const css = await readVaultText('.obsidian/snippets/Bases.css');
+  const declarations = css.replace(/\/\*[\s\S]*?\*\//g, '');
 
-  assert.doesNotMatch(css, /--bases-table-row-height\s*:/);
-  assert.doesNotMatch(css, /--bases-cards-line-height\s*:/);
-  assert.doesNotMatch(css, /min-height:\s*var\(--bases-table-row-height/);
-  assert.doesNotMatch(css, /\.bases-td \.bases-table-cell \{/);
+  assert.doesNotMatch(declarations, /--bases-table-row-height\s*:/);
+  assert.doesNotMatch(declarations, /--bases-cards-line-height\s*:/);
+  assert.doesNotMatch(declarations, /min-height:\s*var\(--bases-table-row-height/);
+  assert.doesNotMatch(declarations, /\.bases-td \.bases-table-cell \{/);
 });
 
 test('Bases toolbar and cards keep hover stationary and reserve movement for a press', async () => {
