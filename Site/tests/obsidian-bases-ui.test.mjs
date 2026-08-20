@@ -124,7 +124,10 @@ test('World Anvil Import composes its triage layer with the shared Bases skin', 
   assert.match(triageCss, /aria-label="World Anvil Import"/);
   assert.match(triageCss, /\.bases-cards-item/);
   assert.match(triageCss, /--vc-bases-card-accent:/);
-  assert.match(triageCss, /border-color:/);
+  assert.match(triageCss, /border-top-color:/);
+  assert.match(triageCss, /border-left-color:/);
+  assert.doesNotMatch(triageCss, /(^|\s)border-color\s*:/m);
+  assert.doesNotMatch(triageCss, /border-(right|bottom)-color\s*:/);
   assert.match(triageCss, /\.wa-action--conflict/);
   assert.match(triageCss, /\.wa-action--ready/);
   assert.doesNotMatch(triageCss, /box-shadow\s*:/);
