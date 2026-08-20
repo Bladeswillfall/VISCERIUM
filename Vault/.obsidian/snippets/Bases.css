@@ -312,7 +312,7 @@
 /* Tables are comparison/editing surfaces, so they stay dense and square. */
 .bases-view[data-view-type="table"] .bases-table {
   border: var(--bases-table-container-border-width, 1px) solid var(--bases-table-border-color, var(--background-modifier-border));
-  border-radius: var(--bases-table-container-border-radius, 0);
+  border-radius: 0;
   overflow: hidden;
   box-shadow: none;
 }
