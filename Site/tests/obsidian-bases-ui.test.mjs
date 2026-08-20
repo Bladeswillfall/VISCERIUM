@@ -27,7 +27,6 @@ test('Bases styles the current Obsidian toolbar DOM and official variables', asy
   assert.match(css, /--bases-cards-container-background:/);
   assert.match(css, /--bases-cards-border-width:\s*1px/);
   assert.match(css, /--bases-table-container-border-width:\s*1px/);
-  assert.match(css, /--bases-table-row-height:/);
   assert.doesNotMatch(css, /--bases-cards-border\s*:/);
 });
 
@@ -62,7 +61,32 @@ test('Bases focus rings stay visible inside the vertically clipped toolbar', asy
   assert.match(searchFocusRule[1], /outline-offset:\s*2px/);
 });
 
-test('Bases toolbar keeps hover stationary and reserves movement for a press', async () => {
+test('Bases cards use the tactile VISCERIUM face rather than the native flat card', async () => {
+  const css = await readVaultText('.obsidian/snippets/Bases.css');
+  const cardRule = css.match(/\.bases-cards-item \{([\s\S]*?)\n\}/);
+  const coverRule = css.match(/\.bases-cards-cover \{([\s\S]*?)\n\}/);
+
+  assert.ok(cardRule, 'Expected a shared card face rule');
+  assert.match(cardRule[1], /border-right-color:\s*var\(--vc-bases-control-edge-deep\)/);
+  assert.match(cardRule[1], /border-bottom-color:\s*var\(--vc-bases-control-edge-deep\)/);
+  assert.match(cardRule[1], /background:\s*var\(--vc-bases-card-face\)/);
+  assert.match(cardRule[1], /inset 3px 0 0 var\(--vc-bases-card-accent\)/);
+
+  assert.ok(coverRule, 'Expected card covers to belong to the tactile card surface');
+  assert.match(coverRule[1], /border-bottom:/);
+  assert.match(coverRule[1], /background:\s*var\(--bases-cards-cover-background\)/);
+});
+
+test('Bases leaves Obsidian table row geometry native', async () => {
+  const css = await readVaultText('.obsidian/snippets/Bases.css');
+
+  assert.doesNotMatch(css, /--bases-table-row-height\s*:/);
+  assert.doesNotMatch(css, /--bases-cards-line-height\s*:/);
+  assert.doesNotMatch(css, /min-height:\s*var\(--bases-table-row-height/);
+  assert.doesNotMatch(css, /\.bases-td \.bases-table-cell \{/);
+});
+
+test('Bases toolbar and cards keep hover stationary and reserve movement for a press', async () => {
   const css = await readVaultText('.obsidian/snippets/Bases.css');
   const hoverRule = css.match(/\.bases-header :is\([\s\S]*?\.query-toolbar-item[\s\S]*?\):hover \{([\s\S]*?)\n\}/);
 
@@ -98,7 +122,9 @@ test('World Anvil Import composes its triage layer with the shared Bases skin', 
 
   assert.match(triageCss, /aria-label="World Anvil Import"/);
   assert.match(triageCss, /\.bases-cards-item/);
+  assert.match(triageCss, /--vc-bases-card-accent:/);
   assert.match(triageCss, /\.wa-action--conflict/);
   assert.match(triageCss, /\.wa-action--ready/);
+  assert.doesNotMatch(triageCss, /box-shadow\s*:/);
   assert.doesNotMatch(triageCss, /\.bases-toolbar|\.query-toolbar/);
 });
