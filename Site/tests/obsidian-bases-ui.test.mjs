@@ -47,6 +47,21 @@ test('Bases button faces match the real nested click targets', async () => {
   assert.match(css, /\.is-mobile[\s\S]*?> :is\(\.text-icon-button, \.clickable-icon, button, \.dropdown\) \{[\s\S]*?min-height:\s*44px;[\s\S]*?padding-inline:\s*13px;/);
 });
 
+test('Bases focus rings stay visible inside the vertically clipped toolbar', async () => {
+  const css = await readVaultText('.obsidian/snippets/Bases.css');
+
+  const toolbarFocusRule = css.match(
+    /\.bases-header :is\([\s\S]*?\):focus-visible,[\s\S]*?:has\(> :focus-visible\) \{([\s\S]*?)\n\}/,
+  );
+  assert.ok(toolbarFocusRule, 'Expected a toolbar focus rule for direct and nested controls');
+  assert.match(toolbarFocusRule[1], /outline:\s*2px solid var\(--vc-bases-focus-ring\)/);
+  assert.match(toolbarFocusRule[1], /outline-offset:\s*-3px/);
+
+  const searchFocusRule = css.match(/\.bases-search-row input:focus-visible \{([\s\S]*?)\n\}/);
+  assert.ok(searchFocusRule, 'Expected search to keep its normal external focus ring');
+  assert.match(searchFocusRule[1], /outline-offset:\s*2px/);
+});
+
 test('Bases toolbar keeps hover stationary and reserves movement for a press', async () => {
   const css = await readVaultText('.obsidian/snippets/Bases.css');
   const hoverRule = css.match(/\.bases-header :is\([\s\S]*?\.query-toolbar-item[\s\S]*?\):hover \{([\s\S]*?)\n\}/);
