@@ -1,7 +1,25 @@
 /*
  * Bases
  * Controls compact card browsing and dense table editing.
+ *
+ * The toolbar follows the Home dashboard's tactile control language:
+ * clear labels, raised faces, dark lower/right edges, and a pressed state.
+ * Data surfaces remain comparatively quiet so the controls are easy to find.
  */
+
+.bases-view,
+.bases-embed {
+  --vc-bases-control-radius: 7px;
+  --vc-bases-control-face: color-mix(in srgb, var(--background-secondary) 88%, var(--text-normal) 4%);
+  --vc-bases-control-hover: color-mix(in srgb, var(--background-secondary) 78%, var(--text-normal) 9%);
+  --vc-bases-control-active: color-mix(in srgb, var(--background-primary) 90%, #000 10%);
+  --vc-bases-control-edge: color-mix(in srgb, var(--background-modifier-border) 48%, #000);
+  --vc-bases-control-edge-deep: color-mix(in srgb, var(--background-modifier-border) 18%, #000);
+  --vc-bases-control-highlight: color-mix(in srgb, var(--text-normal) 8%, transparent);
+  --vc-bases-focus-ring: color-mix(in srgb, var(--interactive-accent) 64%, var(--text-normal));
+  --bases-toolbar-label-display: inline;
+  --bases-toolbar-badge-display: inline-flex;
+}
 
 .bases-view {
   --bases-cards-background: var(--background-secondary);
@@ -11,21 +29,173 @@
   --bases-cards-shadow-hover: none;
 }
 
-/* Cards are interactive controls, so they use the small control corner radius. */
+/* -------------------------------------------------------------------------- */
+/* Toolbar: clear, chunky, tactile controls                                   */
+/* -------------------------------------------------------------------------- */
+
+.bases-header {
+  min-height: 48px;
+  padding: 6px 8px;
+  border-bottom-color: var(--background-modifier-border);
+  background: color-mix(in srgb, var(--background-primary) 94%, var(--background-secondary));
+}
+
+.bases-header .query-toolbar {
+  gap: 8px;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.bases-header .query-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Query toolbar items are the Base's primary controls: views, filters,
+ * properties, sorting, search and related actions. Styling the item wrapper
+ * avoids leaking the chunky button language into editable table cells.
+ */
+.bases-header .query-toolbar-item {
+  min-height: 38px;
+  padding: 0 11px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--vc-bases-control-edge);
+  border-right-color: var(--vc-bases-control-edge-deep);
+  border-bottom-color: var(--vc-bases-control-edge-deep);
+  border-radius: var(--vc-bases-control-radius);
+  background: var(--vc-bases-control-face);
+  color: var(--text-normal);
+  box-shadow:
+    inset 0 1px 0 var(--vc-bases-control-highlight),
+    inset 0 -3px 0 color-mix(in srgb, #000 27%, transparent),
+    0 1px 0 color-mix(in srgb, var(--text-normal) 2%, transparent);
+  font-family: var(--font-interface);
+  font-size: var(--font-ui-smaller);
+  font-weight: 750;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: var(--cursor);
+  transition:
+    background-color 100ms ease,
+    border-color 100ms ease,
+    box-shadow 80ms ease,
+    color 100ms ease;
+}
+
+.bases-header .query-toolbar-item:hover {
+  background: var(--vc-bases-control-hover);
+  color: var(--text-normal);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--text-normal) 10%, transparent),
+    inset 0 -3px 0 color-mix(in srgb, #000 31%, transparent),
+    0 2px 3px color-mix(in srgb, #000 20%, transparent);
+}
+
+.bases-header .query-toolbar-item:active,
+.bases-header .query-toolbar-item.is-active,
+.bases-header .query-toolbar-item[aria-pressed="true"],
+.bases-header .query-toolbar-item[aria-expanded="true"] {
+  border-top-color: var(--vc-bases-control-edge-deep);
+  border-right-color: var(--vc-bases-control-edge);
+  border-bottom-color: var(--vc-bases-control-edge);
+  background: var(--vc-bases-control-active);
+  box-shadow:
+    inset 0 3px 4px color-mix(in srgb, #000 48%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--text-normal) 3%, transparent);
+  transform: translateY(1px);
+}
+
+.bases-header .query-toolbar-item:focus-visible,
+.bases-search-row input:focus-visible {
+  outline: 2px solid var(--vc-bases-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Prevent Obsidian's nested icon buttons from creating a second button face. */
+.bases-header .query-toolbar-item .clickable-icon,
+.bases-header .query-toolbar-item button,
+.bases-header .query-toolbar-item .dropdown {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+.bases-header .query-toolbar-item svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+/* Small counts/status badges read as inset counters inside the raised control. */
+.bases-header .query-toolbar-item .query-toolbar-item-badge,
+.bases-header .query-toolbar-item .bases-toolbar-badge,
+.bases-header .query-toolbar-item .badge {
+  min-width: 19px;
+  height: 19px;
+  padding-inline: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--interactive-accent) 28%, var(--background-modifier-border));
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--interactive-accent) 10%, var(--background-primary));
+  color: var(--text-muted);
+  font-size: 0.72em;
+  font-weight: 850;
+  line-height: 1;
+}
+
+/* Search is visually part of the same control strip without pretending to be a button. */
+.bases-search-row {
+  min-height: 44px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: color-mix(in srgb, var(--background-primary) 96%, var(--background-secondary));
+}
+
+.bases-search-row input[type="search"],
+.bases-search-row input[type="text"] {
+  min-height: 36px;
+  border: 1px solid var(--vc-bases-control-edge);
+  border-radius: var(--vc-bases-control-radius);
+  background: var(--background-primary);
+  box-shadow: inset 0 2px 3px color-mix(in srgb, #000 18%, transparent);
+  color: var(--text-normal);
+}
+
+/* Embedded Bases get the same calm framed-panel treatment as Home modules. */
+.bases-embed {
+  --bases-embed-border-width: 1px;
+  --bases-embed-border-color: var(--background-modifier-border);
+  --bases-embed-border-radius: 10px;
+}
+
+/* Cards are interactive controls, so they use the tactile control radius. */
 .bases-cards-group {
   gap: 0.65rem;
   padding: 0.35rem 0.2rem 0.9rem;
 }
 
 .bases-cards-item {
-  border-radius: var(--vc-radius-control, 4px);
+  border-radius: var(--vc-bases-control-radius, var(--vc-radius-control, 4px));
   overflow: hidden;
   box-shadow: none;
   transition: border-color 100ms ease, background-color 100ms ease;
 }
 
 .bases-cards-item:hover {
-  transform: none;
   border-color: color-mix(in srgb, var(--interactive-accent) 55%, var(--background-modifier-border));
 }
 
@@ -49,7 +219,7 @@
   text-transform: uppercase;
 }
 
-/* Tables are static comparison and editing areas, so they use square corners. */
+/* Tables are static comparison and editing areas, so they stay quiet and square. */
 .bases-view[data-view-type="table"] .bases-table {
   border: 1px solid var(--background-modifier-border);
   border-radius: 0;
@@ -177,4 +347,21 @@
 
 .viscerium-home .bases-tr:has(.attention-state--critical):hover .bases-td {
   background: color-mix(in srgb, var(--color-red) 18%, var(--background-modifier-hover));
+}
+
+/* Touch devices keep the same labels and gain a full 44px target. */
+body.is-mobile .bases-header {
+  min-height: 54px;
+}
+
+body.is-mobile .bases-header .query-toolbar-item {
+  min-height: 44px;
+  padding-inline: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bases-header .query-toolbar-item,
+  .bases-cards-item {
+    transition: none;
+  }
 }
