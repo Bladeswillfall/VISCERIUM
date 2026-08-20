@@ -2,9 +2,9 @@
  * Bases
  * Current Obsidian Bases controls with the VISCERIUM tactile UI language.
  *
- * Controls use raised faces, a darker lower/right edge, and a pressed state.
- * Data surfaces stay quieter so sorting, filtering, search, and view controls
- * remain obvious. Current .bases-toolbar* selectors are primary; the older
+ * Controls and cards use raised faces, a darker lower/right edge, and purposeful
+ * pressed feedback. Tables keep Obsidian's native geometry so virtualized rows
+ * remain readable. Current .bases-toolbar* selectors are primary; the older
  * .query-toolbar* names remain only as a compatibility fallback.
  */
 
@@ -19,6 +19,9 @@
   --vc-bases-control-edge-deep: color-mix(in srgb, var(--background-modifier-border) 18%, #000);
   --vc-bases-control-highlight: color-mix(in srgb, var(--text-normal) 8%, transparent);
   --vc-bases-focus-ring: color-mix(in srgb, var(--interactive-accent) 64%, var(--text-normal));
+  --vc-bases-card-face: color-mix(in srgb, var(--background-secondary) 92%, var(--text-normal) 3%);
+  --vc-bases-card-hover: color-mix(in srgb, var(--background-secondary) 84%, var(--text-normal) 7%);
+  --vc-bases-card-cover: color-mix(in srgb, var(--background-primary-alt) 84%, #000 16%);
   --bases-toolbar-label-display: inline;
   --bases-toolbar-badge-display: inline-flex;
 }
@@ -37,14 +40,14 @@
 
 .bases-view {
   --bases-cards-container-background: transparent;
-  --bases-cards-background: var(--background-secondary);
-  --bases-cards-cover-background: var(--background-primary-alt);
-  --bases-cards-group-padding: 6px 4px 14px;
-  --bases-cards-line-height: 1.35;
+  --bases-cards-background: var(--vc-bases-card-face);
+  --bases-cards-cover-background: var(--vc-bases-card-cover);
+  --bases-cards-group-padding: 8px 6px 16px;
   --bases-cards-border-width: 1px;
   --bases-cards-shadow: none;
   --bases-cards-shadow-hover: none;
 
+  /* Keep table dimensions native. These variables are cosmetic only. */
   --bases-table-container-border-width: 1px;
   --bases-table-container-border-radius: 0;
   --bases-table-header-weight: 750;
@@ -55,7 +58,6 @@
   --bases-table-column-border-width: 1px;
   --bases-table-row-border-width: 1px;
   --bases-table-row-background-hover: var(--background-modifier-hover);
-  --bases-table-row-height: 1.9rem;
   --bases-table-text-size: var(--font-ui-smaller);
 }
 
@@ -279,38 +281,59 @@
 }
 
 /* -------------------------------------------------------------------------- */
-/* Cards: quiet content surface, tactile radius, stationary hover             */
+/* Cards: raised tactile tiles, stationary hover                              */
 /* -------------------------------------------------------------------------- */
 
 .bases-cards-group {
-  gap: 0.65rem;
-  padding: var(--bases-cards-group-padding, 6px 4px 14px);
+  gap: 0.72rem;
+  padding: var(--bases-cards-group-padding, 8px 6px 16px);
 }
 
 .bases-cards-item {
+  --vc-bases-card-accent: transparent;
+  border: 1px solid var(--vc-bases-control-edge);
+  border-right-color: var(--vc-bases-control-edge-deep);
+  border-bottom-color: var(--vc-bases-control-edge-deep);
   border-radius: var(--vc-bases-control-radius, var(--vc-radius-control, 4px));
+  background: var(--vc-bases-card-face);
   overflow: hidden;
-  box-shadow: none;
-  transition: border-color 100ms ease, background-color 100ms ease;
+  box-shadow:
+    inset 0 1px 0 var(--vc-bases-control-highlight),
+    inset 0 -3px 0 color-mix(in srgb, #000 24%, transparent),
+    inset 3px 0 0 var(--vc-bases-card-accent),
+    0 1px 0 color-mix(in srgb, var(--text-normal) 2%, transparent);
+  transition:
+    background-color 100ms ease,
+    border-color 100ms ease,
+    box-shadow 100ms ease;
 }
 
 .bases-cards-item:hover {
-  border-color: color-mix(in srgb, var(--interactive-accent) 42%, var(--background-modifier-border));
-  background: color-mix(in srgb, var(--bases-cards-background, var(--background-secondary)) 96%, var(--text-normal) 2%);
+  border-color: color-mix(in srgb, var(--interactive-accent) 28%, var(--vc-bases-control-edge));
+  border-right-color: var(--vc-bases-control-edge-deep);
+  border-bottom-color: var(--vc-bases-control-edge-deep);
+  background: var(--vc-bases-card-hover);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--text-normal) 10%, transparent),
+    inset 0 -3px 0 color-mix(in srgb, #000 29%, transparent),
+    inset 3px 0 0 var(--vc-bases-card-accent),
+    0 2px 3px color-mix(in srgb, #000 18%, transparent);
 }
 
 .bases-cards-cover {
+  border-bottom: 1px solid color-mix(in srgb, var(--vc-bases-control-edge) 82%, transparent);
   background: var(--bases-cards-cover-background);
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--text-normal) 3%, transparent);
 }
 
 .bases-cards-property {
-  padding-inline: 0.6rem;
+  padding-inline: 0.68rem;
 }
 
 .bases-cards-property.mod-title {
-  padding-top: 0.55rem;
+  padding-top: 0.62rem;
   font-size: 0.98em;
-  font-weight: 750;
+  font-weight: 800;
   line-height: 1.2;
 }
 
@@ -327,7 +350,10 @@
   text-transform: uppercase;
 }
 
-/* Tables are comparison/editing surfaces, so they stay dense and square. */
+/* -------------------------------------------------------------------------- */
+/* Tables: style the surface, never the virtualized row geometry              */
+/* -------------------------------------------------------------------------- */
+
 .bases-view[data-view-type="table"] .bases-table {
   border: var(--bases-table-container-border-width, 1px) solid var(--bases-table-border-color, var(--background-modifier-border));
   border-radius: 0;
@@ -339,23 +365,12 @@
   background: var(--bases-table-header-background, var(--background-secondary));
 }
 
-.bases-view[data-view-type="table"] .bases-th,
-.bases-view[data-view-type="table"] .bases-td {
-  min-height: var(--bases-table-row-height, 1.9rem);
-  box-shadow: inset -1px -1px 0 var(--bases-table-border-color, var(--background-modifier-border));
-}
-
 .bases-view[data-view-type="table"] .bases-th .bases-table-cell {
   color: var(--bases-table-header-color, var(--text-muted));
   font-size: 0.72em;
   font-weight: var(--bases-table-header-weight, 750);
   letter-spacing: 0.055em;
   text-transform: uppercase;
-}
-
-.bases-view[data-view-type="table"] .bases-td .bases-table-cell {
-  padding-block: 0.24rem;
-  font-size: var(--bases-table-text-size, 0.87em);
 }
 
 .bases-view[data-view-type="table"] .bases-tr:hover .bases-td {
