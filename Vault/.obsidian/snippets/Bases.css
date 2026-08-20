@@ -176,17 +176,30 @@
 }
 
 /*
- * Current toolbar items commonly wrap a .text-icon-button or .clickable-icon.
- * The wrapper owns the tactile face, so nested controls stay visually bare and
- * keep the label, icon, and chevron aligned as one control.
+ * Current toolbar items commonly wrap the real clickable control. When they
+ * do, the child owns all interior padding so the visible face and the actual
+ * pointer/touch target are the same size. Directly-clickable toolbar items keep
+ * the padding from the shared rule above.
  */
+.bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+):has(> :is(.text-icon-button, .clickable-icon, button, .dropdown)) {
+  padding: 0;
+}
+
 .bases-header :is(.bases-toolbar-item:not(.bases-toolbar-result-count), .query-toolbar-item)
   > :is(.text-icon-button, .clickable-icon, button, .dropdown),
 .bases-header .query-toolbar-item :is(.clickable-icon, button, .dropdown) {
+  width: 100%;
   min-width: 0;
-  min-height: 0;
+  min-height: 38px;
   margin: 0;
-  padding: 0;
+  padding: 0 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -461,6 +474,19 @@
   min-height: 44px;
   padding-inline: 13px;
   flex-shrink: 0;
+}
+
+.is-mobile .bases-header :is(
+  .bases-toolbar-item:not(.bases-toolbar-result-count),
+  .query-toolbar-item
+):has(> :is(.text-icon-button, .clickable-icon, button, .dropdown)) {
+  padding-inline: 0;
+}
+
+.is-mobile .bases-header :is(.bases-toolbar-item:not(.bases-toolbar-result-count), .query-toolbar-item)
+  > :is(.text-icon-button, .clickable-icon, button, .dropdown) {
+  min-height: 44px;
+  padding-inline: 13px;
 }
 
 .is-mobile .bases-header .bases-toolbar-views-menu,
