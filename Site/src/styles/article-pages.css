@@ -214,8 +214,8 @@
     margin-top: 0;
   }
 
-  body:not(:has(.home-gateway)) .codex-sidebar-meta::before {
-    content: 'Reference';
+  body:not(:has(.home-gateway)) .codex-sidebar-body > .codex-sidebar-meta::before {
+    content: attr(data-reference-label);
     display: block;
     margin: 0 -.35rem .35rem;
     padding: .24rem .35rem;

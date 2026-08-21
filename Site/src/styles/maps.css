@@ -207,7 +207,7 @@
   padding: .7rem .8rem;
   background: transparent;
   color: var(--sl-color-white);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 

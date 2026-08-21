@@ -1,27 +1,14 @@
 ---
-const { starlightRoute } = Astro.locals;
+const { starlightRoute, t } = Astro.locals;
+const locale = starlightRoute.lang;
 const references = Array.isArray(starlightRoute.entry.data.referencedIn)
   ? starlightRoute.entry.data.referencedIn
   : [];
 
 const typeLabels = new Map([
-  ['article', 'Articles'],
-  ['calendar', 'Calendars'],
-  ['character', 'Characters'],
-  ['event', 'Events'],
-  ['faction', 'Factions'],
-  ['fauna', 'Fauna'],
-  ['flora', 'Flora'],
-  ['fungi', 'Fungi'],
-  ['image', 'Images'],
-  ['item', 'Items'],
-  ['location', 'Locations'],
-  ['map', 'Maps'],
-  ['organisation', 'Organisations'],
-  ['organization', 'Organisations'],
-  ['person', 'People'],
-  ['species', 'Species'],
-  ['timeline', 'Timelines'],
+  ...['article', 'calendar', 'character', 'event', 'faction', 'fauna', 'flora', 'fungi', 'image', 'item', 'location', 'map', 'organisation', 'person', 'species', 'timeline']
+    .map((type) => [type, t(`viscerium.references.type.${type}`)]),
+  ['organization', t('viscerium.references.type.organisation')],
 ]);
 
 function groupLabel(type) {
@@ -42,18 +29,18 @@ for (const reference of references) {
 const groups = [...groupMap.entries()]
   .map(([label, entries]) => ({
     label,
-    entries: [...entries].sort((left, right) => left.title.localeCompare(right.title)),
+    entries: [...entries].sort((left, right) => left.title.localeCompare(right.title, locale)),
   }))
-  .sort((left, right) => left.label.localeCompare(right.label));
+  .sort((left, right) => left.label.localeCompare(right.label, locale));
 ---
 
 {references.length > 0 && (
   <section class="codex-referenced-in not-content" aria-labelledby="codex-referenced-in-title">
-    <span class="codex-referenced-in-bracket-label" aria-hidden="true">Index</span>
+    <span class="codex-referenced-in-bracket-label" aria-hidden="true">{t('viscerium.references.index')}</span>
     <div class="codex-referenced-in-inner">
       <header class="codex-referenced-in-heading">
-        <h2 id="codex-referenced-in-title">Referenced in</h2>
-        <span>{references.length} {references.length === 1 ? 'record' : 'records'}</span>
+        <h2 id="codex-referenced-in-title">{t('viscerium.references.title')}</h2>
+        <span>{t('viscerium.references.records', { count: references.length })}</span>
       </header>
 
       <div class="codex-referenced-in-groups">

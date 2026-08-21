@@ -73,7 +73,7 @@ test('Referenced in is placed before contributors and uses the marginal index tr
 
   assert.ok(footer.indexOf('<ReferencedIn />') < footer.indexOf('<ContributorStrip />'));
   assert.match(component, /codex-referenced-in-bracket-label/);
-  assert.match(component, />Index</);
+  assert.match(component, /t\('viscerium\.references\.index'\)/);
   assert.match(component, /codex-referenced-in-groups/);
   assert.match(component, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(schema, /referencedIn: z\.array\(referencedInSchema\)\.optional\(\)/);

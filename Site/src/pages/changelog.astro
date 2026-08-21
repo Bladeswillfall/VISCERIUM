@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { DEFAULT_LOCALE } from '../../site.config.mjs';
 
 function readDate(value) {
   if (!value) return null;
@@ -39,7 +40,7 @@ const entries = (await getCollection('docs', ({ data }) => (
   .sort((a, b) => b.date.valueOf() - a.date.valueOf() || a.entry.data.title.localeCompare(b.entry.data.title))
   .slice(0, 30);
 
-const formatter = new Intl.DateTimeFormat('en-GB', {
+const formatter = new Intl.DateTimeFormat(Astro.currentLocale ?? DEFAULT_LOCALE, {
   day: 'numeric',
   month: 'long',
   year: 'numeric',

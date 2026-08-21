@@ -97,7 +97,8 @@ test('desktop sidebar toggle lives in the sticky header while the sidebar runtim
   assert.match(header, /data-codex-sidebar-toggle/);
   assert.match(header, /aria-controls="starlight__sidebar"/);
   assert.match(header, /aria-expanded="false"/);
-  assert.match(header, /aria-label="Show sidebar"/);
+  assert.match(header, /data-sidebar-show=\{t\('viscerium\.sidebar\.show'\)\}/);
+  assert.match(header, /data-sidebar-hide=\{t\('viscerium\.sidebar\.hide'\)\}/);
   assert.doesNotMatch(footer, /<button[\s\S]*?data-codex-sidebar-toggle/);
   assert.match(shell, /document\.querySelector\('\[data-codex-sidebar-toggle\]'\)/);
   assert.match(headerControls, /\.codex-header \.codex-sidebar-toggle\s*\{[\s\S]*?position:\s*static/);
@@ -111,6 +112,7 @@ test('desktop sidebar toggle lives in the sticky header while the sidebar runtim
   assert.match(shell, /document\.addEventListener\('astro:page-load', \(\) => runtime\.sync\(true\)\)/);
   assert.match(shell, /desktopQuery\.addEventListener\('change', \(\) => runtime\.sync\(true\)\)/);
   assert.match(shell, /setCollapsed\(button, resetCollapsed \|\| root\.classList\.contains\('codex-sidebar-collapsed'\)\)/);
+  assert.match(shell, /collapsed \? button\.dataset\.sidebarShow : button\.dataset\.sidebarHide/);
   assert.match(shell, /runtime\.sync\(true\)/);
   assert.match(shell, /button\.dataset\.codexSidebarBound === 'true'/);
   assert.doesNotMatch(shell, /viscerium-sidebar-collapsed/);

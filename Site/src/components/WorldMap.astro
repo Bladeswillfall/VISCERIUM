@@ -1,39 +1,60 @@
 ---
 import '../styles/maps.css';
 import '../styles/exploration-pages.css';
+import { DEFAULT_LOCALE } from '../../site.config.mjs';
 
 const { map } = Astro.props;
-const payload = JSON.stringify(map ?? {}).replace(/</g, '\\u003c');
+const { t } = Astro.locals;
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+const messages = {
+  layers: t('viscerium.map.layers'),
+  all: t('viscerium.map.all'),
+  untitledLocation: t('viscerium.map.untitledLocation'),
+  openNested: t('viscerium.map.openNested'),
+  openArticle: t('viscerium.common.openArticle'),
+  imageLabel: t('viscerium.map.imageLabel'),
+  markerLabel: t('viscerium.map.markerLabel'),
+  noMatches: t('viscerium.map.noMatches'),
+  untitledMarker: t('viscerium.map.untitledMarker'),
+};
+const payload = JSON.stringify({ ...(map ?? {}), _locale: locale, _messages: messages }).replace(/</g, '\\u003c');
 const positionedMarkers = map?.markers?.filter((marker) => Number.isFinite(marker.x) && Number.isFinite(marker.y)) ?? [];
 const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-').toLowerCase()}`;
 ---
 
 {map ? (
-  <section class="atlas" data-atlas>
+  <section
+    class="atlas"
+    data-atlas
+    data-focus-enter-label={t('viscerium.common.enterFocusMode')}
+    data-focus-exit-label={t('viscerium.common.exitFocusMode')}
+    data-focus-enter-text={t('viscerium.common.focus')}
+    data-focus-exit-text={t('viscerium.common.exit')}
+  >
     <header class="atlas__header">
       <div>
-        <p class="atlas__eyebrow">VISCERIUM Atlas</p>
+        <p class="atlas__eyebrow">{t('viscerium.map.atlas')}</p>
         <h1>{map.title}</h1>
         {map.description && <p>{map.description}</p>}
       </div>
-      {map.page && <a class="atlas__article-link" href={map.page}>Read map notes</a>}
+      {map.page && <a class="atlas__article-link" href={map.page} data-mobile-label={t('viscerium.map.notes')}>{t('viscerium.map.readNotes')}</a>}
     </header>
 
     {map.image ? (
       <>
-        <div class="atlas__toolbar" aria-label="Atlas controls">
+        <div class="atlas__toolbar" aria-label={t('viscerium.map.controls')}>
           <div class="atlas-search" data-atlas-search-shell>
-            <label for={`${atlasId}-search`}>Find a place</label>
+            <label for={`${atlasId}-search`}>{t('viscerium.map.findPlace')}</label>
             <input
               id={`${atlasId}-search`}
               type="search"
-              placeholder="Search markers, regions, factions…"
+              placeholder={t('viscerium.map.searchPlaceholder')}
               autocomplete="off"
               data-atlas-search
             />
             <div class="atlas-search__results" data-atlas-search-results hidden></div>
           </div>
-          <button type="button" class="atlas__reset" data-atlas-reset>Reset view</button>
+          <button type="button" class="atlas__reset" data-atlas-reset>{t('viscerium.map.resetView')}</button>
         </div>
 
         <div class="atlas__frame">
@@ -41,41 +62,41 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
             class="atlas__canvas"
             data-atlas-canvas
             role="application"
-            aria-label={`Interactive map of ${map.title}`}
+            aria-label={t('viscerium.map.interactiveLabel', { title: map.title, interpolation: { escapeValue: false } })}
           ></div>
 
-          <div class="exploration-surface-controls atlas__surface-controls" aria-label="Mobile Atlas controls">
+          <div class="exploration-surface-controls atlas__surface-controls" aria-label={t('viscerium.map.mobileControls')}>
             <button
               type="button"
               class="exploration-control"
               popovertarget={`${atlasId}-mobile-search`}
-              aria-label="Search map"
+              aria-label={t('viscerium.map.searchLabel')}
             >
               <span aria-hidden="true">⌕</span>
-              <span>Search</span>
+              <span>{t('viscerium.common.search')}</span>
             </button>
-            <button type="button" class="exploration-control" data-atlas-reset aria-label="Reset map view">
+            <button type="button" class="exploration-control" data-atlas-reset aria-label={t('viscerium.map.resetLabel')}>
               <span aria-hidden="true">↺</span>
-              <span>Reset</span>
+              <span>{t('viscerium.common.reset')}</span>
             </button>
-            <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label="Enter focus mode">
+            <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label={t('viscerium.common.enterFocusMode')}>
               <span aria-hidden="true">⛶</span>
-              <span data-exploration-focus-label>Focus</span>
+              <span data-exploration-focus-label>{t('viscerium.common.focus')}</span>
             </button>
           </div>
         </div>
 
         <div id={`${atlasId}-mobile-search`} class="exploration-popover atlas__mobile-search" popover>
           <div class="exploration-popover__header">
-            <strong>Find a place</strong>
-            <button type="button" class="exploration-popover__close" popovertarget={`${atlasId}-mobile-search`} popovertargetaction="hide" aria-label="Close search">×</button>
+            <strong>{t('viscerium.map.findPlace')}</strong>
+            <button type="button" class="exploration-popover__close" popovertarget={`${atlasId}-mobile-search`} popovertargetaction="hide" aria-label={t('viscerium.common.closeSearch')}>×</button>
           </div>
           <div class="atlas-search" data-atlas-search-shell>
-            <label for={`${atlasId}-mobile-search-input`}>Search map</label>
+            <label for={`${atlasId}-mobile-search-input`}>{t('viscerium.map.searchLabel')}</label>
             <input
               id={`${atlasId}-mobile-search-input`}
               type="search"
-              placeholder="Search markers, regions, factions…"
+              placeholder={t('viscerium.map.searchPlaceholder')}
               autocomplete="off"
               data-atlas-search
             />
@@ -83,11 +104,11 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
           </div>
         </div>
 
-        <dialog class="exploration-sheet atlas__inspector" data-atlas-inspector aria-label="Map location details">
+        <dialog class="exploration-sheet atlas__inspector" data-atlas-inspector aria-label={t('viscerium.map.locationDetails')}>
           <div class="exploration-sheet__handle" aria-hidden="true"></div>
           <div class="exploration-sheet__header">
-            <span class="atlas__eyebrow">Map location</span>
-            <button type="button" class="exploration-sheet__close" data-exploration-dialog-close aria-label="Close location details">×</button>
+            <span class="atlas__eyebrow">{t('viscerium.map.location')}</span>
+            <button type="button" class="exploration-sheet__close" data-exploration-dialog-close aria-label={t('viscerium.map.closeDetails')}>×</button>
           </div>
           <div data-atlas-inspector-content></div>
         </dialog>
@@ -95,29 +116,29 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
         <script type="application/json" data-atlas-payload set:html={payload}></script>
       </>
     ) : (
-      <p class="codex-warning">No map image configured yet. Markers are listed below.</p>
+      <p class="codex-warning">{t('viscerium.map.noImage')}</p>
     )}
 
     <details class="atlas__marker-index">
-      <summary>Marker index ({map.markers?.length ?? 0})</summary>
+      <summary>{t('viscerium.map.markerIndex', { count: map.markers?.length ?? 0 })}</summary>
       {map.markers?.length ? (
         <ul>
           {map.markers.map((marker) => (
             <li>
               <a href={marker.page}>{marker.title}</a>
               {marker.description ? <> — {marker.description}</> : null}
-              {!Number.isFinite(marker.x) || !Number.isFinite(marker.y) ? <span> (not positioned)</span> : null}
+              {!Number.isFinite(marker.x) || !Number.isFinite(marker.y) ? <span> {t('viscerium.map.notPositioned')}</span> : null}
             </li>
           ))}
         </ul>
-      ) : <p>No markers have been placed on this map yet.</p>}
+      ) : <p>{t('viscerium.map.noMarkers')}</p>}
     </details>
 
     {map.image && positionedMarkers.length === 0 && (
-      <p class="atlas__empty-note">The map is interactive, but no positioned markers have been published yet.</p>
+      <p class="atlas__empty-note">{t('viscerium.map.noPositionedMarkers')}</p>
     )}
   </section>
-) : <p class="codex-warning">Map not found.</p>}
+) : <p class="codex-warning">{t('viscerium.map.notFound')}</p>}
 
 <script>
   import L from 'leaflet';
@@ -179,7 +200,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     return String(value).split(/[/:>]+/).map((part) => part.trim()).filter(Boolean);
   }
 
-  function buildLayerTree(layerGroups) {
+  function buildLayerTree(layerGroups, locale, messages) {
     const root = { children: new Map(), layer: null };
 
     for (const [name, layer] of layerGroups) {
@@ -192,29 +213,29 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       node.layer = layer;
     }
 
-    const convert = (label, node) => {
+    const convert = (label, node, locale, messages) => {
       const children = [...node.children.entries()]
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([childLabel, child]) => convert(childLabel, child));
+        .sort(([a], [b]) => a.localeCompare(b, locale))
+        .map(([childLabel, child]) => convert(childLabel, child, locale, messages));
       if (node.layer && children.length === 0) return { label: prettify(label), layer: node.layer };
-      if (node.layer) children.unshift({ label: 'All', layer: node.layer });
+      if (node.layer) children.unshift({ label: messages.all, layer: node.layer });
       return { label: prettify(label), children };
     };
 
     return {
-      label: 'Layers',
+      label: messages.layers,
       children: [...root.children.entries()]
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([label, node]) => convert(label, node)),
+        .sort(([a], [b]) => a.localeCompare(b, locale))
+        .map(([label, node]) => convert(label, node, locale, messages)),
     };
   }
 
-  function createMarkerDetails(marker) {
+  function createMarkerDetails(marker, messages) {
     const article = document.createElement('article');
     article.className = 'atlas-popup';
 
     const title = document.createElement('h3');
-    title.textContent = marker.title || 'Untitled location';
+    title.textContent = marker.title || messages.untitledLocation;
     article.append(title);
 
     const metadata = [marker.type, marker.region, marker.faction, marker.era]
@@ -237,7 +258,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     if (marker.page) {
       const link = document.createElement('a');
       link.href = marker.page;
-      link.textContent = marker.childMapId ? 'Open nested map →' : 'Open article →';
+      link.textContent = marker.childMapId ? messages.openNested : messages.openArticle;
       article.append(link);
     }
 
@@ -285,6 +306,8 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       root.dataset.atlasReady = 'error';
       return;
     }
+    const locale = data._locale || document.documentElement.lang;
+    const messages = data._messages || {};
 
     const mobileQuery = explorationMobileQuery();
     bindExplorationDialog(inspector);
@@ -309,7 +332,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
 
     L.imageOverlay(data.image, bounds, {
       interactive: false,
-      alt: data.title || 'VISCERIUM map',
+      alt: data.title || messages.imageLabel,
     }).addTo(atlas);
 
     const widthFittedZoom = widthFitZoom(canvas, width, horizontalGutter);
@@ -345,7 +368,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
 
     const openInspector = (marker) => {
       if (!inspector || !inspectorContent) return;
-      inspectorContent.replaceChildren(createMarkerDetails(marker));
+      inspectorContent.replaceChildren(createMarkerDetails(marker, messages));
       showExplorationDialog(inspector);
     };
 
@@ -371,7 +394,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       const leafletMarker = L.marker(latLng, {
         icon,
         title: marker.title || '',
-        alt: marker.title || 'Map marker',
+        alt: marker.title || messages.markerLabel,
         keyboard: true,
       });
       leafletMarker.bindTooltip(marker.title || '', {
@@ -379,7 +402,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
         offset: [0, -10],
         opacity: 0.96,
       });
-      leafletMarker.bindPopup(createMarkerDetails(marker), {
+      leafletMarker.bindPopup(createMarkerDetails(marker, messages), {
         className: 'atlas-leaflet-popup',
         maxWidth: 320,
       });
@@ -393,7 +416,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     }
 
     if (layerGroups.size > 0) {
-      const overlayTree = buildLayerTree(layerGroups);
+      const overlayTree = buildLayerTree(layerGroups, locale, messages);
       const layerOptions = {
         collapsed: mobileQuery.matches,
         position: 'topright',
@@ -478,7 +501,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
         if (!matches.length) {
           const empty = document.createElement('p');
           empty.className = 'atlas-search__empty';
-          empty.textContent = 'No matching markers.';
+          empty.textContent = messages.noMatches;
           searchResults.append(empty);
         } else {
           for (const match of matches) {
@@ -487,7 +510,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
             button.type = 'button';
             button.className = 'atlas-search__result';
             const title = document.createElement('strong');
-            title.textContent = record.marker.title || 'Untitled marker';
+            title.textContent = record.marker.title || messages.untitledMarker;
             const meta = document.createElement('span');
             meta.textContent = [record.marker.type, record.marker.region, record.marker.faction]
               .flatMap((value) => Array.isArray(value) ? value : [value])

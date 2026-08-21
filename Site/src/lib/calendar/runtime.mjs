@@ -28,8 +28,8 @@ export function isRegisteredCalendar(calendarId) {
   return calendars.some((calendar) => calendar.id === calendarId);
 }
 
-export function formatCalendarYear(year) {
-  return new Intl.NumberFormat('en-GB').format(year);
+export function formatCalendarYear(year, locale) {
+  return new Intl.NumberFormat(locale).format(year);
 }
 
 export function isLeapYear(calendar, year) {
@@ -150,7 +150,7 @@ export function fromAbsoluteDay(absoluteDay, calendarId = defaultCalendarId) {
 
 export function formatCalendarDate(input, precision = input.precision ?? 'day', options = {}) {
   const calendar = getCalendar(input.calendar);
-  const year = formatCalendarYear(input.year);
+  const year = formatCalendarYear(input.year, options.locale);
   if (precision === 'year') return year;
   if (input.intercalaryDay) {
     const intercalary = getIntercalaryDay(calendar, input.intercalaryDay, input.year);
@@ -169,7 +169,7 @@ export function formatAbsoluteDay(absoluteDay, calendarId = defaultCalendarId, p
   return formatCalendarDate(fromAbsoluteDay(absoluteDay, calendarId), precision, options);
 }
 
-export function resolveCalendarDate(input) {
+export function resolveCalendarDate(input, options = {}) {
   const calendar = getCalendar(input.calendar);
   const absoluteDay = toAbsoluteDay(input);
   const dayOfYear = getDayOfYear(calendar, input);
@@ -192,19 +192,22 @@ export function resolveCalendarDate(input) {
     intercalaryDay,
     anchor,
     href: `/calendar/${calendar.id}/#${anchor}`,
-    label: formatCalendarDate(input, precision, { includeWeekday: precision === 'day' }),
-    shortLabel: formatCalendarDate(input, precision),
+    label: formatCalendarDate(input, precision, { ...options, includeWeekday: precision === 'day' }),
+    shortLabel: formatCalendarDate(input, precision, options),
   };
 }
 
-export function resolveEquivalentDates(input, calendarIds) {
+export function resolveEquivalentDates(input, calendarIds, options = {}) {
   const absoluteDay = toAbsoluteDay(input);
   const requested = calendarIds?.length ? calendarIds : input.displayCalendars;
   const ids = requested?.length ? requested : [input.calendar];
-  return ids.map((calendarId) => resolveCalendarDate({ ...fromAbsoluteDay(absoluteDay, calendarId), precision: input.precision }));
+  return ids.map((calendarId) => resolveCalendarDate(
+    { ...fromAbsoluteDay(absoluteDay, calendarId), precision: input.precision },
+    options,
+  ));
 }
 
-export function getCalendarYearDates(calendarId, year) {
+export function getCalendarYearDates(calendarId, year, options = {}) {
   const calendar = getCalendar(calendarId);
   const dates = [];
   for (const month of calendar.months) {
@@ -213,5 +216,5 @@ export function getCalendarYearDates(calendarId, year) {
   for (const day of calendar.intercalaryDays) {
     if (!day.leapOnly || isLeapYear(calendar, year)) dates.push({ calendar: calendar.id, year, intercalaryDay: day.slug });
   }
-  return dates.map(resolveCalendarDate);
+  return dates.map((date) => resolveCalendarDate(date, options));
 }

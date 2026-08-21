@@ -3,6 +3,16 @@ import assert from 'node:assert/strict';
 import { createChronosTimelineModel } from '../src/lib/timeline/chronos-adapter.mjs';
 import { syntheticDateToAbsoluteDay } from '../src/lib/timeline/core.mjs';
 
+const i18n = {
+  locale: 'en-GB',
+  messages: {
+    chronology: 'Chronology',
+    otherGroup: 'Other / unassigned',
+    untitledEvent: 'Untitled event',
+    zoomEra: '{era}: use the era control to zoom',
+  },
+};
+
 function fixture() {
   const events = [
     {
@@ -71,6 +81,7 @@ test('serializes canonical records through native Chronos syntax and parsing', (
   const dataset = fixture();
   const model = createChronosTimelineModel({
     dataset,
+    ...i18n,
     formatEventDate: (event) => `day ${event.absoluteStartDay}`,
   });
 
@@ -117,6 +128,7 @@ test('lets Chronos create native groups from declared lanes without changing chr
   const dataset = fixture();
   const model = createChronosTimelineModel({
     dataset,
+    ...i18n,
     laneMode: 'lane',
     formatEventDate: (event) => String(event.absoluteStartDay),
     visibleStartDay: 5,
@@ -137,12 +149,13 @@ test('sanitizes parser delimiters while retaining canonical metadata', () => {
   dataset.events[0].description = '<unsafe> | detail';
   const model = createChronosTimelineModel({
     dataset,
+    ...i18n,
     formatEventDate: (event) => String(event.absoluteStartDay),
   });
   const item = model.items.find((entry) => entry.id === 'event-a');
 
-  assert.match(model.source, /First — event/);
-  assert.match(model.source, /&lt;unsafe&gt; — detail/);
+  assert.match(model.source, /First – event/);
+  assert.match(model.source, /&lt;unsafe&gt; – detail/);
   assert.equal(item.data, dataset.events[0]);
   assert.equal(item.cLink, '/first/');
 });
@@ -163,6 +176,7 @@ test('maps distant VISCERIUM dates into Chronos four-digit parser years', () => 
 
   const model = createChronosTimelineModel({
     dataset,
+    ...i18n,
     formatEventDate: (event) => String(event.absoluteStartDay),
   });
 

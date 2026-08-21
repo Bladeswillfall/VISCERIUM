@@ -11,6 +11,7 @@ interface Props {
 }
 
 const { sublist, depth = 0 } = Astro.props;
+const { t } = Astro.locals;
 ---
 
 <ul class:list={['sidebar-list', { 'top-level': depth === 0 }]} data-sidebar-depth={depth}>
@@ -54,8 +55,8 @@ const { sublist, depth = 0 } = Astro.props;
           <div
             class="empty-group"
             aria-disabled="true"
-            aria-label={`${label}, no published entries`}
-            title="No published entries yet"
+            aria-label={t('viscerium.sidebar.emptyLabel', { label, interpolation: { escapeValue: false } })}
+            title={t('viscerium.sidebar.emptyTitle')}
           >
             <span class="group-label">
               {icon && <LocalIcon name={icon} />}

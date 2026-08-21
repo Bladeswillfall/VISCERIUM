@@ -5,13 +5,14 @@ function normaliseVisibleText(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
 }
 
-function formatEventDate(event, calendarId) {
-  const start = formatAbsoluteDay(event.absoluteStartDay, calendarId, event.precision);
+function formatEventDate(event, calendarId, locale) {
+  const start = formatAbsoluteDay(event.absoluteStartDay, calendarId, event.precision, { locale });
   if (event.absoluteEndDay === undefined) return start;
-  return `${start} — ${formatAbsoluteDay(
+  return `${start} – ${formatAbsoluteDay(
     event.absoluteEndDay,
     calendarId,
     event.endPrecision ?? event.precision,
+    { locale },
   )}`;
 }
 
@@ -22,7 +23,7 @@ function formatEventDate(event, calendarId) {
  * owns only the single hover presentation so browser title bubbles and the
  * native vis tooltip cannot appear alongside it.
  */
-export function installTimelineHovercard(root, dataset) {
+export function installTimelineHovercard(root, dataset, options = {}) {
   const events = dataset?.events ?? [];
   const eventById = new Map(events.map((event) => [event.id, event]));
   const eventByTitle = new Map(events.map((event) => [event.title, event]));
@@ -118,7 +119,7 @@ export function installTimelineHovercard(root, dataset) {
     stripNativeTitle(item);
 
     const calendarId = calendarSelect?.value ?? dataset.defaultCalendar;
-    dateElement.textContent = formatEventDate(event, calendarId);
+    dateElement.textContent = formatEventDate(event, calendarId, options.locale);
     titleElement.textContent = event.title;
     descriptionElement.textContent = event.description;
     tooltip.dataset.vcEventId = event.id;

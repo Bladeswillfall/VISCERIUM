@@ -20,6 +20,6 @@ test('article editorial details retain approved visual treatments', () => {
   assert.match(editorial, /\.sl-markdown-content h3[\s\S]*?margin-block:\s*1\.9rem 0/);
   assert.match(editorial, /\.sl-markdown-content h4[\s\S]*?margin-block:\s*1\.45rem 0/);
 
-  assert.match(editorial, /\.codex-sidebar-meta::before[\s\S]*?linear-gradient\(90deg, color-mix\(in oklch, var\(--sl-color-accent-high\) 6%, transparent\), transparent 78%\)/);
+  assert.match(editorial, /\.codex-sidebar-body > \.codex-sidebar-meta::before[\s\S]*?linear-gradient\(90deg, color-mix\(in oklch, var\(--sl-color-accent-high\) 6%, transparent\), transparent 78%\)/);
   assert.match(editorial, /#starlight__on-this-page[\s\S]*?linear-gradient\(90deg, color-mix\(in oklch, var\(--sl-color-accent-high\) 6%, transparent\), transparent 78%\)/);
 });

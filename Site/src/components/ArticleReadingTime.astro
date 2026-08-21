@@ -4,6 +4,7 @@ import { normalisePageSlug } from '../lib/page-kind.mjs';
 import { estimateReadingTime, isReadingTimeArticle } from '../lib/reading-time.mjs';
 
 const { starlightRoute } = Astro.locals;
+const { t } = Astro.locals;
 const entry = starlightRoute.entry.data;
 const fallbackId = starlightRoute.entry.id;
 const targetSlug = normalisePageSlug(entry.slug ?? fallbackId);
@@ -19,9 +20,9 @@ const readingTime = isReadingTimeArticle(entry, fallbackId) && sourceEntry?.body
   <p
     class="codex-reading-time"
     data-reading-time
-    aria-label={`Reading time: ${readingTime.minutes} minute${readingTime.minutes === 1 ? '' : 's'}`}
+    aria-label={t('viscerium.article.readingTimeLabel', { count: readingTime.minutes })}
   >
-    {readingTime.minutes} min read
+    {t('viscerium.article.readingTime', { count: readingTime.minutes })}
   </p>
 )}
 

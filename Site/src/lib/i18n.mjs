@@ -1,34 +1,13 @@
-export const DEFAULT_LOCALE = 'en-GB';
+import { DEFAULT_LOCALE } from '../../site.config.mjs';
 
-const dictionaries = Object.freeze({
-  'en-GB': Object.freeze({
-    search: 'Search',
-    timeline: 'Timeline',
-    map: 'Map',
-    related: 'Related',
-    previous: 'Previous',
-    next: 'Next',
-  }),
-});
+export { DEFAULT_LOCALE };
 
-export function normaliseLocale(locale = DEFAULT_LOCALE) {
-  const requested = String(locale || '').trim();
-  return Object.hasOwn(dictionaries, requested) ? requested : DEFAULT_LOCALE;
-}
-
-export function uiText(key, locale = DEFAULT_LOCALE) {
-  const resolvedLocale = normaliseLocale(locale);
-  const value = dictionaries[resolvedLocale][key];
-
-  if (typeof value !== 'string') {
-    throw new Error(`Unknown VISCERIUM UI string: ${key}`);
-  }
-
-  return value;
+function localeOrDefault(locale) {
+  return String(locale ?? '').trim() || DEFAULT_LOCALE;
 }
 
 export function formatNumber(value, locale = DEFAULT_LOCALE, options = undefined) {
-  return new Intl.NumberFormat(normaliseLocale(locale), options).format(value);
+  return new Intl.NumberFormat(localeOrDefault(locale), options).format(value);
 }
 
 export function formatDate(value, locale = DEFAULT_LOCALE, options = undefined) {
@@ -40,5 +19,9 @@ export function formatDate(value, locale = DEFAULT_LOCALE, options = undefined) 
     ? { ...options, timeZone: 'UTC' }
     : options;
 
-  return new Intl.DateTimeFormat(normaliseLocale(locale), resolvedOptions).format(date);
+  return new Intl.DateTimeFormat(localeOrDefault(locale), resolvedOptions).format(date);
+}
+
+export function formatList(values, locale = DEFAULT_LOCALE, options = undefined) {
+  return new Intl.ListFormat(localeOrDefault(locale), options).format(values);
 }

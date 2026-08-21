@@ -31,7 +31,7 @@ ${published}    <updated>${entry.updated.toISOString()}</updated>
     .join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="${escapeXml(siteConfig.feeds?.language ?? siteConfig.i18n.defaultLocale)}">
   <title>${escapeXml(siteConfig.feeds?.title ?? siteConfig.title)}</title>
   <subtitle>${escapeXml(siteConfig.feeds?.description ?? siteConfig.description)}</subtitle>
   <link href="${escapeXml(siteUrl)}" />

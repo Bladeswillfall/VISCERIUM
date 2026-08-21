@@ -21,7 +21,7 @@ test('page headers render title, reading time, breadcrumbs, then calendar date',
 test('reading time stays visually quiet and uses the Codex UI face', () => {
   const readingTime = read('../src/components/ArticleReadingTime.astro');
 
-  assert.match(readingTime, /\{readingTime\.minutes\} min read/);
+  assert.match(readingTime, /t\('viscerium\.article\.readingTime', \{ count: readingTime\.minutes \}\)/);
   assert.match(readingTime, /font-family:\s*var\(--vc-font-ui\)/);
   assert.match(readingTime, /color:\s*var\(--sl-color-gray-4\)/);
   assert.doesNotMatch(readingTime, /<svg|CodexIcon|border:/);

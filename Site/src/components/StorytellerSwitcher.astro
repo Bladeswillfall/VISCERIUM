@@ -1,5 +1,6 @@
 ---
 const { starlightRoute } = Astro.locals;
+const { t } = Astro.locals;
 const eraStyle = starlightRoute.entry.data.eraStyle;
 ---
 
@@ -10,7 +11,7 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
   data-era-style={eraStyle}
   hidden
 >
-  <div class="codex-article-view-tabs" role="tablist" aria-label="Article view">
+  <div class="codex-article-view-tabs" role="tablist" aria-label={t('viscerium.article.articleView')}>
     <button
       id="codex-tab-lore"
       class="codex-article-view-tab"
@@ -20,7 +21,7 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
       tabindex="0"
       data-codex-view-tab="lore"
     >
-      Lore
+      {t('viscerium.article.lore')}
     </button>
     <button
       id="codex-tab-storyteller"
@@ -32,7 +33,7 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
       aria-controls="codex-storyteller-panel"
       data-codex-view-tab="storyteller"
     >
-      Storyteller
+      {t('viscerium.article.storyteller')}
     </button>
   </div>
 
@@ -186,9 +187,10 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
           if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
           event.preventDefault();
           const currentIndex = tabs.indexOf(tab);
+          const rtl = getComputedStyle(root).direction === 'rtl';
           let nextIndex = currentIndex;
-          if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-          if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
+          if (event.key === 'ArrowLeft') nextIndex = (currentIndex + (rtl ? 1 : -1) + tabs.length) % tabs.length;
+          if (event.key === 'ArrowRight') nextIndex = (currentIndex + (rtl ? -1 : 1) + tabs.length) % tabs.length;
           if (event.key === 'Home') nextIndex = 0;
           if (event.key === 'End') nextIndex = tabs.length - 1;
           const next = tabs[nextIndex];

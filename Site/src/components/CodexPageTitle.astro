@@ -10,6 +10,7 @@ import DegelSystemExplorer from './degel-system/DegelSystemExplorer.astro';
 import StorytellerSwitcher from './StorytellerSwitcher.astro';
 
 const { starlightRoute } = Astro.locals;
+const { t } = Astro.locals;
 const entry = starlightRoute.entry.data;
 const isExplorationPage = entry.explorationPage === true;
 
@@ -176,10 +177,10 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
 )}
 {!isExplorationPage && <ArticleReadingTime />}
 {!isExplorationPage && breadcrumbs.length > 0 && (
-  <nav class="codex-breadcrumbs" aria-label="Breadcrumbs">
+  <nav class="codex-breadcrumbs" aria-label={t('viscerium.article.breadcrumbs')}>
     <a href="/" class="codex-breadcrumb-item">
       <CodexIcon spec="home" class="codex-breadcrumb-icon" />
-      <span>Home</span>
+      <span>{t('viscerium.article.home')}</span>
     </a>
     {breadcrumbs.map((crumb) => (
       <>
@@ -200,7 +201,7 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
   </nav>
 )}
 {!isExplorationPage && <ContinuitySwitcher />}
-{!isExplorationPage && entry.calendarDate && <CalendarDateBadge date={entry.calendarDate} title="Event date" />}
+{!isExplorationPage && entry.calendarDate && <CalendarDateBadge date={entry.calendarDate} title={t('viscerium.article.eventDate')} />}
 {!isExplorationPage && <StorytellerSwitcher />}
 {!isExplorationPage && isDegelSystemIndex && <DegelSystemExplorer />}
 

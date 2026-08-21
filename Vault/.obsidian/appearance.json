@@ -3,7 +3,6 @@
   "cssTheme": "Baseline",
   "enabledCssSnippets": [
     "Article widths",
-    "Bases",
     "Callout styling",
     "Checkbox styling",
     "Code block styling",
@@ -30,7 +29,8 @@
     "Tag styling",
     "Paragraph spacing",
     "Blockquote styling",
-    "Autohide properties"
+    "Autohide properties",
+    "Bases"
   ],
   "accentColor": "#b1a98c",
   "showViewHeader": true,

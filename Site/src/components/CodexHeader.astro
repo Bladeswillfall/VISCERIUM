@@ -4,6 +4,8 @@ import SiteTitle from 'virtual:starlight/components/SiteTitle';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import CodexSearch from './CodexSearch.astro';
 import EraContextControls from './EraContextControls.astro';
+
+const { t } = Astro.locals;
 ---
 
 <div class="header codex-header">
@@ -14,7 +16,9 @@ import EraContextControls from './EraContextControls.astro';
       data-codex-sidebar-toggle
       aria-controls="starlight__sidebar"
       aria-expanded="false"
-      aria-label="Show sidebar"
+      aria-label={t('menuButton.accessibleLabel')}
+      data-sidebar-show={t('viscerium.sidebar.show')}
+      data-sidebar-hide={t('viscerium.sidebar.hide')}
     >
       <span aria-hidden="true">☰</span>
     </button>
@@ -32,7 +36,7 @@ import EraContextControls from './EraContextControls.astro';
   -->
   <div class="right-group codex-header-controls print:hidden" data-codex-header-controls>
     <EraContextControls />
-    <div class="codex-theme-control" title="Colour theme">
+    <div class="codex-theme-control" title={t('themeSelect.accessibleLabel')}>
       <ThemeSelect />
     </div>
     <LanguageSelect />

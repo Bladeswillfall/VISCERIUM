@@ -9,8 +9,10 @@ interface Props {
   title?: string;
 }
 
-const { date, calendars, title = 'Calendar date' } = Astro.props as Props;
-const resolvedDates = date ? resolveEquivalentDates(date, calendars) : [];
+const { starlightRoute, t } = Astro.locals;
+const { date, calendars, title = t('viscerium.calendar.date') } = Astro.props as Props;
+const locale = starlightRoute.lang;
+const resolvedDates = date ? resolveEquivalentDates(date, calendars, { locale }) : [];
 ---
 
 {date && resolvedDates.length > 0 && (
@@ -22,7 +24,7 @@ const resolvedDates = date ? resolveEquivalentDates(date, calendars) : [];
           <dt>{resolved.calendar.shortName ?? resolved.calendar.name}</dt>
           <dd>
             <a href={resolved.href}>{resolved.label}</a>
-            <span class={`calendar-season calendar-season--${resolved.season}`}>{resolved.season}</span>
+            <span class={`calendar-season calendar-season--${resolved.season}`}>{t(`viscerium.calendar.season.${resolved.season}`)}</span>
             {resolved.observances.map((observance) => (
               <span class={`calendar-observance calendar-observance--${observance.type}`}>{observance.name}</span>
             ))}

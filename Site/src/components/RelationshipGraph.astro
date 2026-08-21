@@ -1,27 +1,54 @@
 ---
 import '../styles/relationships.css';
 import '../styles/exploration-pages.css';
+import { DEFAULT_LOCALE } from '../../site.config.mjs';
 
 const { graph } = Astro.props;
-const payload = JSON.stringify(graph ?? { nodes: [], edges: [], relationTypes: [] }).replace(/</g, '\\u003c');
+const { t } = Astro.locals;
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+const messages = {
+  selectHint: t('viscerium.relationship.selectHint'),
+  entity: t('viscerium.relationship.entity'),
+  openArticle: t('viscerium.relationship.openArticle'),
+  relationship: t('viscerium.relationship.fallbackTitle'),
+  since: t('viscerium.relationship.since'),
+  until: t('viscerium.relationship.until'),
+  noMatches: t('viscerium.relationship.noMatches'),
+  showList: t('viscerium.relationship.showList'),
+  showGraph: t('viscerium.relationship.showGraph'),
+  list: t('viscerium.common.list'),
+  graph: t('viscerium.common.graph'),
+};
+const payload = JSON.stringify({
+  ...(graph ?? { nodes: [], edges: [], relationTypes: [] }),
+  _locale: locale,
+  _messages: messages,
+}).replace(/</g, '\\u003c');
 const hasGraph = (graph?.nodes?.length ?? 0) > 0 && (graph?.edges?.length ?? 0) > 0;
 const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
 ---
 
-<section class="relationship-explorer" data-relationship-explorer>
+<section
+  class="relationship-explorer"
+  data-relationship-explorer
+  data-focus-enter-label={t('viscerium.common.enterFocusMode')}
+  data-focus-exit-label={t('viscerium.common.exitFocusMode')}
+  data-focus-enter-text={t('viscerium.common.focus')}
+  data-focus-exit-text={t('viscerium.common.exit')}
+>
   {hasGraph ? (
     <>
-      <div class="relationship-explorer__toolbar" aria-label="Relationship graph controls">
+      <div class="relationship-explorer__toolbar" aria-label={t('viscerium.relationship.controls')}>
         <div class="relationship-search" data-relationship-search-shell>
-          <label for="relationship-search">Find an entity</label>
-          <input id="relationship-search" type="search" autocomplete="off" placeholder="Search people, factions, places…" data-relationship-search />
+          <label for="relationship-search">{t('viscerium.relationship.findEntity')}</label>
+          <input id="relationship-search" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} data-relationship-search />
           <div class="relationship-search__results" data-relationship-search-results hidden></div>
         </div>
 
         <label class="relationship-control">
-          <span>Relationship</span>
+          <span>{t('viscerium.relationship.label')}</span>
           <select data-relationship-filter>
-            <option value="">All relationships</option>
+            <option value="">{t('viscerium.relationship.all')}</option>
             {graph.relationTypes?.map((relation) => (
               <option value={relation.id}>{relation.label} ({relation.count})</option>
             ))}
@@ -29,23 +56,23 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
         </label>
 
         <label class="relationship-control">
-          <span>Layout</span>
+          <span>{t('viscerium.relationship.layout')}</span>
           <select data-relationship-layout>
-            <option value="cose">Network</option>
-            <option value="dagre">Hierarchy</option>
+            <option value="cose">{t('viscerium.relationship.network')}</option>
+            <option value="dagre">{t('viscerium.relationship.hierarchy')}</option>
           </select>
         </label>
 
-        <button type="button" class="relationship-explorer__reset" data-relationship-reset>Reset</button>
+        <button type="button" class="relationship-explorer__reset" data-relationship-reset>{t('viscerium.common.reset')}</button>
       </div>
 
       <div class="relationship-explorer__frame">
-        <div class="relationship-explorer__canvas" data-relationship-canvas role="application" aria-label="Interactive VISCERIUM relationship graph"></div>
+        <div class="relationship-explorer__canvas" data-relationship-canvas role="application" aria-label={t('viscerium.relationship.interactiveLabel')}></div>
 
-        <div class="relationship-explorer__list" data-relationship-list hidden aria-label="Relationship list">
+        <div class="relationship-explorer__list" data-relationship-list hidden aria-label={t('viscerium.relationship.listLabel')}>
           <div class="relationship-list__header">
-            <p class="atlas__eyebrow">Structured relationships</p>
-            <p>Browse the same explicit relationship data without navigating the graph canvas.</p>
+            <p class="atlas__eyebrow">{t('viscerium.relationship.structured')}</p>
+            <p>{t('viscerium.relationship.listDescription')}</p>
           </div>
           <ul>
             {(graph.edges ?? []).map((edge) => {
@@ -66,67 +93,67 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
           </ul>
         </div>
 
-        <aside class="relationship-explorer__details" data-relationship-details aria-live="polite">
-          <p class="relationship-explorer__details-hint">Select an entity or relationship to inspect it.</p>
+        <aside class="relationship-explorer__details" data-relationship-details data-label={t('viscerium.common.inspector')} aria-live="polite">
+          <p class="relationship-explorer__details-hint">{t('viscerium.relationship.selectHint')}</p>
         </aside>
 
-        <div class="exploration-surface-controls relationship-explorer__mobile-controls" aria-label="Mobile relationship controls">
-          <button type="button" class="exploration-control" popovertarget="relationship-mobile-search" aria-label="Search relationships">
-            <span aria-hidden="true">⌕</span><span>Search</span>
+        <div class="exploration-surface-controls relationship-explorer__mobile-controls" aria-label={t('viscerium.relationship.mobileControls')}>
+          <button type="button" class="exploration-control" popovertarget="relationship-mobile-search" aria-label={t('viscerium.relationship.searchLabel')}>
+            <span aria-hidden="true">⌕</span><span>{t('viscerium.common.search')}</span>
           </button>
-          <button type="button" class="exploration-control" popovertarget="relationship-mobile-filters" aria-label="Filter relationships">
-            <span aria-hidden="true">☷</span><span>Filters</span>
+          <button type="button" class="exploration-control" popovertarget="relationship-mobile-filters" aria-label={t('viscerium.relationship.filterLabel')}>
+            <span aria-hidden="true">☷</span><span>{t('viscerium.common.filters')}</span>
           </button>
-          <button type="button" class="exploration-control" data-relationship-view-toggle aria-pressed="false" aria-label="Show relationship list">
-            <span aria-hidden="true">≡</span><span data-relationship-view-label>List</span>
+          <button type="button" class="exploration-control" data-relationship-view-toggle aria-pressed="false" aria-label={t('viscerium.relationship.showList')}>
+            <span aria-hidden="true">≡</span><span data-relationship-view-label>{t('viscerium.common.list')}</span>
           </button>
-          <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label="Enter focus mode">
-            <span aria-hidden="true">⛶</span><span data-exploration-focus-label>Focus</span>
+          <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label={t('viscerium.common.enterFocusMode')}>
+            <span aria-hidden="true">⛶</span><span data-exploration-focus-label>{t('viscerium.common.focus')}</span>
           </button>
         </div>
       </div>
 
       <div id="relationship-mobile-search" class="exploration-popover relationship-explorer__mobile-search" popover>
         <div class="exploration-popover__header">
-          <strong>Find an entity</strong>
-          <button type="button" class="exploration-popover__close" popovertarget="relationship-mobile-search" popovertargetaction="hide" aria-label="Close search">×</button>
+          <strong>{t('viscerium.relationship.findEntity')}</strong>
+          <button type="button" class="exploration-popover__close" popovertarget="relationship-mobile-search" popovertargetaction="hide" aria-label={t('viscerium.common.closeSearch')}>×</button>
         </div>
         <div class="relationship-search" data-relationship-search-shell>
-          <label for="relationship-mobile-search-input">Search relationships</label>
-          <input id="relationship-mobile-search-input" type="search" autocomplete="off" placeholder="Search people, factions, places…" data-relationship-search />
+          <label for="relationship-mobile-search-input">{t('viscerium.relationship.searchLabel')}</label>
+          <input id="relationship-mobile-search-input" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} data-relationship-search />
           <div class="relationship-search__results" data-relationship-search-results hidden></div>
         </div>
       </div>
 
       <div id="relationship-mobile-filters" class="exploration-popover relationship-explorer__mobile-filters" popover>
         <div class="exploration-popover__header">
-          <strong>Graph controls</strong>
-          <button type="button" class="exploration-popover__close" popovertarget="relationship-mobile-filters" popovertargetaction="hide" aria-label="Close filters">×</button>
+          <strong>{t('viscerium.relationship.graphControls')}</strong>
+          <button type="button" class="exploration-popover__close" popovertarget="relationship-mobile-filters" popovertargetaction="hide" aria-label={t('viscerium.relationship.closeFilters')}>×</button>
         </div>
         <label class="relationship-control">
-          <span>Relationship</span>
+          <span>{t('viscerium.relationship.label')}</span>
           <select data-relationship-filter>
-            <option value="">All relationships</option>
+            <option value="">{t('viscerium.relationship.all')}</option>
             {graph.relationTypes?.map((relation) => (
               <option value={relation.id}>{relation.label} ({relation.count})</option>
             ))}
           </select>
         </label>
         <label class="relationship-control">
-          <span>Layout</span>
+          <span>{t('viscerium.relationship.layout')}</span>
           <select data-relationship-layout>
-            <option value="cose">Network</option>
-            <option value="dagre">Hierarchy</option>
+            <option value="cose">{t('viscerium.relationship.network')}</option>
+            <option value="dagre">{t('viscerium.relationship.hierarchy')}</option>
           </select>
         </label>
-        <button type="button" class="relationship-explorer__reset" data-relationship-reset>Reset graph</button>
+        <button type="button" class="relationship-explorer__reset" data-relationship-reset>{t('viscerium.relationship.resetGraph')}</button>
       </div>
 
-      <dialog class="exploration-sheet relationship-explorer__mobile-inspector" data-relationship-inspector aria-label="Relationship details">
+      <dialog class="exploration-sheet relationship-explorer__mobile-inspector" data-relationship-inspector aria-label={t('viscerium.relationship.details')}>
         <div class="exploration-sheet__handle" aria-hidden="true"></div>
         <div class="exploration-sheet__header">
-          <span class="atlas__eyebrow">Inspector</span>
-          <button type="button" class="exploration-sheet__close" data-exploration-dialog-close aria-label="Close relationship details">×</button>
+          <span class="atlas__eyebrow">{t('viscerium.common.inspector')}</span>
+          <button type="button" class="exploration-sheet__close" data-exploration-dialog-close aria-label={t('viscerium.relationship.closeDetails')}>×</button>
         </div>
         <div data-relationship-inspector-content></div>
       </dialog>
@@ -135,8 +162,8 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     </>
   ) : (
     <div class="relationship-explorer__empty">
-      <h2>No structured relationships published yet</h2>
-      <p>The explorer only uses explicit <code>relationships:</code> frontmatter, so generic backlinks do not turn this view into graph spaghetti. Add meaningful relationships to published character, faction or location notes and they will appear here automatically.</p>
+      <h2>{t('viscerium.relationship.emptyTitle')}</h2>
+      <p>{t('viscerium.relationship.emptyDescription')}</p>
     </div>
   )}
 </section>
@@ -173,7 +200,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     return resolved;
   }
 
-  function appendMetadata(container, values) {
+  function appendMetadata(container, values, listFormatter) {
     const metadata = values
       .flatMap((value) => Array.isArray(value) ? value : [value])
       .filter(Boolean)
@@ -181,7 +208,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     if (!metadata.length) return;
     const line = document.createElement('p');
     line.className = 'relationship-explorer__details-meta';
-    line.textContent = [...new Set(metadata)].join(' · ');
+    line.textContent = listFormatter.format([...new Set(metadata)]);
     container.append(line);
   }
 
@@ -199,6 +226,13 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     } catch {
       return;
     }
+    const locale = graph._locale || document.documentElement.lang;
+    const messages = graph._messages || {};
+    const listFormatter = new Intl.ListFormat(locale, { style: 'short' });
+    const fillMessage = (template, values) => Object.entries(values).reduce(
+      (message, [key, value]) => message.replaceAll(`{${key}}`, String(value)),
+      template,
+    );
 
     const mobileQuery = explorationMobileQuery();
     const details = root.querySelector('[data-relationship-details]');
@@ -340,9 +374,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       const container = document.createElement('div');
       const data = node.data();
       const title = document.createElement('h2');
-      title.textContent = data.title || data.label || 'Entity';
+      title.textContent = data.title || data.label || messages.entity;
       container.append(title);
-      appendMetadata(container, [data.type, data.era]);
+      appendMetadata(container, [data.type, data.era], listFormatter);
       if (data.description) {
         const description = document.createElement('p');
         description.textContent = data.description;
@@ -351,7 +385,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       if (data.page) {
         const link = document.createElement('a');
         link.href = data.page;
-        link.textContent = 'Open article →';
+        link.textContent = messages.openArticle;
         container.append(link);
       }
       return container;
@@ -361,13 +395,17 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       const container = document.createElement('div');
       const data = edge.data();
       const title = document.createElement('h2');
-      title.textContent = data.label || pretty(data.type) || 'Relationship';
+      title.textContent = data.label || pretty(data.type) || messages.relationship;
       container.append(title);
       const path = document.createElement('p');
       path.className = 'relationship-explorer__details-path';
       path.textContent = `${edge.source().data('title')} ${data.directed ? '→' : '↔'} ${edge.target().data('title')}`;
       container.append(path);
-      appendMetadata(container, [data.era, data.since ? `Since ${data.since}` : '', data.until ? `Until ${data.until}` : '']);
+      appendMetadata(container, [
+        data.era,
+        data.since ? fillMessage(messages.since, { value: data.since }) : '',
+        data.until ? fillMessage(messages.until, { value: data.until }) : '',
+      ], listFormatter);
       if (data.description) {
         const description = document.createElement('p');
         description.textContent = data.description;
@@ -457,9 +495,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       if (list) list.hidden = !listMode;
       root.querySelectorAll('[data-relationship-view-toggle]').forEach((button) => {
         button.setAttribute('aria-pressed', String(listMode));
-        button.setAttribute('aria-label', listMode ? 'Show relationship graph' : 'Show relationship list');
+        button.setAttribute('aria-label', listMode ? messages.showGraph : messages.showList);
         const label = button.querySelector('[data-relationship-view-label]');
-        if (label) label.textContent = listMode ? 'Graph' : 'List';
+        if (label) label.textContent = listMode ? messages.graph : messages.list;
       });
       if (!listMode) requestAnimationFrame(() => {
         cy.resize();
@@ -507,7 +545,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
         if (!matches.length) {
           const empty = document.createElement('p');
           empty.className = 'relationship-search__empty';
-          empty.textContent = 'No matching entities.';
+          empty.textContent = messages.noMatches;
           searchResults.append(empty);
         } else {
           for (const match of matches) {
@@ -553,7 +591,12 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       cy.elements().style('display', 'element').unselect();
       setViewMode('graph');
       runLayout();
-      if (details) details.innerHTML = '<p class="relationship-explorer__details-hint">Select an entity or relationship to inspect it.</p>';
+      if (details) {
+        const hint = document.createElement('p');
+        hint.className = 'relationship-explorer__details-hint';
+        hint.textContent = messages.selectHint;
+        details.replaceChildren(hint);
+      }
       if (inspector?.open) inspector.close();
     };
     root.querySelectorAll('[data-relationship-reset]').forEach((button) => button.addEventListener('click', resetExplorer));

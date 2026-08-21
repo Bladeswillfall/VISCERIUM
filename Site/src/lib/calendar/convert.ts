@@ -8,7 +8,9 @@ import type {
   ResolvedCalendarDate,
 } from './types';
 
-export const formatCalendarYear: (year: number) => string = runtime.formatCalendarYear;
+type CalendarFormatOptions = { includeWeekday?: boolean; locale?: string };
+
+export const formatCalendarYear: (year: number, locale?: string) => string = runtime.formatCalendarYear;
 export const isLeapYear: (calendar: CalendarDefinition, year: number) => boolean = runtime.isLeapYear;
 export const getMonth: (calendar: CalendarDefinition, slug: string) => CalendarMonth = runtime.getMonth;
 export const getIntercalaryDay: (calendar: CalendarDefinition, slug: string, year: number) => CalendarIntercalaryDay = runtime.getIntercalaryDay;
@@ -20,14 +22,14 @@ export const fromAbsoluteDay: (absoluteDay: number, calendarId?: string) => Cale
 export const formatCalendarDate: (
   input: CalendarDateInput,
   precision?: CalendarDatePrecision,
-  options?: { includeWeekday?: boolean },
+  options?: CalendarFormatOptions,
 ) => string = runtime.formatCalendarDate;
 export const formatAbsoluteDay: (
   absoluteDay: number,
   calendarId?: string,
   precision?: CalendarDatePrecision,
-  options?: { includeWeekday?: boolean },
+  options?: CalendarFormatOptions,
 ) => string = runtime.formatAbsoluteDay;
-export const resolveCalendarDate: (input: CalendarDateInput) => ResolvedCalendarDate = runtime.resolveCalendarDate;
-export const resolveEquivalentDates: (input: CalendarDateInput, calendarIds?: string[]) => ResolvedCalendarDate[] = runtime.resolveEquivalentDates;
-export const getCalendarYearDates: (calendarId: string, year: number) => ResolvedCalendarDate[] = runtime.getCalendarYearDates;
+export const resolveCalendarDate: (input: CalendarDateInput, options?: CalendarFormatOptions) => ResolvedCalendarDate = runtime.resolveCalendarDate;
+export const resolveEquivalentDates: (input: CalendarDateInput, calendarIds?: string[], options?: CalendarFormatOptions) => ResolvedCalendarDate[] = runtime.resolveEquivalentDates;
+export const getCalendarYearDates: (calendarId: string, year: number, options?: CalendarFormatOptions) => ResolvedCalendarDate[] = runtime.getCalendarYearDates;

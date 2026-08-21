@@ -1,6 +1,7 @@
 import { attachChronosStyles, parseChronos } from 'chronos-timeline-md';
 import { escapeHtml } from '../codex-paths.mjs';
 import { absoluteDayToSyntheticDate, capTimelineGroups, KNOWN_CATEGORY_TOKENS } from './core.mjs';
+import { timelineMessage } from './i18n.mjs';
 
 const CATEGORY_COLORS = {
   technology: 'cyan',
@@ -29,7 +30,7 @@ const ERA_COLORS = {
 function cleanChronosText(value) {
   const normalized = String(value ?? '')
     .replace(/[\r\n]+/g, ' ')
-    .replace(/\|/g, ' — ')
+    .replace(/\|/g, ' – ')
     .replace(/\s+/g, ' ')
     .trim();
   return escapeHtml(normalized);
@@ -57,9 +58,9 @@ function chronosDate(absoluteDay, syntheticOriginDay) {
   return `${year}-${month}-${day}`;
 }
 
-function buildGroups(events, laneMode) {
+function buildGroups(events, laneMode, messages) {
   if (laneMode === 'unified') {
-    const chronology = { key: 'chronology', label: 'Chronology' };
+    const chronology = { key: 'chronology', label: timelineMessage(messages, 'chronology') };
     return {
       groups: [chronology],
       groupFor: () => chronology,
@@ -73,11 +74,11 @@ function buildGroups(events, laneMode) {
 
   const groups = [...new Set(visible)].map((value) => ({
     key: value,
-    label: value === 'other' ? 'Other / unassigned' : titleCase(value),
+    label: value === 'other' ? timelineMessage(messages, 'otherGroup') : titleCase(value),
   }));
 
   if (!groups.length) {
-    const chronology = { key: 'chronology', label: 'Chronology' };
+    const chronology = { key: 'chronology', label: timelineMessage(messages, 'chronology') };
     return { groups: [chronology], groupFor: () => chronology };
   }
 
@@ -96,7 +97,7 @@ function eventColor(event) {
   };
 }
 
-function eventLine(event, laneMode, groupFor, syntheticOriginDay) {
+function eventLine(event, laneMode, groupFor, syntheticOriginDay, messages) {
   const values = laneMode === 'category' ? event.categories : event.lanes;
   const group = groupFor(values[0] ?? 'other');
   const { color } = eventColor(event);
@@ -104,7 +105,7 @@ function eventLine(event, laneMode, groupFor, syntheticOriginDay) {
   const end = event.absoluteEndDay === undefined ? undefined : chronosDate(event.absoluteEndDay + 1, syntheticOriginDay);
   const prefix = event.kind === 'milestone' ? '*' : '-';
   const range = end ? `${start}~${end}` : start;
-  const title = cleanChronosText(event.title) || 'Untitled event';
+  const title = cleanChronosText(event.title) || cleanChronosText(timelineMessage(messages, 'untitledEvent'));
   const description = cleanChronosText(event.description);
   return {
     line: `${prefix} [${range}] #${color} {${cleanChronosText(group.label).replace(/}/g, '')}} ${title}${description ? ` | ${description}` : ''}`,
@@ -119,7 +120,7 @@ function eraLines(dataset, groups, syntheticOriginDay) {
   })));
 }
 
-function enrichParsedItem(item, metadata, formatEventDate) {
+function enrichParsedItem(item, metadata, formatEventDate, messages) {
   if (metadata.kind === 'era') {
     const { era, group, showLabel } = metadata;
     item.id = `era:${era.id}:${cssToken(group.key)}`;
@@ -127,7 +128,7 @@ function enrichParsedItem(item, metadata, formatEventDate) {
     item.className = [item.className, 'vc-era-band', `era-${cssToken(era.id)}`, cssToken(era.visualToken)]
       .filter(Boolean)
       .join(' ');
-    item.title = `${escapeHtml(era.title)} — use the era control to zoom`;
+    item.title = escapeHtml(timelineMessage(messages, 'zoomEra', { era: era.title }));
     item.data = { eraId: era.id };
     return item;
   }
@@ -137,7 +138,7 @@ function enrichParsedItem(item, metadata, formatEventDate) {
   item.id = event.id;
   item.cDescription = event.description;
   item.cLink = event.href;
-  item.title = `${escapeHtml(formatEventDate(event))} — ${escapeHtml(event.description)}`;
+  item.title = `${escapeHtml(formatEventDate(event))} – ${escapeHtml(event.description)}`;
   item.className = [
     item.className,
     'vc-timeline-item',
@@ -155,6 +156,8 @@ export function createChronosTimelineModel({
   events = dataset?.events ?? [],
   laneMode = 'unified',
   formatEventDate,
+  locale,
+  messages,
   visibleStartDay,
   visibleEndDay,
 }) {
@@ -168,12 +171,12 @@ export function createChronosTimelineModel({
   if (typeof document !== 'undefined') attachChronosStyles(document);
 
   const syntheticOriginDay = dataset.absoluteStartDay;
-  const { groups, groupFor } = buildGroups(events, laneMode);
+  const { groups, groupFor } = buildGroups(events, laneMode, messages);
   const startDay = Number.isSafeInteger(visibleStartDay) ? visibleStartDay : dataset.absoluteStartDay;
   const endDay = Number.isSafeInteger(visibleEndDay) ? visibleEndDay : dataset.absoluteEndDay;
   const records = [
     ...eraLines(dataset, groups, syntheticOriginDay),
-    ...events.map((event) => eventLine(event, laneMode, groupFor, syntheticOriginDay)),
+    ...events.map((event) => eventLine(event, laneMode, groupFor, syntheticOriginDay, messages)),
   ];
   const source = [
     '> NOTODAY',
@@ -184,7 +187,7 @@ export function createChronosTimelineModel({
   ].join('\n');
 
   const parsed = parseChronos(source, {
-    selectedLocale: 'en',
+    selectedLocale: locale,
     roundRanges: true,
   });
 
@@ -192,7 +195,7 @@ export function createChronosTimelineModel({
     throw new Error(`Chronos parsed ${parsed.items.length} items from ${records.length} canonical records.`);
   }
 
-  parsed.items = parsed.items.map((item, index) => enrichParsedItem(item, records[index].metadata, formatEventDate));
+  parsed.items = parsed.items.map((item, index) => enrichParsedItem(item, records[index].metadata, formatEventDate, messages));
   // vis-timeline's fitItems mode deliberately ignores label height whenever a
   // row contains visible items. That is correct for dense resource charts, but
   // it lets background-only VISCERIUM lanes collapse to almost zero height and

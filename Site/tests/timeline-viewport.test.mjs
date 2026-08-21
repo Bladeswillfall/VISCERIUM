@@ -13,7 +13,7 @@ test('the Astro component mounts the local Chronos renderer fork without host pa
   assert.match(renderer, /VisceriumChronosTimeline/);
   assert.match(fork, /orientation: \{ axis: 'bottom', item: 'top' \}/);
   assert.match(fork, /groupHeightMode: 'fitItems'/);
-  assert.match(fork, /rtl: false/);
+  assert.match(renderer, /rtl: options\.direction === 'rtl'/);
   assert.match(fork, /#installCalendarAxis\(\)/);
   assert.match(fork, /this\.axis\.getTicks/);
   assert.match(fork, /timeline\.addCustomTime\(tick\.date, id\)/);
@@ -24,14 +24,14 @@ test('the Astro component mounts the local Chronos renderer fork without host pa
   assert.doesNotMatch(renderer, /ChronosTimeline\.prototype|_handleZoomWorkaround|MutationObserver|ResizeObserver/);
 
   assert.match(app, /mountTimeline\(mount, dataset, options\)/);
-  assert.match(app, /installTimelineHovercard\(mount, dataset\)/);
+  assert.match(app, /installTimelineHovercard\(mount, dataset, options\)/);
   assert.doesNotMatch(app, /prepareTimelineViewportGuard|installAdaptiveTimelineGrid|installTimelineTooltipContentSync|installCalendarYearAxisSync/);
 });
 
 test('unified chronology keeps one canonical Chronos group without host remounting', () => {
   const adapter = read('../src/lib/timeline/chronos-adapter.mjs');
 
-  assert.match(adapter, /if \(laneMode === 'unified'\)[\s\S]*const chronology = \{ key: 'chronology', label: 'Chronology' \}/);
+  assert.match(adapter, /if \(laneMode === 'unified'\)[\s\S]*const chronology = \{ key: 'chronology', label: timelineMessage\(messages, 'chronology'\) \}/);
   assert.match(adapter, /groups: \[chronology\]/);
   assert.match(adapter, /groupFor: \(\) => chronology/);
   assert.match(adapter, /\{\$\{cleanChronosText\(group\.label\)/);

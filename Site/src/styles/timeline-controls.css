@@ -52,15 +52,20 @@
 }
 
 .vc-timeline-toolbar-enhanced .vc-timeline-field-label {
+  min-inline-size: 0;
   color: var(--vc-timeline-ink);
+  overflow-wrap: anywhere;
 }
 
 .vc-timeline-toolbar-enhanced .vc-timeline-field-hint {
+  min-inline-size: 0;
   margin-inline-start: auto;
   color: color-mix(in oklch, var(--vc-timeline-muted) 74%, transparent);
   font-size: .58rem;
   font-weight: 700;
   letter-spacing: .04em;
+  overflow-wrap: anywhere;
+  text-align: end;
 }
 
 .vc-timeline-toolbar-enhanced .vc-timeline-control-icon {
@@ -221,6 +226,20 @@
 
   .vc-timeline-toolbar-enhanced .vc-timeline-action-row .vc-timeline-command {
     flex: 1 1 0;
+    min-inline-size: 0;
+    height: auto;
+    max-height: none;
+    align-self: stretch;
+    white-space: normal;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-row {
+    align-items: stretch;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-command-label {
+    overflow-wrap: anywhere;
+    line-height: 1.2;
   }
 }
 
@@ -415,6 +434,23 @@
 
   .vc-timeline-toolbar-enhanced .vc-timeline-field-hint {
     display: none;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-row {
+    align-items: stretch;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-action-row .vc-timeline-command {
+    min-inline-size: 0;
+    height: auto;
+    max-height: none;
+    align-self: stretch;
+    white-space: normal;
+  }
+
+  .vc-timeline-toolbar-enhanced .vc-timeline-command-label {
+    overflow-wrap: anywhere;
+    line-height: 1.2;
   }
 }
 

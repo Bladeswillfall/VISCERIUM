@@ -3,8 +3,10 @@ import { getCollection } from 'astro:content';
 import { isExternalNavigationReference, resolveFrontmatterReference } from '../lib/frontmatter-reference.mjs';
 import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfContents';
 import TableOfContents from 'virtual:starlight/components/TableOfContents';
+import { formatList } from '../lib/i18n.mjs';
 
-const { starlightRoute } = Astro.locals;
+const { starlightRoute, t } = Astro.locals;
+const locale = starlightRoute.lang;
 const entry = starlightRoute.entry.data;
 const docs = await getCollection('docs');
 
@@ -87,15 +89,20 @@ function navigationValue(value) {
 }
 
 function formatValue(value) {
-  return Array.isArray(value) ? value.join(', ') : String(value).replace(/-/g, ' ');
+  return Array.isArray(value)
+    ? formatList(value.map(String), locale)
+    : String(value).replace(/-/g, ' ');
 }
 
 function imageTextAlternative(base, text) {
-  return [base, text ? `Text shown in image: ${text}` : undefined].filter(Boolean).join(' — ');
+  return [
+    base,
+    text ? t('viscerium.sidebar.imageText', { text, interpolation: { escapeValue: false } }) : undefined,
+  ].filter(Boolean).join('; ');
 }
 
 function externalNotice(isExternal) {
-  return isExternal ? ' (opens in a new tab)' : '';
+  return isExternal ? t('viscerium.common.newTab') : '';
 }
 
 function normaliseSidebarField(field) {
@@ -186,13 +193,13 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
       <div class="lg:sl-hidden">
         <MobileTableOfContents />
       </div>
-      <aside class="right-sidebar-panel codex-page-sidebar sl-hidden lg:sl-block" aria-label="Page sidebar">
+      <aside class="right-sidebar-panel codex-page-sidebar sl-hidden lg:sl-block" aria-label={t('viscerium.sidebar.pageLabel')}>
         <div class="sl-container">
           <section class="codex-sidebar-card" aria-labelledby="codex-sidebar-title">
             {sidebarImage && (
               <div class="codex-sidebar-artwork">
                 {imageDetailHref ? (
-                  <a class="codex-sidebar-image-link" href={imageDetailHref} aria-label={`Open image details for ${artworkTitle ?? entry.title}`}>
+                  <a class="codex-sidebar-image-link" href={imageDetailHref} aria-label={t('viscerium.sidebar.openImage', { title: artworkTitle ?? entry.title, interpolation: { escapeValue: false } })}>
                     <img class="codex-sidebar-image" src={sidebarImage} alt={imageAlt} aria-describedby={imageDescriptionId} loading="lazy" decoding="async" />
                   </a>
                 ) : (
@@ -202,17 +209,17 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
                 {(artworkTitle || artworkArtist) && (
                   <div class="codex-sidebar-art-caption">
                     {artworkTitle && <p class="codex-sidebar-art-title">{artworkTitle}</p>}
-                    {artworkArtist && <p class="codex-sidebar-art-artist">by {artworkArtist}</p>}
+                    {artworkArtist && <p class="codex-sidebar-art-artist">{t('viscerium.sidebar.by', { name: artworkArtist, interpolation: { escapeValue: false } })}</p>}
                   </div>
                 )}
               </div>
             )}
             <div class="codex-sidebar-body">
-              <p class="codex-sidebar-kicker">{entry.type ?? 'Entry'}</p>
+              <p class="codex-sidebar-kicker">{entry.type ?? t('viscerium.sidebar.entry')}</p>
               <h2 id="codex-sidebar-title">{entry.title}</h2>
               {entry.description && <p class="codex-sidebar-description">{entry.description}</p>}
               {sidebarFields.length > 0 && (
-                <dl class="codex-sidebar-meta">
+                <dl class="codex-sidebar-meta" data-reference-label={t('viscerium.sidebar.reference')}>
                   {sidebarFields.map(({ label, value, href }) => {
                     const linkedExternally = href && isExternalNavigationReference(href);
                     const valueHref = !href ? navigationValue(value) : undefined;
@@ -227,7 +234,7 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
                             </a>
                           ) : valueHref ? (
                             <a href={valueHref} target={valueLinkedExternally ? '_blank' : undefined} rel={valueLinkedExternally ? 'noreferrer' : undefined}>
-                              Open {label}{valueLinkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
+                              {t('viscerium.sidebar.openField', { label, interpolation: { escapeValue: false } })}{valueLinkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
                             </a>
                           ) : formatValue(value)}
                         </dd>
@@ -257,7 +264,7 @@ const customSidebarSections = Array.isArray(sidebarConfig.sections)
                                     </a>
                                   ) : valueHref ? (
                                     <a href={valueHref} target={valueLinkedExternally ? '_blank' : undefined} rel={valueLinkedExternally ? 'noreferrer' : undefined}>
-                                      Open {label}{valueLinkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
+                                      {t('viscerium.sidebar.openField', { label, interpolation: { escapeValue: false } })}{valueLinkedExternally && <span class="codex-sr-only">{externalNotice(true)}</span>}
                                     </a>
                                   ) : formatValue(value)}
                                 </dd>

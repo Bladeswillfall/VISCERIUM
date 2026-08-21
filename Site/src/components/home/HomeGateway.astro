@@ -1,4 +1,6 @@
 ---
+import { DEFAULT_LOCALE } from '../../../site.config.mjs';
+
 type Props = {
   canonEntryCount: number;
   mappedEventCount: number;
@@ -6,7 +8,7 @@ type Props = {
 };
 
 const { canonEntryCount, mappedEventCount, unbrokenTimelineCount } = Astro.props;
-const numberFormatter = new Intl.NumberFormat('en-GB');
+const numberFormatter = new Intl.NumberFormat(Astro.currentLocale ?? DEFAULT_LOCALE);
 const formattedCanonEntryCount = numberFormatter.format(canonEntryCount);
 const formattedMappedEventCount = numberFormatter.format(mappedEventCount);
 const formattedTimelineCount = numberFormatter.format(unbrokenTimelineCount);

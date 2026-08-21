@@ -2,6 +2,7 @@
 import { HISTORICAL_ERAS, normaliseEra } from '../lib/era-context.mjs';
 
 const { starlightRoute } = Astro.locals;
+const { t } = Astro.locals;
 const entry = starlightRoute.entry.data;
 const continuity = entry.continuity && typeof entry.continuity === 'object' ? entry.continuity : undefined;
 const editions = continuity?.editions && typeof continuity.editions === 'object' ? continuity.editions : {};
@@ -14,14 +15,14 @@ const showSwitcher = Boolean(continuity?.hub) && eraChoices.some((era) => typeof
 ---
 
 {showSwitcher ? (
-  <nav class="codex-continuity-switcher" aria-label="Era editions" data-pagefind-ignore>
-    <span class="codex-continuity-switcher__label">Era</span>
+  <nav class="codex-continuity-switcher" aria-label={t('viscerium.era.editions')} data-pagefind-ignore>
+    <span class="codex-continuity-switcher__label">{t('viscerium.era.label')}</span>
     <a
       href={continuity.hub}
       class:list={{ 'codex-continuity-chip': true, active: isHub }}
       aria-current={isHub ? 'page' : undefined}
       data-era-exit
-    >All eras</a>
+    >{t('viscerium.era.all')}</a>
     {eraChoices.map((era) => typeof editions[era] === 'string' ? (
       <a
         href={editions[era]}
@@ -29,9 +30,9 @@ const showSwitcher = Boolean(continuity?.hub) && eraChoices.some((era) => typeof
         aria-current={currentEra === era && !isHub ? 'page' : undefined}
       >{era}</a>
     ) : (
-      <span class="codex-continuity-chip unavailable" aria-disabled="true" title={`No published ${era} edition`}>{era}</span>
+      <span class="codex-continuity-chip unavailable" aria-disabled="true" title={t('viscerium.era.unavailable', { era, interpolation: { escapeValue: false } })}>{era}</span>
     ))}
   </nav>
 ) : currentEra === 'Universal' ? (
-  <div class="codex-universal-badge" data-pagefind-ignore>Universal</div>
+  <div class="codex-universal-badge" data-pagefind-ignore>{t('viscerium.era.universal')}</div>
 ) : null}

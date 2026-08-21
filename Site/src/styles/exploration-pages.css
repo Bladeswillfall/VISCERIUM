@@ -58,10 +58,10 @@
 .codex-exploration-page .atlas__frame,
 .codex-exploration-page .relationship-explorer__frame {
   position: relative;
-  left: 50%;
-  width: 100vw;
-  max-width: none;
-  margin-left: -50vw;
+  inset-inline-start: 50%;
+  inline-size: 100vw;
+  max-inline-size: none;
+  margin-inline-start: -50vw;
   border-inline: 0;
   border-radius: 0;
 }
@@ -77,6 +77,7 @@
 /* Shared exploration controls use deliberately small native DOM primitives. */
 .exploration-surface-controls {
   display: none;
+  max-inline-size: calc(100% - 1.3rem);
   align-items: center;
   gap: .35rem;
   padding: .35rem;
@@ -102,10 +103,12 @@
 
 .exploration-control {
   display: grid;
-  min-width: 3.6rem;
+  flex: 1 1 0;
+  min-inline-size: 3.6rem;
   place-items: center;
   gap: .05rem;
   padding: .3rem .4rem;
+  overflow-wrap: anywhere;
 }
 
 .exploration-control > span:first-child {
@@ -297,7 +300,7 @@
 
   .codex-exploration-page .atlas__article-link {
     width: auto;
-    margin-left: auto;
+    margin-inline-start: auto;
     padding: .48rem .65rem;
     white-space: nowrap;
   }
@@ -307,7 +310,7 @@
   }
 
   .codex-exploration-page .atlas__article-link::after {
-    content: 'Notes';
+    content: attr(data-mobile-label);
     font-size: var(--sl-text-xs);
   }
 
@@ -339,15 +342,16 @@
   .exploration-surface-controls {
     position: absolute;
     z-index: 650;
-    right: .65rem;
+    inset-inline-end: .65rem;
     bottom: calc(.65rem + env(safe-area-inset-bottom));
     display: flex;
   }
 
   .atlas__surface-controls {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
+    inset-inline: 0;
+    inline-size: fit-content;
+    margin-inline: auto;
+    transform: none;
   }
 
   .relationship-list__item {
@@ -422,9 +426,9 @@ html[data-exploration-focus] .codex-exploration-page .relationship-explorer__lis
 html[data-exploration-focus] .exploration-surface-controls {
   position: fixed;
   z-index: 900;
-  right: .65rem;
+  inset-inline-end: .65rem;
+  inset-inline-start: auto;
   bottom: calc(.65rem + env(safe-area-inset-bottom));
-  left: auto;
   display: flex;
   transform: none;
 }

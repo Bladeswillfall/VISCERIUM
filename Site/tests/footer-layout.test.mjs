@@ -45,8 +45,8 @@ test('the global footer keeps its 25/50/25 underlay while using one authored way
   assert.match(rail, /<footer class="ion-codex-footer">/);
   assert.match(rail, /<div class="footer-grid">/);
   assert.match(rail, /grid-template-columns:\s*minmax\(0,\s*1fr\) minmax\(0,\s*2fr\) minmax\(0,\s*1fr\)/);
-  assert.match(rail, /<nav class="footer-wayfinder" aria-label="Codex destinations">/);
-  assert.match(rail, /<a class="footer-wayfinder__primary" href="\/">Start Here<\/a>/);
+  assert.match(rail, /<nav class="footer-wayfinder" aria-label=\{t\('viscerium\.footer\.destinationsLabel'\)\}>/);
+  assert.match(rail, /<a class="footer-wayfinder__primary" href="\/">\{t\('viscerium\.footer\.startHere'\)\}<\/a>/);
   assert.match(rail, /\.footer-wayfinder__routes\s*\{[\s\S]*?display:\s*flex[\s\S]*?flex-wrap:\s*wrap/);
   assert.match(rail, /<span class="footer-signature" aria-hidden="true">VISCERIUM<\/span>/);
   assert.doesNotMatch(rail, /footer-links__heading|footer-links__group/);

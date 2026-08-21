@@ -3,7 +3,7 @@ filters:
     - type == "fungi"
     - '!file.inFolder("Templates")'
 formulas:
-  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
+  era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
 properties:
   title:
     displayName: Fungi

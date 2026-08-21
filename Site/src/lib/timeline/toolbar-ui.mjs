@@ -1,3 +1,5 @@
+import { timelineMessage } from './i18n.mjs';
+
 const icons = {
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path>',
   search: '<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>',
@@ -65,7 +67,8 @@ function createActionGroup(label, className, buttons) {
  * state or any control event handlers. Existing controls are decorated and
  * regrouped in place so the renderer remains the single behaviour owner.
  */
-export function installTimelineToolbar(root) {
+export function installTimelineToolbar(root, options = {}) {
+  const message = (key) => timelineMessage(options.messages, key);
   const toolbar = root.querySelector('.vc-timeline-toolbar');
   const actions = toolbar?.querySelector('.vc-timeline-actions');
   const calendar = toolbar?.querySelector('[data-vc-calendar]');
@@ -82,13 +85,13 @@ export function installTimelineToolbar(root) {
   toolbar.classList.add('vc-timeline-toolbar-enhanced');
   toolbar.dataset.vcToolbarEnhanced = 'true';
 
-  decorateField(calendar, 'calendar', 'Calendar', 'Date system');
-  decorateField(search, 'search', 'Search events', 'Filter records');
-  decorateField(grouping, 'grouping', 'Grouping', 'Arrange rows');
-  search.setAttribute('placeholder', 'Search titles, factions, locations…');
-  search.setAttribute('aria-label', 'Search timeline events');
-  calendar.setAttribute('aria-label', 'Choose calendar date system');
-  grouping.setAttribute('aria-label', 'Choose how timeline rows are grouped');
+  decorateField(calendar, 'calendar', message('calendar'), message('dateSystem'));
+  decorateField(search, 'search', message('searchEvents'), message('filterRecords'));
+  decorateField(grouping, 'grouping', message('grouping'), message('arrangeRows'));
+  search.setAttribute('placeholder', message('searchPlaceholder'));
+  search.setAttribute('aria-label', message('searchLabel'));
+  calendar.setAttribute('aria-label', message('chooseCalendar'));
+  grouping.setAttribute('aria-label', message('chooseGrouping'));
 
   const previous = toolbar.querySelector('[data-vc-prev]');
   const next = toolbar.querySelector('[data-vc-next]');
@@ -97,11 +100,11 @@ export function installTimelineToolbar(root) {
   const reset = toolbar.querySelector('[data-vc-reset]');
   const list = toolbar.querySelector('[data-vc-list]');
 
-  decorateButton(previous, 'previous', 'Previous', 'Select the previous matching event');
-  decorateButton(next, 'next', 'Next', 'Select the next matching event');
-  decorateButton(zoomOut, 'zoomOut', 'Zoom out', 'Show a wider date range');
-  decorateButton(zoomIn, 'zoomIn', 'Zoom in', 'Show a narrower date range');
-  decorateButton(reset, 'reset', 'Reset', 'Return to the default date range');
+  decorateButton(previous, 'previous', message('previous'), message('previousLabel'));
+  decorateButton(next, 'next', message('next'), message('nextLabel'));
+  decorateButton(zoomOut, 'zoomOut', message('zoomOut'), message('zoomOutLabel'));
+  decorateButton(zoomIn, 'zoomIn', message('zoomIn'), message('zoomInLabel'));
+  decorateButton(reset, 'reset', message('reset'), message('resetLabel'));
 
   const syncViewButton = () => {
     if (!list) return;
@@ -110,17 +113,17 @@ export function installTimelineToolbar(root) {
     decorateButton(
       list,
       chronicleVisible ? 'graph' : 'chronicle',
-      chronicleVisible ? 'Graph view' : 'Chronicle',
-      chronicleVisible ? 'Return to interactive graph view' : 'Open chronicle reading view',
+      chronicleVisible ? message('graphView') : message('chronicle'),
+      chronicleVisible ? message('returnGraph') : message('openChronicle'),
     );
     list.classList.toggle('is-active-view', chronicleVisible);
   };
   syncViewButton();
 
   actions.replaceChildren(
-    createActionGroup('View', 'is-view', [list]),
-    createActionGroup('Navigate', 'is-navigation', [previous, next]),
-    createActionGroup('Scale', 'is-scale', [zoomOut, zoomIn, reset]),
+    createActionGroup(message('viewGroup'), 'is-view', [list]),
+    createActionGroup(message('navigateGroup'), 'is-navigation', [previous, next]),
+    createActionGroup(message('scaleGroup'), 'is-scale', [zoomOut, zoomIn, reset]),
   );
 
   let viewSyncQueued = false;

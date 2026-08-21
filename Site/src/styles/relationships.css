@@ -111,7 +111,7 @@
   padding: .7rem .8rem;
   background: transparent;
   color: var(--sl-color-white);
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 
@@ -160,7 +160,7 @@
 .relationship-explorer__details {
   overflow: auto;
   max-height: min(76vh, 64rem);
-  border-left: 1px solid var(--codex-border);
+  border-inline-start: 1px solid var(--codex-border);
   padding: 1.15rem;
   background: var(--relationship-inspector);
 }
@@ -174,7 +174,7 @@
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
-  content: 'Inspector';
+  content: attr(data-label);
 }
 
 .relationship-explorer__details h2 {
@@ -206,8 +206,8 @@
 
 .relationship-explorer__details-path {
   margin-block: .8rem;
-  border-left: 2px solid var(--codex-accent);
-  padding-left: .75rem;
+  border-inline-start: 2px solid var(--codex-accent);
+  padding-inline-start: .75rem;
   color: var(--sl-color-white) !important;
   font-family: var(--vc-font-ui);
   font-weight: 650;
@@ -266,7 +266,7 @@ body .sl-markdown-content .relationship-explorer__empty h2::after {
   .relationship-explorer__details {
     max-height: none;
     border-top: 1px solid var(--codex-border);
-    border-left: 0;
+    border-inline-start: 0;
   }
 }
 

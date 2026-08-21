@@ -17,7 +17,7 @@ test('shared article styling uses the approved editorial hierarchy', async () =>
   assert.match(css, /:is\(h3, h4\) \+ p \{[\s\S]*?margin-block-start: 0/);
   assert.match(css, /\.sl-markdown-content h4/);
   assert.match(css, /font-style: italic/);
-  assert.match(css, /content: 'Reference'/);
+  assert.match(css, /content: attr\(data-reference-label\)/);
   assert.match(css, /aria-current='true'/);
 });
 

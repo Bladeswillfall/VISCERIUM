@@ -102,9 +102,12 @@
       const label = node.querySelector('[data-era-context-label]');
       const home = node.querySelector('[data-era-home]');
       const exit = node.querySelector('[data-era-exit-label]');
-      if (label) label.textContent = active ? `${active} mode` : '';
+      const fillEra = (template) => String(template || '').replaceAll('{era}', active || '');
+      if (label) label.textContent = active ? fillEra(node.dataset.eraModeTemplate) : '';
       if (home && active) home.setAttribute('href', `/eras/${active.toLowerCase()}/`);
-      if (exit) exit.textContent = active ? `Exit ${active} · All eras` : 'All eras';
+      if (exit) exit.textContent = active
+        ? fillEra(node.dataset.eraExitTemplate)
+        : node.dataset.eraAll;
     });
     scopeTagLinks(active);
     document.dispatchEvent(new CustomEvent('viscerium:era-context', { detail: { era: active } }));
@@ -214,7 +217,7 @@
   const setCollapsed = (button, collapsed) => {
     root.classList.toggle('codex-sidebar-collapsed', collapsed);
     button.setAttribute('aria-expanded', String(!collapsed));
-    button.setAttribute('aria-label', collapsed ? 'Show sidebar' : 'Hide sidebar');
+    button.setAttribute('aria-label', collapsed ? button.dataset.sidebarShow : button.dataset.sidebarHide);
     const icon = button.querySelector('span');
     if (icon) icon.textContent = collapsed ? '☰' : '←';
   };
@@ -287,13 +290,18 @@ const safeUrl = (value) => {
   }
 };
 
-const actionFor = (mention) => ({
-  'like-of': 'liked this page',
-  'repost-of': 'reposted this page',
-  'bookmark-of': 'bookmarked this page',
-  'in-reply-to': 'replied',
-  'mention-of': 'mentioned this page',
-})[String(mention['wm-property'])] ?? 'responded';
+const actionFor = (mention, actions) => ({
+  'like-of': actions.like,
+  'repost-of': actions.repost,
+  'bookmark-of': actions.bookmark,
+  'in-reply-to': actions.reply,
+  'mention-of': actions.mention,
+})[String(mention['wm-property'])] ?? actions.other;
+
+const fillMessage = (template, values) => Object.entries(values).reduce(
+  (message, [key, value]) => message.replaceAll(`{${key}}`, String(value)),
+  template,
+);
 
 class CodexWebmentions extends HTMLElement {
   async connectedCallback() {
@@ -303,6 +311,10 @@ class CodexWebmentions extends HTMLElement {
     const state = this.querySelector('[data-state]');
     const list = this.querySelector('[data-list]');
     if (!state || !list || !this.dataset.api) return;
+    const messages = JSON.parse(this.dataset.messages || '{}');
+    const locale = document.documentElement.lang;
+    const numberFormatter = new Intl.NumberFormat(locale);
+    const pluralRules = new Intl.PluralRules(locale);
 
     try {
       const canonical = document.querySelector('link[rel="canonical"]')?.href ?? location.href;
@@ -324,30 +336,32 @@ class CodexWebmentions extends HTMLElement {
         .filter((mention) => !mention?.['wm-private'])
         .slice(0, Number(this.dataset.limit) || 24);
 
-      state.textContent = mentions.length
-        ? `${mentions.length} response${mentions.length === 1 ? '' : 's'}`
-        : 'No responses yet.';
+      const responseTemplate = messages.responses?.[pluralRules.select(mentions.length)]
+        ?? messages.responses?.other;
+      state.textContent = mentions.length && responseTemplate
+        ? fillMessage(responseTemplate, { count: numberFormatter.format(mentions.length) })
+        : messages.none;
 
       for (const mention of mentions) {
         const author = mention.author ?? {};
         const article = document.createElement('article');
         const meta = document.createElement('p');
         const authorUrl = safeUrl(author.url);
-        const authorName = author.name || author.url || 'Someone';
+        const authorName = author.name || author.url || messages.someone;
         const authorNode = authorUrl ? document.createElement('a') : document.createElement('strong');
         authorNode.textContent = authorName;
         if (authorUrl && authorNode instanceof HTMLAnchorElement) {
           authorNode.href = authorUrl;
           authorNode.rel = 'nofollow ugc noopener noreferrer';
         }
-        meta.append(authorNode, ` ${actionFor(mention)}`);
+        meta.append(authorNode, ` ${actionFor(mention, messages.actions)}`);
 
         const date = new Date(mention.published || mention['wm-received'] || '');
         if (!Number.isNaN(date.valueOf())) {
           const time = document.createElement('time');
           time.dateTime = date.toISOString();
-          time.textContent = date.toLocaleDateString();
-          meta.append(' on ', time);
+          time.textContent = date.toLocaleDateString(locale);
+          meta.append(` ${messages.on} `, time);
         }
         article.append(meta);
 
@@ -363,13 +377,13 @@ class CodexWebmentions extends HTMLElement {
           const source = document.createElement('a');
           source.href = sourceUrl;
           source.rel = 'nofollow ugc noopener noreferrer';
-          source.textContent = 'View source';
+          source.textContent = messages.viewSource;
           article.append(source);
         }
         list.append(article);
       }
     } catch {
-      state.textContent = 'Responses are unavailable.';
+      state.textContent = messages.unavailable;
     }
   }
 }

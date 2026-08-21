@@ -1,18 +1,21 @@
 ---
 import { getPublicationDates } from '../lib/publication-dates.mjs';
+import { formatDate } from '../lib/i18n.mjs';
 
+const { starlightRoute, t } = Astro.locals;
 const data = Astro.locals.starlightRoute.entry.data;
+const locale = starlightRoute.lang;
 const { published, updated } = getPublicationDates(data);
 const sameDay = published && updated
   ? published.toISOString().slice(0, 10) === updated.toISOString().slice(0, 10)
   : false;
 const showUpdated = Boolean(updated && (!published || !sameDay));
-const formatter = new Intl.DateTimeFormat('en-GB', {
+const dateOptions = {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
   timeZone: 'UTC',
-});
+};
 
 function dateTimeValue(date) {
   return date.toISOString().slice(0, 10);
@@ -20,16 +23,16 @@ function dateTimeValue(date) {
 ---
 
 {(published || updated) && (
-  <p class="codex-article-dates" aria-label="Article publication dates">
+  <p class="codex-article-dates" aria-label={t('viscerium.article.datesLabel')}>
     {published && (
       <span>
-        Published <time datetime={dateTimeValue(published)}>{formatter.format(published)}</time>
+        {t('viscerium.article.published')} <time datetime={dateTimeValue(published)}>{formatDate(published, locale, dateOptions)}</time>
       </span>
     )}
     {published && showUpdated && <span aria-hidden="true">·</span>}
     {showUpdated && updated && (
       <span>
-        Updated <time datetime={dateTimeValue(updated)}>{formatter.format(updated)}</time>
+        {t('viscerium.article.updated')} <time datetime={dateTimeValue(updated)}>{formatDate(updated, locale, dateOptions)}</time>
       </span>
     )}
   </p>

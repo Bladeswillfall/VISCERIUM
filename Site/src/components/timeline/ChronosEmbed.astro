@@ -1,18 +1,22 @@
 ---
+import { DEFAULT_LOCALE } from '../../../site.config.mjs';
+
+const { t } = Astro.locals;
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
 const {
   source = '',
   compact = false,
-  label = 'Interactive Chronos timeline',
+  label = t('viscerium.timeline.embedLabel'),
 } = Astro.props;
 
 const serializedSource = JSON.stringify(String(source)).replace(/</g, '\\u003c');
-const serializedOptions = JSON.stringify({ compact, label }).replace(/</g, '\\u003c');
+const serializedOptions = JSON.stringify({ compact, label, locale }).replace(/</g, '\\u003c');
 ---
 
 <div class="vc-chronos-embed not-content" data-vc-chronos-root>
   <div class="vc-chronos-embed-canvas" data-vc-chronos-mount aria-label={label}></div>
   <div class="vc-chronos-source-fallback" data-vc-chronos-fallback>
-    <p>Interactive timeline source:</p>
+    <p>{t('viscerium.timeline.source')}</p>
     <pre><code>{source}</code></pre>
   </div>
   <script type="application/json" data-vc-chronos-source set:html={serializedSource}></script>
@@ -38,7 +42,7 @@ const serializedOptions = JSON.stringify({ compact, label }).replace(/</g, '\\u0
         const chronos = new ChronosTimeline({
           container: mount,
           settings: {
-            selectedLocale: 'en',
+            selectedLocale: options.locale,
             align: 'left',
             clickToUse: false,
             roundRanges: true,

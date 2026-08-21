@@ -5,6 +5,7 @@ import { HISTORICAL_ERAS, eraFromPath, normaliseEra } from '../lib/era-context.m
 import { scopeHistoricalEraBranches } from '../lib/sidebar-era-scope.mjs';
 
 const { sidebar, entry } = Astro.locals.starlightRoute;
+const { t } = Astro.locals;
 const changelogSidebarLabel = 'Releases';
 const labelOf = (entry: any) => parseIconLabel(entry?.label ?? '').label.trim();
 const isChangelogGroup = (entry: any) => entry.type === 'group' && labelOf(entry) === changelogSidebarLabel;
@@ -27,11 +28,11 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
 ---
 
 <div class="codex-sidebar-layout">
-  <div class="codex-sidebar-era-toolbar" data-era-sidebar-toolbar aria-label="Active era context">
+  <div class="codex-sidebar-era-toolbar" data-era-sidebar-toolbar aria-label={t('viscerium.era.activeContext')}>
     <strong>
       {HISTORICAL_ERAS.map((era) => <span data-era-sidebar-label={era}>{era}</span>)}
     </strong>
-    <a href="/" data-era-exit>Exit · All eras</a>
+    <a href="/" data-era-exit>{t('viscerium.era.exitAll')}</a>
   </div>
 
   <div class="codex-sidebar-tree">
@@ -46,7 +47,7 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
   </div>
 
   {changelogSidebar.length > 0 && (
-    <aside class="codex-changelog-sidebar" aria-label="Releases">
+    <aside class="codex-changelog-sidebar" aria-label={t('viscerium.sidebar.releases')}>
       <SidebarSublist sublist={changelogSidebar} />
     </aside>
   )}

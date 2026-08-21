@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from './src/lib/i18n.mjs';
+export const DEFAULT_LOCALE = 'en-GB';
 
 const env = process.env;
 const siteUrl = env.SITE_URL?.trim() || 'https://www.viscerium.co.uk';

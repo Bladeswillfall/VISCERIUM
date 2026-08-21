@@ -1,11 +1,12 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
-import { docsLoader } from '@astrojs/starlight/loaders';
-import { docsSchema } from '@astrojs/starlight/schema';
+import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
+import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { changelogsLoader } from 'starlight-changelogs/loader';
 import { pageSiteGraphSchema } from 'starlight-site-graph/schema';
 import { starlightTagsExtension } from 'starlight-tags/schema';
 import { frontmatterDate } from './lib/frontmatter-date.mjs';
+import defaultTranslations from './content/i18n/en-GB.json';
 
 const stringOrStrings = z.union([z.string(), z.array(z.string())]);
 const eraValue = z.enum(['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY', 'Universal']);
@@ -94,6 +95,11 @@ const referencedInSchema = z.object({
   type: z.string(),
   era: eraValue.optional(),
 });
+const visceriumI18nSchema = z.object(Object.fromEntries(
+  Object.keys(defaultTranslations)
+    .filter((key) => key.startsWith('viscerium.'))
+    .map((key) => [key, z.string()]),
+)).partial();
 
 export const collections = {
   docs: defineCollection({
@@ -180,5 +186,9 @@ export const collections = {
         pageSize: 10,
       },
     ]),
+  }),
+  i18n: defineCollection({
+    loader: i18nLoader(),
+    schema: i18nSchema({ extend: visceriumI18nSchema }),
   }),
 };

@@ -1,5 +1,7 @@
 ---
 import { Icon } from '@astrojs/starlight/components';
+
+const { t } = Astro.locals;
 ---
 
 <button
@@ -13,8 +15,8 @@ import { Icon } from '@astrojs/starlight/components';
   disabled
 >
   <Icon name="magnifier" />
-  <span>Search</span>
-  <kbd>Ctrl K</kbd>
+  <span>{t('search.label')}</span>
+  <kbd>{t('search.ctrlKey')} K</kbd>
 </button>
 
 <style>

@@ -46,9 +46,13 @@ export function bindExplorationFocus(root, onChange = () => {}) {
     const active = documentRoot.hasAttribute('data-exploration-focus');
     buttons.forEach((button) => {
       button.setAttribute('aria-pressed', String(active));
-      button.setAttribute('aria-label', active ? 'Exit focus mode' : 'Enter focus mode');
+      button.setAttribute('aria-label', active
+        ? root.dataset.focusExitLabel
+        : root.dataset.focusEnterLabel);
       const label = button.querySelector('[data-exploration-focus-label]');
-      if (label) label.textContent = active ? 'Exit' : 'Focus';
+      if (label) label.textContent = active
+        ? root.dataset.focusExitText
+        : root.dataset.focusEnterText;
     });
     onChange(active);
   };

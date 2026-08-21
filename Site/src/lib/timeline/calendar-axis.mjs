@@ -14,10 +14,10 @@ function abbreviate(value, maximum = 7) {
   return text.length <= maximum ? text : `${text.slice(0, maximum - 1)}.`;
 }
 
-function resolveAxisDate(absoluteDay, calendarId) {
+function resolveAxisDate(absoluteDay, calendarId, locale) {
   const input = fromAbsoluteDay(absoluteDay, calendarId);
   const calendar = getCalendar(calendarId);
-  const year = formatCalendarYear(input.year);
+  const year = formatCalendarYear(input.year, locale);
 
   if (input.intercalaryDay) {
     const intercalary = getIntercalaryDay(calendar, input.intercalaryDay, input.year);
@@ -47,8 +47,9 @@ export function formatCalendarAxisLabel({
   calendarId,
   scale,
   major = false,
+  locale,
 }) {
-  const resolved = resolveAxisDate(absoluteDay, calendarId);
+  const resolved = resolveAxisDate(absoluteDay, calendarId, locale);
 
   if (major) {
     if (scale === 'year') return '';
@@ -66,8 +67,8 @@ export function formatCalendarAxisLabel({
   return `${resolved.day} ${resolved.monthShort}`;
 }
 
-export function formatCalendarBoundaryLabel({ absoluteDay, calendarId, unit }) {
-  const resolved = resolveAxisDate(absoluteDay, calendarId);
+export function formatCalendarBoundaryLabel({ absoluteDay, calendarId, unit, locale }) {
+  const resolved = resolveAxisDate(absoluteDay, calendarId, locale);
   if (unit === 'year') return resolved.year;
   if (unit === 'month') return `${resolved.monthShort} ${resolved.year}`;
   if (unit === 'week') return `${resolved.day} ${resolved.monthShort}`;
@@ -76,6 +77,7 @@ export function formatCalendarBoundaryLabel({ absoluteDay, calendarId, unit }) {
 
 export function createCalendarAxisFormatter({
   getCalendarId,
+  getLocale = () => undefined,
   fromSyntheticDate,
   toSyntheticDate,
 }) {
@@ -86,6 +88,7 @@ export function createCalendarAxisFormatter({
     calendarId: getCalendarId(),
     scale,
     major,
+    locale: getLocale(),
   });
 
   return {
@@ -123,6 +126,7 @@ export function createCalendarAxisFormatter({
             absoluteDay: boundary.absoluteDay,
             calendarId,
             unit: scale.unit,
+            locale: getLocale(),
           })
           : '',
       });

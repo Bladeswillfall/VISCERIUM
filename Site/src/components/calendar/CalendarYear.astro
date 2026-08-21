@@ -2,6 +2,7 @@
 import { getCalendar } from '../../lib/calendar/registry';
 import { getCalendarYearDates, isLeapYear, resolveCalendarDate } from '../../lib/calendar/convert';
 import type { CalendarEventLink, CalendarEventLinks, CalendarObservance, ResolvedCalendarDate } from '../../lib/calendar/types';
+import { formatList } from '../../lib/i18n.mjs';
 import '../../styles/calendar-year.css';
 
 interface Props {
@@ -11,9 +12,11 @@ interface Props {
 }
 
 const { calendarId = 'okse', eventLinks = {} } = Astro.props as Props;
+const { starlightRoute, t } = Astro.locals;
+const locale = starlightRoute.lang;
 const calendar = getCalendar(calendarId);
 const year = (Astro.props as Props).year ?? calendar.defaultYear;
-const dates = getCalendarYearDates(calendar.id, year);
+const dates = getCalendarYearDates(calendar.id, year, { locale });
 const datesByAnchor = new Map(dates.map((date) => [date.anchor, date]));
 const seasonLabels = ['winter', 'spring', 'summer', 'autumn'];
 const daysPerWeek = 7;
@@ -58,12 +61,18 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
   const primaryLinkedObservance = linkedObservances[0];
   const observanceNames = resolved.observances.map((observance) => observance.name);
   const targetLabel = primaryLinkedObservance?.link.label ?? primaryLinkedObservance?.observance.name;
-  const label = [resolved.label, ...observanceNames].join(' — ');
+  const label = formatList([resolved.label, ...observanceNames], locale);
 
   return {
     href: primaryLinkedObservance?.link.href ?? `#${resolved.anchor}`,
     hasLinkedEvent: Boolean(primaryLinkedObservance?.link.href),
-    ariaLabel: targetLabel ? `${label}; open ${targetLabel}` : label,
+    ariaLabel: targetLabel
+      ? t('viscerium.calendar.openTarget', {
+          date: label,
+          target: targetLabel,
+          interpolation: { escapeValue: false },
+        })
+      : label,
     eventNames: observanceNames,
   };
 }
@@ -72,22 +81,22 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
 <section class="calendar-module" aria-labelledby="calendar-module-title">
   <div class="calendar-module__intro">
     <div class="calendar-module__summary">
-      <p class="codex-kicker">World-time calendar</p>
+      <p class="codex-kicker">{t('viscerium.calendar.worldTime')}</p>
       <h2 id="calendar-module-title">{calendar.name}</h2>
       {calendar.description && <p>{calendar.description}</p>}
     </div>
     <dl class="calendar-module__facts codex-frame">
       <div class="calendar-module__fact">
-        <dt>Rendered year</dt>
+        <dt>{t('viscerium.calendar.renderedYear')}</dt>
         <dd>{year}</dd>
       </div>
       <div class="calendar-module__fact">
-        <dt>Leap rule</dt>
-        <dd>{calendar.leapRule?.label ?? 'No leap years'}</dd>
+        <dt>{t('viscerium.calendar.leapRule')}</dt>
+        <dd>{calendar.leapRule?.label ?? t('viscerium.calendar.noLeapYears')}</dd>
       </div>
       <div class="calendar-module__fact">
-        <dt>Leap year?</dt>
-        <dd>{isLeapYear(calendar, year) ? 'Yes' : 'No'}</dd>
+        <dt>{t('viscerium.calendar.leapYear')}</dt>
+        <dd>{t(isLeapYear(calendar, year) ? 'viscerium.common.yes' : 'viscerium.common.no')}</dd>
       </div>
     </dl>
   </div>
@@ -96,7 +105,7 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
     {calendar.months.map((month) => (
       <section class="calendar-month" aria-labelledby={`calendar-${month.slug}`}>
         <h3 id={`calendar-${month.slug}`}>{month.name} <span>({month.ordinal})</span></h3>
-        <table class="calendar-days calendar-days--month" aria-label={`${month.name} days`}>
+        <table class="calendar-days calendar-days--month" aria-label={t('viscerium.calendar.monthDays', { month: month.name, interpolation: { escapeValue: false } })}>
           <tbody>
             {Array.from({ length: Math.ceil(month.days / daysPerWeek) }, (_, weekIndex) => (
               <tr class="calendar-week">
@@ -106,7 +115,7 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
                     return <td class="calendar-day calendar-day--empty" aria-hidden="true"></td>;
                   }
 
-                  const resolved = getDateForMonthDay(month.slug, day) ?? resolveCalendarDate({ calendar: calendar.id, year, month: month.slug, day });
+                  const resolved = getDateForMonthDay(month.slug, day) ?? resolveCalendarDate({ calendar: calendar.id, year, month: month.slug, day }, { locale });
                   const hasHoliday = resolved.observances.some((observance) => observance.type === 'holiday');
                   const hasSeasonMarker = resolved.observances.some((observance) => observance.type !== 'holiday');
                   const meta = getCellMeta(resolved);
@@ -126,7 +135,7 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
                         <span class="calendar-day__number">{day}</span>
                         <span class="calendar-day__weekday">{resolved.weekday}</span>
                         {meta.eventNames.length > 0 && (
-                          <span class="calendar-day__events">{meta.eventNames.join(', ')}</span>
+                            <span class="calendar-day__events">{formatList(meta.eventNames, locale)}</span>
                         )}
                       </a>
                     </td>
@@ -141,7 +150,7 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
 
     <section class="calendar-month calendar-month--intercalary" aria-labelledby="calendar-engimanutur">
       <h3 id="calendar-engimanutur">Engimanutur <span>(0th/14th)</span></h3>
-      <table class="calendar-days calendar-days--intercalary" aria-label="Engimanutur days">
+      <table class="calendar-days calendar-days--intercalary" aria-label={t('viscerium.calendar.monthDays', { month: 'Engimanutur', interpolation: { escapeValue: false } })}>
         <tbody>
           {Array.from({ length: Math.ceil(calendar.intercalaryDays.length / intercalaryColumns) }, (_, rowIndex) => (
             <tr class="calendar-week">
@@ -173,13 +182,17 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
                         <span class="calendar-day__number">{String(intercalaryDay.day).padStart(2, '0')}</span>
                         <span class="calendar-day__weekday">{resolved.weekday}</span>
                         {meta.eventNames.length > 0 && (
-                          <span class="calendar-day__events">{meta.eventNames.join(', ')}</span>
+                          <span class="calendar-day__events">{formatList(meta.eventNames, locale)}</span>
                         )}
                       </a>
                     ) : (
-                      <span aria-label={`${intercalaryDay.name} ${intercalaryDay.day} only exists in leap years`}>
+                      <span aria-label={t('viscerium.calendar.leapOnlyDescription', {
+                        name: intercalaryDay.name,
+                        day: intercalaryDay.day,
+                        interpolation: { escapeValue: false },
+                      })}>
                         <span class="calendar-day__number">{String(intercalaryDay.day).padStart(2, '0')}</span>
-                        <span class="calendar-day__weekday">Leap only</span>
+                        <span class="calendar-day__weekday">{t('viscerium.calendar.leapOnly')}</span>
                       </span>
                     )}
                   </td>
@@ -192,29 +205,29 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
     </section>
 
     <section class="calendar-legend codex-frame" aria-labelledby="calendar-legend-title">
-      <h3 id="calendar-legend-title">Key</h3>
+      <h3 id="calendar-legend-title">{t('viscerium.calendar.key')}</h3>
       <dl>
         {seasonLabels.map((season) => (
           <div>
-            <dt><span class={`calendar-key calendar-key--${season}`}></span>{season}</dt>
-            <dd>Season band</dd>
+            <dt><span class={`calendar-key calendar-key--${season}`}></span>{t(`viscerium.calendar.season.${season}`)}</dt>
+            <dd>{t('viscerium.calendar.seasonBand')}</dd>
           </div>
         ))}
         <div>
-          <dt><span class="calendar-key calendar-key--leap"></span>Leap day</dt>
-          <dd>Only appears in leap years</dd>
+          <dt><span class="calendar-key calendar-key--leap"></span>{t('viscerium.calendar.leapDay')}</dt>
+          <dd>{t('viscerium.calendar.leapDayDescription')}</dd>
         </div>
         <div>
-          <dt><span class="calendar-key calendar-key--holiday"></span>Holiday</dt>
-          <dd>Marked observance</dd>
+          <dt><span class="calendar-key calendar-key--holiday"></span>{t('viscerium.calendar.holiday')}</dt>
+          <dd>{t('viscerium.calendar.holidayDescription')}</dd>
         </div>
         <div>
-          <dt><span class="calendar-key calendar-key--marker"></span>Red number</dt>
-          <dd>Solstice, equinox, or seasonal marker</dd>
+          <dt><span class="calendar-key calendar-key--marker"></span>{t('viscerium.calendar.seasonMarker')}</dt>
+          <dd>{t('viscerium.calendar.seasonMarkerDescription')}</dd>
         </div>
         <div>
-          <dt><span class="calendar-key calendar-key--linked"></span>Linked event</dt>
-          <dd>Opens an event article</dd>
+          <dt><span class="calendar-key calendar-key--linked"></span>{t('viscerium.calendar.linkedEvent')}</dt>
+          <dd>{t('viscerium.calendar.linkedEventDescription')}</dd>
         </div>
       </dl>
     </section>

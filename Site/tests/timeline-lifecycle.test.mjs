@@ -85,7 +85,7 @@ test('the fork owns axis and geometry while the site owns one non-layout hoverca
   assert.match(renderer, /createCalendarAxisFormatter/);
   assert.match(fork, /#installTooltipBridge\(\)/);
   assert.match(fork, /format: \{[\s\S]*minorLabels:[\s\S]*majorLabels:/);
-  assert.match(app, /installTimelineHovercard\(mount, dataset\)/);
+  assert.match(app, /installTimelineHovercard\(mount, dataset, options\)/);
   assert.match(hovercard, /tooltip\.className = 'vis-tooltip vc-timeline-hovercard'/);
   assert.match(hovercard, /document\.body\.append\(tooltip\)/);
   assert.match(hovercard, /attributeFilter: \['title'\]/);

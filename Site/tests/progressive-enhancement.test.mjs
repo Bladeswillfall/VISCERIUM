@@ -9,7 +9,7 @@ test('Atlas keeps a readable marker index outside the Leaflet canvas', async () 
   const source = await fs.readFile(worldMapUrl, 'utf8');
 
   assert.match(source, /class="atlas__marker-index"/);
-  assert.match(source, /Marker index/);
+  assert.match(source, /t\('viscerium\.map\.markerIndex'/);
   assert.match(source, /<a href=\{marker\.page\}>\{marker\.title\}<\/a>/);
 });
 
@@ -17,8 +17,8 @@ test('timeline keeps its HTML fallback visible until enhanced mounting succeeds'
   const source = await fs.readFile(timelineUrl, 'utf8');
 
   assert.match(source, /class="vc-timeline-fallback"/);
-  assert.match(source, /aria-label="Chronological list"/);
-  assert.match(source, /This list remains available when the interactive timeline cannot run\./);
+  assert.match(source, /t\('viscerium\.timeline\.fallbackTitle'\)/);
+  assert.match(source, /t\('viscerium\.timeline\.fallbackDescription'\)/);
 
   const importIndex = source.indexOf("await import('../../lib/timeline/chronos-native-renderer.mjs')");
   const mountIndex = source.indexOf('state.cleanups.push(mountTimeline(');

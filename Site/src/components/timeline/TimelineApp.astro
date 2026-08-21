@@ -5,6 +5,8 @@ import '../../styles/timeline-canvas.css';
 import '../../styles/timeline-chronicle.css';
 import '../../styles/timeline-controls.css';
 import { formatAbsoluteDay } from '../../lib/calendar/runtime.mjs';
+import defaultTranslations from '../../content/i18n/en-GB.json';
+import { DEFAULT_LOCALE } from '../../../site.config.mjs';
 
 const {
   dataset,
@@ -16,12 +18,30 @@ const {
   compact = false,
 } = Astro.props;
 
-const options = { defaultCalendar, laneMode, showFilters, showMinimap, showLegend, compact };
+const { t } = Astro.locals;
+const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
+const messagePrefix = 'viscerium.timeline.';
+const messages = Object.fromEntries(
+  Object.keys(defaultTranslations)
+    .filter((key) => key.startsWith(messagePrefix))
+    .map((key) => [key.slice(messagePrefix.length), t(key)]),
+);
+const options = {
+  defaultCalendar,
+  laneMode,
+  showFilters,
+  showMinimap,
+  showLegend,
+  compact,
+  locale,
+  direction: t.dir(locale),
+  messages,
+};
 const fallbackEvents = dataset?.events.map((event) => ({
   id: event.id,
   date: event.absoluteEndDay === undefined
-    ? formatAbsoluteDay(event.absoluteStartDay, defaultCalendar, event.precision)
-    : `${formatAbsoluteDay(event.absoluteStartDay, defaultCalendar, event.precision)} — ${formatAbsoluteDay(event.absoluteEndDay, defaultCalendar, event.endPrecision ?? event.precision)}`,
+    ? formatAbsoluteDay(event.absoluteStartDay, defaultCalendar, event.precision, { locale })
+    : `${formatAbsoluteDay(event.absoluteStartDay, defaultCalendar, event.precision, { locale })} – ${formatAbsoluteDay(event.absoluteEndDay, defaultCalendar, event.endPrecision ?? event.precision, { locale })}`,
   title: event.title,
   description: event.description,
   href: event.href,
@@ -56,9 +76,9 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
       </div>
       {showMinimap !== false && <span class="vc-timeline-skeleton-minimap"></span>}
     </div>
-    <section class="vc-timeline-fallback" data-vc-fallback aria-label="Chronological list">
-      <h2>Chronological list</h2>
-      <p>This list remains available when the interactive timeline cannot run.</p>
+    <section class="vc-timeline-fallback" data-vc-fallback aria-label={t('viscerium.timeline.fallbackTitle')}>
+      <h2>{t('viscerium.timeline.fallbackTitle')}</h2>
+      <p>{t('viscerium.timeline.fallbackDescription')}</p>
       <ol>
         {fallbackEvents.map((event) => (
           <li>
@@ -72,7 +92,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
     <script type="application/json" data-vc-timeline-data set:html={serializedDataset}></script>
     <script type="application/json" data-vc-timeline-options set:html={serializedOptions}></script>
   </div>
-) : <p class="codex-warning">Timeline data is unavailable.</p>}
+) : <p class="codex-warning">{t('viscerium.timeline.unavailable')}</p>}
 
 <script>
   import { installTimelineChronicle } from '../../lib/timeline/chronicle-view.mjs';
@@ -117,9 +137,9 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
       if (state.cancelled || !shell.isConnected || timelineInstances.get(shell) !== state) return;
 
       state.cleanups.push(mountTimeline(mount, dataset, options));
-      state.cleanups.push(installTimelineHovercard(mount, dataset));
-      state.cleanups.push(installTimelineChronicle(mount, dataset));
-      state.cleanups.push(installTimelineToolbar(mount));
+      state.cleanups.push(installTimelineHovercard(mount, dataset, options));
+      state.cleanups.push(installTimelineChronicle(mount, dataset, options));
+      state.cleanups.push(installTimelineToolbar(mount, options));
 
       mount.setAttribute('data-vc-island-mounted', 'true');
       mount.setAttribute('aria-busy', 'false');

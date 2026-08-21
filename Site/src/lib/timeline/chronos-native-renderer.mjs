@@ -20,28 +20,19 @@ import {
 } from './core.mjs';
 import { createCalendarAxisFormatter } from './calendar-axis.mjs';
 import { createChronosTimelineModel } from './chronos-adapter.mjs';
+import { timelineList, timelineMessage, timelinePlural } from './i18n.mjs';
 
 const VIEWPORT_BUFFER_FACTOR = 1.25;
 const SEARCH_DEBOUNCE_MS = 140;
 const LIST_PAGE_SIZE = 100;
 const MINIMAP_BUCKET_COUNT = 320;
 
-const importanceLabels = {
-  landmark: 'Landmark',
-  major: 'Major',
-  standard: 'Standard',
-  minor: 'Minor',
-  incidental: 'Incidental',
-};
 function cssToken(value) {
   return String(value ?? '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
 }
 
-function certaintyLabel(certainty) {
-  if (certainty === 'approximate') return 'Approximate';
-  if (certainty === 'disputed') return 'Disputed';
-  if (certainty === 'legendary') return 'Legendary';
-  return 'Exact';
+function certaintyLabel(messages, certainty) {
+  return timelineMessage(messages, ['approximate', 'disputed', 'legendary'].includes(certainty) ? certainty : 'exact');
 }
 
 function checkboxList(name, values, labels = {}) {
@@ -51,44 +42,48 @@ function checkboxList(name, values, labels = {}) {
 }
 
 function renderTemplate(dataset, options, instanceId) {
+  const message = (key, values) => escapeHtml(timelineMessage(options.messages, key, values));
   const categories = [...new Set(dataset.events.flatMap((event) => event.categories))].sort();
   const eraOptions = dataset.id === 'super' ? dataset.eras.map((era) => era.id) : [];
+  const importanceLabels = Object.fromEntries(
+    IMPORTANCE_LEVELS.map((importance) => [importance, timelineMessage(options.messages, importance)]),
+  );
   const detailsTitleId = `vc-timeline-detail-title-${instanceId}`;
   return `
     <section class="vc-timeline-app vc-chronos-powered vc-chronos-native${options.compact ? ' is-compact' : ''}" aria-label="${escapeHtml(dataset.title)}">
-      <div class="vc-timeline-toolbar" role="toolbar" aria-label="VISCERIUM timeline controls">
-        <label class="vc-timeline-field"><span>Calendar</span><select data-vc-calendar>${calendars.map((calendar) => `<option value="${calendar.id}">${escapeHtml(calendar.shortName ?? calendar.name)}</option>`).join('')}</select></label>
-        <label class="vc-timeline-field vc-timeline-search"><span>Search</span><input data-vc-search type="search" autocomplete="off" placeholder="Search events"></label>
-        <label class="vc-timeline-field"><span>Group view</span><select data-vc-lane><option value="unified">Unified</option><option value="lane">Declared lane</option><option value="category">Category</option></select></label>
+      <div class="vc-timeline-toolbar" role="toolbar" aria-label="${message('controls')}">
+        <label class="vc-timeline-field"><span>${message('calendar')}</span><select data-vc-calendar>${calendars.map((calendar) => `<option value="${calendar.id}">${escapeHtml(calendar.shortName ?? calendar.name)}</option>`).join('')}</select></label>
+        <label class="vc-timeline-field vc-timeline-search"><span>${message('searchEvents')}</span><input data-vc-search type="search" autocomplete="off" placeholder="${message('searchEvents')}"></label>
+        <label class="vc-timeline-field"><span>${message('groupView')}</span><select data-vc-lane><option value="unified">${message('unified')}</option><option value="lane">${message('declaredLane')}</option><option value="category">${message('category')}</option></select></label>
         <div class="vc-timeline-actions">
-          <button type="button" data-vc-prev aria-label="Previous event">← Event</button>
-          <button type="button" data-vc-next aria-label="Next event">Event →</button>
-          <button type="button" data-vc-zoom-out aria-label="Zoom out">−</button>
-          <button type="button" data-vc-zoom-in aria-label="Zoom in">+</button>
-          <button type="button" data-vc-reset>Reset view</button>
-          <button type="button" data-vc-list aria-pressed="false">List view</button>
+          <button type="button" data-vc-prev aria-label="${message('previousLabel')}">← ${message('previous')}</button>
+          <button type="button" data-vc-next aria-label="${message('nextLabel')}">${message('next')} →</button>
+          <button type="button" data-vc-zoom-out aria-label="${message('zoomOut')}">−</button>
+          <button type="button" data-vc-zoom-in aria-label="${message('zoomIn')}">+</button>
+          <button type="button" data-vc-reset>${message('reset')}</button>
+          <button type="button" data-vc-list aria-pressed="false">${message('listView')}</button>
         </div>
       </div>
-      ${options.showFilters ? `<details class="vc-timeline-filters" data-vc-filters><summary>Filters</summary><div class="vc-timeline-filter-grid"><fieldset><legend>Importance</legend>${checkboxList('importance', IMPORTANCE_LEVELS, importanceLabels)}</fieldset><fieldset><legend>Categories</legend>${categories.length ? checkboxList('categories', categories) : '<p>No categories.</p>'}</fieldset>${eraOptions.length ? `<fieldset><legend>Eras</legend>${checkboxList('eras', eraOptions)}</fieldset>` : ''}<div class="vc-timeline-filter-actions"><button type="button" data-vc-clear>Clear filters</button></div></div></details>` : ''}
-      <div class="vc-era-strip" aria-label="Era ranges">${dataset.eras.map((era) => `<span class="vc-era-action era-${cssToken(era.id)}"><button type="button" data-vc-era="${escapeHtml(era.id)}">${escapeHtml(era.title)}</button><a href="${escapeHtml(era.href)}" aria-label="Open ${escapeHtml(era.title)} article">Article</a></span>`).join('')}</div>
+      ${options.showFilters ? `<details class="vc-timeline-filters" data-vc-filters><summary>${message('filters')}</summary><div class="vc-timeline-filter-grid"><fieldset><legend>${message('importance')}</legend>${checkboxList('importance', IMPORTANCE_LEVELS, importanceLabels)}</fieldset><fieldset><legend>${message('categories')}</legend>${categories.length ? checkboxList('categories', categories) : `<p>${message('noCategories')}</p>`}</fieldset>${eraOptions.length ? `<fieldset><legend>${message('eras')}</legend>${checkboxList('eras', eraOptions)}</fieldset>` : ''}<div class="vc-timeline-filter-actions"><button type="button" data-vc-clear>${message('clearFilters')}</button></div></div></details>` : ''}
+      <div class="vc-era-strip" aria-label="${message('eraRanges')}">${dataset.eras.map((era) => `<span class="vc-era-action era-${cssToken(era.id)}"><button type="button" data-vc-era="${escapeHtml(era.id)}">${escapeHtml(era.title)}</button><a href="${escapeHtml(era.href)}" aria-label="${message('openEraArticle', { era: era.title })}">${message('article')}</a></span>`).join('')}</div>
       <div class="vc-timeline-stage">
-        <div class="vc-timeline-canvas vc-chronos-host" data-vc-canvas tabindex="0" aria-label="Interactive Chronos timeline with native fictional-calendar axis. Use the list view for complete keyboard navigation."></div>
+        <div class="vc-timeline-canvas vc-chronos-host" data-vc-canvas tabindex="0" aria-label="${message('canvasLabel')}"></div>
       </div>
-      ${options.showMinimap ? `<details class="vc-timeline-minimap-wrap" data-vc-minimap-wrap open><summary>Overview</summary><div class="vc-timeline-minimap" data-vc-minimap aria-label="Timeline overview"></div></details>` : ''}
+      ${options.showMinimap ? `<details class="vc-timeline-minimap-wrap" data-vc-minimap-wrap open><summary>${message('overview')}</summary><div class="vc-timeline-minimap" data-vc-minimap aria-label="${message('overviewLabel')}"></div></details>` : ''}
       <div class="vc-timeline-status" data-vc-status role="status" aria-live="polite"></div>
       <div class="vc-timeline-list" data-vc-list-panel hidden></div>
       <aside class="vc-timeline-details" data-vc-details hidden aria-labelledby="${detailsTitleId}">
-        <button type="button" class="vc-timeline-detail-close" data-vc-close aria-label="Close event details">×</button>
+        <button type="button" class="vc-timeline-detail-close" data-vc-close aria-label="${message('closeDetails')}">×</button>
         <div data-vc-detail-body></div>
       </aside>
-      ${options.showLegend ? `<div class="vc-timeline-legend" aria-label="Timeline legend"><span class="importance-landmark">Landmark</span><span class="importance-major">Major</span><span class="importance-standard">Standard</span><span class="certainty-approximate">Approximate</span><span class="certainty-disputed">Disputed</span><span class="certainty-legendary">Legendary</span><span class="vc-chronos-credit">VISCERIUM Chronos fork</span></div>` : ''}
+      ${options.showLegend ? `<div class="vc-timeline-legend" aria-label="${message('legend')}"><span class="importance-landmark">${message('landmark')}</span><span class="importance-major">${message('major')}</span><span class="importance-standard">${message('standard')}</span><span class="certainty-approximate">${message('approximate')}</span><span class="certainty-disputed">${message('disputed')}</span><span class="certainty-legendary">${message('legendary')}</span><span class="vc-chronos-credit">VISCERIUM Chronos fork</span></div>` : ''}
     </section>`;
 }
 
-function chronosSettings() {
+function chronosSettings(options) {
   return {
-    selectedLocale: 'en',
-    align: 'left',
+    selectedLocale: options.locale,
+    align: options.direction === 'rtl' ? 'right' : 'left',
     clickToUse: false,
     roundRanges: true,
     useUtc: true,
@@ -96,6 +91,7 @@ function chronosSettings() {
     theme: {
       customClass: 'vc-chronos-core',
     },
+    messages: options.messages,
   };
 }
 
@@ -113,7 +109,12 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     showLegend: suppliedOptions.showLegend !== false,
     compact: suppliedOptions.compact === true,
     articleHandler: suppliedOptions.articleHandler,
+    locale: suppliedOptions.locale,
+    direction: suppliedOptions.direction,
+    messages: suppliedOptions.messages,
   };
+  const numberFormatter = new Intl.NumberFormat(options.locale);
+  const message = (key, values) => timelineMessage(options.messages, key, values);
   const syntheticOriginDay = dataset.absoluteStartDay;
   const toSyntheticDate = (absoluteDay) => absoluteDayToSyntheticDateBase(absoluteDay, syntheticOriginDay);
   const fromSyntheticDate = (date) => syntheticDateToAbsoluteDayBase(date, syntheticOriginDay);
@@ -180,10 +181,10 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
   const formatEventDate = (event) => {
     const key = `${state.calendar}:${event.id}:${event.precision}:${event.endPrecision ?? ''}`;
     if (dateCache.has(key)) return dateCache.get(key);
-    const start = formatAbsoluteDay(event.absoluteStartDay, state.calendar, event.precision);
+    const start = formatAbsoluteDay(event.absoluteStartDay, state.calendar, event.precision, { locale: options.locale });
     const value = event.absoluteEndDay === undefined
       ? start
-      : `${start} — ${formatAbsoluteDay(event.absoluteEndDay, state.calendar, event.endPrecision ?? event.precision)}`;
+      : `${start} – ${formatAbsoluteDay(event.absoluteEndDay, state.calendar, event.endPrecision ?? event.precision, { locale: options.locale })}`;
     dateCache.set(key, value);
     return value;
   };
@@ -240,21 +241,23 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
 
   const chronos = new VisceriumChronosTimeline({
     container: canvas,
-    settings: chronosSettings(),
+    settings: chronosSettings(options),
     callbacks: {
       setTooltip: (element, fallbackText) => {
         const itemElement = element.closest?.('[data-id]') ?? element;
         const id = itemElement?.getAttribute?.('data-id');
         const event = id ? eventById.get(id) : undefined;
-        element.setAttribute('title', event ? `${formatEventDate(event)} — ${event.description}` : fallbackText);
+        element.setAttribute('title', event ? `${formatEventDate(event)} – ${event.description}` : fallbackText);
       },
     },
     cssRootClass: 'vc-chronos-core',
     axis: createCalendarAxisFormatter({
       getCalendarId: () => state.calendar,
+      getLocale: () => options.locale,
       fromSyntheticDate,
     }),
     timelineOptions: {
+      rtl: options.direction === 'rtl',
       height: options.compact ? '22rem' : '24rem',
       minHeight: '20rem',
       zoomKey: 'ctrlKey',
@@ -269,6 +272,8 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     events: renderedEvents,
     laneMode: state.laneMode,
     formatEventDate,
+    locale: options.locale,
+    messages: options.messages,
     visibleStartDay: initialWindow.startDay,
     visibleEndDay: initialWindow.endDay,
   });
@@ -291,9 +296,10 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
 
     const visibleEvents = matchingEvents.slice(0, listRenderLimit);
     const remaining = Math.max(0, matchingEvents.length - visibleEvents.length);
+    const nextCount = Math.min(LIST_PAGE_SIZE, remaining);
     listPanel.innerHTML = `
       <ol>${visibleEvents.map((event) => `<li><button type="button" data-vc-select-event="${escapeHtml(event.id)}"><span>${escapeHtml(formatEventDate(event))}</span><strong>${escapeHtml(event.title)}</strong><small>${escapeHtml(event.description)}</small></button></li>`).join('')}</ol>
-      ${remaining > 0 ? `<button type="button" class="vc-timeline-list-more" data-vc-list-more>Show ${Math.min(LIST_PAGE_SIZE, remaining)} more <span>(${remaining} remaining)</span></button>` : ''}`;
+      ${remaining > 0 ? `<button type="button" class="vc-timeline-list-more" data-vc-list-more>${escapeHtml(message('showMore', { count: numberFormatter.format(nextCount) }))} <span>(${escapeHtml(message('remaining', { count: numberFormatter.format(remaining) }))})</span></button>` : ''}`;
     listDirty = false;
   }
 
@@ -343,11 +349,17 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
       events: renderedEvents,
       laneMode: state.laneMode,
       formatEventDate,
+      locale: options.locale,
+      messages: options.messages,
       visibleStartDay,
       visibleEndDay,
     });
     chronos.updateParsed(model.parsed);
-    status.textContent = `${renderedEvents.length} nearby events rendered; ${matchingEvents.length} match the current view rules out of ${dataset.events.length}.`;
+    status.textContent = message('status', {
+      rendered: numberFormatter.format(renderedEvents.length),
+      matching: numberFormatter.format(matchingEvents.length),
+      total: numberFormatter.format(dataset.events.length),
+    });
     if (filtersChanged || thresholdChanged) renderList(true);
   }
 
@@ -397,16 +409,16 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
       <h2 id="${detailsTitleId}">${escapeHtml(event.title)}</h2>
       <p>${escapeHtml(event.description)}</p>
       <dl>
-        <div><dt>Precision</dt><dd>${escapeHtml(event.precision)}</dd></div>
-        <div><dt>Certainty</dt><dd>${escapeHtml(certaintyLabel(event.certainty))}</dd></div>
-        <div><dt>Importance</dt><dd>${escapeHtml(importanceLabels[event.importance])}</dd></div>
-        <div><dt>Categories</dt><dd>${escapeHtml(event.categories.join(', ') || 'Uncategorised')}</dd></div>
-        <div><dt>Era</dt><dd>${escapeHtml(event.eras.join(', ') || 'Outside defined eras')}</dd></div>
-        <div><dt>Factions</dt><dd>${escapeHtml(event.factions.join(', ') || '—')}</dd></div>
-        <div><dt>Locations</dt><dd>${escapeHtml(event.locations.join(', ') || '—')}</dd></div>
-        <div><dt>Participants</dt><dd>${escapeHtml(event.participants.join(', ') || '—')}</dd></div>
+        <div><dt>${escapeHtml(message('precision'))}</dt><dd>${escapeHtml(event.precision)}</dd></div>
+        <div><dt>${escapeHtml(message('certainty'))}</dt><dd>${escapeHtml(certaintyLabel(options.messages, event.certainty))}</dd></div>
+        <div><dt>${escapeHtml(message('importance'))}</dt><dd>${escapeHtml(message(event.importance))}</dd></div>
+        <div><dt>${escapeHtml(message('categories'))}</dt><dd>${escapeHtml(event.categories.length ? timelineList(event.categories, options.locale) : message('uncategorised'))}</dd></div>
+        <div><dt>${escapeHtml(message('era'))}</dt><dd>${escapeHtml(event.eras.length ? timelineList(event.eras, options.locale) : message('outsideEras'))}</dd></div>
+        <div><dt>${escapeHtml(message('factions'))}</dt><dd>${escapeHtml(event.factions.length ? timelineList(event.factions, options.locale) : '–')}</dd></div>
+        <div><dt>${escapeHtml(message('locations'))}</dt><dd>${escapeHtml(event.locations.length ? timelineList(event.locations, options.locale) : '–')}</dd></div>
+        <div><dt>${escapeHtml(message('participants'))}</dt><dd>${escapeHtml(event.participants.length ? timelineList(event.participants, options.locale) : '–')}</dd></div>
       </dl>
-      <a class="vc-detail-link" href="${escapeHtml(event.href)}" data-vc-article data-source-path="${escapeHtml(event.sourcePath ?? '')}">Open full article</a>`;
+      <a class="vc-detail-link" href="${escapeHtml(event.href)}" data-vc-article data-source-path="${escapeHtml(event.sourcePath ?? '')}">${escapeHtml(message('openFullArticle'))}</a>`;
     const article = detailBody.querySelector('[data-vc-article]');
     if (options.articleHandler) {
       article.addEventListener('click', (eventObject) => {
@@ -503,7 +515,7 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
         start: toSyntheticDate(bucket.absoluteDay),
         type: 'point',
         content: '',
-        title: `${bucket.count} event${bucket.count === 1 ? '' : 's'}`,
+        title: timelinePlural(options.messages, 'eventCount', bucket.count, options.locale),
         className: `vc-mini-event density-${Math.max(1, Math.ceil((bucket.count / maximumDensity) * 4))}`,
       })),
       {
@@ -585,7 +597,7 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     listPanel.hidden = !visible;
     canvas.hidden = visible;
     event.currentTarget.setAttribute('aria-pressed', String(visible));
-    event.currentTarget.textContent = visible ? 'Graph view' : 'List view';
+    event.currentTarget.textContent = visible ? message('graphView') : message('listView');
     if (visible && listDirty) renderList(true);
     if (!visible) chronos.redraw();
   });
@@ -616,7 +628,11 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     toSyntheticDate(initialWindow.endDay),
     { animation: false },
   );
-  status.textContent = `${renderedEvents.length} nearby events rendered; ${matchingEvents.length} match the current view rules out of ${dataset.events.length}.`;
+  status.textContent = message('status', {
+    rendered: numberFormatter.format(renderedEvents.length),
+    matching: numberFormatter.format(matchingEvents.length),
+    total: numberFormatter.format(dataset.events.length),
+  });
   syncViewportState();
   scheduleMinimap();
   if (state.selected && eventById.has(state.selected)) {

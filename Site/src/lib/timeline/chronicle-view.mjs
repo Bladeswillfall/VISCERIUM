@@ -1,31 +1,18 @@
 import { formatAbsoluteDay } from '../calendar/runtime.mjs';
 import { escapeHtml } from '../codex-paths.mjs';
-
-const importanceLabels = {
-  landmark: 'Landmark',
-  major: 'Major',
-  standard: 'Standard',
-  minor: 'Minor',
-  incidental: 'Incidental',
-};
-
-const certaintyLabels = {
-  exact: 'Exact',
-  approximate: 'Approximate',
-  disputed: 'Disputed',
-  legendary: 'Legendary',
-};
+import { timelineList, timelineMessage, timelinePlural } from './i18n.mjs';
 function cssToken(value) {
   return String(value ?? '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
 }
 
-function formatEventDate(event, calendarId) {
-  const start = formatAbsoluteDay(event.absoluteStartDay, calendarId, event.precision);
+function formatEventDate(event, calendarId, locale) {
+  const start = formatAbsoluteDay(event.absoluteStartDay, calendarId, event.precision, { locale });
   if (event.absoluteEndDay === undefined) return start;
-  return `${start} — ${formatAbsoluteDay(
+  return `${start} – ${formatAbsoluteDay(
     event.absoluteEndDay,
     calendarId,
     event.endPrecision ?? event.precision,
+    { locale },
   )}`;
 }
 
@@ -44,10 +31,10 @@ function renderTag(label, className = '') {
   return `<span class="vc-chronicle-tag${className ? ` ${className}` : ''}">${escapeHtml(label)}</span>`;
 }
 
-function renderSummaryTags(event) {
+function renderSummaryTags(event, messages) {
   const tags = [
-    renderTag(importanceLabels[event.importance] ?? event.importance, `importance-${cssToken(event.importance)}`),
-    renderTag(certaintyLabels[event.certainty] ?? event.certainty, `certainty-${cssToken(event.certainty)}`),
+    renderTag(timelineMessage(messages, event.importance), `importance-${cssToken(event.importance)}`),
+    renderTag(timelineMessage(messages, event.certainty), `certainty-${cssToken(event.certainty)}`),
     ...(event.categories ?? []).slice(0, 2).map((category) => renderTag(category, `category-${cssToken(category)}`)),
   ];
   const hiddenCategoryCount = Math.max(0, (event.categories?.length ?? 0) - 2);
@@ -55,49 +42,50 @@ function renderSummaryTags(event) {
   return tags.join('');
 }
 
-function renderDefinition(label, values) {
+function renderDefinition(label, values, locale) {
   const items = Array.isArray(values) ? values.filter(Boolean) : [values].filter(Boolean);
   if (!items.length) return '';
-  return `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(items.join(', '))}</dd></div>`;
+  return `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(timelineList(items.map(String), locale))}</dd></div>`;
 }
 
-function renderDossier(event) {
+function renderDossier(event, messages, locale) {
+  const message = (key) => timelineMessage(messages, key);
   const precision = event.absoluteEndDay === undefined || !event.endPrecision
     ? event.precision
-    : `${event.precision} — ${event.endPrecision}`;
+    : `${event.precision} – ${event.endPrecision}`;
   return `
     <div class="vc-chronicle-dossier">
-      <p class="vc-chronicle-dossier-kicker">Archival dossier</p>
+      <p class="vc-chronicle-dossier-kicker">${escapeHtml(message('archivalDossier'))}</p>
       <dl>
-        ${renderDefinition('Record type', event.kind)}
-        ${renderDefinition('Precision', precision)}
-        ${renderDefinition('Certainty', certaintyLabels[event.certainty] ?? event.certainty)}
-        ${renderDefinition('Importance', importanceLabels[event.importance] ?? event.importance)}
-        ${renderDefinition('Categories', event.categories)}
-        ${renderDefinition('Declared lanes', event.lanes)}
-        ${renderDefinition('Factions', event.factions)}
-        ${renderDefinition('Locations', event.locations)}
-        ${renderDefinition('Participants', event.participants)}
-        ${renderDefinition('Status', event.status)}
-        ${renderDefinition('Tags', event.tags)}
+        ${renderDefinition(message('recordType'), event.kind, locale)}
+        ${renderDefinition(message('precision'), precision, locale)}
+        ${renderDefinition(message('certainty'), message(event.certainty), locale)}
+        ${renderDefinition(message('importance'), message(event.importance), locale)}
+        ${renderDefinition(message('categories'), event.categories, locale)}
+        ${renderDefinition(message('declaredLanes'), event.lanes, locale)}
+        ${renderDefinition(message('factions'), event.factions, locale)}
+        ${renderDefinition(message('locations'), event.locations, locale)}
+        ${renderDefinition(message('participants'), event.participants, locale)}
+        ${renderDefinition(message('statusLabel'), event.status, locale)}
+        ${renderDefinition(message('tags'), event.tags, locale)}
       </dl>
       <div class="vc-chronicle-actions">
         <button
           type="button"
           data-vc-select-event="${escapeHtml(event.id)}"
           data-vc-chronicle-locate
-        >Locate on timeline</button>
+        >${escapeHtml(message('locate'))}</button>
         <a
           class="vc-chronicle-article-link"
           href="${escapeHtml(event.href)}"
           data-vc-chronicle-article
           data-vc-event-id="${escapeHtml(event.id)}"
-        >Open full article</a>
+        >${escapeHtml(message('openFullArticle'))}</a>
       </div>
     </div>`;
 }
 
-function renderEntry(event, calendarId) {
+function renderEntry(event, calendarId, messages, locale) {
   return `
     <li
       class="vc-chronicle-item importance-${cssToken(event.importance)} certainty-${cssToken(event.certainty)}"
@@ -105,16 +93,16 @@ function renderEntry(event, calendarId) {
     >
       <details class="vc-chronicle-entry">
         <summary>
-          <time class="vc-chronicle-date">${escapeHtml(formatEventDate(event, calendarId))}</time>
+          <time class="vc-chronicle-date">${escapeHtml(formatEventDate(event, calendarId, locale))}</time>
           <span class="vc-chronicle-marker" aria-hidden="true"></span>
           <span class="vc-chronicle-summary-copy">
             <strong class="vc-chronicle-title">${escapeHtml(event.title)}</strong>
             <span class="vc-chronicle-excerpt">${escapeHtml(event.description)}</span>
-            <span class="vc-chronicle-tags" aria-label="Event classification">${renderSummaryTags(event)}</span>
+            <span class="vc-chronicle-tags" aria-label="${escapeHtml(timelineMessage(messages, 'classification'))}">${renderSummaryTags(event, messages)}</span>
           </span>
-          <span class="vc-chronicle-disclosure" aria-hidden="true">Dossier</span>
+          <span class="vc-chronicle-disclosure" aria-hidden="true">${escapeHtml(timelineMessage(messages, 'dossier'))}</span>
         </summary>
-        ${renderDossier(event)}
+        ${renderDossier(event, messages, locale)}
       </details>
     </li>`;
 }
@@ -134,23 +122,23 @@ function groupIntoChapters(events, erasById, eras) {
   return chapters;
 }
 
-function renderChapter(chapter, calendarId, index) {
+function renderChapter(chapter, calendarId, index, messages, locale) {
   const era = chapter.era;
-  const title = era?.title ?? 'Unassigned chronology';
-  const description = era?.description ?? 'Records outside the presently defined eras.';
+  const title = era?.title ?? timelineMessage(messages, 'unassigned');
+  const description = era?.description ?? timelineMessage(messages, 'outsideDescription');
   const className = era ? ` era-${cssToken(era.id)}` : '';
   return `
     <section class="vc-chronicle-chapter${className}" data-vc-chronicle-chapter="${escapeHtml(chapter.key)}">
       <header class="vc-chronicle-chapter-header">
         <div>
-          <p class="vc-chronicle-chapter-index">Era ${String(index + 1).padStart(2, '0')}</p>
+          <p class="vc-chronicle-chapter-index">${escapeHtml(timelineMessage(messages, 'eraIndex', { index: new Intl.NumberFormat(locale, { minimumIntegerDigits: 2, useGrouping: false }).format(index + 1) }))}</p>
           <h3>${escapeHtml(title)}</h3>
           <p>${escapeHtml(description)}</p>
         </div>
-        ${era?.href ? `<a href="${escapeHtml(era.href)}">Open era article</a>` : ''}
+        ${era?.href ? `<a href="${escapeHtml(era.href)}">${escapeHtml(timelineMessage(messages, 'openEra'))}</a>` : ''}
       </header>
       <ol class="vc-chronicle-records">
-        ${chapter.events.map((event) => renderEntry(event, calendarId)).join('')}
+        ${chapter.events.map((event) => renderEntry(event, calendarId, messages, locale)).join('')}
       </ol>
     </section>`;
 }
@@ -173,7 +161,8 @@ function uniqueEventIds(elements) {
  * module observes only the list panel and enhances the rows that renderer has
  * already selected, ordered and paginated.
  */
-export function installTimelineChronicle(root, dataset) {
+export function installTimelineChronicle(root, dataset, options = {}) {
+  const message = (key) => timelineMessage(options.messages, key);
   const listPanel = root.querySelector('[data-vc-list-panel]');
   const listButton = root.querySelector('[data-vc-list]');
   const timelineStage = root.querySelector('.vc-timeline-stage');
@@ -197,22 +186,22 @@ export function installTimelineChronicle(root, dataset) {
     const events = eventIds.map((id) => eventById.get(id)).filter(Boolean);
     const moreButton = listPanel.querySelector('[data-vc-list-more]');
     const chapters = groupIntoChapters(events, erasById, eras);
-    const recordLabel = `${events.length} ${events.length === 1 ? 'record' : 'records'}`;
+    const recordLabel = timelinePlural(options.messages, 'records', events.length, options.locale);
 
     listPanel.innerHTML = `
       <section class="vc-chronicle" aria-labelledby="vc-chronicle-title">
         <header class="vc-chronicle-masthead">
           <div>
-            <p class="vc-chronicle-kicker">Chronicle</p>
+            <p class="vc-chronicle-kicker">${escapeHtml(message('chronicle'))}</p>
             <h2 id="vc-chronicle-title">${escapeHtml(dataset.title)}</h2>
             <p>${escapeHtml(dataset.description)}</p>
           </div>
-          <p class="vc-chronicle-count"><strong>${escapeHtml(recordLabel)}</strong><span>matching the current view</span></p>
+          <p class="vc-chronicle-count"><strong>${escapeHtml(recordLabel)}</strong><span>${escapeHtml(message('matchingView'))}</span></p>
         </header>
         ${events.length
-          ? `<div class="vc-chronicle-chapters">${chapters.map((chapter, index) => renderChapter(chapter, calendarSelect.value, index)).join('')}</div>`
-          : `<div class="vc-chronicle-empty"><h3>No records found</h3><p>Adjust the search or filters to broaden this chronicle.</p></div>`}
-        ${moreButton ? `<button type="button" class="vc-timeline-list-more vc-chronicle-more" data-vc-list-more>${escapeHtml(moreButton.textContent?.trim() ?? 'Show more records')}</button>` : ''}
+          ? `<div class="vc-chronicle-chapters">${chapters.map((chapter, index) => renderChapter(chapter, calendarSelect.value, index, options.messages, options.locale)).join('')}</div>`
+          : `<div class="vc-chronicle-empty"><h3>${escapeHtml(message('noRecords'))}</h3><p>${escapeHtml(message('noRecordsDescription'))}</p></div>`}
+        ${moreButton ? `<button type="button" class="vc-timeline-list-more vc-chronicle-more" data-vc-list-more>${escapeHtml(moreButton.textContent?.trim() ?? message('showMoreRecords'))}</button>` : ''}
       </section>`;
     listPanel.dataset.vcChronicleEnhanced = 'true';
   };
@@ -229,8 +218,8 @@ export function installTimelineChronicle(root, dataset) {
     timelineStage.hidden = chronicleVisible;
     if (minimapWrap) minimapWrap.hidden = chronicleVisible;
     root.classList.toggle('is-chronicle-view', chronicleVisible);
-    listButton.textContent = chronicleVisible ? 'Graph view' : 'Chronicle';
-    listButton.setAttribute('aria-label', chronicleVisible ? 'Return to graph view' : 'Open chronicle view');
+    listButton.textContent = chronicleVisible ? message('graphView') : message('chronicle');
+    listButton.setAttribute('aria-label', chronicleVisible ? message('returnGraph') : message('openChronicle'));
     if (chronicleVisible) scheduleRender();
   };
 
@@ -270,8 +259,8 @@ export function installTimelineChronicle(root, dataset) {
   observer.observe(listPanel, { childList: true });
 
   root.addEventListener('click', handleRootClick);
-  listButton.textContent = 'Chronicle';
-  listButton.setAttribute('aria-label', 'Open chronicle view');
+  listButton.textContent = message('chronicle');
+  listButton.setAttribute('aria-label', message('openChronicle'));
   syncMode();
 
   return () => {

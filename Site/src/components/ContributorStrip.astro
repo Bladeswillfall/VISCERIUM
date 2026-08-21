@@ -1,5 +1,6 @@
 ---
 import contributorRegistry from '../data/contributors.json';
+import { formatList } from '../lib/i18n.mjs';
 
 type ContributorProfile = {
   name: string;
@@ -13,6 +14,8 @@ type Contributor = ContributorProfile & {
 };
 
 const profiles = contributorRegistry.profiles as Record<string, ContributorProfile>;
+const { starlightRoute, t } = Astro.locals;
+const locale = starlightRoute.lang;
 const entry = Astro.locals.starlightRoute?.entry?.data ?? {};
 const routeId = String(entry.slug ?? Astro.locals.starlightRoute?.entry?.id ?? '')
   .replace(/\.(md|mdx)$/i, '')
@@ -34,7 +37,7 @@ for (const item of requested) {
   if (!id || !profiles[id]) continue;
 
   const contributor = byId.get(id) ?? { id, ...profiles[id], roles: [] };
-  const roles = Array.isArray(reference.roles) ? reference.roles : [reference.role ?? 'Contributor'];
+  const roles = Array.isArray(reference.roles) ? reference.roles : [reference.role ?? t('viscerium.contributors.defaultRole')];
   for (const role of roles.map(String).map((value) => value.trim()).filter(Boolean)) {
     if (!contributor.roles.some((value) => value.toLowerCase() === role.toLowerCase())) contributor.roles.push(role);
   }
@@ -44,18 +47,18 @@ for (const item of requested) {
 const contributors = [...byId.values()].sort((a, b) => (
   Number(b.roles.some((role) => role.toLowerCase() === 'author'))
   - Number(a.roles.some((role) => role.toLowerCase() === 'author'))
-  || a.name.localeCompare(b.name)
+  || a.name.localeCompare(b.name, locale)
 ));
 const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) || 7);
 ---
 
 {contributors.length > 0 && (
-  <section class="codex-contributors" aria-label="Contributors">
+  <section class="codex-contributors" aria-label={t('viscerium.contributors.title')}>
     <details open={contributors.length <= collapsedLimit}>
-      <summary>Contributors <span>{contributors.length}</span></summary>
+      <summary>{t('viscerium.contributors.title')} <span>{contributors.length}</span></summary>
       <ul>
         {contributors.map((contributor) => {
-          const roles = contributor.roles.join(', ');
+          const roles = formatList(contributor.roles, locale);
           const isAuthor = contributor.roles.some((role) => role.toLowerCase() === 'author');
           return (
             <li>
@@ -64,7 +67,11 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
                 href={`https://github.com/${contributor.github}`}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`${contributor.name}, ${roles}. Open GitHub profile in a new tab.`}
+                aria-label={t('viscerium.contributors.profileLabel', {
+                  name: contributor.name,
+                  roles,
+                  interpolation: { escapeValue: false },
+                })}
               >
                 <img
                   src={`/assets/contributors/${contributor.avatar}`}

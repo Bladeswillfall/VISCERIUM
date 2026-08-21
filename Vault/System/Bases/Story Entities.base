@@ -8,8 +8,8 @@ filters:
         - type == "item"
         - type == "myrkild-unit"
 formulas:
-  era_context: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))'
-  era_count: 'if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))'
+  era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
+  era_count: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))
 properties:
   title:
     displayName: Entity
@@ -51,7 +51,7 @@ views:
     name: Continuity
     filters:
       and:
-        - '!entity_id.isEmpty()'
+        - "!entity_id.isEmpty()"
     groupBy:
       property: entity_id
       direction: ASC

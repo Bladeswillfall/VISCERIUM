@@ -38,7 +38,7 @@ ${pubDate}      <description>${escapeXml(entry.description)}</description>${cate
     <description>${escapeXml(siteConfig.feeds?.description ?? siteConfig.description)}</description>
     <link>${escapeXml(siteUrl)}</link>
     <atom:link href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml" />
-    <language>${escapeXml(siteConfig.feeds?.language ?? 'en')}</language>
+    <language>${escapeXml(siteConfig.feeds?.language ?? siteConfig.i18n.defaultLocale)}</language>
 ${lastBuildDate}${items}
   </channel>
 </rss>`;

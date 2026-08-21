@@ -12,7 +12,7 @@ test('the Astro timeline enhances only the existing timeline list panel', () => 
 
   assert.match(app, /installTimelineChronicle/);
   assert.match(app, /import '\.\.\/\.\.\/styles\/timeline-chronicle\.css'/);
-  assert.match(app, /installTimelineChronicle\(mount, dataset\)/);
+  assert.match(app, /installTimelineChronicle\(mount, dataset, options\)/);
 
   assert.match(chronicle, /root\.querySelector\('\[data-vc-list-panel\]'\)/);
   assert.match(chronicle, /const plainList = listPanel\.querySelector\(':scope > ol'\)/);
@@ -50,12 +50,12 @@ test('chronicle records include readable summaries, dossiers and graph/article a
   assert.match(chronicle, /class="vc-chronicle-title"/);
   assert.match(chronicle, /class="vc-chronicle-excerpt"/);
   assert.match(chronicle, /class="vc-chronicle-tags"/);
-  assert.match(chronicle, /Archival dossier/);
-  assert.match(chronicle, /Declared lanes/);
+  assert.match(chronicle, /message\('archivalDossier'\)/);
+  assert.match(chronicle, /renderDefinition\(message\('declaredLanes'\)/);
   assert.match(chronicle, /data-vc-chronicle-locate/);
-  assert.match(chronicle, /Locate on timeline/);
+  assert.match(chronicle, /message\('locate'\)/);
   assert.match(chronicle, /data-vc-chronicle-article/);
-  assert.match(chronicle, /Open full article/);
-  assert.match(chronicle, /No records found/);
+  assert.match(chronicle, /message\('openFullArticle'\)/);
+  assert.match(chronicle, /message\('noRecords'\)/);
   assert.match(chronicle, /data-vc-list-more/);
 });

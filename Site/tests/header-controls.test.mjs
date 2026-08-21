@@ -16,6 +16,7 @@ test('Telescope owns search while the custom header stays enabled', () => {
 test('the Codex header renders the Telescope search trigger, era context and theme controls', () => {
   const header = read('../src/components/CodexHeader.astro');
   const search = read('../src/components/CodexSearch.astro');
+  const eraContext = read('../src/components/EraContextControls.astro');
   const shell = read('../src/scripts/codex-shell.js');
   const headerCss = read('../src/styles/header-controls.css');
 
@@ -31,7 +32,8 @@ test('the Codex header renders the Telescope search trigger, era context and the
   assert.match(shell, /telescope-search \.telescope__trigger-btn/);
   assert.match(search, /aria-controls="telescope-dialog"/);
   assert.doesNotMatch(search, /pagefind/i);
-  assert.match(shell, /Exit \$\{active\} · All eras/);
+  assert.match(eraContext, /data-era-exit-template=\{t\('viscerium\.era\.exitEra'/);
+  assert.match(shell, /fillEra\(node\.dataset\.eraExitTemplate\)/);
   assert.match(shell, /viscerium-era-context/);
 
   assert.match(header, /import '\.\.\/scripts\/codex-shell\.js'/);

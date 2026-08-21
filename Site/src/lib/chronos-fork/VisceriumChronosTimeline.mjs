@@ -1,5 +1,6 @@
 import { attachChronosStyles, parseChronos } from 'chronos-timeline-md';
 import { DataSet, Timeline } from 'vis-timeline/standalone';
+import { timelineMessage } from '../timeline/i18n.mjs';
 
 /**
  * VISCERIUM fork of the Chronos 1.1.0 renderer.
@@ -97,7 +98,8 @@ export class VisceriumChronosTimeline {
 
     this.container = container;
     this.settings = {
-      selectedLocale: 'en',
+      selectedLocale: container.ownerDocument?.documentElement?.lang
+        || Intl.DateTimeFormat().resolvedOptions().locale,
       align: 'left',
       clickToUse: false,
       roundRanges: true,
@@ -302,9 +304,9 @@ export class VisceriumChronosTimeline {
     const button = this.container.ownerDocument.createElement('button');
     button.type = 'button';
     button.className = 'chronos-timeline-refit-button';
-    button.setAttribute('aria-label', 'Fit all timeline events');
+    button.setAttribute('aria-label', timelineMessage(this.settings.messages, 'fitAllLabel'));
     button.innerHTML = refitIcon();
-    this.setTooltip(button, 'Fit all');
+    this.setTooltip(button, timelineMessage(this.settings.messages, 'fitAll'));
     button.addEventListener('click', () => this.timeline?.fit({ animation: true }));
     this.container.appendChild(button);
     this.refitButton = button;

@@ -3,25 +3,26 @@ import siteConfig from '../../site.config.mjs';
 import { visceriumCreativeNotice } from '../config/rights.mjs';
 
 const creativeRightsNotice = visceriumCreativeNotice();
+const { t } = Astro.locals;
 ---
 
 <footer class="ion-codex-footer">
   <div class="footer-grid">
-    <section class="footer-brand" aria-label="VISCERIUM rights information">
+    <section class="footer-brand" aria-label={t('viscerium.footer.rightsLabel')}>
       <span class="footer-brand__mark" aria-hidden="true"></span>
       <h2 class="footer-brand__name">VISCERIUM</h2>
       <p class="footer-brand__notice"><strong>{creativeRightsNotice}</strong></p>
     </section>
 
-    <nav class="footer-wayfinder" aria-label="Codex destinations">
-      <a class="footer-wayfinder__primary" href="/">Start Here</a>
+    <nav class="footer-wayfinder" aria-label={t('viscerium.footer.destinationsLabel')}>
+      <a class="footer-wayfinder__primary" href="/">{t('viscerium.footer.startHere')}</a>
       <div class="footer-wayfinder__routes">
-        <a href="/calendar/">Calendar</a>
-        <a href="/graph/">World Graph</a>
-        <a href="/support/">Support</a>
-        <a href="/contact/">Contact</a>
+        <a href="/calendar/">{t('viscerium.footer.calendar')}</a>
+        <a href="/graph/">{t('viscerium.footer.worldGraph')}</a>
+        <a href="/support/">{t('viscerium.footer.support')}</a>
+        <a href="/contact/">{t('viscerium.footer.contact')}</a>
         <a href={siteConfig.githubRepoUrl} target="_blank" rel="noreferrer">
-          GitHub<span class="codex-sr-only"> (opens in a new tab)</span>
+          GitHub<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
         </a>
         <a href="/rss.xml">RSS</a>
         <a href="/atom.xml">Atom</a>
@@ -32,13 +33,13 @@ const creativeRightsNotice = visceriumCreativeNotice();
       <a
         class="policy-link"
         href="/policies/content-production/"
-        aria-label="Read the VISCERIUM content and production statement"
+        aria-label={t('viscerium.footer.policyLabel')}
       >
         <span class="policy-mark" aria-hidden="true"></span>
         <span class="policy-link__copy">
-          <span class="policy-link__title">Content &amp; production statement</span>
+          <span class="policy-link__title">{t('viscerium.footer.policyTitle')}</span>
           <span class="policy-link__description">
-            Authorship, generative AI, technical assistance, and accountability.
+            {t('viscerium.footer.policyDescription')}
           </span>
         </span>
       </a>

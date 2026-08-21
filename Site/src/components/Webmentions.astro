@@ -3,6 +3,26 @@ import siteConfig from '../../site.config.mjs';
 
 const config = siteConfig.webmentions;
 const enabled = Boolean(config?.enabled && config.apiEndpoint);
+const { t } = Astro.locals;
+const messages = {
+  none: t('viscerium.webmentions.none'),
+  unavailable: t('viscerium.webmentions.unavailable'),
+  responses: Object.fromEntries(
+    ['zero', 'one', 'two', 'few', 'many', 'other']
+      .map((category) => [category, t(`viscerium.webmentions.responses.${category}`)]),
+  ),
+  someone: t('viscerium.webmentions.someone'),
+  on: t('viscerium.webmentions.on'),
+  viewSource: t('viscerium.webmentions.viewSource'),
+  actions: {
+    like: t('viscerium.webmentions.action.like'),
+    repost: t('viscerium.webmentions.action.repost'),
+    bookmark: t('viscerium.webmentions.action.bookmark'),
+    reply: t('viscerium.webmentions.action.reply'),
+    mention: t('viscerium.webmentions.action.mention'),
+    other: t('viscerium.webmentions.action.other'),
+  },
+};
 ---
 
 {enabled && (
@@ -10,10 +30,11 @@ const enabled = Boolean(config?.enabled && config.apiEndpoint);
     class="codex-webmentions"
     data-api={config.apiEndpoint}
     data-limit={config.maxMentions}
+    data-messages={JSON.stringify(messages)}
   >
     <details open>
-      <summary>Across the wider web</summary>
-      <p data-state role="status">Loading responses...</p>
+      <summary>{t('viscerium.webmentions.title')}</summary>
+      <p data-state role="status">{t('viscerium.webmentions.loading')}</p>
       <div class="codex-webmention-list" data-list></div>
     </details>
   </codex-webmentions>
