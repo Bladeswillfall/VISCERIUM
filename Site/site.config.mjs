@@ -1,3 +1,5 @@
+import { DEFAULT_LOCALE } from './src/lib/i18n.mjs';
+
 const env = process.env;
 const siteUrl = env.SITE_URL?.trim() || 'https://www.viscerium.co.uk';
 
@@ -31,13 +33,16 @@ export default {
   title: env.SITE_TITLE ?? 'VISCERIUM',
   description: env.SITE_DESCRIPTION ?? 'The public worldbuilding codex for VISCERIUM.',
   site: siteUrl,
+  i18n: {
+    defaultLocale: DEFAULT_LOCALE,
+  },
   loreSourceDir: env.LORE_SOURCE_DIR ?? '../Vault/Lore',
   vaultAssetDir: '../Vault/Assets',
   githubRepoUrl: 'https://github.com/Bladeswillfall/VISCERIUM',
   feeds: {
     title: env.PUBLIC_FEED_TITLE ?? 'VISCERIUM Codex',
     description: env.PUBLIC_FEED_DESCRIPTION ?? 'Latest public canon updates from the VISCERIUM codex.',
-    language: env.PUBLIC_FEED_LANGUAGE ?? 'en',
+    language: env.PUBLIC_FEED_LANGUAGE ?? DEFAULT_LOCALE,
     maxItems: Number.isFinite(feedMaxItems) ? feedMaxItems : 50,
   },
   webmentions: {
