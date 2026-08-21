@@ -17,7 +17,10 @@ test('the public Codex declares WCAG 2.2 AA as its accessibility target', async 
 test('the global accessibility layer preserves focus, target size and user display preferences', async () => {
   const css = await fs.readFile(a11yCssUrl, 'utf8');
 
-  assert.match(css, /:focus-visible/);
+  assert.match(
+    css,
+    /:where\(a\[href\], button, summary, input, select, textarea, \[tabindex\]:not\(\[tabindex='-1'\]\)\):focus-visible\s*\{\s*outline:\s*2px solid var\(--sl-color-accent-high\);\s*outline-offset:\s*3px;\s*\}/s,
+  );
   assert.match(css, /min-inline-size:\s*2\.75rem/);
   assert.match(css, /min-block-size:\s*2\.75rem/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
