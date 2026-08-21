@@ -55,6 +55,8 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
 
   assert.match(hero, /dv\.currentFilePath \|\| "Home\.md"/);
   assert.match(hero, /metadataCache\.getFileCache/);
+  assert.match(hero, /JSON\.stringify\(heroSource\)/);
+  assert.doesNotMatch(hero, /heroSource\.replace\(/);
   assert.match(hero, /CURRENT FOCUS · MANUAL/);
   assert.match(hero, /Create new/);
   assert.match(hero, /vc-home-create-panel/);
