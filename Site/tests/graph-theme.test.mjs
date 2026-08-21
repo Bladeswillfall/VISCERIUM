@@ -41,10 +41,11 @@ test('site graph uses tags, native interactions and a late canvas adapter', () =
   assert.doesNotMatch(astroConfig, /starlight-site-graph\/styles|src\/styles\/graph\.css/);
 });
 
-test('the dedicated graph page hydrates its production sitemap', () => {
+test('the dedicated graph page hydrates its production sitemap without article discussions', () => {
   const graphPage = read('../src/pages/graph.astro');
 
   assert.match(graphPage, /PageGraph slug="start-here"/);
   assert.match(graphPage, /hydrateWorldGraph/);
   assert.match(graphPage, /sitegraph\/sitemap\.json/);
+  assert.match(graphPage, /giscus:\s*false/);
 });

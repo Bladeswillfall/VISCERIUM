@@ -1,11 +1,16 @@
 /*
  * World Anvil Import triage
  * Font weight shows priority. Color shows migration state.
+ *
+ * The shared Bases snippet owns card depth and interaction. This file only
+ * supplies the semantic left-edge accent and state-specific top/left colour so
+ * the triage layer composes with, rather than replaces, the tactile card skin.
  */
 
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .bases-cards-item {
-  border-color: var(--background-modifier-border);
-  box-shadow: inset 3px 0 0 var(--background-modifier-border);
+  --vc-bases-card-accent: var(--background-modifier-border);
+  border-top-color: var(--background-modifier-border);
+  border-left-color: var(--background-modifier-border);
 }
 
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
@@ -76,8 +81,9 @@
 /* Red marks a conflict. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--conflict) {
-  border-color: color-mix(in srgb, var(--vc-state-danger, var(--color-red)) 45%, var(--background-modifier-border));
-  box-shadow: inset 3px 0 0 var(--vc-state-danger, var(--color-red));
+  --vc-bases-card-accent: var(--vc-state-danger, var(--color-red));
+  border-top-color: color-mix(in srgb, var(--vc-state-danger, var(--color-red)) 45%, var(--background-modifier-border));
+  border-left-color: color-mix(in srgb, var(--vc-state-danger, var(--color-red)) 45%, var(--background-modifier-border));
 }
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-action--conflict {
   color: var(--vc-state-danger, var(--color-red));
@@ -92,8 +98,9 @@
   .bases-cards-item:has(.wa-action--era),
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--relationship) {
-  border-color: color-mix(in srgb, var(--vc-state-warning, var(--color-yellow)) 42%, var(--background-modifier-border));
-  box-shadow: inset 3px 0 0 var(--vc-state-warning, var(--color-yellow));
+  --vc-bases-card-accent: var(--vc-state-warning, var(--color-yellow));
+  border-top-color: color-mix(in srgb, var(--vc-state-warning, var(--color-yellow)) 42%, var(--background-modifier-border));
+  border-left-color: color-mix(in srgb, var(--vc-state-warning, var(--color-yellow)) 42%, var(--background-modifier-border));
 }
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   :is(.wa-action--type, .wa-action--edition, .wa-action--era, .wa-action--relationship) {
@@ -103,8 +110,9 @@
 /* Blue marks link repair and navigation work. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--links) {
-  border-color: color-mix(in srgb, var(--vc-state-reference, var(--color-blue)) 42%, var(--background-modifier-border));
-  box-shadow: inset 3px 0 0 var(--vc-state-reference, var(--color-blue));
+  --vc-bases-card-accent: var(--vc-state-reference, var(--color-blue));
+  border-top-color: color-mix(in srgb, var(--vc-state-reference, var(--color-blue)) 42%, var(--background-modifier-border));
+  border-left-color: color-mix(in srgb, var(--vc-state-reference, var(--color-blue)) 42%, var(--background-modifier-border));
 }
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-action--links {
   color: var(--vc-state-reference, var(--color-blue));
@@ -115,7 +123,7 @@
   .bases-cards-item:has(.wa-action--assets),
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--review) {
-  box-shadow: inset 3px 0 0 var(--text-faint);
+  --vc-bases-card-accent: var(--text-faint);
 }
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   :is(.wa-action--assets, .wa-action--review) {
@@ -125,8 +133,9 @@
 /* Green marks a ready item. */
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active)
   .bases-cards-item:has(.wa-action--ready) {
-  border-color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 38%, var(--background-modifier-border));
-  box-shadow: inset 3px 0 0 var(--vc-state-success, var(--color-green));
+  --vc-bases-card-accent: var(--vc-state-success, var(--color-green));
+  border-top-color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 38%, var(--background-modifier-border));
+  border-left-color: color-mix(in srgb, var(--vc-state-success, var(--color-green)) 38%, var(--background-modifier-border));
 }
 .workspace-tabs:has(.workspace-tab-header[aria-label="World Anvil Import"].is-active) .wa-action--ready {
   color: var(--vc-state-success, var(--color-green));
