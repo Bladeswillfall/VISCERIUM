@@ -32,7 +32,13 @@ export function formatNumber(value, locale = DEFAULT_LOCALE, options = undefined
 }
 
 export function formatDate(value, locale = DEFAULT_LOCALE, options = undefined) {
+  const isDateOnlyString = typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) throw new TypeError('formatDate requires a valid date');
-  return new Intl.DateTimeFormat(normaliseLocale(locale), options).format(date);
+
+  const resolvedOptions = isDateOnlyString && !options?.timeZone
+    ? { ...options, timeZone: 'UTC' }
+    : options;
+
+  return new Intl.DateTimeFormat(normaliseLocale(locale), resolvedOptions).format(date);
 }
