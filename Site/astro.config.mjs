@@ -232,6 +232,12 @@ export default defineConfig({
     starlight({
       title: siteConfig.title,
       description: siteConfig.description,
+      locales: {
+        root: {
+          label: 'English',
+          lang: siteConfig.i18n.defaultLocale,
+        },
+      },
       pagefind: false,
       routeMiddleware: './src/route-data.ts',
       customCss: [

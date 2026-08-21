@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 
 mkdirSync('timeline-browser-diagnostics', { recursive: true });
 
+const previewOrigin = 'http://127.0.0.1:4321';
+
 async function installTheme(page, theme) {
   await page.emulateMedia({ colorScheme: theme });
   await page.addInitScript((selectedTheme) => {
@@ -16,7 +18,19 @@ async function inspectGraph(page, viewport, screenshot, theme) {
   const pageErrors = [];
   const consoleErrors = [];
   const graphParserErrors = [];
+  const firstPartyHttpErrors = [];
+  const firstPartyRequestFailures = [];
+
   page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('response', (response) => {
+    const status = response.status();
+    if (status < 400 || status === 404 || !response.url().startsWith(`${previewOrigin}/`)) return;
+    firstPartyHttpErrors.push(`${status} ${response.url()}`);
+  });
+  page.on('requestfailed', (request) => {
+    if (!request.url().startsWith(`${previewOrigin}/`)) return;
+    firstPartyRequestFailures.push(`${request.failure()?.errorText ?? 'request failed'} ${request.url()}`);
+  });
   page.on('console', (message) => {
     if (message.type() !== 'error') return;
     const text = message.text();
@@ -24,11 +38,15 @@ async function inspectGraph(page, viewport, screenshot, theme) {
       graphParserErrors.push(text);
       return;
     }
-    if (!text.startsWith('Failed to load resource: the server responded with a status of 404')) {
+    // Chromium's resource-load console string omits the failing URL. First-party
+    // failures are asserted above from response/request events, where the URL and
+    // status are available; cross-origin resource failures do not belong to this
+    // graph renderer test.
+    if (!text.startsWith('Failed to load resource:')) {
       consoleErrors.push(text);
     }
   });
-  await page.goto('http://127.0.0.1:4321/graph/', { waitUntil: 'networkidle' });
+  await page.goto(`${previewOrigin}/graph/`, { waitUntil: 'networkidle' });
 
   const graph = page.locator('.world-graph graph-component');
   const canvas = graph.locator('canvas');
@@ -37,6 +55,8 @@ async function inspectGraph(page, viewport, screenshot, theme) {
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);
   expect(graphParserErrors).toEqual([]);
+  expect(firstPartyHttpErrors).toEqual([]);
+  expect(firstPartyRequestFailures).toEqual([]);
   await expect(graph).toBeVisible({ timeout: 10_000 });
   await expect(canvas).toBeVisible({ timeout: 10_000 });
   await expect(graph.locator('button')).not.toHaveCount(0);
@@ -106,6 +126,8 @@ async function inspectGraph(page, viewport, screenshot, theme) {
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);
   expect(graphParserErrors).toEqual([]);
+  expect(firstPartyHttpErrors).toEqual([]);
+  expect(firstPartyRequestFailures).toEqual([]);
 }
 
 test('world graph renders with readable dark-theme colours', async ({ page }) => {
