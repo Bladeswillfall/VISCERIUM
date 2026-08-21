@@ -112,8 +112,6 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
       if (!dataset) throw new Error('Timeline dataset is missing.');
 
       mount.setAttribute('aria-busy', 'true');
-      if (fallback instanceof HTMLElement) fallback.hidden = true;
-      if (skeleton instanceof HTMLElement) skeleton.hidden = false;
 
       const { mountTimeline } = await import('../../lib/timeline/chronos-native-renderer.mjs');
       if (state.cancelled || !shell.isConnected || timelineInstances.get(shell) !== state) return;
@@ -125,6 +123,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
 
       mount.setAttribute('data-vc-island-mounted', 'true');
       mount.setAttribute('aria-busy', 'false');
+      if (fallback instanceof HTMLElement) fallback.hidden = true;
       if (skeleton instanceof HTMLElement) skeleton.hidden = true;
     } catch (error) {
       if (state.cancelled) return;
