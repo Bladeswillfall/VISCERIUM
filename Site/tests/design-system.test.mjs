@@ -5,8 +5,30 @@ import fs from 'node:fs/promises';
 const tokensUrl = new URL('../src/styles/color-tokens.css', import.meta.url);
 const astroConfigUrl = new URL('../astro.config.mjs', import.meta.url);
 
-test('the design system exposes shared semantic colour and surface tokens', async () => {
+function extractCssBlock(source, selectorPattern) {
+  const match = selectorPattern.exec(source);
+  assert.ok(match, `expected selector ${selectorPattern} to exist`);
+
+  const openIndex = source.indexOf('{', match.index);
+  assert.notEqual(openIndex, -1, 'expected selector block to open');
+
+  let depth = 0;
+  for (let index = openIndex; index < source.length; index += 1) {
+    if (source[index] === '{') depth += 1;
+    if (source[index] !== '}') continue;
+    depth -= 1;
+    if (depth === 0) return source.slice(openIndex + 1, index);
+  }
+
+  assert.fail('expected selector block to close');
+}
+
+test('the default design-system theme exposes shared semantic colour and surface tokens', async () => {
   const css = await fs.readFile(tokensUrl, 'utf8');
+  const defaultTheme = extractCssBlock(
+    css,
+    /:root,\s*:root\[data-theme=['"]dark['"]\]\s*\{/,
+  );
 
   for (const token of [
     '--codex-page-bg',
@@ -19,7 +41,11 @@ test('the design system exposes shared semantic colour and surface tokens', asyn
     '--codex-warning',
     '--codex-info',
   ]) {
-    assert.match(css, new RegExp(`${token.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}:`));
+    assert.match(
+      defaultTheme,
+      new RegExp(`${token.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}:`),
+      `expected ${token} to be declared by the default/dark theme`,
+    );
   }
 });
 
