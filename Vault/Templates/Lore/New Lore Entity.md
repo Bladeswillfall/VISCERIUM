@@ -2,13 +2,76 @@
 const HISTORICAL_ERAS = ["CITADEL", "SMOG", "NEARSIGHT", "ENTROPY"];
 const ERA_OPTIONS = [...HISTORICAL_ERAS, "Universal"];
 const ENTITY_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const AUTHORING_START = "<!-- viscerium:authoring:start -->";
+const AUTHORING_END = "<!-- viscerium:authoring:end -->";
+const STORYTELLER_START = "<!-- viscerium:storyteller:start -->";
+const STORYTELLER_END = "<!-- viscerium:storyteller:end -->";
+const STORYTELLER_HEADING = "## Storyteller View";
+const LOCATION_DETAIL_TEMPLATE = "Templates/Lore/Add Location Fields.md";
+
 const TYPES = {
-  character: { label: "Character", folder: "Drafts/Inbox/Characters" },
-  faction: { label: "Faction", folder: "Drafts/Inbox/Factions" },
-  location: { label: "Location", folder: "Drafts/Inbox/Locations" },
-  event: { label: "Event", folder: "Drafts/Inbox/Events" },
-  species: { label: "Species", folder: "Drafts/Inbox/Species" },
+  article: {
+    label: "General article",
+    folder: "Drafts/Inbox/Articles",
+    template: "Templates/Lore/Article Template.md",
+    schemaType: "article",
+  },
+  character: {
+    label: "Character",
+    folder: "Drafts/Inbox/Characters",
+    template: "Templates/Lore/Character Template.md",
+    schemaType: "character",
+  },
+  faction: {
+    label: "Faction",
+    folder: "Drafts/Inbox/Factions",
+    template: "Templates/Lore/Faction Template.md",
+    schemaType: "faction",
+  },
+  location: {
+    label: "Location",
+    folder: "Drafts/Inbox/Locations",
+    template: "Templates/Lore/Location Template.md",
+    schemaType: "location",
+  },
+  event: {
+    label: "Event",
+    folder: "Drafts/Inbox/Events",
+    template: "Templates/Lore/Event Template.md",
+    schemaType: "event",
+  },
+  species: {
+    label: "Species",
+    folder: "Drafts/Inbox/Species",
+    template: "Templates/Lore/Species Template.md",
+    schemaType: "species",
+  },
+  culture: {
+    label: "Culture",
+    folder: "Drafts/Inbox/Articles",
+    template: "Templates/Lore/Culture Template.md",
+    schemaType: "article",
+  },
+  belief: {
+    label: "Belief / religion",
+    folder: "Drafts/Inbox/Articles",
+    template: "Templates/Lore/Belief and Religion Template.md",
+    schemaType: "article",
+  },
+  naming_language: {
+    label: "Naming language",
+    folder: "Drafts/Inbox/Articles",
+    template: "Templates/Lore/Naming Language Template.md",
+    schemaType: "article",
+  },
+  resonance_practice: {
+    label: "Resonance practice",
+    folder: "Drafts/Inbox/Articles",
+    template: "Templates/Lore/Resonance Practice Template.md",
+    schemaType: "article",
+  },
 };
+
 const LOCATION_KINDS = {
   region: "Region",
   settlement: "Settlement",
@@ -16,8 +79,6 @@ const LOCATION_KINDS = {
   route: "Route",
   site: "Site / ruin / landmark",
 };
-const STORYTELLER_START = "<!-- viscerium:storyteller:start -->";
-const STORYTELLER_END = "<!-- viscerium:storyteller:end -->";
 
 function slugify(value) {
   return String(value ?? "")
@@ -48,26 +109,47 @@ function suggestedEntityId(title) {
   return `${base}-${counter}`;
 }
 
-const type = await tp.system.suggester(Object.values(TYPES).map((entry) => entry.label), Object.keys(TYPES), true, "What are you creating?");
-const config = TYPES[type];
-const currentTitle = tp.file.title === "Untitled" ? "" : tp.file.title;
-const title = String(await tp.system.prompt("Name", currentTitle, true) ?? "").trim();
-if (title && title !== tp.file.title) await tp.file.rename(title);
-const description = String(await tp.system.prompt("One-line identity (optional)", "", false) ?? "").trim();
-const allowedEras = type === "event" ? HISTORICAL_ERAS : ERA_OPTIONS;
-const era = await tp.system.suggester(["Leave undefined", ...allowedEras], ["", ...allowedEras], false, "Era / scope") ?? "";
-const entityId = type === "event"
-  ? ""
-  : String(await tp.system.prompt(
-      "Continuity entity ID (stable; change the suggested suffix when this is a different thing with a similar name)",
-      suggestedEntityId(title),
-      false
-    ) ?? "").trim();
-if (entityId && !ENTITY_ID_PATTERN.test(entityId)) {
-  throw new Error(`Invalid entity_id: ${entityId}. Use lowercase kebab-case, e.g. okse-dominion-a.`);
+function yamlValue(value) {
+  if (Array.isArray(value)) return `[${value.map((item) => JSON.stringify(item)).join(", ")}]`;
+  return JSON.stringify(value);
 }
-const pick = (options) => tp.user.reference_picker(tp, options);
-const data = {};
+
+function setTopLevelField(source, key, value) {
+  if (value == null || value === "" || (Array.isArray(value) && value.length === 0)) return source;
+  const lines = source.split("\n");
+  const end = lines.indexOf("---", 1);
+  if (lines[0] !== "---" || end < 0) throw new Error("Selected VISCERIUM template is missing valid frontmatter.");
+
+  const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const fieldPattern = new RegExp(`^${escaped}:`);
+  const existing = lines.findIndex((line, index) => index > 0 && index < end && fieldPattern.test(line));
+  const rendered = `${key}: ${yamlValue(value)}`;
+
+  if (existing >= 0) {
+    lines[existing] = rendered;
+    return lines.join("\n");
+  }
+
+  const typeIndex = lines.findIndex((line, index) => index > 0 && index < end && /^type:/.test(line));
+  lines.splice(typeIndex >= 0 ? typeIndex + 1 : end, 0, rendered);
+  return lines.join("\n");
+}
+
+function setTemplateTitle(source, title) {
+  return source.replace(
+    /^title:\s*["']?\{\{title\}\}["']?\s*$/m,
+    `title: ${JSON.stringify(title)}`,
+  );
+}
+
+function validateTemplate(source, path) {
+  for (const marker of [AUTHORING_START, AUTHORING_END, STORYTELLER_START, STORYTELLER_END]) {
+    if (!source.includes(marker)) throw new Error(`${path} is missing required marker: ${marker}`);
+  }
+  if (!source.split("\n").includes(STORYTELLER_HEADING)) {
+    throw new Error(`${path} must contain a Storyteller View heading.`);
+  }
+}
 
 async function ensureFolder(folderPath) {
   let current = "";
@@ -77,73 +159,76 @@ async function ensureFolder(folderPath) {
   }
 }
 
-if (type === "character") {
+const selection = await tp.system.suggester(
+  Object.values(TYPES).map((entry) => entry.label),
+  Object.keys(TYPES),
+  true,
+  "What are you creating?",
+);
+const config = TYPES[selection];
+const currentTitle = tp.file.title === "Untitled" ? "" : tp.file.title;
+const title = String(await tp.system.prompt("Name", currentTitle, true) ?? "").trim();
+if (!title) throw new Error("A title is required to create a VISCERIUM note.");
+if (title !== tp.file.title) await tp.file.rename(title);
+
+const description = String(await tp.system.prompt("One-line identity (optional)", "", false) ?? "").trim();
+const allowedEras = config.schemaType === "event" ? HISTORICAL_ERAS : ERA_OPTIONS;
+const era = await tp.system.suggester(["Leave undefined", ...allowedEras], ["", ...allowedEras], false, "Era / scope") ?? "";
+const entityId = config.schemaType === "event"
+  ? ""
+  : String(await tp.system.prompt(
+      "Continuity entity ID (stable; change the suggested suffix when this is a different thing with a similar name)",
+      suggestedEntityId(title),
+      false,
+    ) ?? "").trim();
+if (entityId && !ENTITY_ID_PATTERN.test(entityId)) {
+  throw new Error(`Invalid entity_id: ${entityId}. Use lowercase kebab-case, e.g. okse-dominion-a.`);
+}
+
+const pick = (options) => tp.user.reference_picker(tp, options);
+const data = {};
+
+if (config.schemaType === "character") {
   data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
   data.location = await pick({ types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
   data.species = await pick({ types: ["species"], multiple: false, label: "species", stubType: "species", stubFolder: "Drafts/Inbox/Species" });
 }
-if (type === "faction") {
+if (config.schemaType === "faction") {
   data.capital = await pick({ types: ["location"], multiple: false, label: "capital", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
   data.territory = await pick({ types: ["location"], multiple: true, label: "territory", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
   data.leader = await pick({ types: ["character"], multiple: false, label: "leader", stubType: "character", stubFolder: "Drafts/Inbox/Characters" });
 }
-if (type === "location") {
+if (config.schemaType === "location") {
   data.location_kind = await tp.system.suggester(
     ["Leave undefined", ...Object.values(LOCATION_KINDS)],
     ["", ...Object.keys(LOCATION_KINDS)],
     false,
-    "Broad location kind — choose only if useful"
+    "Broad location kind — choose only if useful",
   ) ?? "";
   data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
   data.region = await pick({ types: ["location"], multiple: false, label: "parent region", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
 }
-if (type === "event") {
+if (config.schemaType === "event") {
   data.location = await pick({ types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
   data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
   data.participants = await pick({ types: ["character"], multiple: true, label: "participant", stubType: "character", stubFolder: "Drafts/Inbox/Characters" });
 }
 
-const yamlValue = (value) => Array.isArray(value) ? `[${value.map((item) => JSON.stringify(item)).join(", ")}]` : JSON.stringify(value);
-const frontmatter = ["---", `title: ${JSON.stringify(title)}`, `description: ${JSON.stringify(description)}`, "created:", "published:", "updated:", "status: draft", `type: ${type}`, "development_level: stub"];
-if (entityId) frontmatter.push(`entity_id: ${JSON.stringify(entityId)}`);
-if (era) frontmatter.push(`era: ${JSON.stringify(era)}`);
-for (const [key, value] of Object.entries(data)) {
-  if (Array.isArray(value) ? value.length : Boolean(value)) frontmatter.push(`${key}: ${yamlValue(value)}`);
-}
-frontmatter.push(`tags: [${JSON.stringify(type)}]`, "---");
+const templateFile = tp.app.vault.getAbstractFileByPath(config.template);
+if (!templateFile) throw new Error(`Missing VISCERIUM template: ${config.template}`);
+let rendered = await tp.app.vault.read(templateFile);
+validateTemplate(rendered, config.template);
+rendered = setTemplateTitle(rendered, title);
+rendered = setTopLevelField(rendered, "description", description);
+rendered = setTopLevelField(rendered, "era", era);
+rendered = setTopLevelField(rendered, "development_level", "stub");
+if (entityId) rendered = setTopLevelField(rendered, "entity_id", entityId);
+for (const [key, value] of Object.entries(data)) rendered = setTopLevelField(rendered, key, value);
 
-const bodies = {
-  character: ["## Summary", "", "## Appearance", "", "## Personality", "", "## Biography", "", "## Relationships"],
-  faction: ["## Summary", "", "## Culture", "", "## Government", "", "## Military", "", "## Economy", "", "## History"],
-  location: ["## Summary", "", "## Geography", "", "## People and Culture", "", "## Everyday Life", "", "## History", "", "## Story Use"],
-  event: ["## Summary", "", "## Background", "", "## The Event", "", "## Aftermath", "", "## Outcome"],
-  species: ["## Summary", "", "## Identification", "", "## Ecology", "", "## Relationship with people"],
-};
-
-const guidance = type === "location"
-  ? [
-      "> [!tip] Grow locations progressively",
-      "> Record only the detail that makes this place usable. Later, use **Templater: Insert template → Add Location Fields** for settlement, wilderness, site or route detail. Put scene-facing material in the Storyteller View section at the foot of the note.",
-      ""
-    ]
-  : [];
-
-const body = [
-  ...guidance,
-  ...bodies[type],
-  "",
-  "## Related",
-  "",
-  "- [ ] Review this inbox draft and promote it deliberately when established.",
-  "",
-  STORYTELLER_START,
-  "",
-  "## Storyteller View",
-  "",
-  STORYTELLER_END,
-  ""
-];
-tR += `${frontmatter.join("\n")}\n\n${body.join("\n")}`;
+tR += rendered;
 await ensureFolder(config.folder);
 if (tp.file.folder(true) !== config.folder) await tp.file.move(`${config.folder}/${title}`);
+
+// Location notes can later be enriched progressively via Add Location Fields.
+void LOCATION_DETAIL_TEMPLATE;
 %>

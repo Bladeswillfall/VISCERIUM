@@ -56,31 +56,52 @@ test('frontmatter plugins separate mechanical, authorial and continuity fields',
   }
 });
 
-test('all note-creation templates seed authoring and publication dates', async () => {
-  const templates = [
-    'Templates/Lore/New Lore Entity.md',
-    'Templates/Databases/New Story Entity.md',
-    'Templates/Databases/New Myrkild Unit.md',
-    'Templates/Lore/Article Template.md',
-    'Templates/Lore/Character Template.md',
-    'Templates/Lore/Faction Template.md',
-    'Templates/Lore/Location Template.md',
-    'Templates/Lore/Event Template.md',
-    'Templates/Lore/Species Template.md',
-    'Templates/Lore/Item Template.md',
-    'Templates/Lore/Calendar Template.md',
-    'Templates/Lore/Era Template.md',
-    'Templates/Publishing/Map Template.md',
-    'Templates/Publishing/Image Metadata Template.md',
-    'Templates/Timelines/Timeline Template.md',
-    'Templates/Timelines/Chronos Timeline Template.md',
-    'Templates/Databases/Myrkild Unit Profile.md',
-  ];
+const staticCreationTemplates = [
+  'Templates/Databases/New Story Entity.md',
+  'Templates/Databases/New Myrkild Unit.md',
+  'Templates/Lore/Article Template.md',
+  'Templates/Lore/Character Template.md',
+  'Templates/Lore/Faction Template.md',
+  'Templates/Lore/Location Template.md',
+  'Templates/Lore/Event Template.md',
+  'Templates/Lore/Species Template.md',
+  'Templates/Lore/Item Template.md',
+  'Templates/Lore/Calendar Template.md',
+  'Templates/Lore/Era Template.md',
+  'Templates/Lore/Culture Template.md',
+  'Templates/Lore/Belief and Religion Template.md',
+  'Templates/Lore/Naming Language Template.md',
+  'Templates/Lore/Resonance Practice Template.md',
+  'Templates/Publishing/Map Template.md',
+  'Templates/Publishing/Image Metadata Template.md',
+  'Templates/Timelines/Timeline Template.md',
+  'Templates/Timelines/Chronos Timeline Template.md',
+  'Templates/Databases/Myrkild Unit Profile.md',
+];
 
-  for (const template of templates) {
-    const source = await readText(template);
-    assert.match(source, /created:/, `${template} must seed the guarded created property`);
-    assert.match(source, /published:/, `${template} must seed the editorial published property`);
-    assert.match(source, /updated:/, `${template} must seed the automatic updated property`);
+function assertDateFields(source, template) {
+  assert.match(source, /created:/, `${template} must seed the guarded created property`);
+  assert.match(source, /published:/, `${template} must seed the editorial published property`);
+  assert.match(source, /updated:/, `${template} must seed the automatic updated property`);
+}
+
+test('all static note-creation templates seed authoring and publication dates', async () => {
+  for (const template of staticCreationTemplates) {
+    assertDateFields(await readText(template), template);
+  }
+});
+
+test('New Lore Entity delegates date seeding to configured static templates', async () => {
+  const generatorPath = 'Templates/Lore/New Lore Entity.md';
+  const source = await readText(generatorPath);
+  const configuredTemplates = [...source.matchAll(/template:\s*"([^"]+\.md)"/g)].map((match) => match[1]);
+
+  assert.ok(configuredTemplates.length > 0, `${generatorPath} should configure delegated templates`);
+  assert.match(source, /let rendered = await tp\.app\.vault\.read\(templateFile\)/);
+  assert.match(source, /tR \+= rendered/);
+
+  for (const template of configuredTemplates) {
+    assert.ok(staticCreationTemplates.includes(template), `${template} must be covered by the static frontmatter contract`);
+    assertDateFields(await readText(template), template);
   }
 });
