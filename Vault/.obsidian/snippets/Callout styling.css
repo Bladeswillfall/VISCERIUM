@@ -63,3 +63,52 @@ body.viscerium-callouts-bar-only .callout {
 .callout-content > :last-child {
   margin-bottom: 0;
 }
+
+/*
+ * Creator-only authoring drawer used by the redesigned Lore templates.
+ * It is intentionally quieter than semantic callouts and is stripped before
+ * public Codex rendering by Site/scripts/strip-obsidian-plugin-blocks.mjs.
+ */
+.callout[data-callout="authoring"] {
+  --callout-color: 120, 120, 120;
+  --vc-callout-border-mix: 16%;
+  --vc-callout-bg-mix: 2%;
+  --vc-callout-edge-width: 2px;
+  margin-block: 0.7rem 1rem;
+  color: var(--text-muted);
+}
+
+.callout[data-callout="authoring"] > .callout-title {
+  min-height: 2rem;
+  color: var(--text-muted);
+  font-size: 0.78em;
+  font-weight: 650;
+  letter-spacing: 0.035em;
+}
+
+.callout[data-callout="authoring"] > .callout-content {
+  columns: 2 22rem;
+  column-gap: 2rem;
+  padding-top: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.88em;
+  line-height: 1.5;
+}
+
+.callout[data-callout="authoring"] > .callout-content > * {
+  break-inside: avoid;
+}
+
+.callout[data-callout="authoring"] > .callout-content :is(h1, h2, h3, h4, strong) {
+  color: var(--text-normal);
+}
+
+.callout[data-callout="authoring"] > .callout-content a {
+  color: var(--text-accent);
+}
+
+@media (max-width: 760px) {
+  .callout[data-callout="authoring"] > .callout-content {
+    columns: 1;
+  }
+}
