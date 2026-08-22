@@ -1,0 +1,50 @@
+name: One-shot timeline bundle sync
+
+on:
+  push:
+    branches:
+      - feat/redesigned-lore-authoring-templates
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: feat/redesigned-lore-authoring-templates
+          fetch-depth: 1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Tools/obsidian-viscerium-timelines/package-lock.json
+
+      - name: Use pinned npm
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - name: Build and sync timeline plugin
+        working-directory: Tools/obsidian-viscerium-timelines
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:sync
+
+      - name: Commit generated payload and remove helper workflow
+        run: |
+          rm .github/workflows/one-shot-sync-timeline-bundle.yml
+          git add Vault/.obsidian/plugins/viscerium-timelines/main.js \
+                  Vault/.obsidian/plugins/viscerium-timelines/styles.css \
+                  Vault/.obsidian/plugins/viscerium-timelines/manifest.json \
+                  .github/workflows/one-shot-sync-timeline-bundle.yml
+          git diff --cached --quiet && { echo "No generated payload drift remains."; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "fix: sync Obsidian timeline plugin bundle"
+          git push origin HEAD:feat/redesigned-lore-authoring-templates
