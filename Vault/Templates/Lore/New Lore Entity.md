@@ -6,6 +6,7 @@ const AUTHORING_START = "<!-- viscerium:authoring:start -->";
 const AUTHORING_END = "<!-- viscerium:authoring:end -->";
 const STORYTELLER_START = "<!-- viscerium:storyteller:start -->";
 const STORYTELLER_END = "<!-- viscerium:storyteller:end -->";
+const STORYTELLER_HEADING = "## Storyteller View";
 const LOCATION_DETAIL_TEMPLATE = "Templates/Lore/Add Location Fields.md";
 
 const TYPES = {
@@ -145,7 +146,7 @@ function validateTemplate(source, path) {
   for (const marker of [AUTHORING_START, AUTHORING_END, STORYTELLER_START, STORYTELLER_END]) {
     if (!source.includes(marker)) throw new Error(`${path} is missing required marker: ${marker}`);
   }
-  if (!/^## Storyteller View$/m.test(source)) {
+  if (!source.split("\n").includes(STORYTELLER_HEADING)) {
     throw new Error(`${path} must contain a Storyteller View heading.`);
   }
 }
