@@ -51,7 +51,7 @@ sidebar:
       value: Halvmane Mountains and surrounding highlands
     - label: Capital
       value: Valenheim
-      href: "[[Valenheim]]"
+      href: "[[Drafts/Inbox/Locations/Valenheim]]"
   sections:
     - title: Leadership
       fields:
@@ -67,9 +67,9 @@ sidebar:
     - title: Key holdings
       items:
         - label: Valenheim — capital city
-          href: "[[Valenheim]]"
+          href: "[[Drafts/Inbox/Locations/Valenheim]]"
         - label: Rauthrbak Min — capital prison
-          href: "[[Rauthrbak Min]]"
+          href: "[[Drafts/Inbox/Locations/Rauthrbak Min]]"
         - label: Hjalliberg — city
           href: "[[Hjalliberg]]"
         - label: Aldaness — city
@@ -102,6 +102,8 @@ tags:
   - faction
   - Factions
   - Nations
+updated: 2026-08-23
+word_count: 2599
 ---
 
 :::caution[Content warning]
@@ -111,167 +113,146 @@ This article contains references to slavery, coercion, brutality, and systemic e
 This article is a work in progress.
 
 #### Iron roots, blood fruit.
+The **Okse Dominion does not wait to learn what will kill it. It braces first.** Across the [[Halvmane Mountains]], the Oksmun have taken an old Vetruxi virtue - endurance - and built walls, armies, mines and laws around it until survival became something that could be counted, stocked, guarded and forced from somebody else's back.
 
-> Beneath brooding, iron-grey skies, the Okse Dominion sprawls — a land where the wind howls through craggy mountain passes and the scent of wet stone and pine needles clings to every breath. Rain and snow fall in endless succession, drumming against wood, slate, and thatched rooftops and soaking the moss-laden earth until boots squelch with every step. In the shadow of jagged peaks, forests stand dense and ancient, their trunks carved with runes and bone charms, while icy rivers gnaw through the land, binding villages in a frigid, unyielding embrace. Here, the world is never silent: the lowing of oxen, the distant crack of axes, and the mournful call of the taglharpe echo through the mist, a ceaseless hymn to endurance and survival.
+They are still fishers, farmers, herders, smiths, sailors and families huddled around timber halls while shit weather rattles the roof. They still raid. They still sing old songs, carve bone charms and wear black and gold. The difference is what grew around them: stone where timber once sufficed, oil where tallow once burned, registries where a Jarl once relied on memory, and an industrial appetite that has learned the value of every captive pair of hands.
+
+> Hardy meals, shit weather, thick skin and a cultural pressure to get back up again and again.
 > 
-> —
+> — Common description of the [[Oksmun]]
 
-[cols:1-1 gap=xl align=start]
-[col]
-The Okse Dominion is a hardy land of towering peaks, impenetrable temperate rainforests, deciduous woodlands, grassy highlands, and sheer cliffs. Its varied climates and rough terrain have made it an incredibly defensive nation, one hardened by generations of systematic brutality.
-[/col]
-[col]
-Under skies burdened with brooding clouds, the sun's warmth seldom graces the soil. Rain and snow more often than not dance their ceaseless waltz across the Dominion. Craggy mountains pierce the sky, steep hills challenge the bravest souls, tundral plains stretch to what feels like eternity, and icy rivers etch their veins through dense forests, binding coastal towns, cities, and villages alike in a frigid embrace.
-[/col]
-[/cols]
+## A Dominion of Several Weathers
+There is no single Okse landscape, only several varieties of inconvenience. The highlands rise into tundra and sheer mountain country; elsewhere temperate rainforest crowds the stone, deciduous woodland gives way to conifer, and rivers bind inland settlements to the coast. Snow buries one road while rain turns another to sucking mud. Oksmun have opinions about which is worse. Those opinions are usually loud.
 
-## History
+At [[Aldaness]], the Sverd trölla gulf brings foreign crews, salt, seafood and enough trade to soften some of the Dominion's suspicion of outsiders. Music and drink spill around a city still watched by [[Aldaborg fortress]], patrol boats and pyres kept for things that do not stay dead politely. Far inland, [[Hjalliberg]] sits between three mountains where tundra stands within reach of temperate rainforest; game, furs and wood make a different kind of Oksmun wealth. South of [[Drafts/Inbox/Locations/Valenheim|Valenheim]], [[Vagrvik]] crowds two rivers and the [[Issvatn river|Issvatn]] carries trade north. On the western gulf, [[Strondverdir]] watches the approaches toward [[Republic of Askal|Askal]] from beneath the coastal mountains.
 
-[cols:1-1 gap=xl align=start]
-[col]
-In the turbulent shadows of the Uxifirar family, the Okse Dominion was forged from the rift that cleaved kin from kin. Ralof Gullhyrndr would forge a new nation under his rule. The golden-horned son — ambitious, fearsome, defence-minded, and already in command of the Vetruxi Kingdom’s armies — would brand Errack's face with the flag of the Okse Dominion.
+They do not all live like Valenheimers. A fisher in Aldaness, a hunter outside Hjalliberg and a labourer in a Valenheim oil yard may share gods, colours, kinship and the same irritating belief that everyone else complains too much; their days still smell different. Fish guts and salt. Wet bark and blood. Hot iron, oil and old snow.
 
-To ensure the might of his father’s land would not falter, Ralof set his eyes on fortifying the nation and developing an industrial machine that could arm his followers. The Oksmun would not rely on imported ores or equipment.
-[/col]
-[col]
-Meanwhile, Ralof's younger brother, Asgrim Torradsson, a man deeply attuned to the pulse of their father Torrad Uxifadir’s realm, would birth the Krass Dominion from the soil’s womb. In the wake of the schism, Asgrim ensured that his people tilled the land and clung fiercely to the threads of independent culture and the unyielding mindset of the Vetruxi Kingdom.
+### What survives
+The Oksmun praise stamina and endurance above almost everything else. That does not make every Oksmun a warrior. It makes warrior virtues hard to keep out of ordinary life. A roof is good if it survives winter. A blade is good if it still takes an edge after abuse. A worker earns respect by finishing the job. A child who falls is expected to get back up before somebody turns sympathy into mockery.
 
-Bound by blood, yet split by divergent ambitions, the two brothers navigated a tumultuous partnership. Each harnessed their unique strengths to pursue their individual aspirations, transforming their brotherhood into a strategic alliance that would carve two distinct destinies.
+Coarse wool, pelts and oil-darkened leather answer the weather; bone charms and runes answer older fears. Black and gold remain recognisable Oksmun colours, while their architecture favours straight lines, sharp triangles and thick walls. Even a settlement built mostly from wood can carry the Dominion's newer instincts in one black-stone watchtower, a reinforced bridge or a storehouse built as if grain itself might attempt a siege.
 
-In a solemn tradition, the Oksmun, like their Krassian kin, would elect their once-leader to bear the esteemed title of Kóngr Eilífr. It was a pact born of shared reverence for Torrad, the Ox-Father, the mighty Bulwark of the Vetruxi Kingdom. They swore to forever eschew the titles of Kóngr or Dróttning, for their people continued to hold Torrad in the highest regard. He remained their father figure, revered leader, and a figure of living legend, uniting both Dominions under his enduring legacy.
-[/col]
-[/cols]
+## Iron Roots
+The Dominion began with a family fracture. [[Ralof Gullhyrndr]], golden-horned son of [[Torrad Uxifadir]] and commander of the [[Vetruxi Kingdom]]'s armies, took the militaristic lesson from his father's realm and pushed it further. Fortify. Arm yourself. Do not depend on imported ore or another ruler's goodwill. Whatever comes next, be ready before it arrives.
 
-## People
+His younger brother [[Asgrim Torradsson]] chose differently. The [[Krass Dominion]] turned inward, holding tighter to local land, older traditions and a less centralised inheritance of Vetruxi life. To Oksmun eyes, the Krass chose the easier path. To Krassians, the Okse mistook hardship for virtue and then built a government to enforce it.
 
-### Oksmun culture
+History has been rude enough to give both sides ammunition. The Krass preserved ways of life the Okse increasingly subordinated to defence and industry. The Okse built the kind of military strength their sister Dominion later needed when the Udumans invaded. Oksmun do not forget that part. Krassians rarely forget the price attached to the lesson.
 
-The Oksmun are shaped by hardship and ritual, their faces weathered by biting winds and the glare of snowfields. Each scar is a story, each tattoo a ward against ancestral curses. At night, the air thickens with the sweet, smoky tang of burning tallow and blood, as bone charms rattle on a warrior’s armour and the ground is stained with sacrificial offerings.
+Both Dominions still refuse the titles of *Kóngr* and *Dróttning* in reverence for Torrad, remembered as the **Ox-Father** and *Kóngr Eilífr*. Blood, history and mutual need keep the sisters close even when their philosophies grind against one another.
 
-Children learn to wield a blade before they can read, their lullabies sung in the guttural tongue of old gods. To survive here is to submit to the land’s demands: to kneel in the mud, to bleed in the frost, to rise again and again, unbroken. This is not a culture for the faint of heart. It is a way of life where combat and defence reign supreme, etching warrior traditions deep into their souls.
+## Hard People, Uneven Lives
+Oksmun culture can look simple from outside: scars, pelts, bone charms, dark steel, thick walls. It is not. A wealthy coastal trader in Aldaness may share a table with foreigners and still hang ancestral charms over the door. A rural household may know little of Valenheim's oil politics but understand exactly which Jarl can demand men, boats or stores. A smith may never own a Thrall and still work iron mined by one.
 
-Displays of bone charms, inscribed with ancient runes, adorn battle-worn armour, weaving protective wards and ancestral blessings into Oksmun attire. Their existence is an intricate dance with the relentless metal of war. In this realm of stone and steel, the Dominion's imports are scarce; its self-sufficiency is a testament to Oksmun endurance and their enduring alliance with the Krassians.
+The Dominion's authority is strongest where survival can be made administrative. Mines, roads, passes, ports, forges and fortresses accumulate overseers, guards and rules because each can be described as necessary. Oksmun are not uniquely obedient people; they are people raised in a culture where preparedness has moral weight. That makes coercion easier to defend when it wears the clothes of duty.
+
+There is warmth here too, because otherwise nobody would bother defending any of it. Families pack halls around food heavy enough to survive the weather. Mead, music and argument fill nights that start too early in winter. Coastal pyres guide sailors home. Hunters return with fur and meat. Somebody always insists the younger generation has gone soft. Somebody younger usually waits until they turn around before calling them an old cunt.
 
 ### Submit, and serve
+> In the shadow of the Halvmane Mountains, a Thrall wipes oil from his brow, the sweet, burnt-charcoal reek clinging to his skin. Above, overseers chant the old prayers, bone charms rattling in the wind. Each swing of the pickaxe sends shudders through his arms, each breath a struggle against the stifling, tar-thick air. He dreams of snow and silence, but the Dominion's hunger is endless, and the oil must flow.
 
-> In the shadow of the Halvmane Mountains, a Thrall wipes oil from his brow, the sweet, burnt-charcoal reek clinging to his skin. Above, overseers chant the old prayers, bone charms rattling in the wind. Each swing of the pickaxe sends shudders through his arms, each breath a struggle against the stifling, tar-thick air. He dreams of snow and silence, but the Dominion’s hunger is endless, and the oil must flow.
+The Okse still raid and pillage for labour as their ancestors raided for wealth, cattle, prestige and captives. Industrialisation did not erase the old practice; it gave the state more places to put the people dragged home.
 
-In the unrelenting churn of Oksmun society, power is an ever-shifting maelstrom, a ceaseless cycle of dominance and submission. Power in the Dominion is measured in scars and obedience.
+Thralls and Ambátts work the oil pits, mines and forges, marked by masters who may call the system necessity long after necessity has become profit. Some are raised to Leysingi and find freedom does not scrub the mine from a person's face or other people's memory. The Dominion's ugliest habit is not simply cruelty. It is its talent for making cruelty sound practical.
 
-Thralls and Ambátts toil in the choking blackness of oil pits and the stifling heat of forges, their backs branded with the sigils of their masters, sweat and blood mingling with the reek of crude oil and iron. The clang of chains and the crack of overseers’ whips are as constant as the wind.
+[[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]] is that argument given stone walls. Prison, mine, forge and place of punishment fold together inside the Halvmane Mountains until confinement and production are difficult to separate. Its harsher traditions have attracted people who enjoy suffering for reasons far less defensible than state necessity, but the Dominion does not need every overseer to be a sadist. The machine works perfectly well with men who think they are doing their duty.
 
-Sometimes, a Thrall is unshackled — raised to Leysingi, neither free nor truly kin, their eyes haunted by the memory of the mines. Hope here is a blade’s edge: sharp, but always threatening to cut.
+## Black Gold
+Oil arrived in a culture already obsessed with self-sufficiency and found itself immediately useful. It treats weapons and armour against rust, feeds lamps through long winters, supplies industry and powers specialised fire-weapons. In a wetter settlement it keeps metal from rotting. In a forge it extends what can be done. In a harbour it fills barrels where old raiding holds once expected plunder.
 
-### Hardy attire
+The visual change is easy to romanticise: darkened steel, black smoke, steady lamps, longboats heavy with trade. The social change is uglier. Oil pulls labour toward dangerous extraction, deepens the Dominion's appetite for slaves and makes places such as Rauthrbak economically harder to condemn. New deposits promise security, wealth and military advantage, so exploration keeps moving into terrain where the cheapest person to lose is usually the person already in chains.
 
-Oksmun garb is armour against the world: a patchwork of coarse wool, animal pelts, and oil-darkened leather, heavy with the scent of smoke and wet fur. Cloaks hang thick and sodden, stitched with crimson thread and ivory beads, tokens of clan and conquest. Even in the dim glow of lamplight, every sleeve and hem is a testament to survival, each stain a memory of storm or battle.
-
-### Resonance within the Dominion
-
-Few Resonants emerge from the crucible of the Okse Dominion, yet those born with arcane gifts often embrace either Muld or Svar sorcery.
-
-A shadowy legacy of Muld sorcerers, the architects of a bygone era, has bestowed upon the Oksmun a profound mastery of structural engineering. Consequently, an unrelenting decree has reigned for decades: all who show affinity for Muld sorcery must be registered with the Dominion's Jarl in charge of monitoring such individuals, or face a merciless death.
-
-In contrast, Svar sorcery weaves its fiery threads with more liberty, its wielders labouring in the blistering crucibles of industry or amongst the royal blacksmiths, their powers less regulated, but no less potent.
-
-## Economy
-
-Though predominantly an isolationist nation, the Oksmun rely on an import of slaves to fuel their economy.
-
-### Oil: The Black Gold of the Dominion
-
-[cols:1-1 gap=xl align=start]
-[col]
-Oil has emerged as a new resource fueling industrial might and military prowess. This black gold has become the lifeblood of the Dominion's economy, transforming its landscape and society profoundly.
-
-The discovery of vast oil reserves beneath the Dominion's rugged terrain sparked a revolution in Oksmun industrial capability. Engineers quickly developed methods to harness this valuable resource, integrating it into their culture, technology, and military infrastructure.
-
-In the forges and armouries, oil found a crucial application. Oksmun weaponsmiths discovered that treating their arms and armour with oil not only prevented rust but also imbued their steel with a menacing dark sheen. This innovation soon became a hallmark of Oksmun military equipment, adding to their fearsome appearance on the battlefield.
-
-The military applications of oil extended beyond preservation. Oksmun engineers developed a specialised oil-based propellant for flamethrowers, creating a terrifying weapon for the Dominion's forces. These devices, spewing liquid fire, became a signature tool of Oksmun warfare.
-[/col]
-[col]
-However, the bounty of oil came at a grim cost. The Okse Dominion's reliance on slave labour found new depths in the oil industry. Thralls and Ambátts toil in perilous conditions, pumping crude oil from the earth and processing it in refineries. One of the largest of these operations is housed within the infamous Rauthrbak Min prison, where a section has been converted into a massive oil well.
-
-The search for new oil deposits drives the Dominion to push its slave workforce to ever greater extremes. Exploration teams, comprised mostly of expendable thralls, venture into treacherous terrain, risking life and limb to locate fresh reserves.
-
-Even the Dominion's iconic longboats have not escaped the influence of this new resource. Once primarily vessels of war and raiding, these sleek ships now serve a different purpose. Their holds, once filled with plunder, now brim with barrels of oil, slaves, and other goods vital to the Dominion's burgeoning trade networks.
-
-The oil boom has reshaped the Oksmun way of life in unexpected ways. While traditional fats from whales, pork, and beef remain important for cooking and tallow, oil lamps have become a common sight in Oksmun homes. These steady sources of illumination pierce the long, dark winters: a small comfort in the harsh reality of Dominion life.
-
-As the Okse Dominion's reliance on oil grows, so too does the complexity of its society. The black gold that flows beneath their feet has brought both prosperity and new forms of suffering, fueling the industrial machine while deepening the divide between master and slave. In the smoky glow of oil lamps and the shadow of towering derricks, the Oksmun forge ahead, their future as dark and potent as the resource that now defines them.
-[/col]
-[/cols]
+The Oksmun did not stop using whale, pork and beef fat. They did what they usually do: kept the old thing, added the useful new thing, and then built a system around both.
 
 ### Major exports
+**Ore and ingots.** Mines and metalworks make raw and worked metal one of the Dominion's most guarded sources of wealth.
 
-**Ore and ingots**
+**Arms and armour.** Oksmun-made equipment carries a reputation for hard use, darkened steel and the same preference for durability that shapes their walls.
 
-Thanks to the plethora of mines and metalworks dotted around the Dominion, there is an abundance of metals. So much so that the sale of ores and ingots is now one of the Dominion's largest and most guarded exports.
+**Structural engineers.** The people who make the Dominion so difficult to invade have discovered that foreign rulers will pay extremely well to borrow the talent.
 
-**Arms and armour**
+**Oil.** Increasingly important to lighting, metalwork, industry and war — and increasingly difficult to separate from the coerced labour that extracts it.
 
-Second to the sale of materials to other nations, the sale of Oksmun-made arms and armour is highly coveted by those looking to protect themselves and deal devastating damage.
+The contradiction is difficult to miss: the Dominion prides itself on self-sufficiency while depending heavily on imported slave labour to feed the industry that makes that independence possible.
 
-**Structural engineers**
+## Power Under Seal
+Few Resonants emerge within the Dominion, but those who do are too useful to be left alone. [[Law-Muld-991|Muld]] and [[Law-Svar-a56|Svar]] affinities are the clearest examples.
 
-Known for their grand defensive structures, the Dominion has started to allow those who helped design and build these fortifications to sell their skills to nations and rich individuals for a high price.
+Muld sorcerers inherited the shadow of older architects and the structural expertise that helped make Oksmun engineering feared and expensive. The state response is brutally consistent: **register them**. A Muld Resonant who refuses — or whose family hides them — can face death. The Dominion admires what their hands can build and distrusts the fact those hands are not made of stone.
 
-## Wildlife
+Svar Resonants receive more room to breathe because fire and heat sit comfortably beside forges, royal smiths and heavy industry. Less regulated does not mean free of suspicion. It means their usefulness is obvious enough that the state has fewer reasons to pretend otherwise.
 
-[cols:1-1 gap=xl align=start]
-[col]
-Within the Dominion's tundra and coniferous realms, the tapestry of life is woven with hardy, thick-furred beasts of various magnitudes. Towering mammoths have been tamed to serve as living battering rams, while smaller highland cows graze the wide-open fields and rolling slopes.
-[/col]
-[col]
-In the skies above, Sigdfugl rule the aerial realm, their predatory instincts honed to perfection as they hunt small prey. Amidst the shadows of coniferous forests and wooded enclaves, where slightly milder climes provide respite, the land teems with life. Berries and fungi thrive in these realms, offering sustenance to creatures as resolute as the land itself. Here, amidst towering trees, deer, wolves, bears, and cunning foxes roam.
+In another culture, [[Resonance]] might mark someone as prophet, witch or wonder. The Okse are quite capable of all three reactions.
 
-Venturing to the shimmering waters, a kingdom beneath the surface stirs. Countless rivers, both fresh and salt, converge with the unyielding sea, harbouring a vast realm of sealife. Whales, seals, voracious pike, and the elusive Elvormr all carve their domains in the waters of the Okse Dominion, where survival is as ruthless as the land itself.
-[/col]
-[/cols]
+Then somebody arrives with a ledger.
 
-## Armed forces
+## Behind the Shield
+Oksmun warfare is easiest to understand by looking at the shield. Broad, angular and brutally practical, it assumes something awful is going to hit it and that the sensible response is to still be standing afterwards.
 
-In the embrace of the Okse Dominion, might is the currency of power, where leadership demands both brutality and ingenuity. Kónungsson Erlend Nautleif stands at the helm, commanding the Dominion's formidable armed forces.
+[[Erlend Nautleif|Kónungsson Erlend Nautleif]] commands a large standing force drawn from a hardy, militaristic population. Darkened steel and severe armour give the army its silhouette; gold, fur and cloth mark status without making rank look delicate. [[Juggernauts]] turn that weight into strategy. Some carry warbows large enough to loose arrows the size of a man's forearm. Others serve as guardians, anchors and shock force. Scarce Resonants are held for threats important enough to justify them and often move with supporting foot soldiers or Juggernaut protection.
 
-The vast population, hardy and militaristic, is responsible for the sheer size of its standing force. Their weapons are tools of war, ruthlessly efficient, designed to endure the horrors of the battlefield. The warriors, embodiments of relentless intensity, iconically bear tower shields with angular, menacing edges, mirroring the brutalist armour they don. Darkened steel weaponry, efficient and merciless, is their trademark. For those of rank, a touch of gold, fur, and cloth embellishes their attire.
+Oil extends the same philosophy into flame. Engineering extends it into fortification. Raiding extends it into labour and supply. An Oksmun army is dangerous not because every soldier is some frothing berserker, but because the culture behind him understands roads, walls, metal, stores and the miserable value of preparing before everybody else.
 
-Their ranks brim with Juggernauts, colossal beings whose might shapes the Dominion's strategy. Among their duties, some master the art of long-range archery, wielding gargantuan warbows that launch arrows as massive as a man's forearm. These warriors unleash devastation from afar, embodying the Dominion's relentless might.
+That power carries attitude with it. The Okse can look at the Krass and say, with some historical justification, that softer choices eventually required harder neighbours. The Krass can look back and ask whether a nation that survives by putting chains on other people has confused endurance with righteousness.
 
-Resonants, few in number, are strategic assets reserved for significant threats to the Dominion. They are often deployed with an entourage of supporting foot soldiers and, in some cases, guardian Juggernauts.
+## Faces of the Dominion
+The Dominion works best as a hub when its settlements are allowed to disagree with one another. **Valenheim is not the entire Okse experience; it is the most concentrated expression of it.**
+
+**[[Drafts/Inbox/Locations/Valenheim|Valenheim]]** — The Dominion's fortified heart, where black stone, river trade, Resonant engineering and industrial growth gather behind the [[Mestrvirki]].
+
+**[[Drafts/Inbox/Locations/Rauthrbak Min|Rauthrbak Min]]** — A mountain prison whose mines, forges and punishments make the Dominion's habit of turning suffering into output difficult to ignore.
+
+**[[Vagrvik]]** — A bustling city between two rivers, linked to Valenheim by the [[Issvatn river|Issvatn]] and home to the Dominion's largest port, [[Hofn Heillfranvagr]].
+
+**[[Aldaness]]** — A wealthy gulf settlement shaped by foreign trade, seafood, year-round beacon pyres and an openness outsiders do not always expect from the Okse.
+
+**[[Hjalliberg]]** — An ancient mountainside city between three peaks, where nearby tundra and temperate rainforest supply game, fur and timber.
+
+**[[Strondverdir]]** — A western-gulf city guarding approaches toward [[Republic of Askal|Askal]], tied inland by a north-south road sheltered beneath the coastal mountains.
+
+## A Country That Bites Back
+The Dominion's wildlife follows the same rule as its people: endure the climate or become somebody else's meal. Thick-furred animals dominate the cold country. Highland cattle graze open slopes. Deer, wolves, bears and foxes haunt the wooded zones, while berries and fungi fill the softer ground beneath the trees. [[Sigdfugl]] hunt overhead. Whales, seals, pike and [[Elvormr]] turn the rivers and sea into their own contested territories.
+
+Mammoths are the most Oksmun answer to the question of what to do with something enormous: tame it, armour the idea in military language and turn the beast into a living battering ram.
+
+## The Character of the Okse
+Strip away the black steel and the oil smoke and the Oksmun are not complicated to understand. **They hate being helpless.**
+
+Everything else follows from how far they are willing to go to avoid it. They build too thick, store too much, train too hard and distrust the useful thing they cannot control. They can be generous inside the hall and merciless beyond it; deeply loyal to family and perfectly capable of benefiting from another family's chains. Their history gives them reasons for both pride and paranoia.
+
+That is why the Dominion works best when it is neither romantic Viking hardiness nor faceless industrial cruelty. It is both, layered together. Timber villages and black-stone forts. Whale tallow and oil lamps. Raiders and clerks. Bone charms on armour designed by engineers. An old song sung in a forge that did not exist in the singer's grandfather's time.
+
+They did not abandon what they were after the Vetruxi split.
+
+They took it somewhere harsher.
 
 <!-- viscerium:storyteller:start -->
 
 ## Storyteller View
 
 ### Recognisable presence
-
 Darkened steel, angular tower shields, coarse wool and pelts, bone charms and runic adornment make Oksmun military and cultural presence difficult to mistake; rank adds gold, fur and cloth.
 
 Outsiders are most likely to encounter the Dominion through fortified settlements, mines and forges, military forces, or trade in ore, oil, arms and engineering expertise.
 
 ### Current agenda
-
 The Dominion wants to preserve Oksmun defensive self-sufficiency while expanding the oil and mineral extraction that fuels its industry and military strength.
 
 Growing dependence on oil extraction and imported slave labour drives continued exploration and harsher exploitation, while the Dominion's isolationist character keeps self-sufficiency strategically important.
 
 ### Preferred methods
-
 Fortification, militarised industry, coercive labour, tightly controlled use of Muld Resonants and overwhelming organised force are recurring tools of Dominion power.
 
 ### Resources and limits
-
 The Dominion can draw on a large standing army, Juggernauts, scarce but strategically deployed Resonants, metalworking and oil industries, structural engineers, longboats and valuable exports.
 
 Resonants remain few, imports are deliberately scarce outside the slave labour the economy relies upon, and the Dominion's strength is closely tied to its harsh home terrain and industrial base.
 
 ### Internal tensions
-
 Oil wealth and industrial expansion deepen the divide between masters and enslaved labourers, while freed Leysingi occupy an uneasy position between bondage and full belonging.
 
 ### Consequences of involvement
-
 Involvement with Dominion trade, industry or authority can entangle outsiders in coerced labour, guarded resources, Resonant registration or the demands of a heavily militarised society.
 
 <!-- viscerium:storyteller:end -->
