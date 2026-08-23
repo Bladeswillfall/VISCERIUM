@@ -54,7 +54,12 @@ function readSensitiveManifest(settings) {
       .filter((entry) => entry && typeof entry.asset === 'string')
       .map((entry) => [
         assetFilename(entry.asset),
-        Array.isArray(entry.warnings) ? entry.warnings.filter((warning) => typeof warning === 'string') : [],
+        {
+          sensitive: entry.sensitive === true,
+          warnings: Array.isArray(entry.warnings)
+            ? entry.warnings.filter((warning) => typeof warning === 'string')
+            : [],
+        },
       ])
       .filter(([asset]) => asset));
   } catch {
@@ -82,28 +87,60 @@ function markSensitiveMedia(settings) {
 
   document.querySelectorAll('img[src]').forEach((image) => {
     if (!(image instanceof HTMLImageElement)) return;
-    const warnings = manifest.get(assetFilename(image.currentSrc || image.src));
-    if (!warnings) return;
+    const metadata = manifest.get(assetFilename(image.currentSrc || image.src));
+    if (!metadata) return;
 
     const container = mediaContainer(image);
     if (!container) return;
+    if (metadata.warnings.length > 0) {
+      container.setAttribute('data-image-content-warnings', metadata.warnings.join(','));
+    }
+    if (!metadata.sensitive) return;
+
     container.setAttribute('data-sensitive-media', 'true');
     container.setAttribute('data-sensitive-media-auto', '');
-    container.setAttribute('data-sensitive-warnings', warnings.join(','));
+    container.setAttribute('data-sensitive-warnings', metadata.warnings.join(','));
   });
 }
 
-function sensitiveWarningText(node) {
-  return String(node.getAttribute('data-sensitive-warnings') || '')
+function warningTokens(value) {
+  return String(value || '')
     .split(',')
-    .map((entry) => entry.trim().replace(/-/g, ' '))
-    .filter(Boolean)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function formatWarning(warning) {
+  return String(warning).trim().replace(/-/g, ' ');
+}
+
+function sensitiveWarningText(node) {
+  return warningTokens(node.getAttribute('data-sensitive-warnings'))
+    .map(formatWarning)
     .join(' · ');
+}
+
+function syncContentNotes() {
+  const notes = document.querySelector('[data-content-notes]');
+  if (!(notes instanceof HTMLElement)) return;
+
+  const warnings = new Set(warningTokens(notes.dataset.authoredWarnings));
+  document.querySelectorAll('[data-image-content-warnings]').forEach((node) => {
+    warningTokens(node.getAttribute('data-image-content-warnings')).forEach((warning) => warnings.add(warning));
+  });
+
+  const list = notes.querySelector('[data-content-notes-list]');
+  if (!(list instanceof HTMLElement)) return;
+
+  const rendered = [...warnings].map(formatWarning);
+  list.textContent = rendered.join(' · ');
+  notes.hidden = rendered.length === 0;
 }
 
 function prepareSensitiveMedia() {
   const settings = document.querySelector('viscerium-reader-settings');
   markSensitiveMedia(settings);
+  syncContentNotes();
 
   const revealLabel = settings?.getAttribute('data-sensitive-reveal-label') || 'Reveal image';
   const warningLabel = settings?.getAttribute('data-sensitive-warning-label') || 'Sensitive image';
