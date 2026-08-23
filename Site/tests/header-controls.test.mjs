@@ -11,23 +11,36 @@ test('Telescope owns search while the custom header stays enabled', () => {
   assert.match(config, /starlightTelescope\(\{[\s\S]*key:\s*'k'/);
   assert.match(config, /Header:\s*'\.\/src\/components\/CodexHeader\.astro'/);
   assert.match(config, /'\.\/src\/styles\/header-controls\.css'/);
+  assert.match(config, /'\.\/src\/styles\/reader-settings\.css'/);
 });
 
-test('the Codex header renders the Telescope search trigger, era context and theme controls', () => {
+test('the Codex header renders search, era context and reader settings without a separate theme button', () => {
   const header = read('../src/components/CodexHeader.astro');
+  const settings = read('../src/components/ReaderSettings.astro');
   const search = read('../src/components/CodexSearch.astro');
   const eraContext = read('../src/components/EraContextControls.astro');
   const shell = read('../src/scripts/codex-shell.js');
   const headerCss = read('../src/styles/header-controls.css');
+  const settingsCss = read('../src/styles/reader-settings.css');
 
   assert.match(header, /import CodexSearch from '\.\/CodexSearch\.astro'/);
   assert.match(header, /import EraContextControls from '\.\/EraContextControls\.astro'/);
-  assert.match(header, /import ThemeSelect from 'virtual:starlight\/components\/ThemeSelect'/);
+  assert.match(header, /import ReaderSettings from '\.\/ReaderSettings\.astro'/);
+  assert.doesNotMatch(header, /import ThemeSelect/);
   assert.match(header, /<CodexSearch \/>/);
   assert.match(header, /<EraContextControls \/>/);
-  assert.match(header, /<ThemeSelect \/>/);
+  assert.match(header, /<ReaderSettings \/>/);
   assert.match(header, /data-codex-header-search/);
   assert.match(header, /data-codex-header-controls/);
+
+  assert.match(settings, /import ThemeSelect from 'virtual:starlight\/components\/ThemeSelect'/);
+  assert.match(settings, /<ThemeSelect \/>/);
+  assert.match(settings, /data-reader-settings-trigger/);
+  assert.match(settings, /value="auto" data-reader-theme-option/);
+  assert.match(settings, /value="light" data-reader-theme-option/);
+  assert.match(settings, /value="dark" data-reader-theme-option/);
+  assert.match(settings, /role="switch"/);
+  assert.match(settingsCss, /\.reader-settings-trigger/);
 
   assert.match(shell, /telescope-search \.telescope__trigger-btn/);
   assert.match(search, /aria-controls="telescope-dialog"/);
@@ -47,7 +60,6 @@ test('the Codex header renders the Telescope search trigger, era context and the
   assert.match(headerCss, /html\[data-codex-wide-header\] \.codex-header-search/);
   assert.match(headerCss, /min-width:\s*14rem !important/);
   assert.doesNotMatch(headerCss, /@media\s*\(\s*min-width/);
-  assert.match(headerCss, /\.codex-theme-control select/);
 });
 
 test('the Telescope plugin retains a hidden controller mount', () => {
@@ -66,6 +78,7 @@ test('global shell scripts are processed once instead of repeated inline', () =>
   for (const component of [
     '../src/components/CodexSearch.astro',
     '../src/components/EraContextControls.astro',
+    '../src/components/ReaderSettings.astro',
     '../src/components/Webmentions.astro',
     '../src/components/CodexHeader.astro',
     '../src/components/StarlightFooter.astro',
@@ -73,6 +86,7 @@ test('global shell scripts are processed once instead of repeated inline', () =>
     assert.doesNotMatch(read(component), /<script\s+is:inline>/);
   }
   assert.match(read('../src/components/CodexHeader.astro'), /import '\.\.\/scripts\/codex-shell\.js'/);
+  assert.match(read('../src/components/ReaderSettings.astro'), /import '\.\.\/scripts\/reader-settings\.js'/);
 });
 
 test('the top ribbon is visually flat, centred and free of GitHub branding', () => {
@@ -92,6 +106,7 @@ test('the top ribbon is visually flat, centred and free of GitHub branding', () 
 
 test('the complete header ribbon is borderless without removing focus indicators', () => {
   const headerCss = read('../src/styles/header-controls.css');
+  const settingsCss = read('../src/styles/reader-settings.css');
 
   assert.match(
     headerCss,
@@ -99,6 +114,7 @@ test('the complete header ribbon is borderless without removing focus indicators
   );
   assert.doesNotMatch(headerCss, /border-color\s*:/);
   assert.match(headerCss, /:focus-visible[\s\S]*outline:\s*2px solid/);
+  assert.match(settingsCss, /\.reader-settings-trigger:focus-visible[\s\S]*outline:\s*2px solid/);
 });
 
 test('theme controls are not duplicated inside the sidebar', () => {
