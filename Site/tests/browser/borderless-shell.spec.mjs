@@ -42,37 +42,32 @@ test('structural chrome is borderless while article callouts retain their border
   expect(result.callout.some((width) => width !== '0px')).toBe(true);
 });
 
-test('Okse editorial columns sit side by side on desktop and stack on small screens', async ({ page }) => {
+test('Okse prose-led faction hub remains readable without horizontal overflow', async ({ page }) => {
   await page.goto(okseDominionUrl, { waitUntil: 'networkidle' });
 
-  const firstColumns = page.locator('.sl-markdown-content .cx-cols').first();
-  await expect(firstColumns).toBeVisible();
+  const loreBody = page.locator('#codex-lore-panel');
+  await expect(loreBody).toBeVisible();
+  await expect(loreBody.getByRole('heading', { name: 'A Dominion of Several Weathers' })).toBeVisible();
+  await expect(loreBody.getByRole('heading', { name: 'Faces of the Dominion' })).toBeVisible();
 
-  const desktop = await firstColumns.locator(':scope > .cx-col').evaluateAll((columns) =>
-    columns.map((column) => {
-      const rect = column.getBoundingClientRect();
-      return { left: rect.left, top: rect.top, width: rect.width };
-    }),
-  );
-
-  expect(desktop).toHaveLength(2);
-  expect(desktop[1].left).toBeGreaterThan(desktop[0].left + desktop[0].width - 2);
-  expect(Math.abs(desktop[1].top - desktop[0].top)).toBeLessThan(2);
+  const desktop = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(desktop.scrollWidth).toBeLessThanOrEqual(desktop.clientWidth + 1);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: 'networkidle' });
 
-  const mobileColumns = page.locator('.sl-markdown-content .cx-cols').first().locator(':scope > .cx-col');
-  const mobile = await mobileColumns.evaluateAll((columns) =>
-    columns.map((column) => {
-      const rect = column.getBoundingClientRect();
-      return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
-    }),
-  );
+  const mobileLoreBody = page.locator('#codex-lore-panel');
+  await expect(mobileLoreBody).toBeVisible();
+  await expect(mobileLoreBody.getByRole('heading', { name: 'A Dominion of Several Weathers' })).toBeVisible();
 
-  expect(mobile).toHaveLength(2);
-  expect(Math.abs(mobile[1].left - mobile[0].left)).toBeLessThan(2);
-  expect(mobile[1].top).toBeGreaterThanOrEqual(mobile[0].top + mobile[0].height - 2);
+  const mobile = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(mobile.scrollWidth).toBeLessThanOrEqual(mobile.clientWidth + 1);
 });
 
 test('Okse uses one full-page raised deck with the global footer rail revealed only at the end', async ({ page }) => {

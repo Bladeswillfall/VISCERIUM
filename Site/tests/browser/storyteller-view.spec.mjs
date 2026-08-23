@@ -25,7 +25,7 @@ test('Lore is the default and Storyteller replaces the canonical article body wi
   await expect(storytellerTab).toHaveAttribute('aria-selected', 'false');
   await expect(loreBody).toBeVisible();
   await expect(loreBody).toContainText('Iron roots, blood fruit.');
-  await expect(loreBody.getByRole('heading', { name: 'History' })).toBeVisible();
+  await expect(loreBody.getByRole('heading', { name: 'Iron Roots', exact: true })).toBeVisible();
   await expect(loreBody.getByRole('heading', { name: 'Current agenda' })).toHaveCount(0);
   await expect(storytellerPanel).toBeHidden();
   await expect(sidebar).toBeVisible();
