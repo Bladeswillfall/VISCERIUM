@@ -1,7 +1,16 @@
 ---
+import { getCollection } from 'astro:content';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
 const { t } = Astro.locals;
+const docs = await getCollection('docs');
+const sensitiveMediaManifest = docs
+  .filter((doc) => doc.data.type === 'image' && doc.data.sensitiveMedia === true && typeof doc.data.asset === 'string' && doc.data.asset.trim())
+  .map((doc) => ({
+    asset: doc.data.asset.trim(),
+    warnings: Array.isArray(doc.data.contentWarnings) ? doc.data.contentWarnings : [],
+  }));
+const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replace(/</g, '\\u003c');
 ---
 
 <viscerium-reader-settings
@@ -52,7 +61,7 @@ const { t } = Astro.locals;
       <div class="reader-theme-options">
         <label>
           <input type="radio" name="reader-theme" value="auto" data-reader-theme-option />
-          <span>{t('themeSelect.auto')}</span>
+          <span>{t('viscerium.settings.systemTheme')}</span>
         </label>
         <label>
           <input type="radio" name="reader-theme" value="light" data-reader-theme-option />
@@ -86,6 +95,8 @@ const { t } = Astro.locals;
       <p class="reader-settings-note">{t('viscerium.settings.contentNote')}</p>
     </fieldset>
   </div>
+
+  <script type="application/json" data-sensitive-media-manifest set:html={sensitiveMediaManifestJson}></script>
 </viscerium-reader-settings>
 
 <script>
