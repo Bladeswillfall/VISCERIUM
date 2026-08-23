@@ -195,7 +195,7 @@ const searchVerificationHead = siteConfig.searchVerification?.google
     ]
   : [];
 
-const { enabled: giscusEnabled } = siteConfig.giscus;
+const { enabled: commentsEnabled } = siteConfig.comments;
 
 const sidebar = [
   ...(await buildSidebar()),
@@ -263,7 +263,7 @@ export default defineConfig({
         PageSidebar: './src/components/CodexPageSidebar.astro',
         PageTitle: './src/components/CodexPageTitle.astro',
         TwoColumnContent: './src/components/CodexTwoColumnContent.astro',
-        ...(giscusEnabled ? { Pagination: './src/components/GiscusPagination.astro' } : {}),
+        ...(commentsEnabled ? { Pagination: './src/components/CommentsPagination.astro' } : {}),
       },
       editLink: {
         baseUrl: `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/`,
