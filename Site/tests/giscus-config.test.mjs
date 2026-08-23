@@ -29,17 +29,31 @@ async function readGiscusConfig(overrides = {}) {
   }
 }
 
-test('Giscus uses the migrated public repository defaults without deploy variables', async () => {
+test('Giscus uses the verified public repository identity without deploy variables', async () => {
   const config = await readGiscusConfig();
 
   assert.equal(config.enabled, true);
   assert.equal(config.repo, 'Bladeswillfall/VISCERIUM');
-  assert.equal(config.repoId, 'R_kgDOTOiQ7g');
+  assert.equal(config.repoId, 'R_kgDOTolQ7g');
   assert.equal(config.category, 'Comments');
-  assert.equal(config.categoryId, 'DIC_kwDOTOiQ7s4DCYjH');
+  assert.equal(config.categoryId, 'DIC_kwDOTolQ7s4DCYjH');
   assert.equal(config.theme.dark, 'noborder_dark');
   assert.equal(config.theme.light, 'noborder_light');
   assert.equal(config.theme.auto, 'preferred_color_scheme');
+});
+
+test('stale migration identity variables cannot override the pinned Giscus identity', async () => {
+  const config = await readGiscusConfig({
+    PUBLIC_GISCUS_REPO: 'Bladeswillfall/VISCERIUM',
+    PUBLIC_GISCUS_REPO_ID: 'R_kgDOTOiQ7g',
+    PUBLIC_GISCUS_CATEGORY: 'Comments',
+    PUBLIC_GISCUS_CATEGORY_ID: 'DIC_kwDOTOiQ7s4DCYjH',
+  });
+
+  assert.equal(config.repo, 'Bladeswillfall/VISCERIUM');
+  assert.equal(config.repoId, 'R_kgDOTolQ7g');
+  assert.equal(config.category, 'Comments');
+  assert.equal(config.categoryId, 'DIC_kwDOTolQ7s4DCYjH');
 });
 
 test('Giscus retains an explicit deployment off switch', async () => {

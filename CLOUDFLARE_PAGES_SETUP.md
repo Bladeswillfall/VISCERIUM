@@ -39,22 +39,28 @@ Only public build-time values belong in Pages.
 
 ### Giscus
 
-Giscus is enabled by the repository defaults. Confirm GitHub Discussions and the configured category still exist:
+Giscus is enabled by the repository defaults. Its repository/category identity is pinned in `Site/site.config.mjs` so stale Pages variables cannot point the widget at the wrong GitHub objects.
 
-1. Enable GitHub Discussions.
-2. Create or select the discussion category.
-3. Obtain the real repository and category IDs.
-4. Keep or override these public values:
+Before deployment, confirm all of the external prerequisites:
+
+1. `Bladeswillfall/VISCERIUM` is public.
+2. GitHub Discussions is enabled.
+3. The giscus GitHub App is installed for `Bladeswillfall/VISCERIUM`.
+4. The `Comments` discussion category exists.
+5. The pinned IDs still match the repository/category values reported by giscus.app.
+
+Current pinned identity:
 
 ```text
-PUBLIC_GISCUS_ENABLED=1
-PUBLIC_GISCUS_REPO=Bladeswillfall/VISCERIUM
-PUBLIC_GISCUS_REPO_ID=R_kgDOTOiQ7g
-PUBLIC_GISCUS_CATEGORY=Comments
-PUBLIC_GISCUS_CATEGORY_ID=DIC_kwDOTOiQ7s4DCYjH
+Repository: Bladeswillfall/VISCERIUM
+Repository ID: R_kgDOTolQ7g
+Category: Comments
+Category ID: DIC_kwDOTolQ7s4DCYjH
 ```
 
-Set `PUBLIC_GISCUS_ENABLED=0` only when comments must be disabled. Existing discussion threads do not automatically move with a Git repository. Review and transfer or recreate any discussion that should continue.
+No `PUBLIC_GISCUS_REPO`, `PUBLIC_GISCUS_REPO_ID`, `PUBLIC_GISCUS_CATEGORY`, or `PUBLIC_GISCUS_CATEGORY_ID` variables are needed in Cloudflare Pages. Remove any stale copies from the Pages environment if they remain from the repository migration. `PUBLIC_GISCUS_ENABLED=0` remains available as an emergency off switch; otherwise Giscus is enabled by default.
+
+Existing discussion threads do not automatically move with a Git repository. Review and transfer or recreate any discussion that should continue.
 
 The migration audit on 2026-07-30 found one welcome announcement in the old repository, discussion 4, and no Giscus-backed page threads. Verify that result again immediately before cutover. Transfer or recreate the welcome announcement only if it is still wanted.
 
