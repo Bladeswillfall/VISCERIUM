@@ -63,7 +63,7 @@
   background: var(--sl-color-bg-nav, var(--sl-color-black));
   color: var(--sl-color-gray-2);
   box-shadow:
-    0 1.1rem 2.5rem rgb(0 0 0 / .38),
+    0 1.1rem 2.5rem var(--codex-shadow-color),
     inset 0 0 0 1px var(--sl-color-gray-5);
 }
 
@@ -287,9 +287,11 @@ html[data-conceal-sensitive-media] [data-sensitive-media='true']:not([data-sensi
   transform: translate(-50%, -50%);
   padding: .7rem .9rem;
   border: 0;
-  background: rgb(12 12 12 / .86);
-  color: #fff;
-  box-shadow: 0 0 0 1px rgb(255 255 255 / .28), 0 .5rem 1.5rem rgb(0 0 0 / .4);
+  background: var(--codex-nav-bg);
+  color: var(--codex-fixed-light);
+  box-shadow:
+    0 0 0 1px var(--codex-border-strong),
+    0 .5rem 1.5rem var(--codex-shadow-color);
   font-family: var(--vc-font-ui, system-ui, sans-serif);
   text-align: center;
   cursor: pointer;
@@ -300,7 +302,7 @@ html[data-conceal-sensitive-media] [data-sensitive-media='true']:not([data-sensi
 }
 
 .vc-sensitive-media-reveal span {
-  color: rgb(255 255 255 / .72);
+  color: var(--codex-palette-light);
   font-size: var(--sl-text-xs);
   line-height: 1.35;
 }
