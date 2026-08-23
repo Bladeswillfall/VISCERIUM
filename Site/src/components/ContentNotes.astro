@@ -1,0 +1,19 @@
+---
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+const warnings = Array.isArray(entry.contentWarnings)
+  ? entry.contentWarnings.filter((warning) => typeof warning === 'string' && warning.trim())
+  : [];
+const formatWarning = (warning) => String(warning).trim().replace(/-/g, ' ');
+---
+
+<p
+  class="codex-content-notes"
+  data-content-notes
+  data-authored-warnings={warnings.join(',')}
+  hidden={warnings.length === 0}
+>
+  <strong>Content notes</strong>
+  <span aria-hidden="true">—</span>
+  <span data-content-notes-list>{warnings.map(formatWarning).join(' · ')}</span>
+</p>
