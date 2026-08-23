@@ -69,6 +69,7 @@ sidebar:
         - label: Valenheim — capital city
           href: "[[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim|Valenheim]]"
         - label: Rauthrbak Min — capital prison
+          href: "[[Rauthrbak Min]]"
         - label: Hjalliberg — city
           href: "[[Hjalliberg]]"
         - label: Aldaness — city
