@@ -5,9 +5,14 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 const { t } = Astro.locals;
 const docs = await getCollection('docs');
 const sensitiveMediaManifest = docs
-  .filter((doc) => doc.data.type === 'image' && doc.data.sensitiveMedia === true && typeof doc.data.asset === 'string' && doc.data.asset.trim())
+  .filter((doc) => {
+    if (doc.data.type !== 'image' || typeof doc.data.asset !== 'string' || !doc.data.asset.trim()) return false;
+    const warnings = Array.isArray(doc.data.contentWarnings) ? doc.data.contentWarnings : [];
+    return doc.data.sensitiveMedia === true || warnings.length > 0;
+  })
   .map((doc) => ({
     asset: doc.data.asset.trim(),
+    sensitive: doc.data.sensitiveMedia === true,
     warnings: Array.isArray(doc.data.contentWarnings) ? doc.data.contentWarnings : [],
   }));
 const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replace(/</g, '\\u003c');
