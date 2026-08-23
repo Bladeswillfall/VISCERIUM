@@ -51,7 +51,7 @@ sidebar:
       value: Halvmane Mountains and surrounding highlands
     - label: Capital
       value: Valenheim
-      href: "[[Drafts/Inbox/Locations/Valenheim]]"
+      href: "[[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim|Valenheim]]"
   sections:
     - title: Leadership
       fields:
@@ -67,9 +67,8 @@ sidebar:
     - title: Key holdings
       items:
         - label: Valenheim — capital city
-          href: "[[Drafts/Inbox/Locations/Valenheim]]"
+          href: "[[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim|Valenheim]]"
         - label: Rauthrbak Min — capital prison
-          href: "[[Drafts/Inbox/Locations/Rauthrbak Min]]"
         - label: Hjalliberg — city
           href: "[[Hjalliberg]]"
         - label: Aldaness — city
@@ -124,7 +123,7 @@ They are still fishers, farmers, herders, smiths, sailors and families huddled a
 ## A Dominion of Several Weathers
 There is no single Okse landscape, only several varieties of inconvenience. The highlands rise into tundra and sheer mountain country; elsewhere temperate rainforest crowds the stone, deciduous woodland gives way to conifer, and rivers bind inland settlements to the coast. Snow buries one road while rain turns another to sucking mud. Oksmun have opinions about which is worse. Those opinions are usually loud.
 
-At [[Aldaness]], the Sverd trölla gulf brings foreign crews, salt, seafood and enough trade to soften some of the Dominion's suspicion of outsiders. Music and drink spill around a city still watched by [[Aldaborg fortress]], patrol boats and pyres kept for things that do not stay dead politely. Far inland, [[Hjalliberg]] sits between three mountains where tundra stands within reach of temperate rainforest; game, furs and wood make a different kind of Oksmun wealth. South of [[Drafts/Inbox/Locations/Valenheim|Valenheim]], [[Vagrvik]] crowds two rivers and the [[Issvatn river|Issvatn]] carries trade north. On the western gulf, [[Strondverdir]] watches the approaches toward [[Republic of Askal|Askal]] from beneath the coastal mountains.
+At [[Aldaness]], the Sverd trölla gulf brings foreign crews, salt, seafood and enough trade to soften some of the Dominion's suspicion of outsiders. Music and drink spill around a city still watched by [[Aldaborg fortress]], patrol boats and pyres kept for things that do not stay dead politely. Far inland, [[Hjalliberg]] sits between three mountains where tundra stands within reach of temperate rainforest; game, furs and wood make a different kind of Oksmun wealth. South of [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim|Valenheim]], [[Vagrvik]] crowds two rivers and the [[Issvatn river|Issvatn]] carries trade north. On the western gulf, [[Strondverdir]] watches the approaches toward [[Republic of Askal|Askal]] from beneath the coastal mountains.
 
 They do not all live like Valenheimers. A fisher in Aldaness, a hunter outside Hjalliberg and a labourer in a Valenheim oil yard may share gods, colours, kinship and the same irritating belief that everyone else complains too much; their days still smell different. Fish guts and salt. Wet bark and blood. Hot iron, oil and old snow.
 
@@ -199,9 +198,9 @@ That power carries attitude with it. The Okse can look at the Krass and say, wit
 ## Faces of the Dominion
 The Dominion works best as a hub when its settlements are allowed to disagree with one another. **Valenheim is not the entire Okse experience; it is the most concentrated expression of it.**
 
-**[[Drafts/Inbox/Locations/Valenheim|Valenheim]]** — The Dominion's fortified heart, where black stone, river trade, Resonant engineering and industrial growth gather behind the [[Mestrvirki]].
+**[[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim|Valenheim]]** — The Dominion's fortified heart, where black stone, river trade, Resonant engineering and industrial growth gather behind the [[Mestrvirki]].
 
-**[[Drafts/Inbox/Locations/Rauthrbak Min|Rauthrbak Min]]** — A mountain prison whose mines, forges and punishments make the Dominion's habit of turning suffering into output difficult to ignore.
+**Rauthrbak Min** — A mountain prison whose mines, forges and punishments make the Dominion's habit of turning suffering into output difficult to ignore.
 
 **[[Vagrvik]]** — A bustling city between two rivers, linked to Valenheim by the [[Issvatn river|Issvatn]] and home to the Dominion's largest port, [[Hofn Heillfranvagr]].
 
