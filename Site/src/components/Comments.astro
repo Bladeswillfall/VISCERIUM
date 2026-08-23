@@ -2,7 +2,9 @@
 import siteConfig from '../../site.config.mjs';
 
 const { entry, lang } = Astro.locals.starlightRoute;
-const comments = entry.data.comments ?? entry.data.giscus ?? true;
+// Keep the existing page-level flag during the engine migration. The publishing
+// pipeline can rename this compatibility field separately without affecting threads.
+const comments = entry.data.giscus ?? true;
 const host = siteConfig.comments.host;
 const siteId = siteConfig.comments.siteId;
 const threadUrl = new URL(Astro.url.pathname, siteConfig.site).href;
