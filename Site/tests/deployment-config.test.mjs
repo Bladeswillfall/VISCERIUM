@@ -21,19 +21,26 @@ test('optional third-party origins are declared by the report-only content secur
 });
 
 test('the replacement public configuration uses the new identity', () => {
+  const siteConfig = read('../site.config.mjs');
+  const envExample = read('../.env.example');
   const publicConfiguration = [
-    read('../site.config.mjs'),
+    siteConfig,
     read('../astro.config.mjs'),
-    read('../.env.example'),
+    envExample,
     read('../public/_headers'),
     read('../public/.well-known/security.txt'),
   ].join('\n');
 
   assert.match(publicConfiguration, /Bladeswillfall\/VISCERIUM/);
   assert.match(publicConfiguration, /https:\/\/www\.viscerium\.co\.uk/);
-  assert.match(publicConfiguration, /PUBLIC_GISCUS_ENABLED="1"/);
-  assert.match(publicConfiguration, /PUBLIC_GISCUS_REPO_ID="R_kgDOTOiQ7g"/);
-  assert.match(publicConfiguration, /PUBLIC_GISCUS_CATEGORY_ID="DIC_kwDOTOiQ7s4DCYjH"/);
+  assert.match(envExample, /PUBLIC_GISCUS_ENABLED="1"/);
+  assert.match(siteConfig, /R_kgDOTolQ7g/);
+  assert.match(siteConfig, /DIC_kwDOTolQ7s4DCYjH/);
+  assert.doesNotMatch(siteConfig, /R_kgDOTOiQ7g|DIC_kwDOTOiQ7s4DCYjH/);
+  assert.doesNotMatch(
+    envExample,
+    /PUBLIC_GISCUS_(?:REPO|REPO_ID|CATEGORY|CATEGORY_ID)=/,
+  );
 });
 
 test('public site code cannot read Worker-only contact secrets', () => {

@@ -62,8 +62,8 @@ test('private integrations remain inert while Giscus uses public defaults', asyn
   assert.equal(config.giscus.enabled, true);
   assert.equal(config.webmentions.enabled, false);
   assert.equal(config.contactForm.enabled, false);
-  assert.equal(config.giscus.repoId, 'R_kgDOTOiQ7g');
-  assert.equal(config.giscus.categoryId, 'DIC_kwDOTOiQ7s4DCYjH');
+  assert.equal(config.giscus.repoId, 'R_kgDOTolQ7g');
+  assert.equal(config.giscus.categoryId, 'DIC_kwDOTolQ7s4DCYjH');
 });
 
 test('site identity and lore source support environment overrides', async () => {
