@@ -11,6 +11,27 @@ import defaultTranslations from './content/i18n/en-GB.json';
 const stringOrStrings = z.union([z.string(), z.array(z.string())]);
 const eraValue = z.enum(['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY', 'Universal']);
 const eraOrEras = z.union([eraValue, z.array(eraValue)]);
+const contentWarningValue = z.enum([
+  'strong-language',
+  'partial-nudity',
+  'nudity',
+  'sexual-themes',
+  'sexual-content',
+  'sexualised-violence',
+  'sexual-violence',
+  'graphic-violence',
+  'blood',
+  'gore',
+  'body-horror',
+  'disturbing-imagery',
+  'torture',
+  'abuse',
+  'self-harm',
+  'suicide',
+  'substance-use',
+  'discrimination',
+]);
+const contentWarningsSchema = z.array(contentWarningValue);
 const looseRecord = z.record(z.unknown());
 const optionalString = z.string().nullable().optional();
 const optionalNumber = z.number().nullable().optional();
@@ -148,6 +169,12 @@ export const collections = {
         territory: stringOrStrings.optional(),
         tags: z.array(z.string()).optional(),
         aliases: z.array(z.string()).optional(),
+        contentWarnings: contentWarningsSchema.optional(),
+        sensitiveMedia: z.boolean().optional(),
+        imageSensitiveMedia: z.boolean().optional(),
+        imageContentWarnings: contentWarningsSchema.optional(),
+        headerImageSensitiveMedia: z.boolean().optional(),
+        headerImageContentWarnings: contentWarningsSchema.optional(),
         image: optionalString,
         headerImage: optionalString,
         imagePage: optionalString,
