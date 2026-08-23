@@ -35,16 +35,76 @@ function applySensitivePreference(conceal) {
   }
 }
 
+function assetFilename(value) {
+  try {
+    const url = new URL(String(value || ''), window.location.href);
+    return decodeURIComponent(url.pathname.split('/').pop() || '').trim().toLowerCase();
+  } catch {
+    return String(value || '').split(/[?#]/, 1)[0].split('/').pop()?.trim().toLowerCase() || '';
+  }
+}
+
+function readSensitiveManifest(settings) {
+  const manifestNode = settings?.querySelector('[data-sensitive-media-manifest]');
+  if (!(manifestNode instanceof HTMLScriptElement)) return new Map();
+
+  try {
+    const entries = JSON.parse(manifestNode.textContent || '[]');
+    return new Map(entries
+      .filter((entry) => entry && typeof entry.asset === 'string')
+      .map((entry) => [
+        assetFilename(entry.asset),
+        Array.isArray(entry.warnings) ? entry.warnings.filter((warning) => typeof warning === 'string') : [],
+      ])
+      .filter(([asset]) => asset));
+  } catch {
+    return new Map();
+  }
+}
+
+function mediaContainer(image) {
+  const figure = image.closest('figure');
+  if (figure instanceof HTMLElement) return figure;
+
+  const sidebarArtwork = image.closest('.codex-sidebar-artwork');
+  if (sidebarArtwork instanceof HTMLElement) return sidebarArtwork;
+
+  const parent = image.parentElement;
+  if (parent instanceof HTMLAnchorElement && parent.parentElement instanceof HTMLElement) {
+    return parent.parentElement;
+  }
+  return parent instanceof HTMLElement ? parent : null;
+}
+
+function markSensitiveMedia(settings) {
+  const manifest = readSensitiveManifest(settings);
+  if (manifest.size === 0) return;
+
+  document.querySelectorAll('img[src]').forEach((image) => {
+    if (!(image instanceof HTMLImageElement)) return;
+    const warnings = manifest.get(assetFilename(image.currentSrc || image.src));
+    if (!warnings) return;
+
+    const container = mediaContainer(image);
+    if (!container) return;
+    container.setAttribute('data-sensitive-media', 'true');
+    container.setAttribute('data-sensitive-media-auto', '');
+    container.setAttribute('data-sensitive-warnings', warnings.join(','));
+  });
+}
+
 function sensitiveWarningText(node) {
   return String(node.getAttribute('data-sensitive-warnings') || '')
     .split(',')
-    .map((entry) => entry.trim())
+    .map((entry) => entry.trim().replace(/-/g, ' '))
     .filter(Boolean)
     .join(' · ');
 }
 
 function prepareSensitiveMedia() {
   const settings = document.querySelector('viscerium-reader-settings');
+  markSensitiveMedia(settings);
+
   const revealLabel = settings?.getAttribute('data-sensitive-reveal-label') || 'Reveal image';
   const warningLabel = settings?.getAttribute('data-sensitive-warning-label') || 'Sensitive image';
 
@@ -62,20 +122,21 @@ function prepareSensitiveMedia() {
     button.append(title);
 
     const warnings = sensitiveWarningText(node);
-    if (warnings) {
-      const detail = document.createElement('span');
-      detail.textContent = warnings;
-      button.append(detail);
-      button.setAttribute('aria-label', `${revealLabel}: ${warnings}`);
-    } else {
-      const detail = document.createElement('span');
-      detail.textContent = warningLabel;
-      button.append(detail);
-    }
+    const detail = document.createElement('span');
+    detail.textContent = warnings || warningLabel;
+    button.append(detail);
+    if (warnings) button.setAttribute('aria-label', `${revealLabel}: ${warnings}`);
 
     button.addEventListener('click', () => {
       node.setAttribute('data-sensitive-media-revealed', '');
-      node.querySelector('img')?.focus?.();
+      const link = node.querySelector('a[href]');
+      if (link instanceof HTMLElement) {
+        link.focus();
+        return;
+      }
+      node.setAttribute('tabindex', '-1');
+      node.focus();
+      node.addEventListener('blur', () => node.removeAttribute('tabindex'), { once: true });
     });
 
     node.append(button);
@@ -83,9 +144,12 @@ function prepareSensitiveMedia() {
 }
 
 class VisceriumReaderSettings extends HTMLElement {
+  controller = null;
+
   connectedCallback() {
-    if (this.hasAttribute('data-reader-settings-ready')) return;
-    this.setAttribute('data-reader-settings-ready', '');
+    if (this.controller) return;
+    this.controller = new AbortController();
+    const { signal } = this.controller;
 
     const trigger = this.querySelector('[data-reader-settings-trigger]');
     const panel = this.querySelector('[data-reader-settings-panel]');
@@ -110,24 +174,22 @@ class VisceriumReaderSettings extends HTMLElement {
     trigger.addEventListener('click', () => {
       if (panel.hidden) openPanel();
       else closePanel();
-    });
+    }, { signal });
 
-    close?.addEventListener('click', () => closePanel({ restoreFocus: true }));
+    close?.addEventListener('click', () => closePanel({ restoreFocus: true }), { signal });
 
     document.addEventListener('pointerdown', (event) => {
       if (!panel.hidden && event.target instanceof Node && !this.contains(event.target)) closePanel();
-    });
+    }, { signal });
 
     this.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !panel.hidden) {
         event.preventDefault();
         closePanel({ restoreFocus: true });
       }
-    });
+    }, { signal });
 
-    const currentTheme = nativeThemeSelect instanceof HTMLSelectElement
-      ? nativeThemeSelect.value || readThemePreference()
-      : readThemePreference();
+    const currentTheme = readThemePreference();
     for (const option of themeOptions) {
       if (option instanceof HTMLInputElement) option.checked = option.value === currentTheme;
     }
@@ -139,7 +201,7 @@ class VisceriumReaderSettings extends HTMLElement {
           nativeThemeSelect.value = option.value;
           nativeThemeSelect.dispatchEvent(new Event('change', { bubbles: true }));
         }
-      });
+      }, { signal });
     }
 
     if (sensitiveToggle instanceof HTMLInputElement) {
@@ -150,10 +212,15 @@ class VisceriumReaderSettings extends HTMLElement {
         writeBooleanPreference(sensitiveStorageKey, sensitiveToggle.checked);
         applySensitivePreference(sensitiveToggle.checked);
         prepareSensitiveMedia();
-      });
+      }, { signal });
     }
 
     prepareSensitiveMedia();
+  }
+
+  disconnectedCallback() {
+    this.controller?.abort();
+    this.controller = null;
   }
 }
 
