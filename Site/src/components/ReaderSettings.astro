@@ -101,7 +101,7 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
     </fieldset>
   </div>
 
-  <script type="application/json" data-sensitive-media-manifest set:html={sensitiveMediaManifestJson}></script>
+  <template data-sensitive-media-manifest>{sensitiveMediaManifestJson}</template>
 </viscerium-reader-settings>
 
 <script>
