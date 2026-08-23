@@ -1,0 +1,93 @@
+---
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+
+const { t } = Astro.locals;
+---
+
+<viscerium-reader-settings
+  class="reader-settings"
+  data-sensitive-reveal-label={t('viscerium.settings.revealImage')}
+  data-sensitive-warning-label={t('viscerium.settings.sensitiveImage')}
+>
+  <button
+    class="reader-settings-trigger"
+    type="button"
+    aria-expanded="false"
+    aria-controls="reader-settings-panel"
+    aria-label={t('viscerium.settings.open')}
+    title={t('viscerium.settings.open')}
+    data-reader-settings-trigger
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M19.4 13a7.5 7.5 0 0 0 .05-1 7.5 7.5 0 0 0-.05-1l2.08-1.62-2-3.46-2.53 1a7.65 7.65 0 0 0-1.73-1L14.83 3h-4l-.39 2.92a7.65 7.65 0 0 0-1.73 1l-2.53-1-2 3.46L6.26 11a7.5 7.5 0 0 0-.05 1 7.5 7.5 0 0 0 .05 1l-2.08 1.62 2 3.46 2.53-1a7.65 7.65 0 0 0 1.73 1l.39 2.92h4l.39-2.92a7.65 7.65 0 0 0 1.73-1l2.53 1 2-3.46L19.4 13Zm-6.57 2.5A3.5 3.5 0 1 1 16.33 12a3.5 3.5 0 0 1-3.5 3.5Z" fill="currentColor" />
+    </svg>
+  </button>
+
+  <div
+    class="reader-settings-panel"
+    id="reader-settings-panel"
+    role="dialog"
+    aria-labelledby="reader-settings-title"
+    hidden
+    data-reader-settings-panel
+  >
+    <div class="reader-settings-heading">
+      <div>
+        <p class="reader-settings-kicker">{t('viscerium.settings.kicker')}</p>
+        <h2 id="reader-settings-title">{t('viscerium.settings.title')}</h2>
+      </div>
+      <button
+        class="reader-settings-close"
+        type="button"
+        aria-label={t('viscerium.settings.close')}
+        data-reader-settings-close
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <fieldset class="reader-settings-section" data-reader-theme-group>
+      <legend>{t('viscerium.settings.appearance')}</legend>
+      <p>{t('viscerium.settings.appearanceDescription')}</p>
+      <div class="reader-theme-options">
+        <label>
+          <input type="radio" name="reader-theme" value="auto" data-reader-theme-option />
+          <span>{t('themeSelect.auto')}</span>
+        </label>
+        <label>
+          <input type="radio" name="reader-theme" value="light" data-reader-theme-option />
+          <span>{t('themeSelect.light')}</span>
+        </label>
+        <label>
+          <input type="radio" name="reader-theme" value="dark" data-reader-theme-option />
+          <span>{t('themeSelect.dark')}</span>
+        </label>
+      </div>
+      <div class="reader-theme-bridge" aria-hidden="true">
+        <ThemeSelect />
+      </div>
+    </fieldset>
+
+    <fieldset class="reader-settings-section">
+      <legend>{t('viscerium.settings.content')}</legend>
+      <label class="reader-settings-switch-row">
+        <span>
+          <strong>{t('viscerium.settings.concealSensitive')}</strong>
+          <small>{t('viscerium.settings.concealSensitiveDescription')}</small>
+        </span>
+        <input
+          type="checkbox"
+          role="switch"
+          aria-label={t('viscerium.settings.concealSensitive')}
+          data-reader-sensitive-toggle
+        />
+        <span class="reader-settings-switch" aria-hidden="true"></span>
+      </label>
+      <p class="reader-settings-note">{t('viscerium.settings.contentNote')}</p>
+    </fieldset>
+  </div>
+</viscerium-reader-settings>
+
+<script>
+  import '../scripts/reader-settings.js';
+</script>
