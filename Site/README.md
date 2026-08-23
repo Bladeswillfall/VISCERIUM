@@ -41,4 +41,4 @@ SITE_TITLE="VISCERIUM" SITE_URL="https://www.viscerium.co.uk" npm run build
 
 Set `SITE_URL` to the production origin used for sitemap generation. Use `LORE_SOURCE_DIR` only if your vault layout differs from the template.
 
-Giscus is enabled by default for the configured public repository and can be disabled with `PUBLIC_GISCUS_ENABLED=0`. Webmentions, analytics, and private contact remain off until their public configuration is complete. Use `.env.example` as the public-variable reference.
+Remark42 comments are enabled by default at `https://comments.viscerium.co.uk` and can be disabled with `PUBLIC_COMMENTS_ENABLED=0`. The public embed host and site ID can be overridden with `PUBLIC_COMMENTS_HOST` and `PUBLIC_COMMENTS_SITE_ID`; Remark42 server secrets never belong in this static site configuration. Webmentions, analytics, and private contact remain off until their public configuration is complete. Use `.env.example` as the public-variable reference.
