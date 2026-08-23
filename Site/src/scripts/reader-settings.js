@@ -46,10 +46,10 @@ function assetFilename(value) {
 
 function readSensitiveManifest(settings) {
   const manifestNode = settings?.querySelector('[data-sensitive-media-manifest]');
-  if (!(manifestNode instanceof HTMLScriptElement)) return new Map();
+  if (!(manifestNode instanceof HTMLTemplateElement)) return new Map();
 
   try {
-    const entries = JSON.parse(manifestNode.textContent || '[]');
+    const entries = JSON.parse(manifestNode.content.textContent || '[]');
     return new Map(entries
       .filter((entry) => entry && typeof entry.asset === 'string')
       .map((entry) => [
