@@ -43,7 +43,7 @@ tags:
   - Locations
   - Nations
 ---
-Aldaness is the largest fortified coastal city in the [[Archived - Okse Dominion]]. The local sheer cliffs and definsible sea access provide a terrific location for a protected sea-bound and inter-nation trade port.   Aldaborg fortress was constructed prior to tradesfolk begining to settle at this defensive location. Those same tradesfolk then altered the landscape around the fortress and constructed a large trade-hub.  
+Aldaness is the largest fortified coastal city in the [[Okse Dominion]]. The local sheer cliffs and definsible sea access provide a terrific location for a protected sea-bound and inter-nation trade port.   Aldaborg fortress was constructed prior to tradesfolk begining to settle at this defensive location. Those same tradesfolk then altered the landscape around the fortress and constructed a large trade-hub.  
 
 ## Geography
 

@@ -41,7 +41,7 @@ import_source_file: "Location-Issvatn river-fe0.md"
 import_issues:
   - "missing-inline-assets"
 ---
-Issvatn _(Ice water)_ is one of the largest rivers within the [[Archived - Okse Dominion]]. With its blue green hue, it flows from a grand lake nestled within the Halvmane Mountains, through Valenheim, under Mestrvirki, past Fjallgrind Fortress, all the way south to Vagrvik and then out to sea.   Thick stone bridges Intersect the river at multiple occasions to allow crossing overland, as such, a rowboat or boat with collapsible mast is required to traverse the Issvatn river. Though some of these bridges have large arches, a boat with its mast raised would not fit underneath them and would have no chance with the lower bridges.  
+Issvatn _(Ice water)_ is one of the largest rivers within the [[Okse Dominion]]. With its blue green hue, it flows from a grand lake nestled within the Halvmane Mountains, through Valenheim, under Mestrvirki, past Fjallgrind Fortress, all the way south to Vagrvik and then out to sea.   Thick stone bridges Intersect the river at multiple occasions to allow crossing overland, as such, a rowboat or boat with collapsible mast is required to traverse the Issvatn river. Though some of these bridges have large arches, a boat with its mast raised would not fit underneath them and would have no chance with the lower bridges.  
 
 ## Geography
 

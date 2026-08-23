@@ -35,7 +35,7 @@ import_issues:
   - existing-codex-match
   - missing-inline-assets
 ---
-Nestled high amidst the Halvmane Mountains of the [[Archived - Okse Dominion]], Rauthrbak Min _(Redback Mine)_ stands as a chilling testament to the depths of human cruelty and suffering. This colossal prison, an imposing dark stone tower bound in the embrace of an unforgiving mountain face, serves as a grim reminder of the raw power that unchecked authority can wield.  
+Nestled high amidst the Halvmane Mountains of the [[Okse Dominion]], Rauthrbak Min _(Redback Mine)_ stands as a chilling testament to the depths of human cruelty and suffering. This colossal prison, an imposing dark stone tower bound in the embrace of an unforgiving mountain face, serves as a grim reminder of the raw power that unchecked authority can wield.  
   Beyond the visible torment, a hidden and insidious force lurks in the darkest corners, a fledgling cult that holds knowledge of The Seven - a revelation that defies the boundaries of known evil.  
 
 ## The Tower of Despair

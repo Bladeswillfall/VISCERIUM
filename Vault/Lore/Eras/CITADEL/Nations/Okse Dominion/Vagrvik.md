@@ -24,7 +24,7 @@ import_issues:
   - missing-inline-assets
 ---
 Vagrvik is a bustling trade city nestled between two rivers to the south of Valenheim, the main river to it's east - _Issvatn_, allows for a direct connection to Valenheim.  
-Housing the largest port in the [[Archived - Okse Dominion]] - Hofn Heillfranvagr, Vagrvik is constantly buzzing with traders, sailers and workers alike.
+Housing the largest port in the [[Okse Dominion]] - Hofn Heillfranvagr, Vagrvik is constantly buzzing with traders, sailers and workers alike.
 
 [![Okse Heraldry_1.png](640faf5b8cd2814de13871ff58c900b6%209.png "Okse Heraldry_1.png")](/i/1903863 "Okse Heraldry_1.png")
 

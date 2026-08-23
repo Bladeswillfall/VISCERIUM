@@ -29,7 +29,7 @@ Architecture of the Oksmun is very sturdy and sharp. They love the use of triang
 
 Home nation
 
-[[Archived - Okse Dominion]]
+[[Okse Dominion]]
 
 _All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
 

@@ -87,7 +87,7 @@ Valenheim is fortunate enough to have several layers of defensive structures aro
 ### Food
 
 Sustenance is provided to the people of Valenheim through it's multitude of livestock farms, fishing access and multitude of rye and barley fields.  
-Thanks to the high-number of livestock farms, dairy products are widely available and enjoyed by almost every citizen frequently.   Most meals in Valenheim and the rest of the [[Archived - Okse Dominion]] consist of fish or other seafood that is high in protein along with a side of bread or oats and a variety of cheeses. Several kinds of berries are often also included as sweet snacks or to acompany red meats and cheese dishes. All served with mead, milk or water to drink.
+Thanks to the high-number of livestock farms, dairy products are widely available and enjoyed by almost every citizen frequently.   Most meals in Valenheim and the rest of the [[Okse Dominion]] consist of fish or other seafood that is high in protein along with a side of bread or oats and a variety of cheeses. Several kinds of berries are often also included as sweet snacks or to acompany red meats and cheese dishes. All served with mead, milk or water to drink.
 
 ### Sanitation
 

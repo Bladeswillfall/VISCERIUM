@@ -23,7 +23,7 @@ import_source_file: Settlement-Strondverdir-94b.md
 import_issues:
   - missing-inline-assets
 ---
-Strondverdir is a coastal city within the [[Archived - Okse Dominion]].   The city holds a deffensive status against the western gulf that seperates the [[Archived - Okse Dominion]] and the Republic of Askal. On the eastern side of the city, a north-south road runs along the coastal mountains, shielded by the cliffs and mountains of the Dominion's central mountain range.
+Strondverdir is a coastal city within the [[Okse Dominion]].   The city holds a deffensive status against the western gulf that seperates the [[Okse Dominion]] and the Republic of Askal. On the eastern side of the city, a north-south road runs along the coastal mountains, shielded by the cliffs and mountains of the Dominion's central mountain range.
 
 [![Okse Heraldry_1.png](640faf5b8cd2814de13871ff58c900b6%208.png "Okse Heraldry_1.png")](/i/1903863 "Okse Heraldry_1.png")
 
