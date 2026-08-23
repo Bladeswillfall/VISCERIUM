@@ -41,10 +41,11 @@ test('published image sidecars are the source of truth for sensitive media', () 
   const template = read('../../Vault/Templates/Publishing/Image Metadata Template.md');
 
   assert.match(component, /getCollection\('docs'\)/);
-  assert.match(component, /doc\.data\.type === 'image'/);
+  assert.match(component, /doc\.data\.type !== 'image'/);
   assert.match(component, /doc\.data\.sensitiveMedia === true/);
-  assert.match(component, /data-sensitive-media-manifest/);
+  assert.match(component, /<template data-sensitive-media-manifest>/);
   assert.match(script, /readSensitiveManifest/);
+  assert.match(script, /HTMLTemplateElement/);
   assert.match(script, /document\.querySelectorAll\('img\[src\]'\)/);
   assert.match(script, /data-sensitive-media/);
 
@@ -52,6 +53,20 @@ test('published image sidecars are the source of truth for sensitive media', () 
   assert.match(schema, /sensitiveMedia:\s*z\.boolean\(\)\.optional\(\)/);
   assert.match(template, /sensitiveMedia:\s*false/);
   assert.match(template, /contentWarnings:\s*\[\]/);
+});
+
+test('content notes stay compact and combine article and image-sidecar warnings', () => {
+  const readingTime = read('../src/components/ArticleReadingTime.astro');
+  const notes = read('../src/components/ContentNotes.astro');
+  const script = read('../src/scripts/reader-settings.js');
+
+  assert.match(readingTime, /import ContentNotes from '\.\/ContentNotes\.astro'/);
+  assert.match(readingTime, /<ContentNotes \/>/);
+  assert.match(notes, /data-authored-warnings/);
+  assert.match(notes, /data-content-notes-list/);
+  assert.match(notes, /Content notes/);
+  assert.match(script, /data-image-content-warnings/);
+  assert.match(script, /syncContentNotes/);
 });
 
 test('reader settings translations remain valid JSON', () => {
