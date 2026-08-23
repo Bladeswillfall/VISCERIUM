@@ -200,8 +200,8 @@ _italic_
 
 - [Codex home](/)
 - [Calendar](/calendar/)
-- [[Okse Dominion]]
-- [[Okse Dominion|Custom wikilink label]]
+- [[Archived - Okse Dominion]]
+- [[Archived - Okse Dominion|Custom wikilink label]]
 
 ```md
 [Normal Markdown link](/calendar/)

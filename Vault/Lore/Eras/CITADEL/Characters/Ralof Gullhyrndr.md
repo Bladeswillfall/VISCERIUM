@@ -17,7 +17,7 @@ tags:
 ---
 ### Prince
 
-Ralof Torradsson, later named Ralof Gullhyrndr _(Golden-horned)_ for the apperance of two golden Highland Ox horns on his helmet, Is the founder of the [[Okse Dominion]].  
+Ralof Torradsson, later named Ralof Gullhyrndr _(Golden-horned)_ for the apperance of two golden Highland Ox horns on his helmet, Is the founder of the [[Archived - Okse Dominion]].  
 
 ## Ralof's Helm
 

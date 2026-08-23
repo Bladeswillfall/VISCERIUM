@@ -18,7 +18,7 @@ import_source_file: Article-Virki Miellelja-906.md
 import_issues:
   - missing-inline-assets
 ---
-Virki (fort) Miellelja is one of the [[Okse Dominion]]'s most depressing military training camps. Originally, Miellelja was simple just a training camp but over the years, a dedicated fort was constructed to defend the trainees and simultaneously secure the local land.   Located on the western coast, this fort is almost constantly in a flux of cold wind, and icy rain - perfect for hardening recruits and whitteling out the weak.
+Virki (fort) Miellelja is one of the [[Archived - Okse Dominion]]'s most depressing military training camps. Originally, Miellelja was simple just a training camp but over the years, a dedicated fort was constructed to defend the trainees and simultaneously secure the local land.   Located on the western coast, this fort is almost constantly in a flux of cold wind, and icy rain - perfect for hardening recruits and whitteling out the weak.
 
 [![Okse Heraldry_1.png](640faf5b8cd2814de13871ff58c900b6%202.png "Okse Heraldry_1.png")](/i/1903863 "Okse Heraldry_1.png")
 
