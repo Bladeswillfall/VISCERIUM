@@ -17,3 +17,30 @@ const formatWarning = (warning) => String(warning).trim().replace(/-/g, ' ');
   <span aria-hidden="true">—</span>
   <span data-content-notes-list>{warnings.map(formatWarning).join(' · ')}</span>
 </p>
+
+<style>
+  .codex-content-notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .2rem .35rem;
+    align-items: baseline;
+    margin: -.32rem 0 .72rem;
+    color: var(--sl-color-gray-3);
+    font-family: var(--vc-font-ui);
+    font-size: .72rem;
+    line-height: 1.35;
+  }
+
+  .codex-content-notes[hidden] {
+    display: none;
+  }
+
+  .codex-content-notes strong {
+    color: var(--sl-color-gray-2);
+    font-weight: 650;
+  }
+
+  [data-content-notes-list] {
+    text-transform: lowercase;
+  }
+</style>
