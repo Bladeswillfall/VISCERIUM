@@ -17,6 +17,20 @@ test('reader settings preserve Starlight theme semantics behind a three-way segm
   assert.match(script, /nativeThemeSelect\.dispatchEvent\(new Event\('change'/);
 });
 
+test('reader settings popover keeps the approved compact visual hierarchy', () => {
+  const component = read('../src/components/ReaderSettings.astro');
+  const styles = read('../src/styles/reader-settings.css');
+
+  assert.doesNotMatch(component, /viscerium\.settings\.appearanceDescription/);
+  assert.match(component, /reader-settings-section-icon/);
+  assert.match(component, /Blurs marked artwork until you reveal it\./);
+  assert.match(component, /This setting only changes how marked images are shown\./);
+  assert.match(styles, /\.reader-theme-options::before/);
+  assert.match(styles, /transform 180ms cubic-bezier\(\.2, \.8, \.2, 1\)/);
+  assert.match(styles, /border-radius: 999px/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
+});
+
 test('sensitive imagery is opt-in concealment and persists as a reader preference', () => {
   const component = read('../src/components/ReaderSettings.astro');
   const script = read('../src/scripts/reader-settings.js');
