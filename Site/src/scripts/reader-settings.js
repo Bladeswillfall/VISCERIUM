@@ -219,7 +219,7 @@ class VisceriumReaderSettings extends HTMLElement {
       if (!panel.hidden && event.target instanceof Node && !this.contains(event.target)) closePanel();
     }, { signal });
 
-    this.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !panel.hidden) {
         event.preventDefault();
         closePanel({ restoreFocus: true });
