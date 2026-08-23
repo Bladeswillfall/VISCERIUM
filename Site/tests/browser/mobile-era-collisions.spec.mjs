@@ -12,33 +12,33 @@ function overlapArea(first, second) {
 test.describe('mobile era collision guards', () => {
   test.use({ viewport: phone });
 
-  test('header era exit remains fully visible and separate from search and theme controls', async ({ page }) => {
+  test('header era exit remains fully visible and separate from search and reader settings', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
 
     const search = page.locator('[data-codex-header-search] button[data-open-modal]');
     const exit = page.locator('[data-era-context-control] [data-era-exit]');
-    const theme = page.locator('.codex-theme-control label');
+    const settings = page.locator('[data-reader-settings-trigger]');
 
     await expect(search).toBeVisible();
     await expect(exit).toBeVisible();
-    await expect(theme).toBeVisible();
+    await expect(settings).toBeVisible();
 
     const geometry = await page.evaluate(() => {
       const searchNode = document.querySelector('[data-codex-header-search] button[data-open-modal]');
       const exitNode = document.querySelector('[data-era-context-control] [data-era-exit]');
       const iconNode = exitNode?.querySelector('.codex-era-context-exit-icon');
-      const themeNode = document.querySelector('.codex-theme-control label');
+      const settingsNode = document.querySelector('[data-reader-settings-trigger]');
       if (!(searchNode instanceof HTMLElement)
         || !(exitNode instanceof HTMLElement)
         || !(iconNode instanceof HTMLElement)
-        || !(themeNode instanceof HTMLElement)) {
+        || !(settingsNode instanceof HTMLElement)) {
         throw new Error('Missing mobile header controls');
       }
 
       const searchRect = searchNode.getBoundingClientRect();
       const exitRect = exitNode.getBoundingClientRect();
       const iconRect = iconNode.getBoundingClientRect();
-      const themeRect = themeNode.getBoundingClientRect();
+      const settingsRect = settingsNode.getBoundingClientRect();
       const hit = document.elementFromPoint(
         exitRect.left + exitRect.width / 2,
         exitRect.top + exitRect.height / 2,
@@ -48,7 +48,7 @@ test.describe('mobile era collision guards', () => {
         searchRect: searchRect.toJSON(),
         exitRect: exitRect.toJSON(),
         iconRect: iconRect.toJSON(),
-        themeRect: themeRect.toJSON(),
+        settingsRect: settingsRect.toJSON(),
         searchClientWidth: searchNode.clientWidth,
         searchScrollWidth: searchNode.scrollWidth,
         exitOwnsCentre: Boolean(hit?.closest('[data-era-exit]') === exitNode),
@@ -58,13 +58,13 @@ test.describe('mobile era collision guards', () => {
     });
 
     expect(overlapArea(geometry.searchRect, geometry.exitRect)).toBe(0);
-    expect(overlapArea(geometry.exitRect, geometry.themeRect)).toBe(0);
+    expect(overlapArea(geometry.exitRect, geometry.settingsRect)).toBe(0);
     expect(geometry.searchScrollWidth).toBeLessThanOrEqual(geometry.searchClientWidth + 1);
     expect(geometry.iconRect.left).toBeGreaterThanOrEqual(geometry.exitRect.left - 1);
     expect(geometry.iconRect.right).toBeLessThanOrEqual(geometry.exitRect.right + 1);
     expect(geometry.exitOwnsCentre).toBe(true);
     expect(geometry.exitRect.right).toBeLessThanOrEqual(geometry.viewportWidth + 1);
-    expect(geometry.themeRect.right).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+    expect(geometry.settingsRect.right).toBeLessThanOrEqual(geometry.viewportWidth + 1);
     expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
   });
 
