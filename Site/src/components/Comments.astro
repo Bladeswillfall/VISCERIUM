@@ -45,6 +45,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
 
     remarkLoader = new Promise<void>((resolve, reject) => {
       let settled = false;
+      let loaderScript: HTMLScriptElement | null = null;
       const finish = () => {
         if (settled || !remark42()) return;
         settled = true;
@@ -55,6 +56,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         if (settled) return;
         settled = true;
         cleanup();
+        loaderScript?.remove();
         remarkLoader = null;
         reject(new Error('Remark42 failed to load.'));
       };
@@ -66,6 +68,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
 
       const existing = document.querySelector<HTMLScriptElement>('script[data-viscerium-remark42-loader]');
       if (existing) {
+        loaderScript = existing;
         existing.addEventListener('load', finish, { once: true });
         existing.addEventListener('error', fail, { once: true });
         finish();
@@ -73,6 +76,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
       }
 
       const script = document.createElement('script');
+      loaderScript = script;
       const supportsModules = 'noModule' in script;
       script.dataset.visceriumRemark42Loader = '';
       script.src = `${host.replace(/\/$/, '')}/web/embed${supportsModules ? '.mjs' : '.js'}`;
