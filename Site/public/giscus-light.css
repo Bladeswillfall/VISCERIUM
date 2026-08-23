@@ -1,6 +1,0 @@
-/*
- * Light-mode Giscus should remain recognisably GitHub.
- * Use Giscus' own noborder_light theme directly rather than recreating Primer
- * variables locally. This is the exact light counterpart to noborder_dark.
- */
-@import url('https://giscus.app/themes/noborder_light.css');
