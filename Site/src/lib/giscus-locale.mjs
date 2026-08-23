@@ -10,8 +10,16 @@ const GISCUS_LANGUAGES = new Set([
  * while Starlight may expose a regional site language such as `en-GB`.
  */
 export function toGiscusLanguage(locale) {
-  const normalized = String(locale ?? '').trim();
-  if (!normalized) return 'en';
+  const input = String(locale ?? '').trim();
+  if (!input) return 'en';
+
+  let normalized;
+  try {
+    [normalized] = Intl.getCanonicalLocales(input);
+  } catch {
+    return 'en';
+  }
+
   if (GISCUS_LANGUAGES.has(normalized)) return normalized;
 
   const baseLanguage = normalized.split('-')[0];
