@@ -9,7 +9,6 @@ import starlight from '@astrojs/starlight';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
-import starlightGiscus from 'starlight-giscus';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import siteGraph from 'starlight-site-graph/integration';
 import starlightTags from 'starlight-tags';
@@ -196,7 +195,7 @@ const searchVerificationHead = siteConfig.searchVerification?.google
     ]
   : [];
 
-const { enabled: giscusEnabled, ...giscusConfig } = siteConfig.giscus;
+const { enabled: giscusEnabled } = siteConfig.giscus;
 
 const sidebar = [
   ...(await buildSidebar()),
@@ -264,6 +263,7 @@ export default defineConfig({
         PageSidebar: './src/components/CodexPageSidebar.astro',
         PageTitle: './src/components/CodexPageTitle.astro',
         TwoColumnContent: './src/components/CodexTwoColumnContent.astro',
+        ...(giscusEnabled ? { Pagination: './src/components/GiscusPagination.astro' } : {}),
       },
       editLink: {
         baseUrl: `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/`,
@@ -271,7 +271,6 @@ export default defineConfig({
       plugins: [
         starlightTags({ onInlineTagsNotFound: 'create' }),
         starlightChangelogs(),
-        ...(giscusEnabled ? [starlightGiscus(giscusConfig)] : []),
         starlightScrollToTop(),
         starlightTelescope({
           shortcut: {
