@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+
+const { t } = Astro.locals;
+const docs = await getCollection('docs');
+const sensitiveMediaManifest = docs
+  .filter((doc) => {
+    if (doc.data.type !== 'image' || typeof doc.data.asset !== 'string' || !doc.data.asset.trim()) return false;
+    const warnings = Array.isArray(doc.data.contentWarnings) ? doc.data.contentWarnings : [];
+    return doc.data.sensitiveMedia === true || warnings.length > 0;
+  })
+  .map((doc) => ({
+    asset: doc.data.asset.trim(),
+    sensitive: doc.data.sensitiveMedia === true,
+    warnings: Array.isArray(doc.data.contentWarnings) ? doc.data.contentWarnings : [],
+  }));
+const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replace(/</g, '\\u003c');
+---
+
+<viscerium-reader-settings
+  class="reader-settings"
+  data-sensitive-reveal-label={t('viscerium.settings.revealImage')}
+  data-sensitive-warning-label={t('viscerium.settings.sensitiveImage')}
+>
+  <button
+    class="reader-settings-trigger"
+    type="button"
+    aria-expanded="false"
+    aria-controls="reader-settings-panel"
+    aria-label={t('viscerium.settings.open')}
+    title={t('viscerium.settings.open')}
+    data-reader-settings-trigger
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M19.4 13a7.5 7.5 0 0 0 .05-1 7.5 7.5 0 0 0-.05-1l2.08-1.62-2-3.46-2.53 1a7.65 7.65 0 0 0-1.73-1L14.83 3h-4l-.39 2.92a7.65 7.65 0 0 0-1.73 1l-2.53-1-2 3.46L6.26 11a7.5 7.5 0 0 0-.05 1 7.5 7.5 0 0 0 .05 1l-2.08 1.62 2 3.46 2.53-1a7.65 7.65 0 0 0 1.73 1l.39 2.92h4l.39-2.92a7.65 7.65 0 0 0 1.73-1l2.53 1 2-3.46L19.4 13Zm-6.57 2.5A3.5 3.5 0 1 1 16.33 12a3.5 3.5 0 0 1-3.5 3.5Z" fill="currentColor" />
+    </svg>
+  </button>
+
+  <div
+    class="reader-settings-panel"
+    id="reader-settings-panel"
+    role="dialog"
+    aria-labelledby="reader-settings-title"
+    hidden
+    data-reader-settings-panel
+  >
+    <div class="reader-settings-heading">
+      <div>
+        <p class="reader-settings-kicker">{t('viscerium.settings.kicker')}</p>
+        <h2 id="reader-settings-title">{t('viscerium.settings.title')}</h2>
+      </div>
+      <button
+        class="reader-settings-close"
+        type="button"
+        aria-label={t('viscerium.settings.close')}
+        data-reader-settings-close
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <fieldset class="reader-settings-section" data-reader-theme-group>
+      <legend>
+        <svg class="reader-settings-section-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 3a9 9 0 1 0 9 9c0-1.2-.8-2-2-2h-2.2a2 2 0 0 1-2-2V5.8c0-1.7-1.2-2.8-2.8-2.8Z" />
+          <circle cx="7.5" cy="10" r="1" />
+          <circle cx="9.5" cy="6.8" r="1" />
+          <circle cx="7.3" cy="14" r="1" />
+        </svg>
+        <span>{t('viscerium.settings.appearance')}</span>
+      </legend>
+      <div class="reader-theme-options">
+        <label>
+          <input type="radio" name="reader-theme" value="auto" data-reader-theme-option />
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="3" y="4" width="18" height="13" rx="2" />
+              <path d="M8 21h8M12 17v4" />
+            </svg>
+            <span>{t('themeSelect.auto')}</span>
+          </span>
+        </label>
+        <label>
+          <input type="radio" name="reader-theme" value="light" data-reader-theme-option />
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+            </svg>
+            <span>{t('themeSelect.light')}</span>
+          </span>
+        </label>
+        <label>
+          <input type="radio" name="reader-theme" value="dark" data-reader-theme-option />
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M20.6 15.6A8.5 8.5 0 0 1 8.4 3.4 9 9 0 1 0 20.6 15.6Z" />
+            </svg>
+            <span>{t('themeSelect.dark')}</span>
+          </span>
+        </label>
+      </div>
+      <div class="reader-theme-bridge" aria-hidden="true">
+        <ThemeSelect />
+      </div>
+    </fieldset>
+
+    <fieldset class="reader-settings-section">
+      <legend>
+        <svg class="reader-settings-section-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+          <circle cx="12" cy="12" r="2.5" />
+        </svg>
+        <span>{t('viscerium.settings.content')}</span>
+      </legend>
+      <label class="reader-settings-switch-row">
+        <span>
+          <strong>{t('viscerium.settings.concealSensitive')}</strong>
+          <small>Blurs marked artwork until you reveal it.</small>
+        </span>
+        <input
+          type="checkbox"
+          role="switch"
+          aria-label={t('viscerium.settings.concealSensitive')}
+          data-reader-sensitive-toggle
+        />
+        <span class="reader-settings-switch" aria-hidden="true"></span>
+      </label>
+      <p class="reader-settings-note">VISCERIUM is written for mature audiences. This setting only changes how marked images are shown.</p>
+    </fieldset>
+  </div>
+
+  <template data-sensitive-media-manifest>{sensitiveMediaManifestJson}</template>
+</viscerium-reader-settings>
+
+<script>
+  import '../scripts/reader-settings.js';
+</script>

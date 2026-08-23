@@ -25,6 +25,7 @@ test('global Starlight styles keep their explicit registration order', async () 
     './src/styles/layout.css',
     './src/styles/codex-ui.css',
     './src/styles/header-controls.css',
+    './src/styles/reader-settings.css',
     './src/styles/navigation.css',
     './src/styles/category-index.css',
     './src/styles/a11y.css',

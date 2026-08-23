@@ -196,3 +196,36 @@ Specialist databases may retain provenance/import fields when those fields answe
 ## Artwork provenance
 
 `artist` identifies the maker where known. `credit` is the display/rights-holder credit and may differ from the artist. `source`, `sourceUrl`, `license`, `rights`, and `usage` remain provenance/permission fields rather than synonyms.
+
+## Content notes and sensitive media
+
+`contentWarnings` is an optional controlled list of reader-facing content notes. Use it when a topic is worth flagging beyond VISCERIUM's normal mature baseline; do not populate every adult article merely because it contains ordinary swearing, violence, or grim subject matter.
+
+Supported values are:
+
+- `strong-language`
+- `partial-nudity`
+- `nudity`
+- `sexual-themes`
+- `sexual-content`
+- `sexualised-violence`
+- `sexual-violence`
+- `graphic-violence`
+- `blood`
+- `gore`
+- `body-horror`
+- `disturbing-imagery`
+- `torture`
+- `abuse`
+- `self-harm`
+- `suicide`
+- `substance-use`
+- `discrimination`
+
+On normal lore notes these values appear as a compact **Content notes** line near the article metadata. On `type: image` sidecars they travel with the artwork and are automatically included in the content notes of pages where that asset is displayed.
+
+`sensitiveMedia` is an image-sidecar presentation flag. Set it to `true` only when the artwork should respond to the reader's optional **Conceal sensitive imagery** preference. When the preference is off—the default—the image is rendered normally. When the preference is on, marked artwork is obscured until the reader chooses **Reveal image**.
+
+`contentWarnings` and `sensitiveMedia` are editorial/accessibility metadata. They are **not** age verification, a legal classification, or a declaration that material is pornographic. Do not create `nsfw`, `adultOnly`, or `pornographic` frontmatter flags to drive this presentation system.
+
+General `tags` remain taxonomy/discovery metadata and must not control whether artwork is concealed.

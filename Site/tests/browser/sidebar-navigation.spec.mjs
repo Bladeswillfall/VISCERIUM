@@ -108,16 +108,18 @@ test('homepage loads without a reveal and keeps its desktop navigation closed in
   expect(geometry.homeLeft).toBeGreaterThanOrEqual(geometry.sidebarRight - 1);
 });
 
-test('top ribbon owns flat, centred Telescope search and colour-mode controls', async ({ page }) => {
+test('top ribbon owns flat, centred Telescope search and reader settings', async ({ page }) => {
   await page.goto('http://127.0.0.1:4321/start-here/', { waitUntil: 'networkidle' });
 
   const searchButton = page.locator('[data-codex-header-search] button[data-open-modal]');
   const telescopeButton = page.locator('.right-group telescope-search .telescope__trigger-btn');
-  const themeSelect = page.locator('.codex-theme-control select');
+  const settingsButton = page.locator('[data-reader-settings-trigger]');
+  const settingsPanel = page.locator('[data-reader-settings-panel]');
 
   await expect(searchButton).toBeVisible();
   await expect(telescopeButton).toBeHidden();
-  await expect(themeSelect).toBeVisible();
+  await expect(settingsButton).toBeVisible();
+  await expect(page.locator('.codex-theme-control')).toHaveCount(0);
   await expect(page.locator('#starlight__sidebar starlight-theme-select')).toHaveCount(0);
   expect(await page.locator('#starlight__sidebar .codex-local-icon').count()).toBeGreaterThan(3);
   await expect(page.locator('.codex-header .social-icons')).toHaveCount(0);
@@ -126,10 +128,12 @@ test('top ribbon owns flat, centred Telescope search and colour-mode controls', 
   const ribbon = await page.evaluate(() => {
     const header = document.querySelector('.codex-header');
     const search = document.querySelector('[data-codex-header-search] button[data-open-modal]');
-    const theme = document.querySelector('.codex-theme-control select');
+    const settings = document.querySelector('[data-reader-settings-trigger]');
 
-    if (!(header instanceof HTMLElement) || !(search instanceof HTMLElement)) {
-      throw new Error('Missing Codex header or search control');
+    if (!(header instanceof HTMLElement)
+      || !(search instanceof HTMLElement)
+      || !(settings instanceof HTMLElement)) {
+      throw new Error('Missing Codex header controls');
     }
 
     const headerRect = header.getBoundingClientRect();
@@ -141,8 +145,7 @@ test('top ribbon owns flat, centred Telescope search and colour-mode controls', 
     return {
       searchWidth: searchRect.width,
       centerDelta,
-      backgroundImages: [search, theme]
-        .filter((element) => element instanceof HTMLElement)
+      backgroundImages: [search, settings]
         .map((element) => getComputedStyle(element).backgroundImage),
     };
   });
@@ -151,16 +154,23 @@ test('top ribbon owns flat, centred Telescope search and colour-mode controls', 
   expect(ribbon.centerDelta).toBeLessThan(2);
   expect(ribbon.backgroundImages).toEqual(['none', 'none']);
 
+  const initialTheme = await page.locator('html').getAttribute('data-theme');
+  const selectedTheme = initialTheme === 'dark' ? 'light' : 'dark';
+
+  await settingsButton.click();
+  await expect(settingsPanel).toBeVisible();
+  await expect(page.locator('[data-reader-theme-option]')).toHaveCount(3);
+  await page.locator(`.reader-theme-options label:has(input[value="${selectedTheme}"])`).click();
+  await expect.poll(() => page.locator('html').getAttribute('data-theme')).toBe(selectedTheme);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('starlight-theme'))).toBe(selectedTheme);
+
+  await settingsButton.click();
+  await expect(settingsPanel).toBeHidden();
+
   await searchButton.click();
   await expect(page.locator('#telescope-dialog')).toBeVisible();
   await page.locator('#telescope-search-input').fill('timeline');
   await expect(page.locator('#telescope-results .telescope__result-item').first()).toBeVisible();
-
-  const initialTheme = await page.locator('html').getAttribute('data-theme');
-  const selectedTheme = initialTheme === 'dark' ? 'light' : 'dark';
-  await themeSelect.selectOption(selectedTheme);
-  await expect.poll(() => page.locator('html').getAttribute('data-theme')).toBe(selectedTheme);
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('starlight-theme'))).toBe(selectedTheme);
 });
 
 test('mobile On this page control only appears below the desktop breakpoint', async ({ page }) => {

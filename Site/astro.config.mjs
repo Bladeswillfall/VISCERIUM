@@ -195,6 +195,20 @@ const searchVerificationHead = siteConfig.searchVerification?.google
     ]
   : [];
 
+const readerPreferencesHead = [
+  {
+    tag: 'script',
+    attrs: { id: 'reader-preferences-init' },
+    content: `
+      try {
+        if (localStorage.getItem('viscerium-conceal-sensitive-media') === 'true') {
+          document.documentElement.setAttribute('data-conceal-sensitive-media', '');
+        }
+      } catch {}
+    `,
+  },
+];
+
 const { enabled: giscusEnabled } = siteConfig.giscus;
 
 const sidebar = [
@@ -250,6 +264,7 @@ export default defineConfig({
         './src/styles/layout.css',
         './src/styles/codex-ui.css',
         './src/styles/header-controls.css',
+        './src/styles/reader-settings.css',
         './src/styles/navigation.css',
         './src/styles/category-index.css',
         './src/styles/a11y.css',
@@ -283,7 +298,7 @@ export default defineConfig({
         }),
       ],
       sidebar,
-      head: [...feedHead, ...fontHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...searchVerificationHead],
+      head: [...feedHead, ...fontHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
       social: [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }],
     }),
     siteGraph({
