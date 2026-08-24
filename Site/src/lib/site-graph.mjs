@@ -3,6 +3,7 @@ import {
   normaliseInternalRoute,
   slugToRoute,
 } from './codex-paths.mjs';
+import { pageEra } from './era-context.mjs';
 
 function routeForEntry(entry) {
   const slug = entry.data?.slug || String(entry.id).replace(/\.(md|mdx)$/i, '').replace(/\/index$/i, '') || 'index';
@@ -15,15 +16,29 @@ function generatedRoute(value) {
   return normaliseInternalRoute(raw.startsWith('/') ? raw : `/${raw}`);
 }
 
+function graphEra(entry, route) {
+  const era = pageEra(entry.data, route);
+  return era && era !== 'Universal' ? era.toLowerCase() : null;
+}
+
+function isGeneratedTagIndex(page) {
+  return page.entry.data?.type === 'category' && page.title.trimStart().startsWith('#');
+}
+
 export function buildSiteGraph(entries) {
   const pages = entries
     .filter((entry) => !entry.data?.draft)
-    .map((entry) => ({
-      entry,
-      id: routeForEntry(entry),
-      title: String(entry.data?.title || entry.id),
-      tags: [...new Set((entry.data?.tags ?? []).map(String).filter(Boolean))],
-    }))
+    .map((entry) => {
+      const id = routeForEntry(entry);
+      return {
+        entry,
+        id,
+        title: String(entry.data?.title || entry.id),
+        tags: [...new Set((entry.data?.tags ?? []).map(String).filter(Boolean))],
+        era: graphEra(entry, id),
+      };
+    })
+    .filter((page) => !isGeneratedTagIndex(page))
     .sort((left, right) => left.title.localeCompare(right.title));
   const pageIds = new Set(pages.map((page) => page.id));
   const edges = new Map();
@@ -47,7 +62,7 @@ export function buildSiteGraph(entries) {
   }
 
   return {
-    nodes: pages.map(({ id, title, tags }) => ({ id, title, href: id, tags, kind: 'page' })),
+    nodes: pages.map(({ id, title, tags, era }) => ({ id, title, href: id, tags, era, kind: 'page' })),
     edges: [...edges.values()],
   };
 }
