@@ -1,3 +1,14 @@
+{
+    servers {
+        # Cloudflare Tunnel is expected to run on this host. Only the local
+        # tunnel hop may supply client-address headers; direct internet peers
+        # cannot make Caddy trust spoofed forwarding values.
+        trusted_proxies static 127.0.0.1/32 ::1/128
+        trusted_proxies_strict
+        client_ip_headers CF-Connecting-IP X-Forwarded-For
+    }
+}
+
 comments.viscerium.co.uk {
     request_body {
         max_size 64KB
@@ -24,24 +35,25 @@ comments.viscerium.co.uk {
         respond @commentImageUpload 404
 
         # The local header is authoritative only because internet clients can
-        # never reach the gateway directly and Caddy overwrites it here.
+        # never reach the gateway directly and Caddy overwrites it from its
+        # resolved, trusted-proxy-aware client address.
         handle @commentCreate {
             reverse_proxy 127.0.0.1:8081 {
                 header_up -X-Viscerium-Client-IP
-                header_up X-Viscerium-Client-IP {remote_host}
+                header_up X-Viscerium-Client-IP {client_ip}
                 header_up -X-Forwarded-For
-                header_up X-Forwarded-For {remote_host}
-                header_up X-Real-IP {remote_host}
+                header_up X-Forwarded-For {client_ip}
+                header_up X-Real-IP {client_ip}
             }
         }
 
         handle @commentEdit {
             reverse_proxy 127.0.0.1:8081 {
                 header_up -X-Viscerium-Client-IP
-                header_up X-Viscerium-Client-IP {remote_host}
+                header_up X-Viscerium-Client-IP {client_ip}
                 header_up -X-Forwarded-For
-                header_up X-Forwarded-For {remote_host}
-                header_up X-Real-IP {remote_host}
+                header_up X-Forwarded-For {client_ip}
+                header_up X-Real-IP {client_ip}
             }
         }
 
@@ -51,8 +63,8 @@ comments.viscerium.co.uk {
         handle {
             reverse_proxy 127.0.0.1:8080 {
                 header_up -X-Forwarded-For
-                header_up X-Forwarded-For {remote_host}
-                header_up X-Real-IP {remote_host}
+                header_up X-Forwarded-For {client_ip}
+                header_up X-Real-IP {client_ip}
             }
         }
     }
