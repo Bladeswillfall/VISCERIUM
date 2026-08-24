@@ -119,6 +119,12 @@ export function processCommentUrls(text, { internalOrigins = new Set(), maxExter
 
   for (const match of text.matchAll(markdownDestination)) {
     const destination = match[1];
+    // Markdown treats //host/path as a network-path reference, which the
+    // browser resolves to an external HTTPS URL. Reject it rather than letting
+    // it bypass external-link counting, tracker cleanup and reputation checks.
+    if (destination.startsWith('//')) {
+      fail('url_scheme', 'Comment links must use an explicit HTTPS URL.');
+    }
     if (/^[a-z][a-z0-9+.-]*:/iu.test(destination) && !/^https:/iu.test(destination)) {
       fail('url_scheme', 'Comment links must use HTTPS.');
     }
