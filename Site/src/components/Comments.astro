@@ -21,22 +21,41 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
       data-page-title={pageTitle}
       data-locale={locale}
     >
-      <div class="comments" data-remark42-root>Comments loading…</div>
+      <div id="remark42" class="comments" data-remark42-root>Comments loading…</div>
     </viscerium-comments>
   )
 }
 
 <script>
+  type Remark42Config = {
+    host: string;
+    site_id: string;
+    url: string;
+    page_title: string;
+    locale: string;
+    theme: 'light' | 'dark';
+    components: ['embed'];
+  };
+
   type Remark42Instance = { destroy?: () => void };
   type Remark42Api = {
-    createInstance: (config: Record<string, unknown>) => Remark42Instance;
+    createInstance: (config: Remark42Config) => Remark42Instance;
     changeTheme?: (theme: 'light' | 'dark') => void;
+    destroy?: () => void;
+  };
+  type Remark42Window = typeof window & {
+    REMARK42?: Remark42Api;
+    remark_config?: Remark42Config;
   };
 
   let remarkLoader: Promise<void> | null = null;
 
+  function remarkWindow(): Remark42Window {
+    return window as Remark42Window;
+  }
+
   function remark42(): Remark42Api | undefined {
-    return (window as typeof window & { REMARK42?: Remark42Api }).REMARK42;
+    return remarkWindow().REMARK42;
   }
 
   function loadRemark42(host: string) {
@@ -46,6 +65,9 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
     remarkLoader = new Promise<void>((resolve, reject) => {
       let settled = false;
       let loaderScript: HTMLScriptElement | null = null;
+      const cleanup = () => {
+        window.removeEventListener('REMARK42::ready', finish);
+      };
       const finish = () => {
         if (settled || !remark42()) return;
         settled = true;
@@ -60,30 +82,24 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         remarkLoader = null;
         reject(new Error('Remark42 failed to load.'));
       };
-      const cleanup = () => {
-        window.removeEventListener('REMARK42::ready', finish);
-      };
 
       window.addEventListener('REMARK42::ready', finish);
 
-      const existing = document.querySelector<HTMLScriptElement>('script[data-viscerium-remark42-loader]');
-      if (existing) {
-        loaderScript = existing;
-        existing.addEventListener('load', finish, { once: true });
-        existing.addEventListener('error', fail, { once: true });
-        finish();
-        return;
-      }
+      // Remark42's SPA API is exposed by the classic embed entry point. The
+      // embed boot code also expects window.remark_config and #remark42 to exist
+      // before this script executes; mount() establishes both before calling us.
+      document.querySelector<HTMLScriptElement>('script[data-viscerium-remark42-loader]')?.remove();
 
       const script = document.createElement('script');
       loaderScript = script;
-      const supportsModules = 'noModule' in script;
       script.dataset.visceriumRemark42Loader = '';
-      script.src = `${host.replace(/\/$/, '')}/web/embed${supportsModules ? '.mjs' : '.js'}`;
-      if (supportsModules) script.type = 'module';
-      else script.async = true;
+      script.src = `${host.replace(/\/$/, '')}/web/embed.js`;
+      script.async = true;
       script.defer = true;
-      script.addEventListener('load', finish, { once: true });
+      script.addEventListener('load', () => {
+        if (remark42()) finish();
+        else fail();
+      }, { once: true });
       script.addEventListener('error', fail, { once: true });
       (document.head || document.body).appendChild(script);
     });
@@ -127,6 +143,20 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
 
       if (!host || !siteId || !url || !node) return;
 
+      const config: Remark42Config = {
+        host,
+        site_id: siteId,
+        url,
+        page_title: this.dataset.pageTitle || document.title,
+        locale: this.dataset.locale || 'en',
+        theme: this.currentTheme(),
+        components: ['embed'],
+      };
+
+      // Remark42 currently validates the global config even when createInstance
+      // receives an explicit config object, so keep both in sync.
+      remarkWindow().remark_config = config;
+
       try {
         await loadRemark42(host);
         if (!this.isConnected || generation !== this.generation) return;
@@ -135,16 +165,8 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         if (!api) throw new Error('Remark42 API is unavailable.');
 
         this.destroy();
-        this.instance = api.createInstance({
-          node,
-          host,
-          site_id: siteId,
-          url,
-          page_title: this.dataset.pageTitle || document.title,
-          locale: this.dataset.locale || 'en',
-          theme: this.currentTheme(),
-          components: ['embed'],
-        });
+        remarkWindow().remark_config = config;
+        this.instance = api.createInstance(config);
 
         this.themeObserver = new MutationObserver(() => {
           remark42()?.changeTheme?.(this.currentTheme());
