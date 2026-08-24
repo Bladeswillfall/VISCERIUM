@@ -279,6 +279,6 @@ Obsidian comments are removed during sync:
 %% Private drafting note. %%
 ```
 
-Do not publish raw `dataviewjs`. Native fenced `chronos` blocks are supported for note-local editorial timelines and pass through to Starlight. Use canonical event notes and `[Timeline:...]` shortcodes when entries must participate in registered calendars, era validation and generated datasets.
+Do not publish raw `dataviewjs`. Native fenced `chronos` blocks are Obsidian-only and appear as ordinary code blocks on the public site. Use canonical event notes and `[Timeline:...]` shortcodes for public interactive timelines and whenever entries must participate in registered calendars, era validation and generated datasets.
 
 See `Site/TIMELINES.md`, `Site/CALENDAR.md` and `Tools/obsidian-viscerium-timelines/README.md` for implementation and troubleshooting details.

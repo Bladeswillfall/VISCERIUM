@@ -553,25 +553,19 @@ const stillHighlighted = true;
 
 ## Mathematical notation
 
-Inline TeX: $a^2+b^2=c^2$.
+The public build does not render TeX or KaTeX. Use readable text and Unicode notation instead.
 
-$$
-a^2+b^2=c^2
-$$
+Inline notation: a² + b² = c².
 
 [equation:title="Resonance decay model"]
-$$
-R(t)=R_0e^{-\lambda t}
-$$
+R(t) = R₀ × exp(−λt)
 [/equation]
 
 ```md
-Inline: $a^2+b^2=c^2$
+Inline notation: a² + b² = c².
 
 [equation:title="Resonance decay model"]
-$$
-R(t)=R_0e^{-\lambda t}
-$$
+R(t) = R₀ × exp(−λt)
 [/equation]
 ```
 
@@ -633,7 +627,7 @@ timelineBlocks:
 
 [Timeline:ID-0001]
 
-### Native note-local Chronos timeline
+### Obsidian-only Chronos timeline
 
 ```chronos
 > NOTODAY
@@ -646,7 +640,7 @@ timelineBlocks:
 = [9220] Demonstration marker
 ```
 
-Use canonical event notes and `[Timeline:...]` when events must participate in calendars, era validation, filters, and generated datasets.
+The separate Chronos community plugin can render this inside Obsidian. The public site displays it as an ordinary code block. Use canonical event notes and `[Timeline:...]` for public interactive timelines and whenever events must participate in calendars, era validation, filters, and generated datasets.
 
 ## Footnotes
 
@@ -671,7 +665,7 @@ The old MDX component gallery imported `Badge`, `CardGrid`, `FileTree`, `Tabs`, 
 | Managed images and Obsidian embeds | Yes | Normal article media. |
 | `codex-map`, `world-map`, `map-grid`, `map-card` | Yes | Inline cartography presentation. |
 | Calendar and timeline shortcodes | Yes | Dynamic article modules. |
-| Native `chronos` fences | Yes | Note-local chronology. |
+| Native `chronos` fences | Obsidian only | Published as ordinary code. Use canonical events and timeline shortcodes for public interaction. |
 | Imported Starlight MDX components | No, not by default | Deliberately hand-authored `.mdx` pages only. |
 | `type: map` interactive-map route | Specialist | Use when the note owns the map route/dataset. |
 | Bespoke Astro/Preact components | Specialist | Add at Site/component level. |

@@ -1,7 +1,4 @@
-import { mkdirSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
-
-mkdirSync('timeline-browser-diagnostics', { recursive: true });
 
 const viewports = [
   { name: 'mobile', width: 390, height: 844 },
@@ -27,11 +24,6 @@ for (const theme of ['dark', 'light']) {
       }));
       expect(layout.horizontalOverflow).toBe(false);
       expect(layout.mainWidth).toBeGreaterThan(280);
-
-      await page.screenshot({
-        path: `timeline-browser-diagnostics/article-${theme}-${viewport.name}.png`,
-        fullPage: true,
-      });
     });
   }
 }
@@ -56,10 +48,5 @@ for (const { theme, name, width, height } of [
     expect(await page.evaluate(() => (
       document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
     ))).toBe(false);
-
-    await page.screenshot({
-      path: `timeline-browser-diagnostics/start-here-${theme}-${name}.png`,
-      fullPage: true,
-    });
   });
 }

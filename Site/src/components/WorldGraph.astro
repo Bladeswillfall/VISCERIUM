@@ -129,7 +129,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         style: {
           width: 1,
           'line-color': colour(root, '--world-graph-edge'),
-          opacity: .42,
+          opacity: Number(getComputedStyle(root).getPropertyValue('--world-graph-edge-opacity')),
           'curve-style': 'haystack',
         },
       },

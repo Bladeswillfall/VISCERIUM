@@ -6,7 +6,8 @@
   --world-graph-muted: var(--codex-palette-mid);
   --world-graph-node: var(--codex-palette-light);
   --world-graph-selected: var(--codex-warning-base);
-  --world-graph-edge: var(--codex-palette-deep);
+  --world-graph-edge: var(--codex-palette-mid);
+  --world-graph-edge-opacity: .75;
   display: grid;
   gap: .75rem;
   min-inline-size: 0;
@@ -20,7 +21,7 @@
   --world-graph-muted: var(--codex-palette-deep);
   --world-graph-node: var(--codex-palette-deep);
   --world-graph-selected: var(--codex-palette-oled);
-  --world-graph-edge: var(--codex-palette-mid);
+  --world-graph-edge: var(--codex-palette-deep);
 }
 
 .world-graph__toolbar {

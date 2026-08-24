@@ -167,6 +167,44 @@ async function inspectGraph(page, viewport, theme) {
   expect(colours[0]).not.toBe(colours[1]);
   expect(colours[0]).not.toBe(colours[2]);
 
+  const edgeContrast = await graph.evaluate((element) => {
+    const style = getComputedStyle(element);
+    const raster = document.createElement('canvas');
+    raster.width = 2;
+    raster.height = 1;
+    const context = raster.getContext('2d');
+    if (!context) return 0;
+
+    const resolveColour = (name) => {
+      const probe = document.createElement('span');
+      probe.style.color = `var(${name})`;
+      element.append(probe);
+      const value = getComputedStyle(probe).color;
+      probe.remove();
+      return value;
+    };
+    context.fillStyle = resolveColour('--world-graph-canvas');
+    context.fillRect(0, 0, 2, 1);
+    context.globalAlpha = Number(style.getPropertyValue('--world-graph-edge-opacity'));
+    context.fillStyle = resolveColour('--world-graph-edge');
+    context.fillRect(1, 0, 1, 1);
+
+    const pixels = context.getImageData(0, 0, 2, 1).data;
+    const linear = (value) => {
+      const channel = value / 255;
+      return channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4;
+    };
+    const luminance = (offset) => (
+      .2126 * linear(pixels[offset])
+      + .7152 * linear(pixels[offset + 1])
+      + .0722 * linear(pixels[offset + 2])
+    );
+    const background = luminance(0);
+    const edge = luminance(4);
+    return (Math.max(background, edge) + .05) / (Math.min(background, edge) + .05);
+  });
+  expect(edgeContrast).toBeGreaterThanOrEqual(3);
+
   expect(await selectRenderedNode(page, graph, canvasHost)).toBe(true);
   await expect(graph).toHaveAttribute('data-world-graph-context', 'selected');
   await expect(details.getByRole('heading')).toBeVisible();

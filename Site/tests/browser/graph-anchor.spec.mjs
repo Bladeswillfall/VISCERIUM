@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 const preview = 'http://127.0.0.1:4321';
+const centreSampleStep = 2;
+const centreSamplingTolerance = centreSampleStep * 2;
 
 async function findConnectedNodePoint(page, graph, canvas) {
   const box = await canvas.boundingBox();
@@ -21,7 +23,7 @@ async function findConnectedNodePoint(page, graph, canvas) {
 
 async function approximateNodeCentre(page, graph, point) {
   const xs = [];
-  for (let dx = -24; dx <= 24; dx += 2) {
+  for (let dx = -24; dx <= 24; dx += centreSampleStep) {
     await page.mouse.move(point.x + dx, point.y);
     if (await graph.getAttribute('data-world-graph-active-id') === point.id) xs.push(point.x + dx);
   }
@@ -29,7 +31,7 @@ async function approximateNodeCentre(page, graph, point) {
   const x = (Math.min(...xs) + Math.max(...xs)) / 2;
 
   const ys = [];
-  for (let dy = -24; dy <= 24; dy += 2) {
+  for (let dy = -24; dy <= 24; dy += centreSampleStep) {
     await page.mouse.move(x, point.y + dy);
     if (await graph.getAttribute('data-world-graph-active-id') === point.id) ys.push(point.y + dy);
   }
@@ -58,5 +60,5 @@ test('World Graph wheel zoom keeps the graph point under the cursor', async ({ p
   expect(nextZoom / initialZoom).toBeLessThanOrEqual(1.22);
 
   const after = await approximateNodeCentre(page, graph, before);
-  expect(Math.hypot(after.x - before.x, after.y - before.y)).toBeLessThanOrEqual(3);
+  expect(Math.hypot(after.x - before.x, after.y - before.y)).toBeLessThanOrEqual(centreSamplingTolerance);
 });
