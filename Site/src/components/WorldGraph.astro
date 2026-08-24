@@ -254,6 +254,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         moved: boolean;
         intercepted: boolean;
       } = null;
+      let touchGesture: null | {
+        identifier: number;
+        node: any;
+        startX: number;
+        startY: number;
+        startPosition: { x: number; y: number };
+        moved: boolean;
+      } = null;
 
       const setStatus = (message: string) => {
         if (status) status.textContent = message;
@@ -297,6 +305,8 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       };
       const moveKeyboard = (nextIndex: number) => {
         if (!orderedNodes.length) return;
+        cy.nodes().unselect();
+        selectedNode = null;
         const wrappedIndex = ((nextIndex % orderedNodes.length) + orderedNodes.length) % orderedNodes.length;
         keyboardNode = orderedNodes[wrappedIndex];
         pointerNode = null;
@@ -313,6 +323,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         keyboardNode = null;
         pointerNode = null;
         pointerGesture = null;
+        touchGesture = null;
         canvas.style.removeProperty('cursor');
         clearContext(cy, root);
         showPrompt(root);
@@ -383,9 +394,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         const delta = normaliseWheel(event, canvas.clientHeight);
         if (delta === 0) return;
 
-        event.preventDefault();
+        // Claim the wheel event before Cytoscape's own capture listener. Only cancel
+        // the browser's default scroll when the graph can actually consume the zoom,
+        // so reaching a hard zoom bound does not trap the page.
         event.stopImmediatePropagation();
-        if (pointerGesture) return;
+        if (pointerGesture || touchGesture) {
+          event.preventDefault();
+          return;
+        }
 
         const bounds = canvas.getBoundingClientRect();
         const renderedPosition = {
@@ -397,17 +413,18 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         const nextZoom = clamp(currentZoom * factor, cy.minZoom(), cy.maxZoom());
         if (Math.abs(nextZoom - currentZoom) < .000001) return;
 
+        event.preventDefault();
         cy.zoom({ level: nextZoom, renderedPosition });
         setZoomState();
         setPointerContext(findNodeAt(event.clientX, event.clientY));
       };
 
       const handlePointerDown = (event: PointerEvent) => {
-        if (event.button !== 0 || (!event.isPrimary && event.pointerType !== 'mouse')) return;
+        if (event.pointerType === 'touch') return;
+        if (event.button !== 0 || !event.isPrimary) return;
         const node = findPointerNode(event);
         if (!node) return;
 
-        const intercepted = event.pointerType !== 'touch';
         pointerGesture = {
           pointerId: event.pointerId,
           pointerType: event.pointerType,
@@ -416,41 +433,36 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           startY: event.clientY,
           startPosition: { ...node.position() },
           moved: false,
-          intercepted,
+          intercepted: true,
         };
         setPointerContext(node);
-
-        if (intercepted) {
-          canvas.setPointerCapture(event.pointerId);
-          event.preventDefault();
-          event.stopPropagation();
-        }
+        canvas.setPointerCapture(event.pointerId);
+        event.preventDefault();
+        event.stopPropagation();
       };
 
       const handlePointerMove = (event: PointerEvent) => {
+        if (event.pointerType === 'touch') return;
         if (pointerGesture?.pointerId === event.pointerId) {
           const dx = event.clientX - pointerGesture.startX;
           const dy = event.clientY - pointerGesture.startY;
           if (!pointerGesture.moved && Math.hypot(dx, dy) >= dragThreshold) pointerGesture.moved = true;
 
-          if (pointerGesture.intercepted) {
-            if (pointerGesture.moved) {
-              const zoom = Math.max(cy.zoom(), .0001);
-              pointerGesture.node.position({
-                x: pointerGesture.startPosition.x + dx / zoom,
-                y: pointerGesture.startPosition.y + dy / zoom,
-              });
-              pointerNode = pointerGesture.node;
-              canvas.style.cursor = 'grabbing';
-              applyContext(cy, root, pointerGesture.node, 'pointer');
-            }
-            event.preventDefault();
-            event.stopPropagation();
-            return;
+          if (pointerGesture.moved) {
+            const zoom = Math.max(cy.zoom(), .0001);
+            pointerGesture.node.position({
+              x: pointerGesture.startPosition.x + dx / zoom,
+              y: pointerGesture.startPosition.y + dy / zoom,
+            });
+            pointerNode = pointerGesture.node;
+            canvas.style.cursor = 'grabbing';
+            applyContext(cy, root, pointerGesture.node, 'pointer');
           }
+          event.preventDefault();
+          event.stopPropagation();
+          return;
         }
 
-        if (event.pointerType === 'touch') return;
         if (event.buttons) {
           clearPointerContext();
           return;
@@ -459,15 +471,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       };
 
       const finishPointerGesture = (event: PointerEvent, cancelled = false) => {
+        if (event.pointerType === 'touch') return;
         if (!pointerGesture || pointerGesture.pointerId !== event.pointerId) return;
         const gesture = pointerGesture;
         pointerGesture = null;
 
-        if (gesture.intercepted) {
-          if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
-          event.preventDefault();
-          event.stopPropagation();
-        }
+        if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+        event.preventDefault();
+        event.stopPropagation();
 
         if (!cancelled && !gesture.moved) {
           const releasedNode = findPointerNode(event);
@@ -476,26 +487,103 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
             return;
           }
         }
+        setPointerContext(findPointerNode(event));
+      };
 
-        if (event.pointerType === 'touch') {
-          clearPointerContext();
-        } else {
-          setPointerContext(findPointerNode(event));
+      const touchByIdentifier = (touches: TouchList, identifier: number) => (
+        Array.from(touches).find((touch) => touch.identifier === identifier)
+      );
+      const handleTouchStart = (event: TouchEvent) => {
+        const target = event.target;
+        if (!(target instanceof Node) || !canvas.contains(target)) return;
+
+        if (event.touches.length !== 1) {
+          if (touchGesture) {
+            touchGesture = null;
+            clearPointerContext();
+          }
+          return;
         }
+
+        const touch = event.touches[0];
+        const node = findNodeAt(touch.clientX, touch.clientY, 'touch');
+        if (!node) return;
+
+        touchGesture = {
+          identifier: touch.identifier,
+          node,
+          startX: touch.clientX,
+          startY: touch.clientY,
+          startPosition: { ...node.position() },
+          moved: false,
+        };
+        setPointerContext(node);
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      };
+      const handleTouchMove = (event: TouchEvent) => {
+        if (!touchGesture) return;
+        if (event.touches.length !== 1) {
+          touchGesture = null;
+          clearPointerContext();
+          return;
+        }
+
+        const touch = touchByIdentifier(event.touches, touchGesture.identifier);
+        if (!touch) return;
+        const dx = touch.clientX - touchGesture.startX;
+        const dy = touch.clientY - touchGesture.startY;
+        if (!touchGesture.moved && Math.hypot(dx, dy) >= dragThreshold) touchGesture.moved = true;
+
+        if (touchGesture.moved) {
+          const zoom = Math.max(cy.zoom(), .0001);
+          touchGesture.node.position({
+            x: touchGesture.startPosition.x + dx / zoom,
+            y: touchGesture.startPosition.y + dy / zoom,
+          });
+          pointerNode = touchGesture.node;
+          applyContext(cy, root, touchGesture.node, 'pointer');
+        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      };
+      const finishTouchGesture = (event: TouchEvent, cancelled = false) => {
+        if (!touchGesture) return;
+        const gesture = touchGesture;
+        const touch = touchByIdentifier(event.changedTouches, gesture.identifier);
+        if (!touch) return;
+        touchGesture = null;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        if (!cancelled && !gesture.moved) {
+          const releasedNode = findNodeAt(touch.clientX, touch.clientY, 'touch');
+          if (releasedNode?.id() === gesture.node.id()) {
+            selectNode(gesture.node, 'selected');
+            return;
+          }
+        }
+        clearPointerContext();
       };
 
       const handlePointerUp = (event: PointerEvent) => finishPointerGesture(event);
       const handlePointerCancel = (event: PointerEvent) => finishPointerGesture(event, true);
+      const handleTouchEnd = (event: TouchEvent) => finishTouchGesture(event);
+      const handleTouchCancel = (event: TouchEvent) => finishTouchGesture(event, true);
       const handlePointerLeave = () => {
-        if (!pointerGesture?.intercepted) clearPointerContext();
+        if (!pointerGesture) clearPointerContext();
       };
       const handleViewportMove = () => {
         setZoomState();
-        if (!pointerGesture && pointerNode) clearPointerContext();
+        if (!pointerGesture && !touchGesture && pointerNode) clearPointerContext();
       };
 
       reset?.addEventListener('click', handleReset);
       root.addEventListener('wheel', handleWheel, { passive: false, capture: true });
+      root.addEventListener('touchstart', handleTouchStart, { passive: false, capture: true });
+      root.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+      root.addEventListener('touchend', handleTouchEnd, { passive: false, capture: true });
+      root.addEventListener('touchcancel', handleTouchCancel, { passive: false, capture: true });
       canvas.addEventListener('pointerdown', handlePointerDown, true);
       canvas.addEventListener('pointermove', handlePointerMove, true);
       canvas.addEventListener('pointerup', handlePointerUp, true);
@@ -520,6 +608,10 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         themeObserver.disconnect();
         reset?.removeEventListener('click', handleReset);
         root.removeEventListener('wheel', handleWheel, true);
+        root.removeEventListener('touchstart', handleTouchStart, true);
+        root.removeEventListener('touchmove', handleTouchMove, true);
+        root.removeEventListener('touchend', handleTouchEnd, true);
+        root.removeEventListener('touchcancel', handleTouchCancel, true);
         canvas.removeEventListener('pointerdown', handlePointerDown, true);
         canvas.removeEventListener('pointermove', handlePointerMove, true);
         canvas.removeEventListener('pointerup', handlePointerUp, true);
