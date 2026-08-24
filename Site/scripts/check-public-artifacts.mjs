@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const distRoot = fileURLToPath(new URL('../dist/', import.meta.url));
 const textExtensions = new Set(['.css', '.html', '.js', '.json', '.mjs', '.svg', '.txt', '.xml']);
+const maxScannableTextBytes = 8 * 1024 * 1024;
 const forbiddenNames = [
   /(?:^|\/)\.env(?:\.|$)/i,
   /(?:^|\/)\.dev\.vars(?:\.|$)/i,
@@ -48,7 +49,11 @@ for (const absolute of files) {
 
   if (!textExtensions.has(path.extname(relative).toLowerCase())) continue;
   const stat = await fs.stat(absolute);
-  if (stat.size > 8 * 1024 * 1024) continue;
+  if (stat.size > maxScannableTextBytes) {
+    failures.push(`${relative}: text artifact exceeds the 8 MiB security inspection limit`);
+    continue;
+  }
+
   const source = await fs.readFile(absolute, 'utf8');
   for (const { pattern, label } of forbiddenText) {
     if (pattern.test(source)) failures.push(`${relative}: contains ${label}`);
