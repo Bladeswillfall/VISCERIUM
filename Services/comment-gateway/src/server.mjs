@@ -186,7 +186,7 @@ function copyForwardHeaders(request, ip) {
 function copyResponseHeaders(source) {
   const headers = {};
   for (const [name, value] of source.entries()) {
-    if (['connection', 'content-length', 'keep-alive', 'transfer-encoding', 'upgrade'].includes(name.toLowerCase())) continue;
+    if (['connection', 'content-encoding', 'content-length', 'keep-alive', 'transfer-encoding', 'upgrade'].includes(name.toLowerCase())) continue;
     headers[name] = value;
   }
   headers['cache-control'] = 'no-store';
@@ -196,14 +196,27 @@ function copyResponseHeaders(source) {
 
 async function forwardWrite({ request, requestUrl, body, ip, config, fetchImpl }) {
   const upstream = new URL(`${requestUrl.pathname}${requestUrl.search}`, config.upstream);
-  let result;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), config.upstreamTimeoutMs ?? 5000);
+
   try {
-    result = await fetchImpl(upstream, {
+    const result = await fetchImpl(upstream, {
       method: request.method,
       headers: copyForwardHeaders(request, ip),
       body,
       redirect: 'manual',
+      signal: controller.signal,
     });
+
+    // Read the full body while the same deadline is active. Node fetch may
+    // transparently decompress upstream content while retaining the original
+    // Content-Encoding header, so copyResponseHeaders deliberately strips it.
+    const responseBody = Buffer.from(await result.arrayBuffer());
+    return {
+      status: result.status,
+      headers: copyResponseHeaders(result.headers),
+      body: responseBody,
+    };
   } catch (cause) {
     const error = new GatewayError(
       503,
@@ -213,13 +226,9 @@ async function forwardWrite({ request, requestUrl, body, ip, config, fetchImpl }
     );
     error.cacheIdempotency = true;
     throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return {
-    status: result.status,
-    headers: copyResponseHeaders(result.headers),
-    body: Buffer.from(await result.arrayBuffer()),
-  };
 }
 
 function logEvent(event) {
@@ -232,6 +241,7 @@ export function createGatewayServer(config, dependencies = {}) {
     secret: config.rateLimitSecret,
     windowMs: config.rateLimitWindowMs,
     max: config.rateLimitMax,
+    maxIdentities: config.rateLimitMaxIdentities ?? 5000,
   });
   const idempotency = dependencies.idempotency || new IdempotencyStore({ ttlMs: config.idempotencyTtlMs });
   const webRisk = dependencies.webRisk || new WebRiskClient(config.webRisk, fetchImpl);
