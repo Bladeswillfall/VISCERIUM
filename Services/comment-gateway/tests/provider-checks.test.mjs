@@ -19,17 +19,21 @@ function jsonResponse(payload, status = 200) {
 
 test('Web Risk permits a clean URL and caches the decision without storing a raw cache key', async () => {
   let calls = 0;
+  const rawUrl = 'https://example.com/path';
   const client = new WebRiskClient(webRiskConfig, async (url) => {
     calls += 1;
-    assert.equal(url.searchParams.get('uri'), 'https://example.com/path');
+    assert.equal(url.searchParams.get('uri'), rawUrl);
     assert.deepEqual(url.searchParams.getAll('threatTypes'), ['MALWARE', 'SOCIAL_ENGINEERING', 'UNWANTED_SOFTWARE']);
     return jsonResponse({});
   });
 
-  await client.assertSafe('https://example.com/path');
-  await client.assertSafe('https://example.com/path');
+  await client.assertSafe(rawUrl);
+  await client.assertSafe(rawUrl);
   assert.equal(calls, 1);
-  assert.equal([...client.cache.keys()].some((entry) => entry.includes('example.com')), false);
+
+  const cacheKeys = [...client.cache.keys()];
+  assert.deepEqual(cacheKeys, [client.cacheKey(rawUrl)]);
+  assert.notEqual(cacheKeys[0], rawUrl);
 });
 
 test('Web Risk rejects a matched threat and provider outages fail closed', async () => {
