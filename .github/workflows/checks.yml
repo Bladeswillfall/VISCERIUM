@@ -115,8 +115,8 @@ jobs:
           set -o pipefail
           {
             npx --no-install playwright test tests/browser --browser=chromium --reporter=line --workers=1
-            npx --no-install playwright test tests/browser/graph.spec.mjs --browser=firefox --reporter=line --workers=1
-            npx --no-install playwright test tests/browser/graph.spec.mjs --browser=webkit --reporter=line --workers=1
+            npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
+            npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
           } 2>&1 | tee "$RUNNER_TEMP/playwright.log"
 
       - name: Upload browser check log
