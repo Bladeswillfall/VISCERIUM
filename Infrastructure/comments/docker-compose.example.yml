@@ -1,0 +1,37 @@
+services:
+  remark42:
+    # Pin both the release and manifest digest. Update deliberately after testing.
+    image: ghcr.io/umputun/remark42:v1.16.4@sha256:980e0e76a6f241cd181f44c5b4d686f0d8cd7f552e11deb3bdcba223b2c3b866
+    container_name: remark42
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      REMARK_URL: "https://comments.viscerium.co.uk"
+      SITE: "viscerium"
+      MAX_COMMENT_SIZE: "2048"
+      # Public image-upload requests are blocked at the reverse proxy and,
+      # once deployed, by the comment gateway. This 1-byte limit is a final
+      # backend backstop rather than the primary control.
+      IMAGE_MAX_SIZE: "1"
+      IMAGE_PROXY_HTTP2HTTPS: "false"
+      IMAGE_PROXY_CACHE_EXTERNAL: "false"
+      DISABLE_SIGNATURE: "true"
+      RESTRICTED_NAMES: "VISCERIUM,Admin,Administrator,Moderator,Mod,Staff,System,Official,Support"
+      # Caddy currently reaches the localhost-published port. The Docker CIDR
+      # is included for the later gateway hop. Do not trust arbitrary public
+      # forwarding headers.
+      TRUSTED_PROXY: "127.0.0.1/32,172.16.0.0/12"
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - "./var:/srv/var"
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
