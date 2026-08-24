@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const testDir = path.dirname(fileURLToPath(import.meta.url));
 const configUrl = pathToFileURL(path.resolve(testDir, '../site.config.mjs')).href;
+const commentsComponent = readFileSync(path.resolve(testDir, '../src/components/Comments.astro'), 'utf8');
 let importSequence = 0;
 const commentEnvironmentKeys = [
   'PUBLIC_COMMENTS_ENABLED',
@@ -54,4 +56,11 @@ test('comments retain an explicit deployment off switch', async () => {
 test('comments do not enable for a non-HTTPS host', async () => {
   const config = await readCommentsConfig({ PUBLIC_COMMENTS_HOST: 'http://comments.example.com' });
   assert.equal(config.enabled, false);
+});
+
+test('Remark42 SPA bootstrap uses the required root, global config, and classic embed loader', () => {
+  assert.match(commentsComponent, /id="remark42"/);
+  assert.match(commentsComponent, /remark_config\s*=\s*config/);
+  assert.match(commentsComponent, /\/web\/embed\.js/);
+  assert.doesNotMatch(commentsComponent, /\/web\/embed\.mjs/);
 });
