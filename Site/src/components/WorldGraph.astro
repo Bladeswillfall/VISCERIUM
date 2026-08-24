@@ -39,6 +39,10 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   const instances = new WeakMap<Element, () => void>();
   const interactionClasses = 'is-active is-neighbour is-context is-muted';
   const readyStatus = 'Interactive graph ready. Use pointer or arrow keys to explore pages.';
+  const pointerHitRadius = 18;
+  const touchHitRadius = 24;
+  const pointerHitPadding = 6;
+  const dragThreshold = 5;
 
   function colour(root: Element, name: string) {
     const probe = document.createElement('span');
@@ -60,6 +64,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       'text-background-opacity': .92,
       'text-background-padding': 3,
       'text-margin-y': -12,
+      'text-events': 'no',
     };
   }
 
@@ -73,6 +78,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           opacity: .82,
           'background-color': colour(root, '--world-graph-node'),
           'border-width': 0,
+          'text-events': 'no',
           label: '',
         },
       },
@@ -221,6 +227,17 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       ));
       let selectedNode: any = null;
       let keyboardNode: any = null;
+      let pointerNode: any = null;
+      let pointerGesture: null | {
+        pointerId: number;
+        pointerType: string;
+        node: any;
+        startX: number;
+        startY: number;
+        startPosition: { x: number; y: number };
+        moved: boolean;
+        intercepted: boolean;
+      } = null;
 
       const setStatus = (message: string) => {
         if (status) status.textContent = message;
@@ -235,14 +252,26 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         }
       };
       const clearPointerContext = () => {
+        pointerNode = null;
         canvas.style.removeProperty('cursor');
         restoreContext();
+      };
+      const setPointerContext = (node: any) => {
+        if (!node) {
+          clearPointerContext();
+          return;
+        }
+        if (pointerNode?.id() === node.id() && root.getAttribute('data-world-graph-context') === 'pointer') return;
+        pointerNode = node;
+        canvas.style.cursor = 'pointer';
+        applyContext(cy, root, node, 'pointer');
       };
       const selectNode = (node: any, source: string) => {
         cy.nodes().unselect();
         node.select();
         selectedNode = node;
         keyboardNode = node;
+        pointerNode = null;
         applyContext(cy, root, node, source);
         showDetails(root, node);
         setStatus(`Selected ${node.data('title')}. Use Reset view to clear the selection.`);
@@ -251,6 +280,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         if (!orderedNodes.length) return;
         const wrappedIndex = ((nextIndex % orderedNodes.length) + orderedNodes.length) % orderedNodes.length;
         keyboardNode = orderedNodes[wrappedIndex];
+        pointerNode = null;
         applyContext(cy, root, keyboardNode, 'keyboard');
         showDetails(root, keyboardNode);
         setStatus(`${keyboardNode.data('title')}. Use arrow keys to move, Enter to select, or Escape to reset.`);
@@ -262,6 +292,9 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         cy.nodes().unselect();
         selectedNode = null;
         keyboardNode = null;
+        pointerNode = null;
+        pointerGesture = null;
+        canvas.style.removeProperty('cursor');
         clearContext(cy, root);
         showPrompt(root);
         cy.fit(undefined, 48);
@@ -298,16 +331,131 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         setStatus(`${keyboardNode.data('title')}. Use arrow keys to move, Enter to select, or Escape to reset.`);
       };
 
-      cy.on('tap', 'node', (event) => selectNode(event.target, 'selected'));
-      cy.on('mouseover', 'node', (event) => {
-        canvas.style.cursor = 'pointer';
-        applyContext(cy, root, event.target, 'pointer');
-      });
-      cy.on('mouseout', 'node', clearPointerContext);
+      // The previous Pixi/D3 graph resolved pointer interactions from geometry rather
+      // than from rendered labels. Do the same here so zoomed-out nodes retain a
+      // forgiving, Obsidian-like interaction area without making the dots larger.
+      const findPointerNode = (event: PointerEvent) => {
+        const bounds = canvas.getBoundingClientRect();
+        const x = event.clientX - bounds.left;
+        const y = event.clientY - bounds.top;
+        const minimumRadius = event.pointerType === 'touch' ? touchHitRadius : pointerHitRadius;
+        const zoom = cy.zoom();
+        let closest: any = null;
+        let closestDistance = Number.POSITIVE_INFINITY;
+
+        for (const node of orderedNodes) {
+          const position = node.renderedPosition();
+          const visualRadius = Math.max(node.width(), node.height()) * zoom / 2;
+          const radius = Math.max(minimumRadius, visualRadius + pointerHitPadding);
+          const distance = (position.x - x) ** 2 + (position.y - y) ** 2;
+          if (distance <= radius ** 2 && distance < closestDistance) {
+            closest = node;
+            closestDistance = distance;
+          }
+        }
+        return closest;
+      };
+
+      const handlePointerDown = (event: PointerEvent) => {
+        if (event.button !== 0 || (!event.isPrimary && event.pointerType !== 'mouse')) return;
+        const node = findPointerNode(event);
+        if (!node) return;
+
+        const intercepted = event.pointerType !== 'touch';
+        pointerGesture = {
+          pointerId: event.pointerId,
+          pointerType: event.pointerType,
+          node,
+          startX: event.clientX,
+          startY: event.clientY,
+          startPosition: { ...node.position() },
+          moved: false,
+          intercepted,
+        };
+        setPointerContext(node);
+
+        if (intercepted) {
+          canvas.setPointerCapture(event.pointerId);
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      };
+
+      const handlePointerMove = (event: PointerEvent) => {
+        if (pointerGesture?.pointerId === event.pointerId) {
+          const dx = event.clientX - pointerGesture.startX;
+          const dy = event.clientY - pointerGesture.startY;
+          if (!pointerGesture.moved && Math.hypot(dx, dy) >= dragThreshold) pointerGesture.moved = true;
+
+          if (pointerGesture.intercepted) {
+            if (pointerGesture.moved) {
+              const zoom = Math.max(cy.zoom(), .0001);
+              pointerGesture.node.position({
+                x: pointerGesture.startPosition.x + dx / zoom,
+                y: pointerGesture.startPosition.y + dy / zoom,
+              });
+              pointerNode = pointerGesture.node;
+              canvas.style.cursor = 'grabbing';
+              applyContext(cy, root, pointerGesture.node, 'pointer');
+            }
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+          }
+        }
+
+        if (event.pointerType === 'touch') return;
+        if (event.buttons) {
+          clearPointerContext();
+          return;
+        }
+        setPointerContext(findPointerNode(event));
+      };
+
+      const finishPointerGesture = (event: PointerEvent, cancelled = false) => {
+        if (!pointerGesture || pointerGesture.pointerId !== event.pointerId) return;
+        const gesture = pointerGesture;
+        pointerGesture = null;
+
+        if (gesture.intercepted) {
+          if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        if (!cancelled && !gesture.moved) {
+          const releasedNode = findPointerNode(event);
+          if (releasedNode?.id() === gesture.node.id()) {
+            selectNode(gesture.node, 'selected');
+            return;
+          }
+        }
+
+        if (event.pointerType === 'touch') {
+          clearPointerContext();
+        } else {
+          setPointerContext(findPointerNode(event));
+        }
+      };
+
+      const handlePointerUp = (event: PointerEvent) => finishPointerGesture(event);
+      const handlePointerCancel = (event: PointerEvent) => finishPointerGesture(event, true);
+      const handlePointerLeave = () => {
+        if (!pointerGesture?.intercepted) clearPointerContext();
+      };
+      const handleViewportMove = () => {
+        if (!pointerGesture && pointerNode) clearPointerContext();
+      };
+
       reset?.addEventListener('click', handleReset);
-      canvas.addEventListener('pointerleave', clearPointerContext);
+      canvas.addEventListener('pointerdown', handlePointerDown, true);
+      canvas.addEventListener('pointermove', handlePointerMove, true);
+      canvas.addEventListener('pointerup', handlePointerUp, true);
+      canvas.addEventListener('pointercancel', handlePointerCancel, true);
+      canvas.addEventListener('pointerleave', handlePointerLeave);
       canvas.addEventListener('keydown', handleKeydown);
       canvas.addEventListener('focus', handleFocus);
+      cy.on('pan zoom', handleViewportMove);
       if (reset) reset.disabled = false;
       canvas.setAttribute('aria-busy', 'false');
       root.setAttribute('data-world-graph-ready', 'true');
@@ -322,9 +470,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         resizeObserver.disconnect();
         themeObserver.disconnect();
         reset?.removeEventListener('click', handleReset);
-        canvas.removeEventListener('pointerleave', clearPointerContext);
+        canvas.removeEventListener('pointerdown', handlePointerDown, true);
+        canvas.removeEventListener('pointermove', handlePointerMove, true);
+        canvas.removeEventListener('pointerup', handlePointerUp, true);
+        canvas.removeEventListener('pointercancel', handlePointerCancel, true);
+        canvas.removeEventListener('pointerleave', handlePointerLeave);
         canvas.removeEventListener('keydown', handleKeydown);
         canvas.removeEventListener('focus', handleFocus);
+        cy.off('pan zoom', handleViewportMove);
         cy.destroy();
       });
     } catch (error) {
