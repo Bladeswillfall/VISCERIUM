@@ -23,6 +23,18 @@ updates:
           - 'uuid'
 
   - package-ecosystem: npm
+    directory: /Services/comment-gateway
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: docker
+    directory: /Services/comment-gateway
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+
+  - package-ecosystem: npm
     directory: /Tools/obsidian-viscerium-timelines
     schedule:
       interval: weekly
