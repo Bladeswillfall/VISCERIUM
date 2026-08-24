@@ -49,6 +49,9 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   const wheelLinePixels = 32;
   const contextDepth = 3;
   const labelCollisionPadding = 5;
+  const zoomDispersionStart = .8;
+  const zoomDispersionFull = 2.4;
+  const zoomDispersionMaxScale = 1.7;
 
   function clamp(value: number, minimum: number, maximum: number) {
     return Math.min(maximum, Math.max(minimum, value));
@@ -404,6 +407,65 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       const orderedNodes = cy.nodes().toArray().sort((left: any, right: any) => (
         String(left.data('title')).localeCompare(String(right.data('title')))
       ));
+      const basePositions = new Map<string, { x: number; y: number }>(
+        orderedNodes.map((node: any) => [node.id(), { ...node.position() }]),
+      );
+      const componentGroups = cy.elements().components()
+        .map((component: any) => component.nodes().toArray().map((node: any) => node.id()))
+        .filter((ids: string[]) => ids.length > 0);
+      const componentCenters = new Map<string, { x: number; y: number }>();
+
+      const rebuildComponentCenters = () => {
+        componentCenters.clear();
+        for (const ids of componentGroups) {
+          const positions = ids
+            .map((id: string) => basePositions.get(id))
+            .filter((position: any) => position);
+          if (!positions.length) continue;
+          const center = {
+            x: positions.reduce((sum: number, position: any) => sum + position.x, 0) / positions.length,
+            y: positions.reduce((sum: number, position: any) => sum + position.y, 0) / positions.length,
+          };
+          ids.forEach((id: string) => componentCenters.set(id, center));
+        }
+      };
+      const dispersionScaleForZoom = () => {
+        const progress = clamp(
+          (cy.zoom() - zoomDispersionStart) / (zoomDispersionFull - zoomDispersionStart),
+          0,
+          1,
+        );
+        return 1 + progress * (zoomDispersionMaxScale - 1);
+      };
+      const applyZoomDispersal = () => {
+        const scale = dispersionScaleForZoom();
+        cy.batch(() => {
+          orderedNodes.forEach((node: any) => {
+            const basePosition = basePositions.get(node.id());
+            const center = componentCenters.get(node.id());
+            if (!basePosition || !center) return;
+            node.position({
+              x: center.x + (basePosition.x - center.x) * scale,
+              y: center.y + (basePosition.y - center.y) * scale,
+            });
+          });
+        });
+        root.setAttribute('data-world-graph-dispersion', scale.toFixed(3));
+        refreshLabelVisibility(cy, root);
+      };
+      const commitDraggedNodeToBase = (node: any) => {
+        const center = componentCenters.get(node.id());
+        if (!center) return;
+        const scale = Math.max(dispersionScaleForZoom(), .0001);
+        const position = node.position();
+        basePositions.set(node.id(), {
+          x: center.x + (position.x - center.x) / scale,
+          y: center.y + (position.y - center.y) / scale,
+        });
+        rebuildComponentCenters();
+      };
+      rebuildComponentCenters();
+
       let selectedNode: any = null;
       let keyboardNode: any = null;
       let pointerNode: any = null;
@@ -492,6 +554,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         showPrompt(root);
         cy.fit(undefined, 48);
         setZoomState();
+        applyZoomDispersal();
         setStatus(readyStatus);
       };
       const handleKeydown = (event: KeyboardEvent) => {
@@ -579,7 +642,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         event.preventDefault();
         cy.zoom({ level: nextZoom, renderedPosition });
         setZoomState();
-        refreshLabelVisibility(cy, root);
+        applyZoomDispersal();
         setPointerContext(findNodeAt(event.clientX, event.clientY));
       };
 
@@ -644,6 +707,10 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         event.preventDefault();
         event.stopPropagation();
 
+        if (gesture.moved && !cancelled) {
+          commitDraggedNodeToBase(gesture.node);
+          applyZoomDispersal();
+        }
         if (!cancelled && !gesture.moved) {
           const releasedNode = findPointerNode(event);
           if (releasedNode?.id() === gesture.node.id()) {
@@ -720,6 +787,10 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         event.preventDefault();
         event.stopImmediatePropagation();
 
+        if (gesture.moved && !cancelled) {
+          commitDraggedNodeToBase(gesture.node);
+          applyZoomDispersal();
+        }
         if (!cancelled && !gesture.moved) {
           const releasedNode = findNodeAt(touch.clientX, touch.clientY, 'touch');
           if (releasedNode?.id() === gesture.node.id()) {
@@ -739,7 +810,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       };
       const handleViewportMove = () => {
         setZoomState();
-        refreshLabelVisibility(cy, root);
+        applyZoomDispersal();
         if (!pointerGesture && !touchGesture && pointerNode) clearPointerContext();
       };
 
@@ -760,6 +831,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       setZoomState();
       root.setAttribute('data-world-graph-visible-labels', '0');
       root.setAttribute('data-world-graph-label-tier', 'none');
+      applyZoomDispersal();
       if (reset) reset.disabled = false;
       canvas.setAttribute('aria-busy', 'false');
       root.setAttribute('data-world-graph-ready', 'true');
@@ -768,7 +840,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 
       const resizeObserver = new ResizeObserver(() => {
         cy.resize();
-        refreshLabelVisibility(cy, root);
+        applyZoomDispersal();
       });
       resizeObserver.observe(canvas);
       const themeObserver = new MutationObserver(() => cy.style(styles(root)));
