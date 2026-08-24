@@ -10,17 +10,11 @@ services:
       REMARK_URL: "https://comments.viscerium.co.uk"
       SITE: "viscerium"
       MAX_COMMENT_SIZE: "2048"
-      # Public image-upload requests are blocked at the reverse proxy and,
-      # once deployed, by the comment gateway. This 1-byte limit is a final
-      # backend backstop rather than the primary control.
       IMAGE_MAX_SIZE: "1"
       IMAGE_PROXY_HTTP2HTTPS: "false"
       IMAGE_PROXY_CACHE_EXTERNAL: "false"
       DISABLE_SIGNATURE: "true"
       RESTRICTED_NAMES: "VISCERIUM,Admin,Administrator,Moderator,Mod,Staff,System,Official,Support"
-      # Caddy currently reaches the localhost-published port. The Docker CIDR
-      # is included for the later gateway hop. Do not trust arbitrary public
-      # forwarding headers.
       TRUSTED_PROXY: "127.0.0.1/32,172.16.0.0/12"
     ports:
       - "127.0.0.1:8080:8080"
@@ -31,6 +25,42 @@ services:
     pids_limit: 128
     mem_limit: 512m
     cpus: 1.0
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  comment-gateway:
+    build:
+      context: ../../Services/comment-gateway
+    container_name: viscerium-comment-gateway
+    restart: unless-stopped
+    env_file:
+      - .gateway.env
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "8080"
+      REMARK42_UPSTREAM_URL: "http://remark42:8080"
+      REMARK42_SITE_ID: "viscerium"
+      COMMENT_ORIGINS: "https://www.viscerium.co.uk"
+      MAX_REQUEST_BYTES: "65536"
+      MAX_COMMENT_BYTES: "2048"
+      MAX_EXTERNAL_LINKS: "3"
+    ports:
+      - "127.0.0.1:8081:8080"
+    depends_on:
+      remark42:
+        condition: service_healthy
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.5
     logging:
       options:
         max-size: "10m"
