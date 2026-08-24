@@ -21,6 +21,7 @@ test('Cloudflare Pages ships the public-site security baseline', async () => {
   assert.match(headers, /Strict-Transport-Security:\s*max-age=31536000/i);
   assert.match(headers, /X-Frame-Options:\s*DENY/i);
   assert.match(headers, /X-Content-Type-Options:\s*nosniff/i);
+  assert.match(headers, /X-Permitted-Cross-Domain-Policies:\s*none/i);
   assert.match(headers, /Referrer-Policy:\s*strict-origin-when-cross-origin/i);
 
   const permissionsPolicy = getHeaderValue(headers, 'Permissions-Policy');
@@ -43,17 +44,25 @@ test('Cloudflare Pages ships the public-site security baseline', async () => {
   }
 });
 
-test('CSP remains report-only until the external-resource inventory is validated', async () => {
+test('CSP inventory has no retired Giscus or CDN permissions', async () => {
   const headers = await fs.readFile(headersUrl, 'utf8');
-
   const reportOnlyCsp = getHeaderValue(headers, 'Content-Security-Policy-Report-Only');
+
   assert.ok(reportOnlyCsp, 'expected a report-only CSP header');
-  assert.equal(
-    getHeaderValue(headers, 'Content-Security-Policy'),
-    undefined,
-    'enforcing CSP must not be enabled until the external-resource inventory is validated',
-  );
   assert.match(reportOnlyCsp, /default-src 'self'/);
   assert.match(reportOnlyCsp, /object-src 'none'/);
   assert.match(reportOnlyCsp, /frame-ancestors 'none'/);
+  assert.match(reportOnlyCsp, /https:\/\/comments\.viscerium\.co\.uk/);
+  assert.doesNotMatch(reportOnlyCsp, /giscus\.app/i);
+  assert.doesNotMatch(reportOnlyCsp, /cdnjs\.cloudflare\.com/i);
+});
+
+test('CSP remains report-only until inline scripts and the contact endpoint are narrowed', async () => {
+  const headers = await fs.readFile(headersUrl, 'utf8');
+
+  assert.equal(
+    getHeaderValue(headers, 'Content-Security-Policy'),
+    undefined,
+    'enforcing CSP must not be enabled while known broad inline/contact exceptions remain',
+  );
 });
