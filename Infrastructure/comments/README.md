@@ -8,10 +8,12 @@ This directory is the version-controlled reference for the public Remark42 servi
 - Caddy is the only local HTTP entry point until Cloudflare Tunnel becomes the public ingress.
 - User-uploaded comment images are not supported. `POST /api/v1/picture` is blocked before Remark42 and the backend image limit is set to one byte as a second backstop.
 - Public request bodies are bounded before application parsing.
-- Client-supplied forwarding headers are replaced. Only known proxy hops may influence the client address used for abuse controls.
+- Client-supplied forwarding headers are replaced. Caddy derives `{client_ip}` only through explicitly trusted proxy hops; untrusted direct peers fall back to their actual remote address.
 - The Remark42 image is pinned to a tested release and manifest digest. Do not return to `latest`.
 - The container has no Docker socket. Logs are rotated and resource usage is bounded.
 - Secrets, comment databases and backups never belong in Git.
+
+The example trusts only loopback as the reverse-proxy source because the target Cloudflare Tunnel process runs on the same host. If `cloudflared` is later moved into a container or onto another machine, replace those loopback CIDRs with only the exact network(s) that can legitimately reach Caddy; do not broaden this to arbitrary private ranges. `trusted_proxies_strict` is enabled so appended proxy chains are interpreted from the trusted side, and `CF-Connecting-IP`/`X-Forwarded-For` are considered only when the immediate peer is trusted.
 
 The stock Remark42 image rewrites files under `/srv/web` during container startup and attempts to adjust ownership under `/srv/var`. Because of that upstream behaviour, `read_only: true` and `cap_drop: [ALL]` are not asserted in the example: enabling them blindly can break startup. Revisit those controls only with a tested wrapper/custom image that makes the startup filesystem immutable after initialisation. `no-new-privileges` remains enabled.
 
