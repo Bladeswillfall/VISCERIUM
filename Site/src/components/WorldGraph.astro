@@ -43,6 +43,22 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   const touchHitRadius = 24;
   const pointerHitPadding = 6;
   const dragThreshold = 5;
+  const wheelSensitivity = .4;
+  const maxWheelDelta = 120;
+  const wheelZoomRate = .004;
+  const wheelLinePixels = 32;
+
+  function clamp(value: number, minimum: number, maximum: number) {
+    return Math.min(maximum, Math.max(minimum, value));
+  }
+
+  function normaliseWheel(event: WheelEvent, viewportHeight: number) {
+    let delta = event.deltaY;
+    if (!Number.isFinite(delta) || delta === 0) return 0;
+    if (event.deltaMode === 1) delta *= wheelLinePixels;
+    else if (event.deltaMode === 2) delta *= Math.max(viewportHeight, 1);
+    return clamp(delta, -maxWheelDelta, maxWheelDelta);
+  }
 
   function colour(root: Element, name: string) {
     const probe = document.createElement('span');
@@ -210,7 +226,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         style: styles(root),
         minZoom: .12,
         maxZoom: 3.5,
-        wheelSensitivity: .22,
+        wheelSensitivity,
         boxSelectionEnabled: false,
         layout: {
           name: 'cose',
@@ -241,6 +257,9 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 
       const setStatus = (message: string) => {
         if (status) status.textContent = message;
+      };
+      const setZoomState = () => {
+        root.setAttribute('data-world-graph-zoom', cy.zoom().toFixed(4));
       };
       const restoreContext = () => {
         if (selectedNode?.selected()) {
@@ -298,6 +317,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         clearContext(cy, root);
         showPrompt(root);
         cy.fit(undefined, 48);
+        setZoomState();
         setStatus(readyStatus);
       };
       const handleKeydown = (event: KeyboardEvent) => {
@@ -334,11 +354,11 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       // The previous Pixi/D3 graph resolved pointer interactions from geometry rather
       // than from rendered labels. Do the same here so zoomed-out nodes retain a
       // forgiving, Obsidian-like interaction area without making the dots larger.
-      const findPointerNode = (event: PointerEvent) => {
+      const findNodeAt = (clientX: number, clientY: number, pointerType = 'mouse') => {
         const bounds = canvas.getBoundingClientRect();
-        const x = event.clientX - bounds.left;
-        const y = event.clientY - bounds.top;
-        const minimumRadius = event.pointerType === 'touch' ? touchHitRadius : pointerHitRadius;
+        const x = clientX - bounds.left;
+        const y = clientY - bounds.top;
+        const minimumRadius = pointerType === 'touch' ? touchHitRadius : pointerHitRadius;
         const zoom = cy.zoom();
         let closest: any = null;
         let closestDistance = Number.POSITIVE_INFINITY;
@@ -354,6 +374,32 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           }
         }
         return closest;
+      };
+      const findPointerNode = (event: PointerEvent) => findNodeAt(event.clientX, event.clientY, event.pointerType);
+
+      const handleWheel = (event: WheelEvent) => {
+        const target = event.target;
+        if (!(target instanceof Node) || !canvas.contains(target)) return;
+        const delta = normaliseWheel(event, canvas.clientHeight);
+        if (delta === 0) return;
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (pointerGesture) return;
+
+        const bounds = canvas.getBoundingClientRect();
+        const renderedPosition = {
+          x: event.clientX - bounds.left,
+          y: event.clientY - bounds.top,
+        };
+        const factor = Math.exp(-delta * wheelZoomRate * wheelSensitivity);
+        const currentZoom = cy.zoom();
+        const nextZoom = clamp(currentZoom * factor, cy.minZoom(), cy.maxZoom());
+        if (Math.abs(nextZoom - currentZoom) < .000001) return;
+
+        cy.zoom({ level: nextZoom, renderedPosition });
+        setZoomState();
+        setPointerContext(findNodeAt(event.clientX, event.clientY));
       };
 
       const handlePointerDown = (event: PointerEvent) => {
@@ -444,10 +490,12 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         if (!pointerGesture?.intercepted) clearPointerContext();
       };
       const handleViewportMove = () => {
+        setZoomState();
         if (!pointerGesture && pointerNode) clearPointerContext();
       };
 
       reset?.addEventListener('click', handleReset);
+      root.addEventListener('wheel', handleWheel, { passive: false, capture: true });
       canvas.addEventListener('pointerdown', handlePointerDown, true);
       canvas.addEventListener('pointermove', handlePointerMove, true);
       canvas.addEventListener('pointerup', handlePointerUp, true);
@@ -456,6 +504,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       canvas.addEventListener('keydown', handleKeydown);
       canvas.addEventListener('focus', handleFocus);
       cy.on('pan zoom', handleViewportMove);
+      setZoomState();
       if (reset) reset.disabled = false;
       canvas.setAttribute('aria-busy', 'false');
       root.setAttribute('data-world-graph-ready', 'true');
@@ -470,6 +519,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         resizeObserver.disconnect();
         themeObserver.disconnect();
         reset?.removeEventListener('click', handleReset);
+        root.removeEventListener('wheel', handleWheel, true);
         canvas.removeEventListener('pointerdown', handlePointerDown, true);
         canvas.removeEventListener('pointermove', handlePointerMove, true);
         canvas.removeEventListener('pointerup', handlePointerUp, true);
