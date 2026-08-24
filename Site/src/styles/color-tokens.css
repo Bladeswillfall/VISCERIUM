@@ -19,6 +19,19 @@
     --codex-text-body: var(--codex-text-base);
     --codex-text-minor: var(--codex-text-base);
 
+    /*
+      Legacy sRGB anchors for canvas libraries that cannot parse OKLCH.
+      Keep the era values aligned with the identity anchors in era-styles.css.
+    */
+    --codex-palette-oled-srgb: #000;
+    --codex-palette-deep-srgb: #484137;
+    --codex-palette-mid-srgb: #888070;
+    --codex-palette-light-srgb: #c8bfa8;
+    --era-e1-identity-srgb: #dc143c;
+    --era-e2-identity-srgb: #a5b516;
+    --era-e3-identity-srgb: #bd0b5f;
+    --era-e4-identity-srgb: #00ccbc;
+
     /* Reusable status colours. */
     --codex-danger-base: #ff8a9a;
     --codex-success-base: #7ee2a8;
