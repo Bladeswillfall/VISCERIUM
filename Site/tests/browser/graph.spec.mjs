@@ -188,6 +188,36 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   await expect(graph).not.toHaveAttribute('data-world-graph-active-id', /.+/);
 });
 
+test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+
+  const graph = page.locator('[data-world-graph]');
+  const canvasHost = graph.locator('[data-world-graph-canvas]');
+  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+
+  const hovered = await hoverConnectedNode(page, graph, canvasHost);
+  expect(hovered).not.toBeNull();
+  const initialZoom = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(initialZoom).toBeGreaterThan(0);
+
+  await page.mouse.wheel(0, -120);
+  const zoomedIn = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(zoomedIn).toBeGreaterThan(initialZoom);
+  expect(zoomedIn / initialZoom).toBeLessThanOrEqual(1.22);
+  await expect(graph).toHaveAttribute('data-world-graph-active-id', hovered.id);
+
+  await page.mouse.wheel(0, -5_000);
+  const boundedZoomIn = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(boundedZoomIn).toBeGreaterThanOrEqual(zoomedIn);
+  expect(boundedZoomIn / zoomedIn).toBeLessThanOrEqual(1.22);
+
+  await page.mouse.wheel(0, 5_000);
+  const boundedZoomOut = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(boundedZoomOut).toBeLessThan(boundedZoomIn);
+  expect(boundedZoomOut / boundedZoomIn).toBeGreaterThanOrEqual(.82);
+});
+
 test('World Graph keeps the page list when interactive data fails', async ({ page }) => {
   await page.route('**/sitegraph/sitemap.json', (route) => route.abort());
   await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
