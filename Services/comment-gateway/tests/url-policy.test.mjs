@@ -47,8 +47,9 @@ test('rejects HTTP, credentialed, IP, local and redirector links', () => {
   }
 });
 
-test('rejects non-HTTPS Markdown destinations and media embeds', () => {
+test('rejects non-HTTPS and protocol-relative Markdown destinations and media embeds', () => {
   assert.throws(() => process('[click](javascript:alert(1))'), (error) => error?.code === 'url_scheme');
+  assert.throws(() => process('[click](//evil.example/phish)'), (error) => error?.code === 'url_scheme');
   assert.throws(() => process('![image](https://example.com/a.png)'), (error) => error?.code === 'media_not_allowed');
   assert.throws(() => process('<iframe src="https://example.com"></iframe>'), (error) => error?.code === 'media_not_allowed');
 });
