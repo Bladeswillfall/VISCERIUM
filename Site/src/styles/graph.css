@@ -10,21 +10,15 @@
   --world-graph-edge-opacity: .75;
 
   /* Cytoscape 3.x needs legacy sRGB values rather than modern OKLCH tokens. */
-  --world-graph-cy-text: #c8bfa8;
-  --world-graph-cy-node: #888070;
-  --world-graph-cy-border: #484137;
-  --world-graph-cy-edge: #888070;
-  --world-graph-cy-selected: #c8bfa8;
-
-  /*
-    Pin graph nodes to the established sRGB era identity anchors from
-    era-styles.css. These are deliberately invariant across Auto, Light, and
-    Dark; theme switching may alter graph chrome, but never an era's hue.
-  */
-  --era-e1-accent: #dc143c;
-  --era-e2-accent: #a5b516;
-  --era-e3-accent: #bd0b5f;
-  --era-e4-accent: #00ccbc;
+  --world-graph-cy-text: var(--codex-palette-light-srgb);
+  --world-graph-cy-node: var(--codex-palette-mid-srgb);
+  --world-graph-cy-border: var(--codex-palette-deep-srgb);
+  --world-graph-cy-edge: var(--codex-palette-mid-srgb);
+  --world-graph-cy-selected: var(--codex-palette-light-srgb);
+  --world-graph-cy-era-e1: var(--era-e1-identity-srgb);
+  --world-graph-cy-era-e2: var(--era-e2-identity-srgb);
+  --world-graph-cy-era-e3: var(--era-e3-identity-srgb);
+  --world-graph-cy-era-e4: var(--era-e4-identity-srgb);
 
   display: grid;
   gap: .75rem;
@@ -40,11 +34,11 @@
   --world-graph-node: var(--codex-palette-mid);
   --world-graph-selected: var(--codex-palette-oled);
   --world-graph-edge: var(--codex-palette-deep);
-  --world-graph-cy-text: #000;
-  --world-graph-cy-node: #888070;
-  --world-graph-cy-border: #888070;
-  --world-graph-cy-edge: #484137;
-  --world-graph-cy-selected: #000;
+  --world-graph-cy-text: var(--codex-palette-oled-srgb);
+  --world-graph-cy-node: var(--codex-palette-mid-srgb);
+  --world-graph-cy-border: var(--codex-palette-mid-srgb);
+  --world-graph-cy-edge: var(--codex-palette-deep-srgb);
+  --world-graph-cy-selected: var(--codex-palette-oled-srgb);
 }
 
 .world-graph__toolbar {
