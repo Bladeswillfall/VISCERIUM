@@ -37,7 +37,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   import cytoscape from 'cytoscape';
 
   const instances = new WeakMap<Element, () => void>();
-  const interactionClasses = 'is-active is-neighbour is-context is-muted';
+  const interactionClasses = 'is-active is-distance-1 is-distance-2 is-distance-3 is-context is-muted';
   const readyStatus = 'Interactive graph ready. Use pointer or arrow keys to explore pages.';
   const pointerHitRadius = 18;
   const touchHitRadius = 24;
@@ -47,6 +47,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   const maxWheelDelta = 120;
   const wheelZoomRate = .004;
   const wheelLinePixels = 32;
+  const contextDepth = 3;
 
   function clamp(value: number, minimum: number, maximum: number) {
     return Math.min(maximum, Math.max(minimum, value));
@@ -69,17 +70,18 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     return value;
   }
 
-  function labelStyle(root: Element, size: number) {
+  function labelStyle(root: Element, size: number, weight: number, opacity: number, marginY: number) {
     return {
       label: 'data(title)',
       color: colour(root, '--world-graph-text'),
       'font-family': 'IBM Plex Sans, system-ui, sans-serif',
       'font-size': size,
-      'font-weight': 700,
+      'font-weight': weight,
+      'text-opacity': opacity,
       'text-background-color': colour(root, '--world-graph-canvas'),
-      'text-background-opacity': .92,
+      'text-background-opacity': .9,
       'text-background-padding': 3,
-      'text-margin-y': -12,
+      'text-margin-y': marginY,
       'text-events': 'no',
     };
   }
@@ -93,32 +95,92 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           height: 14,
           opacity: .82,
           'background-color': colour(root, '--world-graph-node'),
-          'border-width': 0,
+          'border-color': colour(root, '--world-graph-border'),
+          'border-width': 1,
           'text-events': 'no',
           label: '',
         },
       },
       {
-        selector: 'node.is-neighbour',
+        selector: 'node[era = "citadel"]',
+        style: {
+          'background-color': colour(root, '--era-e1-base'),
+          'border-color': colour(root, '--era-e1-accent'),
+        },
+      },
+      {
+        selector: 'node[era = "smog"]',
+        style: {
+          'background-color': colour(root, '--era-e2-base'),
+          'border-color': colour(root, '--era-e2-accent'),
+        },
+      },
+      {
+        selector: 'node[era = "nearsight"]',
+        style: {
+          'background-color': colour(root, '--era-e3-base'),
+          'border-color': colour(root, '--era-e3-accent'),
+        },
+      },
+      {
+        selector: 'node[era = "entropy"]',
+        style: {
+          'background-color': colour(root, '--era-e4-base'),
+          'border-color': colour(root, '--era-e4-accent'),
+        },
+      },
+      {
+        selector: 'node.is-distance-3',
+        style: {
+          opacity: .48,
+          ...labelStyle(root, 8, 500, .34, -11),
+        },
+      },
+      {
+        selector: 'node.is-distance-2',
         style: {
           width: 16,
           height: 16,
-          opacity: 1,
-          ...labelStyle(root, 9),
+          opacity: .72,
+          ...labelStyle(root, 9, 600, .58, -12),
+        },
+      },
+      {
+        selector: 'node.is-distance-1',
+        style: {
+          width: 19,
+          height: 19,
+          opacity: .96,
+          ...labelStyle(root, 10.5, 700, .88, -14),
         },
       },
       {
         selector: 'node.is-active, node:selected',
         style: {
-          width: 20,
-          height: 20,
+          width: 28,
+          height: 28,
           opacity: 1,
-          'background-color': colour(root, '--world-graph-selected'),
           'border-color': colour(root, '--world-graph-text'),
-          'border-width': 2,
+          'border-width': 3,
           'z-index': 10,
-          ...labelStyle(root, 10),
+          ...labelStyle(root, 13, 800, 1, -18),
         },
+      },
+      {
+        selector: 'node[era = "citadel"].is-active, node[era = "citadel"]:selected',
+        style: { 'border-color': colour(root, '--era-e1-accent-high') },
+      },
+      {
+        selector: 'node[era = "smog"].is-active, node[era = "smog"]:selected',
+        style: { 'border-color': colour(root, '--era-e2-accent-high') },
+      },
+      {
+        selector: 'node[era = "nearsight"].is-active, node[era = "nearsight"]:selected',
+        style: { 'border-color': colour(root, '--era-e3-accent-high') },
+      },
+      {
+        selector: 'node[era = "entropy"].is-active, node[era = "entropy"]:selected',
+        style: { 'border-color': colour(root, '--era-e4-accent-high') },
       },
       {
         selector: 'node.is-muted',
@@ -136,8 +198,8 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       {
         selector: 'edge.is-context',
         style: {
-          width: 1.5,
-          opacity: .92,
+          width: 1.35,
+          opacity: .72,
         },
       },
       {
@@ -184,18 +246,48 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     root.removeAttribute('data-world-graph-neighbour-count');
   }
 
+  function contextDistances(node: any) {
+    const distances = new Map<string, number>([[node.id(), 0]]);
+    const queue = [node];
+
+    for (let index = 0; index < queue.length; index += 1) {
+      const current = queue[index];
+      const distance = distances.get(current.id()) ?? 0;
+      if (distance >= contextDepth) continue;
+
+      current.neighborhood('node').forEach((neighbour: any) => {
+        if (distances.has(neighbour.id())) return;
+        distances.set(neighbour.id(), distance + 1);
+        queue.push(neighbour);
+      });
+    }
+
+    return distances;
+  }
+
   function applyContext(cy: any, root: Element, node: any, source: string) {
     clearContext(cy, root);
-    const neighbours = node.neighborhood('node');
-    const connectedEdges = node.connectedEdges();
+    const distances = contextDistances(node);
+
     cy.nodes().addClass('is-muted');
     cy.edges().addClass('is-muted');
-    node.removeClass('is-muted').addClass('is-active');
-    neighbours.removeClass('is-muted').addClass('is-neighbour');
-    connectedEdges.removeClass('is-muted').addClass('is-context');
+
+    for (const [nodeId, distance] of distances) {
+      const related = cy.$id(nodeId);
+      related.removeClass('is-muted');
+      if (distance === 0) related.addClass('is-active');
+      else related.addClass(`is-distance-${distance}`);
+    }
+
+    cy.edges().forEach((edge: any) => {
+      if (!distances.has(edge.source().id()) || !distances.has(edge.target().id())) return;
+      edge.removeClass('is-muted').addClass('is-context');
+    });
+
+    const neighbourCount = [...distances.values()].filter((distance) => distance === 1).length;
     root.setAttribute('data-world-graph-context', source);
     root.setAttribute('data-world-graph-active-id', node.id());
-    root.setAttribute('data-world-graph-neighbour-count', String(neighbours.length));
+    root.setAttribute('data-world-graph-neighbour-count', String(neighbourCount));
   }
 
   async function mount(root: Element) {
