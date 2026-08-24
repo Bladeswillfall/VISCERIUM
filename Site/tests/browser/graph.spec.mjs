@@ -30,7 +30,7 @@ async function selectRenderedNode(page, graph, canvas) {
 
 async function hoverConnectedNode(page, graph, canvas) {
   const box = await canvas.boundingBox();
-  if (!box) return false;
+  if (!box) return null;
   let seed = 29;
   for (let index = 0; index < 220; index += 1) {
     seed = (seed * 48_271) % 2_147_483_647;
@@ -40,9 +40,10 @@ async function hoverConnectedNode(page, graph, canvas) {
     await page.mouse.move(x, y);
     const source = await graph.getAttribute('data-world-graph-context');
     const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
-    if (source === 'pointer' && neighbours > 0) return true;
+    const id = await graph.getAttribute('data-world-graph-active-id');
+    if (source === 'pointer' && neighbours > 0 && id) return { x, y, id };
   }
-  return false;
+  return null;
 }
 
 async function inspectGraph(page, viewport, theme) {
@@ -147,9 +148,23 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   const details = graph.locator('[data-world-graph-details]');
 
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
-  expect(await hoverConnectedNode(page, graph, canvasHost)).toBe(true);
+  const hovered = await hoverConnectedNode(page, graph, canvasHost);
+  expect(hovered).not.toBeNull();
   await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
   expect(Number(await graph.getAttribute('data-world-graph-neighbour-count'))).toBeGreaterThan(0);
+
+  let retainedExpandedTarget = false;
+  for (const [dx, dy] of [[14, 0], [-14, 0], [0, 14], [0, -14]]) {
+    await page.mouse.move(hovered.x + dx, hovered.y + dy);
+    if (
+      await graph.getAttribute('data-world-graph-context') === 'pointer'
+      && await graph.getAttribute('data-world-graph-active-id') === hovered.id
+    ) {
+      retainedExpandedTarget = true;
+      break;
+    }
+  }
+  expect(retainedExpandedTarget).toBe(true);
 
   await page.mouse.move(2, 2);
   await expect(graph).not.toHaveAttribute('data-world-graph-context', 'pointer');
