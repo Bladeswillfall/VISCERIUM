@@ -324,9 +324,16 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           name: 'cose',
           animate: false,
           padding: 48,
-          nodeRepulsion: 9_000,
-          idealEdgeLength: 90,
-          gravity: .18,
+          // Obsidian's graph gets its readability from breathing room rather than
+          // label boxes. Bias CoSE the same way: stronger repulsion, a larger
+          // overlap penalty, and slightly longer links keep dense clusters legible
+          // without flattening their topology.
+          nodeRepulsion: 14_000,
+          nodeOverlap: 12,
+          idealEdgeLength: 112,
+          componentSpacing: 56,
+          gravity: .14,
+          numIter: 1_200,
         },
       });
 
