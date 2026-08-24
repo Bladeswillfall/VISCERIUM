@@ -5,7 +5,6 @@
   --world-graph-text: var(--codex-palette-light);
   --world-graph-muted: var(--codex-palette-mid);
   --world-graph-node: var(--codex-palette-light);
-  --world-graph-tag: var(--codex-palette-mid);
   --world-graph-selected: var(--codex-warning-base);
   --world-graph-edge: var(--codex-palette-deep);
   display: grid;
@@ -20,7 +19,6 @@
   --world-graph-text: var(--codex-palette-oled);
   --world-graph-muted: var(--codex-palette-deep);
   --world-graph-node: var(--codex-palette-deep);
-  --world-graph-tag: var(--codex-palette-ink);
   --world-graph-selected: var(--codex-palette-oled);
   --world-graph-edge: var(--codex-palette-mid);
 }
@@ -61,11 +59,16 @@
 }
 
 .world-graph__toolbar button:focus-visible,
+.world-graph__canvas:focus-visible,
 .world-graph__details a:focus-visible,
 .world-graph__fallback a:focus-visible,
 .world-graph__fallback summary:focus-visible {
   outline: 3px solid var(--world-graph-selected);
   outline-offset: 3px;
+}
+
+.world-graph__canvas:focus-visible {
+  outline-offset: -3px;
 }
 
 .world-graph__toolbar button:disabled {

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildSiteGraph } from '../src/lib/site-graph.mjs';
 
-test('builds compact page, tag, link, and reverse-reference graph data', () => {
+test('builds compact page and link graph data while keeping tags as page metadata', () => {
   const graph = buildSiteGraph([
     {
       id: 'alpha.md',
@@ -22,22 +22,16 @@ test('builds compact page, tag, link, and reverse-reference graph data', () => {
     { id: 'draft.md', body: '[Alpha](/alpha/)', data: { title: 'Draft', draft: true } },
   ]);
 
-  assert.deepEqual(graph.nodes.filter(({ kind }) => kind === 'page'), [
+  assert.deepEqual(graph.nodes, [
     { id: '/alpha/', title: 'Alpha', href: '/alpha/', tags: ['Lore'], kind: 'page' },
     { id: '/beta/', title: 'Beta', href: '/beta/', tags: ['Places'], kind: 'page' },
   ]);
-  assert.deepEqual(graph.nodes.filter(({ kind }) => kind === 'tag'), [
-    { id: 'tag:lore', title: '#Lore', href: '/tags/lore/', kind: 'tag' },
-    { id: 'tag:places', title: '#Places', href: '/tags/places/', kind: 'tag' },
-  ]);
-  assert.deepEqual(graph.edges.filter(({ kind }) => kind === 'link'), [
+  assert.deepEqual(graph.edges, [
     { source: '/alpha/', target: '/beta/', kind: 'link' },
     { source: '/beta/', target: '/alpha/', kind: 'link' },
   ]);
-  assert.deepEqual(graph.edges.filter(({ kind }) => kind === 'tag'), [
-    { source: '/alpha/', target: 'tag:lore', kind: 'tag' },
-    { source: '/beta/', target: 'tag:places', kind: 'tag' },
-  ]);
+  assert.equal(graph.nodes.some(({ kind }) => kind === 'tag'), false);
+  assert.equal(graph.edges.some(({ kind }) => kind === 'tag'), false);
 });
 
 test('ignores missing targets, self-links, comments, code, and external URLs', () => {

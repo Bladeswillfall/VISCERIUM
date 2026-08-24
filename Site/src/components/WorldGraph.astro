@@ -8,7 +8,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 
 <section class="world-graph" data-world-graph data-graph-url={`${base}sitegraph/sitemap.json`}>
   <div class="world-graph__toolbar" aria-label="World Graph controls">
-    <p><strong>{pages.length}</strong> public pages connected by links and tags.</p>
+    <p><strong>{pages.length}</strong> public pages connected by internal links.</p>
     <button type="button" data-world-graph-reset disabled>Reset view</button>
   </div>
   <div class="world-graph__frame">
@@ -17,11 +17,11 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       data-world-graph-canvas
       role="application"
       tabindex="0"
-      aria-label="Interactive graph of public VISCERIUM pages"
+      aria-label="Interactive graph of public VISCERIUM pages. Use arrow keys to move between pages, Enter to select, and Escape to reset."
       aria-busy="true"
     ></div>
     <aside class="world-graph__details" data-world-graph-details aria-live="polite">
-      <p>Select a page or tag to inspect it.</p>
+      <p>Select a page to inspect it.</p>
     </aside>
   </div>
   <p class="world-graph__status" data-world-graph-status role="status">Loading interactive graph…</p>
@@ -37,6 +37,8 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   import cytoscape from 'cytoscape';
 
   const instances = new WeakMap<Element, () => void>();
+  const interactionClasses = 'is-active is-neighbour is-context is-muted';
+  const readyStatus = 'Interactive graph ready. Use pointer or arrow keys to explore pages.';
 
   function colour(root: Element, name: string) {
     const probe = document.createElement('span');
@@ -47,6 +49,20 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     return value;
   }
 
+  function labelStyle(root: Element, size: number) {
+    return {
+      label: 'data(title)',
+      color: colour(root, '--world-graph-text'),
+      'font-family': 'IBM Plex Sans, system-ui, sans-serif',
+      'font-size': size,
+      'font-weight': 700,
+      'text-background-color': colour(root, '--world-graph-canvas'),
+      'text-background-opacity': .92,
+      'text-background-padding': 3,
+      'text-margin-y': -12,
+    };
+  }
+
   function styles(root: Element) {
     return [
       {
@@ -54,53 +70,67 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         style: {
           width: 14,
           height: 14,
+          opacity: .82,
           'background-color': colour(root, '--world-graph-node'),
           'border-width': 0,
           label: '',
         },
       },
       {
-        selector: 'node[kind = "tag"]',
+        selector: 'node.is-neighbour',
         style: {
-          width: 9,
-          height: 9,
-          shape: 'diamond',
-          'background-color': colour(root, '--world-graph-tag'),
+          width: 16,
+          height: 16,
+          opacity: 1,
+          ...labelStyle(root, 9),
         },
       },
       {
-        selector: 'node:selected',
+        selector: 'node.is-active, node:selected',
         style: {
           width: 20,
           height: 20,
+          opacity: 1,
           'background-color': colour(root, '--world-graph-selected'),
           'border-color': colour(root, '--world-graph-text'),
           'border-width': 2,
-          label: 'data(title)',
-          color: colour(root, '--world-graph-text'),
-          'font-family': 'IBM Plex Sans, system-ui, sans-serif',
-          'font-size': 10,
-          'font-weight': 700,
-          'text-background-color': colour(root, '--world-graph-canvas'),
-          'text-background-opacity': .9,
-          'text-background-padding': 3,
-          'text-margin-y': -12,
+          'z-index': 10,
+          ...labelStyle(root, 10),
         },
+      },
+      {
+        selector: 'node.is-muted',
+        style: { opacity: .12 },
       },
       {
         selector: 'edge',
         style: {
           width: 1,
           'line-color': colour(root, '--world-graph-edge'),
-          opacity: .55,
+          opacity: .42,
           'curve-style': 'haystack',
         },
       },
       {
-        selector: 'edge[kind = "tag"]',
-        style: { opacity: .28 },
+        selector: 'edge.is-context',
+        style: {
+          width: 1.5,
+          opacity: .92,
+        },
+      },
+      {
+        selector: 'edge.is-muted',
+        style: { opacity: .05 },
       },
     ];
+  }
+
+  function showPrompt(root: Element) {
+    const details = root.querySelector('[data-world-graph-details]');
+    if (!(details instanceof HTMLElement)) return;
+    const prompt = document.createElement('p');
+    prompt.textContent = 'Select a page to inspect it.';
+    details.replaceChildren(prompt);
   }
 
   function showDetails(root: Element, node: any) {
@@ -119,10 +149,31 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     if (data.href) {
       const link = document.createElement('a');
       link.href = data.href;
-      link.textContent = data.kind === 'tag' ? 'Open tag index' : 'Open article';
+      link.textContent = 'Open article';
       content.append(link);
     }
     details.replaceChildren(content);
+  }
+
+  function clearContext(cy: any, root: Element) {
+    cy.elements().removeClass(interactionClasses);
+    root.removeAttribute('data-world-graph-context');
+    root.removeAttribute('data-world-graph-active-id');
+    root.removeAttribute('data-world-graph-neighbour-count');
+  }
+
+  function applyContext(cy: any, root: Element, node: any, source: string) {
+    clearContext(cy, root);
+    const neighbours = node.neighborhood('node');
+    const connectedEdges = node.connectedEdges();
+    cy.nodes().addClass('is-muted');
+    cy.edges().addClass('is-muted');
+    node.removeClass('is-muted').addClass('is-active');
+    neighbours.removeClass('is-muted').addClass('is-neighbour');
+    connectedEdges.removeClass('is-muted').addClass('is-context');
+    root.setAttribute('data-world-graph-context', source);
+    root.setAttribute('data-world-graph-active-id', node.id());
+    root.setAttribute('data-world-graph-neighbour-count', String(neighbours.length));
   }
 
   async function mount(root: Element) {
@@ -139,11 +190,16 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       const graph = await response.json();
       if (!root.isConnected) return;
 
+      const pageNodes = graph.nodes.filter((node: any) => node.kind === 'page');
+      const pageIds = new Set(pageNodes.map((node: any) => node.id));
+      const pageEdges = graph.edges.filter((edge: any) => (
+        edge.kind === 'link' && pageIds.has(edge.source) && pageIds.has(edge.target)
+      ));
       const cy = cytoscape({
         container: canvas,
         elements: [
-          ...graph.nodes.map((node: any) => ({ data: node })),
-          ...graph.edges.map((edge: any, index: number) => ({ data: { id: `edge:${index}`, ...edge } })),
+          ...pageNodes.map((node: any) => ({ data: node })),
+          ...pageEdges.map((edge: any, index: number) => ({ data: { id: `edge:${index}`, ...edge } })),
         ],
         style: styles(root),
         minZoom: .12,
@@ -159,16 +215,101 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           gravity: .18,
         },
       });
-      cy.on('tap', 'node', (event) => showDetails(root, event.target));
-      const handleReset = () => {
-        cy.elements().unselect();
-        cy.fit(undefined, 48);
+
+      const orderedNodes = cy.nodes().toArray().sort((left: any, right: any) => (
+        String(left.data('title')).localeCompare(String(right.data('title')))
+      ));
+      let selectedNode: any = null;
+      let keyboardNode: any = null;
+
+      const setStatus = (message: string) => {
+        if (status) status.textContent = message;
       };
+      const restoreContext = () => {
+        if (selectedNode?.selected()) {
+          applyContext(cy, root, selectedNode, 'selected');
+        } else if (keyboardNode) {
+          applyContext(cy, root, keyboardNode, 'keyboard');
+        } else {
+          clearContext(cy, root);
+        }
+      };
+      const selectNode = (node: any, source: string) => {
+        cy.nodes().unselect();
+        node.select();
+        selectedNode = node;
+        keyboardNode = node;
+        applyContext(cy, root, node, source);
+        showDetails(root, node);
+        setStatus(`Selected ${node.data('title')}. Use Reset view to clear the selection.`);
+      };
+      const moveKeyboard = (nextIndex: number) => {
+        if (!orderedNodes.length) return;
+        const wrappedIndex = ((nextIndex % orderedNodes.length) + orderedNodes.length) % orderedNodes.length;
+        keyboardNode = orderedNodes[wrappedIndex];
+        applyContext(cy, root, keyboardNode, 'keyboard');
+        showDetails(root, keyboardNode);
+        setStatus(`${keyboardNode.data('title')}. Use arrow keys to move, Enter to select, or Escape to reset.`);
+      };
+      const currentKeyboardIndex = () => (
+        keyboardNode ? orderedNodes.findIndex((node: any) => node.id() === keyboardNode.id()) : -1
+      );
+      const handleReset = () => {
+        cy.nodes().unselect();
+        selectedNode = null;
+        keyboardNode = null;
+        clearContext(cy, root);
+        showPrompt(root);
+        cy.fit(undefined, 48);
+        setStatus(readyStatus);
+      };
+      const handleKeydown = (event: KeyboardEvent) => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        const index = currentKeyboardIndex();
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+          event.preventDefault();
+          moveKeyboard(index < 0 ? 0 : index + 1);
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          moveKeyboard(index < 0 ? orderedNodes.length - 1 : index - 1);
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          moveKeyboard(0);
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          moveKeyboard(orderedNodes.length - 1);
+        } else if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          if (keyboardNode) selectNode(keyboardNode, 'selected');
+        } else if (event.key === 'Escape') {
+          event.preventDefault();
+          handleReset();
+        }
+      };
+      const handleFocus = () => {
+        if (!orderedNodes.length) return;
+        if (!keyboardNode) keyboardNode = selectedNode ?? orderedNodes[0];
+        applyContext(cy, root, keyboardNode, selectedNode?.id() === keyboardNode.id() ? 'selected' : 'keyboard');
+        showDetails(root, keyboardNode);
+        setStatus(`${keyboardNode.data('title')}. Use arrow keys to move, Enter to select, or Escape to reset.`);
+      };
+
+      cy.on('tap', 'node', (event) => selectNode(event.target, 'selected'));
+      cy.on('mouseover', 'node', (event) => {
+        canvas.style.cursor = 'pointer';
+        applyContext(cy, root, event.target, 'pointer');
+      });
+      cy.on('mouseout', 'node', () => {
+        canvas.style.removeProperty('cursor');
+        restoreContext();
+      });
       reset?.addEventListener('click', handleReset);
+      canvas.addEventListener('keydown', handleKeydown);
+      canvas.addEventListener('focus', handleFocus);
       if (reset) reset.disabled = false;
       canvas.setAttribute('aria-busy', 'false');
       root.setAttribute('data-world-graph-ready', 'true');
-      if (status) status.textContent = 'Interactive graph ready.';
+      setStatus(readyStatus);
       if (fallback) fallback.open = false;
 
       const resizeObserver = new ResizeObserver(() => cy.resize());
@@ -179,6 +320,8 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         resizeObserver.disconnect();
         themeObserver.disconnect();
         reset?.removeEventListener('click', handleReset);
+        canvas.removeEventListener('keydown', handleKeydown);
+        canvas.removeEventListener('focus', handleFocus);
         cy.destroy();
       });
     } catch (error) {
