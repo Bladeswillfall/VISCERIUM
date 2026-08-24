@@ -7,6 +7,7 @@ import { createGatewayServer } from '../src/server.mjs';
 function config(overrides = {}) {
   return {
     upstream: new URL('http://remark42.internal:8080'),
+    upstreamTimeoutMs: 5000,
     siteId: 'viscerium',
     commentOrigins: new Set(['https://www.viscerium.co.uk']),
     maxRequestBytes: 65536,
@@ -141,6 +142,45 @@ test('caches an uncertain upstream result so an immediate identical retry is not
   assert.equal(first.status, 503);
   assert.equal(second.status, 503);
   assert.match(await first.text(), /result is uncertain/i);
+  assert.equal(calls, 1);
+});
+
+test('strips stale content-encoding after an upstream response has been decoded', async (t) => {
+  const { origin } = await withGateway(t, {
+    fetchImpl: async () => new Response(JSON.stringify({ id: 'comment-1' }), {
+      status: 201,
+      headers: {
+        'content-type': 'application/json',
+        'content-encoding': 'gzip',
+      },
+    }),
+  });
+
+  const response = await post(origin, createPayload('encoding test'));
+  assert.equal(response.status, 201);
+  assert.equal(response.headers.get('content-encoding'), null);
+  assert.deepEqual(await response.json(), { id: 'comment-1' });
+});
+
+test('aborts an upstream response whose body stalls beyond the gateway deadline', async (t) => {
+  let calls = 0;
+  const { origin } = await withGateway(t, {
+    config: { upstreamTimeoutMs: 25 },
+    fetchImpl: async (_url, requestOptions) => {
+      calls += 1;
+      return {
+        status: 201,
+        headers: new Headers({ 'content-type': 'application/json' }),
+        arrayBuffer: () => new Promise((resolve, reject) => {
+          requestOptions.signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true });
+        }),
+      };
+    },
+  });
+
+  const response = await post(origin, createPayload('timeout test'));
+  assert.equal(response.status, 503);
+  assert.match(await response.text(), /result is uncertain/i);
   assert.equal(calls, 1);
 });
 
