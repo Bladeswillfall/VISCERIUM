@@ -4,7 +4,7 @@
   --world-graph-border: var(--codex-palette-deep);
   --world-graph-text: var(--codex-palette-light);
   --world-graph-muted: var(--codex-palette-mid);
-  --world-graph-node: var(--codex-palette-light);
+  --world-graph-node: var(--codex-palette-mid);
   --world-graph-selected: var(--codex-warning-base);
   --world-graph-edge: var(--codex-palette-mid);
   --world-graph-edge-opacity: .75;
@@ -19,7 +19,7 @@
   --world-graph-border: var(--codex-palette-mid);
   --world-graph-text: var(--codex-palette-oled);
   --world-graph-muted: var(--codex-palette-deep);
-  --world-graph-node: var(--codex-palette-deep);
+  --world-graph-node: var(--codex-palette-mid);
   --world-graph-selected: var(--codex-palette-oled);
   --world-graph-edge: var(--codex-palette-deep);
 }
