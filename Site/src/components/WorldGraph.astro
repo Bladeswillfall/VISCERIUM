@@ -37,7 +37,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   import cytoscape from 'cytoscape';
 
   const instances = new WeakMap<Element, () => void>();
-  const interactionClasses = 'is-active is-distance-1 is-distance-2 is-distance-3 is-context is-muted';
+  const interactionClasses = 'is-active is-distance-1 is-distance-2 is-distance-3 is-context is-muted is-label-hidden';
   const readyStatus = 'Interactive graph ready. Use pointer or arrow keys to explore pages.';
   const pointerHitRadius = 18;
   const touchHitRadius = 24;
@@ -48,6 +48,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   const wheelZoomRate = .004;
   const wheelLinePixels = 32;
   const contextDepth = 3;
+  const labelCollisionPadding = 5;
   const colourCanvas = document.createElement('canvas');
   colourCanvas.width = 1;
   colourCanvas.height = 1;
@@ -183,6 +184,10 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         },
       },
       {
+        selector: 'node.is-label-hidden',
+        style: { 'text-opacity': 0 },
+      },
+      {
         selector: 'node.is-muted',
         style: { opacity: .12 },
       },
@@ -244,6 +249,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     root.removeAttribute('data-world-graph-context');
     root.removeAttribute('data-world-graph-active-id');
     root.removeAttribute('data-world-graph-neighbour-count');
+    root.setAttribute('data-world-graph-visible-labels', '0');
   }
 
   function contextDistances(node: any) {
@@ -263,6 +269,92 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     }
 
     return distances;
+  }
+
+  function labelMeta(node: any) {
+    if (node.hasClass('is-active') || node.selected()) {
+      return { priority: 0, minZoom: 0, fontSize: 13, marginY: -18 };
+    }
+    if (node.hasClass('is-distance-1')) {
+      return { priority: 1, minZoom: .55, fontSize: 10.5, marginY: -14 };
+    }
+    if (node.hasClass('is-distance-2')) {
+      return { priority: 2, minZoom: .8, fontSize: 9, marginY: -12 };
+    }
+    if (node.hasClass('is-distance-3')) {
+      return { priority: 3, minZoom: 1.05, fontSize: 8, marginY: -11 };
+    }
+    return null;
+  }
+
+  function labelBox(node: any, meta: { fontSize: number; marginY: number }, zoom: number) {
+    const position = node.renderedPosition();
+    const title = String(node.data('title') ?? '');
+    const width = Math.min(260, Math.max(28, title.length * meta.fontSize * .56 * zoom)) + labelCollisionPadding * 2;
+    const height = Math.max(12, meta.fontSize * 1.35 * zoom) + labelCollisionPadding * 2;
+    const centerY = position.y + meta.marginY * zoom;
+    return {
+      x1: position.x - width / 2,
+      y1: centerY - height / 2,
+      x2: position.x + width / 2,
+      y2: centerY + height / 2,
+    };
+  }
+
+  function boxesOverlap(left: any, right: any) {
+    return !(
+      left.x2 < right.x1
+      || left.x1 > right.x2
+      || left.y2 < right.y1
+      || left.y1 > right.y2
+    );
+  }
+
+  function refreshLabelVisibility(cy: any, root: Element) {
+    const nodes = cy.nodes();
+    nodes.removeClass('is-label-hidden');
+
+    if (!root.getAttribute('data-world-graph-active-id')) {
+      root.setAttribute('data-world-graph-visible-labels', '0');
+      root.setAttribute('data-world-graph-label-tier', 'none');
+      return;
+    }
+
+    const zoom = cy.zoom();
+    const candidates = nodes.toArray()
+      .map((node: any) => ({ node, meta: labelMeta(node) }))
+      .filter((entry: any) => entry.meta)
+      .sort((left: any, right: any) => (
+        left.meta.priority - right.meta.priority
+        || right.node.degree() - left.node.degree()
+        || String(left.node.data('title')).localeCompare(String(right.node.data('title')))
+      ));
+
+    const accepted: any[] = [];
+    let visibleCount = 0;
+
+    for (const { node, meta } of candidates) {
+      if (zoom < meta.minZoom) {
+        node.addClass('is-label-hidden');
+        continue;
+      }
+
+      const box = labelBox(node, meta, zoom);
+      const collides = meta.priority > 0 && accepted.some((acceptedBox) => boxesOverlap(box, acceptedBox));
+      if (collides) {
+        node.addClass('is-label-hidden');
+        continue;
+      }
+
+      accepted.push(box);
+      visibleCount += 1;
+    }
+
+    root.setAttribute('data-world-graph-visible-labels', String(visibleCount));
+    root.setAttribute(
+      'data-world-graph-label-tier',
+      zoom < .55 ? 'active' : zoom < .8 ? 'distance-1' : zoom < 1.05 ? 'distance-2' : 'distance-3',
+    );
   }
 
   function applyContext(cy: any, root: Element, node: any, source: string) {
@@ -288,6 +380,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     root.setAttribute('data-world-graph-context', source);
     root.setAttribute('data-world-graph-active-id', node.id());
     root.setAttribute('data-world-graph-neighbour-count', String(neighbourCount));
+    refreshLabelVisibility(cy, root);
   }
 
   async function mount(root: Element) {
@@ -324,15 +417,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           name: 'cose',
           animate: false,
           padding: 48,
-          // Obsidian's graph gets its readability from breathing room rather than
-          // label boxes. Bias CoSE the same way: stronger repulsion, a larger
-          // overlap penalty, and slightly longer links keep dense clusters legible
-          // without flattening their topology.
-          nodeRepulsion: 14_000,
-          nodeOverlap: 12,
-          idealEdgeLength: 112,
-          componentSpacing: 56,
-          gravity: .14,
+          // Keep the graph loose enough that labels have somewhere to breathe,
+          // but let progressive disclosure do the heavy lifting rather than
+          // exploding the graph purely through force settings.
+          nodeRepulsion: 16_000,
+          nodeOverlap: 14,
+          idealEdgeLength: 120,
+          componentSpacing: 60,
+          gravity: .11,
           numIter: 1_200,
         },
       });
@@ -515,6 +607,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         event.preventDefault();
         cy.zoom({ level: nextZoom, renderedPosition });
         setZoomState();
+        refreshLabelVisibility(cy, root);
         setPointerContext(findNodeAt(event.clientX, event.clientY));
       };
 
@@ -674,6 +767,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       };
       const handleViewportMove = () => {
         setZoomState();
+        refreshLabelVisibility(cy, root);
         if (!pointerGesture && !touchGesture && pointerNode) clearPointerContext();
       };
 
@@ -692,13 +786,18 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       canvas.addEventListener('focus', handleFocus);
       cy.on('pan zoom', handleViewportMove);
       setZoomState();
+      root.setAttribute('data-world-graph-visible-labels', '0');
+      root.setAttribute('data-world-graph-label-tier', 'none');
       if (reset) reset.disabled = false;
       canvas.setAttribute('aria-busy', 'false');
       root.setAttribute('data-world-graph-ready', 'true');
       setStatus(readyStatus);
       if (fallback) fallback.open = false;
 
-      const resizeObserver = new ResizeObserver(() => cy.resize());
+      const resizeObserver = new ResizeObserver(() => {
+        cy.resize();
+        refreshLabelVisibility(cy, root);
+      });
       resizeObserver.observe(canvas);
       const themeObserver = new MutationObserver(() => cy.style(styles(root)));
       themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
