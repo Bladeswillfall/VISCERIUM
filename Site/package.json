@@ -62,7 +62,7 @@
     "leaflet.control.layers.tree": "1.2.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "starlight-changelogs": "^0.5.0",
+    "starlight-changelogs": "^0.6.0",
     "starlight-giscus": "^1.1.0",
     "starlight-scroll-to-top": "^1.0.1",
     "starlight-site-graph": "^0.5.0",
