@@ -39,7 +39,7 @@ export class IdempotencyStore {
       return await promise;
     } catch (error) {
       const current = this.entries.get(key);
-      if (current?.promise === promise) this.entries.delete(key);
+      if (current?.promise === promise && error?.cacheIdempotency !== true) this.entries.delete(key);
       throw error;
     }
   }
