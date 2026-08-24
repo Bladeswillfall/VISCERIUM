@@ -39,7 +39,8 @@
     "test:unit": "node --test tests/*.test.mjs",
     "prebuild": "node scripts/build-content.mjs --mode=build",
     "build": "astro build",
-    "postbuild": "npm run validate:icons && node --test tests/i18n-output.postbuild.mjs",
+    "security:artifacts": "node scripts/check-public-artifacts.mjs",
+    "postbuild": "npm run validate:icons && node --test tests/i18n-output.postbuild.mjs && npm run security:artifacts",
     "preview": "astro preview",
     "astro": "astro",
     "test": "npm run baseline:check && npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build"
