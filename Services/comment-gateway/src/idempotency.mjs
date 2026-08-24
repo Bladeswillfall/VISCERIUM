@@ -1,14 +1,13 @@
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac } from 'node:crypto';
 
 const explicitKeyPattern = /^[A-Za-z0-9._:-]{8,128}$/u;
 
 export function buildIdempotencyKey({ explicitKey, secret, method, path, body, identityHint = '' }) {
-  if (explicitKey) {
-    if (!explicitKeyPattern.test(explicitKey)) throw new Error('invalid idempotency key');
-    return `client:${explicitKey}`;
-  }
+  if (explicitKey && !explicitKeyPattern.test(explicitKey)) throw new Error('invalid idempotency key');
 
-  return `derived:${createHmac('sha256', secret)
+  const hmac = createHmac('sha256', secret)
+    .update(explicitKey || 'derived')
+    .update('\0')
     .update(method)
     .update('\0')
     .update(path)
@@ -16,7 +15,9 @@ export function buildIdempotencyKey({ explicitKey, secret, method, path, body, i
     .update(identityHint)
     .update('\0')
     .update(body)
-    .digest('base64url')}`;
+    .digest('base64url');
+
+  return `${explicitKey ? 'client' : 'derived'}:${hmac}`;
 }
 
 export class IdempotencyStore {
@@ -53,10 +54,4 @@ export class IdempotencyStore {
       this.entries.delete(oldest);
     }
   }
-}
-
-export function sameOpaqueKey(left, right) {
-  const a = Buffer.from(left);
-  const b = Buffer.from(right);
-  return a.length === b.length && timingSafeEqual(a, b);
 }
