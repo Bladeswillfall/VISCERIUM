@@ -57,7 +57,7 @@
     "cytoscape-dagre": "4.0.0",
     "fuse.js": "7.5.0",
     "gray-matter": "^4.0.3",
-    "katex": "^0.18.1",
+    "katex": "^0.18.4",
     "leaflet": "1.9.4",
     "leaflet.control.layers.tree": "1.2.0",
     "rehype-katex": "^7.0.1",
