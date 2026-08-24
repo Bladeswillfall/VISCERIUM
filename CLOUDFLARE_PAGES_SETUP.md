@@ -37,32 +37,29 @@ Cloudflare Pages `_redirects` rules cannot perform a hostname-to-hostname redire
 
 Only public build-time values belong in Pages.
 
-### Giscus
+### Comments
 
-Giscus is enabled by the repository defaults. Its repository/category identity is pinned in `Site/site.config.mjs` so stale Pages variables cannot point the widget at the wrong GitHub objects.
+Article comments are provided by the self-hosted Remark42 service at `https://comments.viscerium.co.uk`. The Astro site only contains the public embed configuration; the Remark42 database, signing secret, OAuth client secret, administrator identity, and other server-only settings stay on the VPS and must never be added to Cloudflare Pages or this repository.
 
-Before deployment, confirm all of the external prerequisites:
-
-1. `Bladeswillfall/VISCERIUM` is public.
-2. GitHub Discussions is enabled.
-3. The giscus GitHub App is installed for `Bladeswillfall/VISCERIUM`.
-4. The `Comments` discussion category exists.
-5. The pinned IDs still match the repository/category values reported by giscus.app.
-
-Current pinned identity:
+The repository defaults are:
 
 ```text
-Repository: Bladeswillfall/VISCERIUM
-Repository ID: R_kgDOTolQ7g
-Category: Comments
-Category ID: DIC_kwDOTolQ7s4DCYjH
+PUBLIC_COMMENTS_ENABLED=1
+PUBLIC_COMMENTS_HOST=https://comments.viscerium.co.uk
+PUBLIC_COMMENTS_SITE_ID=viscerium
 ```
 
-No `PUBLIC_GISCUS_REPO`, `PUBLIC_GISCUS_REPO_ID`, `PUBLIC_GISCUS_CATEGORY`, or `PUBLIC_GISCUS_CATEGORY_ID` variables are needed in Cloudflare Pages. Remove any stale copies from the Pages environment if they remain from the repository migration. `PUBLIC_GISCUS_ENABLED=0` remains available as an emergency off switch; otherwise Giscus is enabled by default.
+`PUBLIC_COMMENTS_ENABLED=0` remains available as an emergency off switch. The embed deliberately identifies each discussion with the canonical production URL (`https://www.viscerium.co.uk` plus the article pathname), so Pages preview hostnames do not create duplicate discussion threads.
 
-Existing discussion threads do not automatically move with a Git repository. Review and transfer or recreate any discussion that should continue.
+Remark42's server-side `ALLOWED_HOSTS` must include every hostname from which the embed is intentionally tested. Production requires `https://www.viscerium.co.uk`; add an exact `pages.dev` preview hostname on the VPS when a preview deployment needs to exercise comments. Do not loosen the allow-list merely to make arbitrary previews work.
 
-The migration audit on 2026-07-30 found one welcome announcement in the old repository, discussion 4, and no Giscus-backed page threads. Verify that result again immediately before cutover. Transfer or recreate the welcome announcement only if it is still wanted.
+Before production deployment, confirm:
+
+1. `https://comments.viscerium.co.uk/web/` is healthy over HTTPS.
+2. The Remark42 container has persistent storage mounted at `/srv/var`.
+3. The production site hostname is allowed by Remark42.
+4. The Astro CSP allows `https://comments.viscerium.co.uk` for scripts, frames, and connections.
+5. GitHub authentication and the configured Remark42 administrator identity still work.
 
 ### Webmentions
 

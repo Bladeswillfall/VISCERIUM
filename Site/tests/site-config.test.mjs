@@ -10,11 +10,9 @@ const integrationKeys = [
   'PUBLIC_GA4_MEASUREMENT_ID',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN',
-  'PUBLIC_GISCUS_ENABLED',
-  'PUBLIC_GISCUS_REPO',
-  'PUBLIC_GISCUS_REPO_ID',
-  'PUBLIC_GISCUS_CATEGORY',
-  'PUBLIC_GISCUS_CATEGORY_ID',
+  'PUBLIC_COMMENTS_ENABLED',
+  'PUBLIC_COMMENTS_HOST',
+  'PUBLIC_COMMENTS_SITE_ID',
   'PUBLIC_WEBMENTIONS_ENABLED',
   'PUBLIC_WEBMENTION_IO_USERNAME',
   'PUBLIC_CONTACT_FORM_ENABLED',
@@ -38,32 +36,31 @@ async function loadConfig(overrides = {}) {
   }
 }
 
-test('replacement defaults use the new repository and canonical domain', async () => {
+test('replacement defaults use the repository, canonical domain, and self-hosted comments', async () => {
   const config = await loadConfig();
 
   assert.equal(config.title, 'VISCERIUM');
   assert.equal(config.site, 'https://www.viscerium.co.uk');
   assert.equal(config.githubRepoUrl, 'https://github.com/Bladeswillfall/VISCERIUM');
-  assert.equal(config.giscus.repo, 'Bladeswillfall/VISCERIUM');
+  assert.equal(config.comments.host, 'https://comments.viscerium.co.uk');
+  assert.equal(config.comments.siteId, 'viscerium');
   assert.equal(config.webmentions.username, 'www.viscerium.co.uk');
 });
 
-test('private integrations remain inert while Giscus uses public defaults', async () => {
+test('private integrations remain inert while Remark42 uses public defaults', async () => {
   const config = await loadConfig({
     PUBLIC_GA4_ENABLED: '1',
     PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED: '1',
-    PUBLIC_GISCUS_ENABLED: '1',
+    PUBLIC_COMMENTS_ENABLED: '1',
     PUBLIC_WEBMENTIONS_ENABLED: '0',
     PUBLIC_CONTACT_FORM_ENABLED: '1',
   });
 
   assert.equal(config.analytics.ga4.enabled, false);
   assert.equal(config.analytics.cloudflare.enabled, false);
-  assert.equal(config.giscus.enabled, true);
+  assert.equal(config.comments.enabled, true);
   assert.equal(config.webmentions.enabled, false);
   assert.equal(config.contactForm.enabled, false);
-  assert.equal(config.giscus.repoId, 'R_kgDOTolQ7g');
-  assert.equal(config.giscus.categoryId, 'DIC_kwDOTolQ7s4DCYjH');
 });
 
 test('site identity and lore source support environment overrides', async () => {

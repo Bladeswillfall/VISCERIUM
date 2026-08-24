@@ -1,0 +1,198 @@
+---
+import siteConfig from '../../site.config.mjs';
+
+const { entry, lang } = Astro.locals.starlightRoute;
+// Keep the existing page-level flag during the engine migration. The publishing
+// pipeline can rename this compatibility field separately without affecting threads.
+const comments = entry.data.giscus ?? true;
+const host = siteConfig.comments.host;
+const siteId = siteConfig.comments.siteId;
+const threadUrl = new URL(Astro.url.pathname, siteConfig.site).href;
+const pageTitle = entry.data.title ?? '';
+const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[0].toLowerCase();
+---
+
+{
+  comments && (
+    <viscerium-comments
+      data-host={host}
+      data-site-id={siteId}
+      data-url={threadUrl}
+      data-page-title={pageTitle}
+      data-locale={locale}
+    >
+      <div id="remark42" class="comments" data-remark42-root>Comments loading…</div>
+    </viscerium-comments>
+  )
+}
+
+<script>
+  type Remark42Config = {
+    host: string;
+    site_id: string;
+    url: string;
+    page_title: string;
+    locale: string;
+    theme: 'light' | 'dark';
+    components: ['embed'];
+  };
+
+  type Remark42Instance = { destroy?: () => void };
+  type Remark42Api = {
+    createInstance: (config: Remark42Config) => Remark42Instance;
+    changeTheme?: (theme: 'light' | 'dark') => void;
+    destroy?: () => void;
+  };
+  type Remark42Window = typeof window & {
+    REMARK42?: Remark42Api;
+    remark_config?: Remark42Config;
+  };
+
+  let remarkLoader: Promise<void> | null = null;
+
+  function remarkWindow(): Remark42Window {
+    return window as Remark42Window;
+  }
+
+  function remark42(): Remark42Api | undefined {
+    return remarkWindow().REMARK42;
+  }
+
+  function loadRemark42(host: string) {
+    if (remark42()) return Promise.resolve();
+    if (remarkLoader) return remarkLoader;
+
+    remarkLoader = new Promise<void>((resolve, reject) => {
+      let settled = false;
+      let loaderScript: HTMLScriptElement | null = null;
+      const cleanup = () => {
+        window.removeEventListener('REMARK42::ready', finish);
+      };
+      const finish = () => {
+        if (settled || !remark42()) return;
+        settled = true;
+        cleanup();
+        resolve();
+      };
+      const fail = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        loaderScript?.remove();
+        remarkLoader = null;
+        reject(new Error('Remark42 failed to load.'));
+      };
+
+      window.addEventListener('REMARK42::ready', finish);
+
+      // Remark42's SPA API is exposed by the classic embed entry point. The
+      // embed boot code also expects window.remark_config and #remark42 to exist
+      // before this script executes; mount() establishes both before calling us.
+      document.querySelector<HTMLScriptElement>('script[data-viscerium-remark42-loader]')?.remove();
+
+      const script = document.createElement('script');
+      loaderScript = script;
+      script.dataset.visceriumRemark42Loader = '';
+      script.src = `${host.replace(/\/$/, '')}/web/embed.js`;
+      script.async = true;
+      script.defer = true;
+      script.addEventListener('load', () => {
+        if (remark42()) finish();
+        else fail();
+      }, { once: true });
+      script.addEventListener('error', fail, { once: true });
+      (document.head || document.body).appendChild(script);
+    });
+
+    return remarkLoader;
+  }
+
+  class VisceriumComments extends HTMLElement {
+    private instance?: Remark42Instance;
+    private themeObserver?: MutationObserver;
+    private generation = 0;
+
+    connectedCallback() {
+      const generation = ++this.generation;
+      void this.mount(generation);
+    }
+
+    disconnectedCallback() {
+      this.generation += 1;
+      this.destroy();
+    }
+
+    private currentTheme(): 'light' | 'dark' {
+      const theme = document.documentElement.dataset.theme;
+      if (theme === 'dark' || theme === 'light') return theme;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    private destroy() {
+      this.instance?.destroy?.();
+      this.instance = undefined;
+      this.themeObserver?.disconnect();
+      this.themeObserver = undefined;
+    }
+
+    private async mount(generation: number) {
+      const host = this.dataset.host;
+      const siteId = this.dataset.siteId;
+      const url = this.dataset.url;
+      const node = this.querySelector<HTMLElement>('[data-remark42-root]');
+
+      if (!host || !siteId || !url || !node) return;
+
+      const config: Remark42Config = {
+        host,
+        site_id: siteId,
+        url,
+        page_title: this.dataset.pageTitle || document.title,
+        locale: this.dataset.locale || 'en',
+        theme: this.currentTheme(),
+        components: ['embed'],
+      };
+
+      // Remark42 currently validates the global config even when createInstance
+      // receives an explicit config object, so keep both in sync.
+      remarkWindow().remark_config = config;
+
+      try {
+        await loadRemark42(host);
+        if (!this.isConnected || generation !== this.generation) return;
+
+        const api = remark42();
+        if (!api) throw new Error('Remark42 API is unavailable.');
+
+        this.destroy();
+        remarkWindow().remark_config = config;
+        this.instance = api.createInstance(config);
+
+        this.themeObserver = new MutationObserver(() => {
+          remark42()?.changeTheme?.(this.currentTheme());
+        });
+        this.themeObserver.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['data-theme'],
+        });
+      } catch (error) {
+        console.error(error);
+        node.textContent = 'Comments are temporarily unavailable.';
+      }
+    }
+  }
+
+  if (!customElements.get('viscerium-comments')) {
+    customElements.define('viscerium-comments', VisceriumComments);
+  }
+</script>
+
+<style>
+  viscerium-comments {
+    display: block;
+  }
+
+  .comments {
+    min-block-size: 4rem;
+  }
+</style>

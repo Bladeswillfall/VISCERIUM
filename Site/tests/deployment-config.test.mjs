@@ -20,27 +20,21 @@ test('optional third-party origins are declared by the report-only content secur
   assert.match(headers, /connect-src[^;]*https:\/\/cloudflareinsights\.com/);
 });
 
-test('the replacement public configuration uses the new identity', () => {
+test('the public comments configuration targets the self-hosted Remark42 service', () => {
   const siteConfig = read('../site.config.mjs');
   const envExample = read('../.env.example');
-  const publicConfiguration = [
-    siteConfig,
-    read('../astro.config.mjs'),
-    envExample,
-    read('../public/_headers'),
-    read('../public/.well-known/security.txt'),
-  ].join('\n');
+  const headers = read('../public/_headers');
 
-  assert.match(publicConfiguration, /Bladeswillfall\/VISCERIUM/);
-  assert.match(publicConfiguration, /https:\/\/www\.viscerium\.co\.uk/);
-  assert.match(envExample, /PUBLIC_GISCUS_ENABLED="1"/);
-  assert.match(siteConfig, /R_kgDOTolQ7g/);
-  assert.match(siteConfig, /DIC_kwDOTolQ7s4DCYjH/);
-  assert.doesNotMatch(siteConfig, /R_kgDOTOiQ7g|DIC_kwDOTOiQ7s4DCYjH/);
-  assert.doesNotMatch(
-    envExample,
-    /PUBLIC_GISCUS_(?:REPO|REPO_ID|CATEGORY|CATEGORY_ID)=/,
-  );
+  assert.match(siteConfig, /https:\/\/comments\.viscerium\.co\.uk/);
+  assert.match(siteConfig, /PUBLIC_COMMENTS_ENABLED/);
+  assert.match(envExample, /PUBLIC_COMMENTS_ENABLED="1"/);
+  assert.match(envExample, /PUBLIC_COMMENTS_HOST="https:\/\/comments\.viscerium\.co\.uk"/);
+  assert.match(envExample, /PUBLIC_COMMENTS_SITE_ID="viscerium"/);
+  assert.match(headers, /script-src[^;]*https:\/\/comments\.viscerium\.co\.uk/);
+  assert.match(headers, /frame-src[^;]*https:\/\/comments\.viscerium\.co\.uk/);
+  assert.match(headers, /connect-src[^;]*https:\/\/comments\.viscerium\.co\.uk/);
+  assert.doesNotMatch(envExample, /PUBLIC_GISCUS_/);
+  assert.doesNotMatch(headers, /https:\/\/giscus\.app/);
 });
 
 test('public site code cannot read Worker-only contact secrets', () => {
