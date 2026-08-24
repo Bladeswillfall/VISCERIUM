@@ -16,7 +16,12 @@ async function findConnectedNodePoint(page, graph, canvas) {
     await page.mouse.move(x, y);
     const id = await graph.getAttribute('data-world-graph-active-id');
     const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
-    if (id && neighbours > 0) return { x, y, id };
+    // Dense nodes can have overlapping expanded pointer halos. Their Voronoi-like
+    // hit region changes as neighbouring nodes move away during zoom, which skews
+    // a black-box centre estimate even when the rendered node itself stays anchored.
+    // A singly-connected node still exercises a real graph relationship while
+    // keeping the geometric sampling stable enough for the strict 4px assertion.
+    if (id && neighbours === 1) return { x, y, id };
   }
   return null;
 }
