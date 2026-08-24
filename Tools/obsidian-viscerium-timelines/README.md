@@ -1,6 +1,6 @@
 # VISCERIUM Timelines for Obsidian
 
-This maintained local plugin renders canonical VISCERIUM timeline shortcodes through Chronos. It imports the shared calendar runtime, compiler, Chronos adapter and renderer from `Site/src/lib/`, compiles canon notes directly from the open vault, and does not require the Astro development server.
+This maintained local plugin renders canonical VISCERIUM timeline shortcodes with `vis-timeline`. It imports the shared calendar runtime, compiler, adapter, and renderer from `Site/src/lib/`, compiles canon notes directly from the open vault, and does not require the Astro development server.
 
 It is designed to coexist with the public **Chronos Timeline** community plugin and **StoryLine**:
 
@@ -117,7 +117,7 @@ Use the public Chronos plugin for quick note-local timelines:
 ```
 ````
 
-The site sync process converts the same block to `ChronosEmbed.astro`, so the core Chronos UI and syntax pass into Starlight. Native blocks are not imported into canonical generated timelines; use an event note with `calendarDate` when the entry must use registered calendars and era validation.
+The public site leaves this fence as ordinary Markdown code. Native blocks are not imported into canonical generated timelines. Use an event note with `calendarDate` when the entry must use registered calendars, era validation, or a public interactive timeline.
 
 ## Source-of-truth behaviour
 
@@ -128,7 +128,7 @@ The site sync process converts the same block to `ChronosEmbed.astro`, so the co
 - `calendarEndDate` is optional for canonical lore events and creates a period by default.
 - Era membership is calculated from canonical era records.
 - Legacy `timeline.id`, `timeline.year` and `timeline.date` fail canonical compilation.
-- The normalized canonical dataset is adapted to Chronos with `renderParsed`; authors do not maintain generated Chronos syntax.
+- The normalized canonical dataset is converted directly into `vis-timeline` items and groups. Authors do not maintain generated renderer syntax.
 - Selecting **Open full article** opens canonical source notes in Obsidian; selecting a StoryLine timeline event opens its scene note.
 
 ## Files to commit

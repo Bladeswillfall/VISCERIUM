@@ -1,16 +1,12 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
-import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
-import rehypeKatex from 'rehype-katex';
-import remarkMath from 'remark-math';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
 import starlightScrollToTop from 'starlight-scroll-to-top';
-import siteGraph from 'starlight-site-graph/integration';
 import starlightTags from 'starlight-tags';
 import starlightTelescope from 'starlight-telescope';
 import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
@@ -235,12 +231,6 @@ const sidebar = [
 
 export default defineConfig({
   site: siteConfig.site,
-  markdown: {
-    processor: unified({
-      remarkPlugins: [remarkMath],
-      rehypePlugins: [rehypeKatex],
-    }),
-  },
   integrations: [
     starlight({
       title: siteConfig.title,
@@ -254,7 +244,6 @@ export default defineConfig({
       pagefind: false,
       routeMiddleware: './src/route-data.ts',
       customCss: [
-        'katex/dist/katex.min.css',
         './src/styles/ion-layers.css',
         './src/styles/color-tokens.css',
         './src/styles/ion-theme.css',
@@ -300,41 +289,6 @@ export default defineConfig({
       sidebar,
       head: [...feedHead, ...fontHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
       social: [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }],
-    }),
-    siteGraph({
-      starlight: true,
-      overridePageSidebar: false,
-      graphConfig: {
-        tagRenderMode: 'node',
-        renderArrows: false,
-        enableDrag: true,
-        enableZoom: true,
-        enablePan: true,
-        labelMutedOpacity: 0.18,
-        labelAdjacentOpacity: 0.9,
-        nodeDefaultStyle: {
-          shape: 'circle',
-          shapeSize: 7,
-          shapeColor: 'nodeColor',
-          strokeWidth: 0,
-          colliderScale: 1,
-          nodeScale: 1,
-          neighborScale: 1,
-        },
-        nodeCurrentStyle: {
-          shapeColor: 'nodeColorCurrent',
-          nodeScale: 1.3,
-        },
-        tagDefaultStyle: {
-          shape: 'circle',
-          shapeSize: 5,
-          shapeColor: 'nodeColorTag',
-          strokeWidth: 0,
-          colliderScale: 1,
-          nodeScale: 0.85,
-          neighborScale: 0.75,
-        },
-      },
     }),
     sitemap({
       serialize(item) {

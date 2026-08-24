@@ -193,7 +193,7 @@
   "viscerium.timeline.eraRanges": "Era ranges",
   "viscerium.timeline.openEraArticle": "Open {era} article",
   "viscerium.timeline.article": "Article",
-  "viscerium.timeline.canvasLabel": "Interactive Chronos timeline with native fictional-calendar axis. Use the list view for complete keyboard navigation.",
+  "viscerium.timeline.canvasLabel": "Interactive timeline with a fictional-calendar axis. Use the list view for complete keyboard navigation.",
   "viscerium.timeline.overview": "Overview",
   "viscerium.timeline.overviewLabel": "Timeline overview",
   "viscerium.timeline.closeDetails": "Close event details",
@@ -245,8 +245,6 @@
   "viscerium.timeline.zoomEra": "{era}: use the era control to zoom",
   "viscerium.timeline.fitAll": "Fit all",
   "viscerium.timeline.fitAllLabel": "Fit all timeline events",
-  "viscerium.timeline.embedLabel": "Interactive Chronos timeline",
-  "viscerium.timeline.source": "Interactive timeline source:",
 
   "viscerium.map.atlas": "VISCERIUM Atlas",
   "viscerium.map.readNotes": "Read map notes",

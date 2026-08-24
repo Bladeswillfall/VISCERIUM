@@ -25,31 +25,23 @@ The block below is maintained from the existing npm package manifests. It record
 <!-- DEPENDENCIES:DIRECT:START -->
 | Project | Package | Scope | Declared version |
 | --- | --- | --- | --- |
-| Codex (`Site/`) | `@astrojs/markdown-remark` | runtime | `7.2.1` |
 | Codex (`Site/`) | `@astrojs/mdx` | runtime | `^7.0.3` |
 | Codex (`Site/`) | `@astrojs/partytown` | runtime | `^2.1.7` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
 | Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
 | Codex (`Site/`) | `astro` | runtime | `^7.1.1` |
-| Codex (`Site/`) | `chronos-timeline-md` | runtime | `1.1.0` |
 | Codex (`Site/`) | `cytoscape` | runtime | `3.34.0` |
 | Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.0` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
 | Codex (`Site/`) | `gray-matter` | runtime | `^4.0.3` |
-| Codex (`Site/`) | `katex` | runtime | `^0.18.1` |
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
-| Codex (`Site/`) | `rehype-katex` | runtime | `^7.0.1` |
-| Codex (`Site/`) | `remark-math` | runtime | `^6.0.0` |
 | Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.6.0` |
-| Codex (`Site/`) | `starlight-giscus` | runtime | `^1.1.0` |
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^1.0.1` |
-| Codex (`Site/`) | `starlight-site-graph` | runtime | `^0.5.0` |
 | Codex (`Site/`) | `starlight-tags` | runtime | `^1.0.1` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^1.0.0` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.1` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
-| Obsidian timelines plugin | `chronos-timeline-md` | runtime | `1.1.0` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.1` |
 | Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |
@@ -75,9 +67,7 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, sitemap, and Partytown integrations | MIT |
 | [Starlight](https://github.com/withastro/starlight) | Documentation-site shell and content framework | MIT |
 | `starlight-changelogs` | Changelog presentation | MIT |
-| `starlight-giscus` | Giscus comments integration | MIT |
 | `starlight-scroll-to-top` | Scroll-to-top interface | MIT |
-| `starlight-site-graph` | Public site-graph integration | MIT |
 | `starlight-tags` | Tag pages and tag navigation | MIT |
 | `starlight-telescope` | Public search integration | MIT |
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) (`cytoscape`) | Relationship and graph visualisation | MIT |
@@ -85,12 +75,8 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [Leaflet](https://github.com/Leaflet/Leaflet) (`leaflet`) | Public interactive maps | BSD-2-Clause |
 | [Leaflet.Control.Layers.Tree](https://github.com/jjimenezshaw/Leaflet.Control.Layers.Tree) (`leaflet.control.layers.tree`) | Hierarchical map-layer controls | BSD-3-Clause |
 | [vis-timeline](https://github.com/visjs/vis-timeline) | Interactive timeline rendering | Apache-2.0 OR MIT |
-| [chronos-timeline-md](https://github.com/clairefro/chronos-timeline-md) | Markdown-to-timeline parsing | ISC |
 | [Fuse.js](https://github.com/krisk/Fuse.js) (`fuse.js`) | Fuzzy search | Apache-2.0 |
 | [gray-matter](https://github.com/jonschlinkert/gray-matter) | Markdown frontmatter parsing | MIT |
-| [KaTeX](https://github.com/KaTeX/KaTeX) (`katex`) | Mathematical notation rendering | MIT |
-| [remark-math](https://github.com/remarkjs/remark-math) | Markdown mathematics parsing | MIT |
-| [rehype-katex](https://github.com/remarkjs/remark-math) | KaTeX output integration | MIT |
 | [Playwright](https://github.com/microsoft/playwright) (`@playwright/test`) | Browser and interface testing | Apache-2.0 |
 | [esbuild](https://github.com/evanw/esbuild) | First-party Obsidian plugin bundling | MIT |
 | [Obsidian API](https://github.com/obsidianmd/obsidian-api) | Type definitions and API surface for first-party plugins | MIT |

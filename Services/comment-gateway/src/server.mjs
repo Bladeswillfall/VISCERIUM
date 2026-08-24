@@ -243,8 +243,6 @@ function copyResponseHeaders(source) {
 
 async function forwardWrite({ request, requestUrl, body, ip, config, fetchImpl }) {
   const upstream = new URL(`${requestUrl.pathname}${requestUrl.search}`, config.upstream);
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), config.upstreamTimeoutMs ?? 5000);
 
   try {
     const result = await fetchImpl(upstream, {
@@ -252,7 +250,7 @@ async function forwardWrite({ request, requestUrl, body, ip, config, fetchImpl }
       headers: copyForwardHeaders(request, ip),
       body,
       redirect: 'manual',
-      signal: controller.signal,
+      signal: AbortSignal.timeout(config.upstreamTimeoutMs ?? 5000),
     });
 
     // Read the full body while the same deadline is active. Node fetch may
@@ -273,8 +271,6 @@ async function forwardWrite({ request, requestUrl, body, ip, config, fetchImpl }
     );
     error.cacheIdempotency = true;
     throw error;
-  } finally {
-    clearTimeout(timeout);
   }
 }
 

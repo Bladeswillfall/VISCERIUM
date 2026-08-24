@@ -1,6 +1,5 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import {
   defaultCalendarId,
   fromAbsoluteDay,
@@ -25,7 +24,6 @@ import {
 } from '../src/lib/timeline/calendar-axis.mjs';
 
 const DAY_MS = 86_400_000;
-const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 const calendar = getCalendar(defaultCalendarId);
 const firstMonth = calendar.months[0].slug;
 const yearStart = (year) => toAbsoluteDay({
@@ -185,24 +183,4 @@ test('the fork generates exact Okse boundaries instead of relabeling Gregorian t
     calendarId: defaultCalendarId,
     scale: 'year',
   }), '120');
-});
-
-test('the fork draws exact calendar labels and grid lines as native vis-timeline components', () => {
-  const renderer = read('../src/lib/timeline/chronos-native-renderer.mjs');
-  const fork = read('../src/lib/chronos-fork/VisceriumChronosTimeline.mjs');
-  const axisStyles = read('../src/styles/timeline-canvas.css');
-
-  assert.match(renderer, /createCalendarAxisFormatter/);
-  assert.match(renderer, /timeline\.on\('rangechanged'/);
-  assert.match(fork, /this\.axis\.getTicks/);
-  assert.match(fork, /timeline\.addCustomTime\(tick\.date, id\)/);
-  assert.match(fork, /timeline\.setCustomTime\(tick\.date, id\)/);
-  assert.match(fork, /timeline\.removeCustomTime\(id\)/);
-  assert.match(fork, /dataset\.absoluteDay/);
-  assert.match(fork, /dataset\.vcCalendarLabel/);
-  assert.match(axisStyles, /\.vc-calendar-time-label/);
-  assert.match(fork, /label\.className = 'vc-calendar-time-label'/);
-  assert.match(axisStyles, /\.vis-custom-time\[data-vc-calendar-kind="secondary"\]/);
-  assert.doesNotMatch(fork, /appendChild\(axisLayer\)|appendChild\(gridLayer\)/);
-  assert.doesNotMatch(renderer, /data-vc-axis|axisTicks|renderAxis/);
 });

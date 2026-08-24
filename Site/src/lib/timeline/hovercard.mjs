@@ -127,8 +127,8 @@ export function installTimelineHovercard(root, dataset, options = {}) {
     tooltip.hidden = false;
     schedulePosition();
 
-    // Chronos emits its itemover bridge during the same pointer turn. Strip any
-    // title it writes before the browser can open a second native title bubble.
+    // Strip any title added during the same pointer turn before the browser can
+    // open a second native title bubble.
     queueMicrotask(() => stripNativeTitle(activeItem));
   };
 

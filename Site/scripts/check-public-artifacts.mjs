@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isMainModule } from './script-entry.mjs';
 
 const distRoot = fileURLToPath(new URL('../dist/', import.meta.url));
 const textExtensions = new Set(['.css', '.html', '.js', '.json', '.mjs', '.svg', '.txt', '.xml']);
@@ -23,47 +24,55 @@ async function walk(directory) {
   const files = [];
   for (const entry of entries) {
     const absolute = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...(await walk(absolute)));
+    if (entry.isDirectory()) files.push(...await walk(absolute));
     else if (entry.isFile()) files.push(absolute);
   }
   return files;
 }
 
-let files;
-try {
-  files = await walk(distRoot);
-} catch (error) {
-  if (error?.code === 'ENOENT') {
-    console.error('Public artifact check requires Site/dist. Run it after the production build.');
-    process.exit(1);
+export async function validatePublicArtifacts({ rootDir = distRoot } = {}) {
+  let files;
+  try {
+    files = await walk(rootDir);
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      console.error('Public artifact check requires Site/dist. Run it after the production build.');
+      return false;
+    }
+    throw error;
   }
-  throw error;
+
+  const failures = [];
+  for (const absolute of files) {
+    const relative = path.relative(rootDir, absolute).split(path.sep).join('/');
+    for (const pattern of forbiddenNames) {
+      if (pattern.test(relative)) failures.push(`${relative}: forbidden public artifact`);
+    }
+
+    if (!textExtensions.has(path.extname(relative).toLowerCase())) continue;
+    const stat = await fs.stat(absolute);
+    if (stat.size > maxScannableTextBytes) {
+      failures.push(`${relative}: text artifact exceeds the 8 MiB security inspection limit`);
+      continue;
+    }
+
+    const source = await fs.readFile(absolute, 'utf8');
+    for (const { pattern, label } of forbiddenText) {
+      if (pattern.test(source)) failures.push(`${relative}: contains ${label}`);
+    }
+  }
+
+  if (failures.length > 0) {
+    console.error('Public build artifact security check failed:');
+    for (const failure of failures) console.error(`- ${failure}`);
+    return false;
+  }
+
+  console.log(`Public artifact security check passed (${files.length} files inspected).`);
+  return true;
 }
 
-const failures = [];
-for (const absolute of files) {
-  const relative = path.relative(distRoot, absolute).split(path.sep).join('/');
-  for (const pattern of forbiddenNames) {
-    if (pattern.test(relative)) failures.push(`${relative}: forbidden public artifact`);
-  }
-
-  if (!textExtensions.has(path.extname(relative).toLowerCase())) continue;
-  const stat = await fs.stat(absolute);
-  if (stat.size > maxScannableTextBytes) {
-    failures.push(`${relative}: text artifact exceeds the 8 MiB security inspection limit`);
-    continue;
-  }
-
-  const source = await fs.readFile(absolute, 'utf8');
-  for (const { pattern, label } of forbiddenText) {
-    if (pattern.test(source)) failures.push(`${relative}: contains ${label}`);
-  }
+if (isMainModule(import.meta.url)) {
+  const valid = await validatePublicArtifacts();
+  if (!valid) process.exitCode = 1;
 }
-
-if (failures.length > 0) {
-  console.error('Public build artifact security check failed:');
-  for (const failure of failures) console.error(`- ${failure}`);
-  process.exit(1);
-}
-
-console.log(`Public artifact security check passed (${files.length} files inspected).`);

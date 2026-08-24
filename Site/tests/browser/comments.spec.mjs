@@ -1,0 +1,88 @@
+import { test, expect } from '@playwright/test';
+
+const preview = 'http://127.0.0.1:4321';
+const loader = 'https://comments.viscerium.co.uk/web/embed.js';
+const mockRemark42 = `
+  window.__remarkCreates = window.__remarkCreates || 0;
+  window.__remarkDestroys = window.__remarkDestroys || 0;
+  window.__remarkThemes = window.__remarkThemes || [];
+  window.REMARK42 = {
+    createInstance(config) {
+      window.__remarkCreates += 1;
+      const root = document.querySelector('[data-remark42-root]');
+      if (root) root.textContent = 'Mock comments ready';
+      return { destroy() { window.__remarkDestroys += 1; } };
+    },
+    changeTheme(theme) { window.__remarkThemes.push(theme); }
+  };
+  window.dispatchEvent(new Event('REMARK42::ready'));
+`;
+
+test('comments load near the viewport and clean up when their page is replaced', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 640 });
+  let requests = 0;
+  await page.route(loader, async (route) => {
+    requests += 1;
+    await route.fulfill({ status: 200, contentType: 'text/javascript', body: mockRemark42 });
+  });
+
+  await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+  const comments = page.locator('viscerium-comments');
+  await expect(comments.locator('[data-remark42-root]')).toHaveText('Comments loading…');
+  await page.waitForTimeout(250);
+  expect(requests).toBe(0);
+
+  await comments.scrollIntoViewIfNeeded();
+  await expect.poll(() => requests).toBe(1);
+  await expect(comments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
+  await expect.poll(() => page.evaluate(() => window.__remarkCreates)).toBe(1);
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+  });
+  await expect.poll(() => page.evaluate(() => window.__remarkThemes.length)).toBeGreaterThan(0);
+
+  await comments.evaluate((element) => element.remove());
+  await expect.poll(() => page.evaluate(() => window.__remarkDestroys)).toBeGreaterThan(0);
+});
+
+test('comments load immediately when IntersectionObserver is unavailable', async ({ page }) => {
+  await page.addInitScript(() => {
+    delete window.IntersectionObserver;
+  });
+  let requests = 0;
+  await page.route(loader, async (route) => {
+    requests += 1;
+    await route.fulfill({ status: 200, contentType: 'text/javascript', body: mockRemark42 });
+  });
+
+  await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+  await expect.poll(() => requests).toBe(1);
+  await expect(page.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
+});
+
+test('a failed comments load reports the problem and a later page can retry', async ({ page }) => {
+  let attempts = 0;
+  await page.route(loader, async (route) => {
+    attempts += 1;
+    if (attempts === 1) {
+      await route.abort();
+      return;
+    }
+    await route.fulfill({ status: 200, contentType: 'text/javascript', body: mockRemark42 });
+  });
+
+  await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+  const comments = page.locator('viscerium-comments');
+  await comments.scrollIntoViewIfNeeded();
+  await expect(comments.locator('[data-remark42-root]')).toHaveText('Comments are temporarily unavailable.');
+
+  await comments.evaluate((element) => {
+    const replacement = element.cloneNode(true);
+    element.replaceWith(replacement);
+  });
+  const nextComments = page.locator('viscerium-comments');
+  await nextComments.scrollIntoViewIfNeeded();
+  await expect.poll(() => attempts).toBe(2);
+  await expect(nextComments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
+});

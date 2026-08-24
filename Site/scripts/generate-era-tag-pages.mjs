@@ -67,17 +67,13 @@ for (const file of files) {
 
 let generated = 0;
 for (const era of HISTORICAL_ERAS) {
-  const byTag = new Map();
-  for (const entry of sourceEntries) {
-    if (entry.era !== era && entry.era !== 'Universal') continue;
-    for (const tag of entry.tags) {
-      const list = byTag.get(tag) ?? [];
-      list.push(entry);
-      byTag.set(tag, list);
-    }
-  }
+  const taggedEntries = sourceEntries
+    .filter((entry) => entry.era === era || entry.era === 'Universal')
+    .flatMap((entry) => entry.tags.map((tag) => ({ tag, entry })));
+  const byTag = Map.groupBy(taggedEntries, ({ tag }) => tag);
 
-  for (const [tag, entries] of byTag.entries()) {
+  for (const [tag, tagged] of byTag) {
+    const entries = tagged.map(({ entry }) => entry);
     const normalizedTag = tagSlug(tag);
     if (!normalizedTag) continue;
     const slug = `eras/${era.toLowerCase()}/tags/${normalizedTag}`;

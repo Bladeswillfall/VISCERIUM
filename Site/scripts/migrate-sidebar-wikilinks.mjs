@@ -12,14 +12,9 @@ const loreRoot = path.resolve(repoRoot, 'Vault/Lore');
 const shouldWrite = process.argv.includes('--write');
 
 async function walk(dir) {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const target = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...await walk(target));
-    else files.push(target);
-  }
-  return files;
+  return (await Array.fromAsync(fs.glob('**/*', { cwd: dir, withFileTypes: true })))
+    .filter((entry) => entry.isFile())
+    .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
 function key(value) {

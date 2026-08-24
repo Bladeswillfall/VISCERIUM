@@ -438,13 +438,8 @@ export function normaliseImportedMarkdown(markdown, filePath = 'Article-Unknown.
 }
 
 async function markdownFiles(directory) {
-  const files = [];
-  for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
-    const full = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...await markdownFiles(full));
-    else if (entry.isFile() && path.extname(entry.name).toLowerCase() === '.md') files.push(full);
-  }
-  return files;
+  return (await Array.fromAsync(fs.glob('**/*.md', { cwd: directory })))
+    .map((file) => path.join(directory, file));
 }
 
 export async function runSidebarNormaliser({ directory = DEFAULT_IMPORT_DIR, write = false } = {}) {

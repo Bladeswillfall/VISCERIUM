@@ -187,9 +187,7 @@ Do not add legacy tags to new content.
 
 ````md
 [equation:title="Resonance decay model"]
-$$
-R(t)=R_0e^{-\lambda t}
-$$
+R(t) = R₀ × exp(−λt)
 [/equation]
 ````
 
@@ -197,35 +195,25 @@ Supported layout tags are `[cols]`, `[row]`, `[col]`, `[card]`, and `[equation]`
 
 ### Mathematical notation
 
-The build renders mathematics with `remark-math`, `rehype-katex`, and KaTeX.
+The public build does not include a TeX or KaTeX renderer. Dollar-sign delimiters remain literal text.
 
-Use TeX delimiters in source notes.
+Use readable plain text and Unicode symbols for notation.
 
 Inline example:
 
 ```md
-Resonance decay can be represented as $R(t)=R_0e^{-\lambda t}$.
+Resonance decay can be represented as R(t) = R₀ × exp(−λt).
 ```
 
 Display example:
 
 ```md
-$$
-R(t)=R_0e^{-\lambda t}
-$$
+[equation:title="Resonance decay model"]
+R(t) = R₀ × exp(−λt)
+[/equation]
 ```
 
-Complex display example:
-
-```md
-$$
-\begin{aligned}
-\mathcal{R}_{total}
-  &= \sum_{i=1}^{n} \alpha_i \psi_i(t) \\
-  &= \alpha_1 \psi_1(t) + \alpha_2 \psi_2(t) + \cdots + \alpha_n \psi_n(t)
-\end{aligned}
-$$
-```
+For notation that cannot remain legible as text, explain it in words and add an accessible SVG with meaningful alternative text.
 
 ### Typography reference
 
@@ -237,7 +225,7 @@ The main typography layer is `Site/src/styles/typography.css`.
 | Body prose | `Source Serif 4` |
 | Interface, metadata, captions, tables, and lower headings | `IBM Plex Sans` |
 | Code and terminal fragments | `IBM Plex Mono` |
-| Mathematical notation | Compile-time KaTeX output |
+| Mathematical notation | Body text, or `IBM Plex Mono` in code spans and blocks |
 
 Do not add a new typeface without an interface and performance review.
 
@@ -284,11 +272,7 @@ Start the local development server:
 npm run dev
 ```
 
-Use the combined sync and development command when source Lore changed:
-
-```bash
-npm run dev:sync
-```
+`npm run dev` prepares the current Vault content before Astro starts. Restart it after source Lore changes that need to be regenerated.
 
 Run the production build before publication:
 

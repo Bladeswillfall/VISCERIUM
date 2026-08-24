@@ -1,0 +1,99 @@
+/* Route-scoped vis-timeline integration shared by the site and Obsidian plugin. */
+
+.vc-timeline-app .viscerium-timeline-container :is(
+  .vis-itemset > .vis-background,
+  .vis-itemset > .vis-foreground,
+  .vis-itemset > .vis-axis,
+  .vis-labelset > .vis-label,
+  .vis-foreground > .vis-group,
+  .vis-background > .vis-group,
+  .vis-axis > .vis-group,
+  .vis-group > .vis-item,
+  .vis-item > .vis-item-content
+) {
+  margin: 0 !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-timeline,
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) :is(
+  .vis-panel.vis-center,
+  .vis-panel.vis-background,
+  .vis-panel.vis-foreground,
+  .vis-content
+) {
+  color: var(--vc-timeline-ink);
+  background-color: var(--vc-timeline-surface-deep) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) :is(
+  .vis-panel.vis-left,
+  .vis-panel.vis-right,
+  .vis-panel.vis-top,
+  .vis-panel.vis-bottom,
+  .vis-labelset,
+  .vis-time-axis
+) {
+  color: var(--vc-timeline-muted);
+  background-color: var(--vc-timeline-surface) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-label {
+  color: var(--vc-timeline-muted);
+  border-color: var(--vc-timeline-border) !important;
+  background-color: var(--vc-timeline-surface-deep) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) :is(
+  .vis-label .vis-inner,
+  .vis-time-axis .vis-text
+) {
+  color: var(--vc-timeline-muted) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-grid.vis-minor {
+  border-color: color-mix(in oklch, var(--vc-timeline-border) 52%, transparent) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) .vis-grid.vis-major {
+  border-color: color-mix(in oklch, var(--vc-timeline-border-strong) 68%, transparent) !important;
+}
+
+.vc-timeline-app :is(.vc-timeline-canvas, .vc-timeline-minimap) :is(.vis-panel, .vis-timeline) {
+  border-color: var(--vc-timeline-border) !important;
+}
+
+.vc-timeline-refit-button {
+  position: absolute;
+  z-index: 8;
+  right: 5px;
+  bottom: 2px;
+  width: 2rem;
+  min-height: 2rem !important;
+  padding: .2rem !important;
+  border: 0 !important;
+  color: var(--vc-timeline-muted) !important;
+  background: var(--vc-timeline-surface-deep) !important;
+  box-shadow: none !important;
+}
+
+.vc-timeline-refit-button:hover,
+.vc-timeline-refit-button:focus-visible {
+  color: var(--vc-timeline-ink) !important;
+  background: var(--vc-timeline-surface) !important;
+}
+
+.vc-timeline-refit-button svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  margin: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-timeline-app * {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

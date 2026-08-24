@@ -205,7 +205,7 @@ table td,
   font-size: .92em;
 }
 
-/* Build-time KaTeX and codex equation panels. */
+/* Codex equation panels. */
 .cx-equation {
   margin-block: 1.5rem;
   padding: 1rem;

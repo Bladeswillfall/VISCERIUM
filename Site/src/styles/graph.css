@@ -1,137 +1,153 @@
-/* ==========================================================================
-   World graph integration
-
-   This file combines the graph page and canvas styles. Later sections can
-   override earlier rules. Keep the Origin comments with moved rules because
-   CSS order affects the result.
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   Graph layout and colors
-   Origin: graph.css
-
-   Styles the graph page and defines RGB color values.
-   -------------------------------------------------------------------------- */
-
-@layer starlight.core {
-  .world-graph .slsg-graph-component {
-    --slsg-graph-width: 100%;
-    --slsg-graph-height: min(70vh, 48rem);
-  }
+.world-graph {
+  --world-graph-canvas: var(--codex-palette-ink);
+  --world-graph-surface: var(--codex-palette-oled);
+  --world-graph-border: var(--codex-palette-deep);
+  --world-graph-text: var(--codex-palette-light);
+  --world-graph-muted: var(--codex-palette-mid);
+  --world-graph-node: var(--codex-palette-light);
+  --world-graph-selected: var(--codex-warning-base);
+  --world-graph-edge: var(--codex-palette-mid);
+  --world-graph-edge-opacity: .75;
+  display: grid;
+  gap: .75rem;
+  min-inline-size: 0;
 }
 
-/*
- * Canvas graph colors use RGB because Pixi/chroma can parse these values reliably.
- * The color transform leaves `rgb(var(...))` unchanged.
- *
- * Keep these rules unlayered. Unlayered rules take priority over the plugin's
- * `sitegraph` CSS layer, even when the plugin loads later.
- */
-.slsg-graph-component {
-  --vc-graph-bg-rgb: 16, 16, 16;
-  --vc-graph-bg-max-rgb: 25, 24, 22;
-  --vc-graph-outline-rgb: 72, 65, 55;
-  --vc-graph-text-rgb: 214, 207, 190;
-  --vc-graph-text-muted-rgb: 152, 145, 132;
-  --vc-graph-accent-rgb: 240, 195, 106;
-  --vc-graph-accent-strong-rgb: 255, 209, 102;
-  --vc-graph-node-rgb: 208, 201, 185;
-  --vc-graph-node-muted-rgb: 66, 63, 58;
-  --vc-graph-current-rgb: 126, 226, 168;
-  --vc-graph-visited-rgb: 240, 195, 106;
-  --vc-graph-unresolved-rgb: 255, 138, 154;
-  --vc-graph-external-rgb: 128, 216, 255;
-  --vc-graph-tag-rgb: 216, 167, 255;
-  --vc-graph-link-rgb: 105, 99, 88;
-  --vc-graph-link-muted-rgb: 52, 50, 46;
-  --vc-graph-group-1-rgb: 224, 90, 90;
-  --vc-graph-group-2-rgb: 216, 168, 75;
-  --vc-graph-group-3-rgb: 209, 196, 92;
-  --vc-graph-group-4-rgb: 102, 181, 140;
-  --vc-graph-group-5-rgb: 79, 169, 184;
-  --vc-graph-group-6-rgb: 89, 121, 200;
-  --vc-graph-group-7-rgb: 108, 109, 187;
-  --vc-graph-group-8-rgb: 138, 101, 214;
-  --vc-graph-group-9-rgb: 187, 95, 168;
-
-  --slsg-color-accent: rgb(var(--vc-graph-accent-rgb));
-  --slsg-color-muted: rgb(var(--vc-graph-node-muted-rgb));
-  --slsg-text-color: rgb(var(--vc-graph-text-rgb));
-  --slsg-text-color-accent: rgb(var(--vc-graph-accent-strong-rgb));
-
-  --slsg-graph-minimized-bg-color: rgb(var(--vc-graph-bg-rgb));
-  --slsg-graph-maximized-bg-color: rgb(var(--vc-graph-bg-max-rgb));
-  --slsg-graph-outline-color: rgb(var(--vc-graph-outline-rgb));
-  --slsg-graph-action-color: rgb(var(--vc-graph-text-muted-rgb));
-  --slsg-graph-action-color-hover: rgb(var(--vc-graph-text-rgb));
-  --slsg-graph-action-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
-  --slsg-context-menu-border-color: rgb(var(--vc-graph-outline-rgb));
-  --slsg-context-menu-bg-color: rgb(var(--vc-graph-bg-max-rgb));
-  --slsg-context-menu-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
-
-  --slsg-node-color: rgb(var(--vc-graph-node-rgb));
-  --slsg-node-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
-  --slsg-node-color-adjacent: rgb(var(--vc-graph-accent-rgb));
-  --slsg-node-color-muted: rgb(var(--vc-graph-node-muted-rgb));
-  --slsg-node-color-current: rgb(var(--vc-graph-current-rgb));
-  --slsg-node-color-visited: rgb(var(--vc-graph-visited-rgb));
-  --slsg-node-color-unresolved: rgb(var(--vc-graph-unresolved-rgb));
-  --slsg-node-color-external: rgb(var(--vc-graph-external-rgb));
-  --slsg-node-color-tag: rgb(var(--vc-graph-tag-rgb));
-  --slsg-node-color-1: rgb(var(--vc-graph-group-1-rgb));
-  --slsg-node-color-2: rgb(var(--vc-graph-group-2-rgb));
-  --slsg-node-color-3: rgb(var(--vc-graph-group-3-rgb));
-  --slsg-node-color-4: rgb(var(--vc-graph-group-4-rgb));
-  --slsg-node-color-5: rgb(var(--vc-graph-group-5-rgb));
-  --slsg-node-color-6: rgb(var(--vc-graph-group-6-rgb));
-  --slsg-node-color-7: rgb(var(--vc-graph-group-7-rgb));
-  --slsg-node-color-8: rgb(var(--vc-graph-group-8-rgb));
-  --slsg-node-color-9: rgb(var(--vc-graph-group-9-rgb));
-
-  --slsg-link-color: rgb(var(--vc-graph-link-rgb));
-  --slsg-link-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
-  --slsg-link-color-muted: rgb(var(--vc-graph-link-muted-rgb));
-  --slsg-label-color: rgb(var(--vc-graph-text-rgb));
-  --slsg-label-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
-  --slsg-label-color-muted: rgb(var(--vc-graph-text-muted-rgb));
+:root[data-theme='light'] .world-graph {
+  --world-graph-canvas: var(--codex-palette-page-light);
+  --world-graph-surface: var(--codex-palette-light);
+  --world-graph-border: var(--codex-palette-mid);
+  --world-graph-text: var(--codex-palette-oled);
+  --world-graph-muted: var(--codex-palette-deep);
+  --world-graph-node: var(--codex-palette-deep);
+  --world-graph-selected: var(--codex-palette-oled);
+  --world-graph-edge: var(--codex-palette-deep);
 }
 
-:root[data-theme='light'] .slsg-graph-component {
-  --vc-graph-bg-rgb: 242, 237, 227;
-  --vc-graph-bg-max-rgb: 230, 223, 208;
-  --vc-graph-outline-rgb: 136, 128, 112;
-  --vc-graph-text-rgb: 28, 26, 22;
-  --vc-graph-text-muted-rgb: 86, 80, 70;
-  --vc-graph-accent-rgb: 72, 65, 55;
-  --vc-graph-accent-strong-rgb: 16, 16, 16;
-  --vc-graph-node-rgb: 79, 74, 66;
-  --vc-graph-node-muted-rgb: 196, 187, 170;
-  --vc-graph-current-rgb: 45, 125, 74;
-  --vc-graph-visited-rgb: 154, 107, 23;
-  --vc-graph-unresolved-rgb: 169, 45, 68;
-  --vc-graph-external-rgb: 23, 100, 122;
-  --vc-graph-tag-rgb: 105, 58, 145;
-  --vc-graph-link-rgb: 139, 130, 116;
-  --vc-graph-link-muted-rgb: 202, 194, 179;
-  --vc-graph-group-1-rgb: 177, 55, 55;
-  --vc-graph-group-2-rgb: 166, 110, 31;
-  --vc-graph-group-3-rgb: 142, 128, 33;
-  --vc-graph-group-4-rgb: 48, 126, 82;
-  --vc-graph-group-5-rgb: 30, 120, 137;
-  --vc-graph-group-6-rgb: 54, 84, 157;
-  --vc-graph-group-7-rgb: 78, 72, 151;
-  --vc-graph-group-8-rgb: 105, 58, 173;
-  --vc-graph-group-9-rgb: 146, 55, 128;
+.world-graph__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .65rem .8rem;
+  color: var(--world-graph-muted);
+  background: var(--world-graph-surface);
 }
 
-/* --------------------------------------------------------------------------
-   Canvas values after the graph plugin loads
-   Origin: graph-canvas.css
+.world-graph__toolbar p {
+  margin: 0;
+}
 
-   Replaces the plugin canvas color values after `starlight-site-graph` loads.
-   -------------------------------------------------------------------------- */
+.world-graph__toolbar strong {
+  color: var(--world-graph-text);
+}
 
-/* The World Graph uses the available page width and keeps desktop sidebar spacing. */
+.world-graph__toolbar button {
+  min-height: 2.5rem;
+  padding-inline: .85rem;
+  border: 1px solid var(--world-graph-border);
+  border-radius: 0;
+  color: var(--world-graph-text);
+  background: var(--world-graph-canvas);
+  font: 700 .85rem/1 var(--vc-font-ui, system-ui, sans-serif);
+  cursor: pointer;
+}
+
+.world-graph__toolbar button:hover,
+.world-graph__toolbar button:focus-visible {
+  border-color: var(--world-graph-selected);
+  background: var(--world-graph-surface);
+}
+
+.world-graph__toolbar button:focus-visible,
+.world-graph__canvas:focus-visible,
+.world-graph__details a:focus-visible,
+.world-graph__fallback a:focus-visible,
+.world-graph__fallback summary:focus-visible {
+  outline: 3px solid var(--world-graph-selected);
+  outline-offset: 3px;
+}
+
+.world-graph__canvas:focus-visible {
+  outline-offset: -3px;
+}
+
+.world-graph__toolbar button:disabled {
+  cursor: wait;
+  opacity: .55;
+}
+
+.world-graph__frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+  min-block-size: min(70vh, 48rem);
+  overflow: hidden;
+  border: 1px solid var(--world-graph-border);
+  background: var(--world-graph-canvas);
+}
+
+.world-graph__canvas {
+  min-inline-size: 0;
+  min-block-size: min(70vh, 48rem);
+  background: var(--world-graph-canvas);
+}
+
+.world-graph__details {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  overflow: auto;
+  border-inline-start: 1px solid var(--world-graph-border);
+  color: var(--world-graph-muted);
+  background: var(--world-graph-surface);
+}
+
+.world-graph__details :is(h2, p) {
+  margin-block-start: 0;
+}
+
+.world-graph__details h2 {
+  color: var(--world-graph-text);
+  font-family: var(--vc-font-display, serif);
+  font-weight: 500;
+}
+
+.world-graph__details a {
+  color: var(--world-graph-text);
+  font-weight: 700;
+}
+
+.world-graph__status {
+  min-block-size: 1.25rem;
+  margin: 0;
+  color: var(--world-graph-muted);
+  font-size: .82rem;
+}
+
+.world-graph__fallback {
+  padding: .7rem .85rem;
+  color: var(--world-graph-text);
+  background: var(--world-graph-surface);
+}
+
+.world-graph__fallback summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.world-graph__fallback ul {
+  columns: 3 15rem;
+  margin-block-end: 0;
+  padding-inline-start: 1.25rem;
+}
+
+.world-graph__fallback li {
+  break-inside: avoid;
+  margin-block: .3rem;
+}
+
+.world-graph__fallback a {
+  color: inherit;
+}
+
 .main-frame:has(.world-graph) main > .content-panel:has(.world-graph) {
   padding: 0 !important;
 }
@@ -147,61 +163,30 @@
     max-inline-size: none !important;
   }
 
-  .main-frame:has(.world-graph)
-    > .codex-two-column-content
-    > .codex-main-pane
-    > main
-    > .content-panel:has(.world-graph) {
+  .main-frame:has(.world-graph) > .codex-two-column-content > .codex-main-pane > main > .content-panel:has(.world-graph) {
     width: min(94vw, 100%);
     max-width: none;
   }
 }
 
-/*
- * `starlight-site-graph` sets several canvas colors on its component.
- * Apply these RGB values after the plugin stylesheet so Pixi/chroma receives
- * values that it can parse.
- */
-.slsg-graph-component,
-graph-component {
-  --slsg-color-accent: rgb(var(--vc-graph-accent-rgb));
-  --slsg-color-muted: rgb(var(--vc-graph-node-muted-rgb));
-  --slsg-text-color: rgb(var(--vc-graph-text-rgb));
-  --slsg-text-color-accent: rgb(var(--vc-graph-accent-strong-rgb));
+@media (max-width: 48rem) {
+  .world-graph__toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
 
-  --slsg-graph-minimized-bg-color: rgb(var(--vc-graph-bg-rgb));
-  --slsg-graph-maximized-bg-color: rgb(var(--vc-graph-bg-max-rgb));
-  --slsg-graph-outline-color: rgb(var(--vc-graph-outline-rgb));
-  --slsg-graph-action-color: rgb(var(--vc-graph-text-muted-rgb));
-  --slsg-graph-action-color-hover: rgb(var(--vc-graph-text-rgb));
-  --slsg-graph-action-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
-  --slsg-context-menu-border-color: rgb(var(--vc-graph-outline-rgb));
-  --slsg-context-menu-bg-color: rgb(var(--vc-graph-bg-max-rgb));
-  --slsg-context-menu-bg-color-hover: rgb(var(--vc-graph-outline-rgb));
+  .world-graph__frame {
+    grid-template-columns: 1fr;
+    min-block-size: 34rem;
+  }
 
-  --slsg-node-color: rgb(var(--vc-graph-node-rgb));
-  --slsg-node-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
-  --slsg-node-color-adjacent: rgb(var(--vc-graph-accent-rgb));
-  --slsg-node-color-muted: rgb(var(--vc-graph-node-muted-rgb));
-  --slsg-node-color-current: rgb(var(--vc-graph-current-rgb));
-  --slsg-node-color-visited: rgb(var(--vc-graph-visited-rgb));
-  --slsg-node-color-unresolved: rgb(var(--vc-graph-unresolved-rgb));
-  --slsg-node-color-external: rgb(var(--vc-graph-external-rgb));
-  --slsg-node-color-tag: rgb(var(--vc-graph-tag-rgb));
-  --slsg-node-color-1: rgb(var(--vc-graph-group-1-rgb));
-  --slsg-node-color-2: rgb(var(--vc-graph-group-2-rgb));
-  --slsg-node-color-3: rgb(var(--vc-graph-group-3-rgb));
-  --slsg-node-color-4: rgb(var(--vc-graph-group-4-rgb));
-  --slsg-node-color-5: rgb(var(--vc-graph-group-5-rgb));
-  --slsg-node-color-6: rgb(var(--vc-graph-group-6-rgb));
-  --slsg-node-color-7: rgb(var(--vc-graph-group-7-rgb));
-  --slsg-node-color-8: rgb(var(--vc-graph-group-8-rgb));
-  --slsg-node-color-9: rgb(var(--vc-graph-group-9-rgb));
+  .world-graph__canvas {
+    min-block-size: 28rem;
+  }
 
-  --slsg-link-color: rgb(var(--vc-graph-link-rgb));
-  --slsg-link-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
-  --slsg-link-color-muted: rgb(var(--vc-graph-link-muted-rgb));
-  --slsg-label-color: rgb(var(--vc-graph-text-rgb));
-  --slsg-label-color-hover: rgb(var(--vc-graph-accent-strong-rgb));
-  --slsg-label-color-muted: rgb(var(--vc-graph-text-muted-rgb));
+  .world-graph__details {
+    min-block-size: 6rem;
+    border-block-start: 1px solid var(--world-graph-border);
+    border-inline-start: 0;
+  }
 }

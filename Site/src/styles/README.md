@@ -6,20 +6,19 @@ Styles are owned by the narrowest stable entry point that needs them. Import loc
 
 `astro.config.mjs` registers this order:
 
-1. `katex/dist/katex.min.css`: third-party maths foundation.
-2. `ion-layers.css`: cascade layers, stacking tokens, and the shared `image-layout.css` import.
-3. `color-tokens.css`: shared palettes and semantic variables.
-4. `ion-theme.css`: broad Starlight theme adaptation.
-5. `ion-expressive-code.css`: code-block theme adaptation.
-6. `typography.css`: type and baseline text rhythm.
-7. `article-pages.css`: editorial article presentation.
-8. `layout.css`: article geometry and structural overrides.
-9. `codex-ui.css`: shared components and authoring utilities.
-10. `header-controls.css`: shared desktop and mobile header controls.
-11. `navigation.css`: shared navigation and overlays.
-12. `category-index.css`: generated Markdown category pages, which have no stable component entry point.
-13. `a11y.css`: focus, target sizing, forced colours, and reduced motion.
-14. `era-styles.css`: final era-specific token and component overrides.
+1. `ion-layers.css`: cascade layers, stacking tokens, and the shared `image-layout.css` import.
+2. `color-tokens.css`: shared palettes and semantic variables.
+3. `ion-theme.css`: broad Starlight theme adaptation.
+4. `ion-expressive-code.css`: code-block theme adaptation.
+5. `typography.css`: type and baseline text rhythm.
+6. `article-pages.css`: editorial article presentation.
+7. `layout.css`: article geometry and structural overrides.
+8. `codex-ui.css`: shared components and authoring utilities.
+9. `header-controls.css`: shared desktop and mobile header controls.
+10. `navigation.css`: shared navigation and overlays.
+11. `category-index.css`: generated Markdown category pages, which have no stable component entry point.
+12. `a11y.css`: focus, target sizing, forced colours, and reduced motion.
+13. `era-styles.css`: final era-specific token and component overrides.
 
 The order is deliberate: layers and tokens, theme, typography, article layout, shared components, navigation, accessibility, then era overrides. Feature routes do not belong in this list.
 
@@ -37,7 +36,7 @@ The order is deliberate: layers and tokens, theme, typography, article layout, s
 | `relationships.css` | `RelationshipGraph.astro` |
 | `exploration-pages.css` | `WorldMap.astro` and `RelationshipGraph.astro` |
 | `support.css` | Support and contact routes |
-| `graph.css` and `starlight-site-graph` package styles | Graph route, with `graph.css` last |
+| `graph.css` | `WorldGraph.astro` on the Graph route |
 | `calendar-date-badge.css` | `CalendarDateBadge.astro` |
 | `calendar-year.css` | `CalendarYear.astro` |
 | `homepage.css` | Public homepage route |
@@ -45,7 +44,7 @@ The order is deliberate: layers and tokens, theme, typography, article layout, s
 | `era-primer-pages.css` | `EraPrimer.astro` |
 | `degel-system.css` | `DegelSystemExplorer.astro` |
 | `storyteller-view.css` | Shared page-title Storyteller switcher boundary |
-| `chronos.css`, `timeline-canvas.css`, `timeline-chronicle.css`, `timeline-controls.css` | `TimelineApp.astro`, while `chronos.css` also serves the Obsidian plugin |
+| `timeline-vis.css`, `timeline-canvas.css`, `timeline-chronicle.css`, `timeline-controls.css` | `TimelineApp.astro` and the Obsidian plugin |
 | `smart-tooltips.css` | Components that install shared tooltip behaviour |
 | `image-layout.css` | Shared article-image rules imported by `ion-layers.css` |
 

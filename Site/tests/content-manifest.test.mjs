@@ -9,22 +9,18 @@ function note(title) {
   return `---\ntitle: ${title}\ndescription: Test note\n---\n\n# ${title}\n`;
 }
 
-test('content manifests cache parsed markdown until explicitly refreshed', async () => {
+test('content manifests always reflect the current markdown', async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'viscerium-content-manifest-'));
   const file = path.join(root, 'entry.md');
 
   try {
     await writeFile(file, note('First'), 'utf8');
-    const first = await scanMarkdownContent(root, { refresh: true });
+    const first = await scanMarkdownContent(root);
     assert.equal(first.records.length, 1);
     assert.equal(first.records[0].data.title, 'First');
 
     await writeFile(file, note('Second'), 'utf8');
-    const cached = await scanMarkdownContent(root);
-    assert.equal(cached, first);
-    assert.equal(cached.records[0].data.title, 'First');
-
-    const refreshed = await scanMarkdownContent(root, { refresh: true });
+    const refreshed = await scanMarkdownContent(root);
     assert.notEqual(refreshed, first);
     assert.equal(refreshed.records[0].data.title, 'Second');
   } finally {
