@@ -263,16 +263,32 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
   expect(Number(await graph.getAttribute('data-world-graph-neighbour-count'))).toBeGreaterThan(0);
 
+  const zoom = Number(await graph.getAttribute('data-world-graph-zoom'));
+  const visibleActiveRadius = 10 * zoom;
   let retainedExpandedTarget = false;
-  for (const [dx, dy] of [[14, 0], [-14, 0], [0, 14], [0, -14]]) {
-    await page.mouse.move(centre.x + dx, centre.y + dy);
-    if (
-      await graph.getAttribute('data-world-graph-context') === 'pointer'
-      && await graph.getAttribute('data-world-graph-active-id') === hovered.id
-    ) {
-      retainedExpandedTarget = true;
-      break;
+  for (const distance of [16, 15, 14, 13, 12]) {
+    if (distance <= visibleActiveRadius + 1) continue;
+    const diagonal = distance / Math.SQRT2;
+    for (const [dx, dy] of [
+      [distance, 0],
+      [-distance, 0],
+      [0, distance],
+      [0, -distance],
+      [diagonal, diagonal],
+      [-diagonal, diagonal],
+      [diagonal, -diagonal],
+      [-diagonal, -diagonal],
+    ]) {
+      await page.mouse.move(centre.x + dx, centre.y + dy);
+      if (
+        await graph.getAttribute('data-world-graph-context') === 'pointer'
+        && await graph.getAttribute('data-world-graph-active-id') === hovered.id
+      ) {
+        retainedExpandedTarget = true;
+        break;
+      }
     }
+    if (retainedExpandedTarget) break;
   }
   expect(retainedExpandedTarget).toBe(true);
 
