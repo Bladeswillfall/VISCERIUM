@@ -1,0 +1,22 @@
+comments.viscerium.co.uk {
+    # Remark42 comments are intentionally small. This rejects oversized
+    # requests before the application parses them. Administrative imports
+    # should be performed locally rather than through the public origin.
+    request_body {
+        max_size 64KB
+    }
+
+    # VISCERIUM permits avatars but not user-uploaded comment images.
+    @commentImageUpload {
+        method POST
+        path /api/v1/picture
+    }
+    respond @commentImageUpload 404
+
+    reverse_proxy 127.0.0.1:8080 {
+        # Replace, rather than trust, forwarding headers supplied by clients.
+        header_up -X-Forwarded-For
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Real-IP {remote_host}
+    }
+}
