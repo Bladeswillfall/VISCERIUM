@@ -52,9 +52,22 @@ export function normaliseInternalRoute(value) {
   return cleaned ? `/${cleaned}/` : '/';
 }
 
+function stripHtmlComments(value) {
+  let output = String(value ?? '');
+
+  while (true) {
+    const start = output.indexOf('<!--');
+    if (start === -1) return output;
+
+    const end = output.indexOf('-->', start + 4);
+    if (end === -1) return output.slice(0, start);
+
+    output = output.slice(0, start) + output.slice(end + 3);
+  }
+}
+
 export function extractInternalRoutes(content) {
-  const source = String(content ?? '')
-    .replace(/<!--[\s\S]*?-->/g, '')
+  const source = stripHtmlComments(content)
     .replace(/```[\s\S]*?```/g, '')
     .replace(/~~~[\s\S]*?~~~/g, '')
     .replace(/`[^`\n]*`/g, '');

@@ -24,6 +24,15 @@ test('internal article links are indexed while embeds, external links, comments 
   assert.deepEqual(routes, ['/degel-system/errack/']);
 });
 
+test('comment stripping removes tokens reconstructed across an earlier boundary', () => {
+  const routes = extractInternalRoutes(`
+A<!<!-- hidden -->-- [Hidden](/hidden/) -->B
+[Visible](/visible/)
+`);
+
+  assert.deepEqual(routes, ['/visible/']);
+});
+
 test('referenced-in records are automatic, source-deduplicated and exclude generated navigation pages', () => {
   const records = [
     {
