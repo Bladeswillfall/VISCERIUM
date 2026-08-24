@@ -109,12 +109,17 @@
       (function () {
         'use strict';
 
+        function removeInput(input) {
+          if (!input) return;
+          var label = input.closest && input.closest('label');
+          (label || input).remove();
+        }
+
         function removeUploadControls(root) {
-          if (!root || !root.querySelectorAll) return;
-          root.querySelectorAll("input[type='file']").forEach(function (input) {
-            var label = input.closest && input.closest('label');
-            (label || input).remove();
-          });
+          if (!root) return;
+          if (root.matches && root.matches("input[type='file']")) removeInput(root);
+          if (!root.querySelectorAll) return;
+          root.querySelectorAll("input[type='file']").forEach(removeInput);
         }
 
         function containsImageTransfer(event) {
