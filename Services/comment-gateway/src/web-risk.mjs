@@ -30,15 +30,11 @@ export class WebRiskClient {
     endpoint.searchParams.set('uri', url);
     endpoint.searchParams.set('key', this.config.apiKey);
 
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), this.config.timeoutMs);
     let response;
     try {
-      response = await this.fetchImpl(endpoint, { signal: controller.signal });
+      response = await this.fetchImpl(endpoint, { signal: AbortSignal.timeout(this.config.timeoutMs) });
     } catch {
       throw new GatewayError(503, 'web_risk_unavailable', 'Link safety checks are temporarily unavailable. Your draft has not been posted.');
-    } finally {
-      clearTimeout(timer);
     }
 
     if (!response.ok) throw new GatewayError(503, 'web_risk_unavailable', 'Link safety checks are temporarily unavailable. Your draft has not been posted.');

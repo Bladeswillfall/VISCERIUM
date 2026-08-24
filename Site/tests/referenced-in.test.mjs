@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   buildReferencedInIndex,
-  extractInternalRoutes,
 } from '../scripts/generate-referenced-in.mjs';
+import { extractInternalRoutes } from '../src/lib/codex-paths.mjs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 

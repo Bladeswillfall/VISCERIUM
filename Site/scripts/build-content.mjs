@@ -20,7 +20,7 @@ if (!validModes.has(mode)) {
   process.exitCode = 1;
 } else {
   try {
-    const vault = await loadVaultContent({ refresh: true });
+    const vault = await loadVaultContent();
     if (!validateVaultNotes(vault)) throw new Error('Vault source validation failed.');
     if (!(await validateRepositoryImages())) throw new Error('Repository image policy failed.');
 
@@ -45,7 +45,7 @@ if (!validModes.has(mode)) {
     await import('./generate-category-pages.mjs');
     await applyGiscusPolicy();
 
-    const docs = await loadGeneratedDocs({ refresh: true });
+    const docs = await loadGeneratedDocs();
     if (mode === 'build' && !validateGeneratedContent(docs)) {
       throw new Error('Generated content validation failed.');
     }

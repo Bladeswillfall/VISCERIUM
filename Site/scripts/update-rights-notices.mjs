@@ -60,7 +60,7 @@ function marker(namespace, name, edge) {
 function replaceBlock(content, namespace, name, replacement, relativePath) {
   const start = marker(namespace, name, 'START');
   const end = marker(namespace, name, 'END');
-  const pattern = new RegExp(`${escapeRegExp(start)}[\\s\\S]*?${escapeRegExp(end)}`, 'g');
+  const pattern = new RegExp(`${RegExp.escape(start)}[\\s\\S]*?${RegExp.escape(end)}`, 'g');
   const matches = content.match(pattern) ?? [];
 
   if (matches.length !== 1) {
@@ -70,10 +70,6 @@ function replaceBlock(content, namespace, name, replacement, relativePath) {
   }
 
   return content.replace(pattern, `${start}\n${replacement}\n${end}`);
-}
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 async function readJson(relativePath) {

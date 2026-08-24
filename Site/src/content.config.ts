@@ -3,7 +3,6 @@ import { z } from 'astro/zod';
 import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { changelogsLoader } from 'starlight-changelogs/loader';
-import { pageSiteGraphSchema } from 'starlight-site-graph/schema';
 import { starlightTagsExtension } from 'starlight-tags/schema';
 import { frontmatterDate } from './lib/frontmatter-date.mjs';
 import defaultTranslations from './content/i18n/en-GB.json';
@@ -126,7 +125,7 @@ export const collections = {
   docs: defineCollection({
     loader: docsLoader(),
     schema: docsSchema({
-      extend: pageSiteGraphSchema.merge(starlightTagsExtension).extend({
+      extend: starlightTagsExtension.extend({
         status: optionalString,
         slug: optionalString,
         sourcePath: optionalString,
@@ -195,6 +194,7 @@ export const collections = {
         relationships: looseRecord.optional(),
         sidebar: looseRecord.optional(),
         related: z.array(z.string()).optional(),
+        links: z.array(z.string()).optional(),
         referencedIn: z.array(referencedInSchema).optional(),
       }),
     }),

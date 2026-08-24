@@ -157,7 +157,7 @@ function uniqueEventIds(elements) {
 
 /**
  * Turns the renderer's intentionally plain, filtered list into an archival
- * chronicle. The Chronos graph and its data lifecycle remain untouched: this
+ * chronicle. The interactive graph and its data lifecycle remain untouched: this
  * module observes only the list panel and enhances the rows that renderer has
  * already selected, ordered and paginated.
  */

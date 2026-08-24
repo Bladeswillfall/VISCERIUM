@@ -10,16 +10,8 @@ function normalisePathname(value) {
 }
 
 async function walkMarkdown(dir) {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const target = path.join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...await walkMarkdown(target));
-    else if (/\.(md|mdx)$/i.test(entry.name)) files.push(target);
-  }
-
-  return files;
+  return (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: dir })))
+    .map((file) => path.join(dir, file));
 }
 
 export async function buildSitemapLastmodMap(contentDir) {

@@ -58,14 +58,7 @@ function alphaId(value) {
 }
 
 function groupedAlphabetically(items) {
-  const groups = new Map();
-  for (const item of items) {
-    const key = alphaKey(item.title);
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(item);
-  }
-
-  return [...groups.entries()]
+  return [...Map.groupBy(items, (item) => alphaKey(item.title))]
     .sort(([left], [right]) => {
       if (left === '#') return 1;
       if (right === '#') return -1;

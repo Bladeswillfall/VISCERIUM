@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 mkdirSync('timeline-browser-diagnostics', { recursive: true });
 
-const previewOrigin = 'http://127.0.0.1:4321';
+const preview = 'http://127.0.0.1:4321';
 
 async function installTheme(page, theme) {
   await page.emulateMedia({ colorScheme: theme });
@@ -12,128 +12,109 @@ async function installTheme(page, theme) {
   }, theme);
 }
 
-async function inspectGraph(page, viewport, screenshot, theme) {
+async function selectRenderedNode(page, canvas, details) {
+  const box = await canvas.boundingBox();
+  if (!box) return false;
+  let seed = 17;
+  for (let index = 0; index < 160; index += 1) {
+    seed = (seed * 48_271) % 2_147_483_647;
+    const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
+    seed = (seed * 48_271) % 2_147_483_647;
+    const y = box.y + 12 + (seed % Math.max(1, Math.floor(box.height - 24)));
+    await page.mouse.click(x, y);
+    if (await details.locator('h2').count()) return true;
+  }
+  return false;
+}
+
+async function inspectGraph(page, viewport, theme) {
   await installTheme(page, theme);
   await page.setViewportSize(viewport);
   const pageErrors = [];
-  const consoleErrors = [];
-  const graphParserErrors = [];
-  const firstPartyHttpErrors = [];
-  const firstPartyRequestFailures = [];
-
+  const firstPartyFailures = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
   page.on('response', (response) => {
-    const status = response.status();
-    if (status < 400 || status === 404 || !response.url().startsWith(`${previewOrigin}/`)) return;
-    firstPartyHttpErrors.push(`${status} ${response.url()}`);
+    if (response.status() >= 400 && response.url().startsWith(`${preview}/`)) {
+      firstPartyFailures.push(`${response.status()} ${response.url()}`);
+    }
   });
   page.on('requestfailed', (request) => {
-    if (!request.url().startsWith(`${previewOrigin}/`)) return;
-    firstPartyRequestFailures.push(`${request.failure()?.errorText ?? 'request failed'} ${request.url()}`);
+    if (request.url().startsWith(`${preview}/`)) firstPartyFailures.push(request.url());
   });
-  page.on('console', (message) => {
-    if (message.type() !== 'error') return;
-    const text = message.text();
-    if (text.includes('[STARLIGHT-SITE-GRAPH]')) {
-      graphParserErrors.push(text);
-      return;
-    }
-    // Chromium's resource-load console string omits the failing URL. First-party
-    // failures are asserted above from response/request events, where the URL and
-    // status are available; cross-origin resource failures do not belong to this
-    // graph renderer test.
-    if (!text.startsWith('Failed to load resource:')) {
-      consoleErrors.push(text);
-    }
-  });
-  await page.goto(`${previewOrigin}/graph/`, { waitUntil: 'networkidle' });
 
-  const graph = page.locator('.world-graph graph-component');
-  const canvas = graph.locator('canvas');
-  await expect.poll(() => graph.getAttribute('data-sitemap')).not.toBe('{}');
-  await page.waitForTimeout(250);
-  expect(pageErrors).toEqual([]);
-  expect(consoleErrors).toEqual([]);
-  expect(graphParserErrors).toEqual([]);
-  expect(firstPartyHttpErrors).toEqual([]);
-  expect(firstPartyRequestFailures).toEqual([]);
-  await expect(graph).toBeVisible({ timeout: 10_000 });
-  await expect(canvas).toBeVisible({ timeout: 10_000 });
-  await expect(graph.locator('button')).not.toHaveCount(0);
+  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+
+  const graph = page.locator('[data-world-graph]');
+  const canvasHost = graph.locator('[data-world-graph-canvas]');
+  const canvas = canvasHost.locator('canvas').first();
+  const details = graph.locator('[data-world-graph-details]');
+  const reset = graph.getByRole('button', { name: 'Reset view' });
+  const fallback = graph.locator('[data-world-graph-fallback]');
+
+  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+  await expect(canvasHost).toHaveAttribute('aria-busy', 'false');
+  await expect(canvas).toBeVisible();
+  await expect(reset).toBeEnabled();
+  await expect(graph.locator('[data-world-graph-status]')).toHaveText('Interactive graph ready.');
+  await expect(fallback).not.toHaveAttribute('open', '');
+  await expect(fallback.locator('a')).not.toHaveCount(0);
   await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-  await page.waitForTimeout(500);
 
-  const graphColors = await graph.evaluate((element) => {
-    const styles = getComputedStyle(element);
-    return Object.fromEntries([
-      '--slsg-graph-minimized-bg-color',
-      '--slsg-node-color',
-      '--slsg-node-color-current',
-      '--slsg-node-color-tag',
-      '--slsg-link-color',
-      '--slsg-label-color',
-      '--slsg-label-color-muted',
-    ].map((name) => [name, styles.getPropertyValue(name).trim()]));
+  const colours = await graph.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return ['--world-graph-canvas', '--world-graph-text', '--world-graph-node', '--world-graph-tag', '--world-graph-edge']
+      .map((name) => style.getPropertyValue(name).trim());
   });
+  expect(colours.every(Boolean)).toBe(true);
+  expect(colours[0]).not.toBe(colours[1]);
+  expect(colours[0]).not.toBe(colours[2]);
 
-  for (const [name, value] of Object.entries(graphColors)) {
-    expect(value, `${theme} ${name} must resolve to RGB for the canvas renderer`).toMatch(/^rgb\(/i);
-    expect(value, `${theme} ${name} must not fall back to black`).not.toMatch(/^rgb\(\s*0(?:\s*,\s*0){2}\s*\)$/i);
-  }
-  expect(graphColors['--slsg-node-color']).not.toBe(graphColors['--slsg-graph-minimized-bg-color']);
-  expect(graphColors['--slsg-label-color']).not.toBe(graphColors['--slsg-graph-minimized-bg-color']);
-  expect(graphColors['--slsg-link-color']).not.toBe(graphColors['--slsg-graph-minimized-bg-color']);
+  expect(await selectRenderedNode(page, canvasHost, details)).toBe(true);
+  await expect(details.getByRole('heading')).toBeVisible();
+  await expect(details.getByRole('link')).toHaveAttribute('href', /^\//);
+  await reset.click();
 
-  const graphPanel = page.locator('main > .content-panel:has(.world-graph)');
-  const panelGeometry = await graphPanel.evaluate((element) => {
-    const panel = element.getBoundingClientRect();
-    const container = element.querySelector('.sl-container')?.getBoundingClientRect();
-    const styles = getComputedStyle(element);
-    return {
-      width: panel.width,
-      containerWidth: container?.width ?? 0,
-      paddingInlineStart: styles.paddingInlineStart,
-      paddingInlineEnd: styles.paddingInlineEnd,
-    };
-  });
-
-  expect(panelGeometry.paddingInlineStart).toBe('0px');
-  expect(panelGeometry.paddingInlineEnd).toBe('0px');
-  expect(panelGeometry.containerWidth).toBeGreaterThanOrEqual(panelGeometry.width - 1);
-  if (viewport.width >= 1152) {
-    expect(panelGeometry.width).toBeGreaterThan(viewport.width * 0.55);
-  }
-
-  const geometry = await canvas.evaluate((element) => {
+  const geometry = await canvasHost.evaluate((element) => {
     const rect = element.getBoundingClientRect();
+    const renderedCanvas = element.querySelector('canvas');
     return {
       width: rect.width,
       height: rect.height,
-      bitmapWidth: element.width,
-      bitmapHeight: element.height,
-      dataLength: element.toDataURL('image/png').length,
-      documentOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      bitmapWidth: renderedCanvas?.width ?? 0,
+      bitmapHeight: renderedCanvas?.height ?? 0,
+      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     };
   });
-
-  await canvas.screenshot({ path: `timeline-browser-diagnostics/${screenshot}` });
   expect(geometry.width).toBeGreaterThan(240);
   expect(geometry.height).toBeGreaterThan(180);
   expect(geometry.bitmapWidth).toBeGreaterThan(240);
   expect(geometry.bitmapHeight).toBeGreaterThan(180);
-  expect(geometry.dataLength).toBeGreaterThan(1_000);
-  expect(geometry.documentOverflow).toBe(false);
+  expect(geometry.overflow).toBe(false);
   expect(pageErrors).toEqual([]);
-  expect(consoleErrors).toEqual([]);
-  expect(graphParserErrors).toEqual([]);
-  expect(firstPartyHttpErrors).toEqual([]);
-  expect(firstPartyRequestFailures).toEqual([]);
+  expect(firstPartyFailures).toEqual([]);
+
+  await page.screenshot({
+    path: `timeline-browser-diagnostics/world-graph-${theme}-${viewport.width}.png`,
+    fullPage: true,
+  });
 }
 
-test('world graph renders with readable dark-theme colours', async ({ page }) => {
-  await inspectGraph(page, { width: 1440, height: 1000 }, 'world-graph-dark.png', 'dark');
+test('World Graph works in the dark desktop layout', async ({ page }) => {
+  await inspectGraph(page, { width: 1440, height: 1000 }, 'dark');
 });
 
-test('world graph renders with readable light-theme colours', async ({ page }) => {
-  await inspectGraph(page, { width: 390, height: 844 }, 'world-graph-light.png', 'light');
+test('World Graph works in the light mobile layout', async ({ page }) => {
+  await inspectGraph(page, { width: 390, height: 844 }, 'light');
+});
+
+test('World Graph keeps the page list when interactive data fails', async ({ page }) => {
+  await page.route('**/sitegraph/sitemap.json', (route) => route.abort());
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
+  const graph = page.locator('[data-world-graph]');
+  await expect(graph.locator('[data-world-graph-status]')).toHaveText(
+    'The interactive graph is unavailable. Use the page list below.',
+  );
+  await expect(graph.locator('[data-world-graph-fallback]')).toHaveAttribute('open', '');
+  await expect(graph.locator('[data-world-graph-fallback] a').first()).toBeVisible();
+  await expect(graph.getByRole('button', { name: 'Reset view' })).toBeDisabled();
 });

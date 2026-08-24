@@ -7,9 +7,6 @@ const srcDir = new URL('../src/', import.meta.url);
 const tokensPath = new URL('../src/styles/color-tokens.css', import.meta.url);
 const eraStylesPath = new URL('../src/styles/era-styles.css', import.meta.url);
 const palettePaths = new Set([tokensPath.href, eraStylesPath.href]);
-const graphStylesPath = new URL('../src/styles/graph.css', import.meta.url);
-const graphCanvasStylesPath = new URL('../src/styles/graph.css', import.meta.url);
-const graphAdapterPaths = new Set([graphStylesPath.href, graphCanvasStylesPath.href]);
 const colorLiteral = /#[\da-f]{3,8}\b|\b(?:rgb|rgba|hsl|hsla|oklab|oklch)\s*\(|color\s*\(\s*display-p3|(?<![-\w])(?:black|white)(?![-\w])/gi;
 
 async function sourceFiles(directory) {
@@ -35,10 +32,6 @@ test('authored colours live in dedicated progressive palette files', async () =>
       : source;
 
     for (const match of css.matchAll(colorLiteral)) {
-      const graphCanvasAdapter = graphAdapterPaths.has(file.href)
-        && /^rgb\s*\(\s*var\(--vc-graph-/i.test(css.slice(match.index, match.index + 64));
-      if (graphCanvasAdapter) continue;
-
       const line = css.slice(0, match.index).split('\n').length;
       failures.push(`${path.relative(srcDir.pathname, file.pathname)}:${line} ${match[0]}`);
     }
@@ -58,23 +51,6 @@ test('authored colours live in dedicated progressive palette files', async () =>
   assert.match(eraStyles, /#[\da-f]{3,8}\b/i, 'era palette needs an sRGB fallback');
   assert.match(eraStyles, /@supports\s*\(color:\s*oklch\(/i, 'era palette needs an OKLCH tier');
   assert.match(eraStyles, /var\(--codex-chroma-scale\)/i, 'era palette needs shared P3 chroma support');
-});
-
-test('canvas graph colours use only the RGB-safe variable adapter', async () => {
-  const graphStyles = `${await readFile(graphStylesPath, 'utf8')}\n${await readFile(graphCanvasStylesPath, 'utf8')}`
-    .replace(/\/\*[\s\S]*?\*\//g, '');
-  const assignments = [...graphStyles.matchAll(/(--slsg-(?:color|text|graph|context|node|link|label)[\w-]*):\s*([^;]+);/gi)]
-    .map(([, name, value]) => ({ name, value: value.trim() }))
-    .filter(({ value }) => /(?:color|rgb|oklch|oklab|color-mix)/i.test(value));
-
-  assert.ok(assignments.length > 20, 'graph theme needs explicit canvas-safe colour assignments');
-  for (const { name, value } of assignments) {
-    assert.match(
-      value,
-      /^rgb\(var\(--vc-graph-[\w-]+-rgb\)\)$/i,
-      `${name} must resolve from a channel-only graph variable`,
-    );
-  }
 });
 
 test('the approved palette owns page and navigation surfaces', async () => {

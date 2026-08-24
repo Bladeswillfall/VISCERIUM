@@ -1,9 +1,9 @@
 import { ItemView, MarkdownRenderChild, Notice, Plugin, TFile, WorkspaceLeaf } from 'obsidian';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 import '../../Site/src/styles/timeline-canvas.css';
-import '../../Site/src/styles/chronos.css';
+import '../../Site/src/styles/timeline-vis.css';
 import { compileTimelineRecords, TimelineCompilationError } from '../../Site/src/lib/timeline/compiler.mjs';
-import { mountTimeline } from '../../Site/src/lib/timeline/chronos-native-renderer.mjs';
+import { mountTimeline } from '../../Site/src/lib/timeline/renderer.mjs';
 import { resolveTimelineOptions } from '../../Site/src/lib/timeline/options.mjs';
 import {
   buildStoryLineTimelineDataset,

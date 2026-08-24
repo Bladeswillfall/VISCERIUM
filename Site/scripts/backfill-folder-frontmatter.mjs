@@ -28,17 +28,13 @@ function splitFrontmatter(markdown) {
   };
 }
 
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 function writeFields(markdown, fields) {
   const parts = splitFrontmatter(markdown);
   if (!parts) return markdown;
 
   let frontmatter = parts.frontmatter;
   for (const [key, value] of Object.entries(fields)) {
-    const blankProperty = new RegExp(`^${escapeRegExp(key)}:\\s*(?:null|~)?\\s*$`, 'm');
+    const blankProperty = new RegExp(`^${RegExp.escape(key)}:\\s*(?:null|~)?\\s*$`, 'm');
     const line = `${key}: ${value}`;
     if (blankProperty.test(frontmatter)) {
       frontmatter = frontmatter.replace(blankProperty, line);

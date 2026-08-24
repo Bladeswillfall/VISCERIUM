@@ -17,15 +17,15 @@ async function pathExists(file) {
   }
 }
 
-test('transforms native Chronos fences and canonical shortcodes into Starlight MDX', async () => {
-  const docsDir = await mkdtemp(path.join(os.tmpdir(), 'viscerium-chronos-transform-'));
+test('transforms canonical shortcodes while leaving ordinary Markdown fences untouched', async () => {
+  const docsDir = await mkdtemp(path.join(os.tmpdir(), 'viscerium-timeline-transform-'));
   const sourceFile = path.join(docsDir, 'example.md');
   const outputFile = path.join(docsDir, 'example.mdx');
 
   try {
     await writeFile(sourceFile, `---
 title: Timeline transform fixture
-description: Exercises both timeline authoring paths.
+description: Exercises shortcode transformation.
 ---
 
 # Fixture
@@ -57,13 +57,11 @@ console.log('ordinary fences remain untouched');
     const output = await readFile(outputFile, 'utf8');
     assert.match(output, /timelinePage: true/);
     assert.match(output, /import TimelineEmbed from/);
-    assert.match(output, /import ChronosEmbed from/);
     assert.match(output, /<TimelineEmbed timelineId="citadel" laneMode="category" showFilters=\{false\}/);
-    assert.match(output, /<ChronosEmbed source=\{/);
-    assert.match(output, /> NOTODAY\\n> ORDERBY start/);
+    assert.match(output, /```chronos\n> NOTODAY\n> ORDERBY start/);
     assert.match(output, /Detail with \{braces\}/);
     assert.match(output, /```js\nconsole\.log\('ordinary fences remain untouched'\);\n```/);
-    assert.doesNotMatch(output, /```chronos/);
+    assert.doesNotMatch(output, /ChronosEmbed/);
   } finally {
     await rm(docsDir, { recursive: true, force: true });
   }

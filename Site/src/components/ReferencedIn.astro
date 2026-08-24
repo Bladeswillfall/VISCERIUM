@@ -18,13 +18,7 @@ function groupLabel(type) {
   return words.endsWith('s') ? words : `${words}s`;
 }
 
-const groupMap = new Map();
-for (const reference of references) {
-  const label = groupLabel(reference.type);
-  const entries = groupMap.get(label) ?? [];
-  entries.push(reference);
-  groupMap.set(label, entries);
-}
+const groupMap = Map.groupBy(references, (reference) => groupLabel(reference.type));
 
 const groups = [...groupMap.entries()]
   .map(([label, entries]) => ({

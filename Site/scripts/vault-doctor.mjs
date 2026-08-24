@@ -257,7 +257,7 @@ export function printVaultDoctor(result) {
 
 async function loadWholeVault() {
   const vaultRoot = path.resolve(process.cwd(), '../Vault');
-  return scanMarkdownContent(vaultRoot, { refresh: true });
+  return scanMarkdownContent(vaultRoot);
 }
 
 if (isMainModule(import.meta.url)) {

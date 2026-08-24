@@ -9,7 +9,6 @@ const docsDir = process.env.VISCERIUM_DOCS_DIR
   ? path.resolve(process.env.VISCERIUM_DOCS_DIR)
   : path.resolve(siteRoot, 'src/content/docs');
 const timelineComponentPath = path.resolve(siteRoot, 'src/components/timeline/TimelineEmbed.astro');
-const chronosComponentPath = path.resolve(siteRoot, 'src/components/timeline/ChronosEmbed.astro');
 
 function relativeImport(file, componentPath) {
   let relative = path.relative(path.dirname(file), componentPath).replace(/\\/g, '/');
@@ -44,39 +43,17 @@ const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir }))
 for (const file of files) {
   const raw = await fs.readFile(file, 'utf8');
   const hasTimelineShortcode = /^\s*\[Timeline:[^\]]+\]\s*$/im.test(raw);
-  const hasChronosFence = /^\s*(?:`{3,}|~{3,})\s*chronos\b/im.test(raw);
-  if (!hasTimelineShortcode && !hasChronosFence) continue;
+  if (!hasTimelineShortcode) continue;
 
   const parsed = matter(raw);
   const blocks = parsed.data.timelineBlocks && typeof parsed.data.timelineBlocks === 'object' ? parsed.data.timelineBlocks : {};
   const lines = parsed.content.split(/\r?\n/);
   const output = [];
   let usedTimeline = false;
-  let usedChronos = false;
 
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
     const openingFence = fenceInfo(line);
-
-    if (openingFence?.language === 'chronos') {
-      const source = [];
-      let closed = false;
-      for (index += 1; index < lines.length; index += 1) {
-        if (isFenceClose(lines[index], openingFence)) {
-          closed = true;
-          break;
-        }
-        source.push(lines[index]);
-      }
-      if (!closed) {
-        output.push(warning('An unclosed Chronos code block was left as source text.'));
-        output.push(line, ...source);
-        continue;
-      }
-      usedChronos = true;
-      output.push(`<ChronosEmbed source={${JSON.stringify(source.join('\n'))}} />`);
-      continue;
-    }
 
     if (openingFence) {
       output.push(line);
@@ -113,11 +90,10 @@ for (const file of files) {
     output.push(`<TimelineEmbed ${props} />`);
   }
 
-  if (!usedTimeline && !usedChronos) continue;
+  if (!usedTimeline) continue;
   const outFile = file.replace(/\.md$/i, '.mdx');
   const imports = [];
   if (usedTimeline) imports.push(`import TimelineEmbed from '${relativeImport(outFile, timelineComponentPath)}';`);
-  if (usedChronos) imports.push(`import ChronosEmbed from '${relativeImport(outFile, chronosComponentPath)}';`);
   if (usedTimeline) parsed.data.timelinePage = true;
   const content = `${imports.join('\n')}\n\n${output.join('\n')}`;
   await fs.writeFile(outFile, matter.stringify(content, parsed.data));

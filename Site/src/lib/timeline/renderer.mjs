@@ -1,5 +1,4 @@
 import { DataSet, Timeline } from 'vis-timeline/standalone';
-import { VisceriumChronosTimeline } from '../chronos-fork/VisceriumChronosTimeline.mjs';
 import { escapeHtml } from '../codex-paths.mjs';
 import { calendars, defaultCalendarId, formatAbsoluteDay } from '../calendar/runtime.mjs';
 import {
@@ -19,8 +18,9 @@ import {
   updateTimelineUrl,
 } from './core.mjs';
 import { createCalendarAxisFormatter } from './calendar-axis.mjs';
-import { createChronosTimelineModel } from './chronos-adapter.mjs';
 import { timelineList, timelineMessage, timelinePlural } from './i18n.mjs';
+import { createTimelineModel } from './vis-adapter.mjs';
+import { createTimelineCanvas } from './vis-renderer.mjs';
 
 const VIEWPORT_BUFFER_FACTOR = 1.25;
 const SEARCH_DEBOUNCE_MS = 140;
@@ -50,7 +50,7 @@ function renderTemplate(dataset, options, instanceId) {
   );
   const detailsTitleId = `vc-timeline-detail-title-${instanceId}`;
   return `
-    <section class="vc-timeline-app vc-chronos-powered vc-chronos-native${options.compact ? ' is-compact' : ''}" aria-label="${escapeHtml(dataset.title)}">
+    <section class="vc-timeline-app${options.compact ? ' is-compact' : ''}" aria-label="${escapeHtml(dataset.title)}">
       <div class="vc-timeline-toolbar" role="toolbar" aria-label="${message('controls')}">
         <label class="vc-timeline-field"><span>${message('calendar')}</span><select data-vc-calendar>${calendars.map((calendar) => `<option value="${calendar.id}">${escapeHtml(calendar.shortName ?? calendar.name)}</option>`).join('')}</select></label>
         <label class="vc-timeline-field vc-timeline-search"><span>${message('searchEvents')}</span><input data-vc-search type="search" autocomplete="off" placeholder="${message('searchEvents')}"></label>
@@ -67,7 +67,7 @@ function renderTemplate(dataset, options, instanceId) {
       ${options.showFilters ? `<details class="vc-timeline-filters" data-vc-filters><summary>${message('filters')}</summary><div class="vc-timeline-filter-grid"><fieldset><legend>${message('importance')}</legend>${checkboxList('importance', IMPORTANCE_LEVELS, importanceLabels)}</fieldset><fieldset><legend>${message('categories')}</legend>${categories.length ? checkboxList('categories', categories) : `<p>${message('noCategories')}</p>`}</fieldset>${eraOptions.length ? `<fieldset><legend>${message('eras')}</legend>${checkboxList('eras', eraOptions)}</fieldset>` : ''}<div class="vc-timeline-filter-actions"><button type="button" data-vc-clear>${message('clearFilters')}</button></div></div></details>` : ''}
       <div class="vc-era-strip" aria-label="${message('eraRanges')}">${dataset.eras.map((era) => `<span class="vc-era-action era-${cssToken(era.id)}"><button type="button" data-vc-era="${escapeHtml(era.id)}">${escapeHtml(era.title)}</button><a href="${escapeHtml(era.href)}" aria-label="${message('openEraArticle', { era: era.title })}">${message('article')}</a></span>`).join('')}</div>
       <div class="vc-timeline-stage">
-        <div class="vc-timeline-canvas vc-chronos-host" data-vc-canvas tabindex="0" aria-label="${message('canvasLabel')}"></div>
+        <div class="vc-timeline-canvas" data-vc-canvas tabindex="0" aria-label="${message('canvasLabel')}"></div>
       </div>
       ${options.showMinimap ? `<details class="vc-timeline-minimap-wrap" data-vc-minimap-wrap open><summary>${message('overview')}</summary><div class="vc-timeline-minimap" data-vc-minimap aria-label="${message('overviewLabel')}"></div></details>` : ''}
       <div class="vc-timeline-status" data-vc-status role="status" aria-live="polite"></div>
@@ -76,23 +76,8 @@ function renderTemplate(dataset, options, instanceId) {
         <button type="button" class="vc-timeline-detail-close" data-vc-close aria-label="${message('closeDetails')}">×</button>
         <div data-vc-detail-body></div>
       </aside>
-      ${options.showLegend ? `<div class="vc-timeline-legend" aria-label="${message('legend')}"><span class="importance-landmark">${message('landmark')}</span><span class="importance-major">${message('major')}</span><span class="importance-standard">${message('standard')}</span><span class="certainty-approximate">${message('approximate')}</span><span class="certainty-disputed">${message('disputed')}</span><span class="certainty-legendary">${message('legendary')}</span><span class="vc-chronos-credit">VISCERIUM Chronos fork</span></div>` : ''}
+      ${options.showLegend ? `<div class="vc-timeline-legend" aria-label="${message('legend')}"><span class="importance-landmark">${message('landmark')}</span><span class="importance-major">${message('major')}</span><span class="importance-standard">${message('standard')}</span><span class="certainty-approximate">${message('approximate')}</span><span class="certainty-disputed">${message('disputed')}</span><span class="certainty-legendary">${message('legendary')}</span></div>` : ''}
     </section>`;
-}
-
-function chronosSettings(options) {
-  return {
-    selectedLocale: options.locale,
-    align: options.direction === 'rtl' ? 'right' : 'left',
-    clickToUse: false,
-    roundRanges: true,
-    useUtc: true,
-    useAI: false,
-    theme: {
-      customClass: 'vc-chronos-core',
-    },
-    messages: options.messages,
-  };
 }
 
 export function mountTimeline(root, dataset, suppliedOptions = {}) {
@@ -239,47 +224,29 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
   let listDirty = true;
   let searchDebounceHandle;
 
-  const chronos = new VisceriumChronosTimeline({
-    container: canvas,
-    settings: chronosSettings(options),
-    callbacks: {
-      setTooltip: (element, fallbackText) => {
-        const itemElement = element.closest?.('[data-id]') ?? element;
-        const id = itemElement?.getAttribute?.('data-id');
-        const event = id ? eventById.get(id) : undefined;
-        element.setAttribute('title', event ? `${formatEventDate(event)} – ${event.description}` : fallbackText);
-      },
-    },
-    cssRootClass: 'vc-chronos-core',
-    axis: createCalendarAxisFormatter({
-      getCalendarId: () => state.calendar,
-      getLocale: () => options.locale,
-      fromSyntheticDate,
-    }),
-    timelineOptions: {
-      rtl: options.direction === 'rtl',
-      height: options.compact ? '22rem' : '24rem',
-      minHeight: '20rem',
-      zoomKey: 'ctrlKey',
-      zoomMin: 86_400_000,
-      zoomMax: Math.max(86_400_000, (dataset.absoluteEndDay - dataset.absoluteStartDay + 365) * 86_400_000),
-      tooltip: { followMouse: true, overflowMethod: 'cap' },
-    },
+  const axis = createCalendarAxisFormatter({
+    getCalendarId: () => state.calendar,
+    getLocale: () => options.locale,
+    fromSyntheticDate,
+    toSyntheticDate,
   });
-
-  const initialModel = createChronosTimelineModel({
+  const initialModel = createTimelineModel({
     dataset,
     events: renderedEvents,
     laneMode: state.laneMode,
     formatEventDate,
-    locale: options.locale,
     messages: options.messages,
-    visibleStartDay: initialWindow.startDay,
-    visibleEndDay: initialWindow.endDay,
   });
-  chronos.renderParsed(initialModel.parsed);
-  const timeline = chronos.timeline;
-  if (!timeline) throw new Error('The VISCERIUM Chronos fork did not create a timeline instance.');
+  const renderer = createTimelineCanvas({
+    container: canvas,
+    model: initialModel,
+    axis,
+    messages: options.messages,
+    direction: options.direction,
+    compact: options.compact,
+    maximumDays: dataset.absoluteEndDay - dataset.absoluteStartDay + 365,
+  });
+  const { timeline } = renderer;
 
   let minimap;
   let minimapItems;
@@ -344,17 +311,14 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     renderedEvents = addSelectedEventIfNeeded(renderedEvents);
     renderedEventIds = new Set(renderedEvents.map((event) => event.id));
 
-    const model = createChronosTimelineModel({
+    const model = createTimelineModel({
       dataset,
       events: renderedEvents,
       laneMode: state.laneMode,
       formatEventDate,
-      locale: options.locale,
       messages: options.messages,
-      visibleStartDay,
-      visibleEndDay,
     });
-    chronos.updateParsed(model.parsed);
+    renderer.update(model);
     status.textContent = message('status', {
       rendered: numberFormatter.format(renderedEvents.length),
       matching: numberFormatter.format(matchingEvents.length),
@@ -399,6 +363,7 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     timeline.setWindow(
       toSyntheticDate(era.absoluteStartDay - padding),
       toSyntheticDate(era.absoluteEndDay + padding),
+      { animation: false },
     );
   }
 
@@ -567,7 +532,7 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     }
     const windowRange = timeline.getWindow();
     refreshItems({ force: true });
-    chronos.redraw();
+    renderer.redraw();
     renderList(true);
     if (state.selected) renderDetails(eventById.get(state.selected));
     timeline.setWindow(windowRange.start, windowRange.end, { animation: false });
@@ -599,7 +564,7 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     event.currentTarget.setAttribute('aria-pressed', String(visible));
     event.currentTarget.textContent = visible ? message('graphView') : message('listView');
     if (visible && listDirty) renderList(true);
-    if (!visible) chronos.redraw();
+    if (!visible) renderer.redraw();
   });
   listPanel.addEventListener('click', (event) => {
     const selectButton = event.target.closest?.('[data-vc-select-event]');
@@ -646,7 +611,7 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
       window.cancelIdleCallback(minimapIdleHandle);
     }
     if (minimapTimeoutHandle !== undefined) window.clearTimeout(minimapTimeoutHandle);
-    chronos.destroy();
+    renderer.destroy();
     minimap?.destroy();
     root.innerHTML = '';
   };

@@ -1,0 +1,203 @@
+---
+import '../styles/graph.css';
+
+const { graph } = Astro.props;
+const pages = graph.nodes.filter((node) => node.kind === 'page');
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+
+<section class="world-graph" data-world-graph data-graph-url={`${base}sitegraph/sitemap.json`}>
+  <div class="world-graph__toolbar" aria-label="World Graph controls">
+    <p><strong>{pages.length}</strong> public pages connected by links and tags.</p>
+    <button type="button" data-world-graph-reset disabled>Reset view</button>
+  </div>
+  <div class="world-graph__frame">
+    <div
+      class="world-graph__canvas"
+      data-world-graph-canvas
+      role="application"
+      tabindex="0"
+      aria-label="Interactive graph of public VISCERIUM pages"
+      aria-busy="true"
+    ></div>
+    <aside class="world-graph__details" data-world-graph-details aria-live="polite">
+      <p>Select a page or tag to inspect it.</p>
+    </aside>
+  </div>
+  <p class="world-graph__status" data-world-graph-status role="status">Loading interactive graph…</p>
+  <details class="world-graph__fallback" data-world-graph-fallback open>
+    <summary>Browse all public pages</summary>
+    <ul>
+      {pages.map((page) => <li><a href={page.href}>{page.title}</a></li>)}
+    </ul>
+  </details>
+</section>
+
+<script>
+  import cytoscape from 'cytoscape';
+
+  const instances = new WeakMap<Element, () => void>();
+
+  function colour(root: Element, name: string) {
+    const probe = document.createElement('span');
+    probe.style.color = `var(${name})`;
+    root.append(probe);
+    const value = getComputedStyle(probe).color;
+    probe.remove();
+    return value;
+  }
+
+  function styles(root: Element) {
+    return [
+      {
+        selector: 'node',
+        style: {
+          width: 14,
+          height: 14,
+          'background-color': colour(root, '--world-graph-node'),
+          'border-width': 0,
+          label: '',
+        },
+      },
+      {
+        selector: 'node[kind = "tag"]',
+        style: {
+          width: 9,
+          height: 9,
+          shape: 'diamond',
+          'background-color': colour(root, '--world-graph-tag'),
+        },
+      },
+      {
+        selector: 'node:selected',
+        style: {
+          width: 20,
+          height: 20,
+          'background-color': colour(root, '--world-graph-selected'),
+          'border-color': colour(root, '--world-graph-text'),
+          'border-width': 2,
+          label: 'data(title)',
+          color: colour(root, '--world-graph-text'),
+          'font-family': 'IBM Plex Sans, system-ui, sans-serif',
+          'font-size': 10,
+          'font-weight': 700,
+          'text-background-color': colour(root, '--world-graph-canvas'),
+          'text-background-opacity': .9,
+          'text-background-padding': 3,
+          'text-margin-y': -12,
+        },
+      },
+      {
+        selector: 'edge',
+        style: {
+          width: 1,
+          'line-color': colour(root, '--world-graph-edge'),
+          opacity: .55,
+          'curve-style': 'haystack',
+        },
+      },
+      {
+        selector: 'edge[kind = "tag"]',
+        style: { opacity: .28 },
+      },
+    ];
+  }
+
+  function showDetails(root: Element, node: any) {
+    const details = root.querySelector('[data-world-graph-details]');
+    if (!(details instanceof HTMLElement)) return;
+    const data = node.data();
+    const content = document.createElement('div');
+    const title = document.createElement('h2');
+    title.textContent = data.title;
+    content.append(title);
+    if (data.tags?.length) {
+      const tags = document.createElement('p');
+      tags.textContent = data.tags.map((tag: string) => `#${tag}`).join(', ');
+      content.append(tags);
+    }
+    if (data.href) {
+      const link = document.createElement('a');
+      link.href = data.href;
+      link.textContent = data.kind === 'tag' ? 'Open tag index' : 'Open article';
+      content.append(link);
+    }
+    details.replaceChildren(content);
+  }
+
+  async function mount(root: Element) {
+    if (instances.has(root)) return;
+    const canvas = root.querySelector('[data-world-graph-canvas]');
+    const reset = root.querySelector<HTMLButtonElement>('[data-world-graph-reset]');
+    const status = root.querySelector<HTMLElement>('[data-world-graph-status]');
+    const fallback = root.querySelector<HTMLDetailsElement>('[data-world-graph-fallback]');
+    if (!(canvas instanceof HTMLElement) || !root.getAttribute('data-graph-url')) return;
+
+    try {
+      const response = await fetch(root.getAttribute('data-graph-url')!, { signal: AbortSignal.timeout(10_000) });
+      if (!response.ok) throw new Error(`World Graph data returned ${response.status}.`);
+      const graph = await response.json();
+      if (!root.isConnected) return;
+
+      const cy = cytoscape({
+        container: canvas,
+        elements: [
+          ...graph.nodes.map((node: any) => ({ data: node })),
+          ...graph.edges.map((edge: any, index: number) => ({ data: { id: `edge:${index}`, ...edge } })),
+        ],
+        style: styles(root),
+        minZoom: .12,
+        maxZoom: 3.5,
+        wheelSensitivity: .22,
+        boxSelectionEnabled: false,
+        layout: {
+          name: 'cose',
+          animate: false,
+          padding: 48,
+          nodeRepulsion: 9_000,
+          idealEdgeLength: 90,
+          gravity: .18,
+        },
+      });
+      cy.on('tap', 'node', (event) => showDetails(root, event.target));
+      const handleReset = () => {
+        cy.elements().unselect();
+        cy.fit(undefined, 48);
+      };
+      reset?.addEventListener('click', handleReset);
+      if (reset) reset.disabled = false;
+      canvas.setAttribute('aria-busy', 'false');
+      root.setAttribute('data-world-graph-ready', 'true');
+      if (status) status.textContent = 'Interactive graph ready.';
+      if (fallback) fallback.open = false;
+
+      const resizeObserver = new ResizeObserver(() => cy.resize());
+      resizeObserver.observe(canvas);
+      const themeObserver = new MutationObserver(() => cy.style(styles(root)));
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      instances.set(root, () => {
+        resizeObserver.disconnect();
+        themeObserver.disconnect();
+        reset?.removeEventListener('click', handleReset);
+        cy.destroy();
+      });
+    } catch (error) {
+      console.error(error);
+      canvas.setAttribute('aria-busy', 'false');
+      if (status) status.textContent = 'The interactive graph is unavailable. Use the page list below.';
+    }
+  }
+
+  function mountAll() {
+    document.querySelectorAll('[data-world-graph]').forEach((root) => void mount(root));
+  }
+
+  mountAll();
+  document.addEventListener('astro:page-load', mountAll);
+  document.addEventListener('astro:before-swap', () => {
+    document.querySelectorAll('[data-world-graph]').forEach((root) => {
+      instances.get(root)?.();
+      instances.delete(root);
+    });
+  });
+</script>

@@ -20,7 +20,7 @@ test('timeline keeps its HTML fallback visible until enhanced mounting succeeds'
   assert.match(source, /t\('viscerium\.timeline\.fallbackTitle'\)/);
   assert.match(source, /t\('viscerium\.timeline\.fallbackDescription'\)/);
 
-  const importIndex = source.indexOf("await import('../../lib/timeline/chronos-native-renderer.mjs')");
+  const importIndex = source.indexOf("await import('../../lib/timeline/renderer.mjs')");
   const mountIndex = source.indexOf('state.cleanups.push(mountTimeline(');
   const mountedIndex = source.indexOf("mount.setAttribute('data-vc-island-mounted', 'true')");
   const hideFallbackIndex = source.indexOf('fallback.hidden = true');

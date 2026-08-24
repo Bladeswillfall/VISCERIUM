@@ -1,6 +1,6 @@
 ---
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
-import '../../styles/chronos.css';
+import '../../styles/timeline-vis.css';
 import '../../styles/timeline-canvas.css';
 import '../../styles/timeline-chronicle.css';
 import '../../styles/timeline-controls.css';
@@ -133,7 +133,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
 
       mount.setAttribute('aria-busy', 'true');
 
-      const { mountTimeline } = await import('../../lib/timeline/chronos-native-renderer.mjs');
+      const { mountTimeline } = await import('../../lib/timeline/renderer.mjs');
       if (state.cancelled || !shell.isConnected || timelineInstances.get(shell) !== state) return;
 
       state.cleanups.push(mountTimeline(mount, dataset, options));
@@ -153,7 +153,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
       mount?.setAttribute('aria-busy', 'false');
       if (skeleton instanceof HTMLElement) skeleton.hidden = true;
       if (fallback instanceof HTMLElement) fallback.hidden = false;
-      console.error('VISCERIUM Chronos timeline failed to mount.', error);
+      console.error('VISCERIUM timeline failed to mount.', error);
     }
   }
 

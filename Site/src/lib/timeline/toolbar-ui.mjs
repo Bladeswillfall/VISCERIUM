@@ -63,7 +63,7 @@ function createActionGroup(label, className, buttons) {
 }
 
 /**
- * Improves the existing timeline toolbar without changing Chronos, timeline
+ * Improves the existing timeline toolbar without changing renderer or timeline
  * state or any control event handlers. Existing controls are decorated and
  * regrouped in place so the renderer remains the single behaviour owner.
  */

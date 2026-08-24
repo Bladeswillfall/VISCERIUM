@@ -33,12 +33,11 @@ Do not duplicate chronology in `timeline.year`, `timeline.date` or `timeline.id`
 
 `precision` (`day`, `month`, `year`) affects only public labels. `certainty` (`exact`, `approximate`, `disputed`, `legendary`) affects only visual treatment. Neither changes the absolute position.
 
-Native fenced `chronos` blocks are separate, note-local presentation timelines. Their Chronos date syntax is self-contained and is not converted by this calendar engine.
+Fenced `chronos` blocks are not read by this calendar engine or rendered as timelines on the public site.
 
 ## Runtime files
 
 - `src/data/calendars/okse.mjs` — canonical Okse definition available to Node, Astro and the Obsidian bundle.
-- `src/data/calendars/okse.ts` — typed re-export.
 - `src/lib/calendar/runtime.mjs` — registry, conversion, validation and formatting.
 - `src/lib/calendar/types.ts` — TypeScript contracts.
 - `src/lib/calendar/convert.ts` and `registry.ts` — typed wrappers for existing Astro components.
@@ -113,9 +112,9 @@ Quick form:
 
 ## Timeline labels
 
-For canonical generated timelines, the adapter gives Chronos synthetic UTC dates only as coordinates. One absolute world-day maps to one synthetic UTC day from a fixed epoch. Gregorian axis labels are hidden. The visible axis, event cards, hover text, details, era boundaries and list view are all formatted at render time through `formatAbsoluteDay()`.
+For canonical generated timelines, the adapter gives `vis-timeline` synthetic UTC dates only as coordinates. One absolute world-day maps to one synthetic UTC day relative to the dataset start. Gregorian axis labels are hidden. The visible axis, event cards, hover text, details, era boundaries and list view are all formatted at render time through `formatAbsoluteDay()`.
 
-Changing the selected calendar therefore reformats labels without moving Chronos items.
+Changing the selected calendar reformats labels without moving items.
 
 ## Adding a future calendar
 
@@ -125,4 +124,4 @@ Changing the selected calendar therefore reformats labels without moving Chronos
 4. Add tests for source-to-absolute conversion, absolute-to-source conversion, leap/intercalary rules and negative days where supported.
 5. Use the new ID as an event source calendar or display calendar.
 
-No timeline compiler or Chronos adapter changes should be necessary. See `TIMELINES.md` for authoring, validation and embedding instructions.
+No timeline compiler or renderer changes should be necessary. See `TIMELINES.md` for authoring, validation and embedding instructions.

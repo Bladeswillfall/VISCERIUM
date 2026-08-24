@@ -122,7 +122,7 @@ async function openGlobalTimeline(page) {
 async function installContinuityProbe(page) {
   await page.locator('[data-vc-canvas]').evaluate((canvas) => {
     const timeline = canvas.querySelector(':scope > .vis-timeline');
-    if (!timeline) throw new Error('Chronos timeline is missing.');
+    if (!timeline) throw new Error('Timeline is missing.');
     timeline.dataset.vcContinuityIdentity = 'original';
 
     const state = {
@@ -193,7 +193,7 @@ async function readContinuityProbe(page) {
 }
 
 for (const era of eras) {
-  test(`${era} hydrates and keeps the native Chronos canvas alive`, async ({ page }) => {
+  test(`${era} hydrates and keeps the native timeline canvas alive`, async ({ page }) => {
     const messages = collectErrors(page, era);
     await openEra(page, era);
     await installContinuityProbe(page);

@@ -7,20 +7,16 @@ export async function verifyTurnstile({ token, remoteIp, config, fetchImpl = fet
   const form = new URLSearchParams({ secret: config.secret, response: token });
   if (remoteIp) form.set('remoteip', remoteIp);
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), config.timeoutMs);
   let response;
   try {
     response = await fetchImpl('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: form,
-      signal: controller.signal,
+      signal: AbortSignal.timeout(config.timeoutMs),
     });
   } catch {
     throw new GatewayError(503, 'turnstile_unavailable', 'Comment safety checks are temporarily unavailable. Your draft has not been posted.');
-  } finally {
-    clearTimeout(timer);
   }
 
   if (!response.ok) throw new GatewayError(503, 'turnstile_unavailable', 'Comment safety checks are temporarily unavailable. Your draft has not been posted.');

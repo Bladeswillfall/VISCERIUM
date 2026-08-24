@@ -16,7 +16,7 @@
 
 /*
  * Owns the enhanced timeline toolbar hierarchy, filters, fields, actions and
- * control affordances. Chronos and viewport presentation use their dedicated styles.
+ * control affordances. Canvas and viewport presentation use their dedicated styles.
  */
 
 .vc-timeline-toolbar.vc-timeline-toolbar-enhanced {
@@ -463,7 +463,7 @@
 
 /*
  * Shared affordance for native timeline action buttons. Date fields, event cards
- * and Chronos geometry use their dedicated style owners.
+ * and timeline geometry use their dedicated style owners.
  */
 
 /* Keep the shared affordance scoped to the two timeline action surfaces. */

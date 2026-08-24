@@ -78,7 +78,7 @@ async function finishFrameProbe(page) {
   });
 }
 
-test('group changes and era jumps never collapse or empty the Chronos viewport', async ({ page }) => {
+test('group changes and era jumps never collapse or empty the timeline viewport', async ({ page }) => {
   await openGlobalTimeline(page);
   await installFrameProbe(page);
 

@@ -2,7 +2,12 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import matter from 'gray-matter';
-import { cleanSlug, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
+import {
+  cleanSlug,
+  extractInternalRoutes,
+  slugToRoute,
+  toPosixPath,
+} from '../src/lib/codex-paths.mjs';
 
 const defaultDocsDir = path.resolve(process.cwd(), 'src/content/docs');
 const markdownExtensions = /\.(md|mdx)$/i;
@@ -11,67 +16,6 @@ function slugFromGeneratedFile(file, docsDir, data = {}) {
   if (typeof data.slug === 'string' && data.slug.trim()) return cleanSlug(data.slug);
   const relative = toPosixPath(path.relative(docsDir, file)).replace(markdownExtensions, '');
   return relative.replace(/\/index$/i, '') || 'index';
-}
-
-function stripHtmlComments(content) {
-  const source = String(content ?? '');
-  let result = '';
-  let cursor = 0;
-
-  while (cursor < source.length) {
-    const start = source.indexOf('<!--', cursor);
-    if (start === -1) {
-      result += source.slice(cursor);
-      break;
-    }
-
-    result += source.slice(cursor, start);
-    const end = source.indexOf('-->', start + 4);
-    if (end === -1) break;
-    cursor = end + 3;
-  }
-
-  return result;
-}
-
-function stripNonProse(content) {
-  return stripHtmlComments(content)
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/~~~[\s\S]*?~~~/g, '')
-    .replace(/`[^`\n]*`/g, '');
-}
-
-export function normaliseInternalRoute(value) {
-  let raw = String(value ?? '').trim();
-  if (!raw || raw.startsWith('#') || /^[a-z][a-z0-9+.-]*:/i.test(raw)) return null;
-  if (raw.startsWith('<') && raw.endsWith('>')) raw = raw.slice(1, -1).trim();
-  if (!raw.startsWith('/')) return null;
-  const pathname = raw.split(/[?#]/, 1)[0];
-  const cleaned = cleanSlug(pathname);
-  return cleaned ? `/${cleaned}/` : '/';
-}
-
-export function extractInternalRoutes(content) {
-  const source = stripNonProse(content);
-  const routes = new Set();
-
-  // Generated Obsidian wikilinks become ordinary Markdown links before this pass.
-  // Ignore image embeds (`![alt](...)`) so artwork is not treated as a prose reference.
-  const markdownLink = /(!?)\[[^\]]*\]\((<[^>]+>|[^)\s]+)(?:\s+["'][^)]*["'])?\)/g;
-  for (const match of source.matchAll(markdownLink)) {
-    if (match[1] === '!') continue;
-    const route = normaliseInternalRoute(match[2]);
-    if (route) routes.add(route);
-  }
-
-  // MDX/HTML links are uncommon in authored lore but should participate when used.
-  const htmlLink = /<a\b[^>]*\bhref=["'](\/[^"']+)["'][^>]*>/gi;
-  for (const match of source.matchAll(htmlLink)) {
-    const route = normaliseInternalRoute(match[1]);
-    if (route) routes.add(route);
-  }
-
-  return [...routes];
 }
 
 function referenceRecord(record) {

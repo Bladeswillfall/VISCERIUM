@@ -19,14 +19,9 @@ const forbiddenText = [
 ];
 
 async function walk(directory) {
-  const entries = await fs.readdir(directory, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const absolute = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...(await walk(absolute)));
-    else if (entry.isFile()) files.push(absolute);
-  }
-  return files;
+  return (await Array.fromAsync(fs.glob('**/*', { cwd: directory, withFileTypes: true })))
+    .filter((entry) => entry.isFile())
+    .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
 let files;

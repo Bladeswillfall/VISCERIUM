@@ -43,7 +43,7 @@ function visibleItemMetrics(canvas) {
   };
 }
 
-test('unified chronology keeps exact fictional-calendar ticks inside one bottom Chronos axis', async ({ page }) => {
+test('unified chronology keeps exact fictional-calendar ticks inside one bottom timeline axis', async ({ page }) => {
   await openGlobalTimeline(page);
 
   const canvas = page.locator('[data-vc-canvas]');
@@ -196,7 +196,7 @@ test('calendar lines remain locked to event geometry throughout a horizontal dra
   expect(spread).toBeLessThanOrEqual(2);
 });
 
-test('the forked grouped renderer does not perform a delayed animated zoom jiggle', async ({ page }) => {
+test('the grouped renderer does not perform a delayed animated zoom jiggle', async ({ page }) => {
   await navigateToGlobalTimeline(page);
 
   const samples = await page.locator('[data-vc-canvas]').evaluate((canvas) => new Promise((resolve) => {

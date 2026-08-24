@@ -28,6 +28,9 @@
   --start-wide: 118rem;
   --start-reading: 66rem;
   --start-gutter: clamp(1.25rem, 4vw, 5.5rem);
+  --start-rail-x: clamp(.7rem, 1.85vw, 2.25rem);
+  --start-rail-color: color-mix(in oklch, var(--start-accent) 44%, var(--start-line));
+  --start-rail-bulge: clamp(2rem, 3.2vw, 3.8rem);
   position: relative;
   min-width: 0;
   overflow: clip;
@@ -286,10 +289,14 @@
 .start-era-band:focus-visible .start-era-band__action { color: var(--home-text-fixed); }
 
 .start-breadcrumb {
+  --start-node-accent: var(--start-accent);
   border-block: 1px solid var(--start-line);
   background: color-mix(in oklch, var(--start-surface) 60%, var(--start-bg));
 }
-.start-breadcrumb--quiet { background: transparent; }
+.start-breadcrumb--quiet {
+  --start-node-accent: var(--vc-event-cultural);
+  background: transparent;
+}
 .start-breadcrumb__inner {
   display: grid;
   grid-template-columns: minmax(16rem, .45fr) minmax(0, 1fr);
@@ -899,10 +906,7 @@
 
 /* This page is an editorial gateway, not a discussion/article endpoint. */
 body:has(.start-here-primer) .codex-contributors,
-body:has(.start-here-primer) .codex-webmentions,
-body:has(.start-here-primer) giscus-comments,
-body:has(.start-here-primer) .giscus,
-body:has(.start-here-primer) iframe.giscus-frame {
+body:has(.start-here-primer) .codex-webmentions {
   display: none !important;
 }
 
@@ -1100,11 +1104,6 @@ body:has(.start-here-primer) iframe.giscus-frame {
 
 /* A continuous reading rail runs down the editorial body. Each breadcrumb question
    gets a node on the rail, echoing a timeline without pretending these are events. */
-.start-here-primer {
-  --start-rail-x: clamp(.7rem, 1.85vw, 2.25rem);
-  --start-rail-color: color-mix(in oklch, var(--start-accent) 44%, var(--start-line));
-}
-
 .start-here-primer > section:not(.start-hero) {
   position: relative;
 }
@@ -1124,14 +1123,6 @@ body:has(.start-here-primer) iframe.giscus-frame {
     color-mix(in oklch, var(--start-rail-color) 62%, transparent)
   );
   pointer-events: none;
-}
-
-.start-breadcrumb {
-  --start-node-accent: var(--start-accent);
-}
-
-.start-breadcrumb--quiet {
-  --start-node-accent: var(--vc-event-cultural);
 }
 
 .start-breadcrumb--last {
@@ -1381,10 +1372,6 @@ body:has(.start-here-primer) iframe.giscus-frame {
 
 /* Start Here interaction pass.
    Loaded after visual polish so motion can enhance the page without changing its palette. */
-
-.start-here-primer {
-  --start-rail-bulge: clamp(2rem, 3.2vw, 3.8rem);
-}
 
 /* The straight reading rail now bends toward each breadcrumb question, then returns
    to its original track. This follows the useful part of the referenced draw-on-scroll
@@ -1729,11 +1716,6 @@ body:has(.start-here-primer) iframe.giscus-frame {
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy {
   --era-map-source: var(--era-e4-base);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark path,
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel .start-map-mark path {
-  fill: var(--era-map);
 }
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy strong {

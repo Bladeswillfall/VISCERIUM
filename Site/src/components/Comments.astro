@@ -109,12 +109,24 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
 
   class VisceriumComments extends HTMLElement {
     private instance?: Remark42Instance;
+    private visibilityObserver?: IntersectionObserver;
     private themeObserver?: MutationObserver;
     private generation = 0;
 
     connectedCallback() {
       const generation = ++this.generation;
-      void this.mount(generation);
+      if (!('IntersectionObserver' in window)) {
+        void this.mount(generation);
+        return;
+      }
+
+      this.visibilityObserver = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        this.visibilityObserver?.disconnect();
+        this.visibilityObserver = undefined;
+        void this.mount(generation);
+      }, { rootMargin: '600px 0px' });
+      this.visibilityObserver.observe(this);
     }
 
     disconnectedCallback() {
@@ -129,6 +141,8 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
     }
 
     private destroy() {
+      this.visibilityObserver?.disconnect();
+      this.visibilityObserver = undefined;
       this.instance?.destroy?.();
       this.instance = undefined;
       this.themeObserver?.disconnect();

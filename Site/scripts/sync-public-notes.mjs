@@ -298,10 +298,6 @@ async function rewriteMarkdownImages(content, currentFile) {
   return converted;
 }
 
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 function hasCalendarShortcodes(content) {
   return /^\s*\[Calendar:[^\]]+\]\s*$/im.test(content);
 }
@@ -434,7 +430,7 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
 
   converted = await rewriteMarkdownImages(converted, currentFile);
 
-  converted = converted.replace(new RegExp(`^#\\s+${escapeRegExp(parsed.data.title)}\\s*$`, 'im'), '').trimStart();
+  converted = converted.replace(new RegExp(`^#\\s+${RegExp.escape(String(parsed.data.title))}\\s*$`, 'im'), '').trimStart();
   converted = converted.replace(/^#\s+\{\{title\}\}\s*$/im, '').trimStart();
 
   converted = converted.replace(/\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|([^\]]+))?\]\]/g, (match, target, alias) => {

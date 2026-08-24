@@ -1,7 +1,7 @@
 /* ==========================================================================
    Timeline application canvas
 
-   Consolidated from timelines.css, timeline-loading.css, timeline-performance.css, timeline-pages.css, timeline-stacking.css, timeline-viewport.css, chronos-calendar-axis.css. Section order is intentional:
+   Consolidated from timelines.css, timeline-loading.css, timeline-performance.css, timeline-pages.css, timeline-stacking.css, timeline-viewport.css, and calendar-axis.css. Section order is intentional:
    later sections may refine or override earlier ownership layers. Keep the
    provenance comments when moving rules so cascade-sensitive behaviour remains
    understandable in isolation.
@@ -956,7 +956,7 @@
    Integrates full-width routes, year grids and event categories.
    -------------------------------------------------------------------------- */
 
-/* Shared Chronos presentation plus route-level full-width timeline-page geometry. */
+/* Shared vis-timeline presentation plus route-level full-width timeline-page geometry. */
 
 /* Dedicated /timelines/* routes use the full content width, but retain the left navigation overlay. */
 .main-frame:has(> .codex-timeline-page) {
@@ -984,7 +984,7 @@
   padding-inline: 0;
 }
 
-/* Every TimelineApp instance receives the same palette and Chronos-led presentation. */
+/* Every TimelineApp instance receives the same palette and presentation. */
 .vc-timeline-shell,
 .vc-timeline-app {
   --vc-year-line: color-mix(in oklch, var(--sl-color-gray-4) 22%, transparent);
@@ -1070,14 +1070,13 @@
   stroke-width: 1.25;
 }
 
-/* Category palette. Inline colours supplied by Chronos are intentionally replaced,
-   while its native event, range, point and period geometry remains intact. */
+/* Category palette for native vis-timeline event, range and point geometry. */
 .vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item {
   --vc-event-fill: var(--vc-event-unknown);
   --vc-event-outline: color-mix(in oklch, var(--vc-event-fill) 62%, var(--vc-event-ink));
-  border-radius: var(--chronos-radius-small, 3px);
-  border-color: var(--chronos-accent);
-  color: var(--chronos-text-on-accent);
+  border-radius: 3px;
+  border-color: var(--vc-timeline-accent);
+  color: var(--vc-event-ink);
   box-shadow: none !important;
   font-family: inherit;
 }
@@ -1109,7 +1108,7 @@
   color: var(--vc-event-ink) !important;
 }
 
-/* Milestones remain native Chronos points rather than being converted into boxes. */
+/* Milestones remain native points rather than being converted into boxes. */
 .vc-timeline-app .vc-timeline-canvas .vis-item.vc-timeline-item.vis-point {
   border-color: transparent !important;
   background: transparent !important;
@@ -1163,7 +1162,7 @@
 /*
  * Native calendar boundaries live in vis-timeline's vertical background panel.
  * The centre viewport stays transparent so those lines remain visible, while
- * background era bands and foreground event items preserve Chronos's stacking.
+ * background era bands and foreground event items preserve the intended stacking.
  */
 .vc-timeline-app .vc-timeline-canvas .vis-itemset > .vis-background {
   z-index: 0 !important;
@@ -1190,7 +1189,7 @@
    -------------------------------------------------------------------------- */
 
 /*
- * The forked Chronos renderer owns one complete, stable viewport. Group and
+ * The renderer owns one complete, stable viewport. Group and
  * filter changes may alter the internal row stack, but must not move the rest
  * of the page. Dense modes use vis-timeline's native vertical scrolling.
  */
@@ -1346,7 +1345,7 @@ body > .vc-timeline-hovercard[hidden] {
 
 /* --------------------------------------------------------------------------
    Calendar axis
-   Origin: chronos-calendar-axis.css
+   Origin: calendar-axis.css
 
    Styles native CustomTime calendar boundaries and labels.
    -------------------------------------------------------------------------- */
@@ -1429,7 +1428,7 @@ body > .vc-timeline-hovercard[hidden] {
   white-space: nowrap;
 }
 
-/* Chronos-authored markers remain distinct and retain their own styling. */
+/* Renderer markers remain distinct from the fictional-calendar grid. */
 .vc-timeline-app .vc-timeline-canvas .vis-custom-time:not([data-vc-calendar-kind]) {
   z-index: 2;
 }
