@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { normalisePageSlug } from '../lib/page-kind.mjs';
 import { estimateReadingTime, isReadingTimeArticle } from '../lib/reading-time.mjs';
+import ContentNotes from './ContentNotes.astro';
 
 const { starlightRoute } = Astro.locals;
 const { t } = Astro.locals;
@@ -25,6 +26,7 @@ const readingTime = isReadingTimeArticle(entry, fallbackId) && sourceEntry?.body
     {t('viscerium.article.readingTime', { count: readingTime.minutes })}
   </p>
 )}
+<ContentNotes />
 
 <style>
   .codex-reading-time {

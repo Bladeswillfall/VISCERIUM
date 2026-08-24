@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import { normalisePageSlug } from '../lib/page-kind.mjs';
+
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+const fallbackId = starlightRoute.entry.id;
+const targetSlug = normalisePageSlug(entry.slug ?? fallbackId);
+const docs = await getCollection('docs');
+const sourceEntry = docs.find((doc) => doc.id === fallbackId)
+  ?? docs.find((doc) => normalisePageSlug(doc.data.slug ?? doc.id) === targetSlug);
+
+const authoredWarnings = Array.isArray(entry.contentWarnings)
+  ? entry.contentWarnings.filter((warning) => typeof warning === 'string' && warning.trim())
+  : [];
+
+function assetFilename(value) {
+  const path = String(value ?? '').split(/[?#]/, 1)[0];
+  const filename = path.split('/').pop() ?? '';
+  try {
+    return decodeURIComponent(filename).trim().toLowerCase();
+  } catch {
+    return filename.trim().toLowerCase();
+  }
+}
+
+const referenceCorpus = [
+  typeof entry.image === 'string' ? entry.image : '',
+  typeof entry.headerImage === 'string' ? entry.headerImage : '',
+  typeof entry.asset === 'string' ? entry.asset : '',
+  sourceEntry?.body ?? '',
+]
+  .join('\n')
+  .toLowerCase();
+
+const imageWarnings = docs.flatMap((doc) => {
+  if (doc.data.type !== 'image' || typeof doc.data.asset !== 'string' || !doc.data.asset.trim()) return [];
+  const warnings = Array.isArray(doc.data.contentWarnings)
+    ? doc.data.contentWarnings.filter((warning) => typeof warning === 'string' && warning.trim())
+    : [];
+  if (warnings.length === 0) return [];
+
+  const filename = assetFilename(doc.data.asset);
+  return filename && referenceCorpus.includes(filename) ? warnings : [];
+});
+
+const warnings = [...new Set([...authoredWarnings, ...imageWarnings])];
+const formatWarning = (warning) => String(warning).trim().replace(/-/g, ' ');
+---
+
+<p
+  class="codex-content-notes"
+  data-content-notes
+  data-authored-warnings={warnings.join(',')}
+  hidden={warnings.length === 0}
+>
+  <strong>Content notes</strong>
+  <span aria-hidden="true">—</span>
+  <span data-content-notes-list>{warnings.map(formatWarning).join(' · ')}</span>
+</p>
+
+<style>
+  .codex-content-notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .2rem .35rem;
+    align-items: baseline;
+    margin: -.32rem 0 .72rem;
+    color: var(--sl-color-gray-3);
+    font-family: var(--vc-font-ui);
+    font-size: .72rem;
+    line-height: 1.35;
+  }
+
+  .codex-content-notes[hidden] {
+    display: none;
+  }
+
+  .codex-content-notes strong {
+    color: var(--sl-color-gray-2);
+    font-weight: 650;
+  }
+
+  [data-content-notes-list] {
+    text-transform: lowercase;
+  }
+</style>

@@ -1,9 +1,9 @@
 ---
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
-import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import CodexSearch from './CodexSearch.astro';
 import EraContextControls from './EraContextControls.astro';
+import ReaderSettings from './ReaderSettings.astro';
 
 const { t } = Astro.locals;
 ---
@@ -36,9 +36,7 @@ const { t } = Astro.locals;
   -->
   <div class="right-group codex-header-controls print:hidden" data-codex-header-controls>
     <EraContextControls />
-    <div class="codex-theme-control" title={t('themeSelect.accessibleLabel')}>
-      <ThemeSelect />
-    </div>
+    <ReaderSettings />
     <LanguageSelect />
   </div>
 </div>

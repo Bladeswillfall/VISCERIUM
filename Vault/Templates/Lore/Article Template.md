@@ -13,6 +13,7 @@ imageTitle:
 artist:
 headerImage:
 alt:
+contentWarnings: []
 tags: []
 related: []
 ---
@@ -56,6 +57,7 @@ related: []
 > - Write a reader-safe `description`.
 > - Establish the relevant era or context.
 > - Set `published` only when the article first becomes public.
+> - Add `contentWarnings` only when a specific topic is worth flagging beyond VISCERIUM's normal mature baseline.
 > - Leave optional metadata absent until it improves navigation, presentation, or continuity.
 >
 > **Boundary**
