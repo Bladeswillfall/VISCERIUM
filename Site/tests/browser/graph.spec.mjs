@@ -41,7 +41,7 @@ async function hoverConnectedNode(page, graph, canvas) {
     const source = await graph.getAttribute('data-world-graph-context');
     const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
     const id = await graph.getAttribute('data-world-graph-active-id');
-    if (source === 'pointer' && neighbours > 0 && id) return { x, y, id };
+    if (source === 'pointer' && neighbours === 1 && id) return { x, y, id };
   }
   return null;
 }
@@ -258,12 +258,14 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
+  const centre = await approximateNodeCentre(page, graph, hovered);
+  await page.mouse.move(centre.x, centre.y);
   await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
   expect(Number(await graph.getAttribute('data-world-graph-neighbour-count'))).toBeGreaterThan(0);
 
   let retainedExpandedTarget = false;
   for (const [dx, dy] of [[14, 0], [-14, 0], [0, 14], [0, -14]]) {
-    await page.mouse.move(hovered.x + dx, hovered.y + dy);
+    await page.mouse.move(centre.x + dx, centre.y + dy);
     if (
       await graph.getAttribute('data-world-graph-context') === 'pointer'
       && await graph.getAttribute('data-world-graph-active-id') === hovered.id
@@ -358,6 +360,9 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
 
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
+  const centre = await approximateNodeCentre(page, graph, hovered);
+  await page.mouse.move(centre.x, centre.y);
+  await expect(graph).toHaveAttribute('data-world-graph-active-id', hovered.id);
   const initialZoom = Number(await graph.getAttribute('data-world-graph-zoom'));
   expect(initialZoom).toBeGreaterThan(0);
 
