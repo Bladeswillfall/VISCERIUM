@@ -30,3 +30,12 @@ test('Remark42 iframe removes image upload affordances and transfer handlers', a
   assert.match(iframe, /href="remark\.css"/);
   assert.match(iframe, /remark' \+ \(m \? '\.mjs' : '\.js'\)/);
 });
+
+test('Remark42 iframe accepts navigation messages only from its parent and only for comment fragments', async () => {
+  const iframe = await fs.readFile(iframeUrl, 'utf8');
+
+  assert.match(iframe, /event\.source\s*!==\s*window\.parent/);
+  assert.match(iframe, /\^#remark42__comment-\(\[A-Za-z0-9_-\]\{1,128\}\)\$/);
+  assert.match(iframe, /encodeURIComponent\(hashMatch\[1\]\)/);
+  assert.doesNotMatch(iframe, /location\.replace\(data\.hash\)/);
+});
