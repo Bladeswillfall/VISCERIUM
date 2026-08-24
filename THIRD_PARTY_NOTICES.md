@@ -41,7 +41,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
 | Codex (`Site/`) | `rehype-katex` | runtime | `^7.0.1` |
 | Codex (`Site/`) | `remark-math` | runtime | `^6.0.0` |
-| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.5.0` |
+| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.6.0` |
 | Codex (`Site/`) | `starlight-giscus` | runtime | `^1.1.0` |
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^1.0.1` |
 | Codex (`Site/`) | `starlight-site-graph` | runtime | `^0.5.0` |
