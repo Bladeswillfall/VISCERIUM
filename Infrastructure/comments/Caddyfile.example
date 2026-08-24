@@ -1,22 +1,59 @@
 comments.viscerium.co.uk {
-    # Remark42 comments are intentionally small. This rejects oversized
-    # requests before the application parses them. Administrative imports
-    # should be performed locally rather than through the public origin.
     request_body {
         max_size 64KB
     }
 
-    # VISCERIUM permits avatars but not user-uploaded comment images.
     @commentImageUpload {
         method POST
         path /api/v1/picture
     }
-    respond @commentImageUpload 404
 
-    reverse_proxy 127.0.0.1:8080 {
-        # Replace, rather than trust, forwarding headers supplied by clients.
-        header_up -X-Forwarded-For
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Real-IP {remote_host}
+    @commentCreate {
+        method POST
+        path /api/v1/comment
+    }
+
+    @commentEdit {
+        method PUT
+        path_regexp commentEdit ^/api/v1/comment/[^/]+$
+    }
+
+    route {
+        # VISCERIUM permits avatars supplied by identities, but not uploads
+        # attached to comments.
+        respond @commentImageUpload 404
+
+        # The local header is authoritative only because internet clients can
+        # never reach the gateway directly and Caddy overwrites it here.
+        handle @commentCreate {
+            reverse_proxy 127.0.0.1:8081 {
+                header_up -X-Viscerium-Client-IP
+                header_up X-Viscerium-Client-IP {remote_host}
+                header_up -X-Forwarded-For
+                header_up X-Forwarded-For {remote_host}
+                header_up X-Real-IP {remote_host}
+            }
+        }
+
+        handle @commentEdit {
+            reverse_proxy 127.0.0.1:8081 {
+                header_up -X-Viscerium-Client-IP
+                header_up X-Viscerium-Client-IP {remote_host}
+                header_up -X-Forwarded-For
+                header_up X-Forwarded-For {remote_host}
+                header_up X-Real-IP {remote_host}
+            }
+        }
+
+        # Reads, authentication, config and the stock Remark42 web app do not
+        # depend on the write gateway. If the gateway fails, existing comments
+        # remain readable while new writes fail closed.
+        handle {
+            reverse_proxy 127.0.0.1:8080 {
+                header_up -X-Forwarded-For
+                header_up X-Forwarded-For {remote_host}
+                header_up X-Real-IP {remote_host}
+            }
+        }
     }
 }
