@@ -8,6 +8,14 @@
   --world-graph-selected: var(--codex-warning-base);
   --world-graph-edge: var(--codex-palette-mid);
   --world-graph-edge-opacity: .75;
+
+  /* Cytoscape 3.x needs legacy sRGB values rather than modern OKLCH tokens. */
+  --world-graph-cy-text: #c8bfa8;
+  --world-graph-cy-node: #888070;
+  --world-graph-cy-border: #484137;
+  --world-graph-cy-edge: #888070;
+  --world-graph-cy-selected: #c8bfa8;
+
   display: grid;
   gap: .75rem;
   min-inline-size: 0;
@@ -22,6 +30,11 @@
   --world-graph-node: var(--codex-palette-mid);
   --world-graph-selected: var(--codex-palette-oled);
   --world-graph-edge: var(--codex-palette-deep);
+  --world-graph-cy-text: #000;
+  --world-graph-cy-node: #888070;
+  --world-graph-cy-border: #888070;
+  --world-graph-cy-edge: #484137;
+  --world-graph-cy-selected: #000;
 }
 
 .world-graph__toolbar {
