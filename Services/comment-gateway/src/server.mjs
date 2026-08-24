@@ -31,6 +31,21 @@ const blockedForwardHeaders = new Set([
   'x-viscerium-client-ip',
 ]);
 
+const fixedPublicMessages = new Map([
+  ['request_too_large', 'Comment request is too large.'],
+  ['content_type', 'Comment requests must use application/json.'],
+  ['rate_limit', 'Too many comment submissions. Please try again shortly.'],
+  ['rate_limit_capacity', 'Too many comment submissions. Please try again shortly.'],
+  ['unsafe_url', 'That link is currently classified as unsafe and cannot be posted.'],
+  ['web_risk_unavailable', 'Link safety checks are temporarily unavailable. Your draft has not been posted.'],
+  ['web_risk_invalid_response', 'Link safety checks are temporarily unavailable. Your draft has not been posted.'],
+  ['turnstile_required', 'Please complete the anti-bot check before posting.'],
+  ['turnstile_failed', 'The anti-bot check could not be verified. Please try again.'],
+  ['turnstile_unavailable', 'Comment safety checks are temporarily unavailable. Your draft has not been posted.'],
+  ['turnstile_invalid_response', 'Comment safety checks are temporarily unavailable. Your draft has not been posted.'],
+  ['upstream_uncertain', 'The posting result is uncertain. Refresh the comments before retrying this exact submission.'],
+]);
+
 function publicHeaders(contentType = 'text/plain; charset=utf-8') {
   return {
     'cache-control': 'no-store',
@@ -47,6 +62,38 @@ function writeText(response, status, text, extraHeaders = {}) {
 function writeJson(response, status, value) {
   response.writeHead(status, publicHeaders('application/json; charset=utf-8'));
   response.end(JSON.stringify(value));
+}
+
+function publicGatewayMessage(error) {
+  const exact = fixedPublicMessages.get(error.code);
+  if (exact) return exact;
+
+  const code = String(error.code || '');
+  if (code.startsWith('url_')) return 'That link cannot be posted. Please check the URL and try again.';
+  if (code.startsWith('unicode_') || code.startsWith('comment_') || code === 'media_not_allowed') {
+    return 'Comment content cannot be posted. Your draft has not been posted.';
+  }
+  if (
+    code === 'invalid_utf8' ||
+    code === 'invalid_json' ||
+    code === 'thread_url' ||
+    code === 'locator' ||
+    code === 'site' ||
+    code === 'payload' ||
+    code.endsWith('_type') ||
+    code.endsWith('_size') ||
+    code.endsWith('_controls')
+  ) {
+    return 'Comment request is invalid. Your draft has not been posted.';
+  }
+
+  if (error.status === 403) return 'Comment request was not authorised. Your draft has not been posted.';
+  if (error.status === 413) return 'Comment request is too large.';
+  if (error.status === 415) return 'Comment request format is not supported.';
+  if (error.status === 422) return 'Comment content cannot be posted. Your draft has not been posted.';
+  if (error.status === 429) return 'Too many comment submissions. Please try again shortly.';
+  if (error.status === 503) return 'Comment service is temporarily unavailable. Your draft has not been posted.';
+  return 'Comment request could not be processed. Your draft has not been posted.';
 }
 
 async function readRequestBody(request, maxBytes) {
@@ -299,7 +346,7 @@ export function createGatewayServer(config, dependencies = {}) {
     } catch (error) {
       if (error instanceof GatewayError) {
         const extraHeaders = error.retryAfterSeconds ? { 'retry-after': String(error.retryAfterSeconds) } : {};
-        writeText(response, error.status, error.publicMessage, extraHeaders);
+        writeText(response, error.status, publicGatewayMessage(error), extraHeaders);
         logEvent({ event: 'comment_rejected', method: request.method, status: error.status, code: error.code, duration_ms: Date.now() - started });
         return;
       }
