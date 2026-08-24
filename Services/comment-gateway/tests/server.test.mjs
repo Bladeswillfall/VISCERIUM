@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import { once } from 'node:events';
 import { createGatewayServer } from '../src/server.mjs';
+import { GatewayError } from '../src/errors.mjs';
 
 function config(overrides = {}) {
   return {
@@ -33,7 +34,7 @@ async function withGateway(t, options = {}) {
       headers: { 'content-type': 'application/json' },
     });
   });
-  const server = createGatewayServer(config(options.config), { fetchImpl });
+  const server = createGatewayServer(config(options.config), { fetchImpl, ...options.dependencies });
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
   t.after(() => server.close());
@@ -124,6 +125,26 @@ test('rejects invalid UTF-8', async (t) => {
   });
 
   assert.equal(status, 400);
+  assert.equal(calls.length, 0);
+});
+
+test('never reflects exception text into a public gateway response', async (t) => {
+  const maliciousMessage = '<img src=x onerror=alert(1)>';
+  const { origin, calls } = await withGateway(t, {
+    dependencies: {
+      rateLimiter: {
+        check() {
+          throw new GatewayError(422, 'unexpected_policy', maliciousMessage);
+        },
+      },
+    },
+  });
+
+  const response = await post(origin, createPayload('safe draft'));
+  const body = await response.text();
+  assert.equal(response.status, 422);
+  assert.doesNotMatch(body, /<img|onerror/i);
+  assert.match(body, /cannot be posted/i);
   assert.equal(calls.length, 0);
 });
 
