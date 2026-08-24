@@ -17,14 +17,14 @@
   --world-graph-cy-selected: #c8bfa8;
 
   /*
-    The graph uses the canonical era identity colours, not the theme-specific
-    accessible text accents. Scope the aliases here so Auto, Light, and Dark
-    keep the same node hues while the surrounding graph chrome can still adapt.
+    Pin graph nodes to the established sRGB era identity anchors from
+    era-styles.css. These are deliberately invariant across Auto, Light, and
+    Dark; theme switching may alter graph chrome, but never an era's hue.
   */
-  --era-e1-accent: var(--era-e1-base);
-  --era-e2-accent: var(--era-e2-base);
-  --era-e3-accent: var(--era-e3-base);
-  --era-e4-accent: var(--era-e4-base);
+  --era-e1-accent: #dc143c;
+  --era-e2-accent: #a5b516;
+  --era-e3-accent: #bd0b5f;
+  --era-e4-accent: #00ccbc;
 
   display: grid;
   gap: .75rem;
