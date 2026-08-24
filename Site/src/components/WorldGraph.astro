@@ -234,6 +234,10 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           clearContext(cy, root);
         }
       };
+      const clearPointerContext = () => {
+        canvas.style.removeProperty('cursor');
+        restoreContext();
+      };
       const selectNode = (node: any, source: string) => {
         cy.nodes().unselect();
         node.select();
@@ -299,11 +303,9 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         canvas.style.cursor = 'pointer';
         applyContext(cy, root, event.target, 'pointer');
       });
-      cy.on('mouseout', 'node', () => {
-        canvas.style.removeProperty('cursor');
-        restoreContext();
-      });
+      cy.on('mouseout', 'node', clearPointerContext);
       reset?.addEventListener('click', handleReset);
+      canvas.addEventListener('pointerleave', clearPointerContext);
       canvas.addEventListener('keydown', handleKeydown);
       canvas.addEventListener('focus', handleFocus);
       if (reset) reset.disabled = false;
@@ -320,6 +322,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         resizeObserver.disconnect();
         themeObserver.disconnect();
         reset?.removeEventListener('click', handleReset);
+        canvas.removeEventListener('pointerleave', clearPointerContext);
         canvas.removeEventListener('keydown', handleKeydown);
         canvas.removeEventListener('focus', handleFocus);
         cy.destroy();
