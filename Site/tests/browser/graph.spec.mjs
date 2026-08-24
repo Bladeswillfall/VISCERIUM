@@ -46,6 +46,76 @@ async function hoverConnectedNode(page, graph, canvas) {
   return null;
 }
 
+async function approximateNodeCentre(page, graph, hovered) {
+  const xs = [];
+  for (let dx = -26; dx <= 26; dx += 2) {
+    await page.mouse.move(hovered.x + dx, hovered.y);
+    if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) xs.push(hovered.x + dx);
+  }
+  if (!xs.length) return hovered;
+  const x = (Math.min(...xs) + Math.max(...xs)) / 2;
+
+  const ys = [];
+  for (let dy = -26; dy <= 26; dy += 2) {
+    await page.mouse.move(x, hovered.y + dy);
+    if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) ys.push(hovered.y + dy);
+  }
+  if (!ys.length) return { x, y: hovered.y, id: hovered.id };
+  return { x, y: (Math.min(...ys) + Math.max(...ys)) / 2, id: hovered.id };
+}
+
+async function emitSyntheticTouch(page, canvas, type, point, identifier = 91) {
+  return canvas.evaluate((element, { type, point, identifier }) => {
+    const target = element.querySelector('canvas') ?? element;
+    const touch = {
+      identifier,
+      target,
+      clientX: point.x,
+      clientY: point.y,
+      pageX: point.x + window.scrollX,
+      pageY: point.y + window.scrollY,
+      screenX: point.x,
+      screenY: point.y,
+      radiusX: 1,
+      radiusY: 1,
+      rotationAngle: 0,
+      force: 1,
+    };
+    const event = new Event(type, { bubbles: true, cancelable: true });
+    const active = type === 'touchend' || type === 'touchcancel' ? [] : [touch];
+    Object.defineProperties(event, {
+      touches: { value: active },
+      targetTouches: { value: active },
+      changedTouches: { value: [touch] },
+    });
+    target.dispatchEvent(event);
+    return event.defaultPrevented;
+  }, { type, point, identifier });
+}
+
+async function dispatchSyntheticWheel(page, canvas, deltaY, deltaMode) {
+  const box = await canvas.boundingBox();
+  if (!box) return false;
+  return canvas.evaluate((element, { deltaY, deltaMode, x, y }) => {
+    const target = element.querySelector('canvas') ?? element;
+    const event = new WheelEvent('wheel', {
+      bubbles: true,
+      cancelable: true,
+      deltaY,
+      deltaMode,
+      clientX: x,
+      clientY: y,
+    });
+    target.dispatchEvent(event);
+    return event.defaultPrevented;
+  }, {
+    deltaY,
+    deltaMode,
+    x: box.x + box.width / 2,
+    y: box.y + box.height / 2,
+  });
+}
+
 async function inspectGraph(page, viewport, theme) {
   await installTheme(page, theme);
   await page.setViewportSize(viewport);
@@ -174,10 +244,18 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   await expect(details.getByRole('heading')).toBeVisible();
   const firstId = await graph.getAttribute('data-world-graph-active-id');
 
+  await page.keyboard.press('Enter');
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'selected');
+  await expect(graph).toHaveAttribute('data-world-graph-active-id', firstId);
+
   await page.keyboard.press('ArrowRight');
   await expect(graph).toHaveAttribute('data-world-graph-context', 'keyboard');
   const secondId = await graph.getAttribute('data-world-graph-active-id');
   expect(secondId).not.toBe(firstId);
+
+  await page.mouse.move(2, 2);
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'keyboard');
+  await expect(graph).toHaveAttribute('data-world-graph-active-id', secondId);
 
   await page.keyboard.press('Enter');
   await expect(graph).toHaveAttribute('data-world-graph-context', 'selected');
@@ -186,6 +264,50 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   await page.keyboard.press('Escape');
   await expect(details).toHaveText('Select a page to inspect it.');
   await expect(graph).not.toHaveAttribute('data-world-graph-active-id', /.+/);
+});
+
+test('World Graph expanded touch target selects a node without becoming background pan', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+
+  const graph = page.locator('[data-world-graph]');
+  const canvasHost = graph.locator('[data-world-graph-canvas]');
+  const reset = graph.getByRole('button', { name: 'Reset view' });
+  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+
+  const hovered = await hoverConnectedNode(page, graph, canvasHost);
+  expect(hovered).not.toBeNull();
+  const centre = await approximateNodeCentre(page, graph, hovered);
+  const candidates = [];
+  for (const distance of [20, 21, 22, 23]) {
+    candidates.push(
+      { x: centre.x + distance, y: centre.y },
+      { x: centre.x - distance, y: centre.y },
+      { x: centre.x, y: centre.y + distance },
+      { x: centre.x, y: centre.y - distance },
+    );
+  }
+
+  let selectedThroughTouchHalo = false;
+  for (const candidate of candidates) {
+    await page.mouse.move(candidate.x, candidate.y);
+    if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) continue;
+
+    const startPrevented = await emitSyntheticTouch(page, canvasHost, 'touchstart', candidate);
+    const endPrevented = await emitSyntheticTouch(page, canvasHost, 'touchend', candidate);
+    if (
+      startPrevented
+      && endPrevented
+      && await graph.getAttribute('data-world-graph-context') === 'selected'
+      && await graph.getAttribute('data-world-graph-active-id') === hovered.id
+    ) {
+      selectedThroughTouchHalo = true;
+      break;
+    }
+    await reset.click();
+  }
+
+  expect(selectedThroughTouchHalo).toBe(true);
 });
 
 test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async ({ page }) => {
@@ -216,6 +338,18 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
   const boundedZoomOut = Number(await graph.getAttribute('data-world-graph-zoom'));
   expect(boundedZoomOut).toBeLessThan(boundedZoomIn);
   expect(boundedZoomOut / boundedZoomIn).toBeGreaterThanOrEqual(.82);
+
+  const beforeLineMode = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(await dispatchSyntheticWheel(page, canvasHost, -3, 1)).toBe(true);
+  const afterLineMode = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(afterLineMode).toBeGreaterThan(beforeLineMode);
+  expect(afterLineMode / beforeLineMode).toBeLessThanOrEqual(1.22);
+
+  const beforePageMode = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(await dispatchSyntheticWheel(page, canvasHost, 1, 2)).toBe(true);
+  const afterPageMode = Number(await graph.getAttribute('data-world-graph-zoom'));
+  expect(afterPageMode).toBeLessThan(beforePageMode);
+  expect(afterPageMode / beforePageMode).toBeGreaterThanOrEqual(.82);
 });
 
 test('World Graph keeps the page list when interactive data fails', async ({ page }) => {
