@@ -89,17 +89,18 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     return cytoscapeColour(value);
   }
 
+  function legacyGraphColour(root: Element, name: string) {
+    return getComputedStyle(root).getPropertyValue(name).trim();
+  }
+
   function labelStyle(root: Element, size: number, weight: number, opacity: number, marginY: number) {
     return {
       label: 'data(title)',
-      color: colour(root, '--world-graph-text'),
+      color: legacyGraphColour(root, '--world-graph-cy-text'),
       'font-family': 'IBM Plex Sans, system-ui, sans-serif',
       'font-size': size,
       'font-weight': weight,
       'text-opacity': opacity,
-      'text-background-color': colour(root, '--world-graph-canvas'),
-      'text-background-opacity': .9,
-      'text-background-padding': 3,
       'text-margin-y': marginY,
       'text-events': 'no',
     };
@@ -113,8 +114,8 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           width: 14,
           height: 14,
           opacity: .82,
-          'background-color': colour(root, '--world-graph-node'),
-          'border-color': colour(root, '--world-graph-border'),
+          'background-color': legacyGraphColour(root, '--world-graph-cy-node'),
+          'border-color': legacyGraphColour(root, '--world-graph-cy-border'),
           'border-width': 1,
           'text-events': 'no',
           label: '',
@@ -123,29 +124,25 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       {
         selector: 'node[era = "citadel"]',
         style: {
-          'background-color': colour(root, '--era-e1-base'),
-          'border-color': colour(root, '--era-e1-accent'),
+          'background-color': colour(root, '--era-e1-accent'),
         },
       },
       {
         selector: 'node[era = "smog"]',
         style: {
-          'background-color': colour(root, '--era-e2-base'),
-          'border-color': colour(root, '--era-e2-accent'),
+          'background-color': colour(root, '--era-e2-accent'),
         },
       },
       {
         selector: 'node[era = "nearsight"]',
         style: {
-          'background-color': colour(root, '--era-e3-base'),
-          'border-color': colour(root, '--era-e3-accent'),
+          'background-color': colour(root, '--era-e3-accent'),
         },
       },
       {
         selector: 'node[era = "entropy"]',
         style: {
-          'background-color': colour(root, '--era-e4-base'),
-          'border-color': colour(root, '--era-e4-accent'),
+          'background-color': colour(root, '--era-e4-accent'),
         },
       },
       {
@@ -179,27 +176,11 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           width: 28,
           height: 28,
           opacity: 1,
-          'border-color': colour(root, '--world-graph-text'),
-          'border-width': 3,
+          'border-color': legacyGraphColour(root, '--world-graph-cy-text'),
+          'border-width': 2,
           'z-index': 10,
           ...labelStyle(root, 13, 800, 1, -18),
         },
-      },
-      {
-        selector: 'node[era = "citadel"].is-active, node[era = "citadel"]:selected',
-        style: { 'border-color': colour(root, '--era-e1-accent-high') },
-      },
-      {
-        selector: 'node[era = "smog"].is-active, node[era = "smog"]:selected',
-        style: { 'border-color': colour(root, '--era-e2-accent-high') },
-      },
-      {
-        selector: 'node[era = "nearsight"].is-active, node[era = "nearsight"]:selected',
-        style: { 'border-color': colour(root, '--era-e3-accent-high') },
-      },
-      {
-        selector: 'node[era = "entropy"].is-active, node[era = "entropy"]:selected',
-        style: { 'border-color': colour(root, '--era-e4-accent-high') },
       },
       {
         selector: 'node.is-muted',
@@ -209,7 +190,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         selector: 'edge',
         style: {
           width: 1,
-          'line-color': colour(root, '--world-graph-edge'),
+          'line-color': legacyGraphColour(root, '--world-graph-cy-edge'),
           opacity: Number(getComputedStyle(root).getPropertyValue('--world-graph-edge-opacity')),
           'curve-style': 'haystack',
         },
