@@ -1,3 +1,14 @@
+{
+    servers {
+        # Cloudflare Tunnel is expected to run on this host. Only the local
+        # tunnel hop may supply client-address headers; direct internet peers
+        # cannot make Caddy trust a spoofed CF-Connecting-IP/X-Forwarded-For.
+        trusted_proxies static 127.0.0.1/32 ::1/128
+        trusted_proxies_strict
+        client_ip_headers CF-Connecting-IP X-Forwarded-For
+    }
+}
+
 comments.viscerium.co.uk {
     # Remark42 comments are intentionally small. This rejects oversized
     # requests before the application parses them. Administrative imports
@@ -14,9 +25,11 @@ comments.viscerium.co.uk {
     respond @commentImageUpload 404
 
     reverse_proxy 127.0.0.1:8080 {
-        # Replace, rather than trust, forwarding headers supplied by clients.
+        # Rebuild forwarding headers from Caddy's resolved client address.
+        # {client_ip} uses trusted proxy parsing above, and falls back to the
+        # direct remote peer when a request does not come through a trusted hop.
         header_up -X-Forwarded-For
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {client_ip}
+        header_up X-Real-IP {client_ip}
     }
 }
