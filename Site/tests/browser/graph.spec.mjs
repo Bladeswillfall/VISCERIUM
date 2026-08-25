@@ -31,8 +31,8 @@ async function selectRenderedNode(page, graph, canvas) {
 async function hoverConnectedNode(page, graph, canvas) {
   const box = await canvas.boundingBox();
   if (!box) return null;
-  let seed = 29;
-  for (let index = 0; index < 220; index += 1) {
+  let seed = 41;
+  for (let index = 0; index < 260; index += 1) {
     seed = (seed * 48_271) % 2_147_483_647;
     const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
     seed = (seed * 48_271) % 2_147_483_647;
@@ -41,7 +41,7 @@ async function hoverConnectedNode(page, graph, canvas) {
     const source = await graph.getAttribute('data-world-graph-context');
     const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
     const id = await graph.getAttribute('data-world-graph-active-id');
-    if (source === 'pointer' && neighbours > 0 && id) return { x, y, id };
+    if (source === 'pointer' && neighbours === 1 && id) return { x, y, id };
   }
   return null;
 }
