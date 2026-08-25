@@ -22,6 +22,19 @@ const mockRemark42 = `
   window.dispatchEvent(new Event('REMARK42::ready'));
 `;
 
+async function sampledBackground(locator) {
+  return locator.evaluate((element) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1;
+    canvas.height = 1;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+    context.fillStyle = getComputedStyle(element).backgroundColor;
+    context.fillRect(0, 0, 1, 1);
+    return Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3));
+  });
+}
+
 test('comments and webmentions sit below the complete article frame', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
@@ -38,14 +51,12 @@ test('comments and webmentions sit below the complete article frame', async ({ p
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'dark';
   });
-  await expect.poll(() => discussions.evaluate((element) => getComputedStyle(element).backgroundColor))
-    .toBe('rgb(11, 11, 11)');
+  await expect.poll(() => sampledBackground(discussions)).toEqual([11, 11, 11]);
 
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
   });
-  await expect.poll(() => discussions.evaluate((element) => getComputedStyle(element).backgroundColor))
-    .toBe('rgb(170, 165, 154)');
+  await expect.poll(() => sampledBackground(discussions)).toEqual([170, 165, 154]);
 
   const placement = await page.evaluate(() => {
     const frame = document.querySelector('.page');
