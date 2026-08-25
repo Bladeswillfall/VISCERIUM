@@ -34,7 +34,11 @@ const discussionsEnabled = Boolean(
       padding-block: calc(1.25rem + 1.5rem) 2.5rem;
       padding-inline: clamp(1rem, 3vw, 3rem);
       border-block-start: 1px solid var(--sl-color-hairline-light);
+      border-radius: 0 0 1.25rem 1.25rem;
       background: var(--codex-page-bg);
+      box-shadow:
+        0 1.5rem 3.4375rem color-mix(in oklch, var(--codex-shadow-color) 46%, transparent),
+        0 1px 0 var(--sl-color-hairline-light);
     }
 
     .codex-discussions__inner {
@@ -62,6 +66,7 @@ const discussionsEnabled = Boolean(
         margin-block-start: -1rem;
         padding-block-start: calc(1rem + 1.25rem);
         padding-block-end: 2rem;
+        border-radius: 0 0 1rem 1rem;
       }
     }
 
@@ -70,8 +75,10 @@ const discussionsEnabled = Boolean(
         margin-block-start: 0;
         padding-block-start: 1.5rem;
         border-block-start: 1px solid CanvasText;
+        border-radius: 0;
         background: Canvas;
         color: CanvasText;
+        box-shadow: none;
       }
     }
   }
