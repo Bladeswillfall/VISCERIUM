@@ -2,6 +2,7 @@
 import DefaultPageFrame from '@astrojs/starlight/components/PageFrame.astro';
 import { classifyCodexPage } from '../lib/page-kind.mjs';
 import '../styles/smart-tooltips.css';
+import CodexDiscussions from './CodexDiscussions.astro';
 import CodexFooterRail from './CodexFooterRail.astro';
 
 const { starlightRoute } = Astro.locals;
@@ -27,6 +28,7 @@ const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
   <slot />
 </DefaultPageFrame>
 
+<CodexDiscussions />
 <CodexFooterRail />
 
 <script>
