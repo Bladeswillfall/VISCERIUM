@@ -18,6 +18,53 @@ const mockRemark42 = `
   window.dispatchEvent(new Event('REMARK42::ready'));
 `;
 
+test('comments and webmentions sit below the complete article frame', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+
+  const discussions = page.locator('.codex-discussions');
+  await expect(discussions).toBeVisible();
+  await expect(discussions.locator('viscerium-comments')).toHaveCount(1);
+  await expect(discussions.locator('.codex-webmentions')).toHaveCount(1);
+  await expect(page.locator('.codex-main-pane viscerium-comments')).toHaveCount(0);
+  await expect(page.locator('.codex-main-pane .codex-webmentions')).toHaveCount(0);
+
+  const placement = await page.evaluate(() => {
+    const frame = document.querySelector('.page');
+    const discussion = document.querySelector('.codex-discussions');
+    const footer = document.querySelector('.ion-codex-footer');
+    const sidebar = document.querySelector('.right-sidebar-container');
+    if (
+      !(frame instanceof HTMLElement)
+      || !(discussion instanceof HTMLElement)
+      || !(footer instanceof HTMLElement)
+      || !(sidebar instanceof HTMLElement)
+    ) return null;
+
+    const followsFrame = Boolean(
+      frame.compareDocumentPosition(discussion) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+    const precedesFooter = Boolean(
+      discussion.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+
+    return {
+      followsFrame,
+      precedesFooter,
+      discussionWidth: discussion.getBoundingClientRect().width,
+      viewportWidth: window.innerWidth,
+      discussionTop: discussion.getBoundingClientRect().top,
+      sidebarBottom: sidebar.getBoundingClientRect().bottom,
+    };
+  });
+
+  expect(placement).not.toBeNull();
+  expect(placement.followsFrame).toBe(true);
+  expect(placement.precedesFooter).toBe(true);
+  expect(Math.abs(placement.discussionWidth - placement.viewportWidth)).toBeLessThanOrEqual(2);
+  expect(placement.discussionTop).toBeGreaterThanOrEqual(placement.sidebarBottom - 24);
+});
+
 test('comments load near the viewport and clean up when their page is replaced', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 640 });
   let requests = 0;
