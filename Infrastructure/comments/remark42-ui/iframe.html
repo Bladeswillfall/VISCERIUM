@@ -22,53 +22,38 @@
 
       /*
         Account metadata only. Do not put Remark42 palette overrides here.
-        The username and timestamp stay in their upstream positions; the compact
-        VISCERIUM identity line wraps underneath the username without moving
-        Preact-owned nodes.
+        Metadata is rendered with CSS generated content from data attributes on
+        existing Remark42 nodes. We never insert children into Preact-owned
+        comment markup, so Preact has nothing custom to reconcile or remove.
       */
-      .vc-comment-user {
+      [data-vc-meta] {
         flex-wrap: wrap;
         align-content: flex-start;
       }
 
-      .vc-comment-time {
-        align-self: flex-start;
-        margin-top: 1px;
-      }
-
-      .vc-comment-meta {
-        display: flex;
+      [data-vc-meta]::after {
+        content: attr(data-vc-meta);
+        display: block;
         flex: 0 0 100%;
-        align-items: center;
-        gap: 5px;
         min-height: 13px;
         margin-top: 1px;
-        margin-left: 0 !important;
         font-size: 10px;
         font-weight: 400;
         line-height: 1.2;
+        letter-spacing: 0.035em;
         opacity: 0.76;
+        white-space: nowrap;
       }
 
-      .vc-comment-uid {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 10px;
-        letter-spacing: 0.07em;
-        user-select: all;
-      }
-
-      .vc-comment-role {
-        font-size: 9px;
+      [data-vc-role='staff']::after {
         font-weight: 700;
         letter-spacing: 0.045em;
-        text-transform: uppercase;
+        opacity: 1;
       }
 
-      .vc-comment-role[data-role='staff'] {
-        padding: 1px 5px;
-        border-radius: 4px;
-        background: color-mix(in srgb, currentColor 14%, transparent);
-        opacity: 1;
+      [data-vc-time] {
+        align-self: flex-start;
+        margin-top: 1px;
       }
     </style>
     <script>
@@ -172,13 +157,6 @@
       (function () {
         'use strict';
 
-        var commentIdPrefix = 'remark42__comment-';
-        var base62Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        var maxFiveCharacterBase62 = 916132832; // 62^5
-        var identityByComment = new Map();
-        var identityRequest = null;
-        var identityRefreshTimer = 0;
-
         function removeInput(input) {
           if (!input) return;
           var label = input.closest && input.closest('label');
@@ -217,6 +195,39 @@
           event.preventDefault();
           event.stopImmediatePropagation();
         }
+
+        document.addEventListener('paste', blockImageTransfer, true);
+        document.addEventListener('drop', blockImageTransfer, true);
+        document.addEventListener('dragover', blockImageTransfer, true);
+
+        function startGuard() {
+          removeUploadControls(document);
+          var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              mutation.addedNodes.forEach(function (node) {
+                if (node.nodeType === 1) removeUploadControls(node);
+              });
+            });
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', startGuard, { once: true });
+        } else {
+          startGuard();
+        }
+      })();
+    </script>
+    <script>
+      (function () {
+        'use strict';
+
+        var commentIdPrefix = 'remark42__comment-';
+        var base62Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var maxFiveCharacterBase62 = 916132832; // 62^5
+        var identityByComment = new Map();
+        var identityRequest = null;
 
         function hashRemarkUserId(userId) {
           // FNV-1a is used only to make a compact opaque display identifier. It
@@ -302,45 +313,6 @@
           return '/api/v1/find?' + query.toString();
         }
 
-        function refreshIdentityIndex() {
-          var endpoint = identityEndpoint();
-          if (!endpoint) return Promise.resolve();
-          if (identityRequest) return identityRequest;
-
-          identityRequest = fetch(endpoint, {
-            method: 'GET',
-            credentials: 'same-origin',
-            headers: { Accept: 'application/json' }
-          })
-            .then(function (response) {
-              if (!response.ok) throw new Error('identity request returned ' + response.status);
-              return response.json();
-            })
-            .then(function (payload) {
-              if (!payload || !Array.isArray(payload.comments)) {
-                throw new Error('identity response did not contain comments');
-              }
-              buildIdentityIndex(payload.comments);
-              decorateComments(document);
-            })
-            .catch(function (error) {
-              console.warn('[VISCERIUM] Comment identity metadata unavailable:', error);
-            })
-            .finally(function () {
-              identityRequest = null;
-            });
-
-          return identityRequest;
-        }
-
-        function scheduleIdentityRefresh() {
-          if (identityRefreshTimer) return;
-          identityRefreshTimer = window.setTimeout(function () {
-            identityRefreshTimer = 0;
-            refreshIdentityIndex();
-          }, 300);
-        }
-
         function findOwnTimeAnchor(info, articleId) {
           if (!info || !info.children) return null;
           for (var i = 0; i < info.children.length; i++) {
@@ -387,104 +359,96 @@
           var parts = findHeaderParts(article, identity);
           if (!parts) return;
 
-          parts.user.classList.add('vc-comment-user');
-          parts.time.classList.add('vc-comment-time');
+          var metaText = identity.uid
+            ? identity.uid + (identity.role ? ' · ' + identity.role : '')
+            : identity.role || '';
 
-          var existing = parts.user.querySelector('.vc-comment-meta');
-          var expectedUid = identity.uid || '';
-          var expectedRole = identity.role || '';
-          if (
-            existing &&
-            existing.getAttribute('data-uid') === expectedUid &&
-            existing.getAttribute('data-role') === expectedRole
-          ) {
-            return;
+          if (!metaText) return;
+
+          if (parts.user.getAttribute('data-vc-meta') !== metaText) {
+            parts.user.setAttribute('data-vc-meta', metaText);
           }
-          if (existing) existing.remove();
-
-          var meta = document.createElement('span');
-          meta.className = 'vc-comment-meta';
-          meta.setAttribute('data-uid', expectedUid);
-          meta.setAttribute('data-role', expectedRole);
-
-          if (identity.uid) {
-            var uid = document.createElement('span');
-            uid.className = 'vc-comment-uid';
-            uid.textContent = identity.uid;
-            uid.title = 'VISCERIUM display UID';
-            meta.appendChild(uid);
+          var roleValue = (identity.role || '').toLowerCase();
+          if (parts.user.getAttribute('data-vc-role') !== roleValue) {
+            parts.user.setAttribute('data-vc-role', roleValue);
           }
-
-          if (identity.uid && identity.role) {
-            var separator = document.createElement('span');
-            separator.textContent = '·';
-            separator.setAttribute('aria-hidden', 'true');
-            meta.appendChild(separator);
+          if (!parts.time.hasAttribute('data-vc-time')) {
+            parts.time.setAttribute('data-vc-time', '');
           }
-
-          if (identity.role) {
-            var role = document.createElement('span');
-            role.className = 'vc-comment-role';
-            role.setAttribute('data-role', identity.role.toLowerCase());
-            role.textContent = identity.role;
-            meta.appendChild(role);
-          }
-
-          parts.user.appendChild(meta);
         }
 
         function decorateComments(root) {
-          if (!root) return;
-          if (root.matches && root.matches("article[id^='remark42__comment-']")) decorateComment(root);
-          if (!root.querySelectorAll) return;
+          if (!root || !root.querySelectorAll) return;
           var comments = root.querySelectorAll("article[id^='remark42__comment-']");
           for (var i = 0; i < comments.length; i++) decorateComment(comments[i]);
         }
 
-        function containsComment(root) {
-          if (!root || root.nodeType !== 1) return false;
-          if (root.matches && root.matches("article[id^='remark42__comment-']")) return true;
-          return Boolean(root.querySelector && root.querySelector("article[id^='remark42__comment-']"));
-        }
-
-        document.addEventListener('paste', blockImageTransfer, true);
-        document.addEventListener('drop', blockImageTransfer, true);
-        document.addEventListener('dragover', blockImageTransfer, true);
-
-        function startGuard() {
-          removeUploadControls(document);
-          refreshIdentityIndex();
-
-          // Remark42 already needs this child-list observer for the no-upload
-          // policy. Identity decoration deliberately shares it rather than adding
-          // another observer. Textarea typing changes values/styles, not child
-          // nodes, so this path stays outside the editor's keystroke hot path.
-          var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-              mutation.addedNodes.forEach(function (node) {
-                if (node.nodeType !== 1) return;
-                removeUploadControls(node);
-                decorateComments(node);
-                if (containsComment(node)) scheduleIdentityRefresh();
-              });
-
-              // If Preact reconciles away our metadata during a low-frequency
-              // component rerender, restore it from the already-fetched identity
-              // map. No network request is needed for this path.
-              if (mutation.removedNodes && mutation.removedNodes.length && mutation.target) {
-                var target = mutation.target.nodeType === 1 ? mutation.target : mutation.target.parentElement;
-                var article = target && target.closest && target.closest("article[id^='remark42__comment-']");
-                if (article && !article.querySelector('.vc-comment-meta')) decorateComment(article);
-              }
-            });
+        function scheduleDecorationBurst() {
+          [0, 80, 250].forEach(function (delay) {
+            window.setTimeout(function () {
+              decorateComments(document);
+            }, delay);
           });
-          observer.observe(document.body, { childList: true, subtree: true });
         }
+
+        function scheduleInitialDecoration() {
+          [0, 50, 150, 300, 600, 1000, 1600, 2500].forEach(function (delay) {
+            window.setTimeout(function () {
+              decorateComments(document);
+            }, delay);
+          });
+        }
+
+        function refreshIdentityIndex() {
+          var endpoint = identityEndpoint();
+          if (!endpoint) return Promise.resolve();
+          if (identityRequest) return identityRequest;
+
+          identityRequest = fetch(endpoint, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' }
+          })
+            .then(function (response) {
+              if (!response.ok) throw new Error('identity request returned ' + response.status);
+              return response.json();
+            })
+            .then(function (payload) {
+              if (!payload || !Array.isArray(payload.comments)) {
+                throw new Error('identity response did not contain comments');
+              }
+              buildIdentityIndex(payload.comments);
+              scheduleInitialDecoration();
+            })
+            .catch(function (error) {
+              console.warn('[VISCERIUM] Comment identity metadata unavailable:', error);
+            })
+            .finally(function () {
+              identityRequest = null;
+            });
+
+          return identityRequest;
+        }
+
+        function scheduleRefreshAfterSubmit() {
+          window.setTimeout(refreshIdentityIndex, 600);
+          window.setTimeout(refreshIdentityIndex, 1800);
+        }
+
+        document.addEventListener('submit', scheduleRefreshAfterSubmit, true);
+        document.addEventListener('click', scheduleDecorationBurst, true);
+
+        window.addEventListener('message', function refreshIdentityAfterParentUpdate(event) {
+          if (event.source !== window.parent) return;
+          var data = event.data;
+          if (!data || typeof data !== 'object' || Array.isArray(data)) return;
+          if (data.theme === 'light' || data.theme === 'dark') scheduleDecorationBurst();
+        });
 
         if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', startGuard, { once: true });
+          document.addEventListener('DOMContentLoaded', refreshIdentityIndex, { once: true });
         } else {
-          startGuard();
+          refreshIdentityIndex();
         }
       })();
     </script>
