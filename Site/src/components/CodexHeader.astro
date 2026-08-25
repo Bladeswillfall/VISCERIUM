@@ -63,9 +63,12 @@ const { t } = Astro.locals;
   /*
    * Mobile keeps the texture as a simple, very faint transparent overlay. Avoid
    * blending the fixed viewport-sized layer against every painted page layer while scrolling.
+   * Repeat the light-theme selector so its desktop specificity cannot override
+   * the mobile value.
    */
   @media (max-width: 40rem) {
-    body::before {
+    body::before,
+    :root[data-theme='light'] body::before {
       mix-blend-mode: normal;
       opacity: .03;
     }
