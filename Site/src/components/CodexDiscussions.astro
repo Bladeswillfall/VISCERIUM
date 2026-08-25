@@ -36,11 +36,7 @@ const discussionsEnabled = Boolean(
       padding-inline: clamp(1rem, 3vw, 3rem);
       border-block-start: 1px solid var(--sl-color-hairline-light);
       border-radius: 0 0 1.25rem 1.25rem;
-      background: #0b0b0b;
-    }
-
-    :global(:root[data-theme='light']) .codex-discussions {
-      background: #aaa59a;
+      background: var(--codex-discussions-bg);
     }
 
     .codex-discussions__inner {
