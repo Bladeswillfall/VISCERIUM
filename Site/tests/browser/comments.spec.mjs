@@ -44,6 +44,15 @@ test('comments and webmentions sit below the complete article frame', async ({ p
   await expect(discussions.getByRole('heading', { level: 1, name: 'Discussions' })).toBeVisible();
   await expect(discussions.locator('viscerium-comments')).toHaveCount(1);
   await expect(discussions.locator('.codex-webmentions')).toHaveCount(1);
+
+  const webmentionProvider = discussions.locator('.codex-webmentions__provider');
+  await expect(webmentionProvider).toHaveAttribute('href', 'https://webmention.io/');
+  await expect(webmentionProvider.locator('img')).toHaveAttribute('src', '/assets/services/webmention-io.webp');
+  const providerIdleOpacity = await webmentionProvider.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
+  expect(providerIdleOpacity).toBeLessThan(1);
+  await webmentionProvider.hover();
+  await expect.poll(() => webmentionProvider.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeGreaterThan(providerIdleOpacity);
+
   await expect(page.locator('.codex-main-pane viscerium-comments')).toHaveCount(0);
   await expect(page.locator('.codex-main-pane .codex-webmentions')).toHaveCount(0);
   await expect(page.locator('.pagination-links')).toHaveCount(0);
