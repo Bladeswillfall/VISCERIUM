@@ -1,137 +1,173 @@
-import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
+import fs from 'node:fs/promises';
 import matter from 'gray-matter';
-import { cleanSlug, toPosixPath } from '../src/lib/codex-paths.mjs';
+import { cleanSlug, escapeHtml, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
 
+const siteRoot = process.cwd();
 const docsDir = process.env.VISCERIUM_DOCS_DIR
   ? path.resolve(process.env.VISCERIUM_DOCS_DIR)
-  : path.resolve(process.cwd(), 'src/content/docs');
-const generatedTagPagePattern = /^#.+?\s+—\s+.+$/;
-const categoryTypeTitles = {
-  calendar: 'Calendars',
-  character: 'Characters',
-  event: 'Events',
-  faction: 'Factions',
-  fauna: 'Fauna',
-  flora: 'Flora',
-  fungi: 'Fungi',
-  image: 'Images',
-  item: 'Items',
-  location: 'Locations',
-  map: 'Maps',
-  organisation: 'Organisations',
-  organization: 'Organisations',
-  person: 'People',
-  species: 'Species',
-  timeline: 'Timelines',
-};
+  : path.resolve(siteRoot, 'src/content/docs');
+const markdownExtensions = /\.(md|mdx)$/i;
+const leadingArticlePattern = /^(?:the|an|a)\s+/i;
 
-function categoryTitle(slug) {
-  return slug
-    .split('/')
-    .at(-1)
-    .replace(/[-_]+/g, ' ')
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+function titleFromSegment(segment) {
+  const known = new Map([
+    ['citadel', 'CITADEL'],
+    ['smog', 'SMOG'],
+    ['nearsight', 'NEARSIGHT'],
+    ['entropy', 'ENTROPY'],
+    ['astu', 'ASTU'],
+    ['tcsc', 'TCSC'],
+  ]);
+  const key = cleanSlug(segment);
+  if (known.has(key)) return known.get(key);
+  return key.replace(/-/g, ' ').replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
-function routeSlug(relativeFile, data) {
-  if (typeof data.slug === 'string' && data.slug.trim()) return cleanSlug(data.slug);
-  return cleanSlug(toPosixPath(relativeFile).replace(/\.(?:md|mdx)$/i, '').replace(/\/index$/i, ''));
+function sourceRouteFromFile(file, data) {
+  const relative = toPosixPath(path.relative(docsDir, file)).replace(markdownExtensions, '');
+  return cleanSlug(data.slug || relative);
 }
 
-function categoryRecord(slug, title = categoryTitle(slug)) {
-  return { slug, title };
+function sortableTitle(value) {
+  const title = String(value ?? '').trim();
+  const withoutArticle = title.replace(leadingArticlePattern, '').trim();
+  return withoutArticle || title;
 }
 
-function typeCategory(type) {
-  const title = categoryTypeTitles[type];
-  return title ? categoryRecord(`categories/${cleanSlug(title)}`, title) : null;
+function compareIndexTitles(left, right) {
+  const leftTitle = sortableTitle(left.title);
+  const rightTitle = sortableTitle(right.title);
+  const primary = leftTitle.localeCompare(rightTitle, 'en', { sensitivity: 'base' });
+  if (primary !== 0) return primary;
+  return String(left.title ?? '').localeCompare(String(right.title ?? ''), 'en', { sensitivity: 'base' });
 }
 
-function explicitCategories(data) {
-  const values = Array.isArray(data.category) ? data.category : data.category ? [data.category] : [];
-  return values
-    .filter((value) => typeof value === 'string' && value.trim())
-    .map((value) => {
-      const slug = cleanSlug(value);
-      const namespaced = slug.includes('/') ? slug : `categories/${slug}`;
-      return categoryRecord(namespaced, categoryTitle(namespaced));
-    });
+function alphaKey(value) {
+  const normalized = sortableTitle(value)
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '');
+  const match = normalized.match(/[a-z0-9]/i);
+  if (!match || /\d/.test(match[0])) return '#';
+  return match[0].toUpperCase();
 }
 
-function categoryTrail(slug) {
-  const parts = slug.split('/');
-  return parts.map((_, index) => parts.slice(0, index + 1).join('/'));
+function alphaId(value) {
+  return value === '#' ? 'other' : value.toLowerCase();
 }
 
-function alphaGroup(title) {
-  const first = String(title ?? '').trim().charAt(0).toUpperCase();
-  return /^[A-Z]$/.test(first) ? first : '#';
+function groupedAlphabetically(items) {
+  return [...Map.groupBy(items, (item) => alphaKey(item.title))]
+    .sort(([left], [right]) => {
+      if (left === '#') return 1;
+      if (right === '#') return -1;
+      return left.localeCompare(right, 'en', { sensitivity: 'base' });
+    })
+    .map(([letter, groupItems]) => ({
+      letter,
+      items: groupItems.sort(compareIndexTitles),
+    }));
 }
 
-function pageLink(entry) {
-  return `- [${entry.data.title}](/${entry.slug}/)`;
+function renderAlphabeticalIndex(items, { idPrefix, kind, renderMeta, renderDescription }) {
+  const groups = groupedAlphabetically(items);
+  if (groups.length === 0) return '';
+
+  const lines = [
+    `<div class="codex-alpha-index" data-index-kind="${escapeHtml(kind)}" aria-label="Alphabetical ${escapeHtml(kind)} index">`,
+  ];
+
+  for (const group of groups) {
+    const headingId = `${idPrefix}-${alphaId(group.letter)}`;
+    lines.push(
+      `<section class="codex-alpha-index__group" aria-labelledby="${headingId}">`,
+      `<h3 id="${headingId}" class="codex-alpha-index__letter">${escapeHtml(group.letter)}</h3>`,
+      '<ul class="codex-alpha-index__items">',
+    );
+
+    for (const item of group.items) {
+      const meta = renderMeta?.(item);
+      const description = renderDescription?.(item);
+      lines.push(
+        '<li class="codex-alpha-index__item">',
+        `<div class="codex-alpha-index__line"><a class="codex-alpha-index__link" href="${escapeHtml(slugToRoute(item.slug))}">${escapeHtml(item.title)}</a>${meta ? `<span class="codex-alpha-index__meta">${escapeHtml(meta)}</span>` : ''}</div>`,
+        description ? `<p class="codex-alpha-index__description">${escapeHtml(description)}</p>` : '',
+        '</li>',
+      );
+    }
+
+    lines.push('</ul>', '</section>');
+  }
+
+  lines.push('</div>');
+  return lines.filter(Boolean).join('\n');
 }
 
 function generatedCategorySection(descendants, childCategories) {
-  const childCategorySlugs = new Set(childCategories.map((category) => category.slug));
-  const directPages = descendants.filter((entry) => {
-    const parent = entry.slug.split('/').slice(0, -1).join('/');
-    return !childCategorySlugs.has(parent);
-  });
-  const pageGroups = Map.groupBy(directPages, (entry) => alphaGroup(entry.data.title));
   const lines = [];
 
   if (childCategories.length > 0) {
-    lines.push('## Subcategories', '');
-    for (const category of childCategories) {
-      lines.push(`- [${category.title}](/${category.slug}/) — ${category.count}`);
-    }
-    lines.push('');
+    lines.push(
+      '## Subcategories',
+      '',
+      renderAlphabeticalIndex(childCategories, {
+        idPrefix: 'subcategories',
+        kind: 'subcategories',
+        renderMeta: (child) => `${child.count} ${child.count === 1 ? 'page' : 'pages'}`,
+      }),
+      '',
+    );
   }
 
-  if (directPages.length > 0) {
-    lines.push('## Pages in this category', '', '<div class="category-alpha-index">', '');
-    for (const [letter, entries] of [...pageGroups.entries()].sort(([left], [right]) => left.localeCompare(right))) {
-      lines.push(`### ${letter}`, '');
-      for (const entry of entries.sort((left, right) => left.data.title.localeCompare(right.data.title))) {
-        lines.push(pageLink(entry));
-      }
-      lines.push('');
-    }
-    lines.push('</div>', '');
+  lines.push('## Pages in this category', '');
+  if (descendants.length > 0) {
+    lines.push(
+      renderAlphabeticalIndex(descendants.map((entry) => ({
+        slug: entry.slug,
+        title: entry.data.title,
+        type: entry.data.type,
+        description: entry.data.description,
+      })), {
+        idPrefix: 'pages',
+        kind: 'pages',
+        renderMeta: (entry) => entry.type && entry.type !== 'article' ? entry.type : '',
+        renderDescription: (entry) => entry.description,
+      }),
+    );
+  } else {
+    lines.push('_No public pages are currently available in this category._');
   }
 
-  return lines.join('\n').trim();
+  lines.push('');
+  return lines.join('\n');
 }
 
-const relativeFiles = await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir }));
+const generatedFiles = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
+  .map((file) => path.resolve(docsDir, file))
+  .sort();
 const entries = [];
-const categories = new Map();
 
-for (const relativeFile of relativeFiles.sort()) {
-  const file = path.resolve(docsDir, relativeFile);
+for (const file of generatedFiles) {
   const raw = await fs.readFile(file, 'utf8');
   const parsed = matter(raw);
-  const data = parsed.data ?? {};
-  const slug = routeSlug(relativeFile, data);
-  if (!slug || data.status !== 'published' || data.type === 'category' || generatedTagPagePattern.test(data.title ?? '')) continue;
+  if (parsed.data.status !== 'published' || parsed.data.type === 'category') continue;
 
-  const entry = { file, slug, data };
-  entries.push(entry);
+  const slug = sourceRouteFromFile(file, parsed.data);
+  if (!slug || slug === 'index') continue;
+  entries.push({ file, slug, data: parsed.data });
+}
 
-  const categoryCandidates = [
-    typeCategory(data.type),
-    ...explicitCategories(data),
-  ].filter(Boolean);
-
-  for (const category of categoryCandidates) {
-    for (const trailSlug of categoryTrail(category.slug)) {
-      if (!categories.has(trailSlug)) {
-        categories.set(trailSlug, categoryRecord(trailSlug, trailSlug === category.slug ? category.title : categoryTitle(trailSlug)));
-      }
+const categories = new Map();
+for (const entry of entries) {
+  const segments = entry.slug.split('/').filter(Boolean);
+  for (let depth = 1; depth < segments.length; depth += 1) {
+    const slug = segments.slice(0, depth).join('/');
+    if (!categories.has(slug)) {
+      categories.set(slug, {
+        slug,
+        title: titleFromSegment(segments[depth - 1]),
+      });
     }
   }
 }
@@ -150,7 +186,8 @@ for (const category of categoryList) {
   }
 
   const prefix = `${category.slug}/`;
-  const descendants = entries.filter((entry) => entry.slug.startsWith(prefix));
+  const descendants = entries
+    .filter((entry) => entry.slug.startsWith(prefix));
   const childDepth = category.slug.split('/').length + 1;
   const childCategories = categoryList
     .filter((candidate) => candidate.slug.startsWith(prefix) && candidate.slug.split('/').length === childDepth)
