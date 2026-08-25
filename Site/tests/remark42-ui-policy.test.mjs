@@ -15,12 +15,15 @@ test('Remark42 iframe override is served before the stock web app', async () => 
   assert.match(caddy, /Content-Security-Policy/);
 });
 
-test('Remark42 iframe removes image upload affordances and transfer handlers', async () => {
+test('Remark42 iframe removes image upload affordances and transfer handlers without observing editor mutations', async () => {
   const iframe = await fs.readFile(iframeUrl, 'utf8');
 
   assert.match(iframe, /label:has\(input\[type='file'\]\)/);
   assert.match(iframe, /querySelectorAll\("input\[type='file'\]"\)/);
-  assert.match(iframe, /new MutationObserver/);
+  assert.match(iframe, /function\s+waitForInitialRender\(attempt\)/);
+  assert.match(iframe, /document\.addEventListener\('click',[\s\S]*?scheduleRefresh\(0\)/);
+  assert.match(iframe, /document\.addEventListener\('submit'/);
+  assert.doesNotMatch(iframe, /new MutationObserver/);
   assert.match(iframe, /addEventListener\('paste',\s*blockImageTransfer,\s*true\)/);
   assert.match(iframe, /addEventListener\('drop',\s*blockImageTransfer,\s*true\)/);
   assert.match(iframe, /addEventListener\('dragover',\s*blockImageTransfer,\s*true\)/);
