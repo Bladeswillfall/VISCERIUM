@@ -64,5 +64,5 @@ test('mobile Relationships reports the real empty state', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'No structured relationships published yet' })).toBeVisible();
   await expect(page.locator('.relationship-explorer__empty')).toContainText('only uses explicit relationships: frontmatter');
   await expect(page.locator('[data-relationship-canvas]')).toHaveCount(0);
-  await expect(page.locator('.pagination-links')).not.toContainText('[map]');
+  await expect(page.locator('.pagination-links')).toHaveCount(0);
 });
