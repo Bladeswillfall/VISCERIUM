@@ -70,18 +70,25 @@ test('Okse prose-led faction hub remains readable without horizontal overflow', 
   expect(mobile.scrollWidth).toBeLessThanOrEqual(mobile.clientWidth + 1);
 });
 
-test('Okse uses one full-page raised deck with the global footer rail revealed only at the end', async ({ page }) => {
+test('Okse uses one full-page raised deck with discussions before the global footer rail', async ({ page }) => {
   await page.goto(okseDominionUrl, { waitUntil: 'networkidle' });
 
   const pageShell = page.locator('.page');
+  const discussions = page.locator('.codex-discussions');
   const footerRail = page.locator('.ion-codex-footer');
   await expect(pageShell).toHaveCount(1);
+  await expect(discussions).toHaveCount(1);
   await expect(footerRail).toHaveCount(1);
 
   const structure = await page.evaluate(() => {
     const shell = document.querySelector('.page');
+    const discussion = document.querySelector('.codex-discussions');
     const rail = document.querySelector('.ion-codex-footer');
-    if (!(shell instanceof HTMLElement) || !(rail instanceof HTMLElement)) return null;
+    if (
+      !(shell instanceof HTMLElement)
+      || !(discussion instanceof HTMLElement)
+      || !(rail instanceof HTMLElement)
+    ) return null;
 
     const shellRect = shell.getBoundingClientRect();
     const railRect = rail.getBoundingClientRect();
@@ -90,7 +97,8 @@ test('Okse uses one full-page raised deck with the global footer rail revealed o
     const topElement = document.elementFromPoint(sampleX, sampleY);
 
     return {
-      railIsNextSibling: shell.nextElementSibling === rail,
+      discussionIsNextSibling: shell.nextElementSibling === discussion,
+      railFollowsDiscussion: discussion.nextElementSibling === rail,
       shellLeft: shellRect.left,
       shellWidth: shellRect.width,
       railLeft: railRect.left,
@@ -102,7 +110,8 @@ test('Okse uses one full-page raised deck with the global footer rail revealed o
   });
 
   expect(structure).not.toBeNull();
-  expect(structure.railIsNextSibling).toBe(true);
+  expect(structure.discussionIsNextSibling).toBe(true);
+  expect(structure.railFollowsDiscussion).toBe(true);
   expect(Math.abs(structure.railLeft - structure.shellLeft)).toBeLessThan(1);
   expect(Math.abs(structure.railWidth - structure.shellWidth)).toBeLessThan(1);
   expect(structure.pageCoversRailBeforeEnd).toBe(true);
