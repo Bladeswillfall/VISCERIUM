@@ -1,0 +1,78 @@
+---
+import siteConfig from '../../site.config.mjs';
+import { classifyCodexPage } from '../lib/page-kind.mjs';
+import Comments from './Comments.astro';
+import Webmentions from './Webmentions.astro';
+
+const { starlightRoute } = Astro.locals;
+const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.entry.id);
+const pageCommentsEnabled = starlightRoute.entry.data.giscus ?? true;
+const discussionsEnabled = Boolean(
+  siteConfig.comments.enabled
+  && pageCommentsEnabled
+  && !pageKind.isEraHomepage
+);
+---
+
+{discussionsEnabled && (
+  <section class="codex-discussions" aria-label="Discussions">
+    <div class="codex-discussions__inner">
+      <Webmentions />
+      <Comments />
+    </div>
+  </section>
+)}
+
+<style>
+  @layer starlight.core {
+    .codex-discussions {
+      position: relative;
+      z-index: var(--codex-z-page, 0);
+      box-sizing: border-box;
+      inline-size: 100%;
+      margin-block-start: -1.25rem;
+      padding-block: calc(1.25rem + 1.5rem) 2.5rem;
+      padding-inline: clamp(1rem, 3vw, 3rem);
+      border-block-start: 1px solid var(--sl-color-hairline-light);
+      background: var(--codex-page-bg);
+    }
+
+    .codex-discussions__inner {
+      box-sizing: border-box;
+      inline-size: 100%;
+      max-inline-size: 92rem;
+      margin-inline: auto;
+    }
+
+    :global(.codex-discussions viscerium-comments) {
+      display: block;
+      padding: 1.5rem var(--sl-content-pad-x);
+    }
+
+    @media (min-width: 72rem) {
+      html:not(.codex-sidebar-collapsed) .codex-discussions {
+        padding-inline-start: calc(
+          var(--codex-sidebar-overlay-width, 18rem) + clamp(1rem, 3vw, 3rem)
+        );
+      }
+    }
+
+    @media (max-width: 40rem) {
+      .codex-discussions {
+        margin-block-start: -1rem;
+        padding-block-start: calc(1rem + 1.25rem);
+        padding-block-end: 2rem;
+      }
+    }
+
+    @media print, (forced-colors: active) {
+      .codex-discussions {
+        margin-block-start: 0;
+        padding-block-start: 1.5rem;
+        border-block-start: 1px solid CanvasText;
+        background: Canvas;
+        color: CanvasText;
+      }
+    }
+  }
+</style>
