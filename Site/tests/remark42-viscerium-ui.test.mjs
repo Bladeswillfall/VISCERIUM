@@ -10,37 +10,57 @@ const iframe = readFileSync(iframePath, 'utf8');
 const style = iframe.match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? '';
 
 test('Remark42 keeps native component geometry while VISCERIUM owns colours', () => {
+  assert.match(style, /html:root\s*\{/);
   assert.match(style, /#remark42 > \.dark\s*\{/);
   assert.match(style, /#remark42 > \.light\s*\{/);
   assert.match(style, /--color9:\s*var\(--vc-era-accent\)/);
   assert.match(style, /--color15:\s*var\(--vc-era-button\)/);
-  assert.match(style, /--primary-text-color:\s*var\(--vc-text-rgb\)/);
 
   assert.doesNotMatch(style, /(^|[}\s])textarea\s*\{/m);
   assert.doesNotMatch(style, /(^|[}\s])button\s*\{/m);
   assert.doesNotMatch(style, /(^|[}\s])a\s*\{/m);
 });
 
-test('theme switching stays out of the editor hot path and synchronizes browser color-scheme explicitly', () => {
+test('neutral Remark42 color tokens keep their upstream semantic roles across theme changes', () => {
+  // Remark42's light composer is color0 on color6; dark is color5 on color8.
+  // Keep these numbered tokens stable rather than rebinding them by theme.
+  assert.match(style, /html:root[\s\S]*?--color0:\s*#101010/);
+  assert.match(style, /html:root[\s\S]*?--color5:\s*#c8bfa8/);
+  assert.match(style, /html:root[\s\S]*?--color6:\s*#b9b4a9/);
+  assert.match(style, /html:root[\s\S]*?--color8:\s*#211f1b/);
+
+  const themeBlocks = style.match(/#remark42 > \.dark,[\s\S]*?#remark42 > \.light\s*\{[\s\S]*?\}/g)?.join('\n') ?? '';
+  assert.doesNotMatch(themeBlocks, /--color0:/);
+  assert.doesNotMatch(themeBlocks, /--color5:/);
+  assert.doesNotMatch(themeBlocks, /--color6:/);
+  assert.doesNotMatch(themeBlocks, /--color8:/);
+});
+
+test('theme switching follows stock Remark42 mechanics and stays out of the editor hot path', () => {
   assert.match(style, /#remark42 > \.dark/);
   assert.match(style, /#remark42 > \.light/);
   assert.doesNotMatch(iframe, /syncRemarkTheme/);
   assert.doesNotMatch(iframe, /new MutationObserver/);
   assert.doesNotMatch(iframe, /observer\.observe/);
-  assert.match(iframe, /if \(data\.theme === 'dark' \|\| data\.theme === 'light'\) \{[\s\S]*?document\.documentElement\.style\.colorScheme = data\.theme/);
-  assert.match(iframe, /Remark42's public changeTheme\(\) updates the parent iframe element/);
+
+  // Match upstream: set document color-scheme only for first paint. Runtime
+  // changeTheme() owns the iframe element and native Remark42 theme message.
+  assert.match(iframe, /document\.documentElement\.style\.colorScheme = theme === 'dark' \? 'dark' : 'light'/);
+  assert.doesNotMatch(iframe, /document\.documentElement\.style\.colorScheme = data\.theme/);
   assert.doesNotMatch(iframe, /addEventListener\(['"]input['"]/);
   assert.doesNotMatch(iframe, /addEventListener\(['"]keydown['"]/);
+  assert.doesNotMatch(iframe, /addEventListener\(['"]focusin['"]/);
 });
 
-test('decoration is bounded and event-driven rather than mutation-driven', () => {
-  assert.match(iframe, /function scheduleRefreshBurst\(\)/);
-  assert.match(iframe, /var delays = \[0, 200, 750, 1500, 3000, 6000\]/);
-  assert.match(iframe, /document\.addEventListener\('submit', scheduleRefreshBurst, true\)/);
-  assert.match(iframe, /document\.addEventListener\('click',[\s\S]*?scheduleRefresh\(0\)/);
-  assert.match(iframe, /document\.addEventListener\('focusin'/);
+test('decoration stops polling once Remark42 initial render is ready', () => {
+  assert.match(iframe, /function waitForInitialRender\(attempt\)/);
+  assert.match(iframe, /mainForm && !stillLoading/);
+  assert.match(iframe, /attempt >= 7/);
+  assert.match(iframe, /document\.addEventListener\('submit'/);
+  assert.match(iframe, /document\.addEventListener\('click'/);
   assert.match(iframe, /window\.requestAnimationFrame/);
   assert.match(iframe, /No persistent DOM observer is installed/);
+  assert.doesNotMatch(iframe, /scheduleRefreshBurst/);
 });
 
 test('Remark42 exposes all four era palettes in light and dark modes', () => {
