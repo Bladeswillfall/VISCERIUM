@@ -70,7 +70,7 @@ test.describe('mobile article presentation', () => {
     expect(result.footerZIndex).toBe('auto');
     expect(result.footerMarginTop).toBe('0px');
     expect(result.grainBlendMode).toBe('normal');
-    expect(result.grainOpacity).toBe('0.2');
+    expect(result.grainOpacity).toBe('0.03');
     expect(result.documentWidth).toBeLessThanOrEqual(result.viewportWidth + 1);
   });
 });
