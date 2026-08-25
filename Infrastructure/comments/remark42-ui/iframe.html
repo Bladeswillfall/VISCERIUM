@@ -327,6 +327,14 @@
           if (typeof data.title === 'string') {
             document.title = data.title.slice(0, 512);
           }
+
+          // Remark42's public changeTheme() updates the parent iframe element and
+          // posts the same theme into this document. Keep the document-level
+          // color-scheme synchronized here so native controls/canvas painting do
+          // not retain the iframe's initial theme and flash on later editor paints.
+          if (data.theme === 'dark' || data.theme === 'light') {
+            document.documentElement.style.colorScheme = data.theme;
+          }
         } catch (e) {}
       });
 
@@ -376,7 +384,6 @@
           'What detail should we explore further?'
         ];
         var selectedPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-        var promptApplied = false;
         var base62Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         var maxFiveCharacterBase62 = 916132832; // 62^5
 
@@ -420,21 +427,23 @@
         }
 
         function maybeApplyPrompt(form, expected) {
-          if (promptApplied || !form || form.getAttribute('data-testid') !== expected) return;
+          if (!form || form.getAttribute('data-testid') !== expected) return false;
           var textarea = form.querySelector('textarea');
-          if (!textarea) return;
-          textarea.setAttribute('placeholder', selectedPrompt);
-          promptApplied = true;
+          if (!textarea) return false;
+          if (textarea.getAttribute('placeholder') !== selectedPrompt) {
+            textarea.setAttribute('placeholder', selectedPrompt);
+          }
+          return true;
         }
 
         function applyMainPrompt(root) {
-          if (promptApplied || !root) return;
+          if (!root) return;
           var expected = 'commentform_' + encodeURI(remark_config.url || '');
-          if (root.matches && root.matches('form[data-testid]')) maybeApplyPrompt(root, expected);
-          if (promptApplied || !root.querySelectorAll) return;
+          if (root.matches && root.matches('form[data-testid]') && maybeApplyPrompt(root, expected)) return;
+          if (!root.querySelectorAll) return;
           var forms = root.querySelectorAll('form[data-testid]');
-          for (var i = 0; i < forms.length && !promptApplied; i++) {
-            maybeApplyPrompt(forms[i], expected);
+          for (var i = 0; i < forms.length; i++) {
+            if (maybeApplyPrompt(forms[i], expected)) return;
           }
         }
 
@@ -525,12 +534,29 @@
           for (var i = 0; i < comments.length; i++) decorateComment(comments[i]);
         }
 
-        function processAddedRoot(root) {
-          if (!root || root.nodeType !== 1) return;
-          if (root.closest && root.closest('.vc-comment-identity')) return;
-          removeUploadControls(root);
-          applyMainPrompt(root);
-          decorateComments(root);
+        function refreshDecorations() {
+          removeUploadControls(document);
+          applyMainPrompt(document);
+          decorateComments(document);
+        }
+
+        var refreshFrame = 0;
+
+        function scheduleRefresh(delay) {
+          if (delay && delay > 0) {
+            window.setTimeout(function () { scheduleRefresh(0); }, delay);
+            return;
+          }
+          if (refreshFrame) return;
+          refreshFrame = window.requestAnimationFrame(function () {
+            refreshFrame = 0;
+            refreshDecorations();
+          });
+        }
+
+        function scheduleRefreshBurst() {
+          var delays = [0, 200, 750, 1500, 3000, 6000];
+          for (var i = 0; i < delays.length; i++) scheduleRefresh(delays[i]);
         }
 
         document.addEventListener('paste', blockImageTransfer, true);
@@ -538,37 +564,30 @@
         document.addEventListener('dragover', blockImageTransfer, true);
 
         function startGuard() {
-          removeUploadControls(document);
-          applyMainPrompt(document);
-          decorateComments(document);
+          // No persistent DOM observer is installed. Remark42's controlled
+          // textarea re-renders on every keystroke, so any subtree observer can
+          // enter the editor hot path even when it watches childList only.
+          refreshDecorations();
+          scheduleRefreshBurst();
 
-          var pendingRoots = [];
-          var scheduled = false;
+          // User actions that can create forms/comments schedule a bounded pass.
+          // Input/keydown events are intentionally not observed.
+          document.addEventListener('submit', scheduleRefreshBurst, true);
+          document.addEventListener('click', function () { scheduleRefresh(0); }, true);
+          document.addEventListener('focusin', function (event) {
+            var target = event.target;
+            if (target && target.matches && target.matches('textarea')) scheduleRefresh(0);
+          }, true);
 
-          function flushPendingRoots() {
-            scheduled = false;
-            var batch = pendingRoots;
-            pendingRoots = [];
-            for (var i = 0; i < batch.length; i++) processAddedRoot(batch[i]);
-          }
-
-          function scheduleRoot(root) {
-            pendingRoots.push(root);
-            if (scheduled) return;
-            scheduled = true;
-            window.requestAnimationFrame(flushPendingRoots);
-          }
-
-          var observer = new MutationObserver(function (mutations) {
-            for (var i = 0; i < mutations.length; i++) {
-              var added = mutations[i].addedNodes;
-              for (var j = 0; j < added.length; j++) {
-                if (added[j].nodeType === 1) scheduleRoot(added[j]);
-              }
-            }
+          // Theme changes are an explicit Remark42 message, not inferred from DOM
+          // mutations. Refresh once after Preact applies the new theme so any
+          // externally-added identity node removed by reconciliation is restored.
+          window.addEventListener('message', function (event) {
+            if (event.source !== window.parent) return;
+            var data = event.data;
+            if (!data || typeof data !== 'object') return;
+            if (data.theme === 'dark' || data.theme === 'light') scheduleRefresh(0);
           });
-
-          observer.observe(document.body, { childList: true, subtree: true });
         }
 
         if (document.readyState === 'loading') {
