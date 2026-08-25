@@ -41,7 +41,7 @@ async function hoverConnectedNode(page, graph, canvas) {
     const source = await graph.getAttribute('data-world-graph-context');
     const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
     const id = await graph.getAttribute('data-world-graph-active-id');
-    if (source === 'pointer' && neighbours === 1 && id) return { x, y, id };
+    if (source === 'pointer' && neighbours > 0 && id) return { x, y, id };
   }
   return null;
 }
