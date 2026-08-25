@@ -42,21 +42,36 @@ test('five-character display UIDs are opaque, deterministic and collision-fail-c
   assert.doesNotMatch(iframe, /\.textContent\s*=\s*[^;]*user\.id/);
 });
 
-test('identity layout keeps username and timestamp primary and metadata underneath', () => {
-  assert.match(style, /\.vc-comment-user[\s\S]*?flex-wrap:\s*wrap/);
-  assert.match(style, /\.vc-comment-time[\s\S]*?align-self:\s*flex-start/);
-  assert.match(style, /\.vc-comment-meta[\s\S]*?flex:\s*0 0 100%/);
-  assert.match(style, /\.vc-comment-uid[\s\S]*?font-family:\s*ui-monospace/);
-  assert.match(style, /\.vc-comment-role\[data-role='staff'\][\s\S]*?border-radius:\s*4px/);
-  assert.match(iframe, /parts\.user\.appendChild\(meta\)/);
-  assert.doesNotMatch(iframe, /appendChild\(parts\.time\)/);
+test('identity layout uses inert attributes and CSS generated content, not Preact-owned child nodes', () => {
+  assert.match(style, /\[data-vc-meta\][\s\S]*?flex-wrap:\s*wrap/);
+  assert.match(style, /\[data-vc-meta\]::after[\s\S]*?content:\s*attr\(data-vc-meta\)/);
+  assert.match(style, /\[data-vc-role='staff'\]::after[\s\S]*?font-weight:\s*700/);
+  assert.match(style, /\[data-vc-time\][\s\S]*?align-self:\s*flex-start/);
+  assert.match(iframe, /parts\.user\.setAttribute\('data-vc-meta', metaText\)/);
+  assert.match(iframe, /parts\.user\.setAttribute\('data-vc-role', roleValue\)/);
+  assert.match(iframe, /parts\.time\.setAttribute\('data-vc-time', ''\)/);
+  assert.doesNotMatch(iframe, /createElement\(['"]span['"]\)/);
+  assert.doesNotMatch(iframe, /appendChild\(meta\)/);
+  assert.doesNotMatch(iframe, /vc-comment-meta/);
 });
 
-test('account decoration shares the existing structural observer and stays out of typing', () => {
+test('account decoration is outside the no-upload observer and outside typing', () => {
   assert.equal((iframe.match(/new MutationObserver/g) ?? []).length, 1);
-  assert.match(iframe, /observer\.observe\(document\.body, \{ childList: true, subtree: true \}\)/);
-  assert.match(iframe, /if \(containsComment\(node\)\) scheduleIdentityRefresh\(\)/);
+  assert.match(
+    iframe,
+    /new MutationObserver\(function \(mutations\) \{[\s\S]*?mutation\.addedNodes\.forEach[\s\S]*?removeUploadControls\(node\)[\s\S]*?\}\);\s*observer\.observe\(document\.body, \{ childList: true, subtree: true \}\)/
+  );
+  assert.doesNotMatch(iframe, /MutationObserver[\s\S]{0,1200}decorateComment/);
+  assert.doesNotMatch(iframe, /MutationObserver[\s\S]{0,1200}refreshIdentityIndex/);
   assert.doesNotMatch(iframe, /addEventListener\(['"]input['"]/);
   assert.doesNotMatch(iframe, /addEventListener\(['"]keydown['"]/);
   assert.doesNotMatch(iframe, /addEventListener\(['"]keyup['"]/);
+});
+
+test('identity refresh is bounded to startup and low-frequency interactions', () => {
+  assert.match(iframe, /\[0, 50, 150, 300, 600, 1000, 1600, 2500\]/);
+  assert.match(iframe, /document\.addEventListener\('submit', scheduleRefreshAfterSubmit, true\)/);
+  assert.match(iframe, /document\.addEventListener\('click', scheduleDecorationBurst, true\)/);
+  assert.match(iframe, /data\.theme === 'light' \|\| data\.theme === 'dark'/);
+  assert.doesNotMatch(iframe, /setInterval\(/);
 });
