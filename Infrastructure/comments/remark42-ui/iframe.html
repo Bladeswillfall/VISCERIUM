@@ -8,14 +8,253 @@
     <base target="_blank" />
     <!--
       Based on Remark42 v1.16.4's production iframe template (MIT).
-      VISCERIUM's only behavioural change is the no-upload UI guard below.
-      Review this file whenever the pinned Remark42 release changes.
+      VISCERIUM keeps the stock Remark42 JS/CSS and adds only the reviewed
+      no-upload guard, colour mapping, comment identity metadata and top-level
+      discussion prompt below. Review this file whenever Remark42 is upgraded.
     -->
     <style>
       /* Hide the upload affordance immediately; the script below also removes
          dynamically-created upload controls from reply/edit forms. */
       label:has(input[type='file']) {
         display: none !important;
+      }
+
+      /*
+        VISCERIUM colour ownership. The values mirror the sRGB fallbacks in the
+        public Codex design tokens. Remark42 keeps its native component geometry,
+        spacing and interaction styling: these variables recolour that UI only.
+      */
+      html[data-viscerium-theme='dark'] {
+        --vc-page: #101010;
+        --vc-panel: #000;
+        --vc-surface: #211f1b;
+        --vc-surface-soft: #484137;
+        --vc-text: #a0a0a0;
+        --vc-text-strong: #c8bfa8;
+        --vc-muted: #888070;
+        --vc-border: #484137;
+        --vc-border-strong: #888070;
+        --vc-danger: #ff8a9a;
+        --vc-danger-soft: #6e2630;
+        --vc-text-rgb: 160, 160, 160;
+        --vc-text-strong-rgb: 200, 191, 168;
+        --vc-muted-rgb: 136, 128, 112;
+        --vc-page-rgb: 16, 16, 16;
+        --vc-era-accent: #888070;
+        --vc-era-high: #c8bfa8;
+        --vc-era-surface: #484137;
+        --vc-era-button: #484137;
+        --vc-era-accent-rgb: 136, 128, 112;
+        --vc-era-high-rgb: 200, 191, 168;
+      }
+
+      html[data-viscerium-theme='light'] {
+        --vc-page: #b9b4a9;
+        --vc-panel: #c8bfa8;
+        --vc-surface: #c8bfa8;
+        --vc-surface-soft: #b1aa9c;
+        --vc-text: #151515;
+        --vc-text-strong: #101010;
+        --vc-muted: #5f594e;
+        --vc-border: #484137;
+        --vc-border-strong: #101010;
+        --vc-danger: #35000f;
+        --vc-danger-soft: #e1a6ac;
+        --vc-text-rgb: 21, 21, 21;
+        --vc-text-strong-rgb: 16, 16, 16;
+        --vc-muted-rgb: 95, 89, 78;
+        --vc-page-rgb: 185, 180, 169;
+        --vc-era-accent: #484137;
+        --vc-era-high: #101010;
+        --vc-era-surface: #b1aa9c;
+        --vc-era-button: #484137;
+        --vc-era-accent-rgb: 72, 65, 55;
+        --vc-era-high-rgb: 16, 16, 16;
+      }
+
+      html[data-viscerium-theme='dark'][data-viscerium-era='e1'] {
+        --vc-era-accent: #b56873;
+        --vc-era-high: #f83b52;
+        --vc-era-surface: #6e141f;
+        --vc-era-button: #974e59;
+        --vc-era-accent-rgb: 181, 104, 115;
+        --vc-era-high-rgb: 248, 59, 82;
+      }
+
+      html[data-viscerium-theme='light'][data-viscerium-era='e1'] {
+        --vc-era-accent: #7b0f2f;
+        --vc-era-high: #62000c;
+        --vc-era-surface: #e5a4a3;
+        --vc-era-button: #5f1b2a;
+        --vc-era-accent-rgb: 123, 15, 47;
+        --vc-era-high-rgb: 98, 0, 12;
+      }
+
+      html[data-viscerium-theme='dark'][data-viscerium-era='e2'] {
+        --vc-era-accent: #7d8250;
+        --vc-era-high: #7f8d00;
+        --vc-era-surface: #555d19;
+        --vc-era-button: #5f6900;
+        --vc-era-accent-rgb: 125, 130, 80;
+        --vc-era-high-rgb: 127, 141, 0;
+      }
+
+      html[data-viscerium-theme='light'][data-viscerium-era='e2'] {
+        --vc-era-accent: #444700;
+        --vc-era-high: #2c3300;
+        --vc-era-surface: #b5bc93;
+        --vc-era-button: #313700;
+        --vc-era-accent-rgb: 68, 71, 0;
+        --vc-era-high-rgb: 44, 51, 0;
+      }
+
+      html[data-viscerium-theme='dark'][data-viscerium-era='e3'] {
+        --vc-era-accent: #b2668d;
+        --vc-era-high: #eb4684;
+        --vc-era-surface: #5d0f2f;
+        --vc-era-button: #954b72;
+        --vc-era-accent-rgb: 178, 102, 141;
+        --vc-era-high-rgb: 235, 70, 132;
+      }
+
+      html[data-viscerium-theme='light'][data-viscerium-era='e3'] {
+        --vc-era-accent: #73144e;
+        --vc-era-high: #5f0028;
+        --vc-era-surface: #dfa5b4;
+        --vc-era-button: #5d1840;
+        --vc-era-accent-rgb: 115, 20, 78;
+        --vc-era-high-rgb: 95, 0, 40;
+      }
+
+      html[data-viscerium-theme='dark'][data-viscerium-era='e4'] {
+        --vc-era-accent: #568786;
+        --vc-era-high: #009688;
+        --vc-era-surface: #1b6860;
+        --vc-era-button: #756047;
+        --vc-era-accent-rgb: 86, 135, 134;
+        --vc-era-high-rgb: 0, 150, 136;
+      }
+
+      html[data-viscerium-theme='light'][data-viscerium-era='e4'] {
+        --vc-era-accent: #004849;
+        --vc-era-high: #00342e;
+        --vc-era-surface: #96c2bb;
+        --vc-era-button: #433018;
+        --vc-era-accent-rgb: 0, 72, 73;
+        --vc-era-high-rgb: 0, 52, 46;
+      }
+
+      html[data-viscerium-theme] {
+        --color0: var(--vc-panel);
+        --color8: var(--vc-surface);
+        --color22: var(--vc-surface);
+        --color24: var(--vc-surface);
+        --color7: var(--vc-border);
+        --color23: var(--vc-surface-soft);
+        --color18: var(--vc-surface-soft);
+        --color19: var(--vc-surface-soft);
+        --color36: var(--vc-border);
+        --color34: var(--vc-border);
+        --color37: var(--vc-border-strong);
+        --color14: var(--vc-muted);
+        --color10: var(--vc-text-strong);
+        --color13: var(--vc-muted);
+        --color11: var(--vc-muted);
+        --color32: var(--vc-text);
+        --color1: var(--vc-muted);
+        --color35: var(--vc-text);
+        --color20: var(--vc-text);
+        --color41: var(--vc-text-strong);
+        --color5: var(--vc-panel);
+        --color6: var(--vc-panel);
+        --color3: var(--vc-era-surface);
+        --color4: var(--vc-era-surface);
+        --color16: var(--vc-border);
+        --color31: var(--vc-border-strong);
+        --color21: var(--vc-surface);
+        --color29: var(--vc-era-accent);
+        --color9: var(--vc-era-accent);
+        --color15: var(--vc-era-button);
+        --color33: var(--vc-era-high);
+        --color40: var(--vc-era-accent);
+        --color43: var(--vc-era-surface);
+        --color42: var(--vc-era-surface);
+        --color48: var(--vc-era-accent);
+        --color47: var(--vc-era-accent);
+        --color28: var(--vc-danger-soft);
+        --color25: var(--vc-danger);
+        --color38: var(--vc-danger);
+        --color27: var(--vc-danger);
+        --color26: var(--vc-danger-soft);
+        --error-color: var(--vc-danger);
+        --error-background: var(--vc-danger-soft);
+        --line-color: var(--vc-border);
+        --line-brighter-color: var(--vc-border-strong);
+      }
+
+      html[data-viscerium-theme] #remark42 .dark,
+      html[data-viscerium-theme] #remark42 .light {
+        --primary-color: var(--vc-era-accent-rgb);
+        --primary-brighter-color: var(--vc-era-high-rgb);
+        --primary-darker-color: var(--vc-era-accent-rgb);
+        --primary-text-color: var(--vc-text-rgb);
+        --secondary-text-color: var(--vc-muted-rgb);
+        --secondary-darker-text-color: var(--vc-muted-rgb);
+        --primary-background-color: var(--vc-page-rgb);
+        --text-color: var(--vc-text-strong-rgb);
+      }
+
+      /* Keep the approved VISCERIUM comment treatment outside the composer UI. */
+      article[id^='remark42__comment-'] {
+        border-left: 2px solid var(--vc-era-accent);
+        padding-left: 12px;
+      }
+
+      img.avatar {
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+
+      .vc-comment-identity {
+        display: flex;
+        flex: 0 0 100%;
+        align-items: center;
+        gap: 6px;
+        min-height: 13px;
+        margin-top: 2px;
+        margin-left: 32px;
+        color: var(--vc-muted);
+        font-size: 10px;
+        line-height: 1.2;
+      }
+
+      .vc-comment-uid {
+        opacity: 0.72;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 9px;
+        letter-spacing: 0.08em;
+        user-select: all;
+      }
+
+      .vc-comment-separator {
+        opacity: 0.45;
+      }
+
+      .vc-comment-role {
+        opacity: 0.72;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .vc-comment-role[data-role='staff'] {
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: var(--vc-era-surface);
+        color: var(--vc-era-high);
+        opacity: 1;
+        letter-spacing: 0.075em;
       }
     </style>
     <script>
@@ -36,6 +275,7 @@
           }
 
           document.documentElement.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
+          document.documentElement.dataset.visceriumTheme = theme === 'dark' ? 'dark' : 'light';
         } catch (e) {}
       })();
       (function () {
@@ -95,6 +335,20 @@
           if (typeof data.title === 'string') {
             document.title = data.title.slice(0, 512);
           }
+
+          if (data.visceriumTheme) {
+            var incomingTheme = data.visceriumTheme.theme;
+            var incomingEra = data.visceriumTheme.era;
+            if (incomingTheme === 'light' || incomingTheme === 'dark') {
+              document.documentElement.dataset.visceriumTheme = incomingTheme;
+              document.documentElement.style.colorScheme = incomingTheme;
+            }
+            if (/^e[1-4]$/.test(incomingEra || '')) {
+              document.documentElement.dataset.visceriumEra = incomingEra;
+            } else {
+              delete document.documentElement.dataset.visceriumEra;
+            }
+          }
         } catch (e) {}
       });
 
@@ -118,6 +372,22 @@
     <script>
       (function () {
         'use strict';
+
+        var prompts = [
+          'What was your favourite part of this article?',
+          'What would you like to see more of from this article?',
+          'What detail stood out to you most?',
+          'Was anything unclear or underdeveloped?',
+          'What would you like to know more about?',
+          'What did we miss?',
+          'Which part of this article stayed with you?',
+          'What should this article explore next?',
+          'Did anything here leave you with questions?',
+          'What detail should we explore further?'
+        ];
+        var selectedPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        var base62Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var maxFiveCharacterBase62 = 916132832; // 62^5
 
         function removeInput(input) {
           if (!input) return;
@@ -158,18 +428,110 @@
           event.stopImmediatePropagation();
         }
 
+        function applyMainPrompt() {
+          var expected = 'commentform_' + encodeURI(remark_config.url || '');
+          var forms = document.querySelectorAll('form[data-testid]');
+          for (var i = 0; i < forms.length; i++) {
+            if (forms[i].getAttribute('data-testid') !== expected) continue;
+            var textarea = forms[i].querySelector('textarea');
+            if (textarea && textarea.getAttribute('placeholder') !== selectedPrompt) {
+              textarea.setAttribute('placeholder', selectedPrompt);
+            }
+            return;
+          }
+        }
+
+        function encodeFiveCharacterUid(id) {
+          if (!Number.isSafeInteger(id) || id < 0 || id >= maxFiveCharacterBase62) return null;
+          var encoded = '';
+          do {
+            encoded = base62Alphabet[id % 62] + encoded;
+            id = Math.floor(id / 62);
+          } while (id > 0);
+          while (encoded.length < 5) encoded = '0' + encoded;
+          return encoded;
+        }
+
+        function githubUidFromAvatar(url) {
+          var match = /^https:\/\/avatars\.githubusercontent\.com\/u\/(\d+)(?:[/?#]|$)/i.exec(url || '');
+          if (!match) return null;
+          return encodeFiveCharacterUid(Number(match[1]));
+        }
+
+        function isStaffComment(article) {
+          for (var i = 0; i < article.classList.length; i++) {
+            if (article.classList[i].toLowerCase().indexOf('viewadmin') !== -1) return true;
+          }
+          return false;
+        }
+
+        function decorateComment(article) {
+          if (!article || article.querySelector('.vc-comment-identity')) return;
+
+          var avatar = article.querySelector('img.avatar');
+          var uid = avatar ? githubUidFromAvatar(avatar.src) : null;
+          var role = isStaffComment(article) ? 'Staff' : 'Reader';
+          if (!uid && role !== 'Staff') return;
+
+          var directChildren = article.children;
+          var info = null;
+          for (var i = 0; i < directChildren.length; i++) {
+            if (directChildren[i].querySelector && directChildren[i].querySelector('img.avatar')) {
+              info = directChildren[i];
+              break;
+            }
+          }
+          if (!info) return;
+
+          var identity = document.createElement('span');
+          identity.className = 'vc-comment-identity';
+
+          if (uid) {
+            var uidNode = document.createElement('span');
+            uidNode.className = 'vc-comment-uid';
+            uidNode.textContent = uid;
+            uidNode.title = 'VISCERIUM user ID';
+            identity.appendChild(uidNode);
+
+            var separator = document.createElement('span');
+            separator.className = 'vc-comment-separator';
+            separator.textContent = '·';
+            separator.setAttribute('aria-hidden', 'true');
+            identity.appendChild(separator);
+          }
+
+          var roleNode = document.createElement('span');
+          roleNode.className = 'vc-comment-role';
+          roleNode.dataset.role = role.toLowerCase();
+          roleNode.textContent = role;
+          identity.appendChild(roleNode);
+          info.appendChild(identity);
+        }
+
+        function decorateComments(root) {
+          if (!root || !root.querySelectorAll) return;
+          if (root.matches && root.matches("article[id^='remark42__comment-']")) decorateComment(root);
+          var comments = root.querySelectorAll("article[id^='remark42__comment-']");
+          for (var i = 0; i < comments.length; i++) decorateComment(comments[i]);
+        }
+
         document.addEventListener('paste', blockImageTransfer, true);
         document.addEventListener('drop', blockImageTransfer, true);
         document.addEventListener('dragover', blockImageTransfer, true);
 
         function startGuard() {
           removeUploadControls(document);
+          applyMainPrompt();
+          decorateComments(document);
           var observer = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
               mutation.addedNodes.forEach(function (node) {
-                if (node.nodeType === 1) removeUploadControls(node);
+                if (node.nodeType !== 1) return;
+                removeUploadControls(node);
+                decorateComments(node);
               });
             });
+            applyMainPrompt();
           });
           observer.observe(document.body, { childList: true, subtree: true });
         }
