@@ -93,3 +93,36 @@ test('category pages use alphabetically grouped responsive index markup', async 
     await rm(docsDir, { recursive: true, force: true });
   }
 });
+
+test('regular articles that own category-shaped routes are not extended with category navigation', async () => {
+  const docsDir = await mkdtemp(path.join(os.tmpdir(), 'viscerium-article-category-route-'));
+
+  try {
+    await mkdir(path.join(docsDir, 'nations', 'okse-dominion'), { recursive: true });
+    const articlePath = path.join(docsDir, 'nations', 'okse-dominion.md');
+    const article = `${fixture({
+      title: 'Okse Dominion',
+      slug: 'nations/okse-dominion',
+      description: 'A regular nation article.',
+      type: 'faction',
+    })}\nAuthored closing paragraph.\n`;
+
+    await writeFile(articlePath, article);
+    await writeFile(
+      path.join(docsDir, 'nations', 'okse-dominion', 'valenheim.md'),
+      fixture({ title: 'Valenheim', slug: 'nations/okse-dominion/valenheim', type: 'location' }),
+    );
+
+    await execFileAsync(process.execPath, ['scripts/generate-category-pages.mjs'], {
+      cwd: process.cwd(),
+      env: { ...process.env, VISCERIUM_DOCS_DIR: docsDir },
+    });
+
+    const output = await readFile(articlePath, 'utf8');
+    assert.match(output, /Authored closing paragraph\./);
+    assert.doesNotMatch(output, /## Subcategories/);
+    assert.doesNotMatch(output, /## Pages in this category/);
+  } finally {
+    await rm(docsDir, { recursive: true, force: true });
+  }
+});
