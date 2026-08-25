@@ -8,14 +8,67 @@
     <base target="_blank" />
     <!--
       Based on Remark42 v1.16.4's production iframe template (MIT).
-      VISCERIUM's only behavioural change is the no-upload UI guard below.
-      Review this file whenever the pinned Remark42 release changes.
+      VISCERIUM keeps Remark42's stock theme, composer, links, buttons and
+      interaction behaviour. This shell adds only the no-upload guard and a
+      small account-identity presentation layer. Review it whenever the pinned
+      Remark42 release changes.
     -->
     <style>
       /* Hide the upload affordance immediately; the script below also removes
          dynamically-created upload controls from reply/edit forms. */
       label:has(input[type='file']) {
         display: none !important;
+      }
+
+      /*
+        Account metadata only. Do not put Remark42 palette overrides here.
+        The username and timestamp stay in their upstream positions; the compact
+        VISCERIUM identity line wraps underneath the username without moving
+        Preact-owned nodes.
+      */
+      .vc-comment-user {
+        flex-wrap: wrap;
+        align-content: flex-start;
+      }
+
+      .vc-comment-time {
+        align-self: flex-start;
+        margin-top: 1px;
+      }
+
+      .vc-comment-meta {
+        display: flex;
+        flex: 0 0 100%;
+        align-items: center;
+        gap: 5px;
+        min-height: 13px;
+        margin-top: 1px;
+        margin-left: 0 !important;
+        font-size: 10px;
+        font-weight: 400;
+        line-height: 1.2;
+        opacity: 0.76;
+      }
+
+      .vc-comment-uid {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: 0.07em;
+        user-select: all;
+      }
+
+      .vc-comment-role {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.045em;
+        text-transform: uppercase;
+      }
+
+      .vc-comment-role[data-role='staff'] {
+        padding: 1px 5px;
+        border-radius: 4px;
+        background: color-mix(in srgb, currentColor 14%, transparent);
+        opacity: 1;
       }
     </style>
     <script>
@@ -119,6 +172,13 @@
       (function () {
         'use strict';
 
+        var commentIdPrefix = 'remark42__comment-';
+        var base62Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var maxFiveCharacterBase62 = 916132832; // 62^5
+        var identityByComment = new Map();
+        var identityRequest = null;
+        var identityRefreshTimer = 0;
+
         function removeInput(input) {
           if (!input) return;
           var label = input.closest && input.closest('label');
@@ -158,17 +218,264 @@
           event.stopImmediatePropagation();
         }
 
+        function hashRemarkUserId(userId) {
+          // FNV-1a is used only to make a compact opaque display identifier. It
+          // is not a security primitive and the raw Remark42 user id is never
+          // inserted into the rendered DOM.
+          var hash = 0x811c9dc5;
+          for (var i = 0; i < userId.length; i++) {
+            hash ^= userId.charCodeAt(i);
+            hash = Math.imul(hash, 0x01000193);
+          }
+          return hash >>> 0;
+        }
+
+        function encodeFiveCharacterUid(value) {
+          var encoded = '';
+          for (var i = 0; i < 5; i++) {
+            encoded = base62Alphabet[value % 62] + encoded;
+            value = Math.floor(value / 62);
+          }
+          return encoded;
+        }
+
+        function deriveDisplayUid(userId) {
+          if (typeof userId !== 'string' || !userId) return null;
+          return encodeFiveCharacterUid(hashRemarkUserId(userId) % maxFiveCharacterBase62);
+        }
+
+        function roleForUser(user) {
+          if (user && user.admin === true) return 'Staff';
+          if (user && typeof user.id === 'string' && user.id.indexOf('anonymous_') === 0) return 'Guest';
+          return 'Reader';
+        }
+
+        function buildIdentityIndex(comments) {
+          var next = new Map();
+          var uidOwner = Object.create(null);
+          var uidByUser = Object.create(null);
+          var collided = Object.create(null);
+
+          for (var i = 0; i < comments.length; i++) {
+            var comment = comments[i];
+            if (!comment || typeof comment.id !== 'string' || !comment.user || typeof comment.user.id !== 'string') {
+              continue;
+            }
+
+            var userId = comment.user.id;
+            var uid = uidByUser[userId] || deriveDisplayUid(userId);
+            if (!uid) continue;
+            uidByUser[userId] = uid;
+
+            if (uidOwner[uid] && uidOwner[uid] !== userId) {
+              collided[uid] = true;
+            } else {
+              uidOwner[uid] = userId;
+            }
+          }
+
+          for (var j = 0; j < comments.length; j++) {
+            var item = comments[j];
+            if (!item || typeof item.id !== 'string' || !item.user || typeof item.user.id !== 'string') continue;
+            var candidate = uidByUser[item.user.id] || null;
+            next.set(item.id, {
+              uid: candidate && !collided[candidate] ? candidate : null,
+              role: roleForUser(item.user),
+              name: typeof item.user.name === 'string' ? item.user.name : ''
+            });
+          }
+
+          identityByComment = next;
+
+          var collisionKeys = Object.keys(collided);
+          if (collisionKeys.length > 0) {
+            console.warn('[VISCERIUM] Withheld colliding five-character comment UIDs:', collisionKeys.join(', '));
+          }
+        }
+
+        function identityEndpoint() {
+          if (!remark_config.site_id || !remark_config.url) return null;
+          var query = new URLSearchParams();
+          query.set('site', remark_config.site_id);
+          query.set('url', remark_config.url);
+          query.set('format', 'plain');
+          return '/api/v1/find?' + query.toString();
+        }
+
+        function refreshIdentityIndex() {
+          var endpoint = identityEndpoint();
+          if (!endpoint) return Promise.resolve();
+          if (identityRequest) return identityRequest;
+
+          identityRequest = fetch(endpoint, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' }
+          })
+            .then(function (response) {
+              if (!response.ok) throw new Error('identity request returned ' + response.status);
+              return response.json();
+            })
+            .then(function (payload) {
+              if (!payload || !Array.isArray(payload.comments)) {
+                throw new Error('identity response did not contain comments');
+              }
+              buildIdentityIndex(payload.comments);
+              decorateComments(document);
+            })
+            .catch(function (error) {
+              console.warn('[VISCERIUM] Comment identity metadata unavailable:', error);
+            })
+            .finally(function () {
+              identityRequest = null;
+            });
+
+          return identityRequest;
+        }
+
+        function scheduleIdentityRefresh() {
+          if (identityRefreshTimer) return;
+          identityRefreshTimer = window.setTimeout(function () {
+            identityRefreshTimer = 0;
+            refreshIdentityIndex();
+          }, 300);
+        }
+
+        function findOwnTimeAnchor(info, articleId) {
+          if (!info || !info.children) return null;
+          for (var i = 0; i < info.children.length; i++) {
+            var child = info.children[i];
+            if (child.tagName !== 'A') continue;
+            try {
+              if (new URL(child.href, window.location.href).hash === '#' + articleId) return child;
+            } catch (e) {}
+          }
+          return null;
+        }
+
+        function findHeaderParts(article, identity) {
+          if (!article || !article.children) return null;
+
+          for (var i = 0; i < article.children.length; i++) {
+            var info = article.children[i];
+            if (!info || info.tagName !== 'DIV') continue;
+
+            var time = findOwnTimeAnchor(info, article.id);
+            if (!time) continue;
+
+            for (var j = 0; j < info.children.length; j++) {
+              var candidate = info.children[j];
+              if (!candidate || candidate.tagName !== 'DIV') continue;
+              var buttons = candidate.querySelectorAll('button');
+              for (var k = 0; k < buttons.length; k++) {
+                if ((buttons[k].textContent || '').trim() === identity.name) {
+                  return { user: candidate, time: time };
+                }
+              }
+            }
+          }
+
+          return null;
+        }
+
+        function decorateComment(article) {
+          if (!article || typeof article.id !== 'string' || article.id.indexOf(commentIdPrefix) !== 0) return;
+          var commentId = article.id.substring(commentIdPrefix.length);
+          var identity = identityByComment.get(commentId);
+          if (!identity) return;
+
+          var parts = findHeaderParts(article, identity);
+          if (!parts) return;
+
+          parts.user.classList.add('vc-comment-user');
+          parts.time.classList.add('vc-comment-time');
+
+          var existing = parts.user.querySelector('.vc-comment-meta');
+          var expectedUid = identity.uid || '';
+          var expectedRole = identity.role || '';
+          if (
+            existing &&
+            existing.getAttribute('data-uid') === expectedUid &&
+            existing.getAttribute('data-role') === expectedRole
+          ) {
+            return;
+          }
+          if (existing) existing.remove();
+
+          var meta = document.createElement('span');
+          meta.className = 'vc-comment-meta';
+          meta.setAttribute('data-uid', expectedUid);
+          meta.setAttribute('data-role', expectedRole);
+
+          if (identity.uid) {
+            var uid = document.createElement('span');
+            uid.className = 'vc-comment-uid';
+            uid.textContent = identity.uid;
+            uid.title = 'VISCERIUM display UID';
+            meta.appendChild(uid);
+          }
+
+          if (identity.uid && identity.role) {
+            var separator = document.createElement('span');
+            separator.textContent = '·';
+            separator.setAttribute('aria-hidden', 'true');
+            meta.appendChild(separator);
+          }
+
+          if (identity.role) {
+            var role = document.createElement('span');
+            role.className = 'vc-comment-role';
+            role.setAttribute('data-role', identity.role.toLowerCase());
+            role.textContent = identity.role;
+            meta.appendChild(role);
+          }
+
+          parts.user.appendChild(meta);
+        }
+
+        function decorateComments(root) {
+          if (!root) return;
+          if (root.matches && root.matches("article[id^='remark42__comment-']")) decorateComment(root);
+          if (!root.querySelectorAll) return;
+          var comments = root.querySelectorAll("article[id^='remark42__comment-']");
+          for (var i = 0; i < comments.length; i++) decorateComment(comments[i]);
+        }
+
+        function containsComment(root) {
+          if (!root || root.nodeType !== 1) return false;
+          if (root.matches && root.matches("article[id^='remark42__comment-']")) return true;
+          return Boolean(root.querySelector && root.querySelector("article[id^='remark42__comment-']"));
+        }
+
         document.addEventListener('paste', blockImageTransfer, true);
         document.addEventListener('drop', blockImageTransfer, true);
         document.addEventListener('dragover', blockImageTransfer, true);
 
         function startGuard() {
           removeUploadControls(document);
+          refreshIdentityIndex();
+
+          // Remark42 already needs this child-list observer for the no-upload
+          // policy. Identity decoration deliberately shares it rather than adding
+          // another observer. Textarea typing changes values/styles, not child
+          // nodes, so this path stays outside the editor's keystroke hot path.
           var observer = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
               mutation.addedNodes.forEach(function (node) {
-                if (node.nodeType === 1) removeUploadControls(node);
+                if (node.nodeType !== 1) return;
+                removeUploadControls(node);
+                decorateComments(node);
+                if (containsComment(node)) scheduleIdentityRefresh();
               });
+
+              // If Preact reconciles away our metadata during a low-frequency
+              // component rerender, restore it from the already-fetched identity
+              // map. No network request is needed for this path.
+              if (mutation.removedNodes && mutation.removedNodes.length && mutation.target) {
+                var target = mutation.target.nodeType === 1 ? mutation.target : mutation.target.parentElement;
+                var article = target && target.closest && target.closest("article[id^='remark42__comment-']");
+                if (article && !article.querySelector('.vc-comment-meta')) decorateComment(article);
+              }
             });
           });
           observer.observe(document.body, { childList: true, subtree: true });
