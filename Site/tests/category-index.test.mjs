@@ -93,3 +93,74 @@ test('category pages use alphabetically grouped responsive index markup', async 
     await rm(docsDir, { recursive: true, force: true });
   }
 });
+
+test('regular articles that own category-shaped routes are not extended with category navigation', async () => {
+  const docsDir = await mkdtemp(path.join(os.tmpdir(), 'viscerium-article-category-route-'));
+
+  try {
+    await mkdir(path.join(docsDir, 'nations', 'okse-dominion'), { recursive: true });
+    const articlePath = path.join(docsDir, 'nations', 'okse-dominion.md');
+    const article = `${fixture({
+      title: 'Okse Dominion',
+      slug: 'nations/okse-dominion',
+      description: 'A regular nation article.',
+      type: 'faction',
+    })}\nAuthored closing paragraph.\n`;
+
+    await writeFile(articlePath, article);
+    await writeFile(
+      path.join(docsDir, 'nations', 'okse-dominion', 'valenheim.md'),
+      fixture({ title: 'Valenheim', slug: 'nations/okse-dominion/valenheim', type: 'location' }),
+    );
+
+    await execFileAsync(process.execPath, ['scripts/generate-category-pages.mjs'], {
+      cwd: process.cwd(),
+      env: { ...process.env, VISCERIUM_DOCS_DIR: docsDir },
+    });
+
+    const output = await readFile(articlePath, 'utf8');
+    assert.match(output, /Authored closing paragraph\./);
+    assert.doesNotMatch(output, /## Subcategories/);
+    assert.doesNotMatch(output, /## Pages in this category/);
+  } finally {
+    await rm(docsDir, { recursive: true, force: true });
+  }
+});
+
+test('era landing pages that own category-shaped routes retain category navigation', async () => {
+  const docsDir = await mkdtemp(path.join(os.tmpdir(), 'viscerium-era-category-route-'));
+
+  try {
+    await mkdir(path.join(docsDir, 'eras', 'citadel', 'events'), { recursive: true });
+    const eraPath = path.join(docsDir, 'eras', 'citadel.md');
+    const era = `${fixture({
+      title: 'CITADEL',
+      slug: 'eras/citadel',
+      description: 'The first era.',
+      type: 'era',
+    })}\nAuthored era primer.\n`;
+
+    await writeFile(eraPath, era);
+    await writeFile(
+      path.join(docsDir, 'eras', 'citadel', 'events', 'breaking.md'),
+      fixture({
+        title: 'The Breaking',
+        slug: 'eras/citadel/events/the-breaking',
+        type: 'event',
+      }),
+    );
+
+    await execFileAsync(process.execPath, ['scripts/generate-category-pages.mjs'], {
+      cwd: process.cwd(),
+      env: { ...process.env, VISCERIUM_DOCS_DIR: docsDir },
+    });
+
+    const output = await readFile(eraPath, 'utf8');
+    assert.match(output, /Authored era primer\./);
+    assert.match(output, /## Subcategories/);
+    assert.match(output, /## Pages in this category/);
+    assert.match(output, /The Breaking/);
+  } finally {
+    await rm(docsDir, { recursive: true, force: true });
+  }
+});

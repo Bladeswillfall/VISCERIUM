@@ -39,7 +39,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
 
   type Remark42Instance = { destroy?: () => void };
   type Remark42Api = {
-    createInstance: (config: Remark42Config) => Remark42Instance;
+    createInstance: (config: Remark42Config & { node: HTMLElement }) => Remark42Instance;
     changeTheme?: (theme: 'light' | 'dark') => void;
     destroy?: () => void;
   };
@@ -64,9 +64,11 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
 
     remarkLoader = new Promise<void>((resolve, reject) => {
       let settled = false;
-      let loaderScript: HTMLScriptElement | null = null;
+      let timeoutId: number | undefined;
+      const script = document.createElement('script');
       const cleanup = () => {
         window.removeEventListener('REMARK42::ready', finish);
+        if (timeoutId !== undefined) window.clearTimeout(timeoutId);
       };
       const finish = () => {
         if (settled || !remark42()) return;
@@ -78,7 +80,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         if (settled) return;
         settled = true;
         cleanup();
-        loaderScript?.remove();
+        script.remove();
         remarkLoader = null;
         reject(new Error('Remark42 failed to load.'));
       };
@@ -90,8 +92,6 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
       // before this script executes; mount() establishes both before calling us.
       document.querySelector<HTMLScriptElement>('script[data-viscerium-remark42-loader]')?.remove();
 
-      const script = document.createElement('script');
-      loaderScript = script;
       script.dataset.visceriumRemark42Loader = '';
       script.src = `${host.replace(/\/$/, '')}/web/embed.js`;
       script.async = true;
@@ -102,6 +102,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
       }, { once: true });
       script.addEventListener('error', fail, { once: true });
       (document.head || document.body).appendChild(script);
+      timeoutId = window.setTimeout(fail, 10_000);
     });
 
     return remarkLoader;
@@ -111,6 +112,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
     private instance?: Remark42Instance;
     private visibilityObserver?: IntersectionObserver;
     private themeObserver?: MutationObserver;
+    private loadingTimeout?: number;
     private generation = 0;
 
     connectedCallback() {
@@ -147,6 +149,8 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
       this.instance = undefined;
       this.themeObserver?.disconnect();
       this.themeObserver = undefined;
+      if (this.loadingTimeout !== undefined) window.clearTimeout(this.loadingTimeout);
+      this.loadingTimeout = undefined;
     }
 
     private async mount(generation: number) {
@@ -167,8 +171,8 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         components: ['embed'],
       };
 
-      // Remark42 currently validates the global config even when createInstance
-      // receives an explicit config object, so keep both in sync.
+      // The loader validates the global config, while createInstance's SPA API
+      // additionally needs the concrete node that owns this page's comment mount.
       remarkWindow().remark_config = config;
 
       try {
@@ -178,9 +182,16 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         const api = remark42();
         if (!api) throw new Error('Remark42 API is unavailable.');
 
-        this.destroy();
+        api.destroy?.();
         remarkWindow().remark_config = config;
-        this.instance = api.createInstance(config);
+        this.instance = api.createInstance({ node, ...config });
+
+        this.loadingTimeout = window.setTimeout(() => {
+          if (!this.isConnected || generation !== this.generation) return;
+          if (node.textContent?.trim() === 'Comments loading…') {
+            node.textContent = 'Comments are temporarily unavailable.';
+          }
+        }, 10_000);
 
         this.themeObserver = new MutationObserver(() => {
           remark42()?.changeTheme?.(this.currentTheme());

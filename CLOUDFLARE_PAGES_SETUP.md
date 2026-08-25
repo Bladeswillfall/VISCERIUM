@@ -63,14 +63,16 @@ Before production deployment, confirm:
 
 ### Webmentions
 
-Webmentions are disabled until `www.viscerium.co.uk` has been registered and verified with Webmention.io. Then configure:
+Incoming Webmentions use Webmention.io and are enabled by the repository defaults for the canonical production domain:
 
 ```text
 PUBLIC_WEBMENTIONS_ENABLED=1
 PUBLIC_WEBMENTION_IO_USERNAME=www.viscerium.co.uk
 ```
 
-Use the endpoint override variables in `Site/.env.example` only if Webmention.io supplies different endpoints.
+No secret is required in Cloudflare Pages for the current public JF2 API integration. Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, complete its domain verification, and confirm that the assigned username is `www.viscerium.co.uk`.
+
+`PUBLIC_WEBMENTIONS_ENABLED=0` remains available as an emergency off switch. Use the endpoint override variables in `Site/.env.example` only if Webmention.io supplies different endpoints.
 
 ### Analytics and verification
 

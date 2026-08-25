@@ -2,6 +2,7 @@
 import DefaultPageFrame from '@astrojs/starlight/components/PageFrame.astro';
 import { classifyCodexPage } from '../lib/page-kind.mjs';
 import '../styles/smart-tooltips.css';
+import CodexDiscussions from './CodexDiscussions.astro';
 import CodexFooterRail from './CodexFooterRail.astro';
 
 const { starlightRoute } = Astro.locals;
@@ -27,6 +28,7 @@ const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
   <slot />
 </DefaultPageFrame>
 
+<CodexDiscussions />
 <CodexFooterRail />
 
 <script>
@@ -60,22 +62,14 @@ const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
     .page {
       position: relative;
       z-index: var(--codex-z-page, 0);
-      border-radius: 0 0 1.25rem 1.25rem;
       background: var(--codex-page-bg);
       box-shadow:
         0 1.5rem 3.4375rem color-mix(in oklch, var(--codex-shadow-color) 46%, transparent),
         0 1px 0 var(--sl-color-hairline-light);
     }
 
-    @media (max-width: 40rem) {
-      .page {
-        border-radius: 0 0 1rem 1rem;
-      }
-    }
-
     @media print, (forced-colors: active) {
       .page {
-        border-radius: 0;
         box-shadow: none;
       }
     }

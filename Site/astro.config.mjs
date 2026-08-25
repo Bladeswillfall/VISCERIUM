@@ -205,8 +205,6 @@ const readerPreferencesHead = [
   },
 ];
 
-const { enabled: commentsEnabled } = siteConfig.comments;
-
 const sidebar = [
   ...(await buildSidebar()),
   {
@@ -267,7 +265,6 @@ export default defineConfig({
         PageSidebar: './src/components/CodexPageSidebar.astro',
         PageTitle: './src/components/CodexPageTitle.astro',
         TwoColumnContent: './src/components/CodexTwoColumnContent.astro',
-        ...(commentsEnabled ? { Pagination: './src/components/CommentsPagination.astro' } : {}),
       },
       editLink: {
         baseUrl: `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/`,

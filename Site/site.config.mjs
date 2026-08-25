@@ -45,7 +45,7 @@ export default {
     maxItems: Number.isFinite(feedMaxItems) ? feedMaxItems : 50,
   },
   webmentions: {
-    enabled: env.PUBLIC_WEBMENTIONS_ENABLED === '1' && Boolean(webmentionEndpoint),
+    enabled: env.PUBLIC_WEBMENTIONS_ENABLED !== '0' && Boolean(webmentionEndpoint),
     username: webmentionUsername,
     endpoint: webmentionEndpoint,
     pingbackEndpoint: webmentionPingbackEndpoint,

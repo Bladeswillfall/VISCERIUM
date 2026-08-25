@@ -28,27 +28,43 @@ function referenceRecord(record) {
   };
 }
 
-export function buildReferencedInIndex(records) {
+function sortedReferenceRecords(records) {
+  return [...records.values()].sort((left, right) => left.title.localeCompare(right.title));
+}
+
+export function buildReferenceIndexes(records) {
   const recordsByRoute = new Map(records.map((record) => [record.route, record]));
   const inbound = new Map();
+  const outbound = new Map();
 
   for (const source of records) {
-    // Only authored Vault notes create "Referenced in" records. Generated category,
+    // Only authored Vault notes create relationship records. Generated category,
     // tag and continuity pages are navigation apparatus, not narrative references.
     if (!source.data.sourcePath) continue;
 
+    const targets = new Map();
     for (const targetRoute of extractInternalRoutes(source.content)) {
       if (targetRoute === source.route || !recordsByRoute.has(targetRoute)) continue;
+
+      const target = recordsByRoute.get(targetRoute);
+      targets.set(targetRoute, referenceRecord(target));
+
       const sources = inbound.get(targetRoute) ?? new Map();
       sources.set(source.route, referenceRecord(source));
       inbound.set(targetRoute, sources);
     }
+
+    if (targets.size > 0) outbound.set(source.route, targets);
   }
 
-  return new Map([...inbound.entries()].map(([route, sources]) => [
-    route,
-    [...sources.values()].sort((left, right) => left.title.localeCompare(right.title)),
-  ]));
+  for (const index of [inbound, outbound]) {
+    for (const [route, entries] of index) index.set(route, sortedReferenceRecords(entries));
+  }
+  return { inbound, outbound };
+}
+
+export function buildReferencedInIndex(records) {
+  return buildReferenceIndexes(records).inbound;
 }
 
 export async function generateReferencedIn({ docsDir = defaultDocsDir } = {}) {
@@ -69,22 +85,32 @@ export async function generateReferencedIn({ docsDir = defaultDocsDir } = {}) {
     });
   }
 
-  const inbound = buildReferencedInIndex(records);
+  const { inbound, outbound } = buildReferenceIndexes(records);
   let targetCount = 0;
+  let sourceCount = 0;
   let referenceCount = 0;
 
   for (const record of records) {
-    const references = inbound.get(record.route) ?? [];
+    const referencedBy = inbound.get(record.route) ?? [];
+    const references = outbound.get(record.route) ?? [];
     const data = { ...record.data };
     delete data.referencedIn;
-    if (references.length > 0) {
-      data.referencedIn = references;
+    delete data.references;
+
+    if (referencedBy.length > 0) {
+      data.referencedIn = referencedBy;
       targetCount += 1;
+    }
+
+    if (references.length > 0) {
+      data.references = references;
+      sourceCount += 1;
       referenceCount += references.length;
     }
+
     await fs.writeFile(record.file, matter.stringify(record.content, data), 'utf8');
   }
 
-  console.log(`Generated Referenced in index: ${referenceCount} source article references across ${targetCount} pages.`);
-  return { targetCount, referenceCount };
+  console.log(`Generated reference index: ${referenceCount} authored links across ${sourceCount} source pages and ${targetCount} referenced pages.`);
+  return { targetCount, sourceCount, referenceCount };
 }

@@ -30,6 +30,7 @@
     --codex-fixed-light: #fff;
     --codex-fixed-dark: var(--codex-palette-oled);
     --codex-page-bg: var(--codex-palette-ink);
+    --codex-discussions-bg: color-mix(in srgb, var(--codex-palette-ink) 69%, var(--codex-palette-oled));
     --codex-bg: var(--codex-palette-ink);
     --codex-bg-soft: var(--codex-palette-oled);
     --codex-accent: var(--codex-palette-light);
@@ -167,6 +168,7 @@
   :root[data-theme='light'] {
     color-scheme: light;
     --codex-page-bg: var(--codex-palette-page-light);
+    --codex-discussions-bg: color-mix(in srgb, var(--codex-palette-page-light) 87%, var(--codex-palette-deep));
     --codex-bg: var(--codex-palette-page-light);
     --codex-bg-soft: var(--codex-palette-light);
     --codex-text-body: #151515;

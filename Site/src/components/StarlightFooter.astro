@@ -1,11 +1,9 @@
 ---
-import Pagination from 'virtual:starlight/components/Pagination';
 import { classifyCodexPage } from '../lib/page-kind.mjs';
 import ArticleDates from './ArticleDates.astro';
 import CodexEditLink from './CodexEditLink.astro';
 import ContributorStrip from './ContributorStrip.astro';
 import ReferencedIn from './ReferencedIn.astro';
-import Webmentions from './Webmentions.astro';
 
 const { starlightRoute } = Astro.locals;
 const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.entry.id);
@@ -20,8 +18,6 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
       <CodexEditLink />
       <ArticleDates />
     </div>
-    {!pageKind.isEraHomepage && <Webmentions />}
-    {!pageKind.isEraHomepage && <Pagination />}
   </div>
 </div>
 
@@ -42,9 +38,9 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
     }
 
     /*
-      The article footer contains references, contributors, edit information,
-      webmentions, and pagination. `PageFrame` controls the global navigation rail
-      and the page-level reveal layout.
+      The article footer contains references, contributors, and edit information.
+      Discussions now live below the complete article/sidebar frame so the right
+      rail ends with the article region.
     */
     .codex-page-deck {
       position: relative;
@@ -84,19 +80,8 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
       text-decoration: underline;
     }
 
-    :global(viscerium-comments) {
-      display: block;
-      padding: 1.5rem var(--sl-content-pad-x);
-    }
-
-    /* Era landing pages provide navigation and orientation. The footer hides
-       article discussion features on these pages. */
-    :global(body:has(.codex-page-classifier--era-homepage) :is(
-      .codex-contributors,
-      .codex-webmentions,
-      viscerium-comments,
-      .pagination-links
-    )) {
+    /* Era landing pages provide navigation and orientation. */
+    :global(body:has(.codex-page-classifier--era-homepage) .codex-contributors) {
       display: none !important;
     }
   }

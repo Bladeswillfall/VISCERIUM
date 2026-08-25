@@ -196,6 +196,7 @@ export const collections = {
         related: z.array(z.string()).optional(),
         links: z.array(z.string()).optional(),
         referencedIn: z.array(referencedInSchema).optional(),
+        references: z.array(referencedInSchema).optional(),
       }),
     }),
   }),

@@ -1,0 +1,82 @@
+---
+import siteConfig from '../../site.config.mjs';
+import { classifyCodexPage } from '../lib/page-kind.mjs';
+import Comments from './Comments.astro';
+import Webmentions from './Webmentions.astro';
+
+const { entry } = Astro.locals.starlightRoute;
+const pageKind = classifyCodexPage(entry.data, entry.id);
+const discussionsEnabled = siteConfig.comments.enabled && (entry.data.giscus ?? true) && !pageKind.isEraHomepage;
+---
+
+{discussionsEnabled && (
+  <section class="codex-discussions" aria-label="Discussions">
+    <div class="codex-discussions__inner">
+      <h1>Discussions</h1>
+      <Webmentions />
+      <Comments />
+    </div>
+  </section>
+)}
+
+<style>
+  @layer starlight.core {
+    .codex-discussions {
+      position: relative;
+      z-index: var(--codex-z-page, 0);
+      box-sizing: border-box;
+      inline-size: 100%;
+      margin-block-start: -1.25rem;
+      padding-block: 2.75rem 2.5rem;
+      padding-inline: clamp(1rem, 3vw, 3rem);
+      border-block-start: 1px solid var(--sl-color-hairline-light);
+      border-radius: 0 0 1.25rem 1.25rem;
+      background: var(--codex-discussions-bg);
+    }
+
+    .codex-discussions__inner {
+      max-inline-size: 92rem;
+      margin-inline: auto;
+    }
+
+    h1 {
+      margin: 0 0 1.5rem;
+      color: var(--sl-color-white);
+      font-size: var(--sl-text-h1);
+      font-weight: 600;
+      line-height: var(--sl-line-height-headings);
+    }
+
+    :global(.codex-discussions viscerium-comments) {
+      display: block;
+      padding: 1.5rem var(--sl-content-pad-x);
+    }
+
+    @media (min-width: 72rem) {
+      html:not(.codex-sidebar-collapsed) .codex-discussions {
+        padding-inline-start: calc(
+          var(--codex-sidebar-overlay-width, 18rem) + clamp(1rem, 3vw, 3rem)
+        );
+      }
+    }
+
+    @media (max-width: 40rem) {
+      .codex-discussions {
+        margin-block-start: -1rem;
+        padding-block: 2.25rem 2rem;
+        border-radius: 0 0 1rem 1rem;
+      }
+    }
+
+    @media print, (forced-colors: active) {
+      .codex-discussions {
+        margin-block-start: 0;
+        padding-block-start: 1.5rem;
+        border-block-start: 1px solid CanvasText;
+        border-radius: 0;
+        background: Canvas;
+        color: CanvasText;
+      }
+    }
+  }
+</style>
