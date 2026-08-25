@@ -28,10 +28,24 @@ test('comments and webmentions sit below the complete article frame', async ({ p
 
   const discussions = page.locator('.codex-discussions');
   await expect(discussions).toBeVisible();
+  await expect(discussions.getByRole('heading', { level: 1, name: 'Discussions' })).toBeVisible();
   await expect(discussions.locator('viscerium-comments')).toHaveCount(1);
   await expect(discussions.locator('.codex-webmentions')).toHaveCount(1);
   await expect(page.locator('.codex-main-pane viscerium-comments')).toHaveCount(0);
   await expect(page.locator('.codex-main-pane .codex-webmentions')).toHaveCount(0);
+  await expect(page.locator('.pagination-links')).toHaveCount(0);
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'dark';
+  });
+  await expect.poll(() => discussions.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe('rgb(11, 11, 11)');
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+  });
+  await expect.poll(() => discussions.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe('rgb(170, 165, 154)');
 
   const placement = await page.evaluate(() => {
     const frame = document.querySelector('.page');
