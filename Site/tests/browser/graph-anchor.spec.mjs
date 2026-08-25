@@ -4,24 +4,40 @@ const preview = 'http://127.0.0.1:4321';
 const centreSampleStep = 2;
 const centreSamplingTolerance = centreSampleStep * 4;
 
+async function inspectLeafPoint(page, graph, x, y) {
+  await page.mouse.move(x, y);
+  const id = await graph.getAttribute('data-world-graph-active-id');
+  const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
+  return id && neighbours === 1 ? { x, y, id } : null;
+}
+
 async function findConnectedNodePoint(page, graph, canvas) {
   const box = await canvas.boundingBox();
   if (!box) return null;
+
+  // Prefer the cheap random probe first. CoSE's final arrangement varies between
+  // runs, so do not rely on one random sequence being lucky enough to hit a leaf.
   let seed = 41;
   for (let index = 0; index < 260; index += 1) {
     seed = (seed * 48_271) % 2_147_483_647;
     const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
     seed = (seed * 48_271) % 2_147_483_647;
     const y = box.y + 12 + (seed % Math.max(1, Math.floor(box.height - 24)));
-    await page.mouse.move(x, y);
-    const id = await graph.getAttribute('data-world-graph-active-id');
-    const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
-    // Dense nodes can have overlapping expanded pointer halos. Their Voronoi-like
-    // hit region changes as neighbouring nodes move away during zoom, which skews
-    // a black-box centre estimate even when the rendered node itself stays anchored.
-    // A singly-connected node still exercises a real graph relationship while
-    // keeping the geometric sampling stable enough for the bounded assertion.
-    if (id && neighbours === 1) return { x, y, id };
+    const point = await inspectLeafPoint(page, graph, x, y);
+    if (point) return point;
+  }
+
+  // Dense nodes can have overlapping expanded pointer halos. Their Voronoi-like
+  // hit region changes as neighbouring nodes disperse during zoom, which can skew
+  // a black-box centre estimate. A leaf still exercises a real relationship while
+  // keeping the geometry stable. The 18px grid matches the pointer halo closely
+  // enough to find one regardless of the nondeterministic CoSE arrangement.
+  const step = 18;
+  for (let y = box.y + 12; y <= box.y + box.height - 12; y += step) {
+    for (let x = box.x + 12; x <= box.x + box.width - 12; x += step) {
+      const point = await inspectLeafPoint(page, graph, x, y);
+      if (point) return point;
+    }
   }
   return null;
 }
