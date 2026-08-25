@@ -8,23 +8,23 @@
     <base target="_blank" />
     <!--
       Based on Remark42 v1.16.4's production iframe template (MIT).
-      VISCERIUM keeps the stock Remark42 JS/CSS and adds only the reviewed
-      no-upload guard, colour mapping, comment identity metadata and top-level
-      discussion prompt below. Review this file whenever Remark42 is upgraded.
+      VISCERIUM keeps the stock Remark42 JS/CSS and adds only a reviewed
+      no-upload guard, colour remap, top-level prompt, and post-render identity
+      decoration. Keep this shell version-pinned and review it on every Remark42
+      upgrade.
     -->
     <style>
-      /* Hide the upload affordance immediately; the script below also removes
-         dynamically-created upload controls from reply/edit forms. */
+      /* The backend and Caddy remain the security boundary for image uploads. */
       label:has(input[type='file']) {
         display: none !important;
       }
 
       /*
-        VISCERIUM colour ownership. The values mirror the sRGB fallbacks in the
-        public Codex design tokens. Remark42 keeps its native component geometry,
-        spacing and interaction styling: these variables recolour that UI only.
+        Theme ownership deliberately follows Remark42's own literal .dark/.light
+        root classes. No theme MutationObserver is used: REMARK42.changeTheme()
+        changes this root and the variables below follow by normal CSS cascade.
       */
-      html[data-viscerium-theme='dark'] {
+      #remark42 > .dark {
         --vc-page: #101010;
         --vc-panel: #000;
         --vc-surface: #211f1b;
@@ -32,10 +32,12 @@
         --vc-text: #a0a0a0;
         --vc-text-strong: #c8bfa8;
         --vc-muted: #888070;
+        --vc-meta: #888070;
         --vc-border: #484137;
         --vc-border-strong: #888070;
         --vc-danger: #ff8a9a;
         --vc-danger-soft: #6e2630;
+        --vc-staff-text: #000;
         --vc-text-rgb: 160, 160, 160;
         --vc-text-strong-rgb: 200, 191, 168;
         --vc-muted-rgb: 136, 128, 112;
@@ -48,7 +50,7 @@
         --vc-era-high-rgb: 200, 191, 168;
       }
 
-      html[data-viscerium-theme='light'] {
+      #remark42 > .light {
         --vc-page: #b9b4a9;
         --vc-panel: #c8bfa8;
         --vc-surface: #c8bfa8;
@@ -56,10 +58,12 @@
         --vc-text: #151515;
         --vc-text-strong: #101010;
         --vc-muted: #5f594e;
+        --vc-meta: #403b34;
         --vc-border: #484137;
         --vc-border-strong: #101010;
         --vc-danger: #35000f;
         --vc-danger-soft: #e1a6ac;
+        --vc-staff-text: #c8bfa8;
         --vc-text-rgb: 21, 21, 21;
         --vc-text-strong-rgb: 16, 16, 16;
         --vc-muted-rgb: 95, 89, 78;
@@ -72,7 +76,7 @@
         --vc-era-high-rgb: 16, 16, 16;
       }
 
-      html[data-viscerium-theme='dark'][data-viscerium-era='e1'] {
+      html[data-viscerium-era='e1'] #remark42 > .dark {
         --vc-era-accent: #b56873;
         --vc-era-high: #f83b52;
         --vc-era-surface: #6e141f;
@@ -81,7 +85,7 @@
         --vc-era-high-rgb: 248, 59, 82;
       }
 
-      html[data-viscerium-theme='light'][data-viscerium-era='e1'] {
+      html[data-viscerium-era='e1'] #remark42 > .light {
         --vc-era-accent: #7b0f2f;
         --vc-era-high: #62000c;
         --vc-era-surface: #e5a4a3;
@@ -90,7 +94,7 @@
         --vc-era-high-rgb: 98, 0, 12;
       }
 
-      html[data-viscerium-theme='dark'][data-viscerium-era='e2'] {
+      html[data-viscerium-era='e2'] #remark42 > .dark {
         --vc-era-accent: #7d8250;
         --vc-era-high: #7f8d00;
         --vc-era-surface: #555d19;
@@ -99,7 +103,7 @@
         --vc-era-high-rgb: 127, 141, 0;
       }
 
-      html[data-viscerium-theme='light'][data-viscerium-era='e2'] {
+      html[data-viscerium-era='e2'] #remark42 > .light {
         --vc-era-accent: #444700;
         --vc-era-high: #2c3300;
         --vc-era-surface: #b5bc93;
@@ -108,7 +112,7 @@
         --vc-era-high-rgb: 44, 51, 0;
       }
 
-      html[data-viscerium-theme='dark'][data-viscerium-era='e3'] {
+      html[data-viscerium-era='e3'] #remark42 > .dark {
         --vc-era-accent: #b2668d;
         --vc-era-high: #eb4684;
         --vc-era-surface: #5d0f2f;
@@ -117,7 +121,7 @@
         --vc-era-high-rgb: 235, 70, 132;
       }
 
-      html[data-viscerium-theme='light'][data-viscerium-era='e3'] {
+      html[data-viscerium-era='e3'] #remark42 > .light {
         --vc-era-accent: #73144e;
         --vc-era-high: #5f0028;
         --vc-era-surface: #dfa5b4;
@@ -126,7 +130,7 @@
         --vc-era-high-rgb: 95, 0, 40;
       }
 
-      html[data-viscerium-theme='dark'][data-viscerium-era='e4'] {
+      html[data-viscerium-era='e4'] #remark42 > .dark {
         --vc-era-accent: #568786;
         --vc-era-high: #009688;
         --vc-era-surface: #1b6860;
@@ -135,7 +139,7 @@
         --vc-era-high-rgb: 0, 150, 136;
       }
 
-      html[data-viscerium-theme='light'][data-viscerium-era='e4'] {
+      html[data-viscerium-era='e4'] #remark42 > .light {
         --vc-era-accent: #004849;
         --vc-era-high: #00342e;
         --vc-era-surface: #96c2bb;
@@ -144,7 +148,8 @@
         --vc-era-high-rgb: 0, 52, 46;
       }
 
-      html[data-viscerium-theme] {
+      #remark42 > .dark,
+      #remark42 > .light {
         --color0: var(--vc-panel);
         --color8: var(--vc-surface);
         --color22: var(--vc-surface);
@@ -190,10 +195,6 @@
         --error-background: var(--vc-danger-soft);
         --line-color: var(--vc-border);
         --line-brighter-color: var(--vc-border-strong);
-      }
-
-      html[data-viscerium-theme] #remark42 .dark,
-      html[data-viscerium-theme] #remark42 .light {
         --primary-color: var(--vc-era-accent-rgb);
         --primary-brighter-color: var(--vc-era-high-rgb);
         --primary-darker-color: var(--vc-era-accent-rgb);
@@ -204,7 +205,7 @@
         --text-color: var(--vc-text-strong-rgb);
       }
 
-      /* Keep the approved VISCERIUM comment treatment outside the composer UI. */
+      /* VISCERIUM-owned structure stays outside the native composer controls. */
       article[id^='remark42__comment-'] {
         border-left: 2px solid var(--vc-era-accent);
         padding-left: 12px;
@@ -223,13 +224,12 @@
         min-height: 13px;
         margin-top: 2px;
         margin-left: 32px;
-        color: var(--vc-muted);
+        color: var(--vc-meta);
         font-size: 10px;
         line-height: 1.2;
       }
 
       .vc-comment-uid {
-        opacity: 0.72;
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 9px;
         letter-spacing: 0.08em;
@@ -237,11 +237,10 @@
       }
 
       .vc-comment-separator {
-        opacity: 0.45;
+        opacity: 0.75;
       }
 
       .vc-comment-role {
-        opacity: 0.72;
         font-size: 9px;
         font-weight: 700;
         letter-spacing: 0.04em;
@@ -251,9 +250,8 @@
       .vc-comment-role[data-role='staff'] {
         padding: 2px 5px;
         border-radius: 4px;
-        background: var(--vc-era-surface);
-        color: var(--vc-era-high);
-        opacity: 1;
+        background: var(--vc-era-accent);
+        color: var(--vc-staff-text);
         letter-spacing: 0.075em;
       }
     </style>
@@ -275,7 +273,6 @@
           }
 
           document.documentElement.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
-          document.documentElement.dataset.visceriumTheme = theme === 'dark' ? 'dark' : 'light';
         } catch (e) {}
       })();
       (function () {
@@ -315,9 +312,6 @@
 
       window.addEventListener('message', function receiveMessages(event) {
         try {
-          // The embedding page is the only legitimate sender. This mirrors
-          // Remark42's own isFromParent() check and rejects messages from any
-          // other window that happens to hold a reference to the iframe.
           if (event.source !== window.parent) return;
 
           const data = event.data;
@@ -326,8 +320,6 @@
 
           const hashMatch = typeof data.hash === 'string' ? commentHashPattern.exec(data.hash) : null;
           if (hashMatch) {
-            // Reconstruct the fragment from a strict comment-id alphabet and
-            // URL-encode the captured value before it reaches a navigation API.
             const safeCommentId = encodeURIComponent(hashMatch[1]);
             location.replace('#remark42__comment-' + safeCommentId);
           }
@@ -384,6 +376,7 @@
           'What detail should we explore further?'
         ];
         var selectedPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        var promptApplied = false;
         var base62Alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         var maxFiveCharacterBase62 = 916132832; // 62^5
 
@@ -426,24 +419,22 @@
           event.stopImmediatePropagation();
         }
 
-        function syncRemarkTheme() {
-          var themedRoot = document.querySelector('#remark42 .dark, #remark42 .light');
-          if (!themedRoot) return;
-          var theme = themedRoot.classList.contains('dark') ? 'dark' : 'light';
-          document.documentElement.dataset.visceriumTheme = theme;
-          document.documentElement.style.colorScheme = theme;
+        function maybeApplyPrompt(form, expected) {
+          if (promptApplied || !form || form.getAttribute('data-testid') !== expected) return;
+          var textarea = form.querySelector('textarea');
+          if (!textarea) return;
+          textarea.setAttribute('placeholder', selectedPrompt);
+          promptApplied = true;
         }
 
-        function applyMainPrompt() {
+        function applyMainPrompt(root) {
+          if (promptApplied || !root) return;
           var expected = 'commentform_' + encodeURI(remark_config.url || '');
-          var forms = document.querySelectorAll('form[data-testid]');
-          for (var i = 0; i < forms.length; i++) {
-            if (forms[i].getAttribute('data-testid') !== expected) continue;
-            var textarea = forms[i].querySelector('textarea');
-            if (textarea && textarea.getAttribute('placeholder') !== selectedPrompt) {
-              textarea.setAttribute('placeholder', selectedPrompt);
-            }
-            return;
+          if (root.matches && root.matches('form[data-testid]')) maybeApplyPrompt(root, expected);
+          if (promptApplied || !root.querySelectorAll) return;
+          var forms = root.querySelectorAll('form[data-testid]');
+          for (var i = 0; i < forms.length && !promptApplied; i++) {
+            maybeApplyPrompt(forms[i], expected);
           }
         }
 
@@ -465,9 +456,6 @@
         }
 
         function isStaffComment(article) {
-          // Remark42 v1.16.4 applies its CSS-module viewAdmin class to comments
-          // authored by an administrator. This shell is already version-pinned,
-          // so this selector is reviewed alongside the other iframe assumptions.
           for (var i = 0; i < article.classList.length; i++) {
             if (article.classList[i].toLowerCase().indexOf('viewadmin') !== -1) return true;
           }
@@ -479,8 +467,16 @@
 
           var avatar = article.querySelector('img.avatar');
           var uid = avatar ? githubUidFromAvatar(avatar.src) : null;
-          var role = isStaffComment(article) ? 'Staff' : 'Reader';
-          if (!uid && role !== 'Staff') return;
+          var isStaff = isStaffComment(article);
+          var role = isStaff ? 'Staff' : uid ? 'Reader' : null;
+
+          /*
+            Do not infer Guest/non-GitHub roles from username or avatar shape.
+            Remark42's rendered comment DOM does not expose provider/user.id.
+            Unsupported providers stay undecorated until a stable identity source
+            is deliberately added.
+          */
+          if (!uid && !role) return;
 
           var directChildren = article.children;
           var info = null;
@@ -502,18 +498,23 @@
             uidNode.title = 'VISCERIUM user ID';
             identity.appendChild(uidNode);
 
-            var separator = document.createElement('span');
-            separator.className = 'vc-comment-separator';
-            separator.textContent = '·';
-            separator.setAttribute('aria-hidden', 'true');
-            identity.appendChild(separator);
+            if (role) {
+              var separator = document.createElement('span');
+              separator.className = 'vc-comment-separator';
+              separator.textContent = '·';
+              separator.setAttribute('aria-hidden', 'true');
+              identity.appendChild(separator);
+            }
           }
 
-          var roleNode = document.createElement('span');
-          roleNode.className = 'vc-comment-role';
-          roleNode.dataset.role = role.toLowerCase();
-          roleNode.textContent = role;
-          identity.appendChild(roleNode);
+          if (role) {
+            var roleNode = document.createElement('span');
+            roleNode.className = 'vc-comment-role';
+            roleNode.dataset.role = role.toLowerCase();
+            roleNode.textContent = role;
+            identity.appendChild(roleNode);
+          }
+
           info.appendChild(identity);
         }
 
@@ -524,32 +525,50 @@
           for (var i = 0; i < comments.length; i++) decorateComment(comments[i]);
         }
 
+        function processAddedRoot(root) {
+          if (!root || root.nodeType !== 1) return;
+          if (root.closest && root.closest('.vc-comment-identity')) return;
+          removeUploadControls(root);
+          applyMainPrompt(root);
+          decorateComments(root);
+        }
+
         document.addEventListener('paste', blockImageTransfer, true);
         document.addEventListener('drop', blockImageTransfer, true);
         document.addEventListener('dragover', blockImageTransfer, true);
 
         function startGuard() {
           removeUploadControls(document);
-          syncRemarkTheme();
-          applyMainPrompt();
+          applyMainPrompt(document);
           decorateComments(document);
+
+          var pendingRoots = [];
+          var scheduled = false;
+
+          function flushPendingRoots() {
+            scheduled = false;
+            var batch = pendingRoots;
+            pendingRoots = [];
+            for (var i = 0; i < batch.length; i++) processAddedRoot(batch[i]);
+          }
+
+          function scheduleRoot(root) {
+            pendingRoots.push(root);
+            if (scheduled) return;
+            scheduled = true;
+            window.requestAnimationFrame(flushPendingRoots);
+          }
+
           var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-              mutation.addedNodes.forEach(function (node) {
-                if (node.nodeType !== 1) return;
-                removeUploadControls(node);
-                decorateComments(node);
-              });
-            });
-            syncRemarkTheme();
-            applyMainPrompt();
+            for (var i = 0; i < mutations.length; i++) {
+              var added = mutations[i].addedNodes;
+              for (var j = 0; j < added.length; j++) {
+                if (added[j].nodeType === 1) scheduleRoot(added[j]);
+              }
+            }
           });
-          observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['class']
-          });
+
+          observer.observe(document.body, { childList: true, subtree: true });
         }
 
         if (document.readyState === 'loading') {
