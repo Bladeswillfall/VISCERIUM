@@ -61,13 +61,13 @@ const { t } = Astro.locals;
   }
 
   /*
-   * Mobile keeps the texture as a simple transparent overlay. Avoid blending
-   * the fixed viewport-sized layer against every painted page layer while scrolling.
+   * Mobile keeps the texture as a simple, very faint transparent overlay. Avoid
+   * blending the fixed viewport-sized layer against every painted page layer while scrolling.
    */
   @media (max-width: 40rem) {
     body::before {
       mix-blend-mode: normal;
-      opacity: .2;
+      opacity: .03;
     }
   }
 
