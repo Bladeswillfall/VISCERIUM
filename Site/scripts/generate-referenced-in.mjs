@@ -57,24 +57,14 @@ export function buildReferenceIndexes(records) {
     if (targets.size > 0) outbound.set(source.route, targets);
   }
 
-  return {
-    inbound: new Map([...inbound.entries()].map(([route, sources]) => [
-      route,
-      sortedReferenceRecords(sources),
-    ])),
-    outbound: new Map([...outbound.entries()].map(([route, targets]) => [
-      route,
-      sortedReferenceRecords(targets),
-    ])),
-  };
+  for (const index of [inbound, outbound]) {
+    for (const [route, entries] of index) index.set(route, sortedReferenceRecords(entries));
+  }
+  return { inbound, outbound };
 }
 
 export function buildReferencedInIndex(records) {
   return buildReferenceIndexes(records).inbound;
-}
-
-export function buildReferencesIndex(records) {
-  return buildReferenceIndexes(records).outbound;
 }
 
 export async function generateReferencedIn({ docsDir = defaultDocsDir } = {}) {
