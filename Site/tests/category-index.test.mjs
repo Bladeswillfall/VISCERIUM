@@ -126,3 +126,41 @@ test('regular articles that own category-shaped routes are not extended with cat
     await rm(docsDir, { recursive: true, force: true });
   }
 });
+
+test('era landing pages that own category-shaped routes retain category navigation', async () => {
+  const docsDir = await mkdtemp(path.join(os.tmpdir(), 'viscerium-era-category-route-'));
+
+  try {
+    await mkdir(path.join(docsDir, 'eras', 'citadel', 'events'), { recursive: true });
+    const eraPath = path.join(docsDir, 'eras', 'citadel.md');
+    const era = `${fixture({
+      title: 'CITADEL',
+      slug: 'eras/citadel',
+      description: 'The first era.',
+      type: 'era',
+    })}\nAuthored era primer.\n`;
+
+    await writeFile(eraPath, era);
+    await writeFile(
+      path.join(docsDir, 'eras', 'citadel', 'events', 'breaking.md'),
+      fixture({
+        title: 'The Breaking',
+        slug: 'eras/citadel/events/the-breaking',
+        type: 'event',
+      }),
+    );
+
+    await execFileAsync(process.execPath, ['scripts/generate-category-pages.mjs'], {
+      cwd: process.cwd(),
+      env: { ...process.env, VISCERIUM_DOCS_DIR: docsDir },
+    });
+
+    const output = await readFile(eraPath, 'utf8');
+    assert.match(output, /Authored era primer\./);
+    assert.match(output, /## Subcategories/);
+    assert.match(output, /## Pages in this category/);
+    assert.match(output, /The Breaking/);
+  } finally {
+    await rm(docsDir, { recursive: true, force: true });
+  }
+});
