@@ -4,20 +4,15 @@ import { classifyCodexPage } from '../lib/page-kind.mjs';
 import Comments from './Comments.astro';
 import Webmentions from './Webmentions.astro';
 
-const { starlightRoute } = Astro.locals;
-const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.entry.id);
-const pageCommentsEnabled = starlightRoute.entry.data.giscus ?? true;
-const discussionsEnabled = Boolean(
-  siteConfig.comments.enabled
-  && pageCommentsEnabled
-  && !pageKind.isEraHomepage
-);
+const { entry } = Astro.locals.starlightRoute;
+const pageKind = classifyCodexPage(entry.data, entry.id);
+const discussionsEnabled = siteConfig.comments.enabled && (entry.data.giscus ?? true) && !pageKind.isEraHomepage;
 ---
 
 {discussionsEnabled && (
   <section class="codex-discussions" aria-label="Discussions">
     <div class="codex-discussions__inner">
-      <h1 class="codex-discussions__title">Discussions</h1>
+      <h1>Discussions</h1>
       <Webmentions />
       <Comments />
     </div>
@@ -32,7 +27,7 @@ const discussionsEnabled = Boolean(
       box-sizing: border-box;
       inline-size: 100%;
       margin-block-start: -1.25rem;
-      padding-block: calc(1.25rem + 1.5rem) 2.5rem;
+      padding-block: 2.75rem 2.5rem;
       padding-inline: clamp(1rem, 3vw, 3rem);
       border-block-start: 1px solid var(--sl-color-hairline-light);
       border-radius: 0 0 1.25rem 1.25rem;
@@ -40,13 +35,11 @@ const discussionsEnabled = Boolean(
     }
 
     .codex-discussions__inner {
-      box-sizing: border-box;
-      inline-size: 100%;
       max-inline-size: 92rem;
       margin-inline: auto;
     }
 
-    .codex-discussions__title {
+    h1 {
       margin: 0 0 1.5rem;
       color: var(--sl-color-white);
       font-size: var(--sl-text-h1);
@@ -70,8 +63,7 @@ const discussionsEnabled = Boolean(
     @media (max-width: 40rem) {
       .codex-discussions {
         margin-block-start: -1rem;
-        padding-block-start: calc(1rem + 1.25rem);
-        padding-block-end: 2rem;
+        padding-block: 2.25rem 2rem;
         border-radius: 0 0 1rem 1rem;
       }
     }
