@@ -20,66 +20,103 @@
       }
 
       /*
-        Theme ownership deliberately follows Remark42's own literal .dark/.light
-        root classes. No theme MutationObserver is used: REMARK42.changeTheme()
-        changes this root and the variables below follow by normal CSS cascade.
+        Keep Remark42's palette architecture intact. Upstream defines the
+        numbered --color* tokens once on :root and lets its own light/dark
+        component classes choose between them. VISCERIUM follows that contract:
+        neutral tokens never swap meaning when the theme changes. Only named
+        theme variables and era accent tokens vary under Remark42's literal
+        direct-child .dark/.light root.
       */
+      html:root {
+        /* Stable neutral ramp: dark ink/surfaces through warm light surfaces. */
+        --color0: #101010;
+        --color8: #211f1b;
+        --color22: #2a2824;
+        --color24: #302d28;
+        --color7: #484137;
+        --color23: #39342f;
+        --color18: #38342e;
+        --color19: #403a33;
+        --color36: #575047;
+        --color34: #555047;
+        --color37: #6b6459;
+        --color14: #6a645a;
+        --color10: #777064;
+        --color13: #888070;
+        --color11: #968f80;
+        --color32: #a6a093;
+        --color1: #aaa395;
+        --color35: #d1c8b5;
+        --color20: #c8bfa8;
+        --color41: #efe6d2;
+        --color5: #c8bfa8;
+        --color6: #b9b4a9;
+        --color3: #a8a192;
+        --color4: #b1aa9c;
+        --color16: #9b9384;
+        --color31: #7e776a;
+        --color21: #c1baa9;
+
+        /* Error states keep their semantic role in both themes. */
+        --color28: #6e2630;
+        --color25: #7a0019;
+        --color38: #b31435;
+        --color27: #ff8a9a;
+        --color26: #e1a6ac;
+      }
+
       #remark42 > .dark {
-        --vc-page: #101010;
-        --vc-panel: #000;
-        --vc-surface: #211f1b;
-        --vc-surface-soft: #484137;
-        --vc-text: #a0a0a0;
-        --vc-text-strong: #c8bfa8;
-        --vc-muted: #888070;
         --vc-meta: #888070;
-        --vc-border: #484137;
-        --vc-border-strong: #888070;
-        --vc-danger: #ff8a9a;
-        --vc-danger-soft: #6e2630;
         --vc-staff-text: #000;
-        --vc-text-rgb: 160, 160, 160;
-        --vc-text-strong-rgb: 200, 191, 168;
-        --vc-muted-rgb: 136, 128, 112;
-        --vc-page-rgb: 16, 16, 16;
         --vc-era-accent: #888070;
         --vc-era-high: #c8bfa8;
-        --vc-era-surface: #484137;
+        --vc-era-soft: #484137;
         --vc-era-button: #484137;
         --vc-era-accent-rgb: 136, 128, 112;
         --vc-era-high-rgb: 200, 191, 168;
+
+        --primary-color: var(--vc-era-accent-rgb);
+        --primary-brighter-color: var(--vc-era-high-rgb);
+        --primary-darker-color: var(--vc-era-accent-rgb);
+        --primary-text-color: 200, 191, 168;
+        --secondary-text-color: 136, 128, 112;
+        --secondary-darker-text-color: 136, 128, 112;
+        --primary-background-color: 16, 16, 16;
+        --text-color: 200, 191, 168;
+        --error-color: #ff8a9a;
+        --error-background: #6e2630;
+        --line-color: var(--color36);
+        --line-brighter-color: var(--color11);
       }
 
       #remark42 > .light {
-        --vc-page: #b9b4a9;
-        --vc-panel: #c8bfa8;
-        --vc-surface: #c8bfa8;
-        --vc-surface-soft: #b1aa9c;
-        --vc-text: #151515;
-        --vc-text-strong: #101010;
-        --vc-muted: #5f594e;
         --vc-meta: #403b34;
-        --vc-border: #484137;
-        --vc-border-strong: #101010;
-        --vc-danger: #35000f;
-        --vc-danger-soft: #e1a6ac;
         --vc-staff-text: #c8bfa8;
-        --vc-text-rgb: 21, 21, 21;
-        --vc-text-strong-rgb: 16, 16, 16;
-        --vc-muted-rgb: 95, 89, 78;
-        --vc-page-rgb: 185, 180, 169;
         --vc-era-accent: #484137;
         --vc-era-high: #101010;
-        --vc-era-surface: #b1aa9c;
+        --vc-era-soft: #b1aa9c;
         --vc-era-button: #484137;
         --vc-era-accent-rgb: 72, 65, 55;
         --vc-era-high-rgb: 16, 16, 16;
+
+        --primary-color: var(--vc-era-accent-rgb);
+        --primary-brighter-color: var(--vc-era-high-rgb);
+        --primary-darker-color: var(--vc-era-accent-rgb);
+        --primary-text-color: 21, 21, 21;
+        --secondary-text-color: 95, 89, 78;
+        --secondary-darker-text-color: 95, 89, 78;
+        --primary-background-color: 185, 180, 169;
+        --text-color: 16, 16, 16;
+        --error-color: #7a0019;
+        --error-background: #e1a6ac;
+        --line-color: var(--color16);
+        --line-brighter-color: var(--color31);
       }
 
       html[data-viscerium-era='e1'] #remark42 > .dark {
         --vc-era-accent: #b56873;
         --vc-era-high: #f83b52;
-        --vc-era-surface: #6e141f;
+        --vc-era-soft: #6e141f;
         --vc-era-button: #974e59;
         --vc-era-accent-rgb: 181, 104, 115;
         --vc-era-high-rgb: 248, 59, 82;
@@ -88,7 +125,7 @@
       html[data-viscerium-era='e1'] #remark42 > .light {
         --vc-era-accent: #7b0f2f;
         --vc-era-high: #62000c;
-        --vc-era-surface: #e5a4a3;
+        --vc-era-soft: #e5a4a3;
         --vc-era-button: #5f1b2a;
         --vc-era-accent-rgb: 123, 15, 47;
         --vc-era-high-rgb: 98, 0, 12;
@@ -97,7 +134,7 @@
       html[data-viscerium-era='e2'] #remark42 > .dark {
         --vc-era-accent: #7d8250;
         --vc-era-high: #7f8d00;
-        --vc-era-surface: #555d19;
+        --vc-era-soft: #555d19;
         --vc-era-button: #5f6900;
         --vc-era-accent-rgb: 125, 130, 80;
         --vc-era-high-rgb: 127, 141, 0;
@@ -106,7 +143,7 @@
       html[data-viscerium-era='e2'] #remark42 > .light {
         --vc-era-accent: #444700;
         --vc-era-high: #2c3300;
-        --vc-era-surface: #b5bc93;
+        --vc-era-soft: #b5bc93;
         --vc-era-button: #313700;
         --vc-era-accent-rgb: 68, 71, 0;
         --vc-era-high-rgb: 44, 51, 0;
@@ -115,7 +152,7 @@
       html[data-viscerium-era='e3'] #remark42 > .dark {
         --vc-era-accent: #b2668d;
         --vc-era-high: #eb4684;
-        --vc-era-surface: #5d0f2f;
+        --vc-era-soft: #5d0f2f;
         --vc-era-button: #954b72;
         --vc-era-accent-rgb: 178, 102, 141;
         --vc-era-high-rgb: 235, 70, 132;
@@ -124,7 +161,7 @@
       html[data-viscerium-era='e3'] #remark42 > .light {
         --vc-era-accent: #73144e;
         --vc-era-high: #5f0028;
-        --vc-era-surface: #dfa5b4;
+        --vc-era-soft: #dfa5b4;
         --vc-era-button: #5d1840;
         --vc-era-accent-rgb: 115, 20, 78;
         --vc-era-high-rgb: 95, 0, 40;
@@ -133,7 +170,7 @@
       html[data-viscerium-era='e4'] #remark42 > .dark {
         --vc-era-accent: #568786;
         --vc-era-high: #009688;
-        --vc-era-surface: #1b6860;
+        --vc-era-soft: #1b6860;
         --vc-era-button: #756047;
         --vc-era-accent-rgb: 86, 135, 134;
         --vc-era-high-rgb: 0, 150, 136;
@@ -142,67 +179,24 @@
       html[data-viscerium-era='e4'] #remark42 > .light {
         --vc-era-accent: #004849;
         --vc-era-high: #00342e;
-        --vc-era-surface: #96c2bb;
+        --vc-era-soft: #96c2bb;
         --vc-era-button: #433018;
         --vc-era-accent-rgb: 0, 72, 73;
         --vc-era-high-rgb: 0, 52, 46;
       }
 
+      /* Accent tokens may vary by era/theme; neutral surface/text tokens above do not. */
       #remark42 > .dark,
       #remark42 > .light {
-        --color0: var(--vc-panel);
-        --color8: var(--vc-surface);
-        --color22: var(--vc-surface);
-        --color24: var(--vc-surface);
-        --color7: var(--vc-border);
-        --color23: var(--vc-surface-soft);
-        --color18: var(--vc-surface-soft);
-        --color19: var(--vc-surface-soft);
-        --color36: var(--vc-border);
-        --color34: var(--vc-border);
-        --color37: var(--vc-border-strong);
-        --color14: var(--vc-muted);
-        --color10: var(--vc-text-strong);
-        --color13: var(--vc-muted);
-        --color11: var(--vc-muted);
-        --color32: var(--vc-text);
-        --color1: var(--vc-muted);
-        --color35: var(--vc-text);
-        --color20: var(--vc-text);
-        --color41: var(--vc-text-strong);
-        --color5: var(--vc-panel);
-        --color6: var(--vc-panel);
-        --color3: var(--vc-era-surface);
-        --color4: var(--vc-era-surface);
-        --color16: var(--vc-border);
-        --color31: var(--vc-border-strong);
-        --color21: var(--vc-surface);
         --color29: var(--vc-era-accent);
         --color9: var(--vc-era-accent);
         --color15: var(--vc-era-button);
         --color33: var(--vc-era-high);
         --color40: var(--vc-era-accent);
-        --color43: var(--vc-era-surface);
-        --color42: var(--vc-era-surface);
-        --color48: var(--vc-era-accent);
-        --color47: var(--vc-era-accent);
-        --color28: var(--vc-danger-soft);
-        --color25: var(--vc-danger);
-        --color38: var(--vc-danger);
-        --color27: var(--vc-danger);
-        --color26: var(--vc-danger-soft);
-        --error-color: var(--vc-danger);
-        --error-background: var(--vc-danger-soft);
-        --line-color: var(--vc-border);
-        --line-brighter-color: var(--vc-border-strong);
-        --primary-color: var(--vc-era-accent-rgb);
-        --primary-brighter-color: var(--vc-era-high-rgb);
-        --primary-darker-color: var(--vc-era-accent-rgb);
-        --primary-text-color: var(--vc-text-rgb);
-        --secondary-text-color: var(--vc-muted-rgb);
-        --secondary-darker-text-color: var(--vc-muted-rgb);
-        --primary-background-color: var(--vc-page-rgb);
-        --text-color: var(--vc-text-strong-rgb);
+        --color43: var(--vc-era-soft);
+        --color42: var(--vc-era-soft);
+        --color48: rgba(var(--vc-era-accent-rgb), 0.6);
+        --color47: rgba(var(--vc-era-accent-rgb), 0.4);
       }
 
       /* VISCERIUM-owned structure stays outside the native composer controls. */
@@ -326,14 +320,6 @@
 
           if (typeof data.title === 'string') {
             document.title = data.title.slice(0, 512);
-          }
-
-          // Remark42's public changeTheme() updates the parent iframe element and
-          // posts the same theme into this document. Keep the document-level
-          // color-scheme synchronized here so native controls/canvas painting do
-          // not retain the iframe's initial theme and flash on later editor paints.
-          if (data.theme === 'dark' || data.theme === 'light') {
-            document.documentElement.style.colorScheme = data.theme;
           }
         } catch (e) {}
       });
@@ -554,9 +540,23 @@
           });
         }
 
-        function scheduleRefreshBurst() {
-          var delays = [0, 200, 750, 1500, 3000, 6000];
-          for (var i = 0; i < delays.length; i++) scheduleRefresh(delays[i]);
+        function waitForInitialRender(attempt) {
+          refreshDecorations();
+
+          var expected = 'commentform_' + encodeURI(remark_config.url || '');
+          var forms = document.querySelectorAll('form[data-testid]');
+          var mainForm = null;
+          for (var i = 0; i < forms.length; i++) {
+            if (forms[i].getAttribute('data-testid') === expected) {
+              mainForm = forms[i];
+              break;
+            }
+          }
+          var stillLoading = document.querySelector('#remark42 .preloader');
+          if ((mainForm && !stillLoading) || attempt >= 7) return;
+
+          var delays = [50, 100, 200, 400, 800, 1600, 3200, 5000];
+          window.setTimeout(function () { waitForInitialRender(attempt + 1); }, delays[attempt] || 5000);
         }
 
         document.addEventListener('paste', blockImageTransfer, true);
@@ -567,17 +567,15 @@
           // No persistent DOM observer is installed. Remark42's controlled
           // textarea re-renders on every keystroke, so any subtree observer can
           // enter the editor hot path even when it watches childList only.
-          refreshDecorations();
-          scheduleRefreshBurst();
+          waitForInitialRender(0);
 
-          // User actions that can create forms/comments schedule a bounded pass.
-          // Input/keydown events are intentionally not observed.
-          document.addEventListener('submit', scheduleRefreshBurst, true);
-          document.addEventListener('click', function () { scheduleRefresh(0); }, true);
-          document.addEventListener('focusin', function (event) {
-            var target = event.target;
-            if (target && target.matches && target.matches('textarea')) scheduleRefresh(0);
+          // Low-frequency actions that can create reply/edit forms or comments
+          // schedule bounded passes. Typing/focus never enter this path.
+          document.addEventListener('submit', function () {
+            scheduleRefresh(250);
+            scheduleRefresh(1000);
           }, true);
+          document.addEventListener('click', function () { scheduleRefresh(0); }, true);
 
           // Theme changes are an explicit Remark42 message, not inferred from DOM
           // mutations. Refresh once after Preact applies the new theme so any
