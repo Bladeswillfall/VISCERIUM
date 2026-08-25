@@ -35,9 +35,9 @@ if (!validModes.has(mode)) {
     await import('./transform-era-primer-shortcodes.mjs');
     await import('./transform-timeline-shortcodes.mjs');
 
-    // Build the reverse reference index while generated docs still contain only
-    // authored article content. Later category/tag/continuity passes may append
-    // navigation links that must never count as narrative references.
+    // Build inbound and outbound reference indexes while generated docs still
+    // contain only authored article content. Later category/tag/continuity passes
+    // may append navigation links that must never count as narrative references.
     await generateReferencedIn();
 
     await import('./generate-continuity-pages.mjs');
