@@ -37,13 +37,9 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
     components: ['embed'];
   };
 
-  type Remark42InstanceConfig = Remark42Config & {
-    node: HTMLElement;
-  };
-
   type Remark42Instance = { destroy?: () => void };
   type Remark42Api = {
-    createInstance: (config: Remark42InstanceConfig) => Remark42Instance;
+    createInstance: (config: Remark42Config & { node: HTMLElement }) => Remark42Instance;
     changeTheme?: (theme: 'light' | 'dark') => void;
     destroy?: () => void;
   };
@@ -68,8 +64,8 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
 
     remarkLoader = new Promise<void>((resolve, reject) => {
       let settled = false;
-      let loaderScript: HTMLScriptElement | null = null;
       let timeoutId: number | undefined;
+      const script = document.createElement('script');
       const cleanup = () => {
         window.removeEventListener('REMARK42::ready', finish);
         if (timeoutId !== undefined) window.clearTimeout(timeoutId);
@@ -84,7 +80,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         if (settled) return;
         settled = true;
         cleanup();
-        loaderScript?.remove();
+        script.remove();
         remarkLoader = null;
         reject(new Error('Remark42 failed to load.'));
       };
@@ -96,8 +92,6 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
       // before this script executes; mount() establishes both before calling us.
       document.querySelector<HTMLScriptElement>('script[data-viscerium-remark42-loader]')?.remove();
 
-      const script = document.createElement('script');
-      loaderScript = script;
       script.dataset.visceriumRemark42Loader = '';
       script.src = `${host.replace(/\/$/, '')}/web/embed.js`;
       script.async = true;
@@ -188,11 +182,7 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         const api = remark42();
         if (!api) throw new Error('Remark42 API is unavailable.');
 
-        this.instance?.destroy?.();
-        this.instance = undefined;
         api.destroy?.();
-        this.themeObserver?.disconnect();
-        this.themeObserver = undefined;
         remarkWindow().remark_config = config;
         this.instance = api.createInstance({ node, ...config });
 
