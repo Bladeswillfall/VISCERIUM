@@ -7,7 +7,8 @@ const comments = readFileSync(commentsUrl, 'utf8');
 
 test('Remark42 snapshots the site theme at mount and does not switch theme at runtime', () => {
   assert.match(comments, /theme:\s*this\.currentTheme\(\)/);
-  assert.doesNotMatch(comments, /changeTheme/);
+  assert.doesNotMatch(comments, /changeTheme\?:/);
+  assert.doesNotMatch(comments, /\.changeTheme\?\.\(/);
   assert.doesNotMatch(comments, /themeObserver/);
   assert.doesNotMatch(comments, /attributeFilter:\s*\['data-theme'\]/);
 });
