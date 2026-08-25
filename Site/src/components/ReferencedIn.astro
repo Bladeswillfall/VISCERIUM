@@ -1,12 +1,9 @@
 ---
 const { starlightRoute, t } = Astro.locals;
 const locale = starlightRoute.lang;
-const referencedBy = Array.isArray(starlightRoute.entry.data.referencedIn)
-  ? starlightRoute.entry.data.referencedIn
-  : [];
-const references = Array.isArray(starlightRoute.entry.data.references)
-  ? starlightRoute.entry.data.references
-  : [];
+const data = starlightRoute.entry.data;
+const referencedBy = Array.isArray(data.referencedIn) ? data.referencedIn : [];
+const references = Array.isArray(data.references) ? data.references : [];
 
 const typeLabels = new Map([
   ...['article', 'calendar', 'character', 'event', 'faction', 'fauna', 'flora', 'fungi', 'image', 'item', 'location', 'map', 'organisation', 'person', 'species', 'timeline']
@@ -32,23 +29,15 @@ function groupedReferences(entries) {
 }
 
 const relations = [
-  {
-    key: 'referenced-by',
-    title: 'Referenced by',
-    entries: referencedBy,
-    groups: groupedReferences(referencedBy),
-  },
-  {
-    key: 'references',
-    title: 'References',
-    entries: references,
-    groups: groupedReferences(references),
-  },
-].filter((relation) => relation.entries.length > 0);
+  { key: 'referenced-by', title: 'Referenced by', entries: referencedBy },
+  { key: 'references', title: 'References', entries: references },
+]
+  .filter((relation) => relation.entries.length > 0)
+  .map((relation) => ({ ...relation, groups: groupedReferences(relation.entries) }));
 ---
 
 {relations.length > 0 && (
-  <section class="codex-referenced-in codex-reference-index not-content" aria-label={t('viscerium.references.index')}>
+  <section class="codex-referenced-in not-content" aria-label={t('viscerium.references.index')}>
     <span class="codex-referenced-in-bracket-label" aria-hidden="true">{t('viscerium.references.index')}</span>
     <div class="codex-referenced-in-inner">
       {relations.map((relation) => (
@@ -88,9 +77,8 @@ const relations = [
       position: relative;
       box-sizing: border-box;
       margin-block: 3.5rem 1.25rem;
-      padding: .65rem 0 .65rem 2rem;
+      padding: .65rem 5px .65rem 2rem;
       background: var(--codex-discussions-bg);
-      padding-right: 5px;
       color: var(--sl-color-gray-2);
     }
 
