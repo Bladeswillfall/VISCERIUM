@@ -28,20 +28,55 @@ async function selectRenderedNode(page, graph, canvas) {
   return false;
 }
 
+async function inspectHoveredPoint(page, graph, x, y, requiredNeighbours = null) {
+  await page.mouse.move(x, y);
+  const source = await graph.getAttribute('data-world-graph-context');
+  const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
+  const id = await graph.getAttribute('data-world-graph-active-id');
+  if (source !== 'pointer' || !id || neighbours <= 0) return null;
+  if (requiredNeighbours !== null && neighbours !== requiredNeighbours) return null;
+  return { x, y, id };
+}
+
 async function hoverConnectedNode(page, graph, canvas) {
   const box = await canvas.boundingBox();
   if (!box) return null;
-  let seed = 41;
-  for (let index = 0; index < 260; index += 1) {
+  let seed = 29;
+  for (let index = 0; index < 220; index += 1) {
     seed = (seed * 48_271) % 2_147_483_647;
     const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
     seed = (seed * 48_271) % 2_147_483_647;
     const y = box.y + 12 + (seed % Math.max(1, Math.floor(box.height - 24)));
-    await page.mouse.move(x, y);
-    const source = await graph.getAttribute('data-world-graph-context');
-    const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
-    const id = await graph.getAttribute('data-world-graph-active-id');
-    if (source === 'pointer' && neighbours === 1 && id) return { x, y, id };
+    const hovered = await inspectHoveredPoint(page, graph, x, y);
+    if (hovered) return hovered;
+  }
+  return null;
+}
+
+async function hoverLeafNode(page, graph, canvas) {
+  const box = await canvas.boundingBox();
+  if (!box) return null;
+
+  let seed = 41;
+  for (let index = 0; index < 320; index += 1) {
+    seed = (seed * 48_271) % 2_147_483_647;
+    const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
+    seed = (seed * 48_271) % 2_147_483_647;
+    const y = box.y + 12 + (seed % Math.max(1, Math.floor(box.height - 24)));
+    const hovered = await inspectHoveredPoint(page, graph, x, y, 1);
+    if (hovered) return hovered;
+  }
+
+  // CoSE can settle differently between browser runs, making sparse leaf nodes
+  // easy for a random probe to miss. A coarse grid is still much smaller than
+  // the 18px pointer halo, so this fallback deterministically finds a rendered
+  // leaf without coupling the test to Cytoscape internals or fixed coordinates.
+  const step = 18;
+  for (let y = box.y + 12; y <= box.y + box.height - 12; y += step) {
+    for (let x = box.x + 12; x <= box.x + box.width - 12; x += step) {
+      const hovered = await inspectHoveredPoint(page, graph, x, y, 1);
+      if (hovered) return hovered;
+    }
   }
   return null;
 }
@@ -331,7 +366,7 @@ test('World Graph expanded touch target selects a node without becoming backgrou
   const reset = graph.getByRole('button', { name: 'Reset view' });
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
 
-  const hovered = await hoverConnectedNode(page, graph, canvasHost);
+  const hovered = await hoverLeafNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
   const centre = await approximateNodeCentre(page, graph, hovered);
   const candidates = [];
