@@ -189,12 +189,12 @@ for (const category of categoryList) {
   const section = generatedCategorySection(descendants, childCategories);
   const existingEntry = entryBySlug.get(category.slug);
 
+  // A regular article may occupy the same route that would otherwise serve as a
+  // category landing page (for example a nation article with nested location
+  // pages). Keep that article focused on its authored content rather than
+  // appending structural category navigation to it.
   if (existingEntry) {
-    const raw = await fs.readFile(existingEntry.file, 'utf8');
-    const parsed = matter(raw);
-    const content = parsed.content.trimEnd();
-    await fs.writeFile(existingEntry.file, matter.stringify(`${content}\n\n${section}`, parsed.data), 'utf8');
-    console.log(`Extended ${path.relative(docsDir, existingEntry.file)} with a generated category index.`);
+    console.log(`Skipped generated category index for ${category.slug}; route belongs to ${existingEntry.data.type ?? 'article'} article ${path.relative(docsDir, existingEntry.file)}.`);
     continue;
   }
 
