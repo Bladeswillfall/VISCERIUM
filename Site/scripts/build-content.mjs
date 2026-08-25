@@ -6,6 +6,7 @@ import { generateTimelineData, reportTimelineError } from './generate-timeline-d
 import { validateGeneratedContent } from './validate-content.mjs';
 import { generateMapData } from './generate-map-data.mjs';
 import { generateRelationshipData } from './generate-relationship-data.mjs';
+import { generateResponsiveImageVariants } from './generate-image-variants.mjs';
 import { stripObsidianPluginBlocks } from './strip-obsidian-plugin-blocks.mjs';
 import { prepareStorytellerMarkers } from './prepare-storyteller-markers.mjs';
 import { generateReferencedIn } from './generate-referenced-in.mjs';
@@ -30,6 +31,7 @@ if (!validModes.has(mode)) {
     });
 
     await import('./sync-public-notes.mjs');
+    await generateResponsiveImageVariants();
     await stripObsidianPluginBlocks();
     await prepareStorytellerMarkers();
     await import('./transform-era-primer-shortcodes.mjs');
