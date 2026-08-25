@@ -17,6 +17,7 @@ const discussionsEnabled = Boolean(
 {discussionsEnabled && (
   <section class="codex-discussions" aria-label="Discussions">
     <div class="codex-discussions__inner">
+      <h1 class="codex-discussions__title">Discussions</h1>
       <Webmentions />
       <Comments />
     </div>
@@ -35,7 +36,11 @@ const discussionsEnabled = Boolean(
       padding-inline: clamp(1rem, 3vw, 3rem);
       border-block-start: 1px solid var(--sl-color-hairline-light);
       border-radius: 0 0 1.25rem 1.25rem;
-      background: var(--codex-page-bg);
+      background: #0b0b0b;
+    }
+
+    :global(:root[data-theme='light']) .codex-discussions {
+      background: #aaa59a;
     }
 
     .codex-discussions__inner {
@@ -43,6 +48,14 @@ const discussionsEnabled = Boolean(
       inline-size: 100%;
       max-inline-size: 92rem;
       margin-inline: auto;
+    }
+
+    .codex-discussions__title {
+      margin: 0 0 1.5rem;
+      color: var(--sl-color-white);
+      font-size: var(--sl-text-h1);
+      font-weight: 600;
+      line-height: var(--sl-line-height-headings);
     }
 
     :global(.codex-discussions viscerium-comments) {
