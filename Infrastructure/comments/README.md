@@ -23,7 +23,15 @@ Remark42 v1.16.4 still renders the image-attachment control for authenticated us
 
 The override removes dynamically-created file inputs and blocks image paste/drop at the iframe boundary. This is a usability layer, not the security boundary: `POST /api/v1/picture` remains blocked by Caddy and `IMAGE_MAX_SIZE=1` remains the backend backstop.
 
-At deployment, copy `remark42-ui/iframe.html` to `/srv/remark42/ui/iframe.html` before reloading the accompanying Caddy configuration. The override is intentionally coupled to the pinned Remark42 frontend shell. Whenever Remark42 is upgraded, compare the upstream `frontend/apps/remark42/templates/iframe.ejs` for the new release, refresh this file as needed, and re-test theme switching, OAuth, comment loading, reply/edit forms and iframe resizing before deployment.
+VISCERIUM deliberately does **not** theme Remark42. The stock light/dark palette, composer, links, buttons, spacing and interaction behaviour remain upstream-owned. The iframe shell adds only a compact account-identity line beneath the existing username and keeps Remark42's own timestamp in its native position.
+
+Identity metadata comes from Remark42's public `GET /api/v1/find` response for the current thread, which already returns each comment's canonical `user.id`, `user.admin`, `user.name` and other public account fields. The raw Remark42 user ID is never written into the rendered DOM. `user.admin` maps to the visual `Staff` role, IDs beginning `anonymous_` map to `Guest`, and other authenticated providers map to `Reader`. These labels are presentation only and do not grant or replace Remark42 permissions.
+
+The public five-character VISCERIUM display UID is derived deterministically from the canonical Remark42 `user.id` and encoded in Base62. It is an opaque display identifier, not an authentication credential or moderation key. Because five characters cannot injectively represent every possible Remark42 identity, the iframe detects collisions among identities present in the loaded thread and withholds the colliding UID rather than showing a duplicate. A later reserved-name/UID registry is still required to guarantee site-wide uniqueness, reserve staff/system identities and resolve any cross-thread collision deliberately.
+
+Account decoration reuses the existing child-list `MutationObserver` already required by the no-upload UI policy; it does not add another observer and does not listen to `input`, `keydown` or other typing events. Newly-rendered comment articles trigger a coalesced refresh of the public identity index. The account layer does not move Remark42-owned username or timestamp nodes; it adds a metadata child beneath the username so normal Preact reconciliation remains authoritative.
+
+At deployment, copy `remark42-ui/iframe.html` to `/srv/remark42/ui/iframe.html` before reloading the accompanying Caddy configuration. The override is intentionally coupled to the pinned Remark42 frontend shell. Whenever Remark42 is upgraded, compare the upstream `frontend/apps/remark42/templates/iframe.ejs`, public comment response shape and comment header markup for the new release, refresh this file as needed, and re-test theme switching, continuous typing, OAuth, anonymous login, comment loading, reply/edit forms, identity roles/UIDs and iframe resizing before deployment.
 
 ## Deliberate upgrades
 
