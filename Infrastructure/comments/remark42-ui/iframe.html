@@ -335,20 +335,6 @@
           if (typeof data.title === 'string') {
             document.title = data.title.slice(0, 512);
           }
-
-          if (data.visceriumTheme) {
-            var incomingTheme = data.visceriumTheme.theme;
-            var incomingEra = data.visceriumTheme.era;
-            if (incomingTheme === 'light' || incomingTheme === 'dark') {
-              document.documentElement.dataset.visceriumTheme = incomingTheme;
-              document.documentElement.style.colorScheme = incomingTheme;
-            }
-            if (/^e[1-4]$/.test(incomingEra || '')) {
-              document.documentElement.dataset.visceriumEra = incomingEra;
-            } else {
-              delete document.documentElement.dataset.visceriumEra;
-            }
-          }
         } catch (e) {}
       });
 
@@ -366,6 +352,18 @@
                 c[splitted[0]] = decodeURIComponent(splitted[1]);
                 return c;
               }, {});
+
+      (function inferVisceriumEra() {
+        try {
+          var pathname = new URL(remark_config.url || '', window.location.href).pathname.toLowerCase();
+          var era = '';
+          if (pathname.indexOf('/eras/citadel/') !== -1) era = 'e1';
+          else if (pathname.indexOf('/eras/smog/') !== -1) era = 'e2';
+          else if (pathname.indexOf('/eras/nearsight/') !== -1) era = 'e3';
+          else if (pathname.indexOf('/eras/entropy/') !== -1) era = 'e4';
+          if (era) document.documentElement.dataset.visceriumEra = era;
+        } catch (e) {}
+      })();
 
       window.parent.postMessage({ inited: true }, '*');
     </script>
@@ -428,6 +426,14 @@
           event.stopImmediatePropagation();
         }
 
+        function syncRemarkTheme() {
+          var themedRoot = document.querySelector('#remark42 .dark, #remark42 .light');
+          if (!themedRoot) return;
+          var theme = themedRoot.classList.contains('dark') ? 'dark' : 'light';
+          document.documentElement.dataset.visceriumTheme = theme;
+          document.documentElement.style.colorScheme = theme;
+        }
+
         function applyMainPrompt() {
           var expected = 'commentform_' + encodeURI(remark_config.url || '');
           var forms = document.querySelectorAll('form[data-testid]');
@@ -459,6 +465,9 @@
         }
 
         function isStaffComment(article) {
+          // Remark42 v1.16.4 applies its CSS-module viewAdmin class to comments
+          // authored by an administrator. This shell is already version-pinned,
+          // so this selector is reviewed alongside the other iframe assumptions.
           for (var i = 0; i < article.classList.length; i++) {
             if (article.classList[i].toLowerCase().indexOf('viewadmin') !== -1) return true;
           }
@@ -521,6 +530,7 @@
 
         function startGuard() {
           removeUploadControls(document);
+          syncRemarkTheme();
           applyMainPrompt();
           decorateComments(document);
           var observer = new MutationObserver(function (mutations) {
@@ -531,9 +541,15 @@
                 decorateComments(node);
               });
             });
+            syncRemarkTheme();
             applyMainPrompt();
           });
-          observer.observe(document.body, { childList: true, subtree: true });
+          observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class']
+          });
         }
 
         if (document.readyState === 'loading') {
