@@ -40,7 +40,6 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
   type Remark42Instance = { destroy?: () => void };
   type Remark42Api = {
     createInstance: (config: Remark42Config) => Remark42Instance;
-    changeTheme?: (theme: 'light' | 'dark') => void;
     destroy?: () => void;
   };
   type Remark42Window = typeof window & {
@@ -110,7 +109,6 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
   class VisceriumComments extends HTMLElement {
     private instance?: Remark42Instance;
     private visibilityObserver?: IntersectionObserver;
-    private themeObserver?: MutationObserver;
     private generation = 0;
 
     connectedCallback() {
@@ -145,8 +143,6 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
       this.visibilityObserver = undefined;
       this.instance?.destroy?.();
       this.instance = undefined;
-      this.themeObserver?.disconnect();
-      this.themeObserver = undefined;
     }
 
     private async mount(generation: number) {
@@ -182,13 +178,12 @@ const locale = String(lang ?? siteConfig.i18n.defaultLocale ?? 'en').split('-')[
         remarkWindow().remark_config = config;
         this.instance = api.createInstance(config);
 
-        this.themeObserver = new MutationObserver(() => {
-          remark42()?.changeTheme?.(this.currentTheme());
-        });
-        this.themeObserver.observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['data-theme'],
-        });
+        // Deliberately do not call REMARK42.changeTheme() after mount. Live
+        // testing against Remark42 v1.16.4 shows its autosizing composer can
+        // flicker while typing after a runtime theme transition. The widget
+        // snapshots the site's current theme when it mounts; a site theme change
+        // made before lazy mounting is therefore picked up, while one made after
+        // mounting takes effect for comments on the next remount/navigation.
       } catch (error) {
         console.error(error);
         node.textContent = 'Comments are temporarily unavailable.';
