@@ -16,23 +16,31 @@ test('Remark42 keeps native component geometry while VISCERIUM owns colours', ()
   assert.match(style, /--color15:\s*var\(--vc-era-button\)/);
   assert.match(style, /--primary-text-color:\s*var\(--vc-text-rgb\)/);
 
-  // Composer, links and native buttons remain upstream-owned.
   assert.doesNotMatch(style, /(^|[}\s])textarea\s*\{/m);
   assert.doesNotMatch(style, /(^|[}\s])button\s*\{/m);
   assert.doesNotMatch(style, /(^|[}\s])a\s*\{/m);
 });
 
-test('theme switching is CSS-driven from Remark42 native root classes', () => {
+test('theme switching stays out of the editor hot path and synchronizes browser color-scheme explicitly', () => {
   assert.match(style, /#remark42 > \.dark/);
   assert.match(style, /#remark42 > \.light/);
   assert.doesNotMatch(iframe, /syncRemarkTheme/);
-  assert.doesNotMatch(iframe, /attributes:\s*true/);
-  assert.doesNotMatch(iframe, /attributeFilter/);
+  assert.doesNotMatch(iframe, /new MutationObserver/);
+  assert.doesNotMatch(iframe, /observer\.observe/);
+  assert.match(iframe, /if \(data\.theme === 'dark' \|\| data\.theme === 'light'\) \{[\s\S]*?document\.documentElement\.style\.colorScheme = data\.theme/);
+  assert.match(iframe, /Remark42's public changeTheme\(\) updates the parent iframe element/);
+  assert.doesNotMatch(iframe, /addEventListener\(['"]input['"]/);
+  assert.doesNotMatch(iframe, /addEventListener\(['"]keydown['"]/);
+});
 
-  // The only DOM observer watches structural additions; typing/class updates
-  // cannot trigger the VISCERIUM decoration path.
-  assert.match(iframe, /observer\.observe\(document\.body, \{ childList: true, subtree: true \}\)/);
-  assert.match(iframe, /window\.requestAnimationFrame\(flushPendingRoots\)/);
+test('decoration is bounded and event-driven rather than mutation-driven', () => {
+  assert.match(iframe, /function scheduleRefreshBurst\(\)/);
+  assert.match(iframe, /var delays = \[0, 200, 750, 1500, 3000, 6000\]/);
+  assert.match(iframe, /document\.addEventListener\('submit', scheduleRefreshBurst, true\)/);
+  assert.match(iframe, /document\.addEventListener\('click',[\s\S]*?scheduleRefresh\(0\)/);
+  assert.match(iframe, /document\.addEventListener\('focusin'/);
+  assert.match(iframe, /window\.requestAnimationFrame/);
+  assert.match(iframe, /No persistent DOM observer is installed/);
 });
 
 test('Remark42 exposes all four era palettes in light and dark modes', () => {
@@ -63,15 +71,15 @@ test('identity metadata keeps readable contrast instead of opacity-dimming tiny 
   assert.match(style, /\.vc-comment-role\[data-role='staff'\][\s\S]*?color:\s*var\(--vc-staff-text\)/);
 });
 
-test('top-level comment prompt rotates once without changing reply or edit placeholders', () => {
+test('top-level comment prompt rotates without touching reply/edit forms or observing keystrokes', () => {
   assert.match(iframe, /What was your favourite part of this article\?/);
   assert.match(iframe, /What would you like to see more of from this article\?/);
   assert.match(iframe, /Was anything unclear or underdeveloped\?/);
   assert.match(iframe, /What did we miss\?/);
   assert.match(iframe, /var selectedPrompt = prompts\[Math\.floor\(Math\.random\(\) \* prompts\.length\)\]/);
-  assert.match(iframe, /var promptApplied = false/);
   assert.match(iframe, /var expected = 'commentform_' \+ encodeURI\(remark_config\.url \|\| ''\)/);
   assert.match(iframe, /form\.getAttribute\('data-testid'\) !== expected/);
+  assert.doesNotMatch(iframe, /promptApplied/);
 });
 
 test('GitHub-backed display UIDs use the numeric avatar account id without hashing or truncation', () => {
