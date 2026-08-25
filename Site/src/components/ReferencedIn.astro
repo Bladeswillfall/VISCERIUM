@@ -1,8 +1,11 @@
 ---
 const { starlightRoute, t } = Astro.locals;
 const locale = starlightRoute.lang;
-const references = Array.isArray(starlightRoute.entry.data.referencedIn)
+const referencedBy = Array.isArray(starlightRoute.entry.data.referencedIn)
   ? starlightRoute.entry.data.referencedIn
+  : [];
+const references = Array.isArray(starlightRoute.entry.data.references)
+  ? starlightRoute.entry.data.references
   : [];
 
 const typeLabels = new Map([
@@ -18,40 +21,63 @@ function groupLabel(type) {
   return words.endsWith('s') ? words : `${words}s`;
 }
 
-const groupMap = Map.groupBy(references, (reference) => groupLabel(reference.type));
+function groupedReferences(entries) {
+  const groupMap = Map.groupBy(entries, (reference) => groupLabel(reference.type));
+  return [...groupMap.entries()]
+    .map(([label, groupEntries]) => ({
+      label,
+      entries: [...groupEntries].sort((left, right) => left.title.localeCompare(right.title, locale)),
+    }))
+    .sort((left, right) => left.label.localeCompare(right.label, locale));
+}
 
-const groups = [...groupMap.entries()]
-  .map(([label, entries]) => ({
-    label,
-    entries: [...entries].sort((left, right) => left.title.localeCompare(right.title, locale)),
-  }))
-  .sort((left, right) => left.label.localeCompare(right.label, locale));
+const relations = [
+  {
+    key: 'referenced-by',
+    title: 'Referenced by',
+    entries: referencedBy,
+    groups: groupedReferences(referencedBy),
+  },
+  {
+    key: 'references',
+    title: 'References',
+    entries: references,
+    groups: groupedReferences(references),
+  },
+].filter((relation) => relation.entries.length > 0);
 ---
 
-{references.length > 0 && (
-  <section class="codex-referenced-in not-content" aria-labelledby="codex-referenced-in-title">
+{relations.length > 0 && (
+  <section class="codex-referenced-in codex-reference-index not-content" aria-label={t('viscerium.references.index')}>
     <span class="codex-referenced-in-bracket-label" aria-hidden="true">{t('viscerium.references.index')}</span>
     <div class="codex-referenced-in-inner">
-      <header class="codex-referenced-in-heading">
-        <h2 id="codex-referenced-in-title">{t('viscerium.references.title')}</h2>
-        <span>{t('viscerium.references.records', { count: references.length })}</span>
-      </header>
+      {relations.map((relation) => (
+        <section class="codex-reference-relation" aria-labelledby={`codex-${relation.key}-title`}>
+          <header class="codex-referenced-in-heading">
+            <h2 id={`codex-${relation.key}-title`}>{relation.title}</h2>
+            <span>{t('viscerium.references.records', { count: relation.entries.length })}</span>
+          </header>
 
-      <div class="codex-referenced-in-groups">
-        {groups.map((group) => (
-          <section class="codex-referenced-in-group" aria-labelledby={`referenced-in-${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
-            <h3 id={`referenced-in-${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>{group.label}</h3>
-            <ul>
-              {group.entries.map((reference) => (
-                <li>
-                  <a href={reference.href}>{reference.title}</a>
-                  {reference.era && <span>{reference.era}</span>}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-      </div>
+          <div class="codex-referenced-in-groups">
+            {relation.groups.map((group) => {
+              const groupId = `${relation.key}-${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+              return (
+                <section class="codex-referenced-in-group" aria-labelledby={groupId}>
+                  <h3 id={groupId}>{group.label}</h3>
+                  <ul>
+                    {group.entries.map((reference) => (
+                      <li>
+                        <a href={reference.href}>{reference.title}</a>
+                        {reference.era && <span>{reference.era}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              );
+            })}
+          </div>
+        </section>
+      ))}
     </div>
   </section>
 )}
@@ -96,6 +122,12 @@ const groups = [...groupMap.entries()]
 
     .codex-referenced-in-inner {
       min-width: 0;
+    }
+
+    .codex-reference-relation + .codex-reference-relation {
+      margin-block-start: 1.5rem;
+      padding-block-start: 1.4rem;
+      border-block-start: 1px solid color-mix(in oklch, var(--codex-border, var(--sl-color-gray-5)) 72%, transparent);
     }
 
     .codex-referenced-in-heading {
