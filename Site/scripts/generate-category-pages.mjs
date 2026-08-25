@@ -177,10 +177,13 @@ const categoryList = [...categories.values()].sort((a, b) => a.slug.localeCompar
 
 for (const category of categoryList) {
   const existingEntry = entryBySlug.get(category.slug);
+  const existingType = String(existingEntry?.data.type ?? '').trim().toLowerCase();
 
-  // An authored article may own a route that would otherwise be a category page.
-  // Leave its content untouched instead of appending structural navigation.
-  if (existingEntry) {
+  // Regular authored articles may own routes that also have descendants. Those
+  // articles are not category pages and must not gain generated navigation.
+  // Era landing pages are structural category hosts, so retain their established
+  // Subcategories / Pages in this category index.
+  if (existingEntry && existingType !== 'era') {
     console.log(`Skipped generated category index for ${category.slug}; route belongs to ${existingEntry.data.type ?? 'article'} article ${path.relative(docsDir, existingEntry.file)}.`);
     continue;
   }
@@ -196,6 +199,16 @@ for (const category of categoryList) {
       count: descendants.filter((entry) => entry.slug.startsWith(`${candidate.slug}/`)).length,
     }));
   const section = generatedCategorySection(descendants, childCategories);
+
+  if (existingEntry) {
+    const raw = await fs.readFile(existingEntry.file, 'utf8');
+    const parsed = matter(raw);
+    const content = parsed.content.trimEnd();
+    await fs.writeFile(existingEntry.file, matter.stringify(`${content}\n\n${section}`, parsed.data), 'utf8');
+    console.log(`Extended ${path.relative(docsDir, existingEntry.file)} with a generated category index.`);
+    continue;
+  }
+
   const outFile = path.join(docsDir, category.slug, 'index.md');
   const frontmatter = {
     title: category.title,
