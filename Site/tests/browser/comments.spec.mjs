@@ -5,15 +5,19 @@ const loader = 'https://comments.viscerium.co.uk/web/embed.js';
 const mockRemark42 = `
   window.__remarkCreates = window.__remarkCreates || 0;
   window.__remarkDestroys = window.__remarkDestroys || 0;
+  window.__remarkGlobalDestroys = window.__remarkGlobalDestroys || 0;
   window.__remarkThemes = window.__remarkThemes || [];
+  window.__remarkNodeMatches = false;
   window.REMARK42 = {
     createInstance(config) {
       window.__remarkCreates += 1;
       const root = document.querySelector('[data-remark42-root]');
+      window.__remarkNodeMatches = config.node === root;
       if (root) root.textContent = 'Mock comments ready';
       return { destroy() { window.__remarkDestroys += 1; } };
     },
-    changeTheme(theme) { window.__remarkThemes.push(theme); }
+    changeTheme(theme) { window.__remarkThemes.push(theme); },
+    destroy() { window.__remarkGlobalDestroys += 1; }
   };
   window.dispatchEvent(new Event('REMARK42::ready'));
 `;
@@ -47,6 +51,8 @@ test('comments and webmentions sit below the complete article frame', async ({ p
     const precedesFooter = Boolean(
       discussion.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING
     );
+    const frameStyle = getComputedStyle(frame);
+    const discussionStyle = getComputedStyle(discussion);
 
     return {
       followsFrame,
@@ -55,6 +61,10 @@ test('comments and webmentions sit below the complete article frame', async ({ p
       viewportWidth: window.innerWidth,
       discussionTop: discussion.getBoundingClientRect().top,
       sidebarBottom: sidebar.getBoundingClientRect().bottom,
+      frameBottomLeftRadius: Number.parseFloat(frameStyle.borderBottomLeftRadius),
+      frameBottomRightRadius: Number.parseFloat(frameStyle.borderBottomRightRadius),
+      discussionBottomLeftRadius: Number.parseFloat(discussionStyle.borderBottomLeftRadius),
+      discussionBottomRightRadius: Number.parseFloat(discussionStyle.borderBottomRightRadius),
     };
   });
 
@@ -63,6 +73,10 @@ test('comments and webmentions sit below the complete article frame', async ({ p
   expect(placement.precedesFooter).toBe(true);
   expect(Math.abs(placement.discussionWidth - placement.viewportWidth)).toBeLessThanOrEqual(2);
   expect(placement.discussionTop).toBeGreaterThanOrEqual(placement.sidebarBottom - 24);
+  expect(placement.frameBottomLeftRadius).toBe(0);
+  expect(placement.frameBottomRightRadius).toBe(0);
+  expect(placement.discussionBottomLeftRadius).toBeGreaterThan(0);
+  expect(placement.discussionBottomRightRadius).toBeGreaterThan(0);
 });
 
 test('comments load near the viewport and clean up when their page is replaced', async ({ page }) => {
@@ -83,6 +97,7 @@ test('comments load near the viewport and clean up when their page is replaced',
   await expect.poll(() => requests).toBe(1);
   await expect(comments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
   await expect.poll(() => page.evaluate(() => window.__remarkCreates)).toBe(1);
+  await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 
   await page.evaluate(() => {
     document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
@@ -106,6 +121,7 @@ test('comments load immediately when IntersectionObserver is unavailable', async
   await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
   await expect.poll(() => requests).toBe(1);
   await expect(page.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
+  await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 });
 
 test('a failed comments load reports the problem and a later page can retry', async ({ page }) => {
@@ -132,4 +148,5 @@ test('a failed comments load reports the problem and a later page can retry', as
   await nextComments.scrollIntoViewIfNeeded();
   await expect.poll(() => attempts).toBe(2);
   await expect(nextComments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
+  await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 });
