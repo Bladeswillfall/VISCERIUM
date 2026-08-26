@@ -27,7 +27,7 @@ Server-side Turnstile verification is implemented but defaults to `off`. Stock c
 
 ## Configuration
 
-Copy `.env.example` to a deployment-only environment file and generate independent high-entropy `RATE_LIMIT_SECRET` and `IDEMPOTENCY_SECRET` values. Never commit the populated file. `REMARK42_UPSTREAM_URL` should resolve only to the internal Remark42 service, not an arbitrary request-supplied host. `COMMENT_ORIGINS` is an explicit comma-separated allowlist of canonical thread origins.
+Copy `.env.example` to a deployment-only environment file and generate independent high-entropy `RATE_LIMIT_SECRET`, `IDEMPOTENCY_SECRET` and `COMMENT_GATEWAY_PROXY_SECRET` values. Never commit the populated file. The same `COMMENT_GATEWAY_PROXY_SECRET` must be available to Caddy so it can authenticate the internal client-address header. `REMARK42_UPSTREAM_URL` should resolve only to the internal Remark42 service, not an arbitrary request-supplied host. `COMMENT_ORIGINS` is an explicit comma-separated allowlist of canonical thread origins.
 
 The service logs compact structured events: outcome, method, status, rejection code, external-link count and duration. It does not log comment bodies, drafts, OAuth credentials, cookies or client addresses.
 
@@ -35,8 +35,8 @@ The service logs compact structured events: outcome, method, status, rejection c
 
 The provided container runs as the unprivileged Node user and needs no writable application filesystem. The compose baseline therefore adds a read-only root filesystem, drops Linux capabilities, enables `no-new-privileges`, uses a small tmpfs, and applies CPU/RAM/PID ceilings. The service has no Docker socket.
 
-Caddy must overwrite `X-Viscerium-Client-IP`; the gateway does not use arbitrary `X-Forwarded-For` supplied by internet clients. When Cloudflare Tunnel becomes the public ingress, revisit the trusted-hop calculation so only Cloudflare/the local tunnel can supply the true client address. Do not simply trust a public `CF-Connecting-IP` header from any source.
+Caddy overwrites `X-Viscerium-Client-IP` and supplies `X-Viscerium-Proxy-Secret`. The gateway accepts the client address only when the proxy secret matches `COMMENT_GATEWAY_PROXY_SECRET`; otherwise it falls back to the immediate socket peer. The proxy secret is stripped before forwarding to Remark42. Keep the gateway bound to loopback at the host boundary as an additional control. When Cloudflare Tunnel becomes the public ingress, revisit the trusted-hop calculation so only Cloudflare/the local tunnel can supply the true client address. Do not simply trust a public `CF-Connecting-IP` header from any source.
 
 ## Tests
 
-Run `npm test` in this directory. The suite includes legitimate Vietnamese, Arabic, Hindi, Japanese and emoji text as well as Zalgo, invisible controls, bidi abuse, oversized requests, URL smuggling classes, media rejection, provider failure, rate/idempotency behaviour and the ambiguous-response duplicate case.
+Run `npm test` in this directory. The suite includes legitimate Vietnamese, Arabic, Hindi, Japanese and emoji text as well as Zalgo, invisible controls, bidi abuse, oversized requests, URL smuggling classes, media rejection, provider failure, rate/idempotency behaviour, authenticated proxy-address handling and the ambiguous-response duplicate case.
