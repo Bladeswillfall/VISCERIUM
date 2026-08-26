@@ -262,7 +262,7 @@ body:has(.support-page) .sl-markdown-content :is(
 .contact-hero {
   position: relative;
   display: grid;
-  min-block-size: 100svh;
+  min-block-size: 50svh;
   align-items: end;
   overflow: hidden;
   background:
@@ -360,6 +360,7 @@ body:has(.support-page) .sl-markdown-content :is(
 
 .contact-intro h2 {
   margin: 0 0 1.1rem;
+  padding-bottom: .35rem;
   color: var(--contact-text);
   font-size: clamp(2.5rem, 2rem + 2vw, 4.5rem);
   line-height: .98;
