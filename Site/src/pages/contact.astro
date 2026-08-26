@@ -18,7 +18,7 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
 }}>
   <div class="contact-page">
     <section class="contact-hero" aria-labelledby="contact-title">
-      <div class="contact-hero__mark" aria-hidden="true">V</div>
+      <div class="contact-hero__mark" aria-hidden="true"></div>
       <div class="contact-shell contact-hero__inner">
         <p class="contact-eyebrow">Private contact</p>
         <h1 id="contact-title">Contact</h1>
@@ -26,8 +26,10 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
         <p class="contact-hero__body">
           Found a typo, broken link, site bug, or something in the Codex that needs correcting? Please use
           <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>
-          so it can be tracked publicly. For collaboration, rights or credit questions, private feedback, or anything
-          you would rather not post publicly, use the contact form below to email us.
+          so it can be tracked publicly.
+          {contactForm.enabled
+            ? ' For collaboration, rights or credit questions, private feedback, or anything you would rather not post publicly, use the contact form below to email us.'
+            : ' Private contact is temporarily unavailable. Please keep sensitive details out of public GitHub issues.'}
         </p>
       </div>
     </section>
@@ -35,7 +37,6 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
     <section class="contact-public" aria-labelledby="public-channel-title">
       <div class="contact-shell contact-layout contact-public__layout">
         <aside class="contact-intro contact-public__intro">
-          <p class="contact-eyebrow">Public channel</p>
           <h2 id="public-channel-title">Submit an Issue.</h2>
           <p>
             Found a typo, broken link, site bug, or something in the Codex that needs correcting? Submit an issue on
@@ -68,8 +69,9 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
           <p class="contact-eyebrow">Private channel</p>
           <h2 id="private-message-title">Send a message.</h2>
           <p>
-            Have a general question, or want to talk to us about licensing, attribution, collaboration, rights, or another
-            private matter? Use the form to send us a message.
+            {contactForm.enabled
+              ? 'Have a general question, or want to talk to us about licensing, attribution, collaboration, rights, or another private matter? Use the form to send us a message.'
+              : 'Private contact is temporarily unavailable. Please use GitHub only for public, trackable site issues.'}
           </p>
         </aside>
 
@@ -146,9 +148,7 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
               ></div>
 
               <div class="contact-form__actions">
-                <p>
-                  All fields are required. Do not include passwords, credentials, or other secrets.
-                </p>
+                <p>All fields are required. Do not include passwords, credentials, or other secrets.</p>
                 <button class="contact-send-button" type="submit">
                   Send message <span aria-hidden="true">→</span>
                 </button>
