@@ -15,7 +15,8 @@ test('Telescope is the only enabled search provider and loads on demand', () => 
   assert.match(config, /pagefind:\s*false/);
   assert.doesNotMatch(config, /starlightTelescope/);
   assert.match(header, /import '\.\.\/scripts\/telescope-scope\.js'/);
-  assert.match(adapter, /import\('starlight-telescope\/styles\/telescope\.css'\)/);
+  assert.match(adapter, /import\('starlight-telescope\/styles\/telescope\.css\?raw'\)/);
+  assert.match(adapter, /ensureTelescopeStyles/);
   assert.match(adapter, /import\('starlight-telescope\/libs\/telescope-search'\)/);
   assert.match(adapter, /import\('starlight-telescope\/libs\/modal'\)/);
   assert.match(adapter, /telescope-scope\.json/);
