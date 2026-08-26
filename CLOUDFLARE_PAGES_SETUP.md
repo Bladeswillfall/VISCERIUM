@@ -39,7 +39,7 @@ Only public build-time values belong in Pages.
 
 ### Comments
 
-Article comments are provided by the self-hosted Remark42 service at `https://comments.viscerium.co.uk`. The Astro site only contains the public embed configuration. The Remark42 database, signing secret, OAuth client secret, administrator identity, and other server-only settings stay on the VPS and must never be added to Cloudflare Pages or this repository.
+Article comments are provided by the self-hosted Remark42 service at `https://comments.viscerium.co.uk`. The Astro site only contains the public embed configuration; the Remark42 database, signing secret, OAuth client secret, administrator identity, and other server-only settings stay on the VPS and must never be added to Cloudflare Pages or this repository.
 
 The repository defaults are:
 
@@ -49,9 +49,9 @@ PUBLIC_COMMENTS_HOST=https://comments.viscerium.co.uk
 PUBLIC_COMMENTS_SITE_ID=viscerium
 ```
 
-`PUBLIC_COMMENTS_ENABLED=0` remains available as an emergency off switch. The embed deliberately identifies each discussion with the canonical production URL, `https://www.viscerium.co.uk` plus the article pathname. Pages preview hostnames do not create duplicate discussion threads.
+`PUBLIC_COMMENTS_ENABLED=0` remains available as an emergency off switch. The embed deliberately identifies each discussion with the canonical production URL (`https://www.viscerium.co.uk` plus the article pathname), so Pages preview hostnames do not create duplicate discussion threads.
 
-Remark42's server-side `ALLOWED_HOSTS` must include every hostname from which the embed is intentionally tested. Production requires `https://www.viscerium.co.uk`. Add an exact `pages.dev` preview hostname on the VPS when a preview deployment needs to exercise comments. Do not loosen the allow-list merely to make arbitrary previews work.
+Remark42's server-side `ALLOWED_HOSTS` must include every hostname from which the embed is intentionally tested. Production requires `https://www.viscerium.co.uk`; add an exact `pages.dev` preview hostname on the VPS when a preview deployment needs to exercise comments. Do not loosen the allow-list merely to make arbitrary previews work.
 
 Before production deployment, confirm:
 
