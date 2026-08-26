@@ -16,6 +16,7 @@ test('contact page keeps public issues secondary when private messaging is unava
   await page.goto(contactUrl, { waitUntil: 'networkidle' });
 
   await expect(page.getByRole('heading', { name: 'Contact', exact: true })).toBeVisible();
+  await expect(page.getByText('Public channel', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Submit an Issue.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Send a message.' })).toBeVisible();
   await expect(page.getByText('Private messages are unavailable.')).toBeVisible();
