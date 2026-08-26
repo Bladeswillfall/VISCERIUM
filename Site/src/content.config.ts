@@ -12,6 +12,7 @@ const stringOrStrings = z.union([z.string(), z.array(z.string())]);
 const eraValue = z.enum(['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY', 'Universal']);
 const eraOrEras = z.union([eraValue, z.array(eraValue)]);
 const entityIdSchema = z.string().regex(ENTITY_ID_PATTERN);
+const relationshipDateSchema = z.union([z.string(), z.number()]);
 const contentWarningValue = z.enum([
   'strong-language',
   'partial-nudity',
@@ -54,8 +55,8 @@ const relationshipObjectSchema = z.object({
   article: z.string().optional(),
   title: z.string().optional(),
   label: z.string().optional(),
-  since: z.string().optional(),
-  until: z.string().optional(),
+  since: relationshipDateSchema.optional(),
+  until: relationshipDateSchema.optional(),
   era: eraValue.optional(),
   description: z.string().optional(),
   note: z.string().optional(),
