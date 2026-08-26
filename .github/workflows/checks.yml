@@ -210,7 +210,7 @@ jobs:
     name: Browser checks
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: Site
@@ -262,6 +262,33 @@ jobs:
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
           } 2>&1 | tee "$RUNNER_TEMP/playwright.log"
+
+      - name: Build enabled contact browser fixture
+        env:
+          PUBLIC_CONTACT_FORM_ENABLED: '1'
+          PUBLIC_CONTACT_FORM_ENDPOINT: 'https://contact-form.invalid/submit'
+          PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA'
+        run: npm run build
+
+      - name: Start enabled contact preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4322 > "$RUNNER_TEMP/viscerium-contact-preview.log" 2>&1 &
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:4322/contact/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/viscerium-contact-preview.log"
+          exit 1
+
+      - name: Run enabled contact browser check
+        env:
+          CONTACT_FORM_TEST_ENABLED: '1'
+          CONTACT_TEST_BASE_URL: 'http://127.0.0.1:4322'
+        run: |
+          set -o pipefail
+          npx --no-install playwright test tests/browser/contact.spec.mjs \
+            --browser=chromium --reporter=line --workers=1 \
+            --grep "enabled private contact form" 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
 
       - name: Upload browser check log
         if: always()
