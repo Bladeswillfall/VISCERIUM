@@ -64,6 +64,21 @@ export function responsiveVariantUrl(category, filename, width, format) {
   );
 }
 
+function generatedPaths(siteRoot) {
+  const publicAssetRoot = path.join(siteRoot, 'public', 'assets');
+  return [
+    ...assetCategories.map((category) => path.join(publicAssetRoot, category.public, 'variants')),
+    path.join(publicAssetRoot, 'image-variants.json'),
+    path.join(siteRoot, 'src', 'data', 'image-variants.json'),
+  ];
+}
+
+export async function cleanResponsiveImageVariants({ siteRoot = defaultSiteRoot } = {}) {
+  await Promise.all(
+    generatedPaths(siteRoot).map((target) => fs.rm(target, { recursive: true, force: true })),
+  );
+}
+
 async function loadSharp() {
   try {
     const sharpModule = await import('sharp');
@@ -160,6 +175,8 @@ async function generateAssetVariants({
 }
 
 export async function generateResponsiveImageVariants({ siteRoot = defaultSiteRoot } = {}) {
+  await cleanResponsiveImageVariants({ siteRoot });
+
   const sharp = await loadSharp();
   const assetRoot = path.resolve(siteRoot, siteConfig.vaultAssetDir);
   const publicAssetRoot = path.join(siteRoot, 'public', 'assets');
@@ -174,7 +191,6 @@ export async function generateResponsiveImageVariants({ siteRoot = defaultSiteRo
     const publicDir = path.join(publicAssetRoot, category.public);
     const variantsDir = path.join(publicDir, 'variants');
 
-    await fs.rm(variantsDir, { recursive: true, force: true });
     if (!(await pathExists(sourceDir)) || !(await pathExists(publicDir))) continue;
 
     const sourceFiles = (await walk(sourceDir))
