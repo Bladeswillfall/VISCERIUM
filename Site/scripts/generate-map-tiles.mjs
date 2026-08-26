@@ -24,7 +24,7 @@ function safeMapId(value) {
 
 function publicMapFile(siteRoot, imageUrl) {
   const value = String(imageUrl ?? '').trim();
-  if (!value.startsWith('/assets/maps/') || value.includes('..')) return undefined;
+  if (!value.startsWith('/assets/maps/') || value.includes('..') || !/\.webp$/i.test(value)) return undefined;
   const relative = value.replace(/^\/+/, '');
   const target = path.resolve(siteRoot, 'public', relative);
   const publicRoot = path.resolve(siteRoot, 'public', 'assets', 'maps');
