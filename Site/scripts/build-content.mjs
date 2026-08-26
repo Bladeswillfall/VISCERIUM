@@ -31,10 +31,10 @@ if (!validModes.has(mode)) {
   process.exitCode = 1;
 } else {
   try {
-    // Responsive WebP/JPEG files are generated delivery artifacts, not source
-    // artwork. Remove leftovers from a prior invocation before the repository
-    // image policy inspects Site/public and Site/src.
+    // Generated delivery artifacts are not source artwork. Remove leftovers
+    // before the repository image policy inspects Site/public and Site/src.
     await cleanResponsiveImageVariants();
+    await cleanMapTilePyramids();
 
     const vault = await loadVaultContent();
     if (!validateVaultNotes(vault)) throw new Error('Vault source validation failed.');
