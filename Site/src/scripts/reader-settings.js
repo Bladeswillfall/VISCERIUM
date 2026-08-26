@@ -251,8 +251,6 @@ class VisceriumReaderSettings extends HTMLElement {
         prepareSensitiveMedia();
       }, { signal });
     }
-
-    prepareSensitiveMedia();
   }
 
   disconnectedCallback() {
