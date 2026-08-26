@@ -37,7 +37,10 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
     <section class="contact-public" aria-labelledby="public-channel-title">
       <div class="contact-shell contact-layout contact-public__layout">
         <aside class="contact-intro contact-public__intro">
-          <h2 id="public-channel-title">Submit an Issue.</h2>
+          <div class="contact-public__heading">
+            <p class="contact-public__channel">Public channel</p>
+            <h2 id="public-channel-title">Submit an Issue.</h2>
+          </div>
           <p>
             Found a typo, broken link, site bug, or something in the Codex that needs correcting? Submit an issue on
             <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>
