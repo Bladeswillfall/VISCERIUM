@@ -20,7 +20,7 @@ test('canonical Atlas streams WebP LOD tiles without downloading the full map ra
   await expect(atlas).toHaveAttribute('data-atlas-ready', 'true', { timeout: 10_000 });
   await expect(atlas).toHaveAttribute('data-atlas-raster', 'tiles');
 
-  const tile = atlas.locator('img.leaflet-tile.atlas-map-tile').first();
+  const tile = atlas.locator('.atlas-map-tile img.leaflet-tile').first();
   await expect(tile).toBeVisible();
   await expect(tile).toHaveAttribute('src', /\/assets\/map-tiles\/errack-citadel\/\d+\/\d+\/\d+\.webp$/);
 
