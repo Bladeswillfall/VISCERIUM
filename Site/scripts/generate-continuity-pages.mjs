@@ -62,56 +62,56 @@ function renderHubBody(title, editions) {
 }
 
 export async function generateContinuityPages() {
-  const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
-    .map((file) => path.resolve(docsDir, file))
-    .sort();
-  const families = new Map();
+const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
+  .map((file) => path.resolve(docsDir, file))
+  .sort();
+const families = new Map();
 
-  for (const file of files) {
-    const raw = await fs.readFile(file, 'utf8');
-    const parsed = matter(raw);
-    if (parsed.data.status !== 'published' || parsed.data.type === 'continuity') continue;
-    const entityId = String(parsed.data.entity_id ?? '').trim();
-    if (!validEntityId(entityId)) continue;
-    const slug = slugFromFile(file, parsed.data);
-    const era = editionEra(parsed.data, slug);
-    if (!era) continue;
-    const edition = { file, raw, parsed, data: parsed.data, slug, era, entityId };
-    const entries = families.get(entityId) ?? [];
-    entries.push(edition);
-    families.set(entityId, entries);
+for (const file of files) {
+  const raw = await fs.readFile(file, 'utf8');
+  const parsed = matter(raw);
+  if (parsed.data.status !== 'published' || parsed.data.type === 'continuity') continue;
+  const entityId = String(parsed.data.entity_id ?? '').trim();
+  if (!validEntityId(entityId)) continue;
+  const slug = slugFromFile(file, parsed.data);
+  const era = editionEra(parsed.data, slug);
+  if (!era) continue;
+  const edition = { file, raw, parsed, data: parsed.data, slug, era, entityId };
+  const entries = families.get(entityId) ?? [];
+  entries.push(edition);
+  families.set(entityId, entries);
+}
+
+for (const [entityId, rawEditions] of families.entries()) {
+  const editions = rawEditions.sort(compareEditions);
+  const continuity = continuityData(entityId, editions);
+
+  for (const edition of editions) {
+    edition.parsed.data.continuity = continuity;
+    await fs.writeFile(edition.file, matter.stringify(edition.parsed.content, edition.parsed.data), 'utf8');
   }
 
-  for (const [entityId, rawEditions] of families.entries()) {
-    const editions = rawEditions.sort(compareEditions);
-    const continuity = continuityData(entityId, editions);
+  const title = displayTitle(editions);
+  const hubSlug = `entities/${entityId}`;
+  const outFile = path.join(docsDir, hubSlug, 'index.md');
+  const tags = [...new Set(editions.flatMap((edition) => Array.isArray(edition.data.tags) ? edition.data.tags : []).map(String).filter(Boolean))];
+  const frontmatter = {
+    title,
+    description: `Cross-era Codex view of ${title}. Available editions: ${editions.map((edition) => edition.era).join(', ')}.`,
+    status: 'published',
+    slug: hubSlug,
+    type: 'continuity',
+    entity_id: entityId,
+    continuity,
+    links: editions.map((edition) => `${edition.slug}/`),
+    ...(tags.length ? { tags } : {}),
+    tableOfContents: false,
+  };
+  await fs.mkdir(path.dirname(outFile), { recursive: true });
+  await fs.writeFile(outFile, matter.stringify(renderHubBody(title, editions), frontmatter), 'utf8');
+}
 
-    for (const edition of editions) {
-      edition.parsed.data.continuity = continuity;
-      await fs.writeFile(edition.file, matter.stringify(edition.parsed.content, edition.parsed.data), 'utf8');
-    }
-
-    const title = displayTitle(editions);
-    const hubSlug = `entities/${entityId}`;
-    const outFile = path.join(docsDir, hubSlug, 'index.md');
-    const tags = [...new Set(editions.flatMap((edition) => Array.isArray(edition.data.tags) ? edition.data.tags : []).map(String).filter(Boolean))];
-    const frontmatter = {
-      title,
-      description: `Cross-era Codex view of ${title}. Available editions: ${editions.map((edition) => edition.era).join(', ')}.`,
-      status: 'published',
-      slug: hubSlug,
-      type: 'continuity',
-      entity_id: entityId,
-      continuity,
-      links: editions.map((edition) => `${edition.slug}/`),
-      ...(tags.length ? { tags } : {}),
-      tableOfContents: false,
-    };
-    await fs.mkdir(path.dirname(outFile), { recursive: true });
-    await fs.writeFile(outFile, matter.stringify(renderHubBody(title, editions), frontmatter), 'utf8');
-  }
-
-  console.log(`Generated ${families.size} continuity hub${families.size === 1 ? '' : 's'}.`);
+console.log(`Generated ${families.size} continuity hub${families.size === 1 ? '' : 's'}.`);
 }
 
 if (isMainModule(import.meta.url)) await generateContinuityPages();
