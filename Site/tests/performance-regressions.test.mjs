@@ -22,3 +22,36 @@ test('reader media preparation is not duplicated during custom-element connectio
   assert.equal(directCalls.length, 2);
   assert.match(script, /document\.addEventListener\('astro:page-load', prepareSensitiveMedia\)/);
 });
+
+test('small-screen paint work stays out of the initial homepage render', () => {
+  const header = read('../src/components/CodexHeader.astro');
+  const homepage = read('../src/pages/index.astro');
+
+  assert.match(header, /@media \(max-width: 40rem\)[\s\S]*body::before,[\s\S]*display: none;/);
+  assert.match(homepage, /#home-continuum,[\s\S]*content-visibility: auto;/);
+  assert.match(homepage, /contain-intrinsic-block-size: auto 48rem;/);
+  assert.match(homepage, /@media \(max-width: 44rem\)[\s\S]*\.home-hero__copy[\s\S]*filter: none;/);
+});
+
+test('mobile homepage text uses the existing accessible era accents', () => {
+  const homepage = read('../src/pages/index.astro');
+
+  for (const era of ['e1', 'e2', 'e3', 'e4']) {
+    assert.match(homepage, new RegExp(`color: var\\(--era-${era}-accent\\)`));
+  }
+});
+
+test('compact header controls keep a 44px minimum target', () => {
+  const a11y = read('../src/styles/a11y.css');
+
+  assert.match(a11y, /\.codex-header-search button\[data-open-modal\]/);
+  assert.match(a11y, /\.reader-settings-trigger/);
+  assert.match(a11y, /min-inline-size: 2\.75rem;/);
+  assert.match(a11y, /min-block-size: 2\.75rem;/);
+});
+
+test('analytics cannot compete at normal fetch priority', () => {
+  const config = read('../astro.config.mjs');
+
+  assert.match(config, /fetchpriority: 'low'/);
+});
