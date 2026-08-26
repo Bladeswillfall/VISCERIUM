@@ -87,17 +87,40 @@ const articleAssets = new Set([...articleRoute].filter((file) => !file.endsWith(
 const globalCss = (await Array.fromAsync(fs.glob('middleware.*.css', { cwd: assetRoot })))
   .map((asset) => path.join(assetRoot, asset));
 const homepageHtml = await fs.readFile(path.join(distRoot, 'index.html'), 'utf8');
+const articleHtml = await fs.readFile(path.join(distRoot, 'degel-system', 'errack', 'index.html'), 'utf8');
+const categoryHtml = await fs.readFile(path.join(distRoot, 'eras', 'index.html'), 'utf8');
 const homepageBlockingStylesheets = [...homepageHtml.matchAll(/<link\b[^>]*>/g)]
   .map(([tag]) => tag)
   .filter((tag) => /\brel="stylesheet"/.test(tag) && !/\bmedia="print"/.test(tag));
-const globalCssSource = await fs.readFile(globalCss[0], 'utf8');
 
 if (globalCss.length !== 1) throw new Error(`Expected one global CSS asset, found ${globalCss.length}`);
+const globalCssSource = await fs.readFile(globalCss[0], 'utf8');
+const articleCss = await findAsset('--vc-reading-text', 'css');
+const categoryCss = await findAsset('.codex-alpha-index', 'css');
+
 if (globalCssSource.includes('.telescope__spinner')) {
   throw new Error('Telescope modal CSS is still bundled into the global render-blocking stylesheet');
 }
+if (globalCssSource.includes('.codex-smart-tooltip')) {
+  throw new Error('Smart tooltip CSS is still bundled into the global render-blocking stylesheet');
+}
+if (globalCssSource.includes('--vc-reading-text')) {
+  throw new Error('Article presentation CSS is still bundled into the global render-blocking stylesheet');
+}
+if (globalCssSource.includes('.codex-alpha-index')) {
+  throw new Error('Category index CSS is still bundled into the global render-blocking stylesheet');
+}
 if (homepageHtml.includes('.telescope__spinner')) {
   throw new Error('Homepage contains Telescope modal CSS before search is requested');
+}
+if (homepageHtml.includes(path.basename(articleCss)) || homepageHtml.includes(path.basename(categoryCss))) {
+  throw new Error('Homepage links route-only article or category CSS');
+}
+if (!articleHtml.includes(path.basename(articleCss))) {
+  throw new Error('Representative article does not link the split article stylesheet');
+}
+if (!categoryHtml.includes(path.basename(articleCss)) || !categoryHtml.includes(path.basename(categoryCss))) {
+  throw new Error('Category route does not link its split article and category stylesheets');
 }
 if (homepageBlockingStylesheets.length > 1) {
   throw new Error(`Homepage has ${homepageBlockingStylesheets.length} render-blocking stylesheets; expected at most 1`);
@@ -109,7 +132,7 @@ check('Timeline renderer raw', await sizeFiles([timelineRenderer]), 650_000);
 check('Timeline renderer Brotli', await sizeFiles([timelineRenderer], 'brotli'), 225_000);
 check('World Graph route JavaScript raw', await sizeFiles(graphJavascript), 500_000);
 check('World Graph linked resources gzip', await sizeFiles(graphRoute, 'gzip'), 250_000);
-check('Global CSS gzip', await sizeFiles(globalCss, 'gzip'), 36_000);
+check('Global CSS gzip', await sizeFiles(globalCss, 'gzip'), 30_000);
 check('Representative article linked resources gzip', await sizeFiles(articleAssets, 'gzip'), 65_000);
 console.log(`Homepage render-blocking stylesheets: ${homepageBlockingStylesheets.length} / 1`);
-console.log('Telescope modal CSS is absent from the first-load stylesheet');
+console.log('Telescope, smart tooltip, article, and category CSS are absent from the homepage first-load stylesheet');
