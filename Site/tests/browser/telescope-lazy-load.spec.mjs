@@ -28,3 +28,35 @@ test('Telescope loads only after search is requested', async ({ page }) => {
   await page.keyboard.press('Control+K');
   await expect(dialog).toBeVisible();
 });
+
+test('mobile footer keeps readable text and full-size route targets in light mode', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('starlight-theme', 'light'));
+  await page.goto('http://127.0.0.1:4321/', { waitUntil: 'networkidle' });
+
+  const footer = page.locator('.ion-codex-footer');
+  await expect(footer.locator('.footer-wayfinder__primary')).toHaveAttribute('href', '/start-here/');
+
+  const state = await footer.evaluate((element) => {
+    const notice = element.querySelector('.footer-brand__notice');
+    const description = element.querySelector('.policy-link__description');
+    const routes = [...element.querySelectorAll('.footer-wayfinder__routes a')];
+    if (!(notice instanceof HTMLElement) || !(description instanceof HTMLElement)) {
+      throw new Error('Missing footer text');
+    }
+
+    return {
+      footerColor: getComputedStyle(element).color,
+      noticeColor: getComputedStyle(notice).color,
+      descriptionColor: getComputedStyle(description).color,
+      routeRects: routes.map((route) => {
+        const rect = route.getBoundingClientRect();
+        return { width: rect.width, height: rect.height };
+      }),
+    };
+  });
+
+  expect(state.noticeColor).toBe(state.footerColor);
+  expect(state.descriptionColor).toBe(state.footerColor);
+  expect(state.routeRects.length).toBeGreaterThan(0);
+  expect(state.routeRects.every(({ width, height }) => width >= 48 && height >= 48)).toBe(true);
+});
