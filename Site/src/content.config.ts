@@ -4,12 +4,14 @@ import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { changelogsLoader } from 'starlight-changelogs/loader';
 import { starlightTagsExtension } from 'starlight-tags/schema';
+import { ENTITY_ID_PATTERN } from './lib/era-context.mjs';
 import { frontmatterDate } from './lib/frontmatter-date.mjs';
 import defaultTranslations from './content/i18n/en-GB.json';
 
 const stringOrStrings = z.union([z.string(), z.array(z.string())]);
 const eraValue = z.enum(['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY', 'Universal']);
 const eraOrEras = z.union([eraValue, z.array(eraValue)]);
+const entityIdSchema = z.string().regex(ENTITY_ID_PATTERN);
 const contentWarningValue = z.enum([
   'strong-language',
   'partial-nudity',
@@ -34,6 +36,38 @@ const contentWarningsSchema = z.array(contentWarningValue);
 const looseRecord = z.record(z.unknown());
 const optionalString = z.string().nullable().optional();
 const optionalNumber = z.number().nullable().optional();
+const continuitySchema = z.object({
+  entityId: entityIdSchema,
+  hub: z.string(),
+  editions: z.object({
+    CITADEL: z.string().optional(),
+    SMOG: z.string().optional(),
+    NEARSIGHT: z.string().optional(),
+    ENTROPY: z.string().optional(),
+    Universal: z.string().optional(),
+  }),
+});
+const relationshipObjectSchema = z.object({
+  target: z.string().optional(),
+  to: z.string().optional(),
+  ref: z.string().optional(),
+  article: z.string().optional(),
+  title: z.string().optional(),
+  label: z.string().optional(),
+  since: z.string().optional(),
+  until: z.string().optional(),
+  era: eraValue.optional(),
+  description: z.string().optional(),
+  note: z.string().optional(),
+  directed: z.boolean().optional(),
+}).passthrough().refine(
+  (entry) => [entry.target, entry.to, entry.ref, entry.article, entry.title]
+    .some((value) => typeof value === 'string' && value.trim().length > 0),
+  { message: 'Relationship metadata must include target, to, ref, article, or title.' },
+);
+const relationshipEntrySchema = z.union([z.string(), relationshipObjectSchema]);
+const relationshipValueSchema = z.union([relationshipEntrySchema, z.array(relationshipEntrySchema)]);
+const relationshipsSchema = z.record(relationshipValueSchema);
 const navigationSchema = z.object({
   section: z.enum([
     'relationships',
@@ -136,8 +170,8 @@ export const collections = {
         titleIcon: optionalString,
         eraStyle: optionalString,
         eraId: optionalString,
-        entity_id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
-        continuity: looseRecord.optional(),
+        entity_id: entityIdSchema.optional(),
+        continuity: continuitySchema.optional(),
         navigation: navigationSchema.optional(),
         calendarDate: calendarDateSchema.optional(),
         calendarEndDate: calendarDateSchema.nullable().optional(),
@@ -191,7 +225,7 @@ export const collections = {
         width: optionalNumber,
         height: optionalNumber,
         map: looseRecord.optional(),
-        relationships: looseRecord.optional(),
+        relationships: relationshipsSchema.optional(),
         sidebar: looseRecord.optional(),
         related: z.array(z.string()).optional(),
         links: z.array(z.string()).optional(),
