@@ -392,19 +392,19 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
   expect(initialZoom).toBeGreaterThan(0);
 
   await page.mouse.wheel(0, -120);
+  await expect.poll(async () => Number(await graph.getAttribute('data-world-graph-zoom'))).toBeGreaterThan(initialZoom);
   const zoomedIn = Number(await graph.getAttribute('data-world-graph-zoom'));
-  expect(zoomedIn).toBeGreaterThan(initialZoom);
   expect(zoomedIn / initialZoom).toBeLessThanOrEqual(1.22);
   await expect(graph).toHaveAttribute('data-world-graph-active-id', hovered.id);
 
   await page.mouse.wheel(0, -5_000);
+  await expect.poll(async () => Number(await graph.getAttribute('data-world-graph-zoom'))).toBeGreaterThan(zoomedIn);
   const boundedZoomIn = Number(await graph.getAttribute('data-world-graph-zoom'));
-  expect(boundedZoomIn).toBeGreaterThanOrEqual(zoomedIn);
   expect(boundedZoomIn / zoomedIn).toBeLessThanOrEqual(1.22);
 
   await page.mouse.wheel(0, 5_000);
+  await expect.poll(async () => Number(await graph.getAttribute('data-world-graph-zoom'))).toBeLessThan(boundedZoomIn);
   const boundedZoomOut = Number(await graph.getAttribute('data-world-graph-zoom'));
-  expect(boundedZoomOut).toBeLessThan(boundedZoomIn);
   expect(boundedZoomOut / boundedZoomIn).toBeGreaterThanOrEqual(.82);
 
   const beforeLineMode = Number(await graph.getAttribute('data-world-graph-zoom'));
