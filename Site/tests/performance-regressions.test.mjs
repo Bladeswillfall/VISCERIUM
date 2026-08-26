@@ -77,3 +77,16 @@ test('analytics cannot compete at normal fetch priority', () => {
 
   assert.match(config, /fetchpriority: 'low'/);
 });
+
+test('desktop sidebar spacing waits for confirmed sidebar state', () => {
+  const layout = read('../src/styles/layout.css');
+
+  assert.match(
+    layout,
+    /html\[data-codex-desktop-sidebar\]:not\(\.codex-sidebar-collapsed\) \.main-frame:has\(> \.codex-two-column-content\)/,
+  );
+  assert.doesNotMatch(
+    layout,
+    /html:not\(\.codex-sidebar-collapsed\) \.main-frame:has\(> \.codex-two-column-content\)/,
+  );
+});
