@@ -1,16 +1,30 @@
 import { test, expect } from '@playwright/test';
 
+const contactUrl = 'http://127.0.0.1:4321/contact/';
+
 test.use({ viewport: { width: 390, height: 844 } });
 
-test('contact page clearly marks private messaging as unavailable', async ({ page }) => {
-  await page.goto('http://127.0.0.1:4321/contact/', { waitUntil: 'networkidle' });
+test('contact page keeps public issues secondary when private messaging is unavailable', async ({ page }) => {
+  await page.goto(contactUrl, { waitUntil: 'networkidle' });
 
-  await expect(page.getByRole('heading', { name: 'Contact us' })).toBeVisible();
-  await expect(page.getByText('Private messages are not available right now.')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Open support page' })).toHaveAttribute('href', '/support/');
+  await expect(page.getByRole('heading', { name: 'Contact', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Submit an Issue.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Send a message.' })).toBeVisible();
+  await expect(page.getByText('Private messages are unavailable.')).toBeVisible();
+  await expect(page.locator('.contact-github-card .codex-icon')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'GitHub', exact: true }).first()).toHaveAttribute(
+    'href',
+    'https://github.com/Bladeswillfall/VISCERIUM/issues',
+  );
+  await expect(page.getByRole('link', { name: 'Submit an issue' })).toHaveAttribute(
+    'href',
+    'https://github.com/Bladeswillfall/VISCERIUM/issues/new/choose',
+  );
   await expect(page.locator('form')).toHaveCount(0);
   await expect(page.locator('.cf-turnstile')).toHaveCount(0);
   await expect(page.locator('script[src*="challenges.cloudflare.com"]')).toHaveCount(0);
+  await expect(page.locator('.right-sidebar-container')).toHaveCount(0);
+  await expect(page.locator('.codex-discussions')).toHaveCount(0);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     'href',
     'https://www.viscerium.co.uk/contact/',
@@ -18,23 +32,49 @@ test('contact page clearly marks private messaging as unavailable', async ({ pag
 
   const pageWidth = await page.locator('body').evaluate((body) => body.scrollWidth);
   expect(pageWidth).toBeLessThanOrEqual(390);
+});
 
-  const noteRows = await page.locator('.support-note').evaluateAll((notes) => notes.map((note) => (
-    [...note.children].map((child) => {
-      const rect = child.getBoundingClientRect();
-      return { top: rect.top, bottom: rect.bottom };
-    })
-  )));
+test('contact page owns the full custom canvas on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(contactUrl, { waitUntil: 'networkidle' });
 
-  for (const rows of noteRows) {
-    for (let index = 1; index < rows.length; index += 1) {
-      expect(rows[index].top).toBeGreaterThanOrEqual(rows[index - 1].bottom);
-    }
-  }
+  await expect(page.locator('.contact-page')).toBeVisible();
+  await expect(page.locator('.right-sidebar-container')).toHaveCount(0);
+  await expect(page.locator('.codex-discussions')).toHaveCount(0);
+  await expect(page.locator('.content-panel > .sl-container > .codex-header-figure')).toBeHidden();
+  await expect(page.locator('.content-panel > .sl-container > h1#_top')).toBeHidden();
+  await expect(page.locator('.content-panel > .sl-container > .codex-breadcrumbs')).toBeHidden();
 
-  await page.getByRole('link', { name: 'Open support page' }).click();
-  await expect(page).toHaveURL('http://127.0.0.1:4321/support/');
-  await expect(page.getByRole('heading', { name: 'Support', exact: true })).toBeVisible();
+  const geometry = await page.evaluate(() => {
+    const twoColumn = document.querySelector('.codex-two-column-content');
+    const main = document.querySelector('.codex-main-pane > main');
+    const contact = document.querySelector('.contact-page');
+    const hero = document.querySelector('.contact-hero');
+    if (
+      !(twoColumn instanceof HTMLElement)
+      || !(main instanceof HTMLElement)
+      || !(contact instanceof HTMLElement)
+      || !(hero instanceof HTMLElement)
+    ) return null;
+
+    const twoColumnRect = twoColumn.getBoundingClientRect();
+    const mainRect = main.getBoundingClientRect();
+    const contactRect = contact.getBoundingClientRect();
+    const heroRect = hero.getBoundingClientRect();
+    return {
+      twoColumnWidth: twoColumnRect.width,
+      mainWidth: mainRect.width,
+      contactWidth: contactRect.width,
+      heroWidth: heroRect.width,
+      heroTopDelta: heroRect.top - mainRect.top,
+    };
+  });
+
+  expect(geometry).not.toBeNull();
+  expect(Math.abs(geometry.mainWidth - geometry.twoColumnWidth)).toBeLessThanOrEqual(2);
+  expect(Math.abs(geometry.contactWidth - geometry.mainWidth)).toBeLessThanOrEqual(2);
+  expect(Math.abs(geometry.heroWidth - geometry.contactWidth)).toBeLessThanOrEqual(2);
+  expect(Math.abs(geometry.heroTopDelta)).toBeLessThanOrEqual(2);
 });
 
 test('support status copy clears every section heading', async ({ page }) => {
