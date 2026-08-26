@@ -29,6 +29,21 @@ test('Telescope loads only after search is requested', async ({ page }) => {
   await expect(dialog).toBeVisible();
 });
 
+test('Telescope keeps the first open request while its index is slow', async ({ page }) => {
+  await page.route('**/pages.json', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 2700));
+    await route.continue();
+  });
+
+  await page.goto('http://127.0.0.1:4321/', { waitUntil: 'domcontentloaded' });
+
+  const searchButton = page.locator('[data-codex-header-search] button[data-open-modal]');
+  const dialog = page.locator('#telescope-dialog');
+  await expect(searchButton).toBeEnabled();
+  await searchButton.click();
+  await expect(dialog).toBeVisible({ timeout: 6000 });
+});
+
 test('mobile footer keeps readable text and full-size route targets in light mode', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('starlight-theme', 'light'));
   await page.goto('http://127.0.0.1:4321/', { waitUntil: 'networkidle' });
