@@ -289,7 +289,7 @@ body:has(.support-page) .sl-markdown-content :is(
     linear-gradient(color-mix(in oklch, var(--contact-fixed-line) 28%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in oklch, var(--contact-fixed-line) 28%, transparent) 1px, transparent 1px);
   background-size: 5rem 5rem;
-  mask-image: linear-gradient(90deg, transparent 0%, #000 35%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, var(--codex-fixed-dark) 35%, var(--codex-fixed-dark) 100%);
   pointer-events: none;
 }
 
