@@ -14,6 +14,8 @@ const webmentionMaxMentions = Number.parseInt(env.PUBLIC_WEBMENTIONS_MAX ?? '24'
 const feedMaxItems = Number.parseInt(env.PUBLIC_FEED_MAX_ITEMS ?? '50', 10);
 const ga4MeasurementId = env.PUBLIC_GA4_MEASUREMENT_ID?.trim() ?? '';
 const cloudflareAnalyticsToken = env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN?.trim() ?? '';
+const rybbitHost = (env.PUBLIC_RYBBIT_HOST?.trim() || 'https://analytics.viscerium.co.uk').replace(/\/+$/, '');
+const rybbitSiteId = env.PUBLIC_RYBBIT_SITE_ID?.trim() ?? '';
 const commentsHost = (env.PUBLIC_COMMENTS_HOST?.trim() || 'https://comments.viscerium.co.uk').replace(/\/+$/, '');
 const commentsSiteId = env.PUBLIC_COMMENTS_SITE_ID?.trim() || 'viscerium';
 
@@ -65,6 +67,14 @@ export default {
         env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED === '1'
         && /^[a-f0-9]{32}$/i.test(cloudflareAnalyticsToken),
       token: cloudflareAnalyticsToken,
+    },
+    rybbit: {
+      enabled:
+        env.PUBLIC_RYBBIT_ENABLED === '1'
+        && isHttpsUrl(rybbitHost)
+        && Boolean(rybbitSiteId),
+      host: rybbitHost,
+      siteId: rybbitSiteId,
     },
   },
   searchVerification: {
