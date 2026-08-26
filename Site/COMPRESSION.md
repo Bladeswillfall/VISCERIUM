@@ -52,6 +52,14 @@ Consumer markup should prefer WebP and leave JPEG as the ordinary `<img>` fallba
 
 Modern browsers therefore select the smaller WebP candidate appropriate to the layout, while older browsers that do not understand `<picture>`/WebP can fall through to the JPEG `<img>`. Consumers such as preview cards, article images, header artwork and a future Basic Edition can choose from the same manifest instead of inventing separate image pipelines.
 
+### Atlas tile delivery
+
+Published WebP maps can also produce 512 px Atlas tile pyramids. Tiling must decode and encode new cropped files, so the tile build uses **lossless WebP** rather than applying another quality setting to treated source artwork.
+
+The tile generator adds an alpha channel before libvips pads incomplete edge tiles. Padding outside the real map bounds stays transparent instead of appearing as black borders in Leaflet.
+
+The canonical map WebP remains unchanged. The smaller 480 px, 960 px and 1600 px responsive variants still use the delivery quality settings above because they are intentionally bandwidth-saving derivatives.
+
 No generated derivative is committed to Git. A clean build regenerates them from the canonical Vault WebP source.
 
 ## Delivery
