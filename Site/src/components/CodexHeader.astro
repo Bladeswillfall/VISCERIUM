@@ -68,17 +68,11 @@ const { t } = Astro.locals;
     opacity: .2;
   }
 
-  /*
-   * Mobile keeps the texture as a simple, very faint transparent overlay. Avoid
-   * blending the fixed viewport-sized layer against every painted page layer while scrolling.
-   * Repeat the light-theme selector so its desktop specificity cannot override
-   * the mobile value.
-   */
+  /* The grain is barely visible on small screens but still costs a fixed paint layer and request. */
   @media (max-width: 40rem) {
     body::before,
     :root[data-theme='light'] body::before {
-      mix-blend-mode: normal;
-      opacity: .03;
+      display: none;
     }
   }
 
