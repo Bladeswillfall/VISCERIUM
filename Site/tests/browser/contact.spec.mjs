@@ -48,10 +48,12 @@ test('contact page keeps public issues secondary when private messaging is unava
   );
 
   const geometry = await page.evaluate(() => {
+    const hero = document.querySelector('.contact-hero');
     const publicSection = document.querySelector('.contact-public');
-    if (!(publicSection instanceof HTMLElement)) return null;
+    if (!(hero instanceof HTMLElement) || !(publicSection instanceof HTMLElement)) return null;
     return {
       pageWidth: document.body.scrollWidth,
+      heroHeight: hero.getBoundingClientRect().height,
       publicDocumentTop: publicSection.getBoundingClientRect().top + window.scrollY,
       viewportHeight: window.innerHeight,
     };
@@ -59,7 +61,8 @@ test('contact page keeps public issues secondary when private messaging is unava
 
   expect(geometry).not.toBeNull();
   expect(geometry.pageWidth).toBeLessThanOrEqual(390);
-  expect(geometry.publicDocumentTop).toBeGreaterThanOrEqual(geometry.viewportHeight - 1);
+  expect(geometry.heroHeight).toBeGreaterThanOrEqual(geometry.viewportHeight * 0.5 - 1);
+  expect(geometry.publicDocumentTop).toBeLessThan(geometry.viewportHeight);
 });
 
 test('contact page owns the full custom canvas on desktop', async ({ page }) => {
@@ -96,6 +99,7 @@ test('contact page owns the full custom canvas on desktop', async ({ page }) => 
       mainWidth: mainRect.width,
       contactWidth: contactRect.width,
       heroWidth: heroRect.width,
+      heroHeight: heroRect.height,
       heroTopDelta: heroRect.top - mainRect.top,
       publicTop: publicSection.getBoundingClientRect().top,
       viewportHeight: window.innerHeight,
@@ -107,7 +111,19 @@ test('contact page owns the full custom canvas on desktop', async ({ page }) => 
   expect(Math.abs(geometry.contactWidth - geometry.mainWidth)).toBeLessThanOrEqual(2);
   expect(Math.abs(geometry.heroWidth - geometry.contactWidth)).toBeLessThanOrEqual(2);
   expect(Math.abs(geometry.heroTopDelta)).toBeLessThanOrEqual(2);
-  expect(geometry.publicTop).toBeGreaterThanOrEqual(geometry.viewportHeight - 1);
+  expect(geometry.heroHeight).toBeGreaterThanOrEqual(geometry.viewportHeight * 0.5 - 1);
+  expect(geometry.publicTop).toBeLessThan(geometry.viewportHeight);
+
+  const headingGeometry = await page.locator('.contact-intro').evaluateAll((intros) => (
+    intros.map((intro) => {
+      const heading = intro.querySelector('h2')?.getBoundingClientRect();
+      const description = intro.querySelector(':scope > p:not(.contact-eyebrow)')?.getBoundingClientRect();
+      return heading && description ? { headingBottom: heading.bottom, descriptionTop: description.top } : null;
+    }).filter(Boolean)
+  ));
+
+  expect(headingGeometry).toHaveLength(2);
+  for (const row of headingGeometry) expect(row.descriptionTop).toBeGreaterThanOrEqual(row.headingBottom);
 });
 
 test('enabled private contact form exercises every changed control', async ({ page }) => {
