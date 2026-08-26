@@ -64,7 +64,7 @@ test('content pipeline cleans old derivatives before validation and regenerates 
   const buildContent = await readSite('scripts/build-content.mjs');
   const cleanupIndex = buildContent.indexOf('await cleanResponsiveImageVariants()');
   const validationIndex = buildContent.indexOf('await validateRepositoryImages()');
-  const syncIndex = buildContent.indexOf("await import('./sync-public-notes.mjs')");
+  const syncIndex = buildContent.indexOf('await syncPublicNotes()');
   const variantsIndex = buildContent.indexOf('await generateResponsiveImageVariants()');
 
   assert.ok(cleanupIndex >= 0, 'old derivative cleanup should remain in the shared pipeline');
