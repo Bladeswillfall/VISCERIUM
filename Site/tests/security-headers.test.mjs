@@ -63,6 +63,7 @@ test('CSP inventory has no retired Giscus or CDN permissions', async () => {
   );
   assert.doesNotMatch(reportOnlyCsp, /giscus\.app/i);
   assert.doesNotMatch(reportOnlyCsp, /cdnjs\.cloudflare\.com/i);
+  assert.doesNotMatch(reportOnlyCsp, /upgrade-insecure-requests/i);
 });
 
 test('CSP remains report-only until inline scripts and the contact endpoint are narrowed', async () => {
