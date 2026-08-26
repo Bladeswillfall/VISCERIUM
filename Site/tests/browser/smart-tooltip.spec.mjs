@@ -1,8 +1,19 @@
 import { test, expect } from '@playwright/test';
 
+const homeUrl = 'http://127.0.0.1:4321/';
 const citadelUrl = 'http://127.0.0.1:4321/eras/citadel/';
 
 test.use({ viewport: { width: 1280, height: 900 } });
+
+test('homepage does not load smart tooltip positioning code', async ({ page }) => {
+  const requestedPaths = [];
+  page.on('request', (request) => requestedPaths.push(new URL(request.url()).pathname));
+
+  await page.goto(homeUrl, { waitUntil: 'networkidle' });
+
+  expect(requestedPaths.some((pathname) => pathname.includes('floating-position'))).toBe(false);
+  await expect(page.locator('.codex-smart-tooltip')).toHaveCount(0);
+});
 
 test('era primer context tips escape clipped cards and remain inside their safe zone', async ({ page }) => {
   await page.goto(citadelUrl, { waitUntil: 'networkidle' });

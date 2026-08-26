@@ -1,12 +1,31 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
 import siteConfig from '../site.config.mjs';
+import { classifyCodexPage } from './lib/page-kind.mjs';
 import { getPublicationDates, toIsoDate } from './lib/publication-dates.mjs';
+import articlePagesStylesheet from './styles/article-pages.css?url';
+import categoryIndexStylesheet from './styles/category-index.css?url';
 
 export const onRequest = defineRouteMiddleware((context) => {
   const route = context.locals.starlightRoute;
   const data = route.entry.data as Record<string, unknown>;
+  const pageKind = classifyCodexPage(data, route.entry.id);
+  const pageType = String(data.type ?? '').trim().toLowerCase();
 
-  if (data.status !== 'published' || data.type === 'category') return;
+  if (!pageKind.isHomepage) {
+    route.head.push({
+      tag: 'link',
+      attrs: { rel: 'stylesheet', href: articlePagesStylesheet },
+    });
+  }
+
+  if (pageType === 'category') {
+    route.head.push({
+      tag: 'link',
+      attrs: { rel: 'stylesheet', href: categoryIndexStylesheet },
+    });
+  }
+
+  if (data.status !== 'published' || pageType === 'category') return;
 
   const { published, updated } = getPublicationDates(data);
   const publishedIso = toIsoDate(published);

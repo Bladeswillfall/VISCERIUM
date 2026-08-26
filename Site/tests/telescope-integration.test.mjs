@@ -4,21 +4,29 @@ import { readFileSync } from 'node:fs';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-test('Telescope is the only enabled search provider and VISCERIUM scopes it separately', () => {
+test('Telescope is the only enabled search provider and loads on demand', () => {
   const config = read('../astro.config.mjs');
   const header = read('../src/components/CodexHeader.astro');
   const adapter = read('../src/scripts/telescope-scope.js');
+  const searchRoute = read('../src/pages/pages.json.ts');
   const continuity = read('../scripts/generate-continuity-pages.mjs');
   const eraTags = read('../scripts/generate-era-tag-pages.mjs');
 
   assert.match(config, /pagefind:\s*false/);
-  assert.match(config, /starlightTelescope\(\{/);
+  assert.doesNotMatch(config, /starlightTelescope/);
   assert.match(header, /import '\.\.\/scripts\/telescope-scope\.js'/);
+  assert.match(adapter, /import\('starlight-telescope\/styles\/telescope\.css\?raw'\)/);
+  assert.match(adapter, /ensureTelescopeStyles/);
+  assert.match(adapter, /import\('starlight-telescope\/libs\/telescope-search'\)/);
+  assert.match(adapter, /import\('starlight-telescope\/libs\/modal'\)/);
   assert.match(adapter, /telescope-scope\.json/);
   assert.match(adapter, /__visceriumAllPages/);
   assert.match(adapter, /initializeFuse/);
   assert.match(adapter, /viscerium:era-context/);
   assert.match(adapter, /data-telescope-scope-label/);
+  assert.match(adapter, /event\.ctrlKey \|\| event\.metaKey/);
+  assert.match(searchRoute, /getCollection\('docs'\)/);
+  assert.match(searchRoute, /page\.id !== 'index'/);
 
   assert.doesNotMatch(continuity, /pagefind\s*:/i);
   assert.doesNotMatch(eraTags, /pagefind\s*:/i);
@@ -26,16 +34,15 @@ test('Telescope is the only enabled search provider and VISCERIUM scopes it sepa
 });
 
 test('the installed Telescope runtime still exposes the internals used by the scoped adapter', () => {
-  const element = read('../node_modules/starlight-telescope/src/libs/telescope-element.ts');
   const search = read('../node_modules/starlight-telescope/src/libs/telescope-search.ts');
 
   // Telescope 1.x does not expose a supported filter callback. The adapter is
   // intentionally narrow and this test should fail loudly if an upgrade moves
   // or renames the implementation details it relies on.
-  assert.match(element, /private telescopeSearch:\s*TelescopeSearch/);
   assert.match(search, /private allPages:\s*TelescopePage\[\]/);
   assert.match(search, /private filteredPages:\s*TelescopePage\[\]/);
   assert.match(search, /private initializeFuse\(\):\s*void/);
   assert.match(search, /private renderSearchResults\(\):\s*void/);
   assert.match(search, /private renderRecentResults\(\):\s*void/);
+  assert.match(search, /public open\(\):\s*void/);
 });

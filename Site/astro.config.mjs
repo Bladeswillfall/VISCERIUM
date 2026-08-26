@@ -8,7 +8,6 @@ import starlight from '@astrojs/starlight';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import starlightTags from 'starlight-tags';
-import starlightTelescope from 'starlight-telescope';
 import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
 import { buildSidebar } from './sidebar.mjs';
 import siteConfig from './site.config.mjs';
@@ -273,13 +272,11 @@ export default defineConfig({
         './src/styles/ion-theme.css',
         './src/styles/ion-expressive-code.css',
         './src/styles/typography.css',
-        './src/styles/article-pages.css',
         './src/styles/layout.css',
         './src/styles/codex-ui.css',
         './src/styles/header-controls.css',
         './src/styles/reader-settings.css',
         './src/styles/navigation.css',
-        './src/styles/category-index.css',
         './src/styles/a11y.css',
         './src/styles/era-styles.css',
       ],
@@ -299,15 +296,6 @@ export default defineConfig({
         starlightTags({ onInlineTagsNotFound: 'create' }),
         starlightChangelogs(),
         starlightScrollToTop(),
-        starlightTelescope({
-          shortcut: {
-            key: 'k',
-            ctrl: true,
-            meta: true,
-            shift: false,
-            alt: false,
-          },
-        }),
       ],
       sidebar,
       head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],

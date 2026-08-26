@@ -1,7 +1,6 @@
 ---
 import DefaultPageFrame from '@astrojs/starlight/components/PageFrame.astro';
 import { classifyCodexPage } from '../lib/page-kind.mjs';
-import '../styles/smart-tooltips.css';
 import CodexDiscussions from './CodexDiscussions.astro';
 import CodexFooterRail from './CodexFooterRail.astro';
 
@@ -32,19 +31,56 @@ const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
 <CodexFooterRail />
 
 <script>
-  import { installSmartTooltips } from '../lib/ui/smart-tooltips.mjs';
-
+  const TOOLTIP_SELECTOR = '[data-smart-tooltip]';
+  const TOOLTIP_STYLE_ID = 'viscerium-smart-tooltip-styles';
   const globalWindow = window as typeof window & {
     __visceriumSmartTooltipCleanup?: () => void;
+    __visceriumSmartTooltipLoadVersion?: number;
+    __visceriumSmartTooltipRuntimeInstalled?: boolean;
   };
 
-  globalWindow.__visceriumSmartTooltipCleanup?.();
-  globalWindow.__visceriumSmartTooltipCleanup = installSmartTooltips(document);
-
-  document.addEventListener('astro:before-swap', () => {
+  const cleanupSmartTooltips = () => {
     globalWindow.__visceriumSmartTooltipCleanup?.();
     globalWindow.__visceriumSmartTooltipCleanup = undefined;
-  }, { once: true });
+  };
+
+  const ensureSmartTooltipStyles = (css: string) => {
+    if (document.getElementById(TOOLTIP_STYLE_ID)) return;
+    const style = document.createElement('style');
+    style.id = TOOLTIP_STYLE_ID;
+    style.textContent = css;
+    document.head.append(style);
+  };
+
+  const syncSmartTooltips = async () => {
+    const loadVersion = (globalWindow.__visceriumSmartTooltipLoadVersion ?? 0) + 1;
+    globalWindow.__visceriumSmartTooltipLoadVersion = loadVersion;
+    cleanupSmartTooltips();
+
+    if (!document.querySelector(TOOLTIP_SELECTOR)) return;
+
+    const [{ installSmartTooltips }, styleModule] = await Promise.all([
+      import('../lib/ui/smart-tooltips.mjs'),
+      import('../styles/smart-tooltips.css?raw'),
+    ]);
+
+    if (globalWindow.__visceriumSmartTooltipLoadVersion !== loadVersion) return;
+    if (!document.querySelector(TOOLTIP_SELECTOR)) return;
+
+    ensureSmartTooltipStyles(styleModule.default);
+    globalWindow.__visceriumSmartTooltipCleanup = installSmartTooltips(document);
+  };
+
+  if (!globalWindow.__visceriumSmartTooltipRuntimeInstalled) {
+    globalWindow.__visceriumSmartTooltipRuntimeInstalled = true;
+    document.addEventListener('astro:page-load', () => void syncSmartTooltips());
+    document.addEventListener('astro:before-swap', () => {
+      globalWindow.__visceriumSmartTooltipLoadVersion = (globalWindow.__visceriumSmartTooltipLoadVersion ?? 0) + 1;
+      cleanupSmartTooltips();
+    });
+  }
+
+  void syncSmartTooltips();
 </script>
 
 <style is:global>
