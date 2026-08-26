@@ -98,6 +98,14 @@ import { filterTelescopePages, telescopeScopeLabel } from '../lib/telescope-scop
     runtime.loadPromise = null;
   };
 
+  const ensureTelescopeStyles = (css) => {
+    if (document.getElementById('viscerium-telescope-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'viscerium-telescope-styles';
+    style.textContent = css;
+    document.head.append(style);
+  };
+
   const syncScopeLabel = (era) => {
     const dialog = document.getElementById('telescope-dialog');
     if (!(dialog instanceof HTMLDialogElement)) return;
@@ -138,11 +146,12 @@ import { filterTelescopePages, telescopeScopeLabel } from '../lib/telescope-scop
 
     if (!runtime.loadPromise) {
       runtime.loadPromise = Promise.all([
-        import('starlight-telescope/styles/telescope.css'),
+        import('starlight-telescope/styles/telescope.css?raw'),
         import('starlight-telescope/libs/modal'),
         import('starlight-telescope/libs/telescope-search'),
       ])
-        .then(([, modalModule, searchModule]) => {
+        .then(([styleModule, modalModule, searchModule]) => {
+          ensureTelescopeStyles(styleModule.default);
           if (!document.getElementById('telescope-dialog')) {
             document.body.insertAdjacentHTML('beforeend', modalModule.getModalHTML());
           }
