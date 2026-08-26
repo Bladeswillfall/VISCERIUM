@@ -15,7 +15,7 @@ const { t } = Astro.locals;
     </section>
 
     <nav class="footer-wayfinder" aria-label={t('viscerium.footer.destinationsLabel')}>
-      <a class="footer-wayfinder__primary" href="/">{t('viscerium.footer.startHere')}</a>
+      <a class="footer-wayfinder__primary" href="/start-here/">{t('viscerium.footer.startHere')}</a>
       <div class="footer-wayfinder__routes">
         <a href="/calendar/">{t('viscerium.footer.calendar')}</a>
         <a href="/graph/">{t('viscerium.footer.worldGraph')}</a>
@@ -132,7 +132,7 @@ const { t } = Astro.locals;
     .footer-brand__notice {
       max-inline-size: 31rem;
       margin: 0;
-      color: var(--codex-text-minor);
+      color: var(--codex-nav-text);
       font-size: clamp(0.56rem, 1.05vw, 0.88rem);
       line-height: 1.45;
       overflow-wrap: anywhere;
@@ -224,7 +224,7 @@ const { t } = Astro.locals;
     }
 
     .policy-link__description {
-      color: var(--codex-text-minor);
+      color: var(--codex-nav-text);
       font-size: clamp(0.54rem, 0.9vw, 0.78rem);
       line-height: 1.4;
       overflow-wrap: anywhere;
@@ -261,7 +261,17 @@ const { t } = Astro.locals;
       }
 
       .footer-wayfinder__routes {
-        gap: 0.42rem 0.7rem;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+
+      .footer-wayfinder__routes a {
+        display: inline-flex;
+        min-inline-size: 3rem;
+        min-block-size: 3rem;
+        align-items: center;
+        justify-content: center;
+        padding-inline: 0.15rem;
       }
     }
 
@@ -274,7 +284,7 @@ const { t } = Astro.locals;
       }
 
       .footer-wayfinder__routes {
-        gap: 0.36rem 0.55rem;
+        gap: 0.5rem;
       }
 
       .policy-link__description {
