@@ -1,12 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   RESPONSIVE_IMAGE_WIDTHS,
   RESPONSIVE_JPEG_QUALITY,
   RESPONSIVE_WEBP_QUALITY,
+  cleanResponsiveImageVariants,
   responsiveCandidateWidths,
   responsiveVariantFilename,
   responsiveVariantUrl,
@@ -22,6 +24,15 @@ async function readSite(relativePath) {
 
 async function readRepo(relativePath) {
   return fs.readFile(path.join(repoRoot, relativePath), 'utf8');
+}
+
+async function exists(target) {
+  try {
+    await fs.access(target);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 test('responsive image tiers never upscale small source artwork', () => {
@@ -49,13 +60,40 @@ test('variant names keep WebP preferred and JPEG available as the legacy fallbac
   );
 });
 
-test('content pipeline generates derivatives only after public asset sync', async () => {
+test('content pipeline cleans old derivatives before validation and regenerates after public asset sync', async () => {
   const buildContent = await readSite('scripts/build-content.mjs');
+  const cleanupIndex = buildContent.indexOf('await cleanResponsiveImageVariants()');
+  const validationIndex = buildContent.indexOf('await validateRepositoryImages()');
   const syncIndex = buildContent.indexOf("await import('./sync-public-notes.mjs')");
   const variantsIndex = buildContent.indexOf('await generateResponsiveImageVariants()');
 
-  assert.ok(syncIndex >= 0, 'public note sync should remain in the shared pipeline');
+  assert.ok(cleanupIndex >= 0, 'old derivative cleanup should remain in the shared pipeline');
+  assert.ok(validationIndex > cleanupIndex, 'generated JPEGs must be removed before source image validation');
+  assert.ok(syncIndex > validationIndex, 'public note sync should remain after source validation');
   assert.ok(variantsIndex > syncIndex, 'variant generation must run after public assets are admitted/copied');
+});
+
+test('generated derivative cleanup removes JPEG/WebP variants and both manifests', async (t) => {
+  const temporaryRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-image-variants-'));
+  t.after(() => fs.rm(temporaryRoot, { recursive: true, force: true }));
+
+  const targets = [
+    path.join(temporaryRoot, 'public/assets/images/variants/example-480.jpg'),
+    path.join(temporaryRoot, 'public/assets/maps/variants/world-480.webp'),
+    path.join(temporaryRoot, 'public/assets/image-variants.json'),
+    path.join(temporaryRoot, 'src/data/image-variants.json'),
+  ];
+
+  for (const target of targets) {
+    await fs.mkdir(path.dirname(target), { recursive: true });
+    await fs.writeFile(target, 'generated', 'utf8');
+  }
+
+  await cleanResponsiveImageVariants({ siteRoot: temporaryRoot });
+
+  for (const target of targets) {
+    assert.equal(await exists(target), false, `${target} should be removed before source validation`);
+  }
 });
 
 test('generated image derivatives and manifests stay out of Git', async () => {
