@@ -195,7 +195,6 @@ body:has(.support-page) .sl-markdown-content :is(
   --contact-void: var(--home-void);
   --contact-fixed-text: var(--home-text-fixed);
   --contact-fixed-body: var(--home-text-soft-fixed);
-  --contact-fixed-line: var(--home-line-fixed);
   --contact-wide: 118rem;
   --contact-gutter: clamp(1.25rem, 4vw, 5.5rem);
   min-width: 0;
@@ -262,49 +261,37 @@ body:has(.support-page) .sl-markdown-content :is(
 
 .contact-hero {
   position: relative;
-  min-height: clamp(34rem, 68svh, 48rem);
   display: grid;
+  min-block-size: calc(100svh - var(--sl-nav-height, 3.5rem));
   align-items: end;
   overflow: hidden;
   background:
-    radial-gradient(circle at 76% 48%, color-mix(in oklch, var(--home-text-fixed) 10%, transparent), transparent 0 18rem),
-    radial-gradient(
-      circle at 76% 48%,
-      transparent 0 10rem,
-      color-mix(in oklch, var(--home-text-fixed) 5%, transparent) 10.08rem 10.15rem,
-      transparent 10.25rem 15rem,
-      color-mix(in oklch, var(--home-text-fixed) 3.5%, transparent) 15.08rem 15.14rem,
-      transparent 15.2rem
+    linear-gradient(
+      118deg,
+      transparent 0 58%,
+      color-mix(in oklch, var(--contact-fixed-text) 5%, transparent) 82%,
+      transparent 100%
     ),
-    linear-gradient(180deg, color-mix(in oklch, var(--contact-void) 92%, var(--codex-palette-ink)) 0%, var(--codex-palette-ink) 78%);
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--contact-void) 94%, var(--codex-palette-ink)) 0%,
+      var(--codex-palette-ink) 100%
+    );
   color: var(--contact-fixed-body);
-}
-
-.contact-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: .34;
-  background-image:
-    linear-gradient(color-mix(in oklch, var(--contact-fixed-line) 28%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklch, var(--contact-fixed-line) 28%, transparent) 1px, transparent 1px);
-  background-size: 5rem 5rem;
-  mask-image: linear-gradient(90deg, transparent 0%, var(--codex-fixed-dark) 35%, var(--codex-fixed-dark) 100%);
-  pointer-events: none;
 }
 
 .contact-hero__mark {
   position: absolute;
   top: 50%;
-  right: clamp(1rem, 7vw, 10rem);
+  right: clamp(2rem, 6vw, 8rem);
+  width: clamp(21rem, 45vw, 43rem);
+  aspect-ratio: 1756 / 969;
   translate: 0 -50%;
-  color: color-mix(in oklch, var(--home-text-fixed) 5.5%, transparent);
-  font-family: var(--vc-font-display);
-  font-size: clamp(14rem, 31vw, 33rem);
-  font-weight: 400;
-  line-height: .72;
-  user-select: none;
+  background: color-mix(in oklch, var(--contact-fixed-text) 9%, transparent);
+  -webkit-mask: url('/assets/brand/viscerium-logo.svg') center / contain no-repeat;
+  mask: url('/assets/brand/viscerium-logo.svg') center / contain no-repeat;
   pointer-events: none;
+  user-select: none;
 }
 
 .contact-hero__inner {
@@ -345,7 +332,7 @@ body:has(.support-page) .sl-markdown-content :is(
 
 .contact-hero .contact-inline-link,
 .contact-github-card .contact-inline-link {
-  color: var(--home-text-fixed) !important;
+  color: var(--contact-fixed-text) !important;
 }
 
 .contact-public {
@@ -387,17 +374,13 @@ body:has(.support-page) .sl-markdown-content :is(
   position: static;
 }
 
-.contact-public__intro .contact-eyebrow {
-  color: var(--contact-muted);
-}
-
 .contact-public__intro h2 {
   margin-bottom: .75rem;
   color: var(--contact-accent);
   font-size: clamp(1.8rem, 1.5rem + 1.15vw, 2.8rem);
 }
 
-.contact-public__intro > p:not(.contact-eyebrow) {
+.contact-public__intro > p {
   max-width: 27rem;
   color: var(--contact-body);
   font-size: .9rem;
@@ -409,6 +392,7 @@ body:has(.support-page) .sl-markdown-content :is(
   padding: clamp(1.25rem, 2.4vw, 1.9rem);
   background: color-mix(in oklch, var(--contact-void) 72%, transparent);
   color: var(--contact-fixed-body);
+  transition: background 150ms ease;
 }
 
 .contact-github-card:hover {
@@ -433,7 +417,7 @@ body:has(.support-page) .sl-markdown-content :is(
   width: 1.35rem;
   height: 1.35rem;
   flex: 0 0 auto;
-  color: var(--home-text-fixed);
+  color: var(--contact-fixed-text);
 }
 
 .contact-github-card h3 {
@@ -474,23 +458,27 @@ body:has(.support-page) .sl-markdown-content :is(
   margin-top: 1.25rem;
   padding: .55rem .85rem;
   background: var(--codex-surface-raised-color);
-  color: var(--home-text-fixed) !important;
+  color: var(--contact-fixed-text) !important;
   font-size: .66rem;
-  transition: gap .15s ease, background .15s ease;
+  transition: gap 150ms ease, background 150ms ease;
 }
 
 .contact-secondary-action:hover,
 .contact-secondary-action:focus-visible {
   gap: .9rem;
-  background: color-mix(in oklch, var(--home-text-fixed) 9%, var(--codex-surface-raised-color));
+  background: color-mix(in oklch, var(--contact-fixed-text) 9%, var(--codex-surface-raised-color));
+}
+
+.contact-secondary-action:focus-visible,
+.contact-send-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: .2rem;
 }
 
 .contact-form-section {
   position: relative;
   padding-block: clamp(5rem, 9vw, 9rem);
-  background:
-    linear-gradient(90deg, color-mix(in oklch, var(--contact-accent) 2.5%, transparent) 1px, transparent 1px) 0 0 / 6rem 100%,
-    var(--contact-bg);
+  background: color-mix(in oklch, var(--contact-bg) 92%, var(--contact-surface));
 }
 
 .contact-form-shell {
@@ -518,7 +506,7 @@ body:has(.support-page) .sl-markdown-content :is(
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  color: var(--home-text-fixed);
+  color: var(--contact-fixed-text);
 }
 
 .contact-form-shell__status::before {
@@ -528,7 +516,6 @@ body:has(.support-page) .sl-markdown-content :is(
   flex: 0 0 auto;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 .8rem color-mix(in oklch, currentColor 55%, transparent);
 }
 
 .contact-form-shell__status.is-unavailable {
@@ -554,7 +541,7 @@ body:has(.support-page) .sl-markdown-content :is(
 }
 
 .contact-field label {
-  color: var(--home-text-fixed);
+  color: var(--contact-fixed-text);
   font-family: var(--vc-font-ui);
   font-size: .72rem;
   font-weight: 700;
@@ -578,10 +565,10 @@ body:has(.support-page) .sl-markdown-content :is(
   border-radius: 0;
   padding: .82rem .9rem;
   background: var(--codex-palette-ink);
-  color: var(--home-text-fixed);
+  color: var(--contact-fixed-text);
   font-family: var(--vc-font-ui);
   font-size: .92rem;
-  transition: background .12s ease, box-shadow .12s ease;
+  transition: background 120ms ease;
 }
 
 .contact-field textarea {
@@ -590,17 +577,17 @@ body:has(.support-page) .sl-markdown-content :is(
 }
 
 .contact-field :is(input, textarea)::placeholder {
-  color: color-mix(in oklch, var(--home-text-soft-fixed) 65%, transparent);
+  color: color-mix(in oklch, var(--contact-fixed-body) 65%, transparent);
 }
 
 .contact-field :is(input, textarea):hover {
   background: color-mix(in oklch, var(--codex-palette-ink) 88%, var(--codex-palette-deep));
 }
 
-.contact-field :is(input, textarea):focus {
-  outline: none;
+.contact-field :is(input, textarea):focus-visible {
+  outline: 2px solid var(--contact-fixed-text);
+  outline-offset: 2px;
   background: color-mix(in oklch, var(--codex-palette-ink) 94%, var(--codex-palette-deep));
-  box-shadow: 0 0 0 2px color-mix(in oklch, var(--home-text-fixed) 28%, transparent);
 }
 
 .cf-turnstile {
@@ -629,14 +616,14 @@ body:has(.support-page) .sl-markdown-content :is(
   min-height: 3.1rem;
   flex: 0 0 auto;
   padding: .75rem 1.15rem;
-  background: var(--home-text-fixed);
+  background: var(--contact-fixed-text);
   color: var(--contact-void);
   font-size: .71rem;
 }
 
 .contact-send-button:hover,
 .contact-send-button:focus-visible {
-  background: color-mix(in oklch, var(--home-text-fixed) 86%, var(--codex-palette-mid));
+  background: color-mix(in oklch, var(--contact-fixed-text) 86%, var(--codex-palette-mid));
 }
 
 .contact-form-unavailable {
@@ -669,18 +656,16 @@ body:has(.support-page) .sl-markdown-content :is(
   }
 
   .contact-hero__mark {
-    right: -4rem;
-    opacity: .55;
+    right: -5rem;
+    width: clamp(21rem, 60vw, 34rem);
+    opacity: .75;
   }
 }
 
 @media (max-width: 44rem) {
-  .contact-hero {
-    min-height: 34rem;
-  }
-
   .contact-hero__mark {
-    right: -7rem;
+    right: -8rem;
+    width: 28rem;
   }
 
   .contact-field-row {
@@ -699,7 +684,9 @@ body:has(.support-page) .sl-markdown-content :is(
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .contact-secondary-action {
+  .contact-github-card,
+  .contact-secondary-action,
+  .contact-field :is(input, textarea) {
     transition: none;
   }
 }
@@ -737,6 +724,10 @@ body:has(.support-page) .sl-markdown-content :is(
   grid-column: 1 / -1 !important;
   grid-row: 1 !important;
   min-inline-size: 0;
+  padding: 0 !important;
+}
+
+.main-frame:has(.contact-page) main > .content-panel {
   padding: 0 !important;
 }
 
