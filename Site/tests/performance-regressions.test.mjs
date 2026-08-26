@@ -33,7 +33,7 @@ test('small-screen paint work stays out of the initial homepage render', () => {
   assert.match(homepage, /@media \(max-width: 44rem\)[\s\S]*\.home-hero__copy[\s\S]*filter: none;/);
 });
 
-test('mobile timeline text uses accessible era accents without retheming fixed-dark hero cards', () => {
+test('mobile timeline text uses adaptive accents while fixed-dark hero cards stay theme independent', () => {
   const homepage = read('../src/pages/index.astro');
   const eras = {
     citadel: 'e1',
@@ -41,6 +41,11 @@ test('mobile timeline text uses accessible era accents without retheming fixed-d
     nearsight: 'e3',
     entropy: 'e4',
   };
+
+  assert.match(
+    homepage,
+    /\.home-era-card :is\(\.home-era-card__number, \.home-era-card__action\) \{\s*color: color-mix\(in oklch, var\(--home-era-accent\) 80%, var\(--home-text-fixed\)\);/,
+  );
 
   for (const [name, era] of Object.entries(eras)) {
     assert.match(
