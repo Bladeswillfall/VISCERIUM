@@ -48,8 +48,7 @@ test.describe('mobile article presentation', () => {
         footerPosition: footerStyle.position,
         footerZIndex: footerStyle.zIndex,
         footerMarginTop: footerStyle.marginTop,
-        grainBlendMode: grainStyle.mixBlendMode,
-        grainOpacity: grainStyle.opacity,
+        grainDisplay: grainStyle.display,
         viewportWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,
       };
@@ -69,8 +68,7 @@ test.describe('mobile article presentation', () => {
     expect(result.footerPosition).toBe('static');
     expect(result.footerZIndex).toBe('auto');
     expect(result.footerMarginTop).toBe('0px');
-    expect(result.grainBlendMode).toBe('normal');
-    expect(result.grainOpacity).toBe('0.03');
+    expect(result.grainDisplay).toBe('none');
     expect(result.documentWidth).toBeLessThanOrEqual(result.viewportWidth + 1);
   });
 });
