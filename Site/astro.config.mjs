@@ -199,6 +199,7 @@ const rybbitAnalyticsHead = siteConfig.analytics?.rybbit?.enabled
           src: `${siteConfig.analytics.rybbit.host}/api/script.js`,
           'data-site-id': siteConfig.analytics.rybbit.siteId,
           defer: true,
+          fetchpriority: 'low',
         },
       },
     ]

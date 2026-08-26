@@ -332,8 +332,9 @@ html[data-codex-wide-header] .codex-header-search button[data-open-modal] > kbd 
  */
 html[data-codex-mobile-header] .codex-header-search button[data-open-modal] {
   width: max-content !important;
-  min-width: max-content !important;
+  min-width: 2.75rem !important;
   max-width: none !important;
+  min-height: 2.75rem !important;
   padding-inline: .35rem !important;
   overflow: visible;
 }
