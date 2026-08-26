@@ -1,25 +1,41 @@
 import { test, expect } from '@playwright/test';
 
-const contactUrl = 'http://127.0.0.1:4321/contact/';
+const baseUrl = process.env.CONTACT_TEST_BASE_URL ?? 'http://127.0.0.1:4321';
+const contactUrl = `${baseUrl}/contact/`;
+const supportUrl = `${baseUrl}/support/`;
+const githubIssueUrl = 'https://github.com/Bladeswillfall/VISCERIUM/issues/new/choose';
+const enabledContactEndpoint = 'https://contact-form.invalid/submit';
+const turnstileTestKey = '1x00000000000000000000AA';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
-test('contact page keeps public issues secondary when private messaging is unavailable', async ({ page }) => {
+test('contact page keeps public issues secondary when private messaging is unavailable', async ({ page, context }) => {
+  await context.route(`${githubIssueUrl}*`, async (route) => {
+    await route.fulfill({ status: 200, contentType: 'text/plain', body: 'GitHub issue chooser test fixture' });
+  });
   await page.goto(contactUrl, { waitUntil: 'networkidle' });
 
   await expect(page.getByRole('heading', { name: 'Contact', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Submit an Issue.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Send a message.' })).toBeVisible();
   await expect(page.getByText('Private messages are unavailable.')).toBeVisible();
+  await expect(page.locator('.contact-hero__body')).toContainText('Private contact is temporarily unavailable.');
+  await expect(page.locator('.contact-hero__body')).not.toContainText('use the contact form below');
+  await expect(page.locator('.contact-hero__mark')).toHaveCSS('mask-image', /viscerium-logo\.svg/);
   await expect(page.locator('.contact-github-card .codex-icon')).toBeVisible();
   await expect(page.getByRole('link', { name: 'GitHub', exact: true }).first()).toHaveAttribute(
     'href',
     'https://github.com/Bladeswillfall/VISCERIUM/issues',
   );
-  await expect(page.getByRole('link', { name: 'Submit an issue' })).toHaveAttribute(
-    'href',
-    'https://github.com/Bladeswillfall/VISCERIUM/issues/new/choose',
-  );
+
+  const submitIssue = page.getByRole('link', { name: 'Submit an issue', exact: true });
+  await expect(submitIssue).toHaveAttribute('href', githubIssueUrl);
+  const popupPromise = page.waitForEvent('popup');
+  await submitIssue.click();
+  const popup = await popupPromise;
+  await expect(popup).toHaveURL(githubIssueUrl);
+  await popup.close();
+
   await expect(page.locator('form')).toHaveCount(0);
   await expect(page.locator('.cf-turnstile')).toHaveCount(0);
   await expect(page.locator('script[src*="challenges.cloudflare.com"]')).toHaveCount(0);
@@ -30,8 +46,19 @@ test('contact page keeps public issues secondary when private messaging is unava
     'https://www.viscerium.co.uk/contact/',
   );
 
-  const pageWidth = await page.locator('body').evaluate((body) => body.scrollWidth);
-  expect(pageWidth).toBeLessThanOrEqual(390);
+  const geometry = await page.evaluate(() => {
+    const publicSection = document.querySelector('.contact-public');
+    if (!(publicSection instanceof HTMLElement)) return null;
+    return {
+      pageWidth: document.body.scrollWidth,
+      publicTop: publicSection.getBoundingClientRect().top,
+      viewportHeight: window.innerHeight,
+    };
+  });
+
+  expect(geometry).not.toBeNull();
+  expect(geometry.pageWidth).toBeLessThanOrEqual(390);
+  expect(geometry.publicTop).toBeGreaterThanOrEqual(geometry.viewportHeight - 1);
 });
 
 test('contact page owns the full custom canvas on desktop', async ({ page }) => {
@@ -50,11 +77,13 @@ test('contact page owns the full custom canvas on desktop', async ({ page }) => 
     const main = document.querySelector('.codex-main-pane > main');
     const contact = document.querySelector('.contact-page');
     const hero = document.querySelector('.contact-hero');
+    const publicSection = document.querySelector('.contact-public');
     if (
       !(twoColumn instanceof HTMLElement)
       || !(main instanceof HTMLElement)
       || !(contact instanceof HTMLElement)
       || !(hero instanceof HTMLElement)
+      || !(publicSection instanceof HTMLElement)
     ) return null;
 
     const twoColumnRect = twoColumn.getBoundingClientRect();
@@ -67,6 +96,8 @@ test('contact page owns the full custom canvas on desktop', async ({ page }) => 
       contactWidth: contactRect.width,
       heroWidth: heroRect.width,
       heroTopDelta: heroRect.top - mainRect.top,
+      publicTop: publicSection.getBoundingClientRect().top,
+      viewportHeight: window.innerHeight,
     };
   });
 
@@ -75,11 +106,50 @@ test('contact page owns the full custom canvas on desktop', async ({ page }) => 
   expect(Math.abs(geometry.contactWidth - geometry.mainWidth)).toBeLessThanOrEqual(2);
   expect(Math.abs(geometry.heroWidth - geometry.contactWidth)).toBeLessThanOrEqual(2);
   expect(Math.abs(geometry.heroTopDelta)).toBeLessThanOrEqual(2);
+  expect(geometry.publicTop).toBeGreaterThanOrEqual(geometry.viewportHeight - 1);
+});
+
+test('enabled private contact form exercises every changed control', async ({ page }) => {
+  test.skip(process.env.CONTACT_FORM_TEST_ENABLED !== '1', 'Runs only against the enabled contact fixture.');
+
+  let submittedBody = '';
+  await page.route(enabledContactEndpoint, async (route) => {
+    submittedBody = route.request().postData() ?? '';
+    await route.fulfill({ status: 200, contentType: 'text/plain', body: 'Contact form accepted for browser test.' });
+  });
+
+  await page.goto(contactUrl, { waitUntil: 'domcontentloaded' });
+
+  const form = page.locator('form.contact-form');
+  await expect(form).toBeVisible();
+  await expect(form).toHaveAttribute('action', enabledContactEndpoint);
+  await expect(page.locator('.contact-hero__body')).toContainText('use the contact form below to email us');
+
+  await page.locator('#contact-name').fill('Review Test');
+  await page.locator('#contact-email').fill('review@example.test');
+  await page.locator('#contact-subject').fill('Contact form browser check');
+  await page.locator('#contact-message').fill('This confirms that the enabled contact controls accept input and submit.');
+
+  const turnstile = page.locator('.cf-turnstile');
+  await expect(turnstile).toHaveAttribute('data-sitekey', turnstileTestKey);
+  await expect(page.locator('script[src*="challenges.cloudflare.com"]')).toHaveCount(1);
+  await expect(turnstile.locator('iframe')).toBeVisible({ timeout: 15_000 });
+
+  const requestPromise = page.waitForRequest(
+    (request) => request.url() === enabledContactEndpoint && request.method() === 'POST',
+  );
+  await page.getByRole('button', { name: 'Send message' }).click();
+  await requestPromise;
+
+  expect(submittedBody).toContain('Review Test');
+  expect(submittedBody).toContain('review@example.test');
+  expect(submittedBody).toContain('Contact form browser check');
+  expect(submittedBody).toContain('This confirms that the enabled contact controls accept input and submit.');
 });
 
 test('support status copy clears every section heading', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('http://127.0.0.1:4321/support/', { waitUntil: 'networkidle' });
+  await page.goto(supportUrl, { waitUntil: 'networkidle' });
 
   const geometry = await page.locator('.support-section > header, .support-contact > div').evaluateAll((headers) => (
     headers.map((header) => {
