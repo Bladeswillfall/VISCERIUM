@@ -21,7 +21,10 @@ test('contact page keeps public issues secondary when private messaging is unava
   await expect(page.getByRole('heading', { name: 'Send a message.' })).toBeVisible();
   await expect(page.getByText('Private messages are unavailable.')).toBeVisible();
   await expect(page.locator('.contact-hero__body')).toContainText('Private contact is temporarily unavailable.');
+  await expect(page.locator('.contact-hero__body')).toContainText('GitHub so it can be tracked publicly.');
   await expect(page.locator('.contact-hero__body')).not.toContainText('use the contact form below');
+  await expect(page.locator('.contact-public__intro > p')).toContainText('GitHub so it can be tracked publicly.');
+  await expect(page.locator('.contact-github-card > p')).toContainText('GitHub so the discussion and fix stay attached');
   await expect(page.locator('.contact-hero__mark')).toHaveCSS('mask-image', /viscerium-logo\.svg/);
   await expect(page.locator('.contact-github-card .codex-icon')).toBeVisible();
   await expect(page.getByRole('link', { name: 'GitHub', exact: true }).first()).toHaveAttribute(
@@ -123,7 +126,57 @@ test('contact page owns the full custom canvas on desktop', async ({ page }) => 
   ));
 
   expect(headingGeometry).toHaveLength(2);
-  for (const row of headingGeometry) expect(row.descriptionTop).toBeGreaterThanOrEqual(row.headingBottom);
+  for (const row of headingGeometry) expect(row.descriptionTop).toBeGreaterThanOrEqual(row.headingBottom + 8);
+
+  const headingStyles = await page.locator('#private-message-title').evaluate((heading) => ({
+    display: getComputedStyle(heading).display,
+    beforeContent: getComputedStyle(heading, '::before').content,
+    afterContent: getComputedStyle(heading, '::after').content,
+    marginBottom: Number.parseFloat(getComputedStyle(heading).marginBottom),
+  }));
+
+  expect(headingStyles.display).toBe('block');
+  expect(headingStyles.beforeContent).toBe('none');
+  expect(headingStyles.afterContent).toBe('none');
+  expect(headingStyles.marginBottom).toBeGreaterThanOrEqual(16);
+});
+
+test('contact fixed-dark panels stay legible in light theme', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(contactUrl, { waitUntil: 'networkidle' });
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+  });
+
+  const colors = await page.evaluate(() => {
+    const color = (selector) => getComputedStyle(document.querySelector(selector)).color;
+    const background = (selector) => getComputedStyle(document.querySelector(selector)).backgroundColor;
+    return {
+      fixedHeading: color('.contact-hero h1'),
+      fixedBody: color('.contact-hero__body'),
+      githubHeading: color('.contact-github-card h3'),
+      githubBody: color('.contact-github-card > p'),
+      unavailableHeading: color('.contact-form-unavailable h3'),
+      unavailableBody: color('.contact-form-unavailable > p'),
+      formMeta: color('.contact-form-shell__top'),
+      unavailableLink: color('.contact-form-unavailable .contact-inline-link'),
+      actionText: color('.contact-secondary-action'),
+      actionBackground: background('.contact-secondary-action'),
+      cardBackground: background('.contact-github-card'),
+      githubHeadingTransform: getComputedStyle(document.querySelector('.contact-github-card h3')).textTransform,
+    };
+  });
+
+  expect(colors.githubHeading).toBe(colors.fixedHeading);
+  expect(colors.githubBody).toBe(colors.fixedBody);
+  expect(colors.unavailableHeading).toBe(colors.fixedHeading);
+  expect(colors.unavailableBody).toBe(colors.fixedBody);
+  expect(colors.formMeta).toBe(colors.fixedBody);
+  expect(colors.unavailableLink).toBe(colors.fixedHeading);
+  expect(colors.actionText).toBe(colors.fixedHeading);
+  expect(colors.actionBackground).not.toBe(colors.actionText);
+  expect(colors.actionBackground).not.toBe(colors.cardBackground);
+  expect(colors.githubHeadingTransform).toBe('none');
 });
 
 test('enabled private contact form exercises every changed control', async ({ page }) => {
