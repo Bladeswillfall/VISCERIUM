@@ -33,21 +33,38 @@ test('small-screen paint work stays out of the initial homepage render', () => {
   assert.match(homepage, /@media \(max-width: 44rem\)[\s\S]*\.home-hero__copy[\s\S]*filter: none;/);
 });
 
-test('mobile homepage text uses the existing accessible era accents', () => {
+test('mobile timeline text uses accessible era accents without retheming fixed-dark hero cards', () => {
   const homepage = read('../src/pages/index.astro');
+  const eras = {
+    citadel: 'e1',
+    smog: 'e2',
+    nearsight: 'e3',
+    entropy: 'e4',
+  };
 
-  for (const era of ['e1', 'e2', 'e3', 'e4']) {
-    assert.match(homepage, new RegExp(`color: var\\(--era-${era}-accent\\)`));
+  for (const [name, era] of Object.entries(eras)) {
+    assert.match(
+      homepage,
+      new RegExp(`\\.home-tech-era--${name} \\.home-tech-era__index \\{\\s*color: var\\(--era-${era}-accent\\);`),
+    );
+    assert.doesNotMatch(
+      homepage,
+      new RegExp(`\\.home-era-card--${name}[^\\n]*--era-${era}-accent`),
+    );
   }
 });
 
-test('compact header controls keep a 44px minimum target', () => {
+test('compact header controls keep a 44px minimum target in the winning owners', () => {
   const a11y = read('../src/styles/a11y.css');
+  const headerControls = read('../src/styles/header-controls.css');
 
-  assert.match(a11y, /\.codex-header-search button\[data-open-modal\]/);
   assert.match(a11y, /\.reader-settings-trigger/);
   assert.match(a11y, /min-inline-size: 2\.75rem;/);
   assert.match(a11y, /min-block-size: 2\.75rem;/);
+  assert.match(
+    headerControls,
+    /html\[data-codex-mobile-header\] \.codex-header-search button\[data-open-modal\] \{[\s\S]*min-width: 2\.75rem !important;[\s\S]*min-height: 2\.75rem !important;/,
+  );
 });
 
 test('analytics cannot compete at normal fetch priority', () => {
