@@ -51,14 +51,14 @@ test('contact page keeps public issues secondary when private messaging is unava
     if (!(publicSection instanceof HTMLElement)) return null;
     return {
       pageWidth: document.body.scrollWidth,
-      publicTop: publicSection.getBoundingClientRect().top,
+      publicDocumentTop: publicSection.getBoundingClientRect().top + window.scrollY,
       viewportHeight: window.innerHeight,
     };
   });
 
   expect(geometry).not.toBeNull();
   expect(geometry.pageWidth).toBeLessThanOrEqual(390);
-  expect(geometry.publicTop).toBeGreaterThanOrEqual(geometry.viewportHeight - 1);
+  expect(geometry.publicDocumentTop).toBeGreaterThanOrEqual(geometry.viewportHeight - 1);
 });
 
 test('contact page owns the full custom canvas on desktop', async ({ page }) => {
