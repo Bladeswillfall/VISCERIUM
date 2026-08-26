@@ -4,6 +4,7 @@ import process from 'node:process';
 import matter from 'gray-matter';
 import { HISTORICAL_ERAS, normaliseEra } from '../src/lib/era-context.mjs';
 import { cleanSlug, escapeHtml, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
+import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
 const docsDir = process.env.VISCERIUM_DOCS_DIR
@@ -48,6 +49,7 @@ function renderIndex(tag, era, entries) {
   return lines.filter(Boolean).join('\n');
 }
 
+export async function generateEraTagPages() {
 const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
   .map((file) => path.resolve(docsDir, file))
   .sort();
@@ -95,3 +97,6 @@ for (const era of HISTORICAL_ERAS) {
 }
 
 console.log(`Generated ${generated} era-scoped tag page${generated === 1 ? '' : 's'}.`);
+}
+
+if (isMainModule(import.meta.url)) await generateEraTagPages();
