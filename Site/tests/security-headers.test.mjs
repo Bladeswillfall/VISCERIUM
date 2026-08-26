@@ -53,6 +53,14 @@ test('CSP inventory has no retired Giscus or CDN permissions', async () => {
   assert.match(reportOnlyCsp, /object-src 'none'/);
   assert.match(reportOnlyCsp, /frame-ancestors 'none'/);
   assert.match(reportOnlyCsp, /https:\/\/comments\.viscerium\.co\.uk/);
+  assert.match(
+    reportOnlyCsp,
+    /script-src[^;]*https:\/\/analytics\.viscerium\.co\.uk/,
+  );
+  assert.match(
+    reportOnlyCsp,
+    /connect-src[^;]*https:\/\/analytics\.viscerium\.co\.uk/,
+  );
   assert.doesNotMatch(reportOnlyCsp, /giscus\.app/i);
   assert.doesNotMatch(reportOnlyCsp, /cdnjs\.cloudflare\.com/i);
 });

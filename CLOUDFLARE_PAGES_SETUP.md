@@ -78,17 +78,30 @@ Before relying on the service in production, sign in to Webmention.io with `http
 
 ### Analytics and verification
 
-GA4 and Cloudflare Web Analytics are independent and disabled by default:
+GA4, Cloudflare Web Analytics, and Rybbit are independent and disabled by default:
 
 ```text
 PUBLIC_GA4_ENABLED=0
 PUBLIC_GA4_MEASUREMENT_ID=
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED=0
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=
+PUBLIC_RYBBIT_ENABLED=0
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=
 PUBLIC_GOOGLE_SITE_VERIFICATION=
 ```
 
 Set a provider's enable flag to `1` only after adding its genuine public identifier. If Cloudflare automatically injects Web Analytics for the Pages project, leave the repository-managed Cloudflare integration disabled to avoid duplicate page views.
+
+The production Rybbit site uses these public build values:
+
+```text
+PUBLIC_RYBBIT_ENABLED=1
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=d863318efa2f
+```
+
+Keep Rybbit disabled on preview deployments unless preview traffic should count in production analytics. The Rybbit Site ID is public client configuration, not a secret.
 
 `PUBLIC_GOOGLE_SITE_VERIFICATION` adds public Search Console verification metadata. It is not an analytics tracker. Any analytics consent, privacy notice, or cookie/storage decision still requires the owner's review before tracking is enabled.
 

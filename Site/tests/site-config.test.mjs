@@ -10,6 +10,9 @@ const integrationKeys = [
   'PUBLIC_GA4_MEASUREMENT_ID',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN',
+  'PUBLIC_RYBBIT_ENABLED',
+  'PUBLIC_RYBBIT_HOST',
+  'PUBLIC_RYBBIT_SITE_ID',
   'PUBLIC_COMMENTS_ENABLED',
   'PUBLIC_COMMENTS_HOST',
   'PUBLIC_COMMENTS_SITE_ID',
@@ -53,21 +56,43 @@ test('replacement defaults use the repository, canonical domain, identity, comme
   assert.equal(config.webmentions.username, 'www.viscerium.co.uk');
   assert.equal(config.webmentions.endpoint, 'https://webmention.io/www.viscerium.co.uk/webmention');
   assert.equal(config.webmentions.pingbackEndpoint, 'https://webmention.io/www.viscerium.co.uk/xmlrpc');
+  assert.equal(config.analytics.rybbit.enabled, false);
+  assert.equal(config.analytics.rybbit.host, 'https://analytics.viscerium.co.uk');
 });
 
 test('private integrations remain inert while public integrations keep safe defaults', async () => {
   const config = await loadConfig({
     PUBLIC_GA4_ENABLED: '1',
     PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED: '1',
+    PUBLIC_RYBBIT_ENABLED: '1',
     PUBLIC_COMMENTS_ENABLED: '1',
     PUBLIC_CONTACT_FORM_ENABLED: '1',
   });
 
   assert.equal(config.analytics.ga4.enabled, false);
   assert.equal(config.analytics.cloudflare.enabled, false);
+  assert.equal(config.analytics.rybbit.enabled, false);
   assert.equal(config.comments.enabled, true);
   assert.equal(config.webmentions.enabled, true);
   assert.equal(config.contactForm.enabled, false);
+});
+
+test('Rybbit requires an HTTPS host and site ID', async () => {
+  const enabled = await loadConfig({
+    PUBLIC_RYBBIT_ENABLED: '1',
+    PUBLIC_RYBBIT_HOST: 'https://analytics.viscerium.co.uk/',
+    PUBLIC_RYBBIT_SITE_ID: 'd863318efa2f',
+  });
+  const insecure = await loadConfig({
+    PUBLIC_RYBBIT_ENABLED: '1',
+    PUBLIC_RYBBIT_HOST: 'http://analytics.viscerium.co.uk',
+    PUBLIC_RYBBIT_SITE_ID: 'd863318efa2f',
+  });
+
+  assert.equal(enabled.analytics.rybbit.enabled, true);
+  assert.equal(enabled.analytics.rybbit.host, 'https://analytics.viscerium.co.uk');
+  assert.equal(enabled.analytics.rybbit.siteId, 'd863318efa2f');
+  assert.equal(insecure.analytics.rybbit.enabled, false);
 });
 
 test('webmentions retain an explicit emergency off switch', async () => {
