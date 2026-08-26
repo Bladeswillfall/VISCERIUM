@@ -1,77 +1,174 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import siteConfig from '../../site.config.mjs';
+import LocalIcon from '../components/LocalIcon.astro';
 import supportStylesHref from '../styles/support.css?url&no-inline';
 
 const contactForm = siteConfig.contactForm;
+const githubIssuesUrl = `${siteConfig.githubRepoUrl}/issues`;
+const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
 ---
 
 <StarlightPage frontmatter={{
   title: 'Contact',
-  description: 'Contact options for the VISCERIUM Codex.',
+  description: 'Contact VISCERIUM privately or report public Codex issues on GitHub.',
+  tableOfContents: false,
+  giscus: false,
   head: [{ tag: 'link', attrs: { rel: 'stylesheet', href: supportStylesHref } }],
 }}>
-  <section class="support-page support-page--contact">
-    <header class="support-hero codex-frame">
-      <p class="codex-kicker">Private contact</p>
-      <h1>Contact us</h1>
-      <p>
-        {contactForm.enabled
-          ? 'Use this form for collaboration, rights, credit, or sensitive concerns. Public site issues still belong on GitHub.'
-          : 'Private messages are not available right now. Public, trackable issues can still be opened through GitHub.'}
-      </p>
-    </header>
-
-    <section class="support-note codex-frame">
-      <h2>Use GitHub for public site issues</h2>
-      <p>
-        For typos, broken links, site bugs, feature requests, or content corrections, use the public support routes.
-        This keeps the work visible and easier to track.
-      </p>
-      <a class="support-button" href="/support/">Open support page</a>
+  <div class="contact-page">
+    <section class="contact-hero" aria-labelledby="contact-title">
+      <div class="contact-hero__mark" aria-hidden="true">V</div>
+      <div class="contact-shell contact-hero__inner">
+        <p class="contact-eyebrow">Private contact</p>
+        <h1 id="contact-title">Contact</h1>
+        <p class="contact-hero__lead">Need to get in touch?</p>
+        <p class="contact-hero__body">
+          Found a typo, broken link, site bug, or something in the Codex that needs correcting? Please use
+          <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>
+          so it can be tracked publicly. For collaboration, rights or credit questions, private feedback, or anything
+          you would rather not post publicly, use the contact form below to email us.
+        </p>
+      </div>
     </section>
 
-    {contactForm.enabled ? (
-      <section class="support-form-section codex-frame" aria-labelledby="private-message-title">
-        <div>
-          <h2 id="private-message-title">Send a private message</h2>
-          <p>All fields are required. Messages are checked before delivery.</p>
+    <section class="contact-public" aria-labelledby="public-channel-title">
+      <div class="contact-shell contact-layout contact-public__layout">
+        <aside class="contact-intro contact-public__intro">
+          <p class="contact-eyebrow">Public channel</p>
+          <h2 id="public-channel-title">Submit an Issue.</h2>
+          <p>
+            Found a typo, broken link, site bug, or something in the Codex that needs correcting? Submit an issue on
+            <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>
+            so it can be tracked publicly.
+          </p>
+        </aside>
+
+        <article class="contact-github-card">
+          <div class="contact-github-card__identity">
+            <LocalIcon name="github" />
+            <span>GitHub · public · trackable</span>
+          </div>
+          <h3>Site issue</h3>
+          <p>
+            Typos, broken links, content corrections, bugs, feature requests, and other work that should remain visible.
+            Open them on <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>
+            so the discussion and fix stay attached to the work.
+          </p>
+          <a class="contact-secondary-action" href={githubNewIssueUrl} target="_blank" rel="noreferrer">
+            Submit an issue <span aria-hidden="true">→</span>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact-form-section" id="private-message" aria-labelledby="private-message-title">
+      <div class="contact-shell contact-layout">
+        <aside class="contact-intro">
+          <p class="contact-eyebrow">Private channel</p>
+          <h2 id="private-message-title">Send a message.</h2>
+          <p>
+            Have a general question, or want to talk to us about licensing, attribution, collaboration, rights, or another
+            private matter? Use the form to send us a message.
+          </p>
+        </aside>
+
+        <div class="contact-form-shell">
+          <div class="contact-form-shell__top">
+            <span>VISCERIUM / contact</span>
+            <span class:list={['contact-form-shell__status', !contactForm.enabled && 'is-unavailable']}>
+              {contactForm.enabled ? 'Channel available' : 'Channel unavailable'}
+            </span>
+          </div>
+
+          {contactForm.enabled ? (
+            <form class="contact-form" method="post" enctype="multipart/form-data" action={contactForm.endpoint}>
+              <div class="contact-field-row">
+                <div class="contact-field">
+                  <label for="contact-name">Name <span>required</span></label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    type="text"
+                    autocomplete="name"
+                    maxlength="120"
+                    placeholder="Your name"
+                    required
+                  />
+                </div>
+                <div class="contact-field">
+                  <label for="contact-email">Email <span>required</span></label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    maxlength="254"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="contact-field">
+                <label for="contact-subject">Subject <span>required</span></label>
+                <input
+                  id="contact-subject"
+                  name="subject"
+                  type="text"
+                  maxlength="160"
+                  placeholder="What is this about?"
+                  required
+                />
+              </div>
+
+              <div class="contact-field">
+                <label for="contact-message">Message <span>required · max 5000</span></label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows="8"
+                  maxlength="5000"
+                  placeholder="Give enough context to understand the request."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="support-form__honeypot" aria-hidden="true">
+                <label for="contact-website">Website</label>
+                <input id="contact-website" name="website" type="text" autocomplete="off" tabindex="-1" />
+              </div>
+
+              <div
+                class="cf-turnstile"
+                data-sitekey={contactForm.turnstileSiteKey}
+                data-action="contact"
+              ></div>
+
+              <div class="contact-form__actions">
+                <p>
+                  All fields are required. Do not include passwords, credentials, or other secrets.
+                </p>
+                <button class="contact-send-button" type="submit">
+                  Send message <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div class="contact-form-unavailable" role="status">
+              <h3>Private messages are unavailable.</h3>
+              <p>
+                The private contact channel is not available right now. Public site issues can still be submitted on
+                <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>.
+              </p>
+            </div>
+          )}
         </div>
-        <form class="support-form" method="post" enctype="multipart/form-data" action={contactForm.endpoint}>
-          <div class="support-form__field">
-            <label for="contact-name">Name</label>
-            <input id="contact-name" name="name" type="text" autocomplete="name" maxlength="120" required />
-          </div>
-          <div class="support-form__field">
-            <label for="contact-email">Email</label>
-            <input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required />
-          </div>
-          <div class="support-form__field">
-            <label for="contact-subject">Subject</label>
-            <input id="contact-subject" name="subject" type="text" maxlength="160" required />
-          </div>
-          <div class="support-form__field">
-            <label for="contact-message">Message</label>
-            <textarea id="contact-message" name="message" rows="8" maxlength="5000" required></textarea>
-          </div>
-          <div class="support-form__honeypot" aria-hidden="true">
-            <label for="contact-website">Website</label>
-            <input id="contact-website" name="website" type="text" autocomplete="off" tabindex="-1" />
-          </div>
-          <div
-            class="cf-turnstile"
-            data-sitekey={contactForm.turnstileSiteKey}
-            data-action="contact"
-          ></div>
-          <button class="support-button" type="submit">Send message</button>
-        </form>
-        <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-      </section>
-    ) : (
-      <section class="support-note codex-frame">
-        <h2>Private messages</h2>
-        <p>Private contact is currently unavailable. Use GitHub for public questions and keep sensitive details out of public issues.</p>
-      </section>
-    )}
-  </section>
+
+        {contactForm.enabled && (
+          <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        )}
+      </div>
+    </section>
+  </div>
 </StarlightPage>
