@@ -3,6 +3,7 @@ import process from 'node:process';
 import fs from 'node:fs/promises';
 import siteConfig from '../site.config.mjs';
 import { loadGeneratedDocs } from './content-manifest.mjs';
+import { generateMapTilePyramids } from './generate-map-tiles.mjs';
 import { isMainModule } from './script-entry.mjs';
 
 const outFile = path.resolve(process.cwd(), 'src/data/maps.json');
@@ -268,6 +269,10 @@ export async function generateMapData({ manifest } = {}) {
     pluginSources: loaded.pluginSources,
     warnings,
   });
+
+  // Build the WebP tile pyramids before serialising map data so each Atlas
+  // receives its delivery descriptor alongside the existing full-image fallback.
+  await generateMapTilePyramids({ maps });
 
   await fs.mkdir(path.dirname(outFile), { recursive: true });
   await fs.writeFile(outFile, `${JSON.stringify(maps, null, 2)}\n`, 'utf8');
