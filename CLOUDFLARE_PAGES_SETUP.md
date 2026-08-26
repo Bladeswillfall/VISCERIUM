@@ -70,7 +70,9 @@ PUBLIC_WEBMENTIONS_ENABLED=1
 PUBLIC_WEBMENTION_IO_USERNAME=www.viscerium.co.uk
 ```
 
-No secret is required in Cloudflare Pages for the current public JF2 API integration. Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, complete its domain verification, and confirm that the assigned username is `www.viscerium.co.uk`.
+No secret is required in Cloudflare Pages for the current public JF2 API integration. The site advertises `https://github.com/Bladeswillfall` as its explicit IndieLogin authentication identity using `rel="me authn"`. The corresponding GitHub profile Website field must point back to `https://www.viscerium.co.uk/` so IndieLogin can verify the relationship in both directions.
+
+Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, authenticate through the advertised GitHub identity, complete the domain verification, and confirm that the assigned username is `www.viscerium.co.uk`.
 
 `PUBLIC_WEBMENTIONS_ENABLED=0` remains available as an emergency off switch. Use the endpoint override variables in `Site/.env.example` only if Webmention.io supplies different endpoints.
 
