@@ -212,19 +212,19 @@ import { filterTelescopePages, telescopeScopeLabel } from '../lib/telescope-scop
     return true;
   };
 
-  runtime.waitUntilReady = async (timeoutMs = 2500) => {
+  runtime.waitUntilReady = async () => {
     try {
       await runtime.loadTelescope();
     } catch {
       return false;
     }
 
-    const deadline = performance.now() + timeoutMs;
-    do {
-      if (await runtime.apply()) return true;
+    while (true) {
+      const controller = telescopeController();
+      if (!controller) return false;
+      if (controller.isLoading === false) return runtime.apply();
       await new Promise((resolve) => setTimeout(resolve, 50));
-    } while (performance.now() < deadline);
-    return false;
+    }
   };
 
   runtime.open ??= async () => {
