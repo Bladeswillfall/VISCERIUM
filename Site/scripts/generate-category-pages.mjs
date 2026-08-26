@@ -145,89 +145,89 @@ function generatedCategorySection(descendants, childCategories) {
 }
 
 export async function generateCategoryPages() {
-  const generatedFiles = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
-    .map((file) => path.resolve(docsDir, file))
-    .sort();
-  const entries = [];
+const generatedFiles = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
+  .map((file) => path.resolve(docsDir, file))
+  .sort();
+const entries = [];
 
-  for (const file of generatedFiles) {
-    const raw = await fs.readFile(file, 'utf8');
+for (const file of generatedFiles) {
+  const raw = await fs.readFile(file, 'utf8');
+  const parsed = matter(raw);
+  if (parsed.data.status !== 'published' || parsed.data.type === 'category') continue;
+
+  const slug = sourceRouteFromFile(file, parsed.data);
+  if (!slug || slug === 'index') continue;
+  entries.push({ file, slug, data: parsed.data });
+}
+
+const categories = new Map();
+for (const entry of entries) {
+  const segments = entry.slug.split('/').filter(Boolean);
+  for (let depth = 1; depth < segments.length; depth += 1) {
+    const slug = segments.slice(0, depth).join('/');
+    if (!categories.has(slug)) {
+      categories.set(slug, {
+        slug,
+        title: titleFromSegment(segments[depth - 1]),
+      });
+    }
+  }
+}
+
+const entryBySlug = new Map(entries.map((entry) => [entry.slug, entry]));
+const categoryList = [...categories.values()].sort((a, b) => a.slug.localeCompare(b.slug));
+
+for (const category of categoryList) {
+  const existingEntry = entryBySlug.get(category.slug);
+  const existingType = String(existingEntry?.data.type ?? '').trim().toLowerCase();
+
+  // Regular authored articles may own routes that also have descendants. Those
+  // articles are not category pages and must not gain generated navigation.
+  // Era landing pages are structural category hosts, so retain their established
+  // Subcategories / Pages in this category index.
+  if (existingEntry && existingType !== 'era') {
+    console.log(`Skipped generated category index for ${category.slug}; route belongs to ${existingEntry.data.type ?? 'article'} article ${path.relative(docsDir, existingEntry.file)}.`);
+    continue;
+  }
+
+  const prefix = `${category.slug}/`;
+  const descendants = entries
+    .filter((entry) => entry.slug.startsWith(prefix));
+  const childDepth = category.slug.split('/').length + 1;
+  const childCategories = categoryList
+    .filter((candidate) => candidate.slug.startsWith(prefix) && candidate.slug.split('/').length === childDepth)
+    .map((candidate) => ({
+      ...candidate,
+      count: descendants.filter((entry) => entry.slug.startsWith(`${candidate.slug}/`)).length,
+    }));
+  const section = generatedCategorySection(descendants, childCategories);
+
+  if (existingEntry) {
+    const raw = await fs.readFile(existingEntry.file, 'utf8');
     const parsed = matter(raw);
-    if (parsed.data.status !== 'published' || parsed.data.type === 'category') continue;
-
-    const slug = sourceRouteFromFile(file, parsed.data);
-    if (!slug || slug === 'index') continue;
-    entries.push({ file, slug, data: parsed.data });
+    const content = parsed.content.trimEnd();
+    await fs.writeFile(existingEntry.file, matter.stringify(`${content}\n\n${section}`, parsed.data), 'utf8');
+    console.log(`Extended ${path.relative(docsDir, existingEntry.file)} with a generated category index.`);
+    continue;
   }
 
-  const categories = new Map();
-  for (const entry of entries) {
-    const segments = entry.slug.split('/').filter(Boolean);
-    for (let depth = 1; depth < segments.length; depth += 1) {
-      const slug = segments.slice(0, depth).join('/');
-      if (!categories.has(slug)) {
-        categories.set(slug, {
-          slug,
-          title: titleFromSegment(segments[depth - 1]),
-        });
-      }
-    }
-  }
+  const outFile = path.join(docsDir, category.slug, 'index.md');
+  const frontmatter = {
+    title: category.title,
+    description: `Index of public VISCERIUM pages in the ${category.title} category.`,
+    status: 'published',
+    slug: category.slug,
+    type: 'category',
+    pagefind: true,
+    tableOfContents: false,
+  };
+  const intro = `Browse every public Codex page filed beneath **${category.title}**.`;
+  await fs.mkdir(path.dirname(outFile), { recursive: true });
+  await fs.writeFile(outFile, matter.stringify(`${intro}\n\n${section}`, frontmatter), 'utf8');
+  console.log(`Generated category index ${path.relative(docsDir, outFile)}.`);
+}
 
-  const entryBySlug = new Map(entries.map((entry) => [entry.slug, entry]));
-  const categoryList = [...categories.values()].sort((a, b) => a.slug.localeCompare(b.slug));
-
-  for (const category of categoryList) {
-    const existingEntry = entryBySlug.get(category.slug);
-    const existingType = String(existingEntry?.data.type ?? '').trim().toLowerCase();
-
-    // Regular authored articles may own routes that also have descendants. Those
-    // articles are not category pages and must not gain generated navigation.
-    // Era landing pages are structural category hosts, so retain their established
-    // Subcategories / Pages in this category index.
-    if (existingEntry && existingType !== 'era') {
-      console.log(`Skipped generated category index for ${category.slug}; route belongs to ${existingEntry.data.type ?? 'article'} article ${path.relative(docsDir, existingEntry.file)}.`);
-      continue;
-    }
-
-    const prefix = `${category.slug}/`;
-    const descendants = entries
-      .filter((entry) => entry.slug.startsWith(prefix));
-    const childDepth = category.slug.split('/').length + 1;
-    const childCategories = categoryList
-      .filter((candidate) => candidate.slug.startsWith(prefix) && candidate.slug.split('/').length === childDepth)
-      .map((candidate) => ({
-        ...candidate,
-        count: descendants.filter((entry) => entry.slug.startsWith(`${candidate.slug}/`)).length,
-      }));
-    const section = generatedCategorySection(descendants, childCategories);
-
-    if (existingEntry) {
-      const raw = await fs.readFile(existingEntry.file, 'utf8');
-      const parsed = matter(raw);
-      const content = parsed.content.trimEnd();
-      await fs.writeFile(existingEntry.file, matter.stringify(`${content}\n\n${section}`, parsed.data), 'utf8');
-      console.log(`Extended ${path.relative(docsDir, existingEntry.file)} with a generated category index.`);
-      continue;
-    }
-
-    const outFile = path.join(docsDir, category.slug, 'index.md');
-    const frontmatter = {
-      title: category.title,
-      description: `Index of public VISCERIUM pages in the ${category.title} category.`,
-      status: 'published',
-      slug: category.slug,
-      type: 'category',
-      pagefind: true,
-      tableOfContents: false,
-    };
-    const intro = `Browse every public Codex page filed beneath **${category.title}**.`;
-    await fs.mkdir(path.dirname(outFile), { recursive: true });
-    await fs.writeFile(outFile, matter.stringify(`${intro}\n\n${section}`, frontmatter), 'utf8');
-    console.log(`Generated category index ${path.relative(docsDir, outFile)}.`);
-  }
-
-  console.log(`Generated ${categoryList.length} category index page${categoryList.length === 1 ? '' : 's'}.`);
+console.log(`Generated ${categoryList.length} category index page${categoryList.length === 1 ? '' : 's'}.`);
 }
 
 if (isMainModule(import.meta.url)) await generateCategoryPages();
