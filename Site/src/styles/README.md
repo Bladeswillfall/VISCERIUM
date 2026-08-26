@@ -11,16 +11,17 @@ Styles are owned by the narrowest stable entry point that needs them. Import loc
 3. `ion-theme.css`: broad Starlight theme adaptation.
 4. `ion-expressive-code.css`: code-block theme adaptation.
 5. `typography.css`: type and baseline text rhythm.
-6. `article-pages.css`: editorial article presentation.
-7. `layout.css`: article geometry and structural overrides.
-8. `codex-ui.css`: shared components and authoring utilities.
-9. `header-controls.css`: shared desktop and mobile header controls.
+6. `layout.css`: article geometry and structural overrides.
+7. `codex-ui.css`: shared components and authoring utilities.
+8. `header-controls.css`: shared desktop and mobile header controls.
+9. `reader-settings.css`: shared reader preference controls.
 10. `navigation.css`: shared navigation and overlays.
-11. `category-index.css`: generated Markdown category pages, which have no stable component entry point.
-12. `a11y.css`: focus, target sizing, forced colours, and reduced motion.
-13. `era-styles.css`: final era-specific token and component overrides.
+11. `a11y.css`: focus, target sizing, forced colours, and reduced motion.
+12. `era-styles.css`: final era-specific token and component overrides.
 
-The order is deliberate: layers and tokens, theme, typography, article layout, shared components, navigation, accessibility, then era overrides. Feature routes do not belong in this list.
+The order is deliberate: layers and tokens, theme, typography, layout, shared components, navigation, accessibility, then era overrides. Feature routes do not belong in this list.
+
+`route-data.ts` adds `article-pages.css` to non-homepage Codex routes and `category-index.css` to category routes. These files stay out of the homepage render-blocking bundle.
 
 ## Stylesheet ownership
 
@@ -28,10 +29,11 @@ The order is deliberate: layers and tokens, theme, typography, article layout, s
 | --- | --- |
 | `ion-layers.css`, `color-tokens.css` | Global cascade foundation in `astro.config.mjs` |
 | `ion-theme.css`, `ion-expressive-code.css`, `typography.css` | Global Starlight and text theme in `astro.config.mjs` |
-| `article-pages.css`, `layout.css` | Shared article and structural layout in `astro.config.mjs` |
-| `codex-ui.css`, `header-controls.css`, `navigation.css` | Shared controls and navigation in `astro.config.mjs` |
-| `category-index.css` | Global exception for generated Markdown category pages |
+| `layout.css` | Shared article and structural layout in `astro.config.mjs` |
+| `codex-ui.css`, `header-controls.css`, `reader-settings.css`, `navigation.css` | Shared controls and navigation in `astro.config.mjs` |
 | `a11y.css`, `era-styles.css` | Final global accessibility and era overrides |
+| `article-pages.css` | Non-homepage Codex routes through `route-data.ts` |
+| `category-index.css` | Category routes through `route-data.ts` |
 | `maps.css` | `WorldMap.astro` and the Atlas index route |
 | `relationships.css` | `RelationshipGraph.astro` |
 | `exploration-pages.css` | `WorldMap.astro` and `RelationshipGraph.astro` |
@@ -45,7 +47,7 @@ The order is deliberate: layers and tokens, theme, typography, article layout, s
 | `degel-system.css` | `DegelSystemExplorer.astro` |
 | `storyteller-view.css` | Shared page-title Storyteller switcher boundary |
 | `timeline-vis.css`, `timeline-canvas.css`, `timeline-chronicle.css`, `timeline-controls.css` | `TimelineApp.astro` and the Obsidian plugin |
-| `smart-tooltips.css` | Components that install shared tooltip behaviour |
+| `smart-tooltips.css` | Loaded as raw CSS by `CodexPageFrame.astro` only after a route contains `[data-smart-tooltip]` |
 | `image-layout.css` | Shared article-image rules imported by `ion-layers.css` |
 
 Astro component and Starlight styles can be emitted in a different order from their source imports. Cross-entrypoint overrides need explicit feature scoping and sufficient selector specificity instead of relying only on concatenation order.
