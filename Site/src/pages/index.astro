@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import HomeGateway from '../components/home/HomeGateway.astro';
 import timelineManifest from '../data/timelines/manifest.json';
-import '../styles/homepage.css';
+import homepageStyles from '../styles/homepage.css?raw';
 
 const canonEntries = await getCollection('docs', ({ data }) => (
   data.status === 'published'
@@ -24,6 +24,7 @@ const homepageStats = {
     template: 'splash',
     pagefind: false,
     giscus: false,
+    head: [{ tag: 'style', content: homepageStyles }],
   }}
   hasSidebar={true}
 >
