@@ -50,53 +50,53 @@ function renderIndex(tag, era, entries) {
 }
 
 export async function generateEraTagPages() {
-  const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
-    .map((file) => path.resolve(docsDir, file))
-    .sort();
-  const sourceEntries = [];
+const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
+  .map((file) => path.resolve(docsDir, file))
+  .sort();
+const sourceEntries = [];
 
-  for (const file of files) {
-    const parsed = matter(await fs.readFile(file, 'utf8'));
-    if (parsed.data.status !== 'published') continue;
-    if (['category', 'continuity'].includes(parsed.data.type)) continue;
-    const tags = Array.isArray(parsed.data.tags) ? parsed.data.tags.map((tag) => String(tag).trim()).filter(Boolean) : [];
-    if (!tags.length) continue;
-    const slug = sourceSlug(file, parsed.data);
-    const era = effectiveEra(parsed.data, slug);
-    if (!era) continue;
-    sourceEntries.push({ file, slug, era, data: parsed.data, tags });
+for (const file of files) {
+  const parsed = matter(await fs.readFile(file, 'utf8'));
+  if (parsed.data.status !== 'published') continue;
+  if (['category', 'continuity'].includes(parsed.data.type)) continue;
+  const tags = Array.isArray(parsed.data.tags) ? parsed.data.tags.map((tag) => String(tag).trim()).filter(Boolean) : [];
+  if (!tags.length) continue;
+  const slug = sourceSlug(file, parsed.data);
+  const era = effectiveEra(parsed.data, slug);
+  if (!era) continue;
+  sourceEntries.push({ file, slug, era, data: parsed.data, tags });
+}
+
+let generated = 0;
+for (const era of HISTORICAL_ERAS) {
+  const taggedEntries = sourceEntries
+    .filter((entry) => entry.era === era || entry.era === 'Universal')
+    .flatMap((entry) => entry.tags.map((tag) => ({ tag, entry })));
+  const byTag = Map.groupBy(taggedEntries, ({ tag }) => tag);
+
+  for (const [tag, tagged] of byTag) {
+    const entries = tagged.map(({ entry }) => entry);
+    const normalizedTag = tagSlug(tag);
+    if (!normalizedTag) continue;
+    const slug = `eras/${era.toLowerCase()}/tags/${normalizedTag}`;
+    const outFile = path.join(docsDir, slug, 'index.md');
+    const frontmatter = {
+      title: `#${tag} — ${era}`,
+      description: `Pages tagged ${tag} that are relevant to ${era}, including Universal material.`,
+      status: 'published',
+      slug,
+      type: 'category',
+      era,
+      searchable: false,
+      tableOfContents: false,
+    };
+    await fs.mkdir(path.dirname(outFile), { recursive: true });
+    await fs.writeFile(outFile, matter.stringify(renderIndex(tag, era, entries), frontmatter), 'utf8');
+    generated += 1;
   }
+}
 
-  let generated = 0;
-  for (const era of HISTORICAL_ERAS) {
-    const taggedEntries = sourceEntries
-      .filter((entry) => entry.era === era || entry.era === 'Universal')
-      .flatMap((entry) => entry.tags.map((tag) => ({ tag, entry })));
-    const byTag = Map.groupBy(taggedEntries, ({ tag }) => tag);
-
-    for (const [tag, tagged] of byTag) {
-      const entries = tagged.map(({ entry }) => entry);
-      const normalizedTag = tagSlug(tag);
-      if (!normalizedTag) continue;
-      const slug = `eras/${era.toLowerCase()}/tags/${normalizedTag}`;
-      const outFile = path.join(docsDir, slug, 'index.md');
-      const frontmatter = {
-        title: `#${tag} — ${era}`,
-        description: `Pages tagged ${tag} that are relevant to ${era}, including Universal material.`,
-        status: 'published',
-        slug,
-        type: 'category',
-        era,
-        searchable: false,
-        tableOfContents: false,
-      };
-      await fs.mkdir(path.dirname(outFile), { recursive: true });
-      await fs.writeFile(outFile, matter.stringify(renderIndex(tag, era, entries), frontmatter), 'utf8');
-      generated += 1;
-    }
-  }
-
-  console.log(`Generated ${generated} era-scoped tag page${generated === 1 ? '' : 's'}.`);
+console.log(`Generated ${generated} era-scoped tag page${generated === 1 ? '' : 's'}.`);
 }
 
 if (isMainModule(import.meta.url)) await generateEraTagPages();
