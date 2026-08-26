@@ -134,7 +134,7 @@ Wide main text.
 [/col]
 
 [col]
-Narrow sidebar body.
+Narrow sidebar.
 [/col]
 [/cols]
 ```
