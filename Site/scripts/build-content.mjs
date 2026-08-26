@@ -15,6 +15,12 @@ import { stripObsidianPluginBlocks } from './strip-obsidian-plugin-blocks.mjs';
 import { prepareStorytellerMarkers } from './prepare-storyteller-markers.mjs';
 import { generateReferencedIn } from './generate-referenced-in.mjs';
 import { applyGiscusPolicy } from './apply-giscus-policy.mjs';
+import { syncPublicNotes } from './sync-public-notes.mjs';
+import { transformEraPrimerShortcodes } from './transform-era-primer-shortcodes.mjs';
+import { transformTimelineShortcodes } from './transform-timeline-shortcodes.mjs';
+import { generateContinuityPages } from './generate-continuity-pages.mjs';
+import { generateEraTagPages } from './generate-era-tag-pages.mjs';
+import { generateCategoryPages } from './generate-category-pages.mjs';
 
 const modeArgument = process.argv.find((value) => value.startsWith('--mode='));
 const mode = modeArgument?.slice('--mode='.length) || 'build';
@@ -25,13 +31,10 @@ if (!validModes.has(mode)) {
   process.exitCode = 1;
 } else {
   try {
-    // Responsive images and Atlas tiles are generated delivery artifacts, not
-    // source artwork. Remove leftovers before the repository image policy scans
-    // Site/public and Site/src so repeated builds remain deterministic.
-    await Promise.all([
-      cleanResponsiveImageVariants(),
-      cleanMapTilePyramids(),
-    ]);
+    // Responsive WebP/JPEG files are generated delivery artifacts, not source
+    // artwork. Remove leftovers from a prior invocation before the repository
+    // image policy inspects Site/public and Site/src.
+    await cleanResponsiveImageVariants();
 
     const vault = await loadVaultContent();
     if (!validateVaultNotes(vault)) throw new Error('Vault source validation failed.');
@@ -42,21 +45,21 @@ if (!validModes.has(mode)) {
       validateOnly: mode === 'sync',
     });
 
-    await import('./sync-public-notes.mjs');
+    await syncPublicNotes();
     await generateResponsiveImageVariants();
     await stripObsidianPluginBlocks();
     await prepareStorytellerMarkers();
-    await import('./transform-era-primer-shortcodes.mjs');
-    await import('./transform-timeline-shortcodes.mjs');
+    await transformEraPrimerShortcodes();
+    await transformTimelineShortcodes();
 
     // Build inbound and outbound reference indexes while generated docs still
     // contain only authored article content. Later category/tag/continuity passes
     // may append navigation links that must never count as narrative references.
     await generateReferencedIn();
 
-    await import('./generate-continuity-pages.mjs');
-    await import('./generate-era-tag-pages.mjs');
-    await import('./generate-category-pages.mjs');
+    await generateContinuityPages();
+    await generateEraTagPages();
+    await generateCategoryPages();
     await applyGiscusPolicy();
 
     const docs = await loadGeneratedDocs();

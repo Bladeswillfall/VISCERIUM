@@ -62,9 +62,9 @@ test('variant names keep WebP preferred and JPEG available as the legacy fallbac
 
 test('content pipeline cleans old derivatives before validation and regenerates after public asset sync', async () => {
   const buildContent = await readSite('scripts/build-content.mjs');
-  const cleanupIndex = buildContent.indexOf('cleanResponsiveImageVariants()');
+  const cleanupIndex = buildContent.indexOf('await cleanResponsiveImageVariants()');
   const validationIndex = buildContent.indexOf('await validateRepositoryImages()');
-  const syncIndex = buildContent.indexOf("await import('./sync-public-notes.mjs')");
+  const syncIndex = buildContent.indexOf('await syncPublicNotes()');
   const variantsIndex = buildContent.indexOf('await generateResponsiveImageVariants()');
 
   assert.ok(cleanupIndex >= 0, 'old derivative cleanup should remain in the shared pipeline');

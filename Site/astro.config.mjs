@@ -65,6 +65,18 @@ const fontHead = [
   },
 ];
 
+const identityHead = siteConfig.identity?.githubProfileUrl
+  ? [
+      {
+        tag: 'link',
+        attrs: {
+          rel: 'me authn',
+          href: siteConfig.identity.githubProfileUrl,
+        },
+      },
+    ]
+  : [];
+
 const webmentionHead = siteConfig.webmentions?.enabled
   ? [
       siteConfig.webmentions.endpoint
@@ -284,7 +296,7 @@ export default defineConfig({
         }),
       ],
       sidebar,
-      head: [...feedHead, ...fontHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
+      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
       social: [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }],
     }),
     sitemap({

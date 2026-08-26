@@ -4,11 +4,9 @@ Site/dist/
 Site/.astro/
 Site/src/data/timelines/*.json
 Site/src/data/image-variants.json
-Site/src/data/map-tiles.json
 Site/public/assets/image-variants.json
 Site/public/assets/images/variants/
 Site/public/assets/maps/variants/
-Site/public/assets/map-tiles/
 Site/timeline-browser-diagnostics/
 Site/test-results/
 Site/playwright-report/

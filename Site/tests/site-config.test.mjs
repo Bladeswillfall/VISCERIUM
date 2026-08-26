@@ -40,12 +40,13 @@ async function loadConfig(overrides = {}) {
   }
 }
 
-test('replacement defaults use the repository, canonical domain, comments, and webmentions', async () => {
+test('replacement defaults use the repository, canonical domain, identity, comments, and webmentions', async () => {
   const config = await loadConfig();
 
   assert.equal(config.title, 'VISCERIUM');
   assert.equal(config.site, 'https://www.viscerium.co.uk');
   assert.equal(config.githubRepoUrl, 'https://github.com/Bladeswillfall/VISCERIUM');
+  assert.equal(config.identity.githubProfileUrl, 'https://github.com/Bladeswillfall');
   assert.equal(config.comments.host, 'https://comments.viscerium.co.uk');
   assert.equal(config.comments.siteId, 'viscerium');
   assert.equal(config.webmentions.enabled, true);

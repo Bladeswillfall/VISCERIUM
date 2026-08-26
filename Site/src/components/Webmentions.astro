@@ -32,6 +32,18 @@ const messages = {
     data-limit={config.maxMentions}
     data-messages={JSON.stringify(messages)}
   >
+    <div class="codex-webmentions__intro" aria-labelledby="webmention-responses-title">
+      <h2 id="webmention-responses-title">Responses from elsewhere</h2>
+      <p>
+        Webmentions are enabled. If you publish a response to this article on your own website, it can appear here.
+      </p>
+      <p>
+        <a href="https://indieweb.org/Webmention" target="_blank" rel="noreferrer">
+          What is a Webmention?
+        </a>
+      </p>
+    </div>
+
     <details open>
       <summary>
         <span class="codex-webmentions__summary-row">
@@ -67,6 +79,32 @@ const messages = {
     margin-block: 2rem;
     border-block-start: 1px solid var(--sl-color-hairline-light);
     padding-block-start: 1rem;
+  }
+
+  .codex-webmentions__intro {
+    margin-block-end: 1rem;
+  }
+
+  .codex-webmentions__intro h2 {
+    margin: 0 0 .45rem;
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-lg);
+    font-weight: 700;
+    line-height: var(--sl-line-height-headings);
+  }
+
+  .codex-webmentions__intro p {
+    margin-block: 0;
+    color: var(--sl-color-gray-2);
+  }
+
+  .codex-webmentions__intro p + p {
+    margin-block-start: .45rem;
+  }
+
+  .codex-webmentions__intro a {
+    color: var(--sl-color-text-accent);
+    text-underline-offset: .15em;
   }
 
   summary {
