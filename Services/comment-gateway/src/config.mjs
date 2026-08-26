@@ -58,6 +58,7 @@ export function loadConfig(env = process.env) {
     rateLimitSecret: requiredSecret(env, 'RATE_LIMIT_SECRET'),
     idempotencySecret: requiredSecret(env, 'IDEMPOTENCY_SECRET'),
     idempotencyTtlMs: boundedInteger(env, 'IDEMPOTENCY_TTL_MS', 300000, 10000, 3600000),
+    proxySharedSecret: requiredSecret(env, 'COMMENT_GATEWAY_PROXY_SECRET'),
     turnstile: {
       mode: turnstileMode,
       secret: env.TURNSTILE_SECRET_KEY || '',
