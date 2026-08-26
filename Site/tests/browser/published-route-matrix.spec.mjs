@@ -8,7 +8,7 @@ const routes = [
   ['/calendar/', '.calendar-module'],
   ['/eras/citadel/events/', '.codex-alpha-index'],
   ['/support/', '.support-page'],
-  ['/contact/', '.support-page--contact'],
+  ['/contact/', '.contact-page'],
   ['/', '.home-gateway'],
   ['/start-here/', '.start-here-primer'],
 ];
