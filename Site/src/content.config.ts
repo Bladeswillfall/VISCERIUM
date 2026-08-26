@@ -34,9 +34,13 @@ const contentWarningValue = z.enum([
   'discrimination',
 ]);
 const contentWarningsSchema = z.array(contentWarningValue);
-const looseRecord = z.record(z.unknown());
 const optionalString = z.string().nullable().optional();
 const optionalNumber = z.number().nullable().optional();
+const numericStringSchema = z.string().refine(
+  (value) => value.trim() !== '' && Number.isFinite(Number(value)),
+  { message: 'Expected a finite numeric string.' },
+);
+const optionalStringOrNumber = z.union([numericStringSchema, z.number().finite()]).nullable().optional();
 const continuitySchema = z.object({
   entityId: entityIdSchema,
   hub: z.string(),
@@ -69,6 +73,62 @@ const relationshipObjectSchema = z.object({
 const relationshipEntrySchema = z.union([z.string(), relationshipObjectSchema]);
 const relationshipValueSchema = z.union([relationshipEntrySchema, z.array(relationshipEntrySchema)]);
 const relationshipsSchema = z.record(relationshipValueSchema);
+const mapSchema = z.object({
+  id: optionalString,
+  x: optionalStringOrNumber,
+  y: optionalStringOrNumber,
+  marker: optionalString,
+  layer: z.union([z.string(), z.array(z.string())]).nullable().optional(),
+  minZoom: optionalStringOrNumber,
+  maxZoom: optionalStringOrNumber,
+}).passthrough();
+const sidebarScalarSchema = z.union([z.string(), z.number(), z.boolean()]);
+const sidebarValueSchema = z.union([sidebarScalarSchema, z.array(sidebarScalarSchema)]);
+const sidebarFieldObjectSchema = z.object({
+  label: optionalString,
+  title: optionalString,
+  name: optionalString,
+  value: sidebarValueSchema.nullable().optional(),
+  text: sidebarValueSchema.nullable().optional(),
+  href: optionalString,
+}).passthrough();
+const sidebarFieldSchema = z.union([
+  z.tuple([sidebarValueSchema, sidebarValueSchema]),
+  sidebarFieldObjectSchema,
+]);
+const sidebarItemSchema = z.union([
+  z.string(),
+  z.object({
+    label: optionalString,
+    title: optionalString,
+    name: optionalString,
+    value: sidebarScalarSchema.nullable().optional(),
+    href: optionalString,
+  }).passthrough(),
+]);
+const sidebarSectionSchema = z.object({
+  title: optionalString,
+  label: optionalString,
+  fields: z.array(sidebarFieldSchema).optional(),
+  items: z.array(sidebarItemSchema).optional(),
+  note: optionalString,
+  description: optionalString,
+}).passthrough();
+const sidebarBadgeSchema = z.union([
+  z.string(),
+  z.object({
+    text: z.string(),
+    variant: z.string().optional(),
+  }).passthrough(),
+]);
+const sidebarSchema = z.object({
+  label: optionalString,
+  order: optionalNumber,
+  badge: sidebarBadgeSchema.nullable().optional(),
+  replaceMeta: z.boolean().optional(),
+  meta: z.array(sidebarFieldSchema).optional(),
+  sections: z.array(sidebarSectionSchema).optional(),
+}).passthrough();
 const navigationSchema = z.object({
   section: z.enum([
     'relationships',
@@ -225,9 +285,9 @@ export const collections = {
         mapId: optionalString,
         width: optionalNumber,
         height: optionalNumber,
-        map: looseRecord.optional(),
+        map: mapSchema.optional(),
         relationships: relationshipsSchema.optional(),
-        sidebar: looseRecord.optional(),
+        sidebar: sidebarSchema.optional(),
         related: z.array(z.string()).optional(),
         links: z.array(z.string()).optional(),
         referencedIn: z.array(referencedInSchema).optional(),
