@@ -37,7 +37,8 @@ test('published era editions generate one neutral continuity hub and switcher me
     }));
 
     process.env.VISCERIUM_DOCS_DIR = docsDir;
-    await import(`../scripts/generate-continuity-pages.mjs?fixture=${Date.now()}`);
+    const { generateContinuityPages } = await import(`../scripts/generate-continuity-pages.mjs?fixture=${Date.now()}`);
+    await generateContinuityPages();
 
     const citadelAfter = matter(await fs.readFile(citadel, 'utf8')).data;
     const smogAfter = matter(await fs.readFile(smog, 'utf8')).data;

@@ -20,7 +20,7 @@ Third-party software remains subject to its own licence terms.
 | --- | --- |
 | VISCERIUM Lore, canon, fiction, worldbuilding, characters, factions, creatures, histories, terminology, timelines as creative expression, and narrative material | All rights reserved |
 | Original artwork, maps, diagrams, logos, branding, visual identity, and source assets | All rights reserved unless a file states otherwise |
-| Original first-party website code, build scripts, components, styles, tests, and creator-tool code | MIT License under [`LICENSE-CODE.md`](LICENSE-CODE.md) |
+| Original first-party website code, build scripts, components, styles, tests, services, and creator-tool code | MIT License under [`LICENSE-CODE.md`](LICENSE-CODE.md) |
 | MySnippets compatibility runtime at `Vault/.obsidian/plugins/mysnippets-plugin/main.js` | Mozilla Public License 2.0; see [`LICENSES/MPL-2.0.txt`](LICENSES/MPL-2.0.txt) and [`LICENSES/MySnippets-NOTICE.md`](LICENSES/MySnippets-NOTICE.md) |
 | Third-party packages, libraries, plugins, fonts, icons, and other external components | Their respective upstream terms; see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) |
 | Generated Codex articles and generated data derived from protected VISCERIUM source material | No broader rights than the protected source material |
@@ -51,6 +51,7 @@ The MIT scope includes original software in these locations, except for generate
 - `Site/scripts/`;
 - `Site/tests/`;
 - original configuration and build files under `Site/`;
+- first-party services under `Services/`;
 - `Tools/obsidian-viscerium-timelines/`;
 - first-party VISCERIUM plugin code under `Vault/.obsidian/plugins/viscerium-*`;
 - original repository automation under `.github/`; and

@@ -5,6 +5,8 @@ import { once } from 'node:events';
 import { createGatewayServer } from '../src/server.mjs';
 import { GatewayError } from '../src/errors.mjs';
 
+const proxySharedSecret = 'proxy-shared-secret-long-enough-for-tests';
+
 function config(overrides = {}) {
   return {
     upstream: new URL('http://remark42.internal:8080'),
@@ -19,6 +21,7 @@ function config(overrides = {}) {
     rateLimitSecret: 'rate-limit-secret-long-enough-for-tests',
     idempotencySecret: 'idempotency-secret-long-enough-for-tests',
     idempotencyTtlMs: 60_000,
+    proxySharedSecret,
     turnstile: { mode: 'off' },
     webRisk: { mode: 'off' },
     ...overrides,
@@ -71,6 +74,51 @@ test('forwards a sanitized create once and deduplicates an identical retry', asy
   assert.equal(forwarded.text, 'Read https://example.com/a?q=1');
   assert.equal(calls[0].url, 'http://remark42.internal:8080/api/v1/comment');
   assert.ok(calls[0].options.headers.get('x-real-ip'));
+});
+
+test('trusts the client address only when Caddy authenticates the proxy header', async (t) => {
+  const seenIps = [];
+  const { origin, calls } = await withGateway(t, {
+    dependencies: {
+      rateLimiter: {
+        check(ip) {
+          seenIps.push(ip);
+        },
+      },
+    },
+  });
+
+  const response = await post(origin, createPayload('trusted proxy'), {
+    'x-viscerium-client-ip': '203.0.113.42',
+    'x-viscerium-proxy-secret': proxySharedSecret,
+  });
+
+  assert.equal(response.status, 201);
+  assert.deepEqual(seenIps, ['203.0.113.42']);
+  assert.equal(calls[0].options.headers.get('x-real-ip'), '203.0.113.42');
+  assert.equal(calls[0].options.headers.get('x-viscerium-proxy-secret'), null);
+});
+
+test('ignores a spoofed client address without the proxy shared secret', async (t) => {
+  const seenIps = [];
+  const { origin, calls } = await withGateway(t, {
+    dependencies: {
+      rateLimiter: {
+        check(ip) {
+          seenIps.push(ip);
+        },
+      },
+    },
+  });
+
+  const response = await post(origin, createPayload('untrusted proxy'), {
+    'x-viscerium-client-ip': '203.0.113.99',
+  });
+
+  assert.equal(response.status, 201);
+  assert.equal(seenIps.length, 1);
+  assert.notEqual(seenIps[0], '203.0.113.99');
+  assert.notEqual(calls[0].options.headers.get('x-real-ip'), '203.0.113.99');
 });
 
 test('accepts an edit only for the configured site and canonical VISCERIUM thread', async (t) => {

@@ -80,8 +80,8 @@ test('reference records are automatic, bidirectional, deduplicated and exclude g
 test('reference indexing runs before generated navigation is appended', () => {
   const pipeline = read('../scripts/build-content.mjs');
   const referencedInIndex = pipeline.indexOf('await generateReferencedIn();');
-  const continuityIndex = pipeline.indexOf("await import('./generate-continuity-pages.mjs');");
-  const categoryIndex = pipeline.indexOf("await import('./generate-category-pages.mjs');");
+  const continuityIndex = pipeline.indexOf('await generateContinuityPages();');
+  const categoryIndex = pipeline.indexOf('await generateCategoryPages();');
 
   assert.ok(referencedInIndex >= 0, 'Reference generator must run');
   assert.ok(referencedInIndex < continuityIndex, 'Reference indexing must run before continuity navigation generation');

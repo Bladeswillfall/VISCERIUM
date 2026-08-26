@@ -56,13 +56,14 @@ comments.viscerium.co.uk {
         # attached to comments.
         respond @commentImageUpload 404
 
-        # The local header is authoritative only because internet clients can
-        # never reach the gateway directly and Caddy overwrites it from its
-        # resolved, trusted-proxy-aware client address.
+        # The client-address header is trusted only when Caddy also proves the
+        # request came through this configured proxy using the shared secret.
         handle @commentCreate {
             reverse_proxy 127.0.0.1:8081 {
                 header_up -X-Viscerium-Client-IP
                 header_up X-Viscerium-Client-IP {client_ip}
+                header_up -X-Viscerium-Proxy-Secret
+                header_up X-Viscerium-Proxy-Secret {env.COMMENT_GATEWAY_PROXY_SECRET}
                 header_up -X-Forwarded-For
                 header_up X-Forwarded-For {client_ip}
                 header_up X-Real-IP {client_ip}
@@ -73,6 +74,8 @@ comments.viscerium.co.uk {
             reverse_proxy 127.0.0.1:8081 {
                 header_up -X-Viscerium-Client-IP
                 header_up X-Viscerium-Client-IP {client_ip}
+                header_up -X-Viscerium-Proxy-Secret
+                header_up X-Viscerium-Proxy-Secret {env.COMMENT_GATEWAY_PROXY_SECRET}
                 header_up -X-Forwarded-For
                 header_up X-Forwarded-For {client_ip}
                 header_up X-Real-IP {client_ip}

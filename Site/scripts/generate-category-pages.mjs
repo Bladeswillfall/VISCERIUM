@@ -3,6 +3,7 @@ import process from 'node:process';
 import fs from 'node:fs/promises';
 import matter from 'gray-matter';
 import { cleanSlug, escapeHtml, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
+import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
 const docsDir = process.env.VISCERIUM_DOCS_DIR
@@ -143,6 +144,7 @@ function generatedCategorySection(descendants, childCategories) {
   return lines.join('\n');
 }
 
+export async function generateCategoryPages() {
 const generatedFiles = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
   .map((file) => path.resolve(docsDir, file))
   .sort();
@@ -226,3 +228,6 @@ for (const category of categoryList) {
 }
 
 console.log(`Generated ${categoryList.length} category index page${categoryList.length === 1 ? '' : 's'}.`);
+}
+
+if (isMainModule(import.meta.url)) await generateCategoryPages();
