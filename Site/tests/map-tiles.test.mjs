@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   MAP_TILE_FORMAT,
   MAP_TILE_SIZE,
+  generateMapTilePyramids,
   mapTileDescriptor,
   mapTileMaxLevel,
 } from '../scripts/generate-map-tiles.mjs';
@@ -60,6 +62,25 @@ test('map tile generator uses Sharp native Google-layout deep zoom with WebP onl
   assert.match(generator, /depth:\s*'onetile'/);
   assert.match(generator, /skipBlanks:\s*-1/);
   assert.doesNotMatch(generator, /\.jpe?g\(/i);
+});
+
+test('SVG Atlas sources stay on the vector image fallback', async (t) => {
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-map-tiles-'));
+  t.after(() => fs.rm(tempRoot, { recursive: true, force: true }));
+
+  const mapDir = path.join(tempRoot, 'public', 'assets', 'maps');
+  await fs.mkdir(mapDir, { recursive: true });
+  await fs.writeFile(
+    path.join(mapDir, 'vector.svg'),
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512"></svg>\n',
+    'utf8',
+  );
+
+  const maps = { vector: { image: '/assets/maps/vector.svg' } };
+  const manifest = await generateMapTilePyramids({ maps, siteRoot: tempRoot });
+
+  assert.deepEqual(manifest.maps, {});
+  assert.equal(maps.vector.tiles, undefined);
 });
 
 test('generated Atlas tiles are cleaned before source image validation', async () => {
