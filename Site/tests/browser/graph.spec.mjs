@@ -328,20 +328,20 @@ test('World Graph expanded touch target selects a node without becoming backgrou
 
   const graph = page.locator('[data-world-graph]');
   const canvasHost = graph.locator('[data-world-graph-canvas]');
-  const reset = graph.getByRole('button', { name: 'Reset view' });
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
 
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
   const centre = await approximateNodeCentre(page, graph, hovered);
   const candidates = [];
-  for (const distance of [20, 21, 22, 23]) {
-    candidates.push(
-      { x: centre.x + distance, y: centre.y },
-      { x: centre.x - distance, y: centre.y },
-      { x: centre.x, y: centre.y + distance },
-      { x: centre.x, y: centre.y - distance },
-    );
+  for (let distance = 16; distance <= 26; distance += 1) {
+    for (let direction = 0; direction < 16; direction += 1) {
+      const angle = direction * Math.PI / 8;
+      candidates.push({
+        x: centre.x + Math.cos(angle) * distance,
+        y: centre.y + Math.sin(angle) * distance,
+      });
+    }
   }
 
   let selectedThroughTouchHalo = false;
@@ -350,17 +350,26 @@ test('World Graph expanded touch target selects a node without becoming backgrou
     if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) continue;
 
     const startPrevented = await emitSyntheticTouch(page, canvasHost, 'touchstart', candidate);
+    const touchTargetedHoveredNode = (
+      startPrevented
+      && await graph.getAttribute('data-world-graph-context') === 'pointer'
+      && await graph.getAttribute('data-world-graph-active-id') === hovered.id
+    );
+
+    if (!touchTargetedHoveredNode) {
+      if (startPrevented) await emitSyntheticTouch(page, canvasHost, 'touchcancel', candidate);
+      continue;
+    }
+
     const endPrevented = await emitSyntheticTouch(page, canvasHost, 'touchend', candidate);
     if (
-      startPrevented
-      && endPrevented
+      endPrevented
       && await graph.getAttribute('data-world-graph-context') === 'selected'
       && await graph.getAttribute('data-world-graph-active-id') === hovered.id
     ) {
       selectedThroughTouchHalo = true;
       break;
     }
-    await reset.click();
   }
 
   expect(selectedThroughTouchHalo).toBe(true);
