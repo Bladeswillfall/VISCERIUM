@@ -44,7 +44,7 @@ test('Cloudflare Pages ships the public-site security baseline', async () => {
   }
 });
 
-test('CSP inventory has no retired Giscus or CDN permissions', async () => {
+test('CSP inventory excludes retired and ignored directives', async () => {
   const headers = await fs.readFile(headersUrl, 'utf8');
   const reportOnlyCsp = getHeaderValue(headers, 'Content-Security-Policy-Report-Only');
 
