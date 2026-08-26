@@ -6,6 +6,10 @@ import { generateTimelineData, reportTimelineError } from './generate-timeline-d
 import { validateGeneratedContent } from './validate-content.mjs';
 import { generateMapData } from './generate-map-data.mjs';
 import { generateRelationshipData } from './generate-relationship-data.mjs';
+import {
+  cleanResponsiveImageVariants,
+  generateResponsiveImageVariants,
+} from './generate-image-variants.mjs';
 import { stripObsidianPluginBlocks } from './strip-obsidian-plugin-blocks.mjs';
 import { prepareStorytellerMarkers } from './prepare-storyteller-markers.mjs';
 import { generateReferencedIn } from './generate-referenced-in.mjs';
@@ -20,6 +24,11 @@ if (!validModes.has(mode)) {
   process.exitCode = 1;
 } else {
   try {
+    // Responsive WebP/JPEG files are generated delivery artifacts, not source
+    // artwork. Remove leftovers from a prior invocation before the repository
+    // image policy inspects Site/public and Site/src.
+    await cleanResponsiveImageVariants();
+
     const vault = await loadVaultContent();
     if (!validateVaultNotes(vault)) throw new Error('Vault source validation failed.');
     if (!(await validateRepositoryImages())) throw new Error('Repository image policy failed.');
@@ -30,6 +39,7 @@ if (!validModes.has(mode)) {
     });
 
     await import('./sync-public-notes.mjs');
+    await generateResponsiveImageVariants();
     await stripObsidianPluginBlocks();
     await prepareStorytellerMarkers();
     await import('./transform-era-primer-shortcodes.mjs');
