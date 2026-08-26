@@ -3,6 +3,7 @@ import process from 'node:process';
 import fs from 'node:fs/promises';
 import matter from 'gray-matter';
 import { resolveTimelineOptions } from '../src/lib/timeline/options.mjs';
+import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
 const docsDir = process.env.VISCERIUM_DOCS_DIR
@@ -37,6 +38,7 @@ function isFenceClose(line, fence) {
   return Boolean(match && match[0].trim().length >= fence.length);
 }
 
+export async function transformTimelineShortcodes() {
 const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
   .map((file) => path.resolve(docsDir, file))
   .sort();
@@ -100,3 +102,6 @@ for (const file of files) {
   if (outFile !== file) await fs.rm(file, { force: true });
   console.log(`Expanded timeline content in ${path.relative(docsDir, outFile)}`);
 }
+}
+
+if (isMainModule(import.meta.url)) await transformTimelineShortcodes();
