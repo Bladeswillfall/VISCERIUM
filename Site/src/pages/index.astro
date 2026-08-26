@@ -60,6 +60,10 @@ const homepageStats = {
       contain-intrinsic-block-size: auto 48rem;
     }
 
+    .home-era-card :is(.home-era-card__number, .home-era-card__action) {
+      color: color-mix(in oklch, var(--home-era-accent) 80%, var(--home-text-fixed));
+    }
+
     .home-tech-era--citadel .home-tech-era__index {
       color: var(--era-e1-accent);
     }
