@@ -191,6 +191,19 @@ const cloudflareAnalyticsHead = siteConfig.analytics?.cloudflare?.enabled
     ]
   : [];
 
+const rybbitAnalyticsHead = siteConfig.analytics?.rybbit?.enabled
+  ? [
+      {
+        tag: 'script',
+        attrs: {
+          src: `${siteConfig.analytics.rybbit.host}/api/script.js`,
+          'data-site-id': siteConfig.analytics.rybbit.siteId,
+          defer: true,
+        },
+      },
+    ]
+  : [];
+
 const searchVerificationHead = siteConfig.searchVerification?.google
   ? [
       {
@@ -296,7 +309,18 @@ export default defineConfig({
         }),
       ],
       sidebar,
-      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
+      head: [
+        ...feedHead,
+        ...fontHead,
+        ...identityHead,
+        ...webmentionHead,
+        ...faviconHead,
+        ...ga4Head,
+        ...cloudflareAnalyticsHead,
+        ...rybbitAnalyticsHead,
+        ...searchVerificationHead,
+        ...readerPreferencesHead,
+      ],
       social: [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }],
     }),
     sitemap({
