@@ -11,6 +11,7 @@ import {
   mapTileDescriptor,
   mapTileMaxLevel,
 } from '../scripts/generate-map-tiles.mjs';
+import { walk } from '../scripts/lib/walk.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, '..');
@@ -53,15 +54,51 @@ test('CITADEL map descriptor maps Leaflet zoom zero to full source detail', () =
   });
 });
 
-test('map tile generator uses Sharp native Google-layout deep zoom with WebP only', async () => {
+test('map tile generator uses transparent lossless WebP Google-layout output', async () => {
   const generator = await readSite('scripts/generate-map-tiles.mjs');
-  assert.match(generator, /\.webp\(\{ quality: RESPONSIVE_WEBP_QUALITY, effort: 4 \}\)/);
+  assert.match(generator, /\.ensureAlpha\(\)/);
+  assert.match(generator, /\.webp\(\{ lossless: true, effort: 4 \}\)/);
   assert.match(generator, /\.tile\(\{/);
   assert.match(generator, /size:\s*MAP_TILE_SIZE/);
   assert.match(generator, /layout:\s*'google'/);
   assert.match(generator, /depth:\s*'onetile'/);
   assert.match(generator, /skipBlanks:\s*-1/);
+  assert.match(generator, /background:\s*\{ r: 0, g: 0, b: 0, alpha: 0 \}/);
   assert.doesNotMatch(generator, /\.jpe?g\(/i);
+});
+
+test('Atlas edge-tile padding stays transparent', async (t) => {
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-map-padding-'));
+  t.after(() => fs.rm(tempRoot, { recursive: true, force: true }));
+
+  const sharp = (await import('sharp')).default;
+  const mapDir = path.join(tempRoot, 'public', 'assets', 'maps');
+  const source = path.join(mapDir, 'wide.webp');
+  await fs.mkdir(mapDir, { recursive: true });
+  await sharp({
+    create: {
+      width: 900,
+      height: 450,
+      channels: 3,
+      background: '#d8cdb1',
+    },
+  }).webp({ lossless: true }).toFile(source);
+
+  const maps = { wide: { image: '/assets/maps/wide.webp' } };
+  const manifest = await generateMapTilePyramids({ maps, siteRoot: tempRoot });
+  assert.equal(manifest.lossless, true);
+
+  const tileFiles = (await walk(path.join(tempRoot, 'public', 'assets', 'map-tiles', 'wide')))
+    .filter((file) => /\.webp$/i.test(file));
+  assert.ok(tileFiles.length > 0);
+
+  const alphaMins = [];
+  for (const tile of tileFiles) {
+    const stats = await sharp(tile).stats();
+    alphaMins.push(stats.channels[3]?.min);
+  }
+
+  assert.ok(alphaMins.includes(0), 'at least one edge tile should contain transparent padding');
 });
 
 test('SVG Atlas sources stay on the vector image fallback', async (t) => {
