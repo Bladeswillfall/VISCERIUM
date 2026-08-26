@@ -8,7 +8,6 @@ import starlight from '@astrojs/starlight';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import starlightTags from 'starlight-tags';
-import starlightTelescope from 'starlight-telescope';
 import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
 import { buildSidebar } from './sidebar.mjs';
 import siteConfig from './site.config.mjs';
@@ -299,15 +298,6 @@ export default defineConfig({
         starlightTags({ onInlineTagsNotFound: 'create' }),
         starlightChangelogs(),
         starlightScrollToTop(),
-        starlightTelescope({
-          shortcut: {
-            key: 'k',
-            ctrl: true,
-            meta: true,
-            shift: false,
-            alt: false,
-          },
-        }),
       ],
       sidebar,
       head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
