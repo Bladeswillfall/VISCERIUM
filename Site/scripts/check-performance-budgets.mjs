@@ -86,12 +86,20 @@ const articleRoute = await routeFiles('/degel-system/errack/');
 const articleAssets = new Set([...articleRoute].filter((file) => !file.endsWith('.html')));
 const globalCss = (await Array.fromAsync(fs.glob('middleware.*.css', { cwd: assetRoot })))
   .map((asset) => path.join(assetRoot, asset));
+const telescopeCss = await findAsset('.telescope__spinner', 'css');
 const homepageHtml = await fs.readFile(path.join(distRoot, 'index.html'), 'utf8');
 const homepageBlockingStylesheets = [...homepageHtml.matchAll(/<link\b[^>]*>/g)]
   .map(([tag]) => tag)
   .filter((tag) => /\brel="stylesheet"/.test(tag) && !/\bmedia="print"/.test(tag));
+const telescopeCssHref = `/_astro/${path.basename(telescopeCss)}`;
 
 if (globalCss.length !== 1) throw new Error(`Expected one global CSS asset, found ${globalCss.length}`);
+if (globalCss.includes(telescopeCss)) {
+  throw new Error('Telescope modal CSS is still bundled into the global render-blocking stylesheet');
+}
+if (homepageHtml.includes(telescopeCssHref)) {
+  throw new Error('Homepage eagerly references the deferred Telescope stylesheet');
+}
 if (homepageBlockingStylesheets.length > 1) {
   throw new Error(`Homepage has ${homepageBlockingStylesheets.length} render-blocking stylesheets; expected at most 1`);
 }
@@ -105,3 +113,4 @@ check('World Graph linked resources gzip', await sizeFiles(graphRoute, 'gzip'), 
 check('Global CSS gzip', await sizeFiles(globalCss, 'gzip'), 36_000);
 check('Representative article linked resources gzip', await sizeFiles(articleAssets, 'gzip'), 65_000);
 console.log(`Homepage render-blocking stylesheets: ${homepageBlockingStylesheets.length} / 1`);
+console.log(`Deferred Telescope stylesheet: ${path.basename(telescopeCss)}`);
