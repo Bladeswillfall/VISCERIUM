@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { RESPONSIVE_WEBP_QUALITY } from './generate-image-variants.mjs';
 import { walk } from './lib/walk.mjs';
 
 export const MAP_TILE_SIZE = 512;
@@ -104,7 +103,7 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
   const manifest = {
     version: MAP_TILE_MANIFEST_VERSION,
     format: MAP_TILE_FORMAT,
-    quality: RESPONSIVE_WEBP_QUALITY,
+    lossless: true,
     tileSize: MAP_TILE_SIZE,
     maps: {},
   };
@@ -130,7 +129,8 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
     const outputDir = path.join(outputRoot, id);
     await sharp(source)
       .rotate()
-      .webp({ quality: RESPONSIVE_WEBP_QUALITY, effort: 4 })
+      .ensureAlpha()
+      .webp({ lossless: true, effort: 4 })
       .tile({
         size: MAP_TILE_SIZE,
         overlap: 0,
@@ -166,7 +166,7 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
   const tileCount = Object.values(manifest.maps)
     .reduce((total, entry) => total + (entry?.tileCount ?? 0), 0);
   console.log(
-    `Generated Atlas tile pyramids for ${Object.keys(manifest.maps).length} map(s) (${tileCount} WebP tile(s)).`,
+    `Generated Atlas tile pyramids for ${Object.keys(manifest.maps).length} map(s) (${tileCount} lossless WebP tile(s)).`,
   );
 
   return manifest;
