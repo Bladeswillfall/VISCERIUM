@@ -39,7 +39,7 @@ Only public build-time values belong in Pages.
 
 ### Comments
 
-Article comments are provided by the self-hosted Remark42 service at `https://comments.viscerium.co.uk`. The Astro site only contains the public embed configuration; the Remark42 database, signing secret, OAuth client secret, administrator identity, and other server-only settings stay on the VPS and must never be added to Cloudflare Pages or this repository.
+Article comments are provided by the self-hosted Remark42 service at `https://comments.viscerium.co.uk`. The Astro site only contains the public embed configuration. The Remark42 database, signing secret, OAuth client secret, administrator identity, and other server-only settings stay on the VPS and must never be added to Cloudflare Pages or this repository.
 
 The repository defaults are:
 
@@ -49,9 +49,9 @@ PUBLIC_COMMENTS_HOST=https://comments.viscerium.co.uk
 PUBLIC_COMMENTS_SITE_ID=viscerium
 ```
 
-`PUBLIC_COMMENTS_ENABLED=0` remains available as an emergency off switch. The embed deliberately identifies each discussion with the canonical production URL (`https://www.viscerium.co.uk` plus the article pathname), so Pages preview hostnames do not create duplicate discussion threads.
+`PUBLIC_COMMENTS_ENABLED=0` remains available as an emergency off switch. The embed deliberately identifies each discussion with the canonical production URL, `https://www.viscerium.co.uk` plus the article pathname. Pages preview hostnames do not create duplicate discussion threads.
 
-Remark42's server-side `ALLOWED_HOSTS` must include every hostname from which the embed is intentionally tested. Production requires `https://www.viscerium.co.uk`; add an exact `pages.dev` preview hostname on the VPS when a preview deployment needs to exercise comments. Do not loosen the allow-list merely to make arbitrary previews work.
+Remark42's server-side `ALLOWED_HOSTS` must include every hostname from which the embed is intentionally tested. Production requires `https://www.viscerium.co.uk`. Add an exact `pages.dev` preview hostname on the VPS when a preview deployment needs to exercise comments. Do not loosen the allow-list merely to make arbitrary previews work.
 
 Before production deployment, confirm:
 
@@ -78,17 +78,30 @@ Before relying on the service in production, sign in to Webmention.io with `http
 
 ### Analytics and verification
 
-GA4 and Cloudflare Web Analytics are independent and disabled by default:
+GA4, Cloudflare Web Analytics, and Rybbit are independent and disabled by default:
 
 ```text
 PUBLIC_GA4_ENABLED=0
 PUBLIC_GA4_MEASUREMENT_ID=
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED=0
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=
+PUBLIC_RYBBIT_ENABLED=0
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=
 PUBLIC_GOOGLE_SITE_VERIFICATION=
 ```
 
 Set a provider's enable flag to `1` only after adding its genuine public identifier. If Cloudflare automatically injects Web Analytics for the Pages project, leave the repository-managed Cloudflare integration disabled to avoid duplicate page views.
+
+The production Rybbit site uses these public build values:
+
+```text
+PUBLIC_RYBBIT_ENABLED=1
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=d863318efa2f
+```
+
+Keep Rybbit disabled on preview deployments unless preview traffic should count in production analytics. The Rybbit Site ID is public client configuration, not a secret.
 
 `PUBLIC_GOOGLE_SITE_VERIFICATION` adds public Search Console verification metadata. It is not an analytics tracker. Any analytics consent, privacy notice, or cookie/storage decision still requires the owner's review before tracking is enabled.
 
