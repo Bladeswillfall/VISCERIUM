@@ -38,6 +38,9 @@ export default {
   loreSourceDir: env.LORE_SOURCE_DIR ?? '../Vault/Lore',
   vaultAssetDir: '../Vault/Assets',
   githubRepoUrl: 'https://github.com/Bladeswillfall/VISCERIUM',
+  identity: {
+    githubProfileUrl: 'https://github.com/Bladeswillfall',
+  },
   feeds: {
     title: env.PUBLIC_FEED_TITLE ?? 'VISCERIUM Codex',
     description: env.PUBLIC_FEED_DESCRIPTION ?? 'Latest public canon updates from the VISCERIUM codex.',
