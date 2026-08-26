@@ -8,6 +8,14 @@ import ReaderSettings from './ReaderSettings.astro';
 const { t } = Astro.locals;
 ---
 
+<script is:inline>
+  (() => {
+    const desktop = window.matchMedia('(min-width: 800px)').matches;
+    document.documentElement.toggleAttribute('data-codex-wide-header', desktop);
+    document.documentElement.toggleAttribute('data-codex-mobile-header', !desktop);
+  })();
+</script>
+
 <div class="header codex-header">
   <div class="title-wrapper sl-flex">
     <button
