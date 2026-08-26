@@ -86,8 +86,15 @@ const articleRoute = await routeFiles('/degel-system/errack/');
 const articleAssets = new Set([...articleRoute].filter((file) => !file.endsWith('.html')));
 const globalCss = (await Array.fromAsync(fs.glob('middleware.*.css', { cwd: assetRoot })))
   .map((asset) => path.join(assetRoot, asset));
+const homepageHtml = await fs.readFile(path.join(distRoot, 'index.html'), 'utf8');
+const homepageBlockingStylesheets = [...homepageHtml.matchAll(/<link\b[^>]*>/g)]
+  .map(([tag]) => tag)
+  .filter((tag) => /\brel="stylesheet"/.test(tag) && !/\bmedia="print"/.test(tag));
 
 if (globalCss.length !== 1) throw new Error(`Expected one global CSS asset, found ${globalCss.length}`);
+if (homepageBlockingStylesheets.length > 1) {
+  throw new Error(`Homepage has ${homepageBlockingStylesheets.length} render-blocking stylesheets; expected at most 1`);
+}
 
 await printBreakdown('Representative article linked assets', articleAssets);
 
@@ -97,3 +104,4 @@ check('World Graph route JavaScript raw', await sizeFiles(graphJavascript), 500_
 check('World Graph linked resources gzip', await sizeFiles(graphRoute, 'gzip'), 250_000);
 check('Global CSS gzip', await sizeFiles(globalCss, 'gzip'), 36_000);
 check('Representative article linked resources gzip', await sizeFiles(articleAssets, 'gzip'), 65_000);
+console.log(`Homepage render-blocking stylesheets: ${homepageBlockingStylesheets.length} / 1`);
