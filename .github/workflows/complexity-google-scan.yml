@@ -1,0 +1,44 @@
+name: Temporary complexity offender scan
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install temporary ESLint
+        run: npm install --prefix /tmp/complexity-scan --no-save --ignore-scripts --no-audit --no-fund eslint@10.9.0
+
+      - name: List current offenders
+        shell: bash
+        run: |
+          /tmp/complexity-scan/node_modules/.bin/eslint \
+            --no-config-lookup \
+            --rule 'complexity: ["error", 20]' \
+            Services/comment-gateway/src/server.mjs \
+            Services/comment-gateway/src/unicode-policy.mjs \
+            Site/scripts/generate-map-data.mjs \
+            Site/scripts/integrate-worldanvil-import.mjs \
+            Site/scripts/normalise-worldanvil-sidebars.mjs \
+            Site/scripts/sync-public-notes.mjs \
+            Site/sidebar.mjs \
+            Site/src/lib/timeline/compiler.mjs \
+            Site/src/lib/timeline/renderer.mjs \
+            Site/src/scripts/codex-shell.js \
+            Site/tests/browser/sidebar-editorial-hierarchy.spec.mjs \
+            Site/tests/browser/timeline-chronicle.spec.mjs \
+            Site/tests/browser/timeline-tooltip.spec.mjs
