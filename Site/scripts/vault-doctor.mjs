@@ -112,6 +112,125 @@ function nearestCanonicalName(value, canonicalNames) {
   return best && !best.ambiguous ? best.candidate : null;
 }
 
+function ordinaryFolderEntry(file) {
+  return [...ORDINARY_ENTITY_FOLDERS].find(([, folder]) => file.startsWith(`${folder}/`));
+}
+
+function creatorContext(file, type) {
+  const ordinaryFolder = ordinaryFolderEntry(file);
+  const inMyrkildFolder = file.startsWith(`${MYRKILD_FOLDER}/`);
+  return {
+    ordinaryFolder,
+    inMyrkildFolder,
+    inCreatorDatabase: Boolean(ordinaryFolder || inMyrkildFolder),
+    isCreatorType: CREATOR_TYPES.has(type),
+  };
+}
+
+function validateCreatorBasics(diagnostics, file, data, context) {
+  const { ordinaryFolder, inMyrkildFolder, isCreatorType } = context;
+  const type = data.type;
+
+  if (ordinaryFolder && type !== ordinaryFolder[0]) {
+    addDiagnostic(
+      diagnostics,
+      'error',
+      'folder-type-mismatch',
+      file,
+      `Folder implies type "${ordinaryFolder[0]}", but frontmatter type is ${JSON.stringify(type)}.`,
+    );
+  }
+  if (inMyrkildFolder && type !== 'myrkild-unit') {
+    addDiagnostic(
+      diagnostics,
+      'error',
+      'folder-type-mismatch',
+      file,
+      `Myrkild Units folder requires type "myrkild-unit", but found ${JSON.stringify(type)}.`,
+    );
+  }
+  if (isCreatorType && !nonEmptyString(data.title)) {
+    addDiagnostic(diagnostics, 'error', 'missing-title', file, 'Creator entity is missing a non-empty "title".');
+  }
+  if (isCreatorType && !nonEmptyString(data.description)) {
+    addDiagnostic(diagnostics, 'error', 'missing-description', file, 'Creator entity is missing a non-empty "description".');
+  }
+  if (Object.hasOwn(data, 'development_level') && data.development_level != null && !DEVELOPMENT_LEVELS.has(data.development_level)) {
+    addDiagnostic(
+      diagnostics,
+      'error',
+      'development-level',
+      file,
+      `Unknown development_level ${JSON.stringify(data.development_level)}; expected stub, usable or developed.`,
+    );
+  }
+  for (const property of LIST_PROPERTIES) {
+    validateListProperty(diagnostics, file, data, property);
+  }
+}
+
+function validateOrdinaryEntity(diagnostics, file, data, canonicalNames) {
+  if (!ORDINARY_ENTITY_FOLDERS.has(data.type)) return;
+
+  validateEraList(diagnostics, file, data.eras);
+
+  if (file.startsWith('Drafts/Databases/') && Object.hasOwn(data, 'era')) {
+    addDiagnostic(
+      diagnostics,
+      'notice',
+      'ordinary-era-property',
+      file,
+      'Ordinary story entities use plural "eras" in the creator database; singular "era" may be legacy or accidental.',
+    );
+  }
+  if (!file.includes('/') || (!file.startsWith('Drafts/') && !file.startsWith('Lore/'))) {
+    addDiagnostic(
+      diagnostics,
+      'notice',
+      'loose-entity',
+      file,
+      'Story entity sits outside Drafts/ or Lore/. Consider filing it into the creator database or canonical lore.',
+    );
+  }
+  if (!Array.isArray(data.locations)) return;
+
+  for (const location of data.locations) {
+    if (typeof location !== 'string') continue;
+    const suggestion = nearestCanonicalName(location, canonicalNames);
+    if (suggestion) {
+      addDiagnostic(
+        diagnostics,
+        'notice',
+        'near-canonical-name',
+        file,
+        `Location ${JSON.stringify(location)} closely resembles canonical note title ${JSON.stringify(suggestion)}. Check spelling or link it explicitly if they are the same place.`,
+      );
+    }
+  }
+}
+
+function validateMyrkildEntity(diagnostics, file, data, unitIds) {
+  if (data.type !== 'myrkild-unit') return;
+
+  if (data.era != null && !ERAS.has(data.era)) {
+    addDiagnostic(diagnostics, 'error', 'unknown-era', file, `Unknown Myrkild era: ${JSON.stringify(data.era)}.`);
+  }
+  if (!nonEmptyString(data.unit_id)) return;
+
+  const existing = unitIds.get(data.unit_id);
+  if (existing) {
+    addDiagnostic(
+      diagnostics,
+      'error',
+      'duplicate-unit-id',
+      file,
+      `Duplicate Myrkild unit_id ${JSON.stringify(data.unit_id)}; already used by ${existing}.`,
+    );
+    return;
+  }
+  unitIds.set(data.unit_id, file);
+}
+
 export function diagnoseCreatorVault(manifest) {
   const diagnostics = [];
   const records = manifest.records ?? [];
@@ -134,107 +253,13 @@ export function diagnoseCreatorVault(manifest) {
       );
     }
 
-    const type = data.type;
-    const ordinaryFolderEntry = [...ORDINARY_ENTITY_FOLDERS].find(([, folder]) => file.startsWith(`${folder}/`));
-    const inMyrkildFolder = file.startsWith(`${MYRKILD_FOLDER}/`);
-    const inCreatorDatabase = Boolean(ordinaryFolderEntry || inMyrkildFolder);
-    const isCreatorType = CREATOR_TYPES.has(type);
-
-    if (!inCreatorDatabase && !isCreatorType) continue;
+    const context = creatorContext(file, data.type);
+    if (!context.inCreatorDatabase && !context.isCreatorType) continue;
     entityCount += 1;
 
-    if (ordinaryFolderEntry && type !== ordinaryFolderEntry[0]) {
-      addDiagnostic(
-        diagnostics,
-        'error',
-        'folder-type-mismatch',
-        file,
-        `Folder implies type "${ordinaryFolderEntry[0]}", but frontmatter type is ${JSON.stringify(type)}.`,
-      );
-    }
-    if (inMyrkildFolder && type !== 'myrkild-unit') {
-      addDiagnostic(
-        diagnostics,
-        'error',
-        'folder-type-mismatch',
-        file,
-        `Myrkild Units folder requires type "myrkild-unit", but found ${JSON.stringify(type)}.`,
-      );
-    }
-
-    if (isCreatorType && !nonEmptyString(data.title)) {
-      addDiagnostic(diagnostics, 'error', 'missing-title', file, 'Creator entity is missing a non-empty "title".');
-    }
-    if (isCreatorType && !nonEmptyString(data.description)) {
-      addDiagnostic(diagnostics, 'error', 'missing-description', file, 'Creator entity is missing a non-empty "description".');
-    }
-    if (Object.hasOwn(data, 'development_level') && data.development_level != null && !DEVELOPMENT_LEVELS.has(data.development_level)) {
-      addDiagnostic(
-        diagnostics,
-        'error',
-        'development-level',
-        file,
-        `Unknown development_level ${JSON.stringify(data.development_level)}; expected stub, usable or developed.`,
-      );
-    }
-    for (const property of LIST_PROPERTIES) validateListProperty(diagnostics, file, data, property);
-
-    if (ORDINARY_ENTITY_FOLDERS.has(type)) {
-      validateEraList(diagnostics, file, data.eras);
-      if (file.startsWith('Drafts/Databases/') && Object.hasOwn(data, 'era')) {
-        addDiagnostic(
-          diagnostics,
-          'notice',
-          'ordinary-era-property',
-          file,
-          'Ordinary story entities use plural "eras" in the creator database; singular "era" may be legacy or accidental.',
-        );
-      }
-      if (!file.includes('/') || (!file.startsWith('Drafts/') && !file.startsWith('Lore/'))) {
-        addDiagnostic(
-          diagnostics,
-          'notice',
-          'loose-entity',
-          file,
-          'Story entity sits outside Drafts/ or Lore/. Consider filing it into the creator database or canonical lore.',
-        );
-      }
-      if (Array.isArray(data.locations)) {
-        for (const location of data.locations) {
-          if (typeof location !== 'string') continue;
-          const suggestion = nearestCanonicalName(location, canonicalNames);
-          if (suggestion) {
-            addDiagnostic(
-              diagnostics,
-              'notice',
-              'near-canonical-name',
-              file,
-              `Location ${JSON.stringify(location)} closely resembles canonical note title ${JSON.stringify(suggestion)}. Check spelling or link it explicitly if they are the same place.`,
-            );
-          }
-        }
-      }
-    }
-
-    if (type === 'myrkild-unit') {
-      if (data.era != null && !ERAS.has(data.era)) {
-        addDiagnostic(diagnostics, 'error', 'unknown-era', file, `Unknown Myrkild era: ${JSON.stringify(data.era)}.`);
-      }
-      if (nonEmptyString(data.unit_id)) {
-        const existing = unitIds.get(data.unit_id);
-        if (existing) {
-          addDiagnostic(
-            diagnostics,
-            'error',
-            'duplicate-unit-id',
-            file,
-            `Duplicate Myrkild unit_id ${JSON.stringify(data.unit_id)}; already used by ${existing}.`,
-          );
-        } else {
-          unitIds.set(data.unit_id, file);
-        }
-      }
-    }
+    validateCreatorBasics(diagnostics, file, data, context);
+    validateOrdinaryEntity(diagnostics, file, data, canonicalNames);
+    validateMyrkildEntity(diagnostics, file, data, unitIds);
   }
 
   diagnostics.sort((a, b) => {
