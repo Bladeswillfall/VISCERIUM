@@ -31,6 +31,7 @@ test.describe('homepage reading routes', () => {
     await expect(gateway.locator('.home-era-card')).toHaveCount(4);
 
     const geometry = await gateway.evaluate((element) => {
+      const items = [...element.querySelectorAll(':scope > li')].map((item) => item.getBoundingClientRect());
       const cards = [...element.querySelectorAll('.home-era-card')].map((card) => card.getBoundingClientRect());
       const style = getComputedStyle(element);
       return {
@@ -41,9 +42,9 @@ test.describe('homepage reading routes', () => {
         scrollWidth: element.scrollWidth,
         firstWidth: cards[0]?.width ?? 0,
         secondWidth: cards[1]?.width ?? 0,
-        firstTop: cards[0]?.top ?? 0,
-        secondTop: cards[1]?.top ?? 0,
-        thirdTop: cards[2]?.top ?? 0,
+        firstRowTop: items[0]?.top ?? 0,
+        secondRowTop: items[1]?.top ?? 0,
+        thirdRowTop: items[2]?.top ?? 0,
         documentOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       };
     });
@@ -55,8 +56,8 @@ test.describe('homepage reading routes', () => {
     expect(geometry.firstWidth).toBeGreaterThan(150);
     expect(geometry.firstWidth).toBeLessThan(190);
     expect(Math.abs(geometry.firstWidth - geometry.secondWidth)).toBeLessThan(2);
-    expect(Math.abs(geometry.firstTop - geometry.secondTop)).toBeLessThan(2);
-    expect(geometry.thirdTop).toBeGreaterThan(geometry.firstTop + 100);
+    expect(Math.abs(geometry.firstRowTop - geometry.secondRowTop)).toBeLessThan(2);
+    expect(geometry.thirdRowTop).toBeGreaterThan(geometry.firstRowTop + 100);
     expect(geometry.documentOverflow).toBe(false);
   });
 
