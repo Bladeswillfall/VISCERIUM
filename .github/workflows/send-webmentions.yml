@@ -31,6 +31,7 @@ jobs:
           node-version: 24
 
       - name: Send Webmentions
-        run: node scripts/send-webmentions.mjs "${{ inputs.source_url }}"
+        run: node scripts/send-webmentions.mjs "$SOURCE_URL"
         env:
+          SOURCE_URL: ${{ inputs.source_url }}
           WEBMENTION_APP_TOKEN: ${{ secrets.WEBMENTION_APP_TOKEN }}
