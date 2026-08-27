@@ -1,15 +1,23 @@
 ---
+import siteConfig from '../../site.config.mjs';
+import { classifyCodexPage } from '../lib/page-kind.mjs';
+
 const { starlightRoute } = Astro.locals;
-const eraStyle = starlightRoute.entry.data.eraStyle;
-const timelinePage = starlightRoute.entry.data.timelinePage === true;
-const explorationPage = starlightRoute.entry.data.explorationPage === true;
-const slugPath = starlightRoute.entry.data.slug ?? starlightRoute.entry.id.replace(/\.(md|mdx)$/, '');
+const entry = starlightRoute.entry.data;
+const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
+const isIndieWebEntry = entry.status === 'published' && pageKind.isStandardArticle;
+const canonicalUrl = isIndieWebEntry ? new URL(Astro.url.pathname, siteConfig.site).href : undefined;
+const eraStyle = entry.eraStyle;
+const timelinePage = entry.timelinePage === true;
+const explorationPage = entry.explorationPage === true;
+const slugPath = entry.slug ?? starlightRoute.entry.id.replace(/\.(md|mdx)$/, '');
 const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel-system';
 ---
 
 <div
   class:list={[
     "codex-two-column-content lg:sl-flex",
+    isIndieWebEntry && "h-entry",
     eraStyle && `era-style-${eraStyle}`,
     timelinePage && "codex-timeline-page",
     explorationPage && "codex-exploration-page",
@@ -20,7 +28,13 @@ const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel
   data-exploration-page={explorationPage || undefined}
   data-degel-system-page={isDegelSystemIndex || undefined}
 >
-  <div class="main-pane codex-main-pane">
+  <div class:list={["main-pane codex-main-pane", isIndieWebEntry && "e-content"]}>
+    {isIndieWebEntry && (
+      <div hidden aria-hidden="true">
+        <span class="p-name">{entry.title}</span>
+        <a class="u-url" href={canonicalUrl}>{entry.title}</a>
+      </div>
+    )}
     {!timelinePage && !explorationPage && starlightRoute.toc && !isDegelSystemIndex && (
       <aside class="right-sidebar-container">
         <div class="right-sidebar">
