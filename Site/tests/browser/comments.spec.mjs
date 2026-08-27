@@ -28,10 +28,13 @@ test('comments and webmentions sit below the complete article frame', async ({ p
 
   const discussions = page.locator('.codex-discussions');
   const pageFrame = page.locator('.page');
+  const pagination = page.locator('.codex-pagination .pagination-links');
   await expect(discussions).toBeVisible();
   await expect(discussions.getByRole('heading', { level: 1, name: 'Discussions' })).toBeVisible();
   await expect(discussions.locator('viscerium-comments')).toHaveCount(1);
   await expect(discussions.locator('.codex-webmentions')).toHaveCount(1);
+  await expect(pagination).toHaveCount(1);
+  await expect(discussions.locator('.pagination-links')).toHaveCount(0);
 
   const webmentionProvider = discussions.locator('.codex-webmentions__provider');
   await expect(webmentionProvider).toHaveAttribute('href', 'https://webmention.io/');
@@ -43,7 +46,6 @@ test('comments and webmentions sit below the complete article frame', async ({ p
 
   await expect(page.locator('.codex-main-pane viscerium-comments')).toHaveCount(0);
   await expect(page.locator('.codex-main-pane .codex-webmentions')).toHaveCount(0);
-  await expect(page.locator('.pagination-links')).toHaveCount(0);
 
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'dark';
@@ -62,16 +64,22 @@ test('comments and webmentions sit below the complete article frame', async ({ p
 
   const placement = await page.evaluate(() => {
     const frame = document.querySelector('.page');
+    const pagination = document.querySelector('.codex-pagination');
     const discussion = document.querySelector('.codex-discussions');
     const footer = document.querySelector('.ion-codex-footer');
     const sidebar = document.querySelector('.right-sidebar-container');
     if (
       !(frame instanceof HTMLElement)
+      || !(pagination instanceof HTMLElement)
       || !(discussion instanceof HTMLElement)
       || !(footer instanceof HTMLElement)
       || !(sidebar instanceof HTMLElement)
     ) return null;
 
+    const paginationInsideFrame = frame.contains(pagination);
+    const paginationPrecedesDiscussion = Boolean(
+      pagination.compareDocumentPosition(discussion) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
     const followsFrame = Boolean(
       frame.compareDocumentPosition(discussion) & Node.DOCUMENT_POSITION_FOLLOWING
     );
@@ -82,6 +90,8 @@ test('comments and webmentions sit below the complete article frame', async ({ p
     const discussionStyle = getComputedStyle(discussion);
 
     return {
+      paginationInsideFrame,
+      paginationPrecedesDiscussion,
       followsFrame,
       precedesFooter,
       discussionWidth: discussion.getBoundingClientRect().width,
@@ -96,6 +106,8 @@ test('comments and webmentions sit below the complete article frame', async ({ p
   });
 
   expect(placement).not.toBeNull();
+  expect(placement.paginationInsideFrame).toBe(true);
+  expect(placement.paginationPrecedesDiscussion).toBe(true);
   expect(placement.followsFrame).toBe(true);
   expect(placement.precedesFooter).toBe(true);
   expect(Math.abs(placement.discussionWidth - placement.viewportWidth)).toBeLessThanOrEqual(2);
