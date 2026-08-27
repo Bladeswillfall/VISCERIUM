@@ -7,7 +7,8 @@
   "packageManager": "npm@11.18.0",
   "scripts": {
     "dev": "node scripts/build-content.mjs --mode=dev && astro dev",
-    "baseline:check": "node scripts/check-repository-baseline.mjs",
+    "baseline:check": "node scripts/check-repository-baseline.mjs && npm run lint:complexity",
+    "lint:complexity": "node scripts/check-complexity.mjs",
     "hooks:install": "node scripts/install-git-hooks.mjs",
     "doctor:vault": "node scripts/vault-doctor.mjs && node scripts/validate-vault-assets.mjs",
     "validate:vault": "node scripts/validate-vault-notes.mjs",
@@ -93,6 +94,7 @@
     "fsevents@2.3.3": true
   },
   "devDependencies": {
-    "@playwright/test": "1.62.1"
+    "@playwright/test": "1.62.1",
+    "eslint": "10.9.0"
   }
 }

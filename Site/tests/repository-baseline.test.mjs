@@ -47,7 +47,11 @@ test("CI, package scripts, Git hooks, and Obsidian Git all carry the repository 
     readFileSync(path.join(repositoryRoot, "Vault/.obsidian/plugins/obsidian-git/data.json"), "utf8"),
   );
 
-  assert.equal(packageJson.scripts["baseline:check"], "node scripts/check-repository-baseline.mjs");
+  assert.equal(
+    packageJson.scripts["baseline:check"],
+    "node scripts/check-repository-baseline.mjs && npm run lint:complexity",
+  );
+  assert.equal(packageJson.scripts["lint:complexity"], "node scripts/check-complexity.mjs");
   assert.equal(packageJson.scripts["hooks:install"], "node scripts/install-git-hooks.mjs");
   assert.match(workflow, /npm run baseline:check/u);
   assert.match(hook, /check-repository-baseline\.mjs" --staged/u);

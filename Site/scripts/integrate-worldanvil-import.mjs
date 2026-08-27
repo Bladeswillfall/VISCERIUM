@@ -230,6 +230,7 @@ function parseArgs(argv) {
   }
   return args;
 }
+// eslint-disable-next-line complexity
 export async function runIntegration({ vault=DEFAULT_VAULT, write=false }={}) {
   const importDir=path.join(vault,IMPORT_REL);
   const data=JSON.parse(await fs.readFile(path.join(vault,'System/Imports/WorldAnvil/integration-data.json'),'utf8'));
