@@ -26,7 +26,7 @@ sidebar:
 title: Krass Dominion
 description: The Krass Dominion is a land where the air itself conspires against life.
 updated:
-status: draft
+status: published
 type: faction
 development_level: stub
 era: CITADEL
@@ -47,7 +47,8 @@ import_issues:
 > 
 > —
 
-  The Krass Dominion is a land where the air itself conspires against life. Fog clings like a suffocating shroud, its tendrils writhing through valleys choked with lichen-crusted monoliths. Rivers run black with peat and the ash of ancestral pyres, their banks studded with fingerbone-white birches that creak in perpetual lament. The soil here is a living entity—cold, acidic, and hungry. It devours the unwary, swallowing boots whole during spring thaws and cracking open in summer to exhale the rot of half-digested corpses from forgotten wars. A treasure trove of ancient traditions and a unique fusion of cultures that have flourished against all odds, a nation where wealth is measured in culture and tradition.   As travelers tread through the untamed heart of the Krass Dominion, the climate mirrors the tempestuous spirit of the land. Rain and fog often shroud the realm in a veil of mystery, as if nature itself weeps for the bloodshed that has soaked the soil. Still there are those rare moments when the skies grant a glimpse of clarity, temporary light for life to bask under. Hedge laid borders, cairns and mossy runestones streak across and dapple the nation, whilst natural rustic arbors provide gateways and small shelters along its many root-like paths.   The Krass Dominion, with its tumultuous history and mystical culture, stands as a testament to the ferocity of its people. In this land, customs and traditions are not mere relics of the past; they are the beating heart of a nation forged by the survivors.  
+  The Krass Dominion is a land where the air itself conspires against life. Fog clings like a suffocating shroud, its tendrils writhing through valleys choked with lichen-crusted monoliths. Rivers run black with peat and the ash of ancestral pyres, their banks studded with fingerbone-white birches that creak in perpetual lament. The soil here is a living entity—cold, acidic, and hungry. It devours
+ the unwary, swallowing boots whole during spring thaws and cracking open in summer to exhale the rot of half-digested corpses from forgotten wars. A treasure trove of ancient traditions and a unique fusion of cultures that have flourished against all odds, a nation where wealth is measured in culture and tradition.   As travelers tread through the untamed heart of the Krass Dominion, the climate mirrors the tempestuous spirit of the land. Rain and fog often shroud the realm in a veil of mystery, as if nature itself weeps for the bloodshed that has soaked the soil. Still there are those rare moments when the skies grant a glimpse of clarity, temporary light for life to bask under. Hedge laid borders, cairns and mossy runestones streak across and dapple the nation, whilst natural rustic arbors provide gateways and small shelters along its many root-like paths.   The Krass Dominion, with its tumultuous history and mystical culture, stands as a testament to the ferocity of its people. In this land, customs and traditions are not mere relics of the past; they are the beating heart of a nation forged by the survivors.  
 
 ## History
 
