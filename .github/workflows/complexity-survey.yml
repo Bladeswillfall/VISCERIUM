@@ -1,0 +1,152 @@
+name: Temporary complexity survey
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  survey:
+    name: Cyclomatic complexity survey
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install temporary lint tooling
+        run: |
+          npm install --prefix /tmp/complexity-scan --no-save --ignore-scripts --no-audit --no-fund \
+            eslint @typescript-eslint/parser astro-eslint-parser
+
+      - name: Scan complexity at 20 and 15
+        shell: bash
+        run: |
+          cat > .complexity-eslint.config.mjs <<'EOF'
+          import { createRequire } from 'node:module';
+
+          const require = createRequire('/tmp/complexity-scan/package.json');
+          const tsParser = require('@typescript-eslint/parser');
+          const astroParser = require('astro-eslint-parser');
+          const max = Number(process.env.COMPLEXITY_MAX || 20);
+
+          export default [
+            {
+              ignores: [
+                '**/node_modules/**',
+                '**/dist/**',
+                '**/.astro/**',
+                '**/coverage/**',
+                'Vault/.obsidian/plugins/**/main.js',
+              ],
+            },
+            {
+              files: ['**/*.{js,mjs,cjs}'],
+              languageOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+              },
+              rules: {
+                complexity: ['error', max],
+              },
+            },
+            {
+              files: ['**/*.ts'],
+              languageOptions: {
+                parser: tsParser,
+                parserOptions: {
+                  ecmaVersion: 'latest',
+                  sourceType: 'module',
+                },
+              },
+              rules: {
+                complexity: ['error', max],
+              },
+            },
+            {
+              files: ['**/*.astro'],
+              languageOptions: {
+                parser: astroParser,
+                parserOptions: {
+                  parser: tsParser,
+                  extraFileExtensions: ['.astro'],
+                },
+              },
+              rules: {
+                complexity: ['error', max],
+              },
+            },
+          ];
+          EOF
+
+          mapfile -t files < <(
+            git ls-files '*.js' '*.mjs' '*.cjs' '*.ts' '*.astro' \
+              | grep -Ev '^Vault/\.obsidian/plugins/[^/]+/main\.js$'
+          )
+          printf 'Scanned files: %s\n' "${#files[@]}"
+
+          for limit in 20 15; do
+            output="/tmp/complexity-${limit}.json"
+            COMPLEXITY_MAX="$limit" /tmp/complexity-scan/node_modules/.bin/eslint \
+              --config .complexity-eslint.config.mjs \
+              --format json \
+              "${files[@]}" > "$output" || true
+
+            LIMIT="$limit" OUTPUT="$output" node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const limit = Number(process.env.LIMIT);
+          const results = JSON.parse(fs.readFileSync(process.env.OUTPUT, 'utf8'));
+          const violations = [];
+          const fatal = [];
+
+          for (const result of results) {
+            const file = path.relative(process.cwd(), result.filePath);
+            for (const message of result.messages) {
+              if (message.ruleId === 'complexity') {
+                const match = message.message.match(/complexity of (\d+)/i);
+                violations.push({
+                  file,
+                  line: message.line,
+                  column: message.column,
+                  complexity: match ? Number(match[1]) : null,
+                  message: message.message,
+                });
+              } else if (message.fatal) {
+                fatal.push({ file, line: message.line, message: message.message });
+              }
+            }
+          }
+
+          violations.sort((a, b) =>
+            (b.complexity ?? 0) - (a.complexity ?? 0)
+            || a.file.localeCompare(b.file)
+            || a.line - b.line
+          );
+
+          const files = new Set(violations.map((entry) => entry.file));
+          console.log(`\n=== complexity max ${limit} ===`);
+          console.log(`Violations: ${violations.length}`);
+          console.log(`Files with violations: ${files.size}`);
+          for (const entry of violations) {
+            console.log(`${entry.file}:${entry.line}:${entry.column} complexity=${entry.complexity ?? '?'} ${entry.message}`);
+          }
+
+          if (fatal.length > 0) {
+            console.error(`Fatal parse errors: ${fatal.length}`);
+            for (const entry of fatal) {
+              console.error(`${entry.file}:${entry.line} ${entry.message}`);
+            }
+            process.exitCode = 1;
+          }
+          NODE
+          done
