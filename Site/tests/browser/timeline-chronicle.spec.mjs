@@ -114,6 +114,7 @@ test('chronicle uses compact geometry on narrow screens without horizontal overf
   await expect(list).toBeVisible();
 
   const firstRecord = list.locator('.vc-chronicle-item').first();
+  // eslint-disable-next-line complexity
   const geometry = await firstRecord.locator('summary').evaluate((summary) => {
     const date = summary.querySelector('.vc-chronicle-date')?.getBoundingClientRect();
     const copy = summary.querySelector('.vc-chronicle-summary-copy')?.getBoundingClientRect();

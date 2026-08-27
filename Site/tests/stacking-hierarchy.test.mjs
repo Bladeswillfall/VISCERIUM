@@ -9,6 +9,7 @@ const layout = read('../src/styles/layout.css');
 const navigation = read('../src/styles/navigation.css');
 const header = read('../src/styles/header-controls.css');
 const rail = read('../src/components/CodexFooterRail.astro');
+const articleFooter = read('../src/components/StarlightFooter.astro');
 const pageFrame = read('../src/components/CodexPageFrame.astro');
 const timeline = read('../src/styles/timeline-canvas.css');
 
@@ -51,6 +52,17 @@ test('article-local footer breakout hacks are gone', () => {
   assert.doesNotMatch(layers, /\.codex-page-deck::before/);
   assert.doesNotMatch(layers, /100cqw|100vw|100dvw/);
   assert.doesNotMatch(rail, /100cqw|100vw|100dvw/);
+});
+
+test('article pagination sits before reference metadata and exposes Rybbit event tags', () => {
+  assert.match(articleFooter, /@astrojs\/starlight\/components\/Pagination\.astro/);
+  const paginationIndex = articleFooter.indexOf('class="codex-pagination"');
+  const referencesIndex = articleFooter.indexOf('<ReferencedIn />');
+  assert.ok(paginationIndex >= 0);
+  assert.ok(referencesIndex > paginationIndex);
+  assert.match(articleFooter, /article_pagination_click/);
+  assert.match(articleFooter, /rybbitPropDirection/);
+  assert.match(articleFooter, /rybbitPropTarget/);
 });
 
 test('global chrome uses the shared hierarchy', () => {

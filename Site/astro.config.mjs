@@ -2,7 +2,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
@@ -141,42 +140,6 @@ const faviconHead = [
   },
 ];
 
-const ga4MeasurementId = siteConfig.analytics?.ga4?.measurementId ?? '';
-const ga4Enabled = siteConfig.analytics?.ga4?.enabled === true;
-const ga4Head = ga4Enabled
-  ? [
-      {
-        tag: 'script',
-        attrs: {
-          type: 'text/partytown',
-          async: true,
-          src: `https://www.googletagmanager.com/gtag/js?id=${ga4MeasurementId}`,
-        },
-      },
-      {
-        tag: 'script',
-        attrs: {
-          type: 'text/partytown',
-          id: 'ga4-init',
-          'data-ga4-measurement-id': ga4MeasurementId,
-        },
-        content: `
-          const measurementId = document
-            .getElementById('ga4-init')
-            .getAttribute('data-ga4-measurement-id');
-
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-
-          gtag('js', new Date());
-          gtag('config', measurementId);
-        `,
-      },
-    ]
-  : [];
-
 const cloudflareAnalyticsToken = siteConfig.analytics?.cloudflare?.token ?? '';
 const cloudflareAnalyticsHead = siteConfig.analytics?.cloudflare?.enabled
   ? [
@@ -299,7 +262,7 @@ export default defineConfig({
         starlightScrollToTop(),
       ],
       sidebar,
-      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
+      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
       social: [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }],
     }),
     sitemap({
@@ -310,14 +273,5 @@ export default defineConfig({
       },
     }),
     mdx(),
-    ...(ga4Enabled
-      ? [
-          partytown({
-            config: {
-              forward: ['dataLayer.push'],
-            },
-          }),
-        ]
-      : []),
   ],
 });

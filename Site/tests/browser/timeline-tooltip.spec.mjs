@@ -14,6 +14,7 @@ async function openEntropyTimeline(page) {
 }
 
 async function readHoverState(page, item) {
+  // eslint-disable-next-line complexity
   return page.evaluate((element) => {
     const visible = (node) => {
       const style = getComputedStyle(node);

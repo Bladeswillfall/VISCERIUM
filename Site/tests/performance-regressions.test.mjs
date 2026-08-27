@@ -28,35 +28,21 @@ test('small-screen paint work stays out of the initial homepage render', () => {
   const homepage = read('../src/pages/index.astro');
 
   assert.match(header, /@media \(max-width: 40rem\)[\s\S]*body::before,[\s\S]*display: none;/);
-  assert.match(homepage, /#home-continuum,[\s\S]*content-visibility: auto;/);
-  assert.match(homepage, /contain-intrinsic-block-size: auto 48rem;/);
+  assert.match(homepage, /#home-routes,[\s\S]*#home-continuum \{[\s\S]*content-visibility: auto;/);
+  assert.match(homepage, /contain-intrinsic-block-size: auto 40rem;/);
   assert.match(homepage, /@media \(max-width: 44rem\)[\s\S]*\.home-hero__copy[\s\S]*filter: none;/);
 });
 
-test('mobile timeline text uses adaptive accents while fixed-dark hero cards stay theme independent', () => {
+test('mobile era cards keep adaptive accents while the duplicate chronology stays removed', () => {
   const homepage = read('../src/pages/index.astro');
-  const eras = {
-    citadel: 'e1',
-    smog: 'e2',
-    nearsight: 'e3',
-    entropy: 'e4',
-  };
+  const gateway = read('../src/components/home/HomeGateway.astro');
 
   assert.match(
     homepage,
     /\.home-era-card :is\(\.home-era-card__number, \.home-era-card__action\) \{\s*color: color-mix\(in oklch, var\(--home-era-accent\) 80%, var\(--home-text-fixed\)\);/,
   );
-
-  for (const [name, era] of Object.entries(eras)) {
-    assert.match(
-      homepage,
-      new RegExp(`\\.home-tech-era--${name} \\.home-tech-era__index \\{\\s*color: var\\(--era-${era}-accent\\);`),
-    );
-    assert.doesNotMatch(
-      homepage,
-      new RegExp(`\\.home-era-card--${name}[^\\n]*--era-${era}-accent`),
-    );
-  }
+  assert.match(homepage, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
+  assert.doesNotMatch(gateway, /home-tech-timeline|home-tech-era/);
 });
 
 test('compact header controls keep a 44px minimum target in the winning owners', () => {
