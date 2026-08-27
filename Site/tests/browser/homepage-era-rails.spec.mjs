@@ -7,7 +7,7 @@ async function openHome(page, viewport) {
   await page.goto(`${preview}/`, { waitUntil: 'networkidle' });
 }
 
-test.describe('homepage era rails', () => {
+test.describe('homepage reading routes', () => {
   test('landing page is structural and keeps its own H2 spacing', async ({ page }) => {
     await openHome(page, { width: 1440, height: 980 });
 
@@ -22,88 +22,66 @@ test.describe('homepage era rails', () => {
     expect(Number.parseFloat(marginBottom)).toBeGreaterThan(0);
   });
 
-  test('phone presents the era gateway as a snap rail with the next age visibly peeking in', async ({ page }) => {
+  test('phone shows all four era choices in a compact two-column grid', async ({ page }) => {
     await openHome(page, { width: 390, height: 844 });
 
-    const rail = page.locator('#home-era-gateway');
-    await expect(rail).toBeVisible();
-    await expect(page.locator('.home-era-scroll-hint')).toBeVisible();
-    await expect(rail.locator('.home-era-card')).toHaveCount(4);
+    const gateway = page.locator('#home-era-gateway');
+    await expect(gateway).toBeVisible();
+    await expect(page.locator('.home-era-scroll-hint')).toBeHidden();
+    await expect(gateway.locator('.home-era-card')).toHaveCount(4);
 
-    const geometry = await rail.evaluate((element) => {
+    const geometry = await gateway.evaluate((element) => {
       const cards = [...element.querySelectorAll('.home-era-card')].map((card) => card.getBoundingClientRect());
       const style = getComputedStyle(element);
       return {
         display: style.display,
+        columns: style.gridTemplateColumns.split(' ').length,
         overflowX: style.overflowX,
-        snap: style.scrollSnapType,
         clientWidth: element.clientWidth,
         scrollWidth: element.scrollWidth,
-        viewportWidth: window.innerWidth,
         firstWidth: cards[0]?.width ?? 0,
-        secondLeft: cards[1]?.left ?? Number.POSITIVE_INFINITY,
-        secondRight: cards[1]?.right ?? Number.POSITIVE_INFINITY,
+        secondWidth: cards[1]?.width ?? 0,
+        firstTop: cards[0]?.top ?? 0,
+        secondTop: cards[1]?.top ?? 0,
+        thirdTop: cards[2]?.top ?? 0,
         documentOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       };
     });
 
     expect(geometry.display).toBe('grid');
-    expect(geometry.overflowX).toBe('auto');
-    expect(geometry.snap).toContain('mandatory');
-    expect(geometry.scrollWidth).toBeGreaterThan(geometry.clientWidth + 200);
-    expect(geometry.firstWidth).toBeGreaterThan(geometry.viewportWidth * 0.78);
-    expect(geometry.firstWidth).toBeLessThan(geometry.viewportWidth * 0.9);
-    expect(geometry.secondLeft).toBeLessThan(geometry.viewportWidth - 8);
-    expect(geometry.secondRight).toBeGreaterThan(geometry.viewportWidth);
+    expect(geometry.columns).toBe(2);
+    expect(geometry.overflowX).toBe('visible');
+    expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth + 1);
+    expect(geometry.firstWidth).toBeGreaterThan(150);
+    expect(geometry.firstWidth).toBeLessThan(190);
+    expect(Math.abs(geometry.firstWidth - geometry.secondWidth)).toBeLessThan(2);
+    expect(Math.abs(geometry.firstTop - geometry.secondTop)).toBeLessThan(2);
+    expect(geometry.thirdTop).toBeGreaterThan(geometry.firstTop + 100);
     expect(geometry.documentOverflow).toBe(false);
-
-    await rail.evaluate((element) => element.scrollTo({ left: element.scrollWidth, behavior: 'instant' }));
-    await expect.poll(() => rail.evaluate((element) => element.scrollLeft)).toBeGreaterThan(100);
-    await expect(rail.locator('.home-era-card--entropy')).toBeInViewport();
   });
 
-  test('phone chronology uses compact linked cards on the same horizontal interaction model', async ({ page }) => {
-    await openHome(page, { width: 390, height: 844 });
-
-    const viewport = page.locator('.home-timeline__viewport');
-    const cards = viewport.locator('.home-tech-era');
-    await expect(viewport).toBeVisible();
-    await expect(cards).toHaveCount(4);
-    await expect(viewport).toHaveAttribute('tabindex', '0');
-
-    const geometry = await viewport.evaluate((element) => {
-      const cardRects = [...element.querySelectorAll('.home-tech-era')].map((card) => card.getBoundingClientRect());
-      const list = element.querySelector('.home-tech-timeline');
-      const viewportStyle = getComputedStyle(element);
-      const firstStyle = cardRects.length ? getComputedStyle(element.querySelector('.home-tech-era')) : null;
-      return {
-        clientWidth: element.clientWidth,
-        scrollWidth: element.scrollWidth,
-        snap: viewportStyle.scrollSnapType,
-        firstWidth: cardRects[0]?.width ?? 0,
-        secondLeft: cardRects[1]?.left ?? Number.POSITIVE_INFINITY,
-        viewportRight: element.getBoundingClientRect().right,
-        listWidth: list?.getBoundingClientRect().width ?? 0,
-        firstBorder: Number.parseFloat(firstStyle?.borderTopWidth ?? '0'),
-      };
-    });
-
-    expect(geometry.scrollWidth).toBeGreaterThan(geometry.clientWidth + 200);
-    expect(geometry.snap).toContain('mandatory');
-    expect(geometry.firstWidth).toBeGreaterThan(280);
-    expect(geometry.firstWidth).toBeLessThan(350);
-    expect(geometry.secondLeft).toBeLessThan(geometry.viewportRight - 8);
-    expect(geometry.listWidth).toBeGreaterThan(geometry.clientWidth);
-    expect(geometry.firstBorder).toBeGreaterThan(0);
-  });
-
-  test('wide screens preserve the four-panel gateway while showing the chronology as one four-card row', async ({ page }) => {
+  test('primary homepage routes expose named Rybbit events', async ({ page }) => {
     await openHome(page, { width: 1440, height: 980 });
 
-    const rail = page.locator('#home-era-gateway');
+    await expect(page.locator('.home-button[href="/start-here/"]')).toHaveAttribute('data-rybbit-event', 'home_start_click');
+    await expect(page.locator('.home-era-card[data-rybbit-event="home_era_click"]')).toHaveCount(4);
+    await expect(page.locator('.home-era-card--citadel')).toHaveAttribute('data-rybbit-prop-era', 'CITADEL');
+    await expect(page.locator('.home-route-card[data-rybbit-event="home_route_click"]')).toHaveCount(3);
+
+    const order = await page.locator('#home-routes').evaluate((routes) => {
+      const continuum = document.querySelector('#home-continuum');
+      return continuum ? Boolean(routes.compareDocumentPosition(continuum) & Node.DOCUMENT_POSITION_FOLLOWING) : false;
+    });
+    expect(order).toBe(true);
+  });
+
+  test('wide screens preserve the four-panel era gateway', async ({ page }) => {
+    await openHome(page, { width: 1440, height: 980 });
+
+    const gateway = page.locator('#home-era-gateway');
     await expect(page.locator('.home-era-scroll-hint')).toBeHidden();
 
-    const gateway = await rail.evaluate((element) => ({
+    const geometry = await gateway.evaluate((element) => ({
       display: getComputedStyle(element).display,
       overflowX: getComputedStyle(element).overflowX,
       clientWidth: element.clientWidth,
@@ -112,21 +90,9 @@ test.describe('homepage era rails', () => {
         .filter((card) => card.getBoundingClientRect().width > 0).length,
     }));
 
-    expect(gateway.display).toBe('flex');
-    expect(gateway.overflowX).toBe('hidden');
-    expect(gateway.visibleCards).toBe(4);
-    expect(gateway.scrollWidth).toBeLessThanOrEqual(gateway.clientWidth + 1);
-
-    const timeline = await page.locator('.home-timeline__viewport').evaluate((element) => {
-      const list = element.querySelector('.home-tech-timeline');
-      return {
-        clientWidth: element.clientWidth,
-        scrollWidth: element.scrollWidth,
-        columns: list ? getComputedStyle(list).gridTemplateColumns.split(' ').length : 0,
-      };
-    });
-
-    expect(timeline.columns).toBe(4);
-    expect(timeline.scrollWidth).toBeLessThanOrEqual(timeline.clientWidth + 1);
+    expect(geometry.display).toBe('flex');
+    expect(geometry.overflowX).toBe('hidden');
+    expect(geometry.visibleCards).toBe(4);
+    expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth + 1);
   });
 });
