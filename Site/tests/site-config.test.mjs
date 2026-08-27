@@ -6,8 +6,6 @@ const integrationKeys = [
   'SITE_DESCRIPTION',
   'SITE_URL',
   'LORE_SOURCE_DIR',
-  'PUBLIC_GA4_ENABLED',
-  'PUBLIC_GA4_MEASUREMENT_ID',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN',
   'PUBLIC_RYBBIT_ENABLED',
@@ -60,16 +58,14 @@ test('replacement defaults use the repository, canonical domain, identity, comme
   assert.equal(config.analytics.rybbit.host, 'https://analytics.viscerium.co.uk');
 });
 
-test('private integrations remain inert while public integrations keep safe defaults', async () => {
+test('optional integrations stay inert without required public values', async () => {
   const config = await loadConfig({
-    PUBLIC_GA4_ENABLED: '1',
     PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED: '1',
     PUBLIC_RYBBIT_ENABLED: '1',
     PUBLIC_COMMENTS_ENABLED: '1',
     PUBLIC_CONTACT_FORM_ENABLED: '1',
   });
 
-  assert.equal(config.analytics.ga4.enabled, false);
   assert.equal(config.analytics.cloudflare.enabled, false);
   assert.equal(config.analytics.rybbit.enabled, false);
   assert.equal(config.comments.enabled, true);

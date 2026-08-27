@@ -78,11 +78,9 @@ Before relying on the service in production, sign in to Webmention.io with `http
 
 ### Analytics and verification
 
-GA4, Cloudflare Web Analytics, and Rybbit are independent and disabled by default:
+Cloudflare Web Analytics and Rybbit are independent and disabled by default:
 
 ```text
-PUBLIC_GA4_ENABLED=0
-PUBLIC_GA4_MEASUREMENT_ID=
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED=0
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=
 PUBLIC_RYBBIT_ENABLED=0
@@ -100,6 +98,18 @@ PUBLIC_RYBBIT_ENABLED=1
 PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
 PUBLIC_RYBBIT_SITE_ID=d863318efa2f
 ```
+
+The public reading funnel emits these named Rybbit events:
+
+| Event | Trigger | Properties |
+| --- | --- | --- |
+| `home_start_click` | The homepage Start Here button | `placement=hero` |
+| `home_era_prompt_click` | The homepage Explore the four eras button | None |
+| `home_era_click` | A homepage era gateway | `era` |
+| `home_route_click` | A curated homepage route | `target` |
+| `article_pagination_click` | A Previous or Next article link | `direction`, `target` |
+
+Use these event names when creating Rybbit goals or funnels. Do not duplicate the same click with a second analytics script.
 
 Keep Rybbit disabled on preview deployments unless preview traffic should count in production analytics. The Rybbit Site ID is public client configuration, not a secret.
 

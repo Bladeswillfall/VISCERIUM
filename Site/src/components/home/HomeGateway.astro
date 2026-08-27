@@ -1,34 +1,21 @@
----
-import { DEFAULT_LOCALE } from '../../../site.config.mjs';
-
-type Props = {
-  canonEntryCount: number;
-  mappedEventCount: number;
-  unbrokenTimelineCount: number;
-};
-
-const { canonEntryCount, mappedEventCount, unbrokenTimelineCount } = Astro.props;
-const numberFormatter = new Intl.NumberFormat(Astro.currentLocale ?? DEFAULT_LOCALE);
-const formattedCanonEntryCount = numberFormatter.format(canonEntryCount);
-const formattedMappedEventCount = numberFormatter.format(mappedEventCount);
-const formattedTimelineCount = numberFormatter.format(unbrokenTimelineCount);
-const timelineLead = unbrokenTimelineCount === 1
-  ? 'One timeline.'
-  : `${formattedTimelineCount} timelines.`;
-const timelineStatLabel = unbrokenTimelineCount === 1
-  ? 'Unbroken timeline'
-  : 'Unbroken timelines';
----
-
 <div class="home-gateway" id="home-gateway-top">
   <section class="home-hero" aria-labelledby="home-hero-title">
     <div class="home-hero__copy">
       <p class="home-eyebrow">Choose an age. Enter the same world.</p>
       <h1 id="home-hero-title">VISCERIUM</h1>
-      <p class="home-hero__deck">{timelineLead} Four eras. Infinite stories.</p>
+      <p class="home-hero__deck">One timeline. Four eras. Infinite stories.</p>
       <div class="home-actions">
-        <a class="home-button" href="/start-here/">Start here</a>
-        <a class="home-button home-button--secondary" href="#home-era-gateway">Explore the four eras</a>
+        <a
+          class="home-button"
+          href="/start-here/"
+          data-rybbit-event="home_start_click"
+          data-rybbit-prop-placement="hero"
+        >Start here</a>
+        <a
+          class="home-button home-button--secondary"
+          href="#home-era-gateway"
+          data-rybbit-event="home_era_prompt_click"
+        >Explore the four eras</a>
       </div>
     </div>
 
@@ -40,11 +27,17 @@ const timelineStatLabel = unbrokenTimelineCount === 1
     <ol
       class="home-era-gateway"
       id="home-era-gateway"
-      aria-label="The four eras of VISCERIUM. On smaller screens, scroll horizontally to explore them."
+      aria-label="The four eras of VISCERIUM. On medium screens, scroll horizontally to explore them."
       tabindex="0"
     >
       <li>
-        <a class="home-era-card home-era-card--citadel" href="/eras/citadel/" aria-describedby="home-citadel-description">
+        <a
+          class="home-era-card home-era-card--citadel"
+          href="/eras/citadel/"
+          aria-describedby="home-citadel-description"
+          data-rybbit-event="home_era_click"
+          data-rybbit-prop-era="CITADEL"
+        >
           <div class="home-era-card__content">
             <span class="home-era-card__number">Era I</span>
             <h2>CITADEL</h2>
@@ -55,7 +48,13 @@ const timelineStatLabel = unbrokenTimelineCount === 1
         </a>
       </li>
       <li>
-        <a class="home-era-card home-era-card--smog" href="/eras/smog/" aria-describedby="home-smog-description">
+        <a
+          class="home-era-card home-era-card--smog"
+          href="/eras/smog/"
+          aria-describedby="home-smog-description"
+          data-rybbit-event="home_era_click"
+          data-rybbit-prop-era="SMOG"
+        >
           <div class="home-era-card__content">
             <span class="home-era-card__number">Era II</span>
             <h2>SMOG</h2>
@@ -66,7 +65,13 @@ const timelineStatLabel = unbrokenTimelineCount === 1
         </a>
       </li>
       <li>
-        <a class="home-era-card home-era-card--nearsight" href="/eras/nearsight/" aria-describedby="home-nearsight-description">
+        <a
+          class="home-era-card home-era-card--nearsight"
+          href="/eras/nearsight/"
+          aria-describedby="home-nearsight-description"
+          data-rybbit-event="home_era_click"
+          data-rybbit-prop-era="NEARSIGHT"
+        >
           <div class="home-era-card__content">
             <span class="home-era-card__number">Era III</span>
             <h2>NEARSIGHT</h2>
@@ -77,7 +82,13 @@ const timelineStatLabel = unbrokenTimelineCount === 1
         </a>
       </li>
       <li>
-        <a class="home-era-card home-era-card--entropy" href="/eras/entropy/" aria-describedby="home-entropy-description">
+        <a
+          class="home-era-card home-era-card--entropy"
+          href="/eras/entropy/"
+          aria-describedby="home-entropy-description"
+          data-rybbit-event="home_era_click"
+          data-rybbit-prop-era="ENTROPY"
+        >
           <div class="home-era-card__content">
             <span class="home-era-card__number">Era IV</span>
             <h2>ENTROPY</h2>
@@ -90,6 +101,50 @@ const timelineStatLabel = unbrokenTimelineCount === 1
     </ol>
   </section>
 
+  <section class="home-section" id="home-routes" aria-labelledby="home-routes-title">
+    <header class="home-section__intro">
+      <p class="home-eyebrow">Choose your route</p>
+      <h2 class="home-section__heading" id="home-routes-title">Enter with the context you want.</h2>
+      <p class="home-lead">Start with the guided primer, the wider system, or the history that connects every era.</p>
+    </header>
+
+    <div class="home-route-grid">
+      <a
+        class="home-route-card"
+        href="/start-here/"
+        data-rybbit-event="home_route_click"
+        data-rybbit-prop-target="start-here"
+      >
+        <span class="home-route-card__symbol" aria-hidden="true">Ⅰ</span>
+        <h3>Start Here</h3>
+        <p>The essential primer to VISCERIUM, the Degel System and its four eras.</p>
+        <strong>Recommended first</strong>
+      </a>
+      <a
+        class="home-route-card"
+        href="/degel-system/"
+        data-rybbit-event="home_route_click"
+        data-rybbit-prop-target="degel-system"
+      >
+        <span class="home-route-card__symbol" aria-hidden="true">⌁</span>
+        <h3>The Degel System</h3>
+        <p>Begin with the star system whose worlds, wounds and hidden structures contain the greater struggle.</p>
+        <strong>Enter the setting</strong>
+      </a>
+      <a
+        class="home-route-card"
+        href="/timelines/super/"
+        data-rybbit-event="home_route_click"
+        data-rybbit-prop-target="timeline"
+      >
+        <span class="home-route-card__symbol" aria-hidden="true">✣</span>
+        <h3>The Timeline</h3>
+        <p>Follow the inherited events that connect CITADEL, SMOG, NEARSIGHT and ENTROPY.</p>
+        <strong>Trace the history</strong>
+      </a>
+    </div>
+  </section>
+
   <section class="home-section" id="home-continuum" aria-labelledby="home-continuum-title">
     <div class="home-section__grid">
       <header>
@@ -99,97 +154,7 @@ const timelineStatLabel = unbrokenTimelineCount === 1
       </header>
       <div class="home-body-copy">
         <p>Kingdoms become republics. Rituals become sciences. Old superstitions survive inside military doctrine, industry and orbital infrastructure. Resonance, incursion and mortal ambition remain the connective tissue.</p>
-        <p>The four gateways above are not separate universes. They are four moments in the same history, each carrying the damage, discoveries and lies of the age before it.</p>
-      </div>
-    </div>
-
-    <figure class="home-timeline">
-      <div
-        class="home-timeline__viewport"
-        tabindex="0"
-        role="region"
-        aria-label="VISCERIUM technology progression across four eras"
-        aria-describedby="home-timeline-caption"
-      >
-        <ol class="home-tech-timeline">
-          <li class="home-tech-era home-tech-era--citadel">
-            <span class="home-tech-era__index">I</span>
-            <strong>CITADEL</strong>
-            <span>Steel, siegecraft and early gunpowder</span>
-          </li>
-          <li class="home-tech-era home-tech-era--smog">
-            <span class="home-tech-era__index">II</span>
-            <strong>SMOG</strong>
-            <span>Industry, combustion and mechanised war</span>
-          </li>
-          <li class="home-tech-era home-tech-era--nearsight">
-            <span class="home-tech-era__index">III</span>
-            <strong>NEARSIGHT</strong>
-            <span>Networks, robotics and near-orbital reach</span>
-          </li>
-          <li class="home-tech-era home-tech-era--entropy">
-            <span class="home-tech-era__index">IV</span>
-            <strong>ENTROPY</strong>
-            <span>Vacuum warfare, altered flesh and deep space</span>
-          </li>
-        </ol>
-      </div>
-      <figcaption id="home-timeline-caption">One continuous technological history, presented as four linked era cards. On narrow screens, swipe or use the arrow keys while the timeline is focused.</figcaption>
-    </figure>
-  </section>
-
-  <section class="home-section" id="home-statistics" aria-labelledby="home-statistics-title">
-    <header class="home-section__intro">
-      <p class="home-eyebrow">The living archive</p>
-      <h2 class="home-section__heading" id="home-statistics-title">A world measured by what has survived.</h2>
-      <p class="home-lead">The Codex grows from published canon. These figures are calculated from the live archive whenever the site builds.</p>
-    </header>
-
-    <dl class="home-stats">
-      <div class="home-stat"><dd>4</dd><dt>Distinct eras</dt></div>
-      <div class="home-stat"><dd>{formattedCanonEntryCount}</dd><dt>Canon entries</dt></div>
-      <div class="home-stat"><dd>{formattedMappedEventCount}</dd><dt>Mapped events</dt></div>
-      <div class="home-stat"><dd>{formattedTimelineCount}</dd><dt>{timelineStatLabel}</dt></div>
-    </dl>
-  </section>
-
-  <section class="home-section" id="home-routes" aria-labelledby="home-routes-title">
-    <header class="home-section__intro">
-      <p class="home-eyebrow">Suggested entry routes</p>
-      <h2 class="home-section__heading" id="home-routes-title">Go deeper with context.</h2>
-      <p class="home-lead">The spectacle gets attention. These curated records prevent a new reader from becoming lost in the archive.</p>
-    </header>
-
-    <div class="home-route-grid">
-      <a class="home-route-card" href="/start-here/">
-        <span class="home-route-card__symbol" aria-hidden="true">Ⅰ</span>
-        <h3>Start Here</h3>
-        <p>The essential primer to VISCERIUM, the Degel System and its four eras.</p>
-        <strong>Recommended first</strong>
-      </a>
-      <a class="home-route-card" href="/degel-system/">
-        <span class="home-route-card__symbol" aria-hidden="true">⌁</span>
-        <h3>The Degel System</h3>
-        <p>Begin with the star system whose worlds, wounds and hidden structures contain the greater struggle.</p>
-        <strong>Enter the setting</strong>
-      </a>
-      <a class="home-route-card" href="/timelines/super/">
-        <span class="home-route-card__symbol" aria-hidden="true">✣</span>
-        <h3>The Timeline</h3>
-        <p>Follow the inherited events that connect CITADEL, SMOG, NEARSIGHT and ENTROPY.</p>
-        <strong>Trace the history</strong>
-      </a>
-    </div>
-  </section>
-
-  <section class="home-final-cta" aria-labelledby="home-start-title">
-    <div class="home-section home-final-cta__inner">
-      <p class="home-eyebrow">The first article</p>
-      <h2 class="home-section__heading" id="home-start-title">Begin before the names become weapons.</h2>
-      <p class="home-lead">Enter VISCERIUM through the guided primer, then choose an age.</p>
-      <div class="home-actions">
-        <a class="home-button" href="/start-here/">Read Start Here</a>
-        <a class="home-button home-button--secondary" href="#home-gateway-top">Return to the gateways</a>
+        <p>The four gateways are not separate universes. They are four moments in the same history, each carrying the damage, discoveries and lies of the age before it.</p>
       </div>
     </div>
   </section>
