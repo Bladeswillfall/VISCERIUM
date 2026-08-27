@@ -18,6 +18,7 @@
     "rights:update": "npm run notices:update",
     "rights:check": "npm run notices:check",
     "sync": "node scripts/build-content.mjs --mode=sync",
+    "webmentions:send": "node scripts/send-webmentions.mjs",
     "validate": "node scripts/validate-content.mjs",
     "generate:maps": "node scripts/generate-map-data.mjs",
     "generate:relationships": "node scripts/generate-relationship-data.mjs",
