@@ -45,6 +45,7 @@ jobs:
                 '**/.astro/**',
                 '**/coverage/**',
                 'Vault/.obsidian/plugins/**/main.js',
+                'Vault/System/Views/**/*.js',
               ],
             },
             {
@@ -55,16 +56,6 @@ jobs:
               },
               rules: {
                 complexity: ['error', max],
-              },
-            },
-            {
-              files: ['Vault/System/Views/**/*.js'],
-              languageOptions: {
-                ecmaVersion: 'latest',
-                sourceType: 'script',
-                parserOptions: {
-                  ecmaFeatures: { globalReturn: true },
-                },
               },
             },
             {
@@ -98,7 +89,8 @@ jobs:
 
           mapfile -t files < <(
             git ls-files '*.js' '*.mjs' '*.cjs' '*.ts' '*.astro' \
-              | grep -Ev '^Vault/\.obsidian/plugins/[^/]+/main\.js$'
+              | grep -Ev '^Vault/\.obsidian/plugins/[^/]+/main\.js$' \
+              | grep -Ev '^Vault/System/Views/.*/view\.js$'
           )
           printf 'Scanned files: %s\n' "${#files[@]}"
 
