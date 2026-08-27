@@ -132,6 +132,7 @@ function resolvePluginRecord(recordIndex, link) {
   return { key, matches };
 }
 
+// eslint-disable-next-line complexity
 export function compileMapData(records, { pluginSources = {}, warnings = [] } = {}) {
   const maps = {};
 

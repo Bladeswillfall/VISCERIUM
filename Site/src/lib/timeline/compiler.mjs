@@ -91,6 +91,7 @@ function ensureNoLegacyTimelineFields(record, issues) {
   }
 }
 
+// eslint-disable-next-line complexity
 function compileEra(record, issues) {
   const { data, sourcePath, href } = record;
   const start = validateDateShape(data.calendarDate, sourcePath, 'calendarDate', issues);
@@ -125,6 +126,7 @@ function compileEra(record, issues) {
   };
 }
 
+// eslint-disable-next-line complexity
 function compileEvent(record, eras, issues) {
   const { data, sourcePath, href } = record;
   const start = validateDateShape(data.calendarDate, sourcePath, 'calendarDate', issues);

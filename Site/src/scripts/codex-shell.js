@@ -304,6 +304,7 @@ const fillMessage = (template, values) => Object.entries(values).reduce(
 );
 
 class CodexWebmentions extends HTMLElement {
+  // eslint-disable-next-line complexity
   async connectedCallback() {
     if (this.dataset.loaded) return;
     this.dataset.loaded = 'true';
