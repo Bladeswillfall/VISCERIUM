@@ -1,0 +1,36 @@
+name: Send webmentions
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_url:
+        description: Production article or feed URL to scan for outbound Webmentions
+        required: true
+        default: https://www.viscerium.co.uk/rss.xml
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    name: Send outbound Webmentions
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: Site
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Send Webmentions
+        run: node scripts/send-webmentions.mjs "${{ inputs.source_url }}"
+        env:
+          WEBMENTION_APP_TOKEN: ${{ secrets.WEBMENTION_APP_TOKEN }}
