@@ -26,13 +26,13 @@ function dateTimeValue(date) {
   <p class="codex-article-dates" aria-label={t('viscerium.article.datesLabel')}>
     {published && (
       <span>
-        {t('viscerium.article.published')} <time datetime={dateTimeValue(published)}>{formatDate(published, locale, dateOptions)}</time>
+        {t('viscerium.article.published')} <time class="dt-published" datetime={dateTimeValue(published)}>{formatDate(published, locale, dateOptions)}</time>
       </span>
     )}
     {published && showUpdated && <span aria-hidden="true">·</span>}
     {showUpdated && updated && (
       <span>
-        {t('viscerium.article.updated')} <time datetime={dateTimeValue(updated)}>{formatDate(updated, locale, dateOptions)}</time>
+        {t('viscerium.article.updated')} <time class="dt-updated" datetime={dateTimeValue(updated)}>{formatDate(updated, locale, dateOptions)}</time>
       </span>
     )}
   </p>
