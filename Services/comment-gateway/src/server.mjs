@@ -1,5 +1,6 @@
 import http from 'node:http';
 import { Buffer } from 'node:buffer';
+import { timingSafeEqual } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { GatewayError, badRequest } from './errors.mjs';
 import { loadConfig } from './config.mjs';
@@ -29,6 +30,7 @@ const blockedForwardHeaders = new Set([
   'x-real-ip',
   'x-turnstile-token',
   'x-viscerium-client-ip',
+  'x-viscerium-proxy-secret',
 ]);
 
 const fixedPublicMessages = new Map([
@@ -64,6 +66,7 @@ function writeJson(response, status, value) {
   response.end(JSON.stringify(value));
 }
 
+// eslint-disable-next-line complexity
 function publicGatewayMessage(error) {
   const exact = fixedPublicMessages.get(error.code);
   if (exact) return exact;
@@ -203,9 +206,23 @@ function sanitizePayload(payload, requestUrl, method, config) {
   return { payload: copy, externalUrls };
 }
 
-function clientIp(request) {
+function proxySecretMatches(raw, expected) {
+  if (typeof raw !== 'string' || typeof expected !== 'string') return false;
+  const received = Buffer.from(raw, 'utf8');
+  const configured = Buffer.from(expected, 'utf8');
+  return received.length === configured.length && timingSafeEqual(received, configured);
+}
+
+function clientIp(request, config) {
   const header = request.headers['x-viscerium-client-ip'];
-  if (typeof header === 'string' && header.length <= 64) return header;
+  const proxySecret = request.headers['x-viscerium-proxy-secret'];
+  if (
+    typeof header === 'string' &&
+    header.length <= 64 &&
+    proxySecretMatches(proxySecret, config.proxySharedSecret)
+  ) {
+    return header;
+  }
   return request.socket.remoteAddress || 'unknown';
 }
 
@@ -314,7 +331,7 @@ export function createGatewayServer(config, dependencies = {}) {
       const parsed = parseJson(rawBody);
       const { payload, externalUrls } = sanitizePayload(parsed, requestUrl, request.method, config);
       const normalizedBody = JSON.stringify(payload);
-      const ip = clientIp(request);
+      const ip = clientIp(request, config);
       const key = buildIdempotencyKey({
         explicitKey: typeof request.headers['idempotency-key'] === 'string' ? request.headers['idempotency-key'] : '',
         secret: config.idempotencySecret,

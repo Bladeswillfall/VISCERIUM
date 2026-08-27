@@ -56,3 +56,27 @@ test('CITADEL homepage links to its canonical Atlas map rather than the WorldAnv
   assert.equal(eraSource.data.eraPrimer.map.href, `/maps/${mapSource.data.mapId}/`);
   assert.deepEqual(markerSource.markers, []);
 });
+
+test('CITADEL power cards point at published canonical nation pages', () => {
+  const eraSource = matter(readFileSync(
+    new URL('../../Vault/Lore/Eras/CITADEL.md', import.meta.url),
+    'utf8',
+  ));
+  const expected = [
+    ['Okse Dominion', '/eras/citadel/nations/okse-dominion/', 'CITADEL/Nations/Okse Dominion/Okse Dominion.md'],
+    ['Krass Dominion', '/eras/citadel/nations/krass-dominion/', 'CITADEL/Nations/Krass Dominion/Krass Dominion.md'],
+    ['Republic of Askalia', '/eras/citadel/nations/republic-of-askalia/', 'CITADEL/Nations/Republic of Askalia/Republic of Askalia.md'],
+    ['Kingdom of Satol', '/eras/citadel/nations/kingdom-of-satol/', 'CITADEL/Nations/Kingdom of Satol/Kingdom of Satol.md'],
+  ];
+
+  for (const [title, href, sourcePath] of expected) {
+    const power = eraSource.data.eraPrimer.powers.find((item) => item.title === title);
+    assert.equal(power?.href, href);
+
+    const nationSource = matter(readFileSync(
+      new URL(`../../Vault/Lore/Eras/${sourcePath}`, import.meta.url),
+      'utf8',
+    ));
+    assert.equal(nationSource.data.status, 'published', `${title} must exist as a public page`);
+  }
+});

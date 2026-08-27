@@ -312,10 +312,18 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     const mobileQuery = explorationMobileQuery();
     bindExplorationDialog(inspector);
 
-    const dimensions = await readImageDimensions(data.image, Number(data.width), Number(data.height));
+    const tiles = data.tiles && typeof data.tiles === 'object' ? data.tiles : null;
+    const dimensions = await readImageDimensions(
+      data.image,
+      Number(tiles?.width ?? data.width),
+      Number(tiles?.height ?? data.height),
+    );
     const width = dimensions.width;
     const height = dimensions.height;
-    const bounds = L.latLngBounds([0, 0], [height, width]);
+    // Shift the simple CRS so the top-left of the illustrated map is [0, 0].
+    // This makes Leaflet tile X/Y coordinates line up with Sharp's Google layout
+    // while preserving all authored marker positions as percentages.
+    const bounds = L.latLngBounds([-height, 0], [0, width]);
     const horizontalGutter = mobileQuery.matches ? 16 : 24;
 
     const atlas = L.map(canvas, {
@@ -330,10 +338,33 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       maxBoundsViscosity: 0.9,
     });
 
-    L.imageOverlay(data.image, bounds, {
-      interactive: false,
-      alt: data.title || messages.imageLabel,
-    }).addTo(atlas);
+    const hasTiles = Boolean(
+      tiles?.urlTemplate
+      && Number.isFinite(Number(tiles.tileSize))
+      && Number.isFinite(Number(tiles.zoomOffset)),
+    );
+
+    if (hasTiles) {
+      L.tileLayer(tiles.urlTemplate, {
+        tileSize: Number(tiles.tileSize),
+        minZoom: -16,
+        maxZoom: 16,
+        minNativeZoom: Number(tiles.minNativeZoom),
+        maxNativeZoom: Number(tiles.maxNativeZoom),
+        zoomOffset: Number(tiles.zoomOffset),
+        bounds,
+        noWrap: true,
+        keepBuffer: 2,
+        className: 'atlas-map-tile',
+      }).addTo(atlas);
+      root.dataset.atlasRaster = 'tiles';
+    } else {
+      L.imageOverlay(data.image, bounds, {
+        interactive: false,
+        alt: data.title || messages.imageLabel,
+      }).addTo(atlas);
+      root.dataset.atlasRaster = 'image';
+    }
 
     const widthFittedZoom = widthFitZoom(canvas, width, horizontalGutter);
     atlas.setMinZoom(Number.isFinite(data.minZoom) ? data.minZoom : widthFittedZoom - 1);
@@ -379,7 +410,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       const markerKind = cleanClass(marker.marker || marker.type || 'location');
       const glyph = markerGlyphs[markerKind] || markerGlyphs.location;
       const latLng = L.latLng(
-        height - (Number(marker.y) / 100) * height,
+        -(Number(marker.y) / 100) * height,
         (Number(marker.x) / 100) * width,
       );
 
@@ -433,6 +464,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
 
     const applyZoomVisibility = () => {
       const zoom = atlas.getZoom();
+      root.dataset.atlasZoom = String(zoom);
       for (const record of markerRecords) {
         const visible = withinZoom(record, zoom);
         const present = record.group.hasLayer(record.leafletMarker);

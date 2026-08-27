@@ -58,11 +58,12 @@ test('landscape phone keeps Atlas inspection compact while preserving the map wo
   await expect(atlas.locator('.atlas__toolbar .atlas-search__empty')).toHaveText('No matching markers.');
 });
 
-test('mobile Relationships reports the real empty state', async ({ page }) => {
+test('mobile Relationships renders published structured relationships', async ({ page }) => {
   await openMobile(page, '/relationships/');
 
-  await expect(page.getByRole('heading', { name: 'No structured relationships published yet' })).toBeVisible();
-  await expect(page.locator('.relationship-explorer__empty')).toContainText('only uses explicit relationships: frontmatter');
-  await expect(page.locator('[data-relationship-canvas]')).toHaveCount(0);
-  await expect(page.locator('.pagination-links')).not.toContainText('[map]');
+  const explorer = page.locator('[data-relationship-explorer]');
+  await expect(explorer.locator('[data-relationship-canvas]')).toBeVisible();
+  await expect(explorer.locator('.relationship-explorer__empty')).toHaveCount(0);
+  await expect(explorer.getByRole('button', { name: 'Search relationships' })).toBeVisible();
+  await expect(page.locator('.pagination-links')).toHaveCount(0);
 });

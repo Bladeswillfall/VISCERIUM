@@ -63,28 +63,55 @@ Before production deployment, confirm:
 
 ### Webmentions
 
-Webmentions are disabled until `www.viscerium.co.uk` has been registered and verified with Webmention.io. Then configure:
+Incoming Webmentions use Webmention.io and are enabled by the repository defaults for the canonical production domain:
 
 ```text
 PUBLIC_WEBMENTIONS_ENABLED=1
 PUBLIC_WEBMENTION_IO_USERNAME=www.viscerium.co.uk
 ```
 
-Use the endpoint override variables in `Site/.env.example` only if Webmention.io supplies different endpoints.
+No secret is required in Cloudflare Pages for the current public JF2 API integration. The site advertises `https://github.com/Bladeswillfall` as its explicit IndieLogin authentication identity using `rel="me authn"`. The corresponding GitHub profile Website field must point back to `https://www.viscerium.co.uk/` so IndieLogin can verify the relationship in both directions.
+
+Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, authenticate through the advertised GitHub identity, complete the domain verification, and confirm that the assigned username is `www.viscerium.co.uk`.
+
+`PUBLIC_WEBMENTIONS_ENABLED=0` remains available as an emergency off switch. Use the endpoint override variables in `Site/.env.example` only if Webmention.io supplies different endpoints.
 
 ### Analytics and verification
 
-GA4 and Cloudflare Web Analytics are independent and disabled by default:
+Cloudflare Web Analytics and Rybbit are independent and disabled by default:
 
 ```text
-PUBLIC_GA4_ENABLED=0
-PUBLIC_GA4_MEASUREMENT_ID=
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED=0
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=
+PUBLIC_RYBBIT_ENABLED=0
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=
 PUBLIC_GOOGLE_SITE_VERIFICATION=
 ```
 
 Set a provider's enable flag to `1` only after adding its genuine public identifier. If Cloudflare automatically injects Web Analytics for the Pages project, leave the repository-managed Cloudflare integration disabled to avoid duplicate page views.
+
+The production Rybbit site uses these public build values:
+
+```text
+PUBLIC_RYBBIT_ENABLED=1
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=d863318efa2f
+```
+
+The public reading funnel emits these named Rybbit events:
+
+| Event | Trigger | Properties |
+| --- | --- | --- |
+| `home_start_click` | The homepage Start Here button | `placement=hero` |
+| `home_era_prompt_click` | The homepage Explore the four eras button | None |
+| `home_era_click` | A homepage era gateway | `era` |
+| `home_route_click` | A curated homepage route | `target` |
+| `article_pagination_click` | A Previous or Next article link | `direction`, `target` |
+
+Use these event names when creating Rybbit goals or funnels. Do not duplicate the same click with a second analytics script.
+
+Keep Rybbit disabled on preview deployments unless preview traffic should count in production analytics. The Rybbit Site ID is public client configuration, not a secret.
 
 `PUBLIC_GOOGLE_SITE_VERIFICATION` adds public Search Console verification metadata. It is not an analytics tracker. Any analytics consent, privacy notice, or cookie/storage decision still requires the owner's review before tracking is enabled.
 

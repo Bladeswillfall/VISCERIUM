@@ -30,7 +30,15 @@
     outline-offset: 3px;
   }
 
-  :where(.codex-sidebar-toggle, .social-icons a, .codex-link-button, .support-button) {
+  :where(
+    .codex-sidebar-toggle,
+    .codex-header-search button[data-open-modal],
+    .reader-settings,
+    .reader-settings-trigger,
+    .social-icons a,
+    .codex-link-button,
+    .support-button
+  ) {
     min-inline-size: 2.75rem;
     min-block-size: 2.75rem;
   }

@@ -6,15 +6,20 @@ const integrationKeys = [
   'SITE_DESCRIPTION',
   'SITE_URL',
   'LORE_SOURCE_DIR',
-  'PUBLIC_GA4_ENABLED',
-  'PUBLIC_GA4_MEASUREMENT_ID',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN',
+  'PUBLIC_RYBBIT_ENABLED',
+  'PUBLIC_RYBBIT_HOST',
+  'PUBLIC_RYBBIT_SITE_ID',
   'PUBLIC_COMMENTS_ENABLED',
   'PUBLIC_COMMENTS_HOST',
   'PUBLIC_COMMENTS_SITE_ID',
   'PUBLIC_WEBMENTIONS_ENABLED',
   'PUBLIC_WEBMENTION_IO_USERNAME',
+  'PUBLIC_WEBMENTION_ENDPOINT',
+  'PUBLIC_WEBMENTION_PINGBACK_ENDPOINT',
+  'PUBLIC_WEBMENTION_API_ENDPOINT',
+  'PUBLIC_WEBMENTIONS_MAX',
   'PUBLIC_CONTACT_FORM_ENABLED',
   'PUBLIC_CONTACT_FORM_ENDPOINT',
   'PUBLIC_TURNSTILE_SITE_KEY',
@@ -36,31 +41,62 @@ async function loadConfig(overrides = {}) {
   }
 }
 
-test('replacement defaults use the repository, canonical domain, and self-hosted comments', async () => {
+test('replacement defaults use the repository, canonical domain, identity, comments, and webmentions', async () => {
   const config = await loadConfig();
 
   assert.equal(config.title, 'VISCERIUM');
   assert.equal(config.site, 'https://www.viscerium.co.uk');
   assert.equal(config.githubRepoUrl, 'https://github.com/Bladeswillfall/VISCERIUM');
+  assert.equal(config.identity.githubProfileUrl, 'https://github.com/Bladeswillfall');
   assert.equal(config.comments.host, 'https://comments.viscerium.co.uk');
   assert.equal(config.comments.siteId, 'viscerium');
+  assert.equal(config.webmentions.enabled, true);
   assert.equal(config.webmentions.username, 'www.viscerium.co.uk');
+  assert.equal(config.webmentions.endpoint, 'https://webmention.io/www.viscerium.co.uk/webmention');
+  assert.equal(config.webmentions.pingbackEndpoint, 'https://webmention.io/www.viscerium.co.uk/xmlrpc');
+  assert.equal(config.analytics.rybbit.enabled, false);
+  assert.equal(config.analytics.rybbit.host, 'https://analytics.viscerium.co.uk');
 });
 
-test('private integrations remain inert while Remark42 uses public defaults', async () => {
+test('optional integrations stay inert without required public values', async () => {
   const config = await loadConfig({
-    PUBLIC_GA4_ENABLED: '1',
     PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED: '1',
+    PUBLIC_RYBBIT_ENABLED: '1',
     PUBLIC_COMMENTS_ENABLED: '1',
-    PUBLIC_WEBMENTIONS_ENABLED: '0',
     PUBLIC_CONTACT_FORM_ENABLED: '1',
   });
 
-  assert.equal(config.analytics.ga4.enabled, false);
   assert.equal(config.analytics.cloudflare.enabled, false);
+  assert.equal(config.analytics.rybbit.enabled, false);
   assert.equal(config.comments.enabled, true);
-  assert.equal(config.webmentions.enabled, false);
+  assert.equal(config.webmentions.enabled, true);
   assert.equal(config.contactForm.enabled, false);
+});
+
+test('Rybbit requires an HTTPS host and site ID', async () => {
+  const enabled = await loadConfig({
+    PUBLIC_RYBBIT_ENABLED: '1',
+    PUBLIC_RYBBIT_HOST: 'https://analytics.viscerium.co.uk/',
+    PUBLIC_RYBBIT_SITE_ID: 'd863318efa2f',
+  });
+  const insecure = await loadConfig({
+    PUBLIC_RYBBIT_ENABLED: '1',
+    PUBLIC_RYBBIT_HOST: 'http://analytics.viscerium.co.uk',
+    PUBLIC_RYBBIT_SITE_ID: 'd863318efa2f',
+  });
+
+  assert.equal(enabled.analytics.rybbit.enabled, true);
+  assert.equal(enabled.analytics.rybbit.host, 'https://analytics.viscerium.co.uk');
+  assert.equal(enabled.analytics.rybbit.siteId, 'd863318efa2f');
+  assert.equal(insecure.analytics.rybbit.enabled, false);
+});
+
+test('webmentions retain an explicit emergency off switch', async () => {
+  const config = await loadConfig({
+    PUBLIC_WEBMENTIONS_ENABLED: '0',
+  });
+
+  assert.equal(config.webmentions.enabled, false);
 });
 
 test('site identity and lore source support environment overrides', async () => {

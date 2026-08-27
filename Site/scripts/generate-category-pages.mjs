@@ -3,6 +3,7 @@ import process from 'node:process';
 import fs from 'node:fs/promises';
 import matter from 'gray-matter';
 import { cleanSlug, escapeHtml, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
+import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
 const docsDir = process.env.VISCERIUM_DOCS_DIR
@@ -143,6 +144,7 @@ function generatedCategorySection(descendants, childCategories) {
   return lines.join('\n');
 }
 
+export async function generateCategoryPages() {
 const generatedFiles = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
   .map((file) => path.resolve(docsDir, file))
   .sort();
@@ -176,6 +178,18 @@ const entryBySlug = new Map(entries.map((entry) => [entry.slug, entry]));
 const categoryList = [...categories.values()].sort((a, b) => a.slug.localeCompare(b.slug));
 
 for (const category of categoryList) {
+  const existingEntry = entryBySlug.get(category.slug);
+  const existingType = String(existingEntry?.data.type ?? '').trim().toLowerCase();
+
+  // Regular authored articles may own routes that also have descendants. Those
+  // articles are not category pages and must not gain generated navigation.
+  // Era landing pages are structural category hosts, so retain their established
+  // Subcategories / Pages in this category index.
+  if (existingEntry && existingType !== 'era') {
+    console.log(`Skipped generated category index for ${category.slug}; route belongs to ${existingEntry.data.type ?? 'article'} article ${path.relative(docsDir, existingEntry.file)}.`);
+    continue;
+  }
+
   const prefix = `${category.slug}/`;
   const descendants = entries
     .filter((entry) => entry.slug.startsWith(prefix));
@@ -187,7 +201,6 @@ for (const category of categoryList) {
       count: descendants.filter((entry) => entry.slug.startsWith(`${candidate.slug}/`)).length,
     }));
   const section = generatedCategorySection(descendants, childCategories);
-  const existingEntry = entryBySlug.get(category.slug);
 
   if (existingEntry) {
     const raw = await fs.readFile(existingEntry.file, 'utf8');
@@ -215,3 +228,6 @@ for (const category of categoryList) {
 }
 
 console.log(`Generated ${categoryList.length} category index page${categoryList.length === 1 ? '' : 's'}.`);
+}
+
+if (isMainModule(import.meta.url)) await generateCategoryPages();

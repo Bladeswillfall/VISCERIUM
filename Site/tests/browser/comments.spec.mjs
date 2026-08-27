@@ -5,18 +5,118 @@ const loader = 'https://comments.viscerium.co.uk/web/embed.js';
 const mockRemark42 = `
   window.__remarkCreates = window.__remarkCreates || 0;
   window.__remarkDestroys = window.__remarkDestroys || 0;
+  window.__remarkGlobalDestroys = window.__remarkGlobalDestroys || 0;
   window.__remarkThemes = window.__remarkThemes || [];
+  window.__remarkNodeMatches = false;
   window.REMARK42 = {
     createInstance(config) {
       window.__remarkCreates += 1;
       const root = document.querySelector('[data-remark42-root]');
+      window.__remarkNodeMatches = config.node === root;
       if (root) root.textContent = 'Mock comments ready';
       return { destroy() { window.__remarkDestroys += 1; } };
     },
-    changeTheme(theme) { window.__remarkThemes.push(theme); }
+    changeTheme(theme) { window.__remarkThemes.push(theme); },
+    destroy() { window.__remarkGlobalDestroys += 1; }
   };
   window.dispatchEvent(new Event('REMARK42::ready'));
 `;
+
+test('comments and webmentions sit below the complete article frame', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+
+  const discussions = page.locator('.codex-discussions');
+  const pageFrame = page.locator('.page');
+  const pagination = page.locator('.codex-pagination .pagination-links');
+  await expect(discussions).toBeVisible();
+  await expect(discussions.getByRole('heading', { level: 1, name: 'Discussions' })).toBeVisible();
+  await expect(discussions.locator('viscerium-comments')).toHaveCount(1);
+  await expect(discussions.locator('.codex-webmentions')).toHaveCount(1);
+  await expect(pagination).toHaveCount(1);
+  await expect(discussions.locator('.pagination-links')).toHaveCount(0);
+
+  const webmentionProvider = discussions.locator('.codex-webmentions__provider');
+  await expect(webmentionProvider).toHaveAttribute('href', 'https://webmention.io/');
+  await expect(webmentionProvider.locator('img')).toHaveAttribute('src', '/assets/services/webmention-io.webp');
+  const providerIdleOpacity = await webmentionProvider.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
+  expect(providerIdleOpacity).toBeLessThan(1);
+  await webmentionProvider.hover();
+  await expect.poll(() => webmentionProvider.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeGreaterThan(providerIdleOpacity);
+
+  await expect(page.locator('.codex-main-pane viscerium-comments')).toHaveCount(0);
+  await expect(page.locator('.codex-main-pane .codex-webmentions')).toHaveCount(0);
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'dark';
+  });
+  const darkDiscussionBackground = await discussions.evaluate((element) => getComputedStyle(element).backgroundColor);
+  const darkPageBackground = await pageFrame.evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(darkDiscussionBackground).not.toBe(darkPageBackground);
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+  });
+  const lightDiscussionBackground = await discussions.evaluate((element) => getComputedStyle(element).backgroundColor);
+  const lightPageBackground = await pageFrame.evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(lightDiscussionBackground).not.toBe(lightPageBackground);
+  expect(lightDiscussionBackground).not.toBe(darkDiscussionBackground);
+
+  const placement = await page.evaluate(() => {
+    const frame = document.querySelector('.page');
+    const pagination = document.querySelector('.codex-pagination');
+    const discussion = document.querySelector('.codex-discussions');
+    const footer = document.querySelector('.ion-codex-footer');
+    const sidebar = document.querySelector('.right-sidebar-container');
+    if (
+      !(frame instanceof HTMLElement)
+      || !(pagination instanceof HTMLElement)
+      || !(discussion instanceof HTMLElement)
+      || !(footer instanceof HTMLElement)
+      || !(sidebar instanceof HTMLElement)
+    ) return null;
+
+    const paginationInsideFrame = frame.contains(pagination);
+    const paginationPrecedesDiscussion = Boolean(
+      pagination.compareDocumentPosition(discussion) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+    const followsFrame = Boolean(
+      frame.compareDocumentPosition(discussion) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+    const precedesFooter = Boolean(
+      discussion.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+    const frameStyle = getComputedStyle(frame);
+    const discussionStyle = getComputedStyle(discussion);
+
+    return {
+      paginationInsideFrame,
+      paginationPrecedesDiscussion,
+      followsFrame,
+      precedesFooter,
+      discussionWidth: discussion.getBoundingClientRect().width,
+      viewportWidth: window.innerWidth,
+      discussionTop: discussion.getBoundingClientRect().top,
+      sidebarBottom: sidebar.getBoundingClientRect().bottom,
+      frameBottomLeftRadius: Number.parseFloat(frameStyle.borderBottomLeftRadius),
+      frameBottomRightRadius: Number.parseFloat(frameStyle.borderBottomRightRadius),
+      discussionBottomLeftRadius: Number.parseFloat(discussionStyle.borderBottomLeftRadius),
+      discussionBottomRightRadius: Number.parseFloat(discussionStyle.borderBottomRightRadius),
+    };
+  });
+
+  expect(placement).not.toBeNull();
+  expect(placement.paginationInsideFrame).toBe(true);
+  expect(placement.paginationPrecedesDiscussion).toBe(true);
+  expect(placement.followsFrame).toBe(true);
+  expect(placement.precedesFooter).toBe(true);
+  expect(Math.abs(placement.discussionWidth - placement.viewportWidth)).toBeLessThanOrEqual(2);
+  expect(placement.discussionTop).toBeGreaterThanOrEqual(placement.sidebarBottom - 24);
+  expect(placement.frameBottomLeftRadius).toBe(0);
+  expect(placement.frameBottomRightRadius).toBe(0);
+  expect(placement.discussionBottomLeftRadius).toBeGreaterThan(0);
+  expect(placement.discussionBottomRightRadius).toBeGreaterThan(0);
+});
 
 test('comments load near the viewport and clean up when their page is replaced', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 640 });
@@ -36,6 +136,7 @@ test('comments load near the viewport and clean up when their page is replaced',
   await expect.poll(() => requests).toBe(1);
   await expect(comments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
   await expect.poll(() => page.evaluate(() => window.__remarkCreates)).toBe(1);
+  await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 
   await page.evaluate(() => {
     document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
@@ -59,6 +160,7 @@ test('comments load immediately when IntersectionObserver is unavailable', async
   await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
   await expect.poll(() => requests).toBe(1);
   await expect(page.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
+  await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 });
 
 test('a failed comments load reports the problem and a later page can retry', async ({ page }) => {
@@ -85,4 +187,5 @@ test('a failed comments load reports the problem and a later page can retry', as
   await nextComments.scrollIntoViewIfNeeded();
   await expect.poll(() => attempts).toBe(2);
   await expect(nextComments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
+  await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 });

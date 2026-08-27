@@ -214,6 +214,7 @@ function addExplorationLinks(groups) {
   }
 }
 
+// eslint-disable-next-line complexity
 export async function buildSidebar() {
   try {
     const files = await walk(docsDir.pathname);

@@ -12,8 +12,9 @@ const webmentionPingbackEndpoint =
   (webmentionUsername ? `https://webmention.io/${webmentionUsername}/xmlrpc` : undefined);
 const webmentionMaxMentions = Number.parseInt(env.PUBLIC_WEBMENTIONS_MAX ?? '24', 10);
 const feedMaxItems = Number.parseInt(env.PUBLIC_FEED_MAX_ITEMS ?? '50', 10);
-const ga4MeasurementId = env.PUBLIC_GA4_MEASUREMENT_ID?.trim() ?? '';
 const cloudflareAnalyticsToken = env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN?.trim() ?? '';
+const rybbitHost = (env.PUBLIC_RYBBIT_HOST?.trim() || 'https://analytics.viscerium.co.uk').replace(/\/+$/, '');
+const rybbitSiteId = env.PUBLIC_RYBBIT_SITE_ID?.trim() ?? '';
 const commentsHost = (env.PUBLIC_COMMENTS_HOST?.trim() || 'https://comments.viscerium.co.uk').replace(/\/+$/, '');
 const commentsSiteId = env.PUBLIC_COMMENTS_SITE_ID?.trim() || 'viscerium';
 
@@ -38,6 +39,9 @@ export default {
   loreSourceDir: env.LORE_SOURCE_DIR ?? '../Vault/Lore',
   vaultAssetDir: '../Vault/Assets',
   githubRepoUrl: 'https://github.com/Bladeswillfall/VISCERIUM',
+  identity: {
+    githubProfileUrl: 'https://github.com/Bladeswillfall',
+  },
   feeds: {
     title: env.PUBLIC_FEED_TITLE ?? 'VISCERIUM Codex',
     description: env.PUBLIC_FEED_DESCRIPTION ?? 'Latest public canon updates from the VISCERIUM codex.',
@@ -45,7 +49,7 @@ export default {
     maxItems: Number.isFinite(feedMaxItems) ? feedMaxItems : 50,
   },
   webmentions: {
-    enabled: env.PUBLIC_WEBMENTIONS_ENABLED === '1' && Boolean(webmentionEndpoint),
+    enabled: env.PUBLIC_WEBMENTIONS_ENABLED !== '0' && Boolean(webmentionEndpoint),
     username: webmentionUsername,
     endpoint: webmentionEndpoint,
     pingbackEndpoint: webmentionPingbackEndpoint,
@@ -53,15 +57,19 @@ export default {
     maxMentions: Number.isFinite(webmentionMaxMentions) ? webmentionMaxMentions : 24,
   },
   analytics: {
-    ga4: {
-      enabled: env.PUBLIC_GA4_ENABLED === '1' && /^G-[A-Z0-9]{10}$/.test(ga4MeasurementId),
-      measurementId: ga4MeasurementId,
-    },
     cloudflare: {
       enabled:
         env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED === '1'
         && /^[a-f0-9]{32}$/i.test(cloudflareAnalyticsToken),
       token: cloudflareAnalyticsToken,
+    },
+    rybbit: {
+      enabled:
+        env.PUBLIC_RYBBIT_ENABLED === '1'
+        && isHttpsUrl(rybbitHost)
+        && Boolean(rybbitSiteId),
+      host: rybbitHost,
+      siteId: rybbitSiteId,
     },
   },
   searchVerification: {

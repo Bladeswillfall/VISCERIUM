@@ -4,12 +4,15 @@ import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { changelogsLoader } from 'starlight-changelogs/loader';
 import { starlightTagsExtension } from 'starlight-tags/schema';
+import { ENTITY_ID_PATTERN } from './lib/era-context.mjs';
 import { frontmatterDate } from './lib/frontmatter-date.mjs';
 import defaultTranslations from './content/i18n/en-GB.json';
 
 const stringOrStrings = z.union([z.string(), z.array(z.string())]);
 const eraValue = z.enum(['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY', 'Universal']);
 const eraOrEras = z.union([eraValue, z.array(eraValue)]);
+const entityIdSchema = z.string().regex(ENTITY_ID_PATTERN);
+const relationshipDateSchema = z.union([z.string(), z.number()]);
 const contentWarningValue = z.enum([
   'strong-language',
   'partial-nudity',
@@ -31,9 +34,101 @@ const contentWarningValue = z.enum([
   'discrimination',
 ]);
 const contentWarningsSchema = z.array(contentWarningValue);
-const looseRecord = z.record(z.unknown());
 const optionalString = z.string().nullable().optional();
 const optionalNumber = z.number().nullable().optional();
+const numericStringSchema = z.string().refine(
+  (value) => value.trim() !== '' && Number.isFinite(Number(value)),
+  { message: 'Expected a finite numeric string.' },
+);
+const optionalStringOrNumber = z.union([numericStringSchema, z.number().finite()]).nullable().optional();
+const continuitySchema = z.object({
+  entityId: entityIdSchema,
+  hub: z.string(),
+  editions: z.object({
+    CITADEL: z.string().optional(),
+    SMOG: z.string().optional(),
+    NEARSIGHT: z.string().optional(),
+    ENTROPY: z.string().optional(),
+    Universal: z.string().optional(),
+  }),
+});
+const relationshipObjectSchema = z.object({
+  target: z.string().optional(),
+  to: z.string().optional(),
+  ref: z.string().optional(),
+  article: z.string().optional(),
+  title: z.string().optional(),
+  label: z.string().optional(),
+  since: relationshipDateSchema.optional(),
+  until: relationshipDateSchema.optional(),
+  era: eraValue.optional(),
+  description: z.string().optional(),
+  note: z.string().optional(),
+  directed: z.boolean().optional(),
+}).passthrough().refine(
+  (entry) => [entry.target, entry.to, entry.ref, entry.article, entry.title]
+    .some((value) => typeof value === 'string' && value.trim().length > 0),
+  { message: 'Relationship metadata must include target, to, ref, article, or title.' },
+);
+const relationshipEntrySchema = z.union([z.string(), relationshipObjectSchema]);
+const relationshipValueSchema = z.union([relationshipEntrySchema, z.array(relationshipEntrySchema)]);
+const relationshipsSchema = z.record(relationshipValueSchema);
+const mapSchema = z.object({
+  id: optionalString,
+  x: optionalStringOrNumber,
+  y: optionalStringOrNumber,
+  marker: optionalString,
+  layer: z.union([z.string(), z.array(z.string())]).nullable().optional(),
+  minZoom: optionalStringOrNumber,
+  maxZoom: optionalStringOrNumber,
+}).passthrough();
+const sidebarScalarSchema = z.union([z.string(), z.number(), z.boolean()]);
+const sidebarValueSchema = z.union([sidebarScalarSchema, z.array(sidebarScalarSchema)]);
+const sidebarFieldObjectSchema = z.object({
+  label: optionalString,
+  title: optionalString,
+  name: optionalString,
+  value: sidebarValueSchema.nullable().optional(),
+  text: sidebarValueSchema.nullable().optional(),
+  href: optionalString,
+}).passthrough();
+const sidebarFieldSchema = z.union([
+  z.tuple([sidebarValueSchema, sidebarValueSchema]),
+  sidebarFieldObjectSchema,
+]);
+const sidebarItemSchema = z.union([
+  z.string(),
+  z.object({
+    label: optionalString,
+    title: optionalString,
+    name: optionalString,
+    value: sidebarScalarSchema.nullable().optional(),
+    href: optionalString,
+  }).passthrough(),
+]);
+const sidebarSectionSchema = z.object({
+  title: optionalString,
+  label: optionalString,
+  fields: z.array(sidebarFieldSchema).optional(),
+  items: z.array(sidebarItemSchema).optional(),
+  note: optionalString,
+  description: optionalString,
+}).passthrough();
+const sidebarBadgeSchema = z.union([
+  z.string(),
+  z.object({
+    text: z.string(),
+    variant: z.string().optional(),
+  }).passthrough(),
+]);
+const sidebarSchema = z.object({
+  label: optionalString,
+  order: optionalNumber,
+  badge: sidebarBadgeSchema.nullable().optional(),
+  replaceMeta: z.boolean().optional(),
+  meta: z.array(sidebarFieldSchema).optional(),
+  sections: z.array(sidebarSectionSchema).optional(),
+}).passthrough();
 const navigationSchema = z.object({
   section: z.enum([
     'relationships',
@@ -136,8 +231,8 @@ export const collections = {
         titleIcon: optionalString,
         eraStyle: optionalString,
         eraId: optionalString,
-        entity_id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
-        continuity: looseRecord.optional(),
+        entity_id: entityIdSchema.optional(),
+        continuity: continuitySchema.optional(),
         navigation: navigationSchema.optional(),
         calendarDate: calendarDateSchema.optional(),
         calendarEndDate: calendarDateSchema.nullable().optional(),
@@ -190,12 +285,13 @@ export const collections = {
         mapId: optionalString,
         width: optionalNumber,
         height: optionalNumber,
-        map: looseRecord.optional(),
-        relationships: looseRecord.optional(),
-        sidebar: looseRecord.optional(),
+        map: mapSchema.optional(),
+        relationships: relationshipsSchema.optional(),
+        sidebar: sidebarSchema.optional(),
         related: z.array(z.string()).optional(),
         links: z.array(z.string()).optional(),
         referencedIn: z.array(referencedInSchema).optional(),
+        references: z.array(referencedInSchema).optional(),
       }),
     }),
   }),

@@ -80,6 +80,7 @@ function renderTemplate(dataset, options, instanceId) {
     </section>`;
 }
 
+// eslint-disable-next-line complexity
 export function mountTimeline(root, dataset, suppliedOptions = {}) {
   if (!root) throw new Error('Timeline mount root is required.');
   if (!dataset?.id || !Array.isArray(dataset.events) || !Array.isArray(dataset.eras)) {

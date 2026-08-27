@@ -397,26 +397,33 @@ Do not activate a placeholder.
 
 Set `SITE_URL` to the production canonical domain before deployment.
 
-### Partytown
-
-`@astrojs/partytown` is configured in `Site/astro.config.mjs`.
-
-It forwards `dataLayer.push` for a future GA4 or GTM-style integration.
-
 ### Analytics
 
-GA4 and Cloudflare Web Analytics are disabled by default.
+Cloudflare Web Analytics and Rybbit are disabled by default.
 
 Use these environment variables when real public identifiers are available:
 
 ```bash
-PUBLIC_GA4_ENABLED=0
-PUBLIC_GA4_MEASUREMENT_ID=
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED=0
 PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN=
+PUBLIC_RYBBIT_ENABLED=0
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=
 ```
 
-Enable an analytics path only when its enable flag and identifier are both valid.
+Enable an analytics path only when its required public values are valid.
+
+Use these production values for the self-hosted Rybbit site:
+
+```bash
+PUBLIC_RYBBIT_ENABLED=1
+PUBLIC_RYBBIT_HOST=https://analytics.viscerium.co.uk
+PUBLIC_RYBBIT_SITE_ID=d863318efa2f
+```
+
+Keep Rybbit disabled on preview deployments unless preview traffic should count in production analytics.
+
+Use the custom reading-funnel event names documented in `CLOUDFLARE_PAGES_SETUP.md` when creating Rybbit goals or funnels.
 
 Do not enable Cloudflare automatic Web Analytics injection and the repository-managed snippet together.
 

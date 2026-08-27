@@ -2,13 +2,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import starlightTags from 'starlight-tags';
-import starlightTelescope from 'starlight-telescope';
 import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
 import { buildSidebar } from './sidebar.mjs';
 import siteConfig from './site.config.mjs';
@@ -64,6 +62,18 @@ const fontHead = [
     },
   },
 ];
+
+const identityHead = siteConfig.identity?.githubProfileUrl
+  ? [
+      {
+        tag: 'link',
+        attrs: {
+          rel: 'me authn',
+          href: siteConfig.identity.githubProfileUrl,
+        },
+      },
+    ]
+  : [];
 
 const webmentionHead = siteConfig.webmentions?.enabled
   ? [
@@ -130,42 +140,6 @@ const faviconHead = [
   },
 ];
 
-const ga4MeasurementId = siteConfig.analytics?.ga4?.measurementId ?? '';
-const ga4Enabled = siteConfig.analytics?.ga4?.enabled === true;
-const ga4Head = ga4Enabled
-  ? [
-      {
-        tag: 'script',
-        attrs: {
-          type: 'text/partytown',
-          async: true,
-          src: `https://www.googletagmanager.com/gtag/js?id=${ga4MeasurementId}`,
-        },
-      },
-      {
-        tag: 'script',
-        attrs: {
-          type: 'text/partytown',
-          id: 'ga4-init',
-          'data-ga4-measurement-id': ga4MeasurementId,
-        },
-        content: `
-          const measurementId = document
-            .getElementById('ga4-init')
-            .getAttribute('data-ga4-measurement-id');
-
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            dataLayer.push(arguments);
-          }
-
-          gtag('js', new Date());
-          gtag('config', measurementId);
-        `,
-      },
-    ]
-  : [];
-
 const cloudflareAnalyticsToken = siteConfig.analytics?.cloudflare?.token ?? '';
 const cloudflareAnalyticsHead = siteConfig.analytics?.cloudflare?.enabled
   ? [
@@ -174,6 +148,20 @@ const cloudflareAnalyticsHead = siteConfig.analytics?.cloudflare?.enabled
         attrs: {
           type: 'module',
           src: `https://static.cloudflareinsights.com/beacon.min.js?token=${encodeURIComponent(cloudflareAnalyticsToken)}`,
+        },
+      },
+    ]
+  : [];
+
+const rybbitAnalyticsHead = siteConfig.analytics?.rybbit?.enabled
+  ? [
+      {
+        tag: 'script',
+        attrs: {
+          src: `${siteConfig.analytics.rybbit.host}/api/script.js`,
+          'data-site-id': siteConfig.analytics.rybbit.siteId,
+          defer: true,
+          fetchpriority: 'low',
         },
       },
     ]
@@ -204,8 +192,6 @@ const readerPreferencesHead = [
     `,
   },
 ];
-
-const { enabled: commentsEnabled } = siteConfig.comments;
 
 const sidebar = [
   ...(await buildSidebar()),
@@ -249,13 +235,11 @@ export default defineConfig({
         './src/styles/ion-theme.css',
         './src/styles/ion-expressive-code.css',
         './src/styles/typography.css',
-        './src/styles/article-pages.css',
         './src/styles/layout.css',
         './src/styles/codex-ui.css',
         './src/styles/header-controls.css',
         './src/styles/reader-settings.css',
         './src/styles/navigation.css',
-        './src/styles/category-index.css',
         './src/styles/a11y.css',
         './src/styles/era-styles.css',
       ],
@@ -266,8 +250,8 @@ export default defineConfig({
         PageFrame: './src/components/CodexPageFrame.astro',
         PageSidebar: './src/components/CodexPageSidebar.astro',
         PageTitle: './src/components/CodexPageTitle.astro',
+        MarkdownContent: './src/components/CodexMarkdownContent.astro',
         TwoColumnContent: './src/components/CodexTwoColumnContent.astro',
-        ...(commentsEnabled ? { Pagination: './src/components/CommentsPagination.astro' } : {}),
       },
       editLink: {
         baseUrl: `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/`,
@@ -276,18 +260,9 @@ export default defineConfig({
         starlightTags({ onInlineTagsNotFound: 'create' }),
         starlightChangelogs(),
         starlightScrollToTop(),
-        starlightTelescope({
-          shortcut: {
-            key: 'k',
-            ctrl: true,
-            meta: true,
-            shift: false,
-            alt: false,
-          },
-        }),
       ],
       sidebar,
-      head: [...feedHead, ...fontHead, ...webmentionHead, ...faviconHead, ...ga4Head, ...cloudflareAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
+      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
       social: [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }],
     }),
     sitemap({
@@ -298,14 +273,5 @@ export default defineConfig({
       },
     }),
     mdx(),
-    ...(ga4Enabled
-      ? [
-          partytown({
-            config: {
-              forward: ['dataLayer.push'],
-            },
-          }),
-        ]
-      : []),
   ],
 });

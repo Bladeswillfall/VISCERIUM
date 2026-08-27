@@ -12,6 +12,7 @@ import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';
 import { resolveGiscusForPage } from '../src/lib/page-kind.mjs';
 import { stringifyGeneratedFrontmatter } from './sync-frontmatter.mjs';
+import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
 const sourceDir = path.resolve(siteRoot, siteConfig.loreSourceDir);
@@ -123,6 +124,8 @@ async function emptyDir(dir) {
   await fs.mkdir(dir, { recursive: true });
 }
 
+// eslint-disable-next-line complexity
+export async function syncPublicNotes() {
 const files = (await walk(sourceDir)).filter((file) => /\.(md|mdx)$/i.test(file)).sort();
 const publicNotes = [];
 const targetIndex = new Map();
@@ -480,3 +483,6 @@ if (warnings.length > 0) {
   console.warn('\nSync warnings:');
   for (const warning of warnings) console.warn(`- ${warning}`);
 }
+}
+
+if (isMainModule(import.meta.url)) await syncPublicNotes();

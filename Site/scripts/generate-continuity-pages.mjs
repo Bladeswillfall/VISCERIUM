@@ -4,6 +4,7 @@ import process from 'node:process';
 import matter from 'gray-matter';
 import { HISTORICAL_ERAS, continuityHubRoute, normaliseEra, validEntityId } from '../src/lib/era-context.mjs';
 import { cleanSlug, slugToRoute, toPosixPath } from '../src/lib/codex-paths.mjs';
+import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
 const docsDir = process.env.VISCERIUM_DOCS_DIR
@@ -60,6 +61,7 @@ function renderHubBody(title, editions) {
   return lines.join('\n').trimEnd() + '\n';
 }
 
+export async function generateContinuityPages() {
 const files = (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: docsDir })))
   .map((file) => path.resolve(docsDir, file))
   .sort();
@@ -110,3 +112,6 @@ for (const [entityId, rawEditions] of families.entries()) {
 }
 
 console.log(`Generated ${families.size} continuity hub${families.size === 1 ? '' : 's'}.`);
+}
+
+if (isMainModule(import.meta.url)) await generateContinuityPages();
