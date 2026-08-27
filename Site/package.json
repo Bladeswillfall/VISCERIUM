@@ -59,9 +59,9 @@
     "leaflet": "1.9.4",
     "leaflet.control.layers.tree": "1.2.0",
     "starlight-changelogs": "^0.6.0",
-    "starlight-scroll-to-top": "^1.0.1",
-    "starlight-tags": "^1.0.1",
-    "starlight-telescope": "^1.0.0",
+    "starlight-scroll-to-top": "^2.0.0",
+    "starlight-tags": "^2.0.0",
+    "starlight-telescope": "^2.0.0",
     "vis-timeline": "8.5.1"
   },
   "engines": {
