@@ -12,7 +12,7 @@ sidebar:
 title: "Republic of Askalia"
 description: "The golden nation of Askalia is the pinacle of trade in Errack."
 updated:
-status: "draft"
+status: "published"
 type: "faction"
 development_level: "stub"
 era: "CITADEL"
