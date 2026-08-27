@@ -1,0 +1,48 @@
+name: Temporary PR 104 ESLint lock migration
+
+on:
+  push:
+    branches:
+      - scratch/pr104-eslint-lock
+
+permissions:
+  contents: write
+
+jobs:
+  lock-eslint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: true
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Use repository npm version
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - name: Lock ESLint
+        working-directory: Site
+        run: npm install --save-dev --save-exact --ignore-scripts --no-audit --no-fund eslint@10.9.0
+
+      - name: Verify locked complexity guard
+        working-directory: Site
+        run: npm run baseline:check
+
+      - name: Commit generated lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Site/package.json Site/package-lock.json Site/scripts/check-complexity.mjs
+          if git diff --cached --quiet; then
+            echo "No generated changes."
+            exit 0
+          fi
+          git commit -m "build: lock ESLint for complexity guard"
+          git push origin HEAD:scratch/pr104-eslint-lock
