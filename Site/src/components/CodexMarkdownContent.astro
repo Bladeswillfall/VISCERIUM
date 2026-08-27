@@ -1,0 +1,11 @@
+---
+import '@astrojs/starlight/style/markdown.css';
+import { classifyCodexPage } from '../lib/page-kind.mjs';
+
+const { starlightRoute } = Astro.locals;
+const entry = starlightRoute.entry.data;
+const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
+const isIndieWebEntry = entry.status === 'published' && pageKind.isStandardArticle;
+---
+
+<div class:list={['sl-markdown-content', isIndieWebEntry && 'e-content']}><slot /></div>
