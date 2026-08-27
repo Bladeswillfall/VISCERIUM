@@ -7,7 +7,10 @@ test('published canon articles expose IndieWeb microformats', async ({ page }) =
 
   const entry = page.locator('.codex-two-column-content.h-entry');
   await expect(entry).toHaveCount(1);
-  await expect(entry.locator('.e-content')).toHaveCount(1);
+
+  const content = entry.locator('.sl-markdown-content.e-content');
+  await expect(content).toHaveCount(1);
+  await expect(content.locator('.right-sidebar-container')).toHaveCount(0);
   await expect(entry.locator('.p-name')).toHaveText('Errack');
   await expect(entry.locator('.u-url')).toHaveAttribute(
     'href',
