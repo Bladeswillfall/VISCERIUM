@@ -66,6 +66,7 @@ function writeJson(response, status, value) {
   response.end(JSON.stringify(value));
 }
 
+// eslint-disable-next-line complexity
 function publicGatewayMessage(error) {
   const exact = fixedPublicMessages.get(error.code);
   if (exact) return exact;
