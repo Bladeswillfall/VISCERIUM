@@ -94,6 +94,7 @@
     "fsevents@2.3.3": true
   },
   "devDependencies": {
-    "@playwright/test": "1.62.1"
+    "@playwright/test": "1.62.1",
+    "eslint": "10.9.0"
   }
 }
