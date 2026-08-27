@@ -1,4 +1,4 @@
-name: Temporary PR 104 ESLint lock migration
+name: Temporary PR 104 notice migration
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  lock-eslint:
+  notices:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -27,22 +27,44 @@ jobs:
           npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
           test "$(npm --version)" = "11.18.0"
 
-      - name: Lock ESLint
+      - name: Install locked dependencies
         working-directory: Site
-        run: npm install --save-dev --save-exact --ignore-scripts --no-audit --no-fund eslint@10.9.0
+        run: npm ci --silent --no-audit --no-fund
 
-      - name: Verify locked complexity guard
+      - name: Update managed notices
         working-directory: Site
-        run: npm run baseline:check
+        run: npm run notices:update
 
-      - name: Commit generated lockfile
+      - name: Add ESLint human attribution
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const file = 'THIRD_PARTY_NOTICES.md';
+          let text = fs.readFileSync(file, 'utf8');
+          const row = '| [ESLint](https://github.com/eslint/eslint) (`eslint`) | Cyclomatic-complexity checks for repository JavaScript | MIT |';
+          if (!text.includes(row)) {
+            const anchor = '| [Playwright](https://github.com/microsoft/playwright) (`@playwright/test`) | Browser and interface testing | Apache-2.0 |';
+            if (!text.includes(anchor)) throw new Error('Playwright attribution anchor not found');
+            text = text.replace(anchor, `${anchor}\n${row}`);
+            fs.writeFileSync(file, text);
+          }
+          NODE
+
+      - name: Verify notices
+        working-directory: Site
+        run: |
+          npm run notices:check
+          node --test tests/third-party-notices.test.mjs
+
+      - name: Commit notice update
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Site/package.json Site/package-lock.json Site/scripts/check-complexity.mjs
+          git add THIRD_PARTY_NOTICES.md
           if git diff --cached --quiet; then
-            echo "No generated changes."
+            echo "No notice changes."
             exit 0
           fi
-          git commit -m "build: lock ESLint for complexity guard"
+          git commit -m "docs: attribute ESLint dependency"
           git push origin HEAD:scratch/pr104-eslint-lock
