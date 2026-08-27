@@ -14,7 +14,7 @@ sidebar:
 title: "Kingdom of Satol"
 description: "The Kingdom of Satol is extremely fertile, brimming with farmland and lush forests alike."
 updated:
-status: "draft"
+status: "published"
 type: "faction"
 development_level: "stub"
 era: "CITADEL"
