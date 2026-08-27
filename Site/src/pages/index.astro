@@ -1,20 +1,7 @@
 ---
-import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import HomeGateway from '../components/home/HomeGateway.astro';
-import timelineManifest from '../data/timelines/manifest.json';
 import homepageStyles from '../styles/homepage.css?raw';
-
-const canonEntries = await getCollection('docs', ({ data }) => (
-  data.status === 'published'
-  && data.type !== 'category'
-));
-const globalTimelines = timelineManifest.timelines.filter(({ id }) => id === 'super');
-const homepageStats = {
-  canonEntryCount: canonEntries.length,
-  mappedEventCount: globalTimelines.reduce((total, timeline) => total + timeline.eventCount, 0),
-  unbrokenTimelineCount: globalTimelines.length,
-};
 ---
 
 <StarlightPage
@@ -28,7 +15,7 @@ const homepageStats = {
   }}
   hasSidebar={true}
 >
-  <HomeGateway {...homepageStats} />
+  <HomeGateway />
 </StarlightPage>
 
 <style is:global>
@@ -52,39 +39,81 @@ const homepageStats = {
     padding: 0 !important;
   }
 
+  #home-routes,
+  #home-continuum {
+    padding-block: clamp(4.5rem, 8vw, 8rem);
+  }
+
+  #home-continuum {
+    border-block-start: 1px solid var(--home-line);
+  }
+
   @media (max-width: 68.75rem) {
-    #home-continuum,
-    #home-statistics,
     #home-routes,
-    .home-final-cta {
+    #home-continuum {
       content-visibility: auto;
-      contain-intrinsic-block-size: auto 48rem;
+      contain-intrinsic-block-size: auto 40rem;
     }
 
     .home-era-card :is(.home-era-card__number, .home-era-card__action) {
       color: color-mix(in oklch, var(--home-era-accent) 80%, var(--home-text-fixed));
-    }
-
-    .home-tech-era--citadel .home-tech-era__index {
-      color: var(--era-e1-accent);
-    }
-
-    .home-tech-era--smog .home-tech-era__index {
-      color: var(--era-e2-accent);
-    }
-
-    .home-tech-era--nearsight .home-tech-era__index {
-      color: var(--era-e3-accent);
-    }
-
-    .home-tech-era--entropy .home-tech-era__index {
-      color: var(--era-e4-accent);
     }
   }
 
   @media (max-width: 44rem) {
     .home-hero__copy {
       filter: none;
+    }
+
+    .home-era-scroll-hint {
+      display: none;
+    }
+
+    .home-era-gateway {
+      grid-auto-flow: row;
+      grid-auto-columns: unset;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .65rem;
+      padding: 0 1rem 1rem;
+      overflow: visible;
+      scroll-padding-inline: 0;
+      scroll-snap-type: none;
+      scrollbar-width: auto;
+    }
+
+    .home-era-gateway > li {
+      scroll-snap-align: none;
+      scroll-snap-stop: normal;
+    }
+
+    .home-era-card,
+    .home-era-gateway > li:last-child .home-era-card {
+      min-height: 15rem;
+      padding: .9rem;
+    }
+
+    .home-era-card h2 {
+      font-size: clamp(1.35rem, 7vw, 2rem);
+    }
+
+    .home-era-card__tags {
+      font-size: .6rem;
+      letter-spacing: .08em;
+    }
+
+    .home-era-card__description {
+      display: none;
+    }
+
+    .home-era-card__action {
+      min-height: 0;
+      margin-block-start: .55rem;
+      font-size: .62rem;
+      letter-spacing: .08em;
+    }
+
+    .home-route-card {
+      min-height: 14rem;
     }
   }
 
