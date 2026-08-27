@@ -41,145 +41,151 @@ function eraValues(value) {
   return Array.isArray(value) ? value : [value];
 }
 
-export function validateVaultNotes(manifest) {
-  let failed = false;
+function validateIcon(spec, label, file, fail) {
+  if (spec === undefined || spec === null || spec === '') return;
+  if (typeof spec !== 'string' || !parseIconSpec(spec)) {
+    fail(`Invalid ${label} icon specification in ${relative(file)}: ${JSON.stringify(spec)}`);
+  }
+}
 
-  function fail(message) {
-    console.error(message);
-    failed = true;
+function validateActiveContent(content, file, fail) {
+  const surface = executableSurface(content);
+  if (forbiddenActiveTag.test(surface)) {
+    fail(`Published note contains a forbidden active HTML tag: ${relative(file)}`);
+  }
+  if (inlineEventHandler.test(surface)) {
+    fail(`Published note contains an inline HTML event handler: ${relative(file)}`);
+  }
+  if (unsafeUrlScheme.test(surface)) {
+    fail(`Published note contains a javascript: or data:text/html URL: ${relative(file)}`);
+  }
+  if (remoteMdxModule.test(surface) || remoteDynamicImport.test(surface)) {
+    fail(`Published note imports executable MDX code from a remote URL: ${relative(file)}`);
+  }
+}
+
+function validateEraPrimerSource(content, data, file, fail) {
+  const matches = [...String(content ?? '').matchAll(eraPrimerShortcode)];
+  eraPrimerShortcode.lastIndex = 0;
+
+  if (matches.length === 0) {
+    if (data.eraPrimer !== undefined) {
+      fail(`Lore note has eraPrimer data but no [EraPrimer:id] shortcode: ${relative(file)}`);
+    }
+    return;
   }
 
-  function validateIcon(spec, label, file) {
-    if (spec === undefined || spec === null || spec === '') return;
-    if (typeof spec !== 'string' || !parseIconSpec(spec)) {
-      fail(`Invalid ${label} icon specification in ${relative(file)}: ${JSON.stringify(spec)}`);
-    }
+  if (matches.length > 1) {
+    fail(`Lore note contains more than one era primer shortcode: ${relative(file)}`);
+    return;
   }
 
-  function validateActiveContent(content, file) {
-    const surface = executableSurface(content);
-    if (forbiddenActiveTag.test(surface)) {
-      fail(`Published note contains a forbidden active HTML tag: ${relative(file)}`);
-    }
-    if (inlineEventHandler.test(surface)) {
-      fail(`Published note contains an inline HTML event handler: ${relative(file)}`);
-    }
-    if (unsafeUrlScheme.test(surface)) {
-      fail(`Published note contains a javascript: or data:text/html URL: ${relative(file)}`);
-    }
-    if (remoteMdxModule.test(surface) || remoteDynamicImport.test(surface)) {
-      fail(`Published note imports executable MDX code from a remote URL: ${relative(file)}`);
-    }
+  const eraId = matches[0][1].trim().toLowerCase();
+  const errors = validateEraPrimerData(data.eraPrimer, eraId);
+  for (const error of errors) {
+    fail(`Invalid Vault-owned era primer in ${relative(file)}: ${error}`);
   }
+}
 
-  function validateEraPrimerSource(content, data, file) {
-    const matches = [...String(content ?? '').matchAll(eraPrimerShortcode)];
-    eraPrimerShortcode.lastIndex = 0;
-
-    if (matches.length === 0) {
-      if (data.eraPrimer !== undefined) {
-        fail(`Lore note has eraPrimer data but no [EraPrimer:id] shortcode: ${relative(file)}`);
-      }
-      return;
-    }
-
-    if (matches.length > 1) {
-      fail(`Lore note contains more than one era primer shortcode: ${relative(file)}`);
-      return;
-    }
-
-    const eraId = matches[0][1].trim().toLowerCase();
-    const errors = validateEraPrimerData(data.eraPrimer, eraId);
-    for (const error of errors) {
-      fail(`Invalid Vault-owned era primer in ${relative(file)}: ${error}`);
-    }
-  }
-
-  for (const { file, relativePath, data, content } of manifest.records) {
-    if (Object.hasOwn(data, 'publish')) {
-      fail(`Lore note uses retired frontmatter "publish"; remove it and use status: published when public: ${relative(file)}`);
-    }
-    if (data.status === 'canon') {
-      fail(`Lore note uses retired status: canon; use status: published when public: ${relative(file)}`);
-      continue;
-    }
-
-    for (const [field, value] of [['era', data.era], ['eras', data.eras]]) {
-      for (const rawEra of eraValues(value)) {
-        if (!normaliseEra(rawEra)) {
-          fail(`Invalid ${field} value in ${relative(file)}: ${JSON.stringify(rawEra)}. Allowed values: ${ERA_VALUES.join(', ')}.`);
-        }
+function validateControlledEraFields(data, file, fail) {
+  for (const [field, value] of [['era', data.era], ['eras', data.eras]]) {
+    for (const rawEra of eraValues(value)) {
+      if (!normaliseEra(rawEra)) {
+        fail(`Invalid ${field} value in ${relative(file)}: ${JSON.stringify(rawEra)}. Allowed values: ${ERA_VALUES.join(', ')}.`);
       }
     }
+  }
+}
 
-    if (data.entity_id !== undefined && data.entity_id !== null && data.entity_id !== '') {
-      if (!validEntityId(data.entity_id)) {
-        fail(`Invalid entity_id in ${relative(file)}: ${JSON.stringify(data.entity_id)}. Use stable lowercase kebab-case such as "okse-dominion-a".`);
-      }
-    }
-
-    const folderEra = eraFromPath(relativePath ?? file);
-    const declaredEra = normaliseEra(Array.isArray(data.era) ? data.era[0] : data.era);
-    if (folderEra && declaredEra && folderEra !== declaredEra) {
-      fail(`Era mismatch in ${relative(file)}: folder implies ${folderEra} but frontmatter declares ${declaredEra}.`);
-    }
-
-    const effectiveEra = pageEra(data, relativePath ?? file);
-    if (data.type === 'event' && effectiveEra === 'Universal') {
-      fail(`Events are chronological and cannot use era: Universal: ${relative(file)}`);
-    }
-
-    if (data.status !== 'published') continue;
-
-    for (const reference of findInvalidFrontmatterReferences(data)) {
-      fail(`Invalid frontmatter ${reference.kind} reference "${reference.field}" in ${relative(file)}: ${JSON.stringify(reference.value)}`);
-    }
-
-    if (migrationReviewScaffolding.test(content)) {
-      fail(`Published note contains World Anvil migration review scaffolding: ${relative(file)}`);
-    }
-    if (draftInboxWikilink.test(content)) {
-      fail(`Published note links to Drafts/Inbox; publish the target or leave the term unlinked: ${relative(file)}`);
-    }
-
-    validateEraPrimerSource(content, data, file);
-
-    if (data.entity_id && Object.hasOwn(data, 'eras')) {
-      fail(`Published continuity edition uses transitional "eras" metadata; choose one scalar era/Universal scope or create separate era editions: ${relative(file)}`);
-    }
-    if (data.entity_id && Array.isArray(data.era)) {
-      fail(`Published continuity edition uses an era array; editions require one scalar era/Universal value: ${relative(file)}`);
-    }
-
-    if (Object.hasOwn(data, 'slug')) {
-      fail(`Published note routes are derived from file paths; remove frontmatter "slug": ${relative(file)}`);
-    }
-
-    for (const field of requiredPublicFields) {
-      if (!data[field]) fail(`Published note is missing required frontmatter "${field}": ${relative(file)}`);
-    }
-
-    for (const field of iconFields) validateIcon(data[field], `frontmatter "${field}"`, file);
-
-    for (const match of content.matchAll(/^\s{0,3}#{1,6}\s+\[icon:([^\]]+)\]/gim)) {
-      validateIcon(match[1], 'heading shortcode', file);
-    }
-
-    if (data.entity_id && !effectiveEra) {
-      fail(`Published continuity edition has entity_id but no controlled era: ${relative(file)}`);
-    }
-    if (data.entity_id && effectiveEra && effectiveEra !== 'Universal' && folderEra !== effectiveEra) {
-      fail(`Published ${effectiveEra} continuity edition must live beneath Lore/Eras/${effectiveEra}/ so its public route remains inside that era context: ${relative(file)}`);
-    }
-    if (data.entity_id && effectiveEra === 'Universal' && !String(relativePath ?? '').replace(/\\/g, '/').toLowerCase().startsWith('universal/')) {
-      fail(`Published Universal continuity edition must live beneath Lore/Universal/ so it is available from every era without masquerading as a historical edition: ${relative(file)}`);
-    }
-
-    validateActiveContent(content, file);
+function validatePublishedMetadata({ file, data, content }, fail) {
+  for (const reference of findInvalidFrontmatterReferences(data)) {
+    fail(`Invalid frontmatter ${reference.kind} reference "${reference.field}" in ${relative(file)}: ${JSON.stringify(reference.value)}`);
   }
 
-  const published = manifest.records.filter((record) => record.data?.status === 'published');
+  if (migrationReviewScaffolding.test(content)) {
+    fail(`Published note contains World Anvil migration review scaffolding: ${relative(file)}`);
+  }
+  if (draftInboxWikilink.test(content)) {
+    fail(`Published note links to Drafts/Inbox; publish the target or leave the term unlinked: ${relative(file)}`);
+  }
+
+  validateEraPrimerSource(content, data, file, fail);
+
+  if (data.entity_id && Object.hasOwn(data, 'eras')) {
+    fail(`Published continuity edition uses transitional "eras" metadata; choose one scalar era/Universal scope or create separate era editions: ${relative(file)}`);
+  }
+  if (data.entity_id && Array.isArray(data.era)) {
+    fail(`Published continuity edition uses an era array; editions require one scalar era/Universal value: ${relative(file)}`);
+  }
+  if (Object.hasOwn(data, 'slug')) {
+    fail(`Published note routes are derived from file paths; remove frontmatter "slug": ${relative(file)}`);
+  }
+
+  for (const field of requiredPublicFields) {
+    if (!data[field]) fail(`Published note is missing required frontmatter "${field}": ${relative(file)}`);
+  }
+  for (const field of iconFields) {
+    validateIcon(data[field], `frontmatter "${field}"`, file, fail);
+  }
+  for (const match of content.matchAll(/^\s{0,3}#{1,6}\s+\[icon:([^\]]+)\]/gim)) {
+    validateIcon(match[1], 'heading shortcode', file, fail);
+  }
+}
+
+function validatePublishedContinuity({ file, relativePath, data }, folderEra, effectiveEra, fail) {
+  if (data.entity_id && !effectiveEra) {
+    fail(`Published continuity edition has entity_id but no controlled era: ${relative(file)}`);
+  }
+  if (data.entity_id && effectiveEra && effectiveEra !== 'Universal' && folderEra !== effectiveEra) {
+    fail(`Published ${effectiveEra} continuity edition must live beneath Lore/Eras/${effectiveEra}/ so its public route remains inside that era context: ${relative(file)}`);
+  }
+  if (
+    data.entity_id
+    && effectiveEra === 'Universal'
+    && !String(relativePath ?? '').replace(/\\/g, '/').toLowerCase().startsWith('universal/')
+  ) {
+    fail(`Published Universal continuity edition must live beneath Lore/Universal/ so it is available from every era without masquerading as a historical edition: ${relative(file)}`);
+  }
+}
+
+function validateRecord(record, fail) {
+  const { file, relativePath, data, content } = record;
+
+  if (Object.hasOwn(data, 'publish')) {
+    fail(`Lore note uses retired frontmatter "publish"; remove it and use status: published when public: ${relative(file)}`);
+  }
+  if (data.status === 'canon') {
+    fail(`Lore note uses retired status: canon; use status: published when public: ${relative(file)}`);
+    return;
+  }
+
+  validateControlledEraFields(data, file, fail);
+
+  if (data.entity_id !== undefined && data.entity_id !== null && data.entity_id !== '' && !validEntityId(data.entity_id)) {
+    fail(`Invalid entity_id in ${relative(file)}: ${JSON.stringify(data.entity_id)}. Use stable lowercase kebab-case such as "okse-dominion-a".`);
+  }
+
+  const folderEra = eraFromPath(relativePath ?? file);
+  const declaredEra = normaliseEra(Array.isArray(data.era) ? data.era[0] : data.era);
+  if (folderEra && declaredEra && folderEra !== declaredEra) {
+    fail(`Era mismatch in ${relative(file)}: folder implies ${folderEra} but frontmatter declares ${declaredEra}.`);
+  }
+
+  const effectiveEra = pageEra(data, relativePath ?? file);
+  if (data.type === 'event' && effectiveEra === 'Universal') {
+    fail(`Events are chronological and cannot use era: Universal: ${relative(file)}`);
+  }
+  if (data.status !== 'published') return;
+
+  validatePublishedMetadata(record, fail);
+  validatePublishedContinuity(record, folderEra, effectiveEra, fail);
+  validateActiveContent(content, file, fail);
+}
+
+function validateContinuityFamilies(records, fail) {
+  const published = records.filter((record) => record.data?.status === 'published');
   const families = buildContinuityFamilies(published);
+
   for (const family of families.values()) {
     const types = [...new Set(family.records.map((record) => record.data?.type).filter(Boolean))];
     if (types.length > 1) {
@@ -191,11 +197,25 @@ export function validateVaultNotes(manifest) {
       fail(`Continuity family "${family.entity_id}" mixes Universal with historical editions. Use the generated entity hub instead of an authored Universal parent.`);
     }
 
-    for (const [era, records] of family.editions.entries()) {
-      if (records.length <= 1) continue;
-      fail(`Continuity family "${family.entity_id}" has ${records.length} published ${era} editions: ${records.map((record) => relative(record.file)).join(', ')}`);
+    for (const [era, familyRecords] of family.editions.entries()) {
+      if (familyRecords.length <= 1) continue;
+      fail(`Continuity family "${family.entity_id}" has ${familyRecords.length} published ${era} editions: ${familyRecords.map((record) => relative(record.file)).join(', ')}`);
     }
   }
+}
+
+export function validateVaultNotes(manifest) {
+  let failed = false;
+
+  function fail(message) {
+    console.error(message);
+    failed = true;
+  }
+
+  for (const record of manifest.records) {
+    validateRecord(record, fail);
+  }
+  validateContinuityFamilies(manifest.records, fail);
 
   if (!failed) console.log(`Validated ${manifest.records.length} vault source note(s).`);
   return !failed;
