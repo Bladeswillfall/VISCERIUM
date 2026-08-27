@@ -8,6 +8,7 @@ test.describe('desktop sidebar editorial hierarchy', () => {
   test('uses Cinzel selectively, a 14px depth step, and larger structural icons', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
 
+    // eslint-disable-next-line complexity
     const geometry = await page.evaluate(() => {
       const sidebar = document.querySelector('#starlight__sidebar');
       const rootRow = document.querySelector('[data-sidebar-row="Degel System"] > details > summary');
