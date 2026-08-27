@@ -6,9 +6,14 @@ import { fileURLToPath } from 'node:url';
 import { isMainModule } from './script-entry.mjs';
 
 const MAX_COMPLEXITY = 20;
-const ESLINT_VERSION = '10.9.0';
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repoRoot = path.resolve(siteRoot, '..');
+const eslintExecutable = path.join(
+  siteRoot,
+  'node_modules',
+  '.bin',
+  process.platform === 'win32' ? 'eslint.cmd' : 'eslint',
+);
 
 function trackedJavaScriptFiles() {
   const git = spawnSync(
@@ -30,15 +35,9 @@ function trackedJavaScriptFiles() {
 
 export function runComplexityCheck() {
   const files = trackedJavaScriptFiles();
-  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   const result = spawnSync(
-    npm,
+    eslintExecutable,
     [
-      'exec',
-      '--yes',
-      `--package=eslint@${ESLINT_VERSION}`,
-      '--',
-      'eslint',
       '--no-config-lookup',
       '--report-unused-disable-directives',
       '--rule',
