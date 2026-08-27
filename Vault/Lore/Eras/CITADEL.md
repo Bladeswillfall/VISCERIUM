@@ -82,13 +82,16 @@ eraPrimer:
   powers:
     - title: Okse Dominion
       summary: A mountain bulwark built around endurance, fortification and the legacy of the Vetruxi Kingdom.
-      href: /eras/citadel/okse-dominion/
+      href: /eras/citadel/nations/okse-dominion/
     - title: Krass Dominion
       summary: A highland dominion where tradition, cunning and intimate knowledge of the land are weapons in their own right.
+      href: /eras/citadel/nations/krass-dominion/
     - title: Republic of Askalia
       summary: A mercantile republic where coin moves quickly and private interests press hard against public rule.
+      href: /eras/citadel/nations/republic-of-askalia/
     - title: Kingdom of Satol
       summary: A fertile kingdom of forests, farms and contested roads, wealthy in produce and never quite as safe as its abundance suggests.
+      href: /eras/citadel/nations/kingdom-of-satol/
   knowledge:
     - label: Observed
       body: Incursions recur. Resonants can reshape matter. Roads, walls and old local warnings save lives often enough to be taken seriously.
