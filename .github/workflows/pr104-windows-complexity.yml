@@ -1,0 +1,37 @@
+name: Temporary PR 104 Windows complexity check
+
+on:
+  push:
+    branches:
+      - scratch/pr104-windows-complexity
+
+permissions:
+  contents: read
+
+jobs:
+  windows-complexity:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Use repository npm version
+        shell: pwsh
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          if ((npm --version) -ne '11.18.0') { throw 'Unexpected npm version' }
+
+      - name: Install locked dependencies
+        working-directory: Site
+        run: npm ci --silent --no-audit --no-fund
+
+      - name: Run complexity guard
+        working-directory: Site
+        run: npm run lint:complexity
