@@ -1,6 +1,7 @@
 ---
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import siteConfig from '../../site.config.mjs';
 import CodexSearch from './CodexSearch.astro';
 import EraContextControls from './EraContextControls.astro';
 import ReaderSettings from './ReaderSettings.astro';
@@ -17,7 +18,7 @@ const { t } = Astro.locals;
 </script>
 
 <div class="header codex-header">
-  <div class="title-wrapper sl-flex">
+  <div class="title-wrapper sl-flex h-card">
     <button
       class="codex-sidebar-toggle"
       type="button"
@@ -31,6 +32,10 @@ const { t } = Astro.locals;
       <span aria-hidden="true">☰</span>
     </button>
     <SiteTitle />
+    <span hidden aria-hidden="true">
+      <span class="p-name">{siteConfig.title}</span>
+      <a class="u-url" href={siteConfig.site}>{siteConfig.title}</a>
+    </span>
   </div>
 
   <div class="codex-header-search print:hidden" data-codex-header-search>

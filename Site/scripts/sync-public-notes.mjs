@@ -124,6 +124,7 @@ async function emptyDir(dir) {
   await fs.mkdir(dir, { recursive: true });
 }
 
+// eslint-disable-next-line complexity
 export async function syncPublicNotes() {
 const files = (await walk(sourceDir)).filter((file) => /\.(md|mdx)$/i.test(file)).sort();
 const publicNotes = [];

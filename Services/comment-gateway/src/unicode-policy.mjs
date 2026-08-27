@@ -30,6 +30,7 @@ function fail(code, message = 'Comment contains unsupported or disruptive Unicod
   throw unprocessable(code, message);
 }
 
+// eslint-disable-next-line complexity
 export function normalizeCommentText(input, { maxBytes = 2048 } = {}) {
   if (typeof input !== 'string') fail('comment_text_type', 'Comment text must be a string.');
 

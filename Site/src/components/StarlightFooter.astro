@@ -1,4 +1,5 @@
 ---
+import Pagination from '@astrojs/starlight/components/Pagination.astro';
 import { classifyCodexPage } from '../lib/page-kind.mjs';
 import ArticleDates from './ArticleDates.astro';
 import CodexEditLink from './CodexEditLink.astro';
@@ -10,6 +11,12 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
 ---
 
 <div class="codex-page-deck">
+  {pageKind.isStandardArticle && (
+    <div class="codex-pagination" data-codex-pagination>
+      <Pagination />
+    </div>
+  )}
+
   <ReferencedIn />
   {!pageKind.isEraHomepage && <ContributorStrip />}
 
@@ -20,6 +27,21 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
     </div>
   </div>
 </div>
+
+<script>
+  const tagRybbitPaginationLinks = () => {
+    document.querySelectorAll('[data-codex-pagination] a[rel="prev"], [data-codex-pagination] a[rel="next"]').forEach((link) => {
+      if (!(link instanceof HTMLAnchorElement)) return;
+      const direction = link.rel === 'prev' ? 'previous' : 'next';
+      link.dataset.rybbitEvent = 'article_pagination_click';
+      link.dataset.rybbitPropDirection = direction;
+      link.dataset.rybbitPropTarget = link.pathname;
+    });
+  };
+
+  document.addEventListener('astro:page-load', tagRybbitPaginationLinks);
+  tagRybbitPaginationLinks();
+</script>
 
 <style>
   /* On desktop, the sidebar stays hidden until the shell script sets its state. */
@@ -38,9 +60,8 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
     }
 
     /*
-      The article footer contains references, contributors, and edit information.
-      Discussions now live below the complete article/sidebar frame so the right
-      rail ends with the article region.
+      The reading handoff comes before reference and contributor metadata so the
+      next article remains the primary action at the end of the article body.
     */
     .codex-page-deck {
       position: relative;
@@ -48,6 +69,35 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
       box-sizing: border-box;
       padding-block-end: 1.25rem;
       background: transparent;
+    }
+
+    .codex-pagination {
+      margin-block: 2rem 2.75rem;
+    }
+
+    .codex-pagination :global(.pagination-links) {
+      gap: .75rem;
+    }
+
+    .codex-pagination :global(.pagination-links a) {
+      min-block-size: 5.5rem;
+      margin: 0 0 1.5rem !important;
+      padding: .8rem 1.25rem;
+      border: 0;
+      border-radius: .8rem;
+      background: var(--codex-surface-raised-color);
+      box-shadow: none;
+      transition: background-color .16s ease, color .16s ease;
+    }
+
+    .codex-pagination :global(.pagination-links a:hover) {
+      background: var(--codex-accent-soft);
+    }
+
+    .codex-pagination :global(.pagination-links a:focus-visible) {
+      outline: 2px solid var(--sl-color-accent-high);
+      outline-offset: 2px;
+      background: var(--codex-accent-soft);
     }
 
     .codex-site-footer {

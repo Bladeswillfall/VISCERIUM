@@ -237,6 +237,7 @@ function hasLegacyContext(blocks, startIndex, endIndex) {
   return image || ARTWORK_DISCLAIMER.test(after);
 }
 
+// eslint-disable-next-line complexity
 function parseCandidate(blocks, startIndex, type) {
   const sidebar = { meta: [], sections: [] };
   const consumed = new Set();

@@ -26,7 +26,7 @@ sidebar:
 title: Krass Dominion
 description: The Krass Dominion is a land where the air itself conspires against life.
 updated:
-status: draft
+status: published
 type: faction
 development_level: stub
 era: CITADEL
@@ -115,10 +115,3 @@ Mistmaraders: Scouts who inhale hallucinogenic spores to become one with the fog
 Bog-Speakers: Saboteurs trained to manipulate methane pockets. They ignite entire battlefields with flint-studded grins, immolating friend and foe alike.
 
   The Krass Dominion has a Juggernaut population less than half of that of the _Okse Dominion_, as such potential Juggernauts are more often than not, sent to train with the Oksmun. The Juggernauts report directly to Kónungsdóttir Lilja, acting as guardians as well as being sent to the settlments of the subservient Jarls to aide in defences or simply improve diplomatic relations.   In times of dire need, Krassians may swallow their pride and seek aid from the _Okse Dominion_. For superior military might, sturdy tactics, and unmatched capabilities, the _Okse Dominion_ stands as a potent ally in the face of impending conflicts.
-
-<!-- worldanvil-migration-review:start -->
-## Import review
-
-- [ ] Review the imported leadership/membership/succession data and promote only continuity-significant links into `relationships:` or `related:`.
-- [ ] Resolve legacy inline image references against `Assets/Images` / `Assets/Maps`; do not assume the absent export image is intentionally missing.
-<!-- worldanvil-migration-review:end -->

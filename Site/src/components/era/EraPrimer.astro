@@ -1,5 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import '../../styles/era-primer-pages.css';
+import { normaliseInternalRoute, slugToRoute } from '../../lib/codex-paths.mjs';
 import { validateEraPrimerData } from '../../lib/era-primer-data.mjs';
 
 const { primer } = Astro.props;
@@ -19,6 +21,21 @@ const eraAccent = {
   nearsight: 'var(--era-e3-base)',
   entropy: 'var(--era-e4-base)',
 }[primer.id] ?? 'var(--sl-color-accent)';
+
+const docs = await getCollection('docs');
+const docsByRoute = new Map(docs.map((doc) => {
+  const slug = doc.data.slug
+    ?? doc.id.replace(/\.(md|mdx)$/i, '').replace(/\/index$/i, '');
+  return [slugToRoute(slug), doc.data];
+}));
+const powers = primer.powers.map((power) => {
+  const route = power.href ? normaliseInternalRoute(power.href) : null;
+  const linkedPage = route ? docsByRoute.get(route) : undefined;
+  return {
+    ...power,
+    sigil: power.sigil ?? linkedPage?.headerImage ?? placeholderSigil,
+  };
+});
 ---
 
 <div
@@ -129,9 +146,9 @@ const eraAccent = {
     </header>
 
     <div class="era-primer__powers">
-      {primer.powers.map((power) => (
+      {powers.map((power) => (
         <article class="era-primer__power">
-          <img src={power.sigil ?? placeholderSigil} alt="" loading="lazy" aria-hidden="true" />
+          <img src={power.sigil} alt="" loading="lazy" aria-hidden="true" />
           <div>
             <h4>
               {power.href
@@ -174,3 +191,11 @@ const eraAccent = {
     </nav>
   </section>
 </div>
+
+<style>
+  .era-primer__power img {
+    object-fit: contain;
+    border-radius: 0;
+    filter: none;
+  }
+</style>
