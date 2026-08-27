@@ -165,3 +165,25 @@ test('CITADEL map opens the canonical Atlas entry', async ({ page }) => {
   await expect(page.locator('[data-atlas]')).toBeVisible();
   await expect(page.locator('.atlas__empty-note')).toContainText('no positioned markers');
 });
+
+test('CITADEL power cards use canonical nation links and linked header artwork', async ({ page }) => {
+  await page.goto(eraUrl('citadel'), { waitUntil: 'domcontentloaded' });
+
+  const primer = page.locator('[data-era-primer="citadel"]');
+  const expected = [
+    ['Okse Dominion', '/eras/citadel/nations/okse-dominion/'],
+    ['Krass Dominion', '/eras/citadel/nations/krass-dominion/'],
+    ['Republic of Askalia', '/eras/citadel/nations/republic-of-askalia/'],
+    ['Kingdom of Satol', '/eras/citadel/nations/kingdom-of-satol/'],
+  ];
+
+  for (const [title, href] of expected) {
+    await expect(primer.getByRole('link', { name: title, exact: true })).toHaveAttribute('href', href);
+  }
+
+  const okseCard = primer.locator('.era-primer__power').filter({ hasText: 'Okse Dominion' });
+  await expect(okseCard.locator('img')).toHaveAttribute(
+    'src',
+    '/assets/images/1d6a04547df953b36f4d6f8ce73e91f2.webp',
+  );
+});
