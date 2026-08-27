@@ -93,6 +93,7 @@ jobs:
         run: |
           cat > Site/scripts/check-complexity.mjs <<'EOF'
           import { spawnSync } from 'node:child_process';
+          import { existsSync } from 'node:fs';
           import path from 'node:path';
           import process from 'node:process';
           import { fileURLToPath } from 'node:url';
@@ -115,6 +116,7 @@ jobs:
             return git.stdout
               .split('\0')
               .filter(Boolean)
+              .filter((file) => existsSync(path.join(repoRoot, file)))
               .filter((file) => !file.includes('/dist/'))
               .filter((file) => !file.startsWith('Vault/.obsidian/plugins/'))
               .filter((file) => !file.startsWith('Vault/System/Views/'));
