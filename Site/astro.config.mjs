@@ -250,6 +250,7 @@ export default defineConfig({
         PageFrame: './src/components/CodexPageFrame.astro',
         PageSidebar: './src/components/CodexPageSidebar.astro',
         PageTitle: './src/components/CodexPageTitle.astro',
+        MarkdownContent: './src/components/CodexMarkdownContent.astro',
         TwoColumnContent: './src/components/CodexTwoColumnContent.astro',
       },
       editLink: {
