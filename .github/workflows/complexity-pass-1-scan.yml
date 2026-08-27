@@ -1,0 +1,64 @@
+name: Temporary complexity pass 1 scan
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install temporary ESLint
+        run: npm install --prefix /tmp/complexity-scan --no-save --ignore-scripts --no-audit --no-fund eslint@10.9.1
+
+      - name: Measure refactored functions
+        shell: bash
+        run: |
+          output="$RUNNER_TEMP/complexity.json"
+          /tmp/complexity-scan/node_modules/.bin/eslint \
+            --no-config-lookup \
+            --rule 'complexity: ["error", 1]' \
+            --format json \
+            Site/scripts/validate-vault-notes.mjs \
+            Site/scripts/vault-doctor.mjs > "$output" || true
+
+          OUTPUT="$output" node <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const results = JSON.parse(fs.readFileSync(process.env.OUTPUT, 'utf8'));
+          const findings = [];
+          for (const result of results) {
+            for (const message of result.messages) {
+              if (message.ruleId !== 'complexity') continue;
+              const match = message.message.match(/complexity of (\d+)/i);
+              findings.push({
+                file: path.relative(process.cwd(), result.filePath),
+                line: message.line,
+                complexity: match ? Number(match[1]) : null,
+                message: message.message,
+              });
+            }
+          }
+
+          findings.sort((a, b) => (b.complexity ?? 0) - (a.complexity ?? 0));
+          for (const finding of findings) {
+            console.log(`${finding.file}:${finding.line} complexity=${finding.complexity ?? '?'} ${finding.message}`);
+          }
+
+          const overTwenty = findings.filter((finding) => (finding.complexity ?? 0) > 20);
+          console.log(`Functions over 20: ${overTwenty.length}`);
+          if (overTwenty.length > 0) process.exitCode = 1;
+          NODE
