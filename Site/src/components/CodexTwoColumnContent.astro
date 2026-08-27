@@ -28,7 +28,7 @@ const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel
   data-exploration-page={explorationPage || undefined}
   data-degel-system-page={isDegelSystemIndex || undefined}
 >
-  <div class:list={["main-pane codex-main-pane", isIndieWebEntry && "e-content"]}>
+  <div class="main-pane codex-main-pane">
     {isIndieWebEntry && (
       <div hidden aria-hidden="true">
         <span class="p-name">{entry.title}</span>
