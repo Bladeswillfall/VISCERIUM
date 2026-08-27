@@ -14,7 +14,7 @@ sidebar:
 title: "Kingdom of Satol"
 description: "The Kingdom of Satol is extremely fertile, brimming with farmland and lush forests alike."
 updated:
-status: "draft"
+status: "published"
 type: "faction"
 development_level: "stub"
 era: "CITADEL"
@@ -73,9 +73,3 @@ Religion(s)
 [TBD]
 
 _All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
-
-<!-- worldanvil-migration-review:start -->
-## Import review
-
-- [ ] Resolve legacy inline image references against `Assets/Images` / `Assets/Maps`; do not assume the absent export image is intentionally missing.
-<!-- worldanvil-migration-review:end -->
