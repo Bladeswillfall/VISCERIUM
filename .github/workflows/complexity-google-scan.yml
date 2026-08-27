@@ -1,19 +1,22 @@
-name: Temporary complexity offender scan
+name: Temporary complexity migration
 
 on:
-  pull_request:
+  push:
+    branches:
+      - scratch/complexity-google-scan
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  scan:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          persist-credentials: false
+          persist-credentials: true
           show-progress: false
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -23,22 +26,141 @@ jobs:
       - name: Install temporary ESLint
         run: npm install --prefix /tmp/complexity-scan --no-save --ignore-scripts --no-audit --no-fund eslint@10.9.0
 
-      - name: List current offenders
+      - name: Convert existing debt to inline suppressions
         shell: bash
         run: |
-          /tmp/complexity-scan/node_modules/.bin/eslint \
-            --no-config-lookup \
-            --rule 'complexity: ["error", 20]' \
-            Services/comment-gateway/src/server.mjs \
-            Services/comment-gateway/src/unicode-policy.mjs \
-            Site/scripts/generate-map-data.mjs \
-            Site/scripts/integrate-worldanvil-import.mjs \
-            Site/scripts/normalise-worldanvil-sidebars.mjs \
-            Site/scripts/sync-public-notes.mjs \
-            Site/sidebar.mjs \
-            Site/src/lib/timeline/compiler.mjs \
-            Site/src/lib/timeline/renderer.mjs \
-            Site/src/scripts/codex-shell.js \
-            Site/tests/browser/sidebar-editorial-hierarchy.spec.mjs \
-            Site/tests/browser/timeline-chronicle.spec.mjs \
-            Site/tests/browser/timeline-tooltip.spec.mjs
+          node <<'NODE'
+          const { spawnSync } = require('node:child_process');
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const git = spawnSync(
+            'git',
+            ['ls-files', '-z', '--', ':(glob)**/*.js', ':(glob)**/*.mjs', ':(glob)**/*.cjs'],
+            { encoding: 'utf8' },
+          );
+          if (git.status !== 0) throw new Error(git.stderr || 'git ls-files failed');
+
+          const files = git.stdout
+            .split('\0')
+            .filter(Boolean)
+            .filter((file) => !file.includes('/dist/'))
+            .filter((file) => !file.startsWith('Vault/.obsidian/plugins/'))
+            .filter((file) => !file.startsWith('Vault/System/Views/'));
+
+          const eslint = spawnSync(
+            '/tmp/complexity-scan/node_modules/.bin/eslint',
+            [
+              '--no-config-lookup',
+              '--rule',
+              'complexity: ["error", 20]',
+              '--format',
+              'json',
+              ...files,
+            ],
+            { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 },
+          );
+          if (eslint.status !== 0 && eslint.status !== 1) {
+            throw new Error(eslint.stderr || 'ESLint failed');
+          }
+
+          const reports = JSON.parse(eslint.stdout || '[]');
+          let inserted = 0;
+          for (const report of reports) {
+            const targets = report.messages
+              .filter((message) => message.ruleId === 'complexity')
+              .map((message) => message.line)
+              .sort((a, b) => b - a);
+            if (targets.length === 0) continue;
+
+            const file = path.relative(process.cwd(), report.filePath);
+            const lines = fs.readFileSync(file, 'utf8').split('\n');
+            for (const lineNumber of targets) {
+              const index = lineNumber - 1;
+              if (lines[index - 1]?.trim() === '// eslint-disable-next-line complexity') continue;
+              const indent = lines[index].match(/^\s*/u)?.[0] ?? '';
+              lines.splice(index, 0, `${indent}// eslint-disable-next-line complexity`);
+              inserted += 1;
+            }
+            fs.writeFileSync(file, lines.join('\n'));
+          }
+          if (inserted !== 14) throw new Error(`Expected 14 complexity suppressions, inserted ${inserted}`);
+          console.log(`Inserted ${inserted} targeted complexity suppressions.`);
+          NODE
+
+      - name: Simplify complexity guard
+        shell: bash
+        run: |
+          cat > Site/scripts/check-complexity.mjs <<'EOF'
+          import { spawnSync } from 'node:child_process';
+          import path from 'node:path';
+          import process from 'node:process';
+          import { fileURLToPath } from 'node:url';
+          import { isMainModule } from './script-entry.mjs';
+
+          const MAX_COMPLEXITY = 20;
+          const ESLINT_VERSION = '10.9.0';
+          const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+          const repoRoot = path.resolve(siteRoot, '..');
+
+          function trackedJavaScriptFiles() {
+            const git = spawnSync(
+              'git',
+              ['ls-files', '-z', '--', ':(glob)**/*.js', ':(glob)**/*.mjs', ':(glob)**/*.cjs'],
+              { cwd: repoRoot, encoding: 'utf8' },
+            );
+            if (git.error) throw git.error;
+            if (git.status !== 0) throw new Error(git.stderr.trim() || 'git ls-files failed');
+
+            return git.stdout
+              .split('\0')
+              .filter(Boolean)
+              .filter((file) => !file.includes('/dist/'))
+              .filter((file) => !file.startsWith('Vault/.obsidian/plugins/'))
+              .filter((file) => !file.startsWith('Vault/System/Views/'));
+          }
+
+          export function runComplexityCheck() {
+            const files = trackedJavaScriptFiles();
+            const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+            const result = spawnSync(
+              npm,
+              [
+                'exec',
+                '--yes',
+                `--package=eslint@${ESLINT_VERSION}`,
+                '--',
+                'eslint',
+                '--no-config-lookup',
+                '--report-unused-disable-directives',
+                '--rule',
+                `complexity: ["error", ${MAX_COMPLEXITY}]`,
+                ...files,
+              ],
+              { cwd: repoRoot, stdio: 'inherit' },
+            );
+            if (result.error) throw result.error;
+            if (result.status !== 0) return false;
+
+            console.log(`Complexity guard checked ${files.length} tracked JavaScript files at max ${MAX_COMPLEXITY}.`);
+            return true;
+          }
+
+          if (isMainModule(import.meta.url) && !runComplexityCheck()) process.exitCode = 1;
+          EOF
+
+          rm Site/scripts/complexity-baseline.mjs
+          rm Site/tests/complexity-guard.test.mjs
+
+      - name: Verify migrated guard
+        working-directory: Site
+        run: npm run lint:complexity
+
+      - name: Commit generated migration
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Services Site
+          git commit -m 'refactor: use inline complexity suppressions'
+          git push origin HEAD:scratch/complexity-google-scan
