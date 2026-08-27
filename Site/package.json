@@ -47,11 +47,11 @@
     "test": "npm run baseline:check && npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.3",
+    "@astrojs/mdx": "^7.0.8",
     "@astrojs/partytown": "^2.1.7",
     "@astrojs/sitemap": "3.7.3",
-    "@astrojs/starlight": "^0.41.3",
-    "astro": "^7.1.1",
+    "@astrojs/starlight": "^0.41.7",
+    "astro": "^7.2.5",
     "cytoscape": "3.34.0",
     "cytoscape-dagre": "4.0.0",
     "fuse.js": "7.5.0",
