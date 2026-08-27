@@ -26,16 +26,15 @@ jobs:
         run: |
           npm install --prefix /tmp/complexity-scan --no-save --ignore-scripts --no-audit --no-fund \
             eslint @typescript-eslint/parser astro-eslint-parser
+          ln -s /tmp/complexity-scan/node_modules node_modules
 
       - name: Scan complexity at 20 and 15
         shell: bash
         run: |
           cat > .complexity-eslint.config.mjs <<'EOF'
-          import { createRequire } from 'node:module';
+          import tsParser from '@typescript-eslint/parser';
+          import * as astroParser from 'astro-eslint-parser';
 
-          const require = createRequire('/tmp/complexity-scan/package.json');
-          const tsParser = require('@typescript-eslint/parser');
-          const astroParser = require('astro-eslint-parser');
           const max = Number(process.env.COMPLEXITY_MAX || 20);
 
           export default [
