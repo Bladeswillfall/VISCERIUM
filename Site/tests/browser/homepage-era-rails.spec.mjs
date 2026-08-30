@@ -103,10 +103,14 @@ test.describe('homepage reading routes', () => {
     }));
 
     await openHome(page, { width: 1440, height: 980 });
-    await page.addScriptTag({
-      url: `${rybbitHost}/script.js`,
-      attributes: { 'data-site-id': rybbitSiteId },
-    });
+    await page.evaluate(({ scriptUrl, siteId }) => new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = scriptUrl;
+      script.dataset.siteId = siteId;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('Rybbit script failed to load'));
+      document.head.append(script);
+    }), { scriptUrl: `${rybbitHost}/script.js`, siteId: rybbitSiteId });
     await page.evaluate(() => new Promise((resolve) => window.rybbit.onReady(resolve)));
 
     const eventRequest = page.waitForRequest((request) => {
