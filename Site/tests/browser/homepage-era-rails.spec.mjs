@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 const preview = 'http://127.0.0.1:4321';
+const rybbitHost = 'https://analytics.viscerium.co.uk/api';
+const rybbitSiteId = 'd863318efa2f';
 
 async function openHome(page, viewport) {
   await page.setViewportSize(viewport);
@@ -74,6 +76,63 @@ test.describe('homepage reading routes', () => {
       return continuum ? Boolean(routes.compareDocumentPosition(continuum) & Node.DOCUMENT_POSITION_FOLLOWING) : false;
     });
     expect(order).toBe(true);
+  });
+
+  test('Rybbit sends the named homepage event with its properties', async ({ page }) => {
+    await page.route(`${rybbitHost}/site/tracking-config/**`, (route) => route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      headers: { 'access-control-allow-origin': '*' },
+      body: JSON.stringify({
+        trackInitialPageView: false,
+        trackSpaNavigation: false,
+        trackUrlParams: true,
+        trackOutbound: false,
+        webVitals: false,
+        trackErrors: false,
+        sessionReplay: false,
+        trackButtonClicks: false,
+        trackCopy: false,
+        trackFormInteractions: false,
+        featureFlagsEnabled: false,
+      }),
+    }));
+    await page.route(`${rybbitHost}/track`, (route) => route.fulfill({
+      status: 204,
+      headers: { 'access-control-allow-origin': '*' },
+    }));
+
+    await openHome(page, { width: 1440, height: 980 });
+    await page.evaluate(({ scriptUrl, siteId }) => new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = scriptUrl;
+      script.dataset.siteId = siteId;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('Rybbit script failed to load'));
+      document.head.append(script);
+    }), { scriptUrl: `${rybbitHost}/script.js`, siteId: rybbitSiteId });
+    await page.evaluate(() => new Promise((resolve) => window.rybbit.onReady(resolve)));
+
+    const eventRequest = page.waitForRequest((request) => {
+      if (request.url() !== `${rybbitHost}/track` || request.method() !== 'POST') return false;
+      try {
+        const payload = request.postDataJSON();
+        return payload.type === 'custom_event' && payload.event_name === 'home_start_click';
+      } catch {
+        return false;
+      }
+    });
+
+    await page.locator('.home-button[href="/start-here/"]').click();
+    const payload = (await eventRequest).postDataJSON();
+
+    expect(payload).toMatchObject({
+      site_id: rybbitSiteId,
+      pathname: '/',
+      type: 'custom_event',
+      event_name: 'home_start_click',
+    });
+    expect(JSON.parse(payload.properties)).toEqual({ placement: 'hero' });
   });
 
   test('wide screens preserve the four-panel era gateway', async ({ page }) => {
