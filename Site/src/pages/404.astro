@@ -1,0 +1,326 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage
+  hasSidebar={false}
+  frontmatter={{
+    title: 'Page not found',
+    description: 'The requested VISCERIUM Codex record could not be found.',
+    template: 'splash',
+    pagefind: false,
+    tableOfContents: false,
+    giscus: false,
+    head: [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex' } }],
+  }}
+>
+  <section class="not-found-page" aria-labelledby="not-found-title">
+    <div class="not-found-shell">
+      <div class="not-found-header">
+        <span class="not-found-watermark" aria-hidden="true">404</span>
+
+        <div class="not-found-copy">
+          <p class="not-found-eyebrow">Error 404 / record unavailable</p>
+          <h1 id="not-found-title">This page is not in the codex.</h1>
+          <p class="not-found-lede">
+            The record may have moved, been renamed, or never existed.
+            Start from the beginning, return home, or take another route through VISCERIUM.
+          </p>
+
+          <div class="not-found-actions">
+            <a class="not-found-button not-found-button--primary" href="/start-here/">Start here</a>
+            <a class="not-found-button" href="/">Return home</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="not-found-routes" aria-label="Other routes">
+        <a class="not-found-route" href="/#home-era-gateway">
+          <small>Browse</small>
+          <strong>Choose an era</strong>
+          <span>Enter through CITADEL, SMOG, NEARSIGHT, or ENTROPY.</span>
+        </a>
+
+        <a class="not-found-route" href="/graph/">
+          <small>Explore</small>
+          <strong>World graph</strong>
+          <span>Follow the links between places, people, events, and records.</span>
+        </a>
+
+        <button class="not-found-route" type="button" data-codex-search-open>
+          <small>Find</small>
+          <strong>Search the codex</strong>
+          <span>Look for the record by title, tag, path, or description.</span>
+        </button>
+      </div>
+    </div>
+  </section>
+</StarlightPage>
+
+<style is:global>
+  main:has(.not-found-page) {
+    min-width: 0;
+    padding: 0 !important;
+    overflow: clip;
+  }
+
+  main:has(.not-found-page) > .content-panel:first-of-type {
+    display: none;
+  }
+
+  main:has(.not-found-page) > .content-panel:last-of-type {
+    padding: 0;
+    border-block-start: 0;
+  }
+
+  main:has(.not-found-page) > .content-panel:last-of-type > .sl-container,
+  main:has(.not-found-page) .sl-markdown-content {
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .main-frame:has(.not-found-page) {
+    max-inline-size: none !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  .not-found-page {
+    --not-found-line: var(--sl-color-hairline-light);
+    --not-found-line-strong: color-mix(in oklch, var(--sl-color-gray-4) 62%, transparent);
+    --not-found-text: var(--sl-color-white);
+    --not-found-muted: var(--sl-color-gray-2);
+    --not-found-faint: var(--sl-color-gray-3);
+    --not-found-accent: var(--sl-color-accent-high);
+    min-height: calc(100svh - var(--sl-nav-height));
+    display: grid;
+    align-items: center;
+    padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 7vw, 8rem);
+    background:
+      radial-gradient(circle at 18% 14%, color-mix(in oklch, var(--not-found-text) 3%, transparent), transparent 24rem),
+      var(--sl-color-bg);
+    color: var(--not-found-text);
+    font-family: var(--vc-font-ui);
+  }
+
+  .not-found-page *,
+  .not-found-page *::before,
+  .not-found-page *::after {
+    box-sizing: border-box;
+  }
+
+  .not-found-page :focus-visible {
+    outline: .2rem solid var(--sl-color-white);
+    outline-offset: .25rem;
+  }
+
+  .not-found-shell {
+    width: min(100%, 76rem);
+    margin-inline: auto;
+  }
+
+  .not-found-header {
+    position: relative;
+    isolation: isolate;
+    padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(3rem, 6vw, 5rem);
+    border-block: 1px solid var(--not-found-line);
+    border-block-start-color: var(--not-found-line-strong);
+  }
+
+  .not-found-watermark {
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 50%;
+    inset-inline-start: -.045em;
+    translate: 0 -51%;
+    color: var(--not-found-text);
+    font-family: var(--vc-font-display);
+    font-size: clamp(11rem, 30vw, 27rem);
+    font-weight: 700;
+    line-height: .72;
+    letter-spacing: -.09em;
+    opacity: .035;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .not-found-copy {
+    position: relative;
+    z-index: 1;
+    width: min(44rem, 100%);
+    margin-inline-start: clamp(0rem, 4vw, 3rem);
+  }
+
+  .not-found-eyebrow {
+    margin: 0 0 1.25rem;
+    color: var(--not-found-accent);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  .not-found-page h1 {
+    max-width: 12ch;
+    margin: 0;
+    color: var(--not-found-text);
+    font-family: var(--vc-font-display);
+    font-size: clamp(3.25rem, 7vw, 6.8rem);
+    font-weight: 700;
+    line-height: .92;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+  }
+
+  .not-found-lede {
+    max-width: 38rem;
+    margin: 1.75rem 0 0;
+    color: var(--not-found-muted);
+    font-family: var(--vc-font-body);
+    font-size: clamp(1rem, 1.5vw, 1.18rem);
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-block-start: 2rem;
+  }
+
+  .not-found-button {
+    min-height: 2.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .78rem 1.05rem;
+    border: 1px solid var(--not-found-line-strong);
+    background: color-mix(in oklch, var(--not-found-text) 2.5%, transparent);
+    color: var(--not-found-text);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color 140ms ease, border-color 140ms ease, translate 140ms ease;
+  }
+
+  .not-found-button:hover {
+    border-color: color-mix(in oklch, var(--not-found-text) 48%, transparent);
+    background: color-mix(in oklch, var(--not-found-text) 6%, transparent);
+    translate: 0 -1px;
+  }
+
+  .not-found-button--primary {
+    border-color: var(--not-found-accent);
+    background: var(--not-found-accent);
+    color: var(--sl-color-black);
+  }
+
+  .not-found-button--primary:hover {
+    border-color: var(--not-found-accent);
+    background: var(--not-found-accent);
+    filter: brightness(1.08);
+  }
+
+  .not-found-routes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-block-end: 1px solid var(--not-found-line);
+  }
+
+  .not-found-route {
+    min-width: 0;
+    min-height: 7.5rem;
+    display: block;
+    padding: 1.25rem 1.4rem;
+    border: 0;
+    border-inline-end: 1px solid var(--not-found-line);
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .not-found-route:last-child {
+    border-inline-end: 0;
+  }
+
+  .not-found-route:hover {
+    background: color-mix(in oklch, var(--not-found-text) 3%, transparent);
+  }
+
+  .not-found-route small {
+    display: block;
+    margin-block-end: .8rem;
+    color: var(--not-found-faint);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .not-found-route strong {
+    display: block;
+    color: var(--not-found-text);
+    font-family: var(--vc-font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .not-found-route span {
+    display: block;
+    margin-block-start: .45rem;
+    color: var(--not-found-muted);
+    font-size: .86rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 44rem) {
+    .not-found-page {
+      min-height: calc(100svh - var(--sl-nav-height));
+      padding-block: 2rem 3rem;
+    }
+
+    .not-found-header {
+      padding-block-start: 4.5rem;
+      overflow: hidden;
+    }
+
+    .not-found-copy {
+      margin-inline-start: 0;
+    }
+
+    .not-found-watermark {
+      inset-block-start: 48%;
+      inset-inline-start: -.08em;
+      font-size: clamp(10rem, 62vw, 17rem);
+      opacity: .045;
+    }
+
+    .not-found-routes {
+      grid-template-columns: 1fr;
+    }
+
+    .not-found-route {
+      min-height: auto;
+      border-inline-end: 0;
+      border-block-end: 1px solid var(--not-found-line);
+    }
+
+    .not-found-route:last-child {
+      border-block-end: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .not-found-button {
+      transition: none;
+    }
+  }
+</style>
