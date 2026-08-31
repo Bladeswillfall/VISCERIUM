@@ -76,49 +76,66 @@ async function ensureFolder(tp, folderPath) {
   }
 }
 
+async function syncNativeFields(service) {
+  let changed = false;
+  for (const field of CORE_FIELDS) {
+    const existing = service.getAll().find((entry) => entry.id === field.id);
+    if (!existing) {
+      await service.add({ ...field });
+      changed = true;
+      continue;
+    }
+    if (!service.update) continue;
+    const keys = ["label", "section", "category", "type", "placeholder", "order", "topLevelKey"];
+    if (!keys.some((key) => existing[key] !== field[key])) continue;
+    await service.update(field.id, { ...field });
+    changed = true;
+  }
+  return changed;
+}
+
+async function readFieldTemplateData(tp, path) {
+  const fallback = { version: 1, fields: [], sectionOrders: {} };
+  if (!await tp.app.vault.adapter.exists(path)) return fallback;
+  try {
+    const parsed = JSON.parse(await tp.app.vault.adapter.read(path));
+    if (!Array.isArray(parsed.fields)) parsed.fields = [];
+    return parsed;
+  } catch {
+    return fallback;
+  }
+}
+
+async function syncFallbackFields(tp, project) {
+  const system = `${project.base}/System`;
+  await ensureFolder(tp, system);
+  const path = `${system}/field-templates.json`;
+  const data = await readFieldTemplateData(tp, path);
+  let changed = false;
+  for (const field of CORE_FIELDS) {
+    const index = data.fields.findIndex((entry) => entry?.id === field.id);
+    if (index === -1) {
+      data.fields.push({ ...field });
+      changed = true;
+      continue;
+    }
+    const next = { ...data.fields[index], ...field };
+    if (JSON.stringify(next) === JSON.stringify(data.fields[index])) continue;
+    data.fields[index] = next;
+    changed = true;
+  }
+  if (changed) await tp.app.vault.adapter.write(path, `${JSON.stringify(data, null, 2)}\n`);
+  return changed;
+}
+
 async function ensureCoreFields(tp, project, { quiet = false } = {}) {
   if (!project) return false;
   const storyLine = storylinePlugin(tp);
   const activeStoryLineBase = inferProjectBase(tp, clean(storyLine?.settings?.activeProjectFile));
   const service = activeStoryLineBase === project.base ? storyLine?.fieldTemplates : null;
-  let changed = false;
-
-  if (service?.getAll && service?.add) {
-    for (const field of CORE_FIELDS) {
-      const existing = service.getAll().find((entry) => entry.id === field.id);
-      if (!existing) {
-        await service.add({ ...field });
-        changed = true;
-      } else if (service.update) {
-        const keys = ["label", "section", "category", "type", "placeholder", "order", "topLevelKey"];
-        if (keys.some((key) => existing[key] !== field[key])) {
-          await service.update(field.id, { ...field });
-          changed = true;
-        }
-      }
-    }
-  } else {
-    const system = `${project.base}/System`;
-    await ensureFolder(tp, system);
-    const path = `${system}/field-templates.json`;
-    let data = { version: 1, fields: [], sectionOrders: {} };
-    if (await tp.app.vault.adapter.exists(path)) {
-      try { data = JSON.parse(await tp.app.vault.adapter.read(path)); } catch { /* replace malformed file below */ }
-    }
-    if (!Array.isArray(data.fields)) data.fields = [];
-    for (const field of CORE_FIELDS) {
-      const index = data.fields.findIndex((entry) => entry?.id === field.id);
-      if (index === -1) {
-        data.fields.push({ ...field });
-        changed = true;
-      } else {
-        const next = { ...data.fields[index], ...field };
-        if (JSON.stringify(next) !== JSON.stringify(data.fields[index])) changed = true;
-        data.fields[index] = next;
-      }
-    }
-    if (changed) await tp.app.vault.adapter.write(path, `${JSON.stringify(data, null, 2)}\n`);
-  }
+  const changed = service?.getAll && service?.add
+    ? await syncNativeFields(service)
+    : await syncFallbackFields(tp, project);
 
   if (!quiet) new tp.obsidian.Notice(changed ? "VISCERIUM StoryLine scene fields are ready." : "VISCERIUM StoryLine scene fields are already ready.");
   return changed;
