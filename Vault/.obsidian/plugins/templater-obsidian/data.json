@@ -44,10 +44,13 @@
   "enabled_templates_hotkeys": [
     "Templates/Databases/New Story Entity.md",
     "Templates/Lore/New Lore Entity.md",
-    "Templates/Databases/New Myrkild Unit.md"
+    "Templates/Databases/New Myrkild Unit.md",
+    "Templates/StoryLine/Add Story Change.md",
+    "Templates/StoryLine/Open Story State.md"
   ],
   "startup_templates": [
-    "Templates/_Startup/Open VISCERIUM Home.md"
+    "Templates/_Startup/Open VISCERIUM Home.md",
+    "Templates/_Startup/Ensure StoryLine Fields.md"
   ],
   "intellisense_render": "1",
   "ignore_folders_on_creation": []
