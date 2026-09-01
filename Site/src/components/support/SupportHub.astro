@@ -1,70 +1,117 @@
 ---
-import { Badge, CardGrid, LinkCard } from '@astrojs/starlight/components';
 import { githubSupportLinks, monetarySupportLinks, socialLinks } from '../../config/supportLinks.mjs';
 import LocalIcon from '../LocalIcon.astro';
 ---
 
 <section class="support-page">
   <header class="support-hero">
-    <h1>Support the VISCERIUM Codex</h1>
-    <p>Report issues, suggest corrections, support continued development, or find official channels as they come online.</p>
+    <div class="support-hero__mark" aria-hidden="true"></div>
+    <div class="support-shell support-hero__inner">
+      <div>
+        <p class="support-eyebrow">Codex support</p>
+        <h1>Support the VISCERIUM Codex</h1>
+      </div>
+      <div class="support-hero__copy">
+        <p class="support-hero__lead">Report issues, suggest corrections, support continued development, or find official channels as they come online.</p>
+        <p class="support-hero__body">Public work stays trackable on GitHub. Supporter and social channels remain visible here while they are prepared.</p>
+      </div>
+    </div>
   </header>
 
-  <section class="support-section" aria-labelledby="improve-codex-title">
-    <header>
-      <h2 id="improve-codex-title">Help improve the Codex</h2>
-      <p>GitHub keeps bugs, corrections, and feature requests public and trackable.</p>
-    </header>
-    <CardGrid>
-      {githubSupportLinks.map((link) => (
-        <LinkCard
-          title={link.title}
-          description={link.text}
-          href={link.href}
-          target="_blank"
-          rel="noreferrer"
-        />
-      ))}
-    </CardGrid>
-  </section>
-
-  <section class="support-section" aria-labelledby="support-project-title">
-    <header>
-      <h2 id="support-project-title">Support the project</h2>
-      <p>These routes will open once the public supporter structure is ready.</p>
-    </header>
-    <div class="support-placeholders">
-      {monetarySupportLinks.map((link) => (
+  <section class="support-section support-section--issues" aria-labelledby="improve-codex-title">
+    <div class="support-shell">
+      <header class="support-section__header">
         <div>
-          <LocalIcon name={link.icon} />
-          <span><strong>{link.title}</strong><small>{link.text}</small></span>
-          <Badge text="Coming soon" variant="note" />
+          <p class="support-kicker">Public contribution</p>
+          <h2 id="improve-codex-title">Help improve the Codex</h2>
         </div>
-      ))}
+        <p>GitHub keeps bugs, corrections, and feature requests public and trackable.</p>
+      </header>
+
+      <div class="support-cards">
+        {githubSupportLinks.map((link, index) => {
+          const isRepository = index === githubSupportLinks.length - 1;
+          return (
+            <a class:list={['support-card', isRepository && 'support-card--wide']} href={link.href} target="_blank" rel="noreferrer">
+              <div class="support-card__top">
+                <span class="support-card__index">{String(index + 1).padStart(2, '0')} / {isRepository ? 'source' : 'issue'}</span>
+                <span class="support-card__arrow" aria-hidden="true">↗</span>
+              </div>
+              <div>
+                <h3>{link.title}</h3>
+                <p>{link.text}</p>
+              </div>
+              <div class="support-card__footer">
+                <span class="support-card__meta">{isRepository ? 'Repository' : 'GitHub issue'}</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
     </div>
   </section>
 
-  <section class="support-section" aria-labelledby="socials-title">
-    <header>
-      <h2 id="socials-title">Official socials</h2>
-      <p>Reserved account slots remain visible until each official channel is active.</p>
-    </header>
-    <ul class="support-socials">
-      {socialLinks.map((link) => (
-        <li aria-label={`${link.label} coming soon`}>
-          <LocalIcon name={link.icon} />
-          <span>{link.label}</span>
-          <small>Coming soon</small>
-        </li>
-      ))}
-    </ul>
+  <section class="support-section support-section--support" aria-labelledby="support-project-title">
+    <div class="support-shell">
+      <header class="support-section__header">
+        <div>
+          <p class="support-kicker">Funding</p>
+          <h2 id="support-project-title">Support the project</h2>
+        </div>
+        <p>These routes will open once the public supporter structure is ready.</p>
+      </header>
+
+      <div class="support-placeholder-grid">
+        {monetarySupportLinks.map((link) => (
+          <article class="support-placeholder">
+            <div class="support-placeholder__brand">
+              <span class="support-placeholder__icon" aria-hidden="true"><LocalIcon name={link.icon} /></span>
+              <span class="support-status">Coming soon</span>
+            </div>
+            <div>
+              <h3>{link.title}</h3>
+              <p>{link.text}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="support-section support-section--social" aria-labelledby="socials-title">
+    <div class="support-shell">
+      <header class="support-section__header">
+        <div>
+          <p class="support-kicker">Channels</p>
+          <h2 id="socials-title">Official socials</h2>
+        </div>
+        <p>Reserved account slots remain visible until each official channel is active.</p>
+      </header>
+
+      <ul class="support-socials">
+        {socialLinks.map((link) => (
+          <li>
+            <div class="support-social" aria-label={`${link.label} coming soon`}>
+              <span class="support-social__mark" aria-hidden="true"><LocalIcon name={link.icon} /></span>
+              <span>
+                <strong>{link.label}</strong>
+                <small class="support-social__status">Coming soon</small>
+              </span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
   <section class="support-contact" aria-labelledby="private-contact-title">
-    <div>
-      <h2 id="private-contact-title">Need to contact privately?</h2>
-      <p>Use the contact page for collaboration, rights or credit concerns, and sensitive questions.</p>
+    <div class="support-shell support-contact__inner">
+      <div>
+        <p class="support-eyebrow">Private channel</p>
+        <h2 id="private-contact-title">Need to contact privately?</h2>
+        <p>Use the contact page for collaboration, rights or credit concerns, and sensitive questions.</p>
+      </div>
+      <a class="support-contact__action" href="/contact/">Contact us <span aria-hidden="true">→</span></a>
     </div>
-    <a class="support-button" href="/contact/">Contact us</a>
   </section>
 </section>
