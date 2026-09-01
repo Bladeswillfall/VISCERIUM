@@ -9,7 +9,7 @@ import LocalIcon from '../LocalIcon.astro';
     <div class="support-shell support-hero__inner">
       <div>
         <p class="support-eyebrow">Codex support</p>
-        <h1>Support the VISCERIUM Codex</h1>
+        <h1>Support the <span class="support-wordmark">VISCERIUM</span> Codex</h1>
       </div>
       <div class="support-hero__copy">
         <p class="support-hero__lead">Report issues, suggest corrections, support continued development, or find official channels as they come online.</p>
@@ -64,6 +64,7 @@ import LocalIcon from '../LocalIcon.astro';
       <div class="support-placeholder-grid">
         {monetarySupportLinks.map((link) => (
           <article class="support-placeholder">
+            <span class="support-placeholder__watermark" aria-hidden="true"><LocalIcon name={link.icon} /></span>
             <div class="support-placeholder__brand">
               <span class="support-placeholder__icon" aria-hidden="true"><LocalIcon name={link.icon} /></span>
               <span class="support-status">Coming soon</span>
