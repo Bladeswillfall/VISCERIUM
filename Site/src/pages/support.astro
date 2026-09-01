@@ -2,6 +2,7 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import SupportHub from '../components/support/SupportHub.astro';
 import supportStylesHref from '../styles/support.css?url&no-inline';
+import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inline';
 ---
 
 <StarlightPage
@@ -11,7 +12,10 @@ import supportStylesHref from '../styles/support.css?url&no-inline';
     description: 'Report issues, suggest edits, support development, and find official VISCERIUM Codex channels.',
     tableOfContents: false,
     giscus: false,
-    head: [{ tag: 'link', attrs: { rel: 'stylesheet', href: supportStylesHref } }],
+    head: [
+      { tag: 'link', attrs: { rel: 'stylesheet', href: supportStylesHref } },
+      { tag: 'link', attrs: { rel: 'stylesheet', href: supportRedesignStylesHref } },
+    ],
   }}
 >
   <SupportHub />
