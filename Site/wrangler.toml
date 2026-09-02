@@ -2,6 +2,9 @@ name = "viscerium"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-07-31"
 
+[secrets]
+required = ["KUDOS_HMAC_KEY"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "viscerium-community-preview"
@@ -10,6 +13,9 @@ preview_database_id = "DB"
 
 [vars]
 NODE_VERSION = "24"
+
+[env.production.secrets]
+required = ["KUDOS_HMAC_KEY"]
 
 [[env.production.d1_databases]]
 binding = "DB"
