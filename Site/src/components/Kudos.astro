@@ -242,7 +242,7 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
     border: 1px solid var(--sl-color-hairline-light);
     border-radius: .7rem;
     background: transparent;
-    color: var(--sl-color-white);
+    color: var(--sl-color-text);
     font: inherit;
     font-weight: 650;
     cursor: pointer;
@@ -258,7 +258,7 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
   }
 
   .kudos-button:disabled {
-    cursor: wait;
+    cursor: default;
     opacity: .65;
   }
 
@@ -287,8 +287,8 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
     padding: .65rem .75rem;
     border: 1px solid var(--sl-color-hairline-light);
     border-radius: .65rem;
-    background: var(--sl-color-bg-nav);
-    color: var(--sl-color-gray-2);
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
     font-size: var(--sl-text-sm);
     opacity: 0;
     visibility: hidden;
@@ -298,7 +298,7 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
   }
 
   .kudos-breakdown strong {
-    color: var(--sl-color-white);
+    color: var(--sl-color-text);
     text-align: end;
   }
 
