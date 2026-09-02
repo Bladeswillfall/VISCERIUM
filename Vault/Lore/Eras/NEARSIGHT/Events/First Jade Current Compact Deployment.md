@@ -36,6 +36,7 @@ tags:
   - "timeline-showcase"
   - "jade-current"
   - Events
+community_id: 6448a7c5-2af9-4441-9cbd-7406fa820ca6
 ---
 
 # First Jade Current Compact Deployment

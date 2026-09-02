@@ -37,6 +37,7 @@ tags:
   - "krg"
   - "same-day"
   - Events
+community_id: d098104f-49f4-4cb9-ad01-fad7ed5e1428
 ---
 
 # KRG Recovery at Kraal Nine

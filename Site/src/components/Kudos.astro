@@ -1,0 +1,331 @@
+---
+import siteConfig from '../../site.config.mjs';
+import { slugToRoute } from '../lib/codex-paths.mjs';
+
+const { entry } = Astro.locals.starlightRoute;
+const communityId = entry.data.community_id;
+const canonicalUrl = new URL(slugToRoute(entry.data.slug ?? entry.id), siteConfig.site).href;
+const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
+---
+
+{communityId && (
+  <viscerium-kudos
+    data-community-id={communityId}
+    data-canonical-url={canonicalUrl}
+  >
+    <div class="kudos-control">
+      <button
+        type="button"
+        class="kudos-button"
+        data-kudos-button
+        aria-pressed="false"
+        aria-busy="true"
+        aria-describedby={breakdownId}
+        disabled
+      >
+        <svg class="kudos-heart" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"></path>
+        </svg>
+        <span data-kudos-count hidden></span>
+        <span>Appreciate</span>
+      </button>
+
+      <div id={breakdownId} class="kudos-breakdown" role="tooltip">
+        <span>Native</span>
+        <strong data-kudos-native>0</strong>
+        <span>Webmentions</span>
+        <strong data-kudos-webmentions>0</strong>
+      </div>
+    </div>
+    <p class="kudos-status" data-kudos-status aria-live="polite"></p>
+  </viscerium-kudos>
+)}
+
+<script>
+  type KudosState = {
+    liked: boolean;
+    native: number;
+    webmentions: number | null;
+    webmentionsAvailable: boolean;
+    total: number;
+  };
+
+  const visitorKey = 'viscerium-kudos-visitor';
+  const uuidPattern =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  let fallbackVisitorId: string | undefined;
+
+  function visitorId() {
+    try {
+      const stored = localStorage.getItem(visitorKey);
+      if (stored && uuidPattern.test(stored)) return stored;
+      const created = crypto.randomUUID();
+      localStorage.setItem(visitorKey, created);
+      return created;
+    } catch {
+      fallbackVisitorId ??= crypto.randomUUID();
+      return fallbackVisitorId;
+    }
+  }
+
+  class VisceriumKudos extends HTMLElement {
+    private liked = false;
+    private busy = false;
+    private cooldown?: number;
+    private touchTimer?: number;
+
+    connectedCallback() {
+      const button = this.button();
+      if (!button || button.dataset.bound === 'true') return;
+      button.dataset.bound = 'true';
+      button.addEventListener('click', () => void this.toggle());
+      button.addEventListener('pointerdown', (event) => {
+        if (event.pointerType !== 'touch') return;
+        this.dataset.touchOpen = 'true';
+        if (this.touchTimer !== undefined) window.clearTimeout(this.touchTimer);
+        this.touchTimer = window.setTimeout(() => delete this.dataset.touchOpen, 2500);
+      });
+      void this.initialise();
+    }
+
+    disconnectedCallback() {
+      if (this.cooldown !== undefined) window.clearTimeout(this.cooldown);
+      if (this.touchTimer !== undefined) window.clearTimeout(this.touchTimer);
+    }
+
+    private button() {
+      return this.querySelector<HTMLButtonElement>('[data-kudos-button]');
+    }
+
+    private status() {
+      return this.querySelector<HTMLElement>('[data-kudos-status]');
+    }
+
+    private headers() {
+      return {
+        Accept: 'application/json',
+        'X-Viscerium-Visitor': visitorId(),
+        'X-Viscerium-Page': this.dataset.canonicalUrl ?? '',
+      };
+    }
+
+    private async request(method: 'GET' | 'PUT' | 'DELETE') {
+      const communityId = this.dataset.communityId;
+      if (!communityId) throw new Error('Missing community ID.');
+      const path = method === 'GET'
+        ? `/api/kudos/${encodeURIComponent(communityId)}`
+        : `/api/kudos/write/${encodeURIComponent(communityId)}`;
+      return fetch(path, {
+        method,
+        headers: this.headers(),
+        credentials: 'same-origin',
+      });
+    }
+
+    private apply(state: KudosState) {
+      const button = this.button();
+      const count = this.querySelector<HTMLElement>('[data-kudos-count]');
+      const native = this.querySelector<HTMLElement>('[data-kudos-native]');
+      const webmentions = this.querySelector<HTMLElement>('[data-kudos-webmentions]');
+      if (!button || !count || !native || !webmentions) return;
+
+      this.liked = Boolean(state.liked);
+      const nativeCount = Number(state.native) || 0;
+      const total = Number(state.total) || 0;
+      const webmentionCount = state.webmentionsAvailable && state.webmentions !== null
+        ? Number(state.webmentions) || 0
+        : null;
+
+      button.setAttribute('aria-pressed', String(this.liked));
+      button.setAttribute('aria-busy', 'false');
+      count.hidden = total === 0;
+      count.textContent = total === 0
+        ? ''
+        : new Intl.NumberFormat(document.documentElement.lang).format(total);
+      native.textContent = new Intl.NumberFormat(document.documentElement.lang).format(nativeCount);
+      webmentions.textContent = webmentionCount === null
+        ? 'Unavailable'
+        : new Intl.NumberFormat(document.documentElement.lang).format(webmentionCount);
+
+      const action = this.liked ? 'Remove appreciation' : 'Appreciate this page';
+      const breakdown = webmentionCount === null
+        ? `${nativeCount} native appreciations. Webmentions unavailable.`
+        : `${nativeCount} native and ${webmentionCount} Webmention appreciations.`;
+      button.setAttribute('aria-label', `${action}. ${total} total. ${breakdown}`);
+    }
+
+    private async refresh() {
+      const response = await this.request('GET');
+      if (!response.ok) throw new Error(`Kudos GET failed with ${response.status}.`);
+      this.apply(await response.json() as KudosState);
+    }
+
+    private async initialise() {
+      const button = this.button();
+      const status = this.status();
+      try {
+        await this.refresh();
+        if (button) button.disabled = false;
+      } catch {
+        if (button) button.setAttribute('aria-busy', 'false');
+        if (status) status.textContent = 'Appreciation is temporarily unavailable.';
+      }
+    }
+
+    private setCooldown() {
+      const button = this.button();
+      if (!button) return;
+      button.disabled = true;
+      if (this.cooldown !== undefined) window.clearTimeout(this.cooldown);
+      this.cooldown = window.setTimeout(() => {
+        this.cooldown = undefined;
+        if (!this.busy) button.disabled = false;
+      }, 5000);
+    }
+
+    private async toggle() {
+      const button = this.button();
+      const status = this.status();
+      if (!button || this.busy || this.cooldown !== undefined) return;
+
+      this.busy = true;
+      button.disabled = true;
+      const method = this.liked ? 'DELETE' : 'PUT';
+
+      try {
+        const response = await this.request(method);
+        if (response.status === 429) {
+          await this.refresh();
+          if (status) status.textContent = 'Too many changes. Current state restored.';
+          this.setCooldown();
+          return;
+        }
+        if (!response.ok) throw new Error(`Kudos write failed with ${response.status}.`);
+        this.apply(await response.json() as KudosState);
+        if (status) status.textContent = '';
+      } catch {
+        try {
+          await this.refresh();
+          if (status) status.textContent = 'Could not save appreciation. Current state restored.';
+        } catch {
+          if (status) status.textContent = 'Appreciation is temporarily unavailable.';
+        }
+      } finally {
+        this.busy = false;
+        if (this.cooldown === undefined) button.disabled = false;
+      }
+    }
+  }
+
+  if (!customElements.get('viscerium-kudos')) {
+    customElements.define('viscerium-kudos', VisceriumKudos);
+  }
+</script>
+
+<style>
+  viscerium-kudos {
+    display: block;
+    margin-block: 0 1.5rem;
+  }
+
+  .kudos-control {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .kudos-button {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    min-block-size: 2.6rem;
+    padding: .55rem .8rem;
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: .7rem;
+    background: transparent;
+    color: var(--sl-color-text);
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .kudos-button:hover:not(:disabled) {
+    border-color: var(--sl-color-accent-high);
+  }
+
+  .kudos-button:focus-visible {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: .18rem;
+  }
+
+  .kudos-button:disabled {
+    cursor: default;
+    opacity: .65;
+  }
+
+  .kudos-heart {
+    inline-size: 1.15rem;
+    block-size: 1.15rem;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+  }
+
+  .kudos-button[aria-pressed='true'] .kudos-heart {
+    fill: currentColor;
+  }
+
+  .kudos-breakdown {
+    position: absolute;
+    z-index: 3;
+    inset-block-start: calc(100% + .5rem);
+    inset-inline-start: 0;
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: .2rem .8rem;
+    min-inline-size: 12rem;
+    padding: .65rem .75rem;
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: .65rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    font-size: var(--sl-text-sm);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-.2rem);
+    transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease;
+  }
+
+  .kudos-breakdown strong {
+    color: var(--sl-color-text);
+    text-align: end;
+  }
+
+  .kudos-control:hover .kudos-breakdown,
+  .kudos-control:focus-within .kudos-breakdown,
+  viscerium-kudos[data-touch-open='true'] .kudos-breakdown {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .kudos-status {
+    min-block-size: 1.2em;
+    margin: .4rem 0 0;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kudos-breakdown {
+      transition: none;
+    }
+  }
+
+  @media print {
+    viscerium-kudos {
+      display: none;
+    }
+  }
+</style>

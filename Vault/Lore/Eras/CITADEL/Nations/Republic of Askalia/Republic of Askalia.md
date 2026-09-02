@@ -26,6 +26,7 @@ import_source_type: "Organization"
 import_source_file: "Organization-Republic of Askalia-6c0.md"
 import_issues:
   - "missing-inline-assets"
+community_id: 2dd5253c-480c-40e2-92a9-e09c74482de7
 ---
 The _golden nation_ of Askalia is the pinacle of trade in Errack. Money flows here like water through a river and as such, anything can be bought for the right price. The landscape is temperate and rather flat, serving well for larger cities and quick transport. clusters of rolling hills and woodland are scattered across the yellow-green grasslands for the soil is not the most fertile but serves it's purpose.  
 

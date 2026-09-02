@@ -44,6 +44,7 @@ tags:
   - "timeline-showcase"
   - "satol"
   - Events
+community_id: be224405-8220-4d8b-8dd2-6412f2141fc6
 ---
 
 # The Vacuum Siege of Satol Reach

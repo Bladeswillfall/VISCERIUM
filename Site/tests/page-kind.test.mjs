@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   classifyCodexPage,
+  resolveCommunityForPage,
   resolveGiscusForPage,
 } from '../src/lib/page-kind.mjs';
 
@@ -43,6 +44,7 @@ test('category, Start Here and composed utility pages are structural', () => {
   assert.equal(classifyCodexPage({ type: 'article', slug: 'custom', explorationPage: true }).isStructural, true);
   assert.equal(classifyCodexPage({ type: 'article', slug: 'timeline', timelinePage: true }).isStructural, true);
 });
+
 test('Giscus defaults to standard articles while preserving explicit overrides', () => {
   assert.equal(resolveGiscusForPage({
     type: 'faction',
@@ -75,4 +77,36 @@ test('Giscus defaults to standard articles while preserving explicit overrides',
     slug: 'eras/citadel/factions',
     giscus: true,
   }), true);
+});
+
+test('Community uses its own override and preserves legacy Giscus flags', () => {
+  assert.equal(resolveCommunityForPage({
+    type: 'faction',
+    slug: 'eras/citadel/okse-dominion',
+  }), true);
+
+  assert.equal(resolveCommunityForPage({
+    type: 'category',
+    slug: 'eras/citadel/factions',
+  }), false);
+
+  assert.equal(resolveCommunityForPage({
+    type: 'faction',
+    slug: 'eras/citadel/okse-dominion',
+    giscus: false,
+  }), false);
+
+  assert.equal(resolveCommunityForPage({
+    type: 'faction',
+    slug: 'eras/citadel/okse-dominion',
+    giscus: false,
+    community: true,
+  }), true);
+
+  assert.equal(resolveCommunityForPage({
+    type: 'faction',
+    slug: 'eras/citadel/okse-dominion',
+    giscus: true,
+    community: false,
+  }), false);
 });

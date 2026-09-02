@@ -28,6 +28,7 @@ import_source_type: "Organization"
 import_source_file: "Organization-Kingdom of Satol-412.md"
 import_issues:
   - "missing-inline-assets"
+community_id: 51d9d41b-4639-45b4-afe9-193ed6a8c9b8
 ---
 The Kingdom of Satol is extremely fertile, brimming with farmland and lush forests alike.  
 The verdant landscape makes for great farming and produce. So much so, that a lot of the produce made is exported to the neighbouring nations - allowing for a decent ammount of monetary flow throughout the Kingdom.   Life within the Kingdom is not always as great as it seems, for with the dense forests and winding roads, comes a lot of risk to travelers and those unwise enough to enter the woods unprepared. Traveling farmers are easy targets for mercenaries, bandits, highway men and the like. Not to mention the darkness that might step out of the trees that so often cloak them.  

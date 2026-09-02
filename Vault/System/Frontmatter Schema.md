@@ -8,6 +8,12 @@ VISCERIUM properties have one authoritative meaning. Templates may omit properti
 
 Do not add a second `publish` boolean. Canon/continuity truth is a separate concept from whether a note is publicly released.
 
+## Community identity
+
+`community_id` is the permanent UUIDv4 identity for a public page's Community data. Add it when a page first becomes Community-enabled. Never change or reuse it when the title, filename, slug or era presentation changes. From `Site/`, `node -e "console.log(crypto.randomUUID())"` generates a suitable value.
+
+`community` is an optional boolean override. Omit it for the normal page-kind default. Set `community: false` to remove the whole Community section, or `community: true` to enable it on an otherwise excluded page. The older `giscus` boolean remains a compatibility fallback during the comment-system migration; do not add it to new notes.
+
 ## Reader-facing presentation
 
 `pronunciation` is an optional display string shown beside the public article title. Prefer IPA with its normal delimiters, for example `pronunciation: /ˈɛræk/`. Keep `title` itself clean so links, filenames and canonical naming are not polluted by pronunciation text.

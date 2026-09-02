@@ -41,6 +41,7 @@ sidebar:
       value:
         - 7 Nadirs of Sin
         - Underlings
+community_id: d7e0e59d-eced-4800-8c0d-68afd3cdc184
 ---
 > Watch for unusual growths on your meat, fruit and vegetables, these can be indications of Myrkild in the vicinity. Under no circumstances should you consume produce you believe to be infected.
 > 
