@@ -30,7 +30,14 @@ export function classifyCodexPage(entry = {}, fallbackId = '') {
     isStandardArticle: !isStructural,
   };
 }
+
 export function resolveGiscusForPage(entry = {}, fallbackId = '') {
+  if (typeof entry.giscus === 'boolean') return entry.giscus;
+  return classifyCodexPage(entry, fallbackId).isStandardArticle;
+}
+
+export function resolveCommunityForPage(entry = {}, fallbackId = '') {
+  if (typeof entry.community === 'boolean') return entry.community;
   if (typeof entry.giscus === 'boolean') return entry.giscus;
   return classifyCodexPage(entry, fallbackId).isStandardArticle;
 }
