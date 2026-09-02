@@ -1,0 +1,26 @@
+name = "viscerium"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-07-31"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "viscerium-community-preview"
+database_id = "b835e74b-3388-4dcb-bb88-3440892ab61d"
+preview_database_id = "DB"
+
+[vars]
+NODE_VERSION = "24"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "viscerium-community"
+database_id = "1780f75b-69dc-412f-aa43-dfdd6dcecd99"
+
+[env.production.vars]
+NODE_VERSION = "24"
+PUBLIC_CONTACT_FORM_ENABLED = "1"
+PUBLIC_CONTACT_FORM_ENDPOINT = "https://viscerium-site-services.bladeswillfall.workers.dev/contact"
+PUBLIC_RYBBIT_ENABLED = "1"
+PUBLIC_RYBBIT_HOST = "https://analytics.viscerium.co.uk"
+PUBLIC_RYBBIT_SITE_ID = "d863318efa2f"
+PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAADyoq-9zwp5ep4hG"
