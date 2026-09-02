@@ -10,7 +10,7 @@ const cases = [
 
 test('Appreciate control follows the active era context', async ({ page }) => {
   for (const [era, path, token] of cases) {
-    await page.goto(`${preview}${path}`, { waitUntil: 'networkidle' });
+    await page.goto(`${preview}${path}`, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('html')).toHaveAttribute('data-era-context', era);
     await expect(page.locator('.kudos-button')).toBeAttached();
 
