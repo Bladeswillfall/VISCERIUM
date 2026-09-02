@@ -6,12 +6,18 @@ const { entry } = Astro.locals.starlightRoute;
 const communityId = entry.data.community_id;
 const canonicalUrl = new URL(slugToRoute(entry.data.slug ?? entry.id), siteConfig.site).href;
 const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
+const eraKudosAccent = {
+  e2: 'var(--era-e2-accent-high)',
+  e3: 'var(--era-e3-accent-high)',
+  e4: 'var(--era-e4-accent-high)',
+}[entry.data.eraStyle];
 ---
 
 {communityId && (
   <viscerium-kudos
     data-community-id={communityId}
     data-canonical-url={canonicalUrl}
+    style={eraKudosAccent ? `--sl-color-red-high: ${eraKudosAccent}` : undefined}
   >
     <div class="kudos-control">
       <button
