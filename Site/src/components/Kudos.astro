@@ -6,19 +6,12 @@ const { entry } = Astro.locals.starlightRoute;
 const communityId = entry.data.community_id;
 const canonicalUrl = new URL(slugToRoute(entry.data.slug ?? entry.id), siteConfig.site).href;
 const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
-const eraKudosAccent = {
-  e1: 'var(--sl-color-red-high)',
-  e2: 'var(--era-e2-accent-high)',
-  e3: 'var(--era-e3-accent-high)',
-  e4: 'var(--era-e4-accent-high)',
-}[entry.data.eraStyle] ?? 'var(--sl-color-red-high)';
 ---
 
 {communityId && (
   <viscerium-kudos
     data-community-id={communityId}
     data-canonical-url={canonicalUrl}
-    style={`--kudos-accent: ${eraKudosAccent}`}
   >
     <div class="kudos-control">
       <button
@@ -231,8 +224,26 @@ const eraKudosAccent = {
 
 <style>
   viscerium-kudos {
+    --kudos-accent: var(--sl-color-red-high);
+
     display: block;
     margin-block: .6rem 1.75rem;
+  }
+
+  :global(:root[data-era-context='CITADEL']) viscerium-kudos {
+    --kudos-accent: var(--sl-color-red-high);
+  }
+
+  :global(:root[data-era-context='SMOG']) viscerium-kudos {
+    --kudos-accent: var(--era-e2-accent-high);
+  }
+
+  :global(:root[data-era-context='NEARSIGHT']) viscerium-kudos {
+    --kudos-accent: var(--era-e3-accent-high);
+  }
+
+  :global(:root[data-era-context='ENTROPY']) viscerium-kudos {
+    --kudos-accent: var(--era-e4-accent-high);
   }
 
   .kudos-control {
