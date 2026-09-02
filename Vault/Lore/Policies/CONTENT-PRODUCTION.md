@@ -8,6 +8,7 @@ tags:
   - authorship
   - production
   - human-made
+community_id: a0d2052c-1dc7-4b42-9bd3-439c51de988b
 ---
 
 This statement explains how VISCERIUM distinguishes human-created *creative work* from *AI-assisted technical development*. It applies to material published under the VISCERIUM name and to the technical framework used to publish and maintain it.

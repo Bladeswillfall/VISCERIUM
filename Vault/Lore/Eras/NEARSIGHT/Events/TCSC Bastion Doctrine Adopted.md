@@ -36,6 +36,7 @@ tags:
   - "timeline-showcase"
   - "tcsc"
   - Events
+community_id: dca6513b-2b67-4ece-bb06-9307fd96d590
 ---
 
 # TCSC Bastion Doctrine Adopted

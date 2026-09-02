@@ -41,6 +41,7 @@ import_source_file: Organization-Krass Dominion-9da.md
 import_issues:
   - relationship-review
   - missing-inline-assets
+community_id: c3144040-6bfb-425e-98a9-4ce579882fa5
 ---
 > The bone chimes rattle softly, hanging from the overgrown gnarled branches of a lone oak tree. Streams of colourful cloth wave in the gentle winds, bound to its branches, signaling the border of the Krass Dominion.  
 > The highland expanse stretches out into the overcast daylight, grand forests lay but a short distance away each hiding secrets within, whilst the feint smokestacks of broochs and sod-roofed outposts dot the vast, grassy plains.

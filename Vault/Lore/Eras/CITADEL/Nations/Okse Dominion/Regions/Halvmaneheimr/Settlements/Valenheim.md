@@ -60,6 +60,7 @@ related:
   - "[[Mestrvirki]]"
   - "[[Issvatn river|Issvatn]]"
 word_count: 5666
+community_id: e486f65b-f9f8-4023-8e47-5aab2c518c31
 ---
 
 <!-- viscerium:authoring:start -->
