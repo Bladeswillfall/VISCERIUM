@@ -6,7 +6,6 @@ const { entry } = Astro.locals.starlightRoute;
 const communityId = entry.data.community_id;
 const canonicalUrl = new URL(slugToRoute(entry.data.slug ?? entry.id), siteConfig.site).href;
 const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
-// Citadel keeps the approved red treatment. Later eras inherit their existing accent tokens.
 const eraKudosAccent = {
   e2: 'var(--era-e2-accent-high)',
   e3: 'var(--era-e3-accent-high)',
@@ -18,7 +17,7 @@ const eraKudosAccent = {
   <viscerium-kudos
     data-community-id={communityId}
     data-canonical-url={canonicalUrl}
-    style={eraKudosAccent ? `--sl-color-red-high: ${eraKudosAccent}; --sl-color-accent-high: ${eraKudosAccent}` : undefined}
+    style={eraKudosAccent ? `--kudos-accent: ${eraKudosAccent}` : undefined}
   >
     <div class="kudos-control">
       <button
@@ -231,6 +230,7 @@ const eraKudosAccent = {
 
 <style>
   viscerium-kudos {
+    --kudos-accent: var(--sl-color-red-high);
     display: block;
     margin-block: .6rem 1.75rem;
   }
@@ -246,27 +246,27 @@ const eraKudosAccent = {
     gap: .45rem;
     min-block-size: 2.6rem;
     padding: .55rem .85rem;
-    border: 1px solid color-mix(in oklch, var(--sl-color-red-high) 48%, var(--sl-color-hairline-light));
+    border: 1px solid color-mix(in oklch, var(--kudos-accent) 48%, var(--sl-color-hairline-light));
     border-radius: .7rem;
-    background: color-mix(in oklch, var(--sl-color-red-high) 7%, transparent);
-    color: var(--sl-color-red-high);
+    background: color-mix(in oklch, var(--kudos-accent) 7%, transparent);
+    color: var(--kudos-accent);
     font: inherit;
     font-weight: 650;
     cursor: pointer;
   }
 
   .kudos-button:hover:not(:disabled) {
-    border-color: var(--sl-color-red-high);
-    background: color-mix(in oklch, var(--sl-color-red-high) 13%, transparent);
+    border-color: var(--kudos-accent);
+    background: color-mix(in oklch, var(--kudos-accent) 13%, transparent);
   }
 
   .kudos-button[aria-pressed='true'] {
-    border-color: var(--sl-color-red-high);
-    background: color-mix(in oklch, var(--sl-color-red-high) 18%, transparent);
+    border-color: var(--kudos-accent);
+    background: color-mix(in oklch, var(--kudos-accent) 18%, transparent);
   }
 
   .kudos-button:focus-visible {
-    outline: 2px solid var(--sl-color-accent-high);
+    outline: 2px solid var(--kudos-accent);
     outline-offset: .18rem;
   }
 
