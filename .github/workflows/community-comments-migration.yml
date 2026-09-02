@@ -1,0 +1,52 @@
+name: Community comments migration
+
+on:
+  push:
+    branches: [feature/community-kudos]
+    paths:
+      - .github/workflows/community-comments-migration.yml
+      - Site/scripts/prepare-community-comments-migration.mjs
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Site/package-lock.json
+
+      - name: Use repository npm version
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - name: Install Site dependencies
+        working-directory: Site
+        run: npm ci --silent --no-audit --no-fund
+
+      - name: Prepare Remark42 migration
+        working-directory: Site
+        run: node scripts/prepare-community-comments-migration.mjs
+
+      - name: Commit migration preparation
+        run: |
+          git diff --check -- Site/src/components/Comments.astro Site/remark42-community-remap.txt "Vault/System/Frontmatter Schema.md"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Site/src/components/Comments.astro Site/remark42-community-remap.txt "Vault/System/Frontmatter Schema.md"
+          if git diff --cached --quiet; then
+            echo "Migration preparation is already current."
+            exit 0
+          fi
+          git commit -m "Prepare Remark42 stable thread migration"
+          git push
