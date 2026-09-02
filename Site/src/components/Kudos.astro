@@ -85,7 +85,7 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
         if (this.touchTimer !== undefined) window.clearTimeout(this.touchTimer);
         this.touchTimer = window.setTimeout(() => delete this.dataset.touchOpen, 2500);
       });
-      void this.refresh(true);
+      void this.initialise();
     }
 
     disconnectedCallback() {
@@ -154,13 +154,21 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
       button.setAttribute('aria-label', `${action}. ${total} total. ${breakdown}`);
     }
 
-    private async refresh(initial = false) {
+    private async refresh() {
       const response = await this.request('GET');
       if (!response.ok) throw new Error(`Kudos GET failed with ${response.status}.`);
       this.apply(await response.json() as KudosState);
-      if (initial) {
-        const button = this.button();
+    }
+
+    private async initialise() {
+      const button = this.button();
+      const status = this.status();
+      try {
+        await this.refresh();
         if (button) button.disabled = false;
+      } catch {
+        if (button) button.setAttribute('aria-busy', 'false');
+        if (status) status.textContent = 'Appreciation is temporarily unavailable.';
       }
     }
 
