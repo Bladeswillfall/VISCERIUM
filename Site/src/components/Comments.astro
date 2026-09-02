@@ -2,8 +2,6 @@
 import siteConfig from '../../site.config.mjs';
 
 const { entry, lang } = Astro.locals.starlightRoute;
-// Keep the existing page-level flag during the engine migration. The publishing
-// pipeline can rename this compatibility field separately without affecting threads.
 const comments = siteConfig.comments.enabled;
 const host = siteConfig.comments.host;
 const siteId = siteConfig.comments.siteId;
