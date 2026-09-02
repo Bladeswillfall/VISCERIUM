@@ -44,12 +44,9 @@ function normalisePageUrl(value) {
   }
 }
 
-async function fetchCommunityRecord(context, communityId) {
+export async function fetchCommunityRecord(context, communityId) {
   const registryUrl = new URL(`/community/${communityId}/`, context.request.url);
-  const response = await fetch(registryUrl, {
-    headers: { Accept: 'text/html' },
-    redirect: 'manual',
-  });
+  const response = await context.env.ASSETS.fetch(registryUrl);
   if (!response.ok) return null;
 
   const html = await response.text();
