@@ -62,7 +62,7 @@
     "starlight-scroll-to-top": "^1.0.1",
     "starlight-tags": "^1.0.1",
     "starlight-telescope": "^1.0.0",
-    "vis-timeline": "8.5.1"
+    "vis-timeline": "8.5.4"
   },
   "engines": {
     "node": ">=24 <25"
