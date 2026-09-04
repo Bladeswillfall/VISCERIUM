@@ -101,6 +101,17 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
       return this.querySelector<HTMLElement>('[data-kudos-status]');
     }
 
+    private track(method: 'PUT' | 'DELETE') {
+      try {
+        const rybbit = (window as Window & {
+          rybbit?: { event: (name: string, properties?: Record<string, string>) => void };
+        }).rybbit;
+        rybbit?.event(method === 'PUT' ? 'kudos_add' : 'kudos_remove', {
+          community_id: this.dataset.communityId ?? '',
+        });
+      } catch {}
+    }
+
     private headers() {
       return {
         Accept: 'application/json',
@@ -202,6 +213,7 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
         }
         if (!response.ok) throw new Error(`Kudos write failed with ${response.status}.`);
         this.apply(await response.json() as KudosState);
+        this.track(method);
         if (status) status.textContent = '';
       } catch {
         try {
