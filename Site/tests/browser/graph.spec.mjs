@@ -136,6 +136,12 @@ async function inspectGraph(page, viewport, theme) {
   await expect(fallback.locator('a')).not.toHaveCount(0);
   await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
 
+  const controlHeights = await Promise.all([
+    reset.evaluate((element) => element.getBoundingClientRect().height),
+    fallback.locator('summary').evaluate((element) => element.getBoundingClientRect().height),
+  ]);
+  expect(Math.min(...controlHeights)).toBeGreaterThanOrEqual(44);
+
   const graphData = await page.evaluate(async () => {
     const response = await fetch('/sitegraph/sitemap.json');
     return response.json();
@@ -221,12 +227,27 @@ async function inspectGraph(page, viewport, theme) {
   const geometry = await canvasHost.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     const renderedCanvas = element.querySelector('canvas');
+    const nodes = element._cyreg?.cy?.nodes().toArray() ?? [];
+    let overlappingNodes = false;
+    for (let left = 0; left < nodes.length && !overlappingNodes; left += 1) {
+      for (let right = left + 1; right < nodes.length; right += 1) {
+        const leftPosition = nodes[left].renderedPosition();
+        const rightPosition = nodes[right].renderedPosition();
+        const distance = Math.hypot(leftPosition.x - rightPosition.x, leftPosition.y - rightPosition.y);
+        const minimumDistance = (nodes[left].renderedOuterWidth() + nodes[right].renderedOuterWidth()) / 2;
+        if (distance < minimumDistance) {
+          overlappingNodes = true;
+          break;
+        }
+      }
+    }
     return {
       width: rect.width,
       height: rect.height,
       bitmapWidth: renderedCanvas?.width ?? 0,
       bitmapHeight: renderedCanvas?.height ?? 0,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      overlappingNodes,
     };
   });
   expect(geometry.width).toBeGreaterThan(240);
@@ -234,6 +255,7 @@ async function inspectGraph(page, viewport, theme) {
   expect(geometry.bitmapWidth).toBeGreaterThan(240);
   expect(geometry.bitmapHeight).toBeGreaterThan(180);
   expect(geometry.overflow).toBe(false);
+  expect(geometry.overlappingNodes).toBe(false);
   expect(pageErrors).toEqual([]);
   expect(firstPartyFailures).toEqual([]);
 
@@ -270,7 +292,7 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   const zoom = Number(await graph.getAttribute('data-world-graph-zoom'));
   const visibleActiveRadius = 10 * zoom;
   let retainedExpandedTarget = false;
-  for (const distance of [16, 15, 14, 13, 12]) {
+  for (const distance of [21, 20, 19, 18]) {
     if (distance <= visibleActiveRadius + 1) continue;
     const diagonal = distance / Math.SQRT2;
     for (const [dx, dy] of [

@@ -43,7 +43,7 @@
 }
 
 .world-graph__toolbar button {
-  min-height: 2.5rem;
+  min-block-size: 2.75rem;
   padding-inline: .85rem;
   border: 1px solid var(--world-graph-border);
   border-radius: 0;
@@ -129,6 +129,8 @@
 }
 
 .world-graph__fallback summary {
+  min-block-size: 2.75rem;
+  align-content: center;
   font-weight: 700;
   cursor: pointer;
 }
