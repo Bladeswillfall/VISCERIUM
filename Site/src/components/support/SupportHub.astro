@@ -92,13 +92,29 @@ import LocalIcon from '../LocalIcon.astro';
       <ul class="support-socials">
         {socialLinks.map((link) => (
           <li>
-            <div class="support-social" aria-label={`${link.label} coming soon`}>
-              <span class="support-social__mark" aria-hidden="true"><LocalIcon name={link.icon} /></span>
-              <span>
-                <strong>{link.label}</strong>
-                <small class="support-social__status">Coming soon</small>
-              </span>
-            </div>
+            {link.href ? (
+              <a
+                class="support-social support-social--active"
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${link.label}: ${link.status ?? 'official VISCERIUM account'} (opens in a new tab)`}
+              >
+                <span class="support-social__mark" aria-hidden="true"><LocalIcon name={link.icon} /></span>
+                <span>
+                  <strong>{link.label}</strong>
+                  <small class="support-social__status">{link.status ?? 'Official account'}</small>
+                </span>
+              </a>
+            ) : (
+              <div class="support-social" aria-label={`${link.label} coming soon`}>
+                <span class="support-social__mark" aria-hidden="true"><LocalIcon name={link.icon} /></span>
+                <span>
+                  <strong>{link.label}</strong>
+                  <small class="support-social__status">Coming soon</small>
+                </span>
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -116,3 +132,20 @@ import LocalIcon from '../LocalIcon.astro';
     </div>
   </section>
 </section>
+
+<style>
+  .support-social--active {
+    text-decoration: none;
+    transition: background 160ms ease;
+  }
+
+  .support-social--active:hover,
+  .support-social--active:focus-visible {
+    background: var(--support-void);
+    outline: none;
+  }
+
+  .support-social--active:focus-visible {
+    box-shadow: inset 0 0 0 1px var(--support-accent);
+  }
+</style>
