@@ -43,6 +43,7 @@ sidebar:
       href: "[[Degel]]"
 updated: 2026-08-16
 word_count: 2377
+community_id: d833d093-b73c-4bf0-859e-4fbf31dda9fd
 ---
 Nestled in the [[Degel System/Degel|Degel system]], Errack presents a paradox: a life-sustaining planet teeming with rich plant life and biodiversity, yet a world of savage beauty and unforgiving extremes. Towering mountains pierce skies above expansive jungles teeming with both vibrant life and lurking horrors, while arid deserts push the limits of ecological adaptation. Every corner of Errack showcases nature's ingenuity and ferocity, demanding respect and resilience from all who dare to inhabit it.
 

@@ -3,6 +3,8 @@ import process from 'node:process';
 import { parseIconSpec } from '../src/lib/icon-spec.mjs';
 import { findInvalidFrontmatterReferences } from '../src/lib/frontmatter-reference.mjs';
 import { validateEraPrimerData } from '../src/lib/era-primer-data.mjs';
+import { vaultSourceSlug } from '../src/lib/codex-paths.mjs';
+import { resolveCommunityForPage } from '../src/lib/page-kind.mjs';
 import {
   ERA_VALUES,
   buildContinuityFamilies,
@@ -12,11 +14,13 @@ import {
   validEntityId,
 } from '../src/lib/era-context.mjs';
 import { loadVaultContent } from './content-manifest.mjs';
+import { inferNoteType } from './note-inference.mjs';
 import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
 const requiredPublicFields = ['title', 'description'];
 const iconFields = ['icon', 'sidebarIcon', 'titleIcon'];
+const communityIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const forbiddenActiveTag = /<\s*\/?\s*(?:script|iframe|object|embed|base)\b/i;
 const inlineEventHandler = /<[^>]*\son[a-z][\w:-]*\s*=/i;
 const unsafeUrlScheme = /(?:\b(?:href|src|action|formaction)\s*=\s*["']?\s*|\]\(\s*)(?:javascript:|data\s*:\s*text\/html)/i;
@@ -204,6 +208,38 @@ function validateContinuityFamilies(records, fail) {
   }
 }
 
+function validateCommunityIds(records, fail) {
+  const seen = new Map();
+
+  for (const record of records) {
+    const { file, relativePath, data } = record;
+    const communityId = data?.community_id;
+
+    if (communityId !== undefined) {
+      if (typeof communityId !== 'string' || !communityIdPattern.test(communityId)) {
+        fail(`Invalid community_id in ${relative(file)}: ${JSON.stringify(communityId)}. Use a UUIDv4 value.`);
+      } else {
+        const previous = seen.get(communityId);
+        if (previous) {
+          fail(`Duplicate community_id "${communityId}" in ${previous} and ${relative(file)}.`);
+        } else {
+          seen.set(communityId, relative(file));
+        }
+      }
+    }
+
+    if (data?.status !== 'published' || !relativePath) continue;
+
+    const slug = vaultSourceSlug(relativePath);
+    const type = data.type ?? inferNoteType(path.join('source', relativePath), 'source');
+    if (!resolveCommunityForPage({ ...data, slug, type }, slug)) continue;
+
+    if (!communityId) {
+      fail(`Published Community page is missing community_id: ${relative(file)}`);
+    }
+  }
+}
+
 export function validateVaultNotes(manifest) {
   let failed = false;
 
@@ -216,6 +252,7 @@ export function validateVaultNotes(manifest) {
     validateRecord(record, fail);
   }
   validateContinuityFamilies(manifest.records, fail);
+  validateCommunityIds(manifest.records, fail);
 
   if (!failed) console.log(`Validated ${manifest.records.length} vault source note(s).`);
   return !failed;

@@ -17,7 +17,7 @@ SITE_URL=https://www.viscerium.co.uk
 
 Choose the new Cloudflare project name in the dashboard. No project name or Cloudflare identifier is committed because those values do not exist yet.
 
-The build regenerates public content from `Vault/Lore/` before Astro creates `Site/dist/`. No committed Wrangler file is required for the static Pages project.
+The build regenerates public content from `Vault/Lore/` before Astro creates `Site/dist/`.
 
 After Cloudflare assigns the real `pages.dev` hostname, either redirect it to the canonical domain or add hostname-specific `X-Robots-Tag: noindex` rules. The old project hostname was removed from `Site/public/_headers`, and a replacement cannot be written accurately before Cloudflare creates the project.
 
@@ -35,7 +35,37 @@ Cloudflare Pages `_redirects` rules cannot perform a hostname-to-hostname redire
 
 ## Pages environment variables
 
-Only public build-time values belong in Pages.
+Only public build-time values belong in Pages variables. Runtime secrets belong in Pages secrets.
+
+### Community kudos
+
+Community kudos use Pages Functions and D1. The repository contains the D1 binding names and database IDs in `Site/wrangler.toml`.
+
+The required runtime secret is:
+
+```text
+KUDOS_HMAC_KEY
+```
+
+Generate a random value outside the repository and add it as a Cloudflare Pages secret. Do not commit it or paste it into documentation, issues, logs, or chat.
+
+Use the preview D1 database for branch previews:
+
+```text
+viscerium-community-preview
+```
+
+Use the production D1 database for the production environment:
+
+```text
+viscerium-community
+```
+
+Apply D1 migrations to preview first. Apply them to production only immediately before the production rollout.
+
+Pages Functions are limited by `Site/public/_routes.json` to `/api/kudos/*`, so normal static requests do not invoke the Function.
+
+The initial rollout uses one pilot article. Keep the production `KUDOS_HMAC_KEY` unset until the preview API and UI pass their checks.
 
 ### Comments
 

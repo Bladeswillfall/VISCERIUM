@@ -36,6 +36,7 @@ tags:
   - "timeline-showcase"
   - "galdyr"
   - Events
+community_id: 78779f76-4ece-4eda-87fa-db17e287afe3
 ---
 
 # The Galdyr Compact

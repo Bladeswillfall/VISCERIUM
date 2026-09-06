@@ -232,6 +232,8 @@ export const collections = {
         eraStyle: optionalString,
         eraId: optionalString,
         entity_id: entityIdSchema.optional(),
+        community_id: z.string().uuid().optional(),
+        community: z.boolean().optional(),
         continuity: continuitySchema.optional(),
         navigation: navigationSchema.optional(),
         calendarDate: calendarDateSchema.optional(),

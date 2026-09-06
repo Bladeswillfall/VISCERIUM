@@ -44,6 +44,7 @@ tags:
   - "timeline-showcase"
   - "pathfinder"
   - Events
+community_id: 3371c744-49e6-444e-9ebf-02c268486af9
 ---
 
 # The Pathfinder Exodus

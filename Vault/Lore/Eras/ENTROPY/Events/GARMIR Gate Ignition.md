@@ -37,6 +37,7 @@ tags:
   - "garmir"
   - "same-day"
   - Events
+community_id: 1b3ed600-f486-4753-9952-d2247f19de26
 ---
 
 # GARMIR Gate Ignition

@@ -37,6 +37,7 @@ tags:
   - "timeline-showcase"
   - "myrkild"
   - Events
+community_id: 05701931-ea75-4489-bc23-7437977da1b1
 ---
 
 # The Myrkild Amnesty Schism
