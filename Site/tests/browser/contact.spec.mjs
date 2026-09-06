@@ -222,11 +222,21 @@ test('support status copy clears every section heading', async ({ page }) => {
     headers.map((header) => {
       const heading = header.querySelector('h2')?.getBoundingClientRect();
       const description = header.querySelector(':scope > p:not(.support-eyebrow)')?.getBoundingClientRect();
-      return heading && description ? { headingBottom: heading.bottom, descriptionTop: description.top } : null;
+      return heading && description ? {
+        heading: { top: heading.top, right: heading.right, bottom: heading.bottom, left: heading.left },
+        description: { top: description.top, right: description.right, bottom: description.bottom, left: description.left },
+      } : null;
     }).filter(Boolean)
   ));
 
   expect(geometry).toHaveLength(4);
-  for (const row of geometry) expect(row.descriptionTop).toBeGreaterThanOrEqual(row.headingBottom + 4);
+  for (const row of geometry) {
+    const gap = 4;
+    const clearsHeading = row.description.left >= row.heading.right + gap
+      || row.description.right <= row.heading.left - gap
+      || row.description.top >= row.heading.bottom + gap
+      || row.description.bottom <= row.heading.top - gap;
+    expect(clearsHeading).toBe(true);
+  }
   await expect(page.locator('main')).not.toContainText(/\b(?:Worker|Resend|Turnstile|deployment)\b/i);
 });
