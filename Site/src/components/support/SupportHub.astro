@@ -21,10 +21,7 @@ import LocalIcon from '../LocalIcon.astro';
   <section class="support-section support-section--issues" aria-labelledby="improve-codex-title">
     <div class="support-shell">
       <header class="support-section__header">
-        <div>
-          <p class="support-kicker">Public contribution</p>
-          <h2 id="improve-codex-title">Help improve the Codex</h2>
-        </div>
+        <h2 id="improve-codex-title">Help improve the Codex</h2>
         <p>GitHub keeps bugs, corrections, and feature requests public and trackable.</p>
       </header>
 
@@ -54,10 +51,7 @@ import LocalIcon from '../LocalIcon.astro';
   <section class="support-section support-section--support" aria-labelledby="support-project-title">
     <div class="support-shell">
       <header class="support-section__header">
-        <div>
-          <p class="support-kicker">Funding</p>
-          <h2 id="support-project-title">Support the project</h2>
-        </div>
+        <h2 id="support-project-title">Support the project</h2>
         <p>These routes will open once the public supporter structure is ready.</p>
       </header>
 
@@ -82,10 +76,7 @@ import LocalIcon from '../LocalIcon.astro';
   <section class="support-section support-section--social" aria-labelledby="socials-title">
     <div class="support-shell">
       <header class="support-section__header">
-        <div>
-          <p class="support-kicker">Channels</p>
-          <h2 id="socials-title">Official socials</h2>
-        </div>
+        <h2 id="socials-title">Official socials</h2>
         <p>Reserved account slots remain visible until each official channel is active.</p>
       </header>
 
@@ -132,20 +123,3 @@ import LocalIcon from '../LocalIcon.astro';
     </div>
   </section>
 </section>
-
-<style>
-  .support-social--active {
-    text-decoration: none;
-    transition: background 160ms ease;
-  }
-
-  .support-social--active:hover,
-  .support-social--active:focus-visible {
-    background: var(--support-void);
-    outline: none;
-  }
-
-  .support-social--active:focus-visible {
-    box-shadow: inset 0 0 0 1px var(--support-accent);
-  }
-</style>
