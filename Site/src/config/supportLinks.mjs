@@ -45,7 +45,12 @@ export const monetarySupportLinks = [
 ];
 
 export const socialLinks = [
-  { label: 'Bluesky', icon: 'bluesky' },
+  {
+    label: 'Bluesky',
+    icon: 'bluesky',
+    href: 'https://bsky.app/profile/viscerium.bsky.social',
+    status: '@viscerium.bsky.social',
+  },
   { label: 'Mastodon', icon: 'mastodon' },
   { label: 'Twitter / X', icon: 'twitter-x' },
   { label: 'Instagram', icon: 'instagram' },

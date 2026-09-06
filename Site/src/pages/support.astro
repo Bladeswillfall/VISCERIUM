@@ -1,7 +1,7 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import SupportHub from '../components/support/SupportHub.astro';
-import supportStylesHref from '../styles/support.css?url&no-inline';
+import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inline';
 ---
 
 <StarlightPage
@@ -11,8 +11,112 @@ import supportStylesHref from '../styles/support.css?url&no-inline';
     description: 'Report issues, suggest edits, support development, and find official VISCERIUM Codex channels.',
     tableOfContents: false,
     giscus: false,
-    head: [{ tag: 'link', attrs: { rel: 'stylesheet', href: supportStylesHref } }],
+    head: [
+      { tag: 'link', attrs: { rel: 'stylesheet', href: supportRedesignStylesHref } },
+    ],
   }}
 >
   <SupportHub />
 </StarlightPage>
+
+<style is:global>
+  body:has(.support-page) .support-wordmark {
+    display: inline-block;
+    white-space: nowrap;
+    word-break: keep-all;
+  }
+
+  body:has(.support-page) .support-placeholder::after {
+    content: none;
+    display: none;
+  }
+
+  body:has(.support-page) .support-placeholder__watermark {
+    position: absolute;
+    right: clamp(-2.5rem, -1vw, -.75rem);
+    bottom: clamp(-3.5rem, -1.5vw, -1.5rem);
+    width: clamp(13rem, 24vw, 23rem);
+    aspect-ratio: 1;
+    color: color-mix(in oklch, var(--support-fixed-text) 8%, transparent);
+    pointer-events: none;
+    rotate: -6deg;
+  }
+
+  body:has(.support-page) .support-placeholder__watermark .codex-icon {
+    width: 100%;
+    height: 100%;
+    color: currentColor;
+  }
+
+  body:has(.support-page) .support-placeholder__brand {
+    position: relative;
+    z-index: 1;
+  }
+
+  body:has(.support-page) .support-socials {
+    gap: .75rem;
+    border: 0;
+  }
+
+  body:has(.support-page) .support-social {
+    border: 1px solid var(--support-line);
+    background: color-mix(in oklch, var(--support-surface) 10%, transparent);
+  }
+
+  body:has(.support-page) .support-contact {
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+    border-top: 1px solid var(--support-line);
+    background: color-mix(in oklch, var(--support-surface) 68%, var(--support-bg));
+    color: var(--support-body);
+  }
+
+  body:has(.support-page) .support-contact::before {
+    content: none;
+    display: none;
+  }
+
+  body:has(.support-page) .support-contact__inner {
+    align-items: center;
+  }
+
+  body:has(.support-page) .support-contact .support-eyebrow {
+    color: var(--support-accent);
+  }
+
+  body:has(.support-page) .sl-markdown-content .support-contact h2 {
+    max-width: 18ch;
+    margin: 0 0 .8rem;
+    color: var(--support-text);
+    font-size: clamp(2.35rem, 1.8rem + 2vw, 4.3rem);
+    line-height: 1;
+  }
+
+  body:has(.support-page) .support-contact p {
+    color: var(--support-body);
+  }
+
+  body:has(.support-page) .support-contact__action {
+    border-color: var(--support-accent);
+    background: var(--support-accent);
+    color: var(--support-bg) !important;
+  }
+
+  body:has(.support-page) .support-contact__action:hover,
+  body:has(.support-page) .support-contact__action:focus-visible {
+    border-color: var(--support-text);
+    background: var(--support-text);
+    color: var(--support-bg) !important;
+  }
+
+  @media (max-width: 48rem) {
+    body:has(.support-page) .support-hero h1 {
+      font-size: clamp(2.75rem, 13.5vw, 6.2rem);
+    }
+
+    body:has(.support-page) .support-placeholder__watermark {
+      right: -1.75rem;
+      bottom: -2.5rem;
+      width: clamp(12rem, 55vw, 19rem);
+    }
+  }
+</style>

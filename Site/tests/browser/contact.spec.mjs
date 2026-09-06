@@ -218,15 +218,25 @@ test('support status copy clears every section heading', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(supportUrl, { waitUntil: 'networkidle' });
 
-  const geometry = await page.locator('.support-section > header, .support-contact > div').evaluateAll((headers) => (
+  const geometry = await page.locator('.support-section__header, .support-contact__inner > div').evaluateAll((headers) => (
     headers.map((header) => {
       const heading = header.querySelector('h2')?.getBoundingClientRect();
-      const description = header.querySelector('p')?.getBoundingClientRect();
-      return heading && description ? { headingBottom: heading.bottom, descriptionTop: description.top } : null;
+      const description = header.querySelector(':scope > p:not(.support-eyebrow)')?.getBoundingClientRect();
+      return heading && description ? {
+        heading: { top: heading.top, right: heading.right, bottom: heading.bottom, left: heading.left },
+        description: { top: description.top, right: description.right, bottom: description.bottom, left: description.left },
+      } : null;
     }).filter(Boolean)
   ));
 
-  expect(geometry.length).toBeGreaterThan(0);
-  for (const row of geometry) expect(row.descriptionTop).toBeGreaterThanOrEqual(row.headingBottom + 4);
+  expect(geometry).toHaveLength(4);
+  for (const row of geometry) {
+    const gap = 4;
+    const clearsHeading = row.description.left >= row.heading.right + gap
+      || row.description.right <= row.heading.left - gap
+      || row.description.top >= row.heading.bottom + gap
+      || row.description.bottom <= row.heading.top - gap;
+    expect(clearsHeading).toBe(true);
+  }
   await expect(page.locator('main')).not.toContainText(/\b(?:Worker|Resend|Turnstile|deployment)\b/i);
 });
