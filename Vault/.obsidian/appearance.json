@@ -30,7 +30,8 @@
     "Paragraph spacing",
     "Blockquote styling",
     "Autohide properties",
-    "Bases"
+    "Bases",
+    "Story State"
   ],
   "accentColor": "#b1a98c",
   "showViewHeader": true,
