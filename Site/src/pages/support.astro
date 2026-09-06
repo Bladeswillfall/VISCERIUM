@@ -1,7 +1,6 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import SupportHub from '../components/support/SupportHub.astro';
-import supportStylesHref from '../styles/support.css?url&no-inline';
 import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inline';
 ---
 
@@ -13,7 +12,6 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
     tableOfContents: false,
     giscus: false,
     head: [
-      { tag: 'link', attrs: { rel: 'stylesheet', href: supportStylesHref } },
       { tag: 'link', attrs: { rel: 'stylesheet', href: supportRedesignStylesHref } },
     ],
   }}
