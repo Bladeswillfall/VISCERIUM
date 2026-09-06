@@ -75,7 +75,11 @@
       color-mix(in oklch, var(--support-fixed-text) 4%, transparent) 78%,
       transparent 100%
     ),
-    linear-gradient(180deg, #050505 0%, var(--support-void) 100%);
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--codex-palette-ink) 32%, var(--support-void)) 0%,
+      var(--support-void) 100%
+    );
   color: var(--support-fixed-body);
   isolation: isolate;
 }
