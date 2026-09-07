@@ -240,3 +240,29 @@ test('support status copy clears every section heading', async ({ page }) => {
   }
   await expect(page.locator('main')).not.toContainText(/\b(?:Worker|Resend|Turnstile|deployment)\b/i);
 });
+
+test('support hero wordmark stays inside a narrow mobile viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 760 });
+  await page.goto(supportUrl, { waitUntil: 'networkidle' });
+
+  const geometry = await page.evaluate(() => {
+    const hero = document.querySelector('.support-hero');
+    const wordmark = document.querySelector('.support-wordmark');
+    if (!(hero instanceof HTMLElement) || !(wordmark instanceof HTMLElement)) return null;
+
+    const heroRect = hero.getBoundingClientRect();
+    const wordmarkRect = wordmark.getBoundingClientRect();
+    return {
+      pageWidth: document.documentElement.scrollWidth,
+      heroLeft: heroRect.left,
+      heroRight: heroRect.right,
+      wordmarkLeft: wordmarkRect.left,
+      wordmarkRight: wordmarkRect.right,
+    };
+  });
+
+  expect(geometry).not.toBeNull();
+  expect(geometry.pageWidth).toBeLessThanOrEqual(360);
+  expect(geometry.wordmarkLeft).toBeGreaterThanOrEqual(geometry.heroLeft - 1);
+  expect(geometry.wordmarkRight).toBeLessThanOrEqual(geometry.heroRight + 1);
+});
