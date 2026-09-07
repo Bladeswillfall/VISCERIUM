@@ -1,30 +1,8 @@
 .world-graph {
-  /* Cytoscape receives these values through getComputedStyle(). Keep this
-     renderer boundary in legacy sRGB so CSS Color 4 values do not fall back to
-     Cytoscape's black/default colours. */
-  --world-graph-canvas: #101010;
-  --world-graph-surface: #000;
-  --world-graph-border: #484137;
-  --world-graph-text: #c8bfa8;
-  --world-graph-muted: #888070;
-  --world-graph-node: #c8bfa8;
-  --world-graph-selected: #ffd166;
-  --world-graph-edge: #888070;
   --world-graph-edge-opacity: .75;
   display: grid;
   gap: .75rem;
   min-inline-size: 0;
-}
-
-:root[data-theme='light'] .world-graph {
-  --world-graph-canvas: #b9b4a9;
-  --world-graph-surface: #c8bfa8;
-  --world-graph-border: #888070;
-  --world-graph-text: #000;
-  --world-graph-muted: #484137;
-  --world-graph-node: #484137;
-  --world-graph-selected: #000;
-  --world-graph-edge: #484137;
 }
 
 .world-graph__toolbar {
