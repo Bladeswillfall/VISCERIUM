@@ -159,4 +159,10 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
       min-height: 0;
     }
   }
+
+  @media (max-width: 30rem) {
+    body:has(.support-page) .support-hero h1 {
+      font-size: clamp(2.6rem, 11.75vw, 3.6rem);
+    }
+  }
 </style>
