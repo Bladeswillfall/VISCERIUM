@@ -5,7 +5,7 @@ const supportUrl = `${baseUrl}/support/`;
 
 test.use({ viewport: { width: 1280, height: 900 } });
 
-test('support interactive surfaces stay rounded and legible in light mode', async ({ page }) => {
+test('support card geometry and light-mode surfaces stay legible', async ({ page }) => {
   await page.goto(supportUrl, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
@@ -13,10 +13,12 @@ test('support interactive surfaces stay rounded and legible in light mode', asyn
 
   const readSurface = (locator) => locator.evaluate((element) => {
     const style = getComputedStyle(element);
+    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
     return {
       background: style.backgroundColor,
       color: style.color,
       radius: Number.parseFloat(style.borderRadius),
+      heightRem: element.getBoundingClientRect().height / rootFontSize,
     };
   });
 
@@ -31,7 +33,8 @@ test('support interactive surfaces stay rounded and legible in light mode', asyn
   await activeSocial.hover();
   const socialSurface = await readSurface(activeSocial);
   expect(socialSurface.background).not.toBe('rgb(0, 0, 0)');
-  expect(socialSurface.radius).toBeGreaterThan(0);
+  expect(socialSurface.radius).toBe(0);
+  expect(socialSurface.heightRem).toBeLessThan(9);
 
   const staticSocialRadius = await page.locator('.support-social:not(.support-social--active)').first().evaluate(
     (element) => Number.parseFloat(getComputedStyle(element).borderRadius),
@@ -41,6 +44,31 @@ test('support interactive surfaces stay rounded and legible in light mode', asyn
   );
   expect(staticSocialRadius).toBe(0);
   expect(supporterRadius).toBe(0);
+
+  const watermark = page.locator('.support-placeholder__watermark').first();
+  await expect(watermark).toBeVisible();
+  const watermarkState = await watermark.evaluate((element) => {
+    const card = element.closest('.support-placeholder');
+    const cardWidth = card?.getBoundingClientRect().width ?? 0;
+    return {
+      ariaHidden: element.getAttribute('aria-hidden'),
+      pointerEvents: getComputedStyle(element).pointerEvents,
+      widthRatio: cardWidth > 0 ? element.getBoundingClientRect().width / cardWidth : 0,
+      lightColor: getComputedStyle(element).color,
+    };
+  });
+  expect(watermarkState.ariaHidden).toBe('true');
+  expect(watermarkState.pointerEvents).toBe('none');
+  expect(watermarkState.widthRatio).toBeGreaterThanOrEqual(0.4);
+  expect(watermarkState.widthRatio).toBeLessThanOrEqual(0.55);
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'dark';
+  });
+  expect(await watermark.evaluate((element) => getComputedStyle(element).color)).not.toBe(watermarkState.lightColor);
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+  });
 
   const supporterStatus = await page.locator('.support-status').first().evaluate((element) => {
     const statusStyle = getComputedStyle(element);
