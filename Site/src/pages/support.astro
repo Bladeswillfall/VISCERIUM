@@ -39,6 +39,8 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
 
   body:has(.support-page) .sl-markdown-content .support-cards {
     grid-auto-rows: 1fr;
+    gap: .75rem;
+    border: 0;
   }
 
   body:has(.support-page) .sl-markdown-content .support-card {
@@ -49,11 +51,18 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
     grid-template-rows: auto 1fr auto;
     align-self: stretch;
     justify-self: stretch;
+    overflow: clip;
+    border: 1px solid var(--support-line);
+    border-radius: .5rem;
     text-decoration: none;
   }
 
   body:has(.support-page) .sl-markdown-content .support-card--wide {
     min-height: 17rem;
+  }
+
+  body:has(.support-page) .support-card:focus-visible::after {
+    border-radius: .25rem;
   }
 
   body:has(.support-page) .support-placeholder-grid {
@@ -102,6 +111,8 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
   }
 
   body:has(.support-page) .support-social--active {
+    overflow: clip;
+    border-radius: .5rem;
     text-decoration: none;
   }
 
@@ -139,8 +150,13 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
 
   body:has(.support-page) .support-contact__action {
     border-color: var(--support-accent);
+    border-radius: 999px;
     background: var(--support-accent);
     color: var(--support-bg) !important;
+  }
+
+  body:has(.support-page) .support-contact__action:focus-visible::after {
+    border-radius: 999px;
   }
 
   body:has(.support-page) .support-contact__action:hover,
@@ -148,6 +164,20 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
     border-color: var(--support-text);
     background: var(--support-text);
     color: var(--support-bg) !important;
+  }
+
+  :root[data-theme='light'] body:has(.support-page) .support-card:hover,
+  :root[data-theme='light'] body:has(.support-page) .support-card:focus-visible,
+  :root[data-theme='light'] body:has(.support-page) .support-social--active:hover,
+  :root[data-theme='light'] body:has(.support-page) .support-social--active:focus-visible {
+    background: var(--support-surface);
+  }
+
+  :root[data-theme='light'] body:has(.support-page) .support-contact__action:hover,
+  :root[data-theme='light'] body:has(.support-page) .support-contact__action:focus-visible {
+    border-color: var(--codex-palette-mid);
+    background: var(--codex-palette-deep);
+    color: var(--codex-palette-light) !important;
   }
 
   @media (max-width: 48rem) {
