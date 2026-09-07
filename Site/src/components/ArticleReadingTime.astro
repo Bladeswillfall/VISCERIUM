@@ -26,7 +26,7 @@ const readingTime = isReadingTimeArticle(entry, fallbackId) && sourceEntry?.body
     {t('viscerium.article.readingTime', { count: readingTime.minutes })}
   </p>
 )}
-<ContentNotes />
+<ContentNotes {docs} {sourceEntry} />
 
 <style>
   .codex-reading-time {

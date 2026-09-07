@@ -26,7 +26,6 @@ The block below is maintained from the existing npm package manifests. It record
 | Project | Package | Scope | Declared version |
 | --- | --- | --- | --- |
 | Codex (`Site/`) | `@astrojs/mdx` | runtime | `^7.0.3` |
-| Codex (`Site/`) | `@astrojs/partytown` | runtime | `^2.1.7` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
 | Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
 | Codex (`Site/`) | `astro` | runtime | `^7.1.1` |
@@ -65,7 +64,7 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 
 | Component | Role in VISCERIUM | Upstream licence |
 | --- | --- | --- |
-| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, sitemap, and Partytown integrations | MIT |
+| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, and sitemap integrations | MIT |
 | [Starlight](https://github.com/withastro/starlight) | Documentation-site shell and content framework | MIT |
 | `starlight-changelogs` | Changelog presentation | MIT |
 | `starlight-scroll-to-top` | Scroll-to-top interface | MIT |
