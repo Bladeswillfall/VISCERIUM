@@ -42,6 +42,20 @@ test('support interactive surfaces stay rounded and legible in light mode', asyn
   expect(staticSocialRadius).toBe(0);
   expect(supporterRadius).toBe(0);
 
+  const supporterStatus = await page.locator('.support-status').first().evaluate((element) => {
+    const statusStyle = getComputedStyle(element);
+    const supporter = element.closest('.support-placeholder');
+    const description = supporter?.querySelector('p');
+    return {
+      color: statusStyle.color,
+      borderColor: statusStyle.borderTopColor,
+      supporterBackground: supporter ? getComputedStyle(supporter).backgroundColor : '',
+      descriptionColor: description ? getComputedStyle(description).color : '',
+    };
+  });
+  expect(supporterStatus.color).toBe(supporterStatus.descriptionColor);
+  expect(supporterStatus.borderColor).not.toBe(supporterStatus.supporterBackground);
+
   const contactAction = page.locator('.support-contact__action');
   await contactAction.hover();
   const contactSurface = await readSurface(contactAction);
