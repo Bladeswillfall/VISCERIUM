@@ -56,12 +56,12 @@ test('support interactive surfaces stay rounded and legible in light mode', asyn
   );
 });
 
-test('support serves the requested black Discord icon without clipping its source shape', async ({ request }) => {
+test('support serves the supplied black Discord icon without changing its geometry', async ({ request }) => {
   const response = await request.get(`${baseUrl}/icons/discord.svg`);
   expect(response.ok()).toBe(true);
 
   const svg = await response.text();
-  expect(svg).toContain('viewBox="0 -1 24 25"');
+  expect(svg).toContain('viewBox="0 -28.5 256 256"');
   expect(svg).toContain('fill="#000"');
-  expect(svg).toContain('M19.5 2.75C19.815 3.421');
+  expect(svg).toContain('M216.856339,16.5966031');
 });
