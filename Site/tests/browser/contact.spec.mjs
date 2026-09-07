@@ -218,15 +218,51 @@ test('support status copy clears every section heading', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(supportUrl, { waitUntil: 'networkidle' });
 
-  const geometry = await page.locator('.support-section > header, .support-contact > div').evaluateAll((headers) => (
+  const geometry = await page.locator('.support-section__header, .support-contact__inner > div').evaluateAll((headers) => (
     headers.map((header) => {
       const heading = header.querySelector('h2')?.getBoundingClientRect();
-      const description = header.querySelector('p')?.getBoundingClientRect();
-      return heading && description ? { headingBottom: heading.bottom, descriptionTop: description.top } : null;
+      const description = header.querySelector(':scope > p:not(.support-eyebrow)')?.getBoundingClientRect();
+      return heading && description ? {
+        heading: { top: heading.top, right: heading.right, bottom: heading.bottom, left: heading.left },
+        description: { top: description.top, right: description.right, bottom: description.bottom, left: description.left },
+      } : null;
     }).filter(Boolean)
   ));
 
-  expect(geometry.length).toBeGreaterThan(0);
-  for (const row of geometry) expect(row.descriptionTop).toBeGreaterThanOrEqual(row.headingBottom + 4);
+  expect(geometry).toHaveLength(4);
+  for (const row of geometry) {
+    const gap = 4;
+    const clearsHeading = row.description.left >= row.heading.right + gap
+      || row.description.right <= row.heading.left - gap
+      || row.description.top >= row.heading.bottom + gap
+      || row.description.bottom <= row.heading.top - gap;
+    expect(clearsHeading).toBe(true);
+  }
   await expect(page.locator('main')).not.toContainText(/\b(?:Worker|Resend|Turnstile|deployment)\b/i);
+});
+
+test('support hero wordmark stays inside a narrow mobile viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 760 });
+  await page.goto(supportUrl, { waitUntil: 'networkidle' });
+
+  const geometry = await page.evaluate(() => {
+    const hero = document.querySelector('.support-hero');
+    const wordmark = document.querySelector('.support-wordmark');
+    if (!(hero instanceof HTMLElement) || !(wordmark instanceof HTMLElement)) return null;
+
+    const heroRect = hero.getBoundingClientRect();
+    const wordmarkRect = wordmark.getBoundingClientRect();
+    return {
+      pageWidth: document.documentElement.scrollWidth,
+      heroLeft: heroRect.left,
+      heroRight: heroRect.right,
+      wordmarkLeft: wordmarkRect.left,
+      wordmarkRight: wordmarkRect.right,
+    };
+  });
+
+  expect(geometry).not.toBeNull();
+  expect(geometry.pageWidth).toBeLessThanOrEqual(360);
+  expect(geometry.wordmarkLeft).toBeGreaterThanOrEqual(geometry.heroLeft - 1);
+  expect(geometry.wordmarkRight).toBeLessThanOrEqual(geometry.heroRight + 1);
 });
