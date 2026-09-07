@@ -51,7 +51,9 @@ test('support interactive surfaces stay rounded and legible in light mode', asyn
 
   const discordMark = page.locator('.support-social').filter({ hasText: 'Discord' }).locator('.support-social__mark');
   await expect(discordMark).toBeVisible();
-  expect(await discordMark.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(0, 0, 0)');
+  expect(await discordMark.evaluate((element) => getComputedStyle(element).color)).toMatch(
+    /^(rgb\(0, 0, 0\)|oklch\(0 0 0\))$/,
+  );
 });
 
 test('support serves the requested black Discord icon without clipping its source shape', async ({ request }) => {
