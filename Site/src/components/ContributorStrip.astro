@@ -1,19 +1,22 @@
 ---
+import contributorAssets from '../data/contributor-avatars.json';
 import contributorRegistry from '../data/contributors.json';
+import { buildRoleSegments, normalizeRole, normalizeRoles } from '../lib/contributors.mjs';
 import { formatList } from '../lib/i18n.mjs';
 
 type ContributorProfile = {
   name: string;
   url: string;
-  avatar: string;
 };
 
 type Contributor = ContributorProfile & {
   id: string;
   roles: string[];
+  avatarSrc: string;
 };
 
 const profiles = contributorRegistry.profiles as Record<string, ContributorProfile>;
+const avatarPaths = contributorAssets as Record<string, string>;
 const { starlightRoute, t } = Astro.locals;
 const locale = starlightRoute.lang;
 const entry = Astro.locals.starlightRoute?.entry?.data ?? {};
@@ -36,17 +39,22 @@ for (const item of requested) {
   const id = reference?.id?.trim().toLowerCase();
   if (!id || !profiles[id]) continue;
 
-  const contributor = byId.get(id) ?? { id, ...profiles[id], roles: [] };
-  const roles = Array.isArray(reference.roles) ? reference.roles : [reference.role ?? t('viscerium.contributors.defaultRole')];
-  for (const role of roles.map(String).map((value) => value.trim()).filter(Boolean)) {
-    if (!contributor.roles.some((value) => value.toLowerCase() === role.toLowerCase())) contributor.roles.push(role);
-  }
+  const contributor = byId.get(id) ?? {
+    id,
+    ...profiles[id],
+    roles: [],
+    avatarSrc: avatarPaths[id] ?? avatarPaths.fallback,
+  };
+  const roles = Array.isArray(reference.roles)
+    ? reference.roles
+    : [reference.role ?? t('viscerium.contributors.defaultRole')];
+  contributor.roles = normalizeRoles([...contributor.roles, ...roles]);
   byId.set(id, contributor);
 }
 
 const contributors = [...byId.values()].sort((a, b) => (
-  Number(b.roles.some((role) => role.toLowerCase() === 'author'))
-  - Number(a.roles.some((role) => role.toLowerCase() === 'author'))
+  Number(b.roles.some((role) => normalizeRole(role) === 'author'))
+  - Number(a.roles.some((role) => normalizeRole(role) === 'author'))
   || a.name.localeCompare(b.name, locale)
 ));
 const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) || 7);
@@ -59,11 +67,10 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
       <ul>
         {contributors.map((contributor) => {
           const roles = formatList(contributor.roles, locale);
-          const isAuthor = contributor.roles.some((role) => role.toLowerCase() === 'author');
+          const segments = buildRoleSegments(contributor.roles);
           return (
             <li>
               <a
-                class:list={{ 'is-author': isAuthor }}
                 href={contributor.url}
                 target="_blank"
                 rel="noreferrer"
@@ -73,15 +80,33 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
                   interpolation: { escapeValue: false },
                 })}
               >
-                <img
-                  src={`/assets/contributors/${contributor.avatar}`}
-                  alt=""
-                  width="48"
-                  height="48"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <span><strong>{contributor.name}</strong><small>{roles}</small></span>
+                <span class="contributor-avatar-wrap">
+                  {segments.length > 0 && (
+                    <svg class="role-ring" viewBox="0 0 100 100" aria-hidden="true">
+                      {segments.map((segment) => (
+                        <circle
+                          class:list={['segment', segment.className]}
+                          cx="50"
+                          cy="50"
+                          r="46"
+                          pathLength="100"
+                          stroke-dasharray={segment.dasharray}
+                          stroke-dashoffset={segment.dashoffset}
+                          transform="rotate(-90 50 50)"
+                        />
+                      ))}
+                    </svg>
+                  )}
+                  <img
+                    src={contributor.avatarSrc}
+                    alt=""
+                    width="48"
+                    height="48"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+                <span class="contributor-copy"><strong>{contributor.name}</strong><small>{roles}</small></span>
               </a>
             </li>
           );
@@ -93,6 +118,13 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
 
 <style>
   .codex-contributors {
+    --role-author: #d6b66a;
+    --role-co-author: #c9896b;
+    --role-editor: #8aa8c7;
+    --role-research: #8faf98;
+    --role-illustrator: #b59ac7;
+    --role-consultant: #b9a894;
+    --role-other: #8f969f;
     margin-block: 2.5rem 1.5rem;
     border-block-start: 1px solid var(--sl-color-hairline-light);
     padding: 1.5rem var(--sl-content-pad-x);
@@ -131,7 +163,40 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
     color: var(--sl-color-accent-high);
   }
 
+  .contributor-avatar-wrap {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .role-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .role-ring .segment {
+    fill: none;
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .role-ring .role-author { stroke: var(--role-author); }
+  .role-ring .role-co-author { stroke: var(--role-co-author); }
+  .role-ring .role-editor { stroke: var(--role-editor); }
+  .role-ring .role-research { stroke: var(--role-research); }
+  .role-ring .role-illustrator { stroke: var(--role-illustrator); }
+  .role-ring .role-consultant { stroke: var(--role-consultant); }
+  .role-ring .role-other { stroke: var(--role-other); }
+
   img {
+    position: absolute;
+    inset: .25rem;
     width: 3rem;
     height: 3rem;
     border: 2px solid var(--sl-color-bg);
@@ -140,11 +205,7 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
     object-fit: cover;
   }
 
-  .is-author img {
-    border-color: var(--sl-color-accent-high);
-  }
-
-  a span {
+  .contributor-copy {
     display: grid;
   }
 
