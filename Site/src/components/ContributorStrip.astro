@@ -118,13 +118,13 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
 
 <style>
   .codex-contributors {
-    --role-author: #d6b66a;
-    --role-co-author: #c9896b;
-    --role-editor: #8aa8c7;
-    --role-research: #8faf98;
-    --role-illustrator: #b59ac7;
-    --role-consultant: #b9a894;
-    --role-other: #8f969f;
+    --role-author: color-mix(in oklch, var(--vc-event-political) 78%, var(--sl-color-white));
+    --role-co-author: color-mix(in oklch, var(--vc-event-military) 78%, var(--sl-color-white));
+    --role-editor: color-mix(in oklch, var(--vc-event-scientific) 78%, var(--sl-color-white));
+    --role-research: color-mix(in oklch, var(--vc-event-environmental) 78%, var(--sl-color-white));
+    --role-illustrator: color-mix(in oklch, var(--vc-event-cultural) 78%, var(--sl-color-white));
+    --role-consultant: color-mix(in oklch, var(--vc-event-religious) 78%, var(--sl-color-white));
+    --role-other: color-mix(in oklch, var(--vc-event-unknown) 78%, var(--sl-color-white));
     margin-block: 2.5rem 1.5rem;
     border-block-start: 1px solid var(--sl-color-hairline-light);
     padding: 1.5rem var(--sl-content-pad-x);
