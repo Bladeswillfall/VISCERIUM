@@ -193,6 +193,13 @@ const readerPreferencesHead = [
   },
 ];
 
+const githubEditLink = siteConfig.githubRepoUrl
+  ? { baseUrl: `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/` }
+  : undefined;
+const githubSocial = siteConfig.githubRepoUrl
+  ? [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }]
+  : [];
+
 const sidebar = [
   ...(await buildSidebar()),
   {
@@ -253,9 +260,7 @@ export default defineConfig({
         MarkdownContent: './src/components/CodexMarkdownContent.astro',
         TwoColumnContent: './src/components/CodexTwoColumnContent.astro',
       },
-      editLink: {
-        baseUrl: `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/`,
-      },
+      editLink: githubEditLink,
       plugins: [
         starlightTags({ onInlineTagsNotFound: 'create' }),
         starlightChangelogs(),
@@ -263,7 +268,7 @@ export default defineConfig({
       ],
       sidebar,
       head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
-      social: [{ icon: 'github', label: 'GitHub', href: siteConfig.githubRepoUrl }],
+      social: githubSocial,
     }),
     sitemap({
       serialize(item) {
