@@ -4,12 +4,19 @@ import { classifyCodexPage } from './lib/page-kind.mjs';
 import { getPublicationDates, toIsoDate } from './lib/publication-dates.mjs';
 import articlePagesStylesheet from './styles/article-pages.css?url';
 import categoryIndexStylesheet from './styles/category-index.css?url';
+import statementPagesStylesheet from './styles/statement-pages.css?url';
+
+const statementPagePaths = new Set([
+  '/policies/content-production/',
+  '/statements/human-authorship-and-ai/',
+]);
 
 export const onRequest = defineRouteMiddleware((context) => {
   const route = context.locals.starlightRoute;
   const data = route.entry.data as Record<string, unknown>;
   const pageKind = classifyCodexPage(data, route.entry.id);
   const pageType = String(data.type ?? '').trim().toLowerCase();
+  const routePath = context.url.pathname.endsWith('/') ? context.url.pathname : `${context.url.pathname}/`;
 
   if (!pageKind.isHomepage) {
     route.head.push({
@@ -22,6 +29,13 @@ export const onRequest = defineRouteMiddleware((context) => {
     route.head.push({
       tag: 'link',
       attrs: { rel: 'stylesheet', href: categoryIndexStylesheet },
+    });
+  }
+
+  if (statementPagePaths.has(routePath)) {
+    route.head.push({
+      tag: 'link',
+      attrs: { rel: 'stylesheet', href: statementPagesStylesheet },
     });
   }
 
