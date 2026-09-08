@@ -46,6 +46,7 @@ We consider whether its use is appropriate for the task and remain mindful of co
 - transparency;  
 - environmental and computational cost; and  
 - dependency on opaque or closed systems.  
+
   
 We recognise the legitimate concerns of creators whose work may have been used in generative systems without meaningful consent, attribution or compensation.
 
@@ -84,6 +85,7 @@ When VISCERIUM describes its creative work as **human-made**, we mean that liter
 - The world was created by people.  
 - The artwork was made by people.  
 - The canon was decided by people.
+
   
 AI-generated creative content is not included in published VISCERIUM work carrying that description.
 
