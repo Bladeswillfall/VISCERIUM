@@ -155,7 +155,7 @@ I am trying to understand the subject well enough to keep doing better.
 
 **[2]** IBM Training Manual (1979), reproduced in Doug Bonderud, [*AI decision-making: Where do businesses draw the line?*](https://www.ibm.com/think/insights/ai-decision-making-where-do-businesses-draw-the-line), IBM Think.
 
-**[3]** Regulation (EU) 2024/1689, [*Artificial Intelligence Act*](https://eur-lex.europa.eu/eli/2024/1689/oj/eng), particularly Article 53 and associated copyright and transparency provisions.
+**[3]** Regulation (EU) 2024/1689, [*Artificial Intelligence Act*](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng), particularly Article 53 and associated copyright and transparency provisions.
 
 **[4]** Open Source Initiative, [*The Open Source AI Definition 1.0*](https://opensource.org/ai/open-source-ai-definition).
 
