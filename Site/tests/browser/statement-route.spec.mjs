@@ -21,6 +21,21 @@ test('policy and commentary suppress Starlight previous/next pagination', async 
   }
 });
 
+test('content production policy disables community interactions', async ({ page }) => {
+  const policyResponse = await page.goto(policyUrl, { waitUntil: 'domcontentloaded' });
+  expect(policyResponse?.status()).toBe(200);
+
+  await expect(page.locator('.codex-discussions')).toHaveCount(0);
+  await expect(page.locator('viscerium-kudos')).toHaveCount(0);
+  await expect(page.locator('viscerium-comments')).toHaveCount(0);
+  await expect(page.locator('codex-webmentions')).toHaveCount(0);
+
+  const commentaryResponse = await page.goto(statementUrl, { waitUntil: 'domcontentloaded' });
+  expect(commentaryResponse?.status()).toBe(200);
+  await expect(page.locator('.codex-discussions')).toBeVisible();
+  await expect(page.locator('viscerium-kudos')).toHaveCount(1);
+});
+
 test('Elias Vail signature remains visible, themed, and responsive', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const response = await page.goto(statementUrl, { waitUntil: 'networkidle' });
