@@ -37,6 +37,7 @@ tags:
   - timeline-showcase
   - okse
   - Events
+community_id: 51dd0a36-ca8a-4cef-811d-ffc9243087f9
 slug: eras/citadel/events/the-first-crowning-at-skallfast
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The First Crowning at Skallfast.md

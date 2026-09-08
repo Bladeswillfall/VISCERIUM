@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - same-day
   - Events
+community_id: 73d810e6-e47a-48de-8b44-1135aabd4d02
 slug: eras/smog/events/the-nine-stack-lockout
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Nine-Stack Lockout.md

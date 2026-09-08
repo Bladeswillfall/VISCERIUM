@@ -37,6 +37,7 @@ tags:
   - timeline-showcase
   - aesir
   - Events
+community_id: ac76bebb-5c16-434b-9d40-79cb829db432
 slug: eras/nearsight/events/first-aesir-mk-2-fielding
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/First AESIR Mk-2 Fielding.md

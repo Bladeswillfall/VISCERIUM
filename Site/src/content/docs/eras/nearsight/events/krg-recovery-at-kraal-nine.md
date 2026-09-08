@@ -39,6 +39,7 @@ tags:
   - krg
   - same-day
   - Events
+community_id: d098104f-49f4-4cb9-ad01-fad7ed5e1428
 slug: eras/nearsight/events/krg-recovery-at-kraal-nine
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/KRG Recovery at Kraal Nine.md

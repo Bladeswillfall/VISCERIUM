@@ -46,6 +46,7 @@ tags:
   - timeline-showcase
   - pathfinder
   - Events
+community_id: 3371c744-49e6-444e-9ebf-02c268486af9
 slug: eras/entropy/events/the-pathfinder-exodus
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Pathfinder Exodus.md

@@ -49,6 +49,7 @@ tags:
   - timeline-showcase
   - genetics
   - Events
+community_id: 5c4f56bd-ccaf-4096-a998-38b524a9aa3e
 slug: eras/nearsight/events/the-corporate-genetic-bidding-programme
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Corporate Genetic Bidding Programme.md

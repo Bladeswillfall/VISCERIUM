@@ -39,6 +39,7 @@ tags:
   - timeline-showcase
   - myrkild
   - Events
+community_id: 87cc4b35-4ea6-499d-8761-9bb91ddf5b46
 slug: eras/smog/events/the-hollowed-labour-panic
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Hollowed Labour Panic.md

@@ -42,6 +42,7 @@ tags:
   - lorndale
   - resonance
   - Events
+community_id: 0a018b40-d600-4c54-a08a-09e0c4285cdb
 slug: eras/citadel/events/the-breaking-of-lorndale
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Breaking of Lorndale.md

@@ -47,6 +47,7 @@ tags:
   - timeline-showcase
   - blackout
   - Events
+community_id: 71450a4b-11e3-4402-a975-9b6d79434362
 slug: eras/nearsight/events/the-nearsight-blackout
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Nearsight Blackout.md

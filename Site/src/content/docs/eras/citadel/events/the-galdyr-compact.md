@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - galdyr
   - Events
+community_id: 78779f76-4ece-4eda-87fa-db17e287afe3
 slug: eras/citadel/events/the-galdyr-compact
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Galdyr Compact.md

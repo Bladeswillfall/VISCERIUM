@@ -37,6 +37,7 @@ tags:
   - timeline-showcase
   - same-day
   - Events
+community_id: 82d18e3b-2a8f-44af-bea0-10ae1967d664
 slug: eras/smog/events/the-nine-stack-strike
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Nine-Stack Strike.md

@@ -46,6 +46,7 @@ tags:
   - timeline-showcase
   - trench-war
   - Events
+community_id: 58df2a8c-1c3d-4725-9825-7f87cacaf849
 slug: eras/smog/events/the-trench-line-at-orra-vale
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Trench Line at Orra Vale.md

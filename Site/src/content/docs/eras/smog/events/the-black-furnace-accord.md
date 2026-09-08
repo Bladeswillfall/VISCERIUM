@@ -39,6 +39,7 @@ tags:
   - timeline-showcase
   - industry
   - Events
+community_id: 45efd982-b296-492b-9ffb-3f1cc45446f7
 slug: eras/smog/events/the-black-furnace-accord
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Black Furnace Accord.md

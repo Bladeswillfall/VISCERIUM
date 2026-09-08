@@ -17,6 +17,7 @@ tags:
   - errack
   - atlas
   - Maps
+community_id: e77074e2-e5d9-42f6-bf3e-7a0bef726bc3
 slug: eras/citadel/errack-citadel-map
 eraStyle: e1
 sourcePath: Eras/CITADEL/Errack CITADEL Map.md

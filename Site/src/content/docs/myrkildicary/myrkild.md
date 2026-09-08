@@ -45,9 +45,21 @@ sidebar:
       value:
         - 7 Nadirs of Sin
         - Underlings
+community_id: d7e0e59d-eced-4800-8c0d-68afd3cdc184
 slug: myrkildicary/myrkild
 sourcePath: Myrkildicary/Myrkild.md
 giscus: true
+referencedIn:
+  - title: Valenheim
+    href: >-
+      /eras/citadel/nations/okse-dominion/regions/halvmaneheimr/settlements/valenheim/
+    type: location
+    era: CITADEL
+references:
+  - title: Errack
+    href: /degel-system/errack/
+    type: location
+    era: Universal
 ---
 
 > Watch for unusual growths on your meat, fruit and vegetables, these can be indications of Myrkild in the vicinity. Under no circumstances should you consume produce you believe to be infected.

@@ -37,6 +37,7 @@ tags:
   - timeline-showcase
   - same-day
   - Events
+community_id: ef5d4ee5-167c-4d7b-95ab-9465686a73b2
 slug: eras/citadel/events/the-night-of-seven-bells
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Night of Seven Bells.md

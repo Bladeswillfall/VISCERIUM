@@ -39,6 +39,7 @@ tags:
   - timeline-showcase
   - trade
   - Events
+community_id: 5bfdd414-3aa7-44db-be20-c2d8a3cb8213
 slug: eras/citadel/events/the-opening-of-the-bone-road
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Opening of the Bone Road.md

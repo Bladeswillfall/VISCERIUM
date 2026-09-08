@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - science
   - Events
+community_id: cb303f1b-ffc5-4449-981b-a86bd79562a8
 slug: eras/smog/events/the-first-resonance-meter-standard
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The First Resonance Meter Standard.md

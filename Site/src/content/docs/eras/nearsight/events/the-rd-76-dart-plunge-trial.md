@@ -40,6 +40,7 @@ tags:
   - timeline-showcase
   - rd-76
   - Events
+community_id: 13a8fe54-ec6b-42e1-8edf-ca07b3a6baf2
 slug: eras/nearsight/events/the-rd-76-dart-plunge-trial
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The RD-76 Dart Plunge Trial.md

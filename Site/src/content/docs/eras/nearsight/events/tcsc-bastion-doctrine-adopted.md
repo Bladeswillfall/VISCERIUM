@@ -40,6 +40,7 @@ tags:
   - timeline-showcase
   - tcsc
   - Events
+community_id: dca6513b-2b67-4ece-bb06-9307fd96d590
 slug: eras/nearsight/events/tcsc-bastion-doctrine-adopted
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/TCSC Bastion Doctrine Adopted.md

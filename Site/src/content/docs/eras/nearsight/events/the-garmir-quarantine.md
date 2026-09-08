@@ -49,6 +49,7 @@ tags:
   - garmir
   - myrkild
   - Events
+community_id: 5846289e-326c-4fa8-b980-8274bd35ca09
 slug: eras/nearsight/events/the-garmir-quarantine
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Garmir Quarantine.md

@@ -45,6 +45,7 @@ tags:
   - timeline-showcase
   - public-health
   - Events
+community_id: b94c8b67-6e86-494c-9f33-8fadce402983
 slug: eras/smog/events/the-brass-lung-winter
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Brass Lung Winter.md

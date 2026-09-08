@@ -40,6 +40,7 @@ tags:
   - timeline-showcase
   - aviation
   - Events
+community_id: c7c9546f-e1da-4d1d-959f-f9c4d78047f4
 slug: eras/smog/events/the-skyhook-demonstration
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Skyhook Demonstration.md

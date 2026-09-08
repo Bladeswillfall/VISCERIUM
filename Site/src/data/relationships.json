@@ -1,5 +1,38 @@
 {
-  "nodes": [],
-  "edges": [],
-  "relationTypes": []
+  "nodes": [
+    {
+      "id": "eras/citadel/nations/krass-dominion",
+      "title": "Krass Dominion",
+      "description": "The Krass Dominion is a land where the air itself conspires against life.",
+      "type": "faction",
+      "era": "CITADEL",
+      "page": "/eras/citadel/nations/krass-dominion/"
+    },
+    {
+      "id": "eras/citadel/nations/okse-dominion",
+      "title": "Okse Dominion",
+      "description": "A harsh mountain dominion of the Oksmun, built on endurance, fortification, oil, slave labour, and old Vetruxi blood.",
+      "type": "faction",
+      "era": "CITADEL",
+      "page": "/eras/citadel/nations/okse-dominion/"
+    }
+  ],
+  "edges": [
+    {
+      "id": "rel-1",
+      "source": "eras/citadel/nations/okse-dominion",
+      "target": "eras/citadel/nations/krass-dominion",
+      "type": "related",
+      "label": "Related",
+      "directed": false,
+      "description": ""
+    }
+  ],
+  "relationTypes": [
+    {
+      "id": "related",
+      "label": "Related",
+      "count": 1
+    }
+  ]
 }

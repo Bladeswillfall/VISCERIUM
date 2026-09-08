@@ -39,6 +39,7 @@ tags:
   - krg
   - same-day
   - Events
+community_id: a200c28b-0bd2-4fc5-8d73-99e821c183f6
 slug: eras/nearsight/events/the-kraal-nine-signal-return
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/The Kraal Nine Signal Return.md

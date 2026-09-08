@@ -45,6 +45,7 @@ tags:
   - timeline-showcase
   - verigoth
   - Events
+community_id: 9f97dd14-2c98-498d-aed9-ef074eaac03d
 slug: eras/citadel/events/the-verigoth-chain-census
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Verigoth Chain Census.md

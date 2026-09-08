@@ -39,6 +39,7 @@ tags:
   - timeline-showcase
   - myrkild
   - Events
+community_id: 05701931-ea75-4489-bc23-7437977da1b1
 slug: eras/entropy/events/the-myrkild-amnesty-schism
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Myrkild Amnesty Schism.md

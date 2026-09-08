@@ -5,6 +5,7 @@ description: >-
   warmth to Errack and the rest of the Degel System.
 status: published
 type: article
+community_id: 2bef0971-7237-40d5-b247-b7812c0dad55
 slug: degel-system/degel
 sourcePath: Degel System/Degel.md
 giscus: true

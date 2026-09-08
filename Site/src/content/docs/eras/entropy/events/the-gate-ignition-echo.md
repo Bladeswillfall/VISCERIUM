@@ -39,6 +39,7 @@ tags:
   - garmir
   - same-day
   - Events
+community_id: b8d97577-48c4-4fb3-8a72-121822dabf35
 slug: eras/entropy/events/the-gate-ignition-echo
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Gate Ignition Echo.md

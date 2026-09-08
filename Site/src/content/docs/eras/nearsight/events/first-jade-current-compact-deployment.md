@@ -40,6 +40,7 @@ tags:
   - timeline-showcase
   - jade-current
   - Events
+community_id: 6448a7c5-2af9-4441-9cbd-7406fa820ca6
 slug: eras/nearsight/events/first-jade-current-compact-deployment
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/First Jade Current Compact Deployment.md

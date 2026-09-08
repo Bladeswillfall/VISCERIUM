@@ -48,6 +48,7 @@ tags:
   - timeline-showcase
   - satol
   - Events
+community_id: be224405-8220-4d8b-8dd2-6412f2141fc6
 slug: eras/entropy/events/the-vacuum-siege-of-satol-reach
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Vacuum Siege of Satol Reach.md

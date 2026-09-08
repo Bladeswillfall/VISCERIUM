@@ -39,6 +39,7 @@ tags:
   - timeline-showcase
   - intercalary
   - Events
+community_id: 9fc3ca08-0ee9-4b9f-a726-9cb3e2e0822d
 slug: eras/entropy/events/the-last-calendar-correction
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Last Calendar Correction.md

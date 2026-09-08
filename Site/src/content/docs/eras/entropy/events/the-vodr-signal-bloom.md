@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - vodr
   - Events
+community_id: 3dcf68d3-a60e-4aa3-ae04-bcae0d421298
 slug: eras/entropy/events/the-vodr-signal-bloom
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Vodr Signal Bloom.md

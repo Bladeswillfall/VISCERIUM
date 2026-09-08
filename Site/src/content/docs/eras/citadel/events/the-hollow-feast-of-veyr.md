@@ -39,6 +39,7 @@ tags:
   - myrkild
   - legend
   - Events
+community_id: de738676-2eca-4af3-a7d0-834c45d231e3
 slug: eras/citadel/events/the-hollow-feast-of-veyr
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Hollow Feast of Veyr.md

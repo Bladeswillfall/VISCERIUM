@@ -9,6 +9,18 @@
     "minZoom": -6,
     "maxZoom": 3,
     "page": "/eras/citadel/errack-citadel-map/",
-    "markers": []
+    "markers": [],
+    "tiles": {
+      "format": "webp",
+      "tileSize": 512,
+      "width": 7680,
+      "height": 3840,
+      "maxLevel": 4,
+      "minNativeZoom": -4,
+      "maxNativeZoom": 0,
+      "zoomOffset": 4,
+      "urlTemplate": "/assets/map-tiles/errack-citadel/{z}/{y}/{x}.webp",
+      "tileCount": 163
+    }
   }
 }

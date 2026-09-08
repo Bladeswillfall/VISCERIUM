@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - same-day
   - Events
+community_id: 12b435a4-3cc4-4b2a-8331-0421101ebe40
 slug: eras/citadel/events/the-silence-after-seven-bells
 eraStyle: e1
 sourcePath: Eras/CITADEL/Events/The Silence After Seven Bells.md

@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - juggernauts
   - Events
+community_id: dc65db16-4aec-478e-b915-2dae301d0a7a
 slug: eras/entropy/events/the-juggernaut-compact
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Juggernaut Compact.md

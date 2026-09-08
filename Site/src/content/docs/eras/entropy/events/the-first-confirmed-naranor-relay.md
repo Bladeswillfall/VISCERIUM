@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - naranor
   - Events
+community_id: 9b2498a8-df6c-4bbf-b11b-1ba8b16d96e9
 slug: eras/entropy/events/the-first-confirmed-naranor-relay
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The First Confirmed Naranor Relay.md

@@ -37,6 +37,7 @@ tags:
   - timeline-showcase
   - astu
   - Events
+community_id: e03ed9ed-237a-48e4-a724-7284992b9cf9
 slug: eras/nearsight/events/formation-of-astu
 eraStyle: e3
 sourcePath: Eras/NEARSIGHT/Events/Formation of ASTU.md

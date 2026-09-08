@@ -39,6 +39,7 @@ tags:
   - timeline-showcase
   - intercalary
   - Events
+community_id: dc40efec-9ba1-462c-96ee-580949ea9cfc
 slug: eras/smog/events/the-engimanutur-explosion
 eraStyle: e2
 sourcePath: Eras/SMOG/Events/The Engimanutur Explosion.md

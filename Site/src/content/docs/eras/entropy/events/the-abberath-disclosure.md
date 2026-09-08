@@ -38,6 +38,7 @@ tags:
   - timeline-showcase
   - abberath
   - Events
+community_id: e758e39f-5751-44d9-b2ea-da8a1ab3f4c1
 slug: eras/entropy/events/the-abberath-disclosure
 eraStyle: e4
 sourcePath: Eras/ENTROPY/Events/The Abberath Disclosure.md
