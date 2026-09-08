@@ -54,7 +54,7 @@ Krathan's domain frequently contains a lot of crude iconography, traps and forti
 
 [![](/uploads/images/476758fed45ca780da7ae66c00ab1a5e.png "B_Wrath.png")](/i/2635722 "B_Wrath.png")
 
-by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 ### Boleth
 
@@ -62,7 +62,7 @@ In contrast, Boleth's teritory is slimey. Encompassed by damp, dead soil, string
 
 [![](/uploads/images/4b3f96a763a704c5dc925a4da485b773.png "B_Gluttony.png")](/i/2635715 "B_Gluttony.png")
 
-by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 ### Evaxi
 
@@ -70,7 +70,7 @@ Evaxi's domain is best described
 
 [![](/uploads/images/23a7bfd7fbb716e9e55324cad6203d94.png "B_Envy.png")](/i/2635716 "B_Envy.png")
 
-by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

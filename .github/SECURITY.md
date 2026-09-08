@@ -4,7 +4,7 @@ VISCERIUM welcomes responsible reports about vulnerabilities in the public Codex
 
 ## Report a vulnerability privately
 
-Please use [GitHub Private Vulnerability Reporting](https://github.com/Bladeswillfall/VISCERIUM/security/advisories/new). Do not open a public issue for an unpatched vulnerability, leaked credential, bypass, or exploit.
+Please use the private channel described on the [VISCERIUM contact page](https://www.viscerium.co.uk/contact/) and the canonical [`security.txt`](https://www.viscerium.co.uk/.well-known/security.txt). Do not open a public issue for an unpatched vulnerability, leaked credential, bypass, or exploit.
 
 Include the affected URL or component, the smallest reproducible example you can provide, the impact you observed, and any conditions needed to reproduce it. Please avoid accessing data that is not yours, degrading the service, or testing against other users.
 

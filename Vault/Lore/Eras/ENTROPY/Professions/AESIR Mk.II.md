@@ -69,7 +69,7 @@ by [PeterPrime](https://www.deviantart.com/peterprime)
 The AESIR Mk.II armour is adorned with high-thrust, short burn-time jump jets strategically integrated into the spinal and calf sections. These propulsion systems exhibit diverse configurations tailored to the specific demands of each suit. Take, for instance, the GUNGNIR/Akula variant deployed by the Alliance of Democratic Nations - a grand singular thruster aligns seamlessly along the spinal column.  
 This imposing centerpiece finds reinforcement in the form of dual sets of angular wings, poised as both air brakes and aids for precise maneuvering. Complementing this arrangement, each calf houses a supplementary thruster, granting further control over direction and augmenting the lift potential of these formidable warriors. Such mastery of propulsion ensures unparalleled mobility upon the battlefield, defying the constraints of gravity itself.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
   
 

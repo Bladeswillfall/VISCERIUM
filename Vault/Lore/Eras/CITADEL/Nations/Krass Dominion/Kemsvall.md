@@ -43,12 +43,12 @@ To the west of Kemsvall, the imposing Kraken's Teeth Mountains rise dramatically
 
 [![Krass Heraldry_2.png](c201ad655088386ddcbbbeb9639fcb22.webp "Krass Heraldry_2.png")](/i/1938475 "Krass Heraldry_2.png")
 
-by [Fall (me)](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 Location: Krass Dominion   Rulers:   Religion:   Places of note:  
 @Port [____],
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

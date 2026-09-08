@@ -82,7 +82,7 @@ Enlisted ranks are Non-commissioned offcers.  
 
 [![2by1-image-missing.png](/uploads/images/a85dc8970ac1f631833da0aca875168c.png "2by1-image-missing.png")](/i/2735420 "2by1-image-missing.png")
 
-Image_missing_4 by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Image_missing_4 by Elias Vail
 
 Formed
 
@@ -104,7 +104,7 @@ Table of Contents
 
 Related Articles
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

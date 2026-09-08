@@ -5,13 +5,15 @@ import LocalIcon from '../components/LocalIcon.astro';
 import supportStylesHref from '../styles/support.css?url&no-inline';
 
 const contactForm = siteConfig.contactForm;
-const githubIssuesUrl = `${siteConfig.githubRepoUrl}/issues`;
-const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
+const hasGithubRepository = Boolean(siteConfig.githubRepoUrl);
+const githubIssuesUrl = hasGithubRepository ? `${siteConfig.githubRepoUrl}/issues` : '/support/';
+const githubNewIssueUrl = hasGithubRepository ? `${githubIssuesUrl}/new/choose` : '/support/';
+const publicChannelLabel = hasGithubRepository ? 'GitHub' : 'the support page';
 ---
 
 <StarlightPage frontmatter={{
   title: 'Contact',
-  description: 'Contact VISCERIUM privately or report public Codex issues on GitHub.',
+  description: 'Contact VISCERIUM privately or report public Codex issues.',
   tableOfContents: false,
   giscus: false,
   head: [{ tag: 'link', attrs: { rel: 'stylesheet', href: supportStylesHref } }],
@@ -25,11 +27,11 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
         <p class="contact-hero__lead">Need to get in touch?</p>
         <p class="contact-hero__body">
           Found a typo, broken link, site bug, or something in the Codex that needs correcting? Please use
-          <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>{' '}
+          <a class="contact-inline-link" href={githubIssuesUrl} target={hasGithubRepository ? '_blank' : undefined} rel={hasGithubRepository ? 'noreferrer' : undefined}>{publicChannelLabel}</a>{' '}
           so it can be tracked publicly.
           {contactForm.enabled
             ? ' For collaboration, rights or credit questions, private feedback, or anything you would rather not post publicly, use the contact form below to email us.'
-            : ' Private contact is temporarily unavailable. Please keep sensitive details out of public GitHub issues.'}
+            : ' Private contact is temporarily unavailable. Please keep sensitive details out of public issue reports.'}
         </p>
       </div>
     </section>
@@ -42,24 +44,24 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
             <h2 id="public-channel-title">Submit an Issue.</h2>
           </div>
           <p>
-            Found a typo, broken link, site bug, or something in the Codex that needs correcting? Submit an issue on
-            <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>{' '}
+            Found a typo, broken link, site bug, or something in the Codex that needs correcting? Submit it through
+            <a class="contact-inline-link" href={githubIssuesUrl} target={hasGithubRepository ? '_blank' : undefined} rel={hasGithubRepository ? 'noreferrer' : undefined}>{publicChannelLabel}</a>{' '}
             so it can be tracked publicly.
           </p>
         </aside>
 
         <article class="contact-github-card">
           <div class="contact-github-card__identity">
-            <LocalIcon name="github" />
-            <span>GitHub · public · trackable</span>
+            {hasGithubRepository && <LocalIcon name="github" />}
+            <span>{hasGithubRepository ? 'GitHub · public · trackable' : 'VISCERIUM support · public · trackable'}</span>
           </div>
           <h3>Site issue</h3>
           <p>
             Typos, broken links, content corrections, bugs, feature requests, and other work that should remain visible.
-            Open them on <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>{' '}
+            Submit them through <a class="contact-inline-link" href={githubIssuesUrl} target={hasGithubRepository ? '_blank' : undefined} rel={hasGithubRepository ? 'noreferrer' : undefined}>{publicChannelLabel}</a>{' '}
             so the discussion and fix stay attached to the work.
           </p>
-          <a class="contact-secondary-action" href={githubNewIssueUrl} target="_blank" rel="noreferrer">
+          <a class="contact-secondary-action" href={githubNewIssueUrl} target={hasGithubRepository ? '_blank' : undefined} rel={hasGithubRepository ? 'noreferrer' : undefined}>
             Submit an issue <span aria-hidden="true">→</span>
           </a>
         </article>
@@ -74,7 +76,7 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
           <p>
             {contactForm.enabled
               ? 'Have a general question, or want to talk to us about licensing, attribution, collaboration, rights, or another private matter? Use the form to send us a message.'
-              : 'Private contact is temporarily unavailable. Please use GitHub only for public, trackable site issues.'}
+              : 'Private contact is temporarily unavailable. Please use the public support channel only for trackable site issues.'}
           </p>
         </aside>
 
@@ -161,8 +163,8 @@ const githubNewIssueUrl = `${githubIssuesUrl}/new/choose`;
             <div class="contact-form-unavailable" role="status">
               <h3>Private messages are unavailable.</h3>
               <p>
-                The private contact channel is not available right now. Public site issues can still be submitted on
-                <a class="contact-inline-link" href={githubIssuesUrl} target="_blank" rel="noreferrer">GitHub</a>.
+                The private contact channel is not available right now. Public site issues can still be submitted through
+                <a class="contact-inline-link" href={githubIssuesUrl} target={hasGithubRepository ? '_blank' : undefined} rel={hasGithubRepository ? 'noreferrer' : undefined}>{publicChannelLabel}</a>.
               </p>
             </div>
           )}

@@ -29,13 +29,13 @@ The Golden-horned helm of Ralof Torradsson, now known as Ralof Gullhyrndr, first
 
 [![Okse Heraldry_2.png](c1c861e723e66d52b8b1a1ee5679c21f%201.webp "Okse Heraldry_2.png")](/i/1903864 "Okse Heraldry_2.png")
 
-by [Fall](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 Parents
 
 **Children**
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

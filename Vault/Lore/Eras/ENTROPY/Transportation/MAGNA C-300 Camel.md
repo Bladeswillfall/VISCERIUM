@@ -73,7 +73,7 @@ During such a devestating era for the people of [[Lore/Degel System/Errack]], it
 
 Camel Concept by [Negev1812](https://www.worldanvil.com/author/Negev1812)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

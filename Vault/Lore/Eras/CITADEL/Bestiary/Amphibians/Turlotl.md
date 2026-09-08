@@ -24,7 +24,7 @@ A rare and cute amphibian, the Tutlotl
 
 [Untitled](https://twitter.com/goma_lee/status/1065601343421788160/photo/1) by [Le Yamamura](https://twitter.com/goma_lee)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

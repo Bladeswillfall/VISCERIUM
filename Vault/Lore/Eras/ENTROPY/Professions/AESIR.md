@@ -45,7 +45,7 @@ To be classified as an AESIR, the soldier must meet a certain set of criteria, t
 
 [![Heraldry-image-missing.png](/uploads/images/72c4a576a6b663a32057b8de64dd5ce0.png "Heraldry-image-missing.png")](/i/2730368 "Heraldry-image-missing.png")
 
-Image_missing_2 by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Image_missing_2 by Elias Vail
 
 ### AESIR Mk.I
 

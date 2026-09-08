@@ -1,7 +1,7 @@
 # MIT License for VISCERIUM First-Party Software
 
 <!-- RIGHTS:FIRST_PARTY_CODE:START -->
-Copyright (c) 2026 Fall
+Copyright (c) 2026 Elias Vail
 <!-- RIGHTS:FIRST_PARTY_CODE:END -->
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

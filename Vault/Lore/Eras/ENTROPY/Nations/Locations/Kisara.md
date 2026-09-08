@@ -64,7 +64,7 @@ On the north north-west side of the city, a large bay opens into the sea. This b
 
 [![](/uploads/images/49cf23b6f42f06acc1c06f534c91df5f.png "KCAP_placeholder.png")](/i/2628803 "KCAP_placeholder.png")
 
-KCAP Placeholder icon by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+KCAP Placeholder icon by Elias Vail
 
 ### Citizen control
 
@@ -74,7 +74,7 @@ The Kisara city's Armed Police are instrumental to ensuring the control and safe
 
 [![Square-image-missing.png](/uploads/images/cfee3cfbe4f069bf4461e43010c13ef2.png "Square-image-missing.png")](/i/2730367 "Square-image-missing.png")
 
-Image_missing_1 by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Image_missing_1 by Elias Vail
 
 ### Defence force
 
@@ -82,7 +82,7 @@ _____ defence force is a section of the wider Imperium Coalition Army, tasked wi
 
 [![Flag-image-missing.png](/uploads/images/362fce5ba3254fe75360d981dc909e39.png "Flag-image-missing.png")](/i/2730434 "Flag-image-missing.png")
 
-Image_missing_3 by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Image_missing_3 by Elias Vail
 
 Continent
 
@@ -92,7 +92,7 @@ Nation
 
 Nayoru
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

@@ -20,4 +20,4 @@ tags:
 A somewhat antiquated rifle now that bolt-actions are so prevelant.  
   Rifle has a guide protruding form the loading port to act as a guide for the speedloader tube (ref. https://youtu.be/6xPNQEgN6Ks) often utilised with this rifle. Users of this type of rifle are often seen with a "quill" of speedloaders".
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

@@ -76,7 +76,7 @@ Open-topped back, two armoured front facing 15mm HMGs, and two side pintle-mount
 
 [![](99a2653d49cc45c889233ea23ab08208.png "APC concept2.png")](/i/6452043 "APC concept2.png")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

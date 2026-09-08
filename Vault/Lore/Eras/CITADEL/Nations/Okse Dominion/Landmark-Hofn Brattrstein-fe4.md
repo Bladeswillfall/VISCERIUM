@@ -22,7 +22,7 @@ import_issues:
 ---
 Hofn (Port) Brattrstein (Steep stone)   This port is situated within the Capital city of Valenheim on the river Issvatn, adjacent to the steep rock-face of the eastern mountains that almost envelopes Valenheim. This port is primarily used to ship goods and ferry people in and out of the city.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

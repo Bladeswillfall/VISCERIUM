@@ -18,7 +18,7 @@ Visi is the god of; Justice, adaptability, prudence, empathy, harmony, memory, a
 
 [![](7b9d46162c737eaf67e57d5bb6d14ac4.png "Screenshot 2025-02-23 224017.png")](/i/6407140 "Screenshot 2025-02-23 224017.png")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

@@ -17,7 +17,7 @@ The smaller of [[Lore/Degel System/Errack]]'s two moons. The Eye of the Sage.  
 
 [![](014894b42b6e3860955765a6630a00c2.png "Screenshot 2025-02-23 224047.png")](/i/6407141 "Screenshot 2025-02-23 224047.png")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

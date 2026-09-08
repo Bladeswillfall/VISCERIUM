@@ -2,6 +2,8 @@ export const DEFAULT_LOCALE = 'en-GB';
 
 const env = process.env;
 const siteUrl = env.SITE_URL?.trim() || 'https://www.viscerium.co.uk';
+const githubRepoUrl = (env.PUBLIC_GITHUB_REPO_URL?.trim() || '').replace(/\/+$/, '');
+const githubProfileUrl = (env.PUBLIC_GITHUB_PROFILE_URL?.trim() || '').replace(/\/+$/, '');
 
 const webmentionUsername = env.PUBLIC_WEBMENTION_IO_USERNAME?.trim() || 'www.viscerium.co.uk';
 const webmentionEndpoint =
@@ -38,9 +40,10 @@ export default {
   },
   loreSourceDir: env.LORE_SOURCE_DIR ?? '../Vault/Lore',
   vaultAssetDir: '../Vault/Assets',
-  githubRepoUrl: 'https://github.com/Bladeswillfall/VISCERIUM',
+  githubRepoUrl,
   identity: {
-    githubProfileUrl: 'https://github.com/Bladeswillfall',
+    creatorName: 'Elias Vail',
+    githubProfileUrl,
   },
   feeds: {
     title: env.PUBLIC_FEED_TITLE ?? 'VISCERIUM Codex',

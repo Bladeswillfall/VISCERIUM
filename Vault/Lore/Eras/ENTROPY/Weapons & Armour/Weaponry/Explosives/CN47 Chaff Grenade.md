@@ -25,4 +25,4 @@ tags:
 ---
 A smokescreen deploying grenade that poppulates the area with highly-reflective aluminium particles as well as traditional smoke creating compounds such as potassium chlorate. This combination of components allow the ___ Chaff grenade to block visual line-of-sight across the spectrum and also prevents methods such as WiFi targetting and other non-light based methods of sight.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

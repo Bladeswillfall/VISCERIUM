@@ -78,7 +78,7 @@ Graphic content, reference to: torture, assault
 
 by Midjourney
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 ## The Tormentors and Their Masters
 

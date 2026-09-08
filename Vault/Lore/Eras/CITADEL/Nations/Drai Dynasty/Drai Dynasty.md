@@ -44,7 +44,7 @@ And many more.   This is due to their current prowess in persuing the latest an
 
 **Errack v4**
 
-[Open full size](/w/past-bladeswillfall/map/64ce4b1e-206f-41a1-940f-24668077a062)
+[Open full size](/w/past-elias-vail/map/64ce4b1e-206f-41a1-940f-24668077a062)
 
  
 
@@ -76,4 +76,4 @@ And many more.   This is due to their current prowess in persuing the latest an
 
 - TBD,
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

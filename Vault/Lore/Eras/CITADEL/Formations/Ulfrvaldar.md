@@ -17,7 +17,7 @@ tags:
 ---
 Wolf masters. An Ulfrvaldr holds charge over a pack of wolves bread for combat and hunting. The Ulfrvaldar are renowned for their cruelty and viciousness.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

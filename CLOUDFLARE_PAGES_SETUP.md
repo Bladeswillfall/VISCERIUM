@@ -4,7 +4,7 @@ The VISCERIUM site remains a static Astro application on Cloudflare Pages. Creat
 
 ## Build settings
 
-Connect the new Pages project to `Bladeswillfall/VISCERIUM` and use:
+Connect the Pages project to the VISCERIUM repository and use:
 
 ```text
 Production branch: main
@@ -13,6 +13,8 @@ Build command: npm run build
 Build output directory: dist
 Node version: 24
 SITE_URL=https://www.viscerium.co.uk
+PUBLIC_GITHUB_REPO_URL=<public repository URL, if repository/edit/issue links should be shown>
+PUBLIC_GITHUB_PROFILE_URL=<public creator profile URL, only if rel="me authn" is required>
 ```
 
 Choose the new Cloudflare project name in the dashboard. No project name or Cloudflare identifier is committed because those values do not exist yet.
@@ -100,9 +102,9 @@ PUBLIC_WEBMENTIONS_ENABLED=1
 PUBLIC_WEBMENTION_IO_USERNAME=www.viscerium.co.uk
 ```
 
-No secret is required in Cloudflare Pages for the current public JF2 API integration. The site advertises `https://github.com/Bladeswillfall` as its explicit IndieLogin authentication identity using `rel="me authn"`. The corresponding GitHub profile Website field must point back to `https://www.viscerium.co.uk/` so IndieLogin can verify the relationship in both directions.
+No secret is required in Cloudflare Pages for the current public JF2 API integration. `PUBLIC_GITHUB_PROFILE_URL` is optional; when set, the site advertises that URL using `rel="me authn"`. Keep it unset unless the selected IndieLogin identity is intentionally public and its profile links back to `https://www.viscerium.co.uk/`.
 
-Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, authenticate through the advertised GitHub identity, complete the domain verification, and confirm that the assigned username is `www.viscerium.co.uk`.
+Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, complete the domain verification using the public identity you have deliberately configured, and confirm that the assigned username is `www.viscerium.co.uk`.
 
 `PUBLIC_WEBMENTIONS_ENABLED=0` remains available as an emergency off switch. Use the endpoint override variables in `Site/.env.example` only if Webmention.io supplies different endpoints.
 

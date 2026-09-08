@@ -69,7 +69,7 @@ Ophir's story begins in the unforgiving wilderness, where he was part of a wolf 
 
 Ophir by [Midjourney (edited)](https://www.midjourney.com/)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
   
 

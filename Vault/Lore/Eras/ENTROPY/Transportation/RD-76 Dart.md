@@ -76,7 +76,7 @@ The RD-76 Dart was designed with vaccum flight in mind. The cockpit is sealed se
 
 The RD-76 has room for up to eight seated individuals within the cargo/transport area, nested before the two door gunners. This translates to two rows of four forward-facing seats, whilst the door-gunners get a seat each that is on a curved rail. This allows the gunners to face-outwards when at lower-speeds or sit back and face-forwards when at higher-speeds.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 ### Propulsion
 

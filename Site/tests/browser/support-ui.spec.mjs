@@ -1,33 +1,31 @@
 import { test, expect } from '@playwright/test';
 
-const baseUrl = process.env.CONTACT_TEST_BASE_URL ?? 'http://127.0.0.1:4321';
+const baseUrl = process.env.SUPPORT_TEST_BASE_URL ?? process.env.CONTACT_TEST_BASE_URL ?? 'http://127.0.0.1:4321';
 const supportUrl = `${baseUrl}/support/`;
+const repoFixtureEnabled = process.env.SUPPORT_REPO_TEST_ENABLED === '1';
 
 test.use({ viewport: { width: 1280, height: 900 } });
 
-test('support card geometry and light-mode surfaces stay legible', async ({ page }) => {
+const readSurface = (locator) => locator.evaluate((element) => {
+  const style = getComputedStyle(element);
+  const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+  return {
+    background: style.backgroundColor,
+    color: style.color,
+    radius: Number.parseFloat(style.borderRadius),
+    heightRem: element.getBoundingClientRect().height / rootFontSize,
+  };
+});
+
+test('support surfaces stay legible when repository links are disabled', async ({ page }) => {
   await page.goto(supportUrl, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
   });
 
-  const readSurface = (locator) => locator.evaluate((element) => {
-    const style = getComputedStyle(element);
-    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
-    return {
-      background: style.backgroundColor,
-      color: style.color,
-      radius: Number.parseFloat(style.borderRadius),
-      heightRem: element.getBoundingClientRect().height / rootFontSize,
-    };
-  });
-
-  const issueCard = page.locator('.support-card').first();
-  await issueCard.hover();
-  const issueSurface = await readSurface(issueCard);
-  expect(issueSurface.background).not.toBe('rgb(0, 0, 0)');
-  expect(issueSurface.background).not.toBe(issueSurface.color);
-  expect(issueSurface.radius).toBeGreaterThan(0);
+  if (!repoFixtureEnabled) {
+    await expect(page.locator('.support-card')).toHaveCount(0);
+  }
 
   const activeSocial = page.locator('.support-social--active').first();
   await activeSocial.hover();
@@ -96,6 +94,29 @@ test('support card geometry and light-mode surfaces stay legible', async ({ page
   expect(await discordMark.evaluate((element) => getComputedStyle(element).color)).toMatch(
     /^(rgb\(0, 0, 0\)|oklch\(0 0 0\))$/,
   );
+});
+
+test('configured repository support cards retain their geometry and light-mode surface', async ({ page }) => {
+  test.skip(!repoFixtureEnabled, 'repository support fixture is not enabled');
+
+  await page.goto(supportUrl, { waitUntil: 'networkidle' });
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+  });
+
+  const issueCards = page.locator('.support-card');
+  await expect(issueCards).toHaveCount(5);
+
+  const issueCard = issueCards.first();
+  await issueCard.hover();
+  const issueSurface = await readSurface(issueCard);
+  expect(issueSurface.background).not.toBe('rgb(0, 0, 0)');
+  expect(issueSurface.background).not.toBe(issueSurface.color);
+  expect(issueSurface.radius).toBeGreaterThan(0);
+
+  const repositoryCard = issueCards.last();
+  await expect(repositoryCard).toHaveClass(/support-card--wide/);
+  await expect(repositoryCard).toHaveAttribute('href', /github\.com\//);
 });
 
 test('support serves the supplied black Discord icon without changing its geometry', async ({ request }) => {

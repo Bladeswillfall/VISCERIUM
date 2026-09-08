@@ -1,18 +1,18 @@
 export const rightsConfig = Object.freeze({
   visceriumCreative: Object.freeze({
     startYear: 2021,
-    creator: 'Fall',
-    currentOwner: 'Fall',
+    creator: 'Elias Vail',
+    currentOwner: 'Elias Vail',
     futureOwner: 'NULL Holdings Ltd',
   }),
   nullMaterials: Object.freeze({
     startYear: 2025,
-    currentOwner: 'Fall',
+    currentOwner: 'Elias Vail',
     futureOwner: 'NULL Holdings Ltd',
   }),
   firstPartyCode: Object.freeze({
     startYear: 2026,
-    currentOwner: 'Fall',
+    currentOwner: 'Elias Vail',
     futureOwner: 'NULL Holdings Ltd',
   }),
 });

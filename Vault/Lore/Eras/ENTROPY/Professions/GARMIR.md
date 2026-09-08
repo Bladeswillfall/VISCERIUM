@@ -21,7 +21,7 @@ tags:
 
   Stepping forth as indomitable guardians, the GARMIR (_Guardians of Authority, Regal Might, and Iron Resolve_) arise from the distinguished ranks of the Imperium Coalition Special Shock Assault Service (ICSSAS). These defenders, selected from the ranks of the exceptional few, embody a different aspect of warfare - one characterized by unwavering determination and protective prowess. Unlike their volatile counterparts, the AESIR, the GARMIR's power stems not from augmentation, but from unyielding resolve and technological mastery.   Where some brandish towering shields or colossal shoulder-mounted weaponry, invoking a legacy of steadfast defense. Some eschew traditional defenses, opting instead for raw, unrelenting firepower wielded by the aide of an exo-skeleton arm. These choices, however diverse, echo the core creed of GARMIR – the protection of power and authority.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

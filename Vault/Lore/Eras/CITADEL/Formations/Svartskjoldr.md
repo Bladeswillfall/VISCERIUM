@@ -24,7 +24,7 @@ Defenders of oil infrastructure; industrial weaponry and coordination with Reson
 
   The Svartskjoldr. symbolise the Dominion’s industrial heart and the lengths it will go to protect its lifeblood
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

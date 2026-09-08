@@ -69,9 +69,9 @@ Through Integrating an exo-skeleton into the [TBC Armour]'s design instead of ha
 
 [![](/uploads/images/7f1c07be4efaf436c2aacba67778be8a.png "BlackFoundry.png")](/i/2597399 "BlackFoundry.png")
 
-BF_Placeholder by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+BF_Placeholder by Elias Vail
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

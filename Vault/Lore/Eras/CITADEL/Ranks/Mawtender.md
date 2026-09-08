@@ -17,7 +17,7 @@ tags:
 ---
 A group of ghastly healers and alchemists who concoct noxious elixirs, utilising forbidden knowledge to harness the power of decay and disease. They seek to push the boundaries of the mortal form, transforming their brethren into grotesque, twisted beings in an attempt to please The Great Maw.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review
