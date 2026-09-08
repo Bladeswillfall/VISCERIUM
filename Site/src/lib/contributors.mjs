@@ -70,8 +70,8 @@ export function githubUsernameFromUrl(value) {
   try {
     const url = new URL(String(value ?? ''));
     if (!['github.com', 'www.github.com'].includes(url.hostname.toLowerCase())) return undefined;
-    const [username] = url.pathname.split('/').filter(Boolean);
-    return username || undefined;
+    const segments = url.pathname.split('/').filter(Boolean);
+    return segments.length === 1 ? segments[0] : undefined;
   } catch {
     return undefined;
   }
