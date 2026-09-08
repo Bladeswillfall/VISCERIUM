@@ -26,7 +26,6 @@ jobs:
           from pathlib import Path
           import re
 
-          root = Path('.')
           generated = Path('Site/src/content/docs')
           generated_legacy = []
           for path in generated.rglob('*'):
@@ -36,9 +35,8 @@ jobs:
                   text = path.read_text('utf-8')
               except UnicodeDecodeError:
                   continue
-              if re.search(r'bladeswillfall|\bFall\b|\bJake\b', text, re.I):
-                  if 'Bladeswillfall' in text or re.search(r'\bFall\b', text) or re.search(r'\bJake\b', text):
-                      generated_legacy.append(path.as_posix())
+              if 'Bladeswillfall' in text or re.search(r'\bFall\b', text) or re.search(r'\bJake\b', text):
+                  generated_legacy.append(path.as_posix())
           Path('/tmp/generated-legacy-paths.txt').write_text('\n'.join(generated_legacy), 'utf-8')
 
           replacements = [
@@ -64,8 +62,9 @@ jobs:
               ("viscerium-bladeswillfall", "viscerium"),
           ]
 
-          for path in root.rglob('*'):
-              if not path.is_file() or path.as_posix().startswith('Site/src/content/docs/'):
+          for path in Path('.').rglob('*'):
+              rel = path.as_posix()
+              if not path.is_file() or rel.startswith('Site/src/content/docs/') or rel.startswith('.git/'):
                   continue
               try:
                   text = path.read_text('utf-8')
@@ -85,26 +84,31 @@ jobs:
               'utf-8',
           )
 
-          path = Path('.github/SECURITY.md')
-          text = path.read_text('utf-8').replace(
-              'Please use [GitHub Private Vulnerability Reporting](https://github.com/Bladeswillfall/VISCERIUM/security/advisories/new). Do not open a public issue for an unpatched vulnerability, leaked credential, bypass, or exploit.',
-              'Please use the private channel described on the [VISCERIUM contact page](https://www.viscerium.co.uk/contact/) and the canonical [`security.txt`](https://www.viscerium.co.uk/.well-known/security.txt). Do not open a public issue for an unpatched vulnerability, leaked credential, bypass, or exploit.',
-          )
-          path.write_text(text, 'utf-8')
-
-          path = Path('Architecture/README.md')
-          path.write_text(path.read_text('utf-8').replace(
-              'Remote: GitHub repository `Bladeswillfall/VISCERIUM`.',
-              'Remote: the VISCERIUM GitHub repository configured for the working checkout.',
-          ), 'utf-8')
-
-          path = Path('Architecture/viscerium-architecture.html')
-          path.write_text(path.read_text('utf-8').replace(
-              'Repository: Bladeswillfall/VISCERIUM ·', 'Repository: VISCERIUM ·'), 'utf-8')
-
-          path = Path('Architecture/viscerium-architecture.json')
-          path.write_text(path.read_text('utf-8').replace(
-              '"repository": "Bladeswillfall/VISCERIUM"', '"repository": "VISCERIUM"'), 'utf-8')
+          special_replacements = {
+              '.github/SECURITY.md': [
+                  ('Please use [GitHub Private Vulnerability Reporting](https://github.com/Bladeswillfall/VISCERIUM/security/advisories/new). Do not open a public issue for an unpatched vulnerability, leaked credential, bypass, or exploit.',
+                   'Please use the private channel described on the [VISCERIUM contact page](https://www.viscerium.co.uk/contact/) and the canonical [`security.txt`](https://www.viscerium.co.uk/.well-known/security.txt). Do not open a public issue for an unpatched vulnerability, leaked credential, bypass, or exploit.'),
+              ],
+              'Architecture/README.md': [
+                  ('Remote: GitHub repository `Bladeswillfall/VISCERIUM`.', 'Remote: the VISCERIUM GitHub repository configured for the working checkout.'),
+              ],
+              'Architecture/viscerium-architecture.html': [
+                  ('Repository: Bladeswillfall/VISCERIUM ·', 'Repository: VISCERIUM ·'),
+              ],
+              'Architecture/viscerium-architecture.json': [
+                  ('"repository": "Bladeswillfall/VISCERIUM"', '"repository": "VISCERIUM"'),
+              ],
+              'Vault/System/SOPs/Codex Publishing and Deployment SOP.md': [
+                  ('The site is configured for repository `Bladeswillfall/VISCERIUM` and the `Comments` discussion category.',
+                   'The site can expose a public repository URL through `PUBLIC_GITHUB_REPO_URL` and uses the `Comments` discussion category.'),
+              ],
+          }
+          for rel, pairs in special_replacements.items():
+              path = Path(rel)
+              text = path.read_text('utf-8')
+              for old, new in pairs:
+                  text = text.replace(old, new)
+              path.write_text(text, 'utf-8')
 
           path = Path('CLOUDFLARE_PAGES_SETUP.md')
           text = path.read_text('utf-8')
@@ -186,12 +190,6 @@ jobs:
           )
           path.write_text(text, 'utf-8')
 
-          path = Path('Vault/System/SOPs/Codex Publishing and Deployment SOP.md')
-          path.write_text(path.read_text('utf-8').replace(
-              'The site is configured for repository `Bladeswillfall/VISCERIUM` and the `Comments` discussion category.',
-              'The site can expose a public repository URL through `PUBLIC_GITHUB_REPO_URL` and uses the `Comments` discussion category.',
-          ), 'utf-8')
-
           for path in Path('Vault').rglob('*'):
               if not path.is_file():
                   continue
@@ -215,7 +213,6 @@ jobs:
               new_avatar.write_bytes(old_avatar.read_bytes())
               old_avatar.unlink()
           PY
-
           git add -A
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -260,7 +257,13 @@ jobs:
               re.compile(r'fall\.webp', re.I),
           ]
           for path in Path('.').rglob('*'):
-              if not path.is_file() or '.git/' in path.as_posix() or 'node_modules/' in path.as_posix():
+              rel = path.as_posix()
+              if (
+                  not path.is_file()
+                  or rel.startswith('.git/')
+                  or 'node_modules/' in rel
+                  or rel == '.github/workflows/source-snapshot.yml'
+              ):
                   continue
               try:
                   text = path.read_text('utf-8')
