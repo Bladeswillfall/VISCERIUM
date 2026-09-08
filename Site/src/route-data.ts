@@ -6,8 +6,7 @@ import articlePagesStylesheet from './styles/article-pages.css?url';
 import categoryIndexStylesheet from './styles/category-index.css?url';
 import statementPagesStylesheet from './styles/statement-pages.css?url';
 
-const statementPagePaths = new Set([
-  '/policies/content-production/',
+const standaloneStatementPagePaths = new Set([
   '/statements/human-authorship-and-ai/',
 ]);
 
@@ -17,6 +16,7 @@ export const onRequest = defineRouteMiddleware((context) => {
   const pageKind = classifyCodexPage(data, route.entry.id);
   const pageType = String(data.type ?? '').trim().toLowerCase();
   const routePath = context.url.pathname.endsWith('/') ? context.url.pathname : `${context.url.pathname}/`;
+  const isPolicyPage = routePath.startsWith('/policies/');
 
   if (!pageKind.isHomepage) {
     route.head.push({
@@ -32,7 +32,7 @@ export const onRequest = defineRouteMiddleware((context) => {
     });
   }
 
-  if (statementPagePaths.has(routePath)) {
+  if (isPolicyPage || standaloneStatementPagePaths.has(routePath)) {
     route.head.push({
       tag: 'link',
       attrs: { rel: 'stylesheet', href: statementPagesStylesheet },
