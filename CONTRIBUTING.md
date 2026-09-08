@@ -77,8 +77,8 @@ The modified MySnippets compatibility runtime is an explicit MPL-2.0 exception. 
 ## Source-of-truth rules
 
 1. Edit public source Lore under `Vault/Lore/`.
-2. Keep draft creator material under `Vault/Drafts/` or the correct private workspace.
-3. Keep private StoryLine writing under `Vault/Stories/`.
+2. Keep draft creator material under `VISCERIUM-Workshop/Vault/Drafts/` in the private sibling repository.
+3. Keep private StoryLine writing under `VISCERIUM-Workshop/Vault/Stories/`.
 4. Keep source assets under `Vault/Assets/`.
 5. Do not edit generated files under `Site/src/content/docs/`.
 6. Do not author canonical data directly in generated map, timeline, relationship, or search output.
@@ -95,7 +95,7 @@ Use `Vault/Home.md` as the normal creator entry point.
 
 Use `Vault/System/SOPs/Creator Command Reference.md` for exact Obsidian and terminal commands.
 
-Use `Vault/Drafts/Inbox/World Anvil Migration Review.md` for the guided World Anvil transfer.
+Use `VISCERIUM-Workshop/Vault/Drafts/Inbox/World Anvil Migration Review.md` for the guided World Anvil transfer.
 
 Use `Vault/System/SOPs/Era Edition Workflow SOP.md` for cross-era continuity.
 

@@ -5,12 +5,12 @@ headerImage: Assets/Images/errack-header.webp
 decorativeImage: true
 homeImagePosition: 50% 46%
 homeCreativeLine: Make something worth returning to.
-focusTitle: World Anvil Migration
-focusDescription: Review the setting spine and era anchors before polishing secondary material.
-focusPrimary: System/Bases/World Anvil Import.base
+focusTitle: Published Lore
+focusDescription: Review the published Codex and its source notes.
+focusPrimary: System/Bases/Publishing.base
 focusPrimaryLabel: Continue focus
-focusSecondary: Drafts/Inbox/World Anvil Migration Review
-focusSecondaryLabel: Migration guide
+focusSecondary: System/SOPs/Codex Publishing and Deployment SOP
+focusSecondaryLabel: Publishing guide
 ---
 > [!home-hero]
 > ```dataviewjs

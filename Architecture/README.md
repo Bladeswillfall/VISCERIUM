@@ -20,10 +20,10 @@ Bases, dashboards, the public website, maps, timelines, search, and graphs are v
 
 ## Main source-of-truth rules
 
-1. Keep creator and draft facts in Markdown notes under `Vault/`.
+1. Keep drafts, private facts, stories, and migration data in the sibling `VISCERIUM-Workshop/Vault/`.
 2. Keep public canon under `Vault/Lore/`.
-3. Keep private story projects under `Vault/Stories/`.
-4. Keep source artwork under `Vault/Assets/`.
+3. Keep private story projects under `VISCERIUM-Workshop/Vault/Stories/`.
+4. Keep published artwork under `Vault/Assets/` and unpublished artwork in Workshop.
 5. Do not hand-edit generated files under `Site/src/content/docs/`.
 6. Do not hand-edit generated map, timeline, relationship, or search data.
 7. Change the source note or generator when generated output is wrong.
@@ -45,7 +45,7 @@ Obsidian
   v
 Vault Markdown + YAML
   |
-  +--> Drafts ----------------------------+
+  +--> Workshop drafts -- review and move +
   |                                       |
   +--> Lore -- published source ----------+--> Node build pipeline
   |                                              |
@@ -136,7 +136,7 @@ Important rule: Use these commands instead of typing arbitrary era values.
 
 Purpose: Organise private story projects, scenes, sequence, point of view, and `storyDate`.
 
-Source: `Vault/Stories/` and StoryLine project data.
+Source: `VISCERIUM-Workshop/Vault/Stories/` and StoryLine project data.
 
 Important rule: StoryLine story files are private writing data. They are not public canon input.
 
@@ -230,7 +230,7 @@ No private application server is required for the current Codex.
 
 ## Workflow — World Anvil transfer
 
-Use [[../Vault/Drafts/Inbox/World Anvil Migration Review|World Anvil Migration Review]] for the full guided procedure.
+Use the private Workshop note `Drafts/Inbox/World Anvil Migration Review.md` for the full guided procedure.
 
 1. Open `World Anvil Import.base` in Obsidian.
 2. Start in **Needs attention**.
@@ -251,7 +251,7 @@ The migration does not automatically decide continuity, chronology, or canon.
 2. Select **Create Story Entity**.
 3. Select Fauna, Flora, Fungi, or Item.
 4. Complete the guided Templater prompts.
-5. Edit the draft under `Vault/Drafts/Databases/<Type>/`.
+5. Edit the draft under `VISCERIUM-Workshop/Vault/Drafts/Databases/<Type>/`.
 6. Browse it through the relevant Base.
 7. Run Vault Doctor after broad structural edits.
 8. Move it to Lore only when publication is deliberate.
@@ -315,7 +315,7 @@ Do not create duplicate chronology fields.
 
 ## Workflow — StoryLine timeline
 
-1. Keep private scenes under `Vault/Stories/`.
+1. Keep private scenes under `VISCERIUM-Workshop/Vault/Stories/`.
 2. Let StoryLine own project structure and `storyDate`.
 3. Open **VISCERIUM Timelines: Open StoryLine project timeline**.
 4. Let VISCERIUM Timelines read the active project in memory.
@@ -405,7 +405,7 @@ Change the authoritative source instead of editing generated output.
 | Creator property or schema | `Vault/System/SOPs/Schema Change SOP.md` |
 | Creator workflow or command | `Vault/System/SOPs/Creator Command Reference.md` |
 | Era or continuity behaviour | `Vault/System/SOPs/Era Edition Workflow SOP.md` and `Site/src/lib/era-context.mjs` |
-| World Anvil migration UX | `Vault/Drafts/Inbox/World Anvil Migration Review.md` and `Site/scripts/apply-worldanvil-base-triage.mjs` |
+| World Anvil migration UX | `VISCERIUM-Workshop/Vault/Drafts/Inbox/World Anvil Migration Review.md` and `Site/scripts/apply-worldanvil-base-triage.mjs` |
 | Public content transformation | `Site/scripts/sync-public-notes.mjs` |
 | Public build orchestration | `Site/scripts/build-content.mjs` |
 | Search | `Site/src/scripts/telescope-scope.js` and Telescope integration |

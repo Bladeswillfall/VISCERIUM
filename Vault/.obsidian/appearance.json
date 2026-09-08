@@ -30,9 +30,10 @@
     "Paragraph spacing",
     "Blockquote styling",
     "Autohide properties",
-    "Bases"
+    "Bases",
+    "Vault identity - LIVE"
   ],
-  "accentColor": "#b1a98c",
+  "accentColor": "#9f2f35",
   "showViewHeader": true,
   "showRibbon": true,
   "nativeMenus": false,

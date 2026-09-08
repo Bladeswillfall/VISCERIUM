@@ -31,8 +31,8 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
   assert.equal(home.data.publish, undefined, 'Home must not carry the legacy publish boolean');
   assert.ok(home.data.cssclasses?.includes('viscerium-home'));
   assert.equal(home.data.headerImage, 'Assets/Images/errack-header.webp');
-  assert.equal(home.data.focusTitle, 'World Anvil Migration');
-  assert.equal(home.data.focusPrimary, 'System/Bases/World Anvil Import.base');
+  assert.equal(home.data.focusTitle, 'Published Lore');
+  assert.equal(home.data.focusPrimary, 'System/Bases/Publishing.base');
 
   for (const snippet of ['Creator UI foundation', 'File explorer', 'Bases', 'Home dashboard']) {
     assert.ok(appearance.enabledCssSnippets.includes(snippet), `${snippet} should be enabled`);

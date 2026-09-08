@@ -95,7 +95,13 @@ Thumbs.db
 !**/.env.example
 Site/.dev.vars
 
-# Local-only/private authoring
+# Public-vault safety boundary
+# These paths belong in the private VISCERIUM-Workshop repository and must
+# never be committed to the public repository, even if recreated locally.
 Vault/Drafts/
 Vault/Private/
 Vault/Stories/
+Vault/.trash/
+Vault/Assets/Unpublished/
+Vault/Archive/
+Vault/System/Imports/
