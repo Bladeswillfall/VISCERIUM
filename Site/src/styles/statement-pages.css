@@ -11,10 +11,12 @@
     margin-block: 1.5rem .75rem;
     object-fit: contain;
     filter: invert(1) brightness(.92);
+    opacity: 70%;
   }
 
   :root[data-theme='light'] img[src$="/assets/images/elias-vail-signature.svg"] {
     filter: none;
+    opacity: 30%;
   }
 
   @media (max-width: 30rem) {
