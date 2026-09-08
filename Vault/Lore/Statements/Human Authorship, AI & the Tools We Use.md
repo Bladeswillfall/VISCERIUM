@@ -188,6 +188,8 @@ Exactly what appropriate compensation or redress should look like is a larger le
 
 But "the technology already exists" is not an adequate answer.
 
+The EU Artificial Intelligence Act now requires providers of general-purpose AI models to maintain a policy for compliance with EU copyright law and to publish a sufficiently detailed summary of the content used to train those models.[3]
+
 ## Openness gives me agency
 
 This also explains why I am drawn towards open-source technology.
@@ -317,6 +319,8 @@ Someone contracted its electricity.
 Someone decided which costs mattered and which could be externalised.
 
 Those decisions can be made differently.
+
+European data-centre reporting rules already treat energy and water performance as measurable public-policy concerns rather than invisible externalities.[5]
 
 This is another area where I find the work of Sasha Luccioni and others at Hugging Face useful.
 
