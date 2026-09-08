@@ -61,7 +61,7 @@ The Republic is brimming with a wide variety of wildlife. Some of the more stand
 
 [![Republic of Askalia.png](acda2a2a2b7cf4e2756fda53d9b6bc7e.png "Republic of Askalia.png")](/i/1990843 "Republic of Askalia.png")
 
-by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 Previously
 
@@ -75,4 +75,4 @@ Governing body
 
 The Senate
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

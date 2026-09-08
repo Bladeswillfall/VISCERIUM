@@ -19,7 +19,7 @@ REF: AMX-13   Relying on speed and manuverability rather than expensive well ar
 Capable of penetrating even the Aliance of Democratic Nations top of the line MBT the [TBN TANK], the [TBN PCP Tank] is lighter and therefore faster too.  
   Crewed by a team of two - driver and gunner, the [TBN PCP Tank] usually opperates in a group of at least 2, often 3 or more.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

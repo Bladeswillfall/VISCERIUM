@@ -19,11 +19,11 @@ Current ruler of the Okse Dominion
 
 [![Okse Heraldry_2.png](c1c861e723e66d52b8b1a1ee5679c21f.webp "Okse Heraldry_2.png")](/i/1903864 "Okse Heraldry_2.png")
 
-by [Fall](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 **Children**
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

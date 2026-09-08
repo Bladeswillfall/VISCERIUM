@@ -22,9 +22,9 @@ Virki (fort) Miellelja is one of the [[Archived - Okse Dominion]]'s most depress
 
 [![Okse Heraldry_1.png](640faf5b8cd2814de13871ff58c900b6%202.png "Okse Heraldry_1.png")](/i/1903863 "Okse Heraldry_1.png")
 
-by [Fall](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

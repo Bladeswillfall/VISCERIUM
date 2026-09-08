@@ -90,9 +90,9 @@ The Judicial branch of the ASTU upholds the law as defined by the Executive bran
 
 [![](/uploads/images/13e658e350ef4a96589e3b442f07a049.png "ASTU_Flag_Verticalpng.png")](/i/2817016 "ASTU_Flag_Verticalpng.png")
 
-ASTU icon by Me (Fall)
+ASTU icon by Elias Vail
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

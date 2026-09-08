@@ -159,7 +159,7 @@ Errack is orbited by two moons, **[[Degel System/Eye of Vordr|the Eye of Vordr]]
 [cols:7-3 gap=lg align=start]
 [col]In addition to its twin moons, Errack boasts a wide but faint ring system around its equator. These planetary rings are unfortunately the cause of many asteroids and comets becoming meteors. Whilst the resulting meteor showers are usually enjoyed for their stunning displays, some have also caused substantial destruction on rare occasions.[/col]
 [col]![[errack-rings.webp]]
-*Rings of Errack — artwork by [Fall](https://github.com/Bladeswillfall).*[/col][/cols]
+*Rings of Errack — artwork by Elias Vail.*[/col][/cols]
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >

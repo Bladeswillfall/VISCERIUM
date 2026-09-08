@@ -23,4 +23,4 @@ import_source_file: Settlement-Oakencourt district-38d.md
 ---
 The most powerful district in Elkenhurst, it houses the lawmakers quarters, the parliment of _____ and many noble houses.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

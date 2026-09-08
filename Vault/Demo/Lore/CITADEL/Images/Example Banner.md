@@ -8,7 +8,7 @@ asset: example-banner.svg
 image: example-banner.svg
 alt: "A simple placeholder fantasy banner."
 artist: "Unknown placeholder artist"
-editor: "Fall"
+editor: "Elias Vail"
 source: "Placeholder asset"
 sourceUrl:
 credit: "Unknown / placeholder"

@@ -94,4 +94,4 @@ In ordere to effectively communicate internally, a common language was decided u
 
 Opting to keep the currency of its predacessor, the Aquillan Seas Trade Union, the ADN still uses Quills and Knots as its formal currency, though they have been re guilded with new designs and security measures to differenciate from the previous variation.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

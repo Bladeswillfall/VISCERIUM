@@ -56,11 +56,11 @@ Once an unknown factor to the denizens of [[Lore/Degel System/Errack]] and the [
 Each cavea station is formed around a large central ring gate. This ring gate then has five massive arms reaching outwards in different directions, the five arms thus forming a star pentagon.  
 The biomimicry of these giant stations emulate blooming flowers with five petals - something that is not an uncommon sight on [[Lore/Degel System/Errack]]...
 
-![](WE22_Building.png "WorldEmber 2022: Best Building awarded to Bladeswillfall")
+![](WE22_Building.png "WorldEmber 2022: Best Building awarded to Elias Vail")
 
 [![CAVEA_Station.png](/uploads/images/a6b6f007d8dcf3dd924d6bf3bf5acf89.png "CAVEA_Station.png")](/i/3972459 "CAVEA_Station.png")
 
-CAVEA station mock-up by [Generated with DALL·E 2 and photobashed by Fall](https://openai.com/dall-e-2/)
+CAVEA station mock-up by [Generated with DALL·E 2 and photobashed by Elias Vail](https://openai.com/dall-e-2/)
 
 Avg. Distance from Degel
 
@@ -70,7 +70,7 @@ Diameter
 
 8,400km (~5219.5miles)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

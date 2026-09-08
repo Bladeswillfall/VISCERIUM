@@ -131,7 +131,7 @@ The Cathedral Maw embodies Gluttony in its most patient form.   It does not lun
 
 [![](d27c729c2dcd437fe107bd0013de25a2.png "805fb84b-e211-4056-8fd6-c380c0fb05d9.png")](/i/7531511 "805fb84b-e211-4056-8fd6-c380c0fb05d9.png")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

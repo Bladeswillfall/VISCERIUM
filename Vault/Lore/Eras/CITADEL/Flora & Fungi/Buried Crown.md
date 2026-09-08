@@ -123,4 +123,4 @@ Because of its severe beauty and enduring material, Buried Crown is often drawn 
 
 The dread of Buried Crown lies partly in the violence of eruption, but more in the insult it offers to human certainty. Open ground is supposed to stay open. A laid foundation is supposed to mean the earth beneath has accepted its burden. Buried Crown rejects that assumption outright. It waits below, immense and patient, until rain, tremor, or the arrogance of excavation gives it cause to answer.   Then the site changes shape.   A courtyard becomes a thorn court. A workyard becomes an aisle of black-white lances. A cellar becomes a grave with ideas of grandeur. And those who built above it discover, too late, that they had not chosen the ground at all.   The ground had merely allowed them to begin.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

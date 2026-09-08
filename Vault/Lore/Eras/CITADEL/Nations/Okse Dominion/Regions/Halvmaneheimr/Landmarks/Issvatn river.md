@@ -77,7 +77,7 @@ The waterfall is flanked by slopped cliffs that meander their way down to the ri
 Situated along the river, north of Vagrvik, Fjallgrind Fortress is embedded along the eastern bank and has a small secondary fort on the western bank. The fort and fortress allow for a large spiked chain to span the width of the river cutting off access for vessels in the event of an attack or to stop unpermitted vessels.  
 In addition to the large chain, three catapults are staged to hurl oil pots and a small two-man ballista with standard bolts or optional fire-basket bolts could be used.   Both structures are wrapped in a wet moat that has been pierced by large vertical logs to prevent boats from sailing through whilst still allowing the water to flow unimpeded.
 
-![](Worldbuilding_awards_2022-nominee.png "Worldbuilding Awards 2022 Nominee awarded to Bladeswillfall")
+![](Worldbuilding_awards_2022-nominee.png "Worldbuilding Awards 2022 Nominee awarded to Elias Vail")
 
 [![ISSVATN_highlight.png](/uploads/images/87f5e098e78ddabf9659247acf242d71.png "ISSVATN_highlight.png")](/i/3342352 "ISSVATN_highlight.png")
 
@@ -97,7 +97,7 @@ In addition to the large chain, three catapults are staged to hurl oil pots and 
 > 
 > — Unknown
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 ## Ecosystem
 

@@ -13,7 +13,7 @@ import_issues:
 ---
 Index functionality, tagging and concept by [Satrium](https://www.worldanvil.com/author/Satrium) - [Advanced uses of Tags](https://www.worldanvil.com/w/lothrea/a/advanced-uses-of-tags-article)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

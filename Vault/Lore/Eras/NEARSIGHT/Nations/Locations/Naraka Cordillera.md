@@ -31,7 +31,7 @@ Once known as Galdrvyr, Galdyr is a strange material utilised by Resonants to cr
 
 ](/w/viscerium/a/galdyr-2F-galdrvyr-material)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

@@ -63,7 +63,7 @@ Wild animals ranging from small rodents like ferrets, field mice and squirels sc
 
 [![Kingdom of Satol.png](986bcf2b3ca111bf3fde7f5b78ce1ea2.png "Kingdom of Satol.png")](/i/2257058 "Kingdom of Satol.png")
 
-by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 Queen - Rohesia Strallese
 
@@ -73,4 +73,4 @@ Religion(s)
 
 [TBD]
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

@@ -87,9 +87,9 @@ In the skies above, raptors also prey upon the small groundland mammals and all 
 
 [![Soloveyko Republic.png](/uploads/images/880e78ab29f8c3a5a1473b607026fc57.png "Soloveyko Republic.png")](/i/3115610 "Soloveyko Republic.png")
 
-Flag of the Soloveyko Republic by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Flag of the Soloveyko Republic by Elias Vail
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

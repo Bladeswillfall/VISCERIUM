@@ -88,7 +88,7 @@ Few [Resonants](/w/viscerium/a/resonance-article) emerge from the crucible of th
     
     
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 ## Economy
 
@@ -127,7 +127,7 @@ by [Generated using Midjourney (edited)](https://www.midjourney.com)
 
 [![Okse Heraldry_1.png](640faf5b8cd2814de13871ff58c900b6%205.png "Okse Heraldry_1.png")](/i/1903863 "Okse Heraldry_1.png")
 
-by [Fall](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
 ## Armed forces
 

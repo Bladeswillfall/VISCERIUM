@@ -23,7 +23,7 @@ Muld Resonants as combat engineers and medics; defensive and offensive manipulat
 - Collapsing tunnels or creating rockfalls to block enemy advances, especially effective in the Dominion’s mountainous terrain.
 - Battlefield medics, using their abilities to mend bone and flesh in emergencies.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

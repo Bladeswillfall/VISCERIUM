@@ -22,4 +22,4 @@ tags:
 ---
 This space station, orbiting [[Lore/Degel System/Errack]] serves as a mainstay headquarters from which the Imperium Coalition Defence Force organizes it's forces.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

@@ -178,7 +178,7 @@ Important rule: Git remains the repository history and synchronization system.
 
 Purpose: Track versions and synchronize repository changes.
 
-Remote: GitHub repository `Bladeswillfall/VISCERIUM`.
+Remote: the VISCERIUM GitHub repository configured for the working checkout.
 
 Important rule: Check `git status` before a pull when local edits exist.
 

@@ -15,7 +15,7 @@ import_issues:
 ---
 > The world of VISCERIUM is vast and dark, yet exotic and full of intrigue. Here, reality is a merciless labyrinth, filled with unexpected twists that can lead to both doom and discovery. Yet, amid the chaos and despair, the indomitable spirit of humanity flickers like a stubborn flame. Every choice echoes through time, every whisper bears consequence, and the thread between salvation and damnation frays with each passing moment.   What will you discover first?
 > 
-> — [Fall](https://www.worldanvil.com/author/Bladeswillfall)
+> — Elias Vail
 
  
 
@@ -63,7 +63,7 @@ Humanity's home planet, nestled in the Degel system. A planet of extremes in bot
 
 [![Corruption icon.png](598b4c8d3d6aaae231daefd475d4888a.png "Nadirs of Sin.png")](https://www.worldanvil.com/w/viscerium/a/7-nadirs-of-sin-organization)
 
-[Nadirs of Sin by](https://www.worldanvil.com/w/viscerium/a/7-nadirs-of-sin-organization) [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+[Nadirs of Sin by](https://www.worldanvil.com/w/viscerium/a/7-nadirs-of-sin-organization) Elias Vail
 
 ### The Sevenfold Blight
 
@@ -79,7 +79,7 @@ The awe-striking presence of the Naranor Zeniths, united as the Veilbound Enclav
 
 [![Zeniths of Virtue.png](0e0f4f66d44a0c03ce3ec042978a6a2f.png "Zeniths of Virtue.png")](https://www.worldanvil.com/w/viscerium/a/7-zeniths-of-virtue-organization)
 
-[Zeniths of Virtue by](https://www.worldanvil.com/w/viscerium/a/7-zeniths-of-virtue-organization) [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+[Zeniths of Virtue by](https://www.worldanvil.com/w/viscerium/a/7-zeniths-of-virtue-organization) Elias Vail
 
  
 

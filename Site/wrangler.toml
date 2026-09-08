@@ -24,8 +24,8 @@ database_id = "1780f75b-69dc-412f-aa43-dfdd6dcecd99"
 
 [env.production.vars]
 NODE_VERSION = "24"
-PUBLIC_CONTACT_FORM_ENABLED = "1"
-PUBLIC_CONTACT_FORM_ENDPOINT = "https://viscerium-site-services.bladeswillfall.workers.dev/contact"
+PUBLIC_CONTACT_FORM_ENABLED = "0"
+PUBLIC_CONTACT_FORM_ENDPOINT = ""
 PUBLIC_RYBBIT_ENABLED = "1"
 PUBLIC_RYBBIT_HOST = "https://analytics.viscerium.co.uk"
 PUBLIC_RYBBIT_SITE_ID = "d863318efa2f"

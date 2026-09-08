@@ -98,7 +98,7 @@ The Judicial branch of the TCSC upholds the law as defined by the Executive bran
 
 [![](/uploads/images/9ca32c1b8910141ff287b1484e73ea8d.png "TCSC_Flag_Vertical.png")](/i/2816961 "TCSC_Flag_Vertical.png")
 
-TCSC icon by Me (Fall)
+TCSC icon by Elias Vail
 
 Style of governmnet
 
@@ -108,7 +108,7 @@ Republic
 > 
 > — A popular proverb within the TCSC
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

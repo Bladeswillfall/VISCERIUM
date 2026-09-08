@@ -61,7 +61,7 @@ The initial firing of the Intico plasma-beam cannon was a world-wide success and
 
 After its widely successful implementation and the effective use of the Intico plasma-beam cannon for over a decade, it seemed as though the threat of the Nadirs was all but history.   Unfortunately for humanity, the project's lead and holder of one of the three cryptographic command & control keys, Adrastus Delroy, was an acolyte of Evaxi, Nadir of Envy. Unbeknownst to humanity, the creation of such a devastating weapon, was all part of Evaxi's plan to weaken their Nadir kin whilst also removing the threat of humanity's nuclear arms and large standing armies. All so that the Nadir of Envy could attempt a swift and brutal strike, overpowering the nations of Errack and gaining far more power than their Kin could ever attempt to hold.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

@@ -53,10 +53,7 @@ for (const era of eraPages) {
     await expect(page.locator('.calendar-date-badge')).toBeHidden();
     await expect(page.locator('.codex-page-classifier--era-homepage')).toHaveCount(1);
     await expect(page.locator('.codex-page-classifier--article')).toHaveCount(0);
-    await expect(page.getByRole('link', { name: /Edit page/ })).toHaveAttribute(
-      'href',
-      `https://github.com/Bladeswillfall/VISCERIUM/edit/main/Vault/Lore/Eras/${era.source}`,
-    );
+    await expect(page.getByRole('link', { name: /Edit page/ })).toHaveCount(0);
 
     const map = primer.locator('.era-primer__map');
     await expect(map).toHaveAttribute('href', era.mapHref);

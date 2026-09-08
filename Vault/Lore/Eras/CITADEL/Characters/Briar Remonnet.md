@@ -19,11 +19,11 @@ Head of the Remonnet family, Briar ruled the Kingdom of Askalia until his assass
 
 [![](/uploads/images/5aaa8692342b55fab738525aa58751f4.png "Briar Remonnet.png")](/i/2268939 "Briar Remonnet.png")
 
-Briar's personal heraldry by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Briar's personal heraldry by Elias Vail
 
 **Children**
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review
