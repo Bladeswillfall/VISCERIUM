@@ -35,7 +35,7 @@ test('Errack Planetary Rings demonstrates the responsive text-and-image authorin
   assert.equal((section.match(/\[\/col\]/g) ?? []).length, 2);
   assert.match(section, /In addition to its twin moons, Errack boasts a wide but faint ring system/);
   assert.match(section, /!\[\[errack-rings\.webp\]\]/);
-  assert.match(section, /artwork by \[Fall\]\(https:\/\/github\.com\/Bladeswillfall\)/);
+  assert.match(section, /artwork by Elias Vail/);
   assert.match(section, /\[\/cols\]/);
 });
 

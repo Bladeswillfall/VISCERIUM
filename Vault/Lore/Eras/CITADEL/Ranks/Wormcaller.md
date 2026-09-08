@@ -17,7 +17,7 @@ tags:
 ---
 Among the most feared and revered of the cult's servants, commands the disgusting hordes that dwell within the tunnels. For the cult's followers are not alone within their lair. Twisted and loathsome creatures, from bloated and pestilential beings that carry the marks of The Great Maw's favor, to ravenous worm-like entities that serve as guardians, the lair teems with a repulsive assortment of creatures to be controlled.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

@@ -3,15 +3,11 @@ import { test, expect } from '@playwright/test';
 const baseUrl = process.env.CONTACT_TEST_BASE_URL ?? 'http://127.0.0.1:4321';
 const contactUrl = `${baseUrl}/contact/`;
 const supportUrl = `${baseUrl}/support/`;
-const githubIssueUrl = 'https://github.com/Bladeswillfall/VISCERIUM/issues/new/choose';
 const enabledContactEndpoint = 'https://contact-form.invalid/submit';
 
 test.use({ viewport: { width: 390, height: 844 } });
 
-test('contact page keeps public issues secondary when private messaging is unavailable', async ({ page, context }) => {
-  await context.route(`${githubIssueUrl}*`, async (route) => {
-    await route.fulfill({ status: 200, contentType: 'text/plain', body: 'GitHub issue chooser test fixture' });
-  });
+test('contact page keeps public issues secondary when private messaging is unavailable', async ({ page }) => {
   await page.goto(contactUrl, { waitUntil: 'networkidle' });
 
   await expect(page.getByRole('heading', { name: 'Contact', exact: true })).toBeVisible();
@@ -20,24 +16,14 @@ test('contact page keeps public issues secondary when private messaging is unava
   await expect(page.getByRole('heading', { name: 'Send a message.' })).toBeVisible();
   await expect(page.getByText('Private messages are unavailable.')).toBeVisible();
   await expect(page.locator('.contact-hero__body')).toContainText('Private contact is temporarily unavailable.');
-  await expect(page.locator('.contact-hero__body')).toContainText('GitHub so it can be tracked publicly.');
+  await expect(page.locator('.contact-hero__body')).toContainText('the support page so it can be tracked publicly.');
   await expect(page.locator('.contact-hero__body')).not.toContainText('use the contact form below');
-  await expect(page.locator('.contact-public__intro > p')).toContainText('GitHub so it can be tracked publicly.');
-  await expect(page.locator('.contact-github-card > p')).toContainText('GitHub so the discussion and fix stay attached');
+  await expect(page.locator('.contact-public__intro > p')).toContainText('the support page so it can be tracked publicly.');
+  await expect(page.locator('.contact-github-card > p')).toContainText('the support page so the discussion and fix stay attached');
   await expect(page.locator('.contact-hero__mark')).toHaveCSS('mask-image', /viscerium-logo\.svg/);
-  await expect(page.locator('.contact-github-card .codex-icon')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'GitHub', exact: true }).first()).toHaveAttribute(
-    'href',
-    'https://github.com/Bladeswillfall/VISCERIUM/issues',
-  );
-
+  await expect(page.locator('.contact-github-card .codex-icon')).toHaveCount(0);
   const submitIssue = page.getByRole('link', { name: 'Submit an issue', exact: true });
-  await expect(submitIssue).toHaveAttribute('href', githubIssueUrl);
-  const popupPromise = page.waitForEvent('popup');
-  await submitIssue.click();
-  const popup = await popupPromise;
-  await expect(popup).toHaveURL(githubIssueUrl);
-  await popup.close();
+  await expect(submitIssue).toHaveAttribute('href', '/support/');
 
   await expect(page.locator('form')).toHaveCount(0);
   await expect(page.locator('.cf-turnstile')).toHaveCount(0);

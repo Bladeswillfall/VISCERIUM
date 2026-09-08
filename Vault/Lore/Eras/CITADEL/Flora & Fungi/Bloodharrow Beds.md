@@ -127,7 +127,7 @@ Veterans learn quickly that Bloodharrow is not frightening because it is hidden 
 
 [![](1decf121791c684cb8808f411a682067.png "ChatGPT Image Mar 20, 2026, 11_47_28 PM.png")](/i/7530507 "ChatGPT Image Mar 20, 2026, 11_47_28 PM.png")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

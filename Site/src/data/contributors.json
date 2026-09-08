@@ -2,15 +2,15 @@
   "collapsedLimit": 7,
   "defaultContributors": [
     {
-      "id": "fall",
+      "id": "elias",
       "role": "Author"
     }
   ],
   "profiles": {
-    "fall": {
-      "name": "Fall",
-      "github": "Bladeswillfall",
-      "avatar": "fall.webp"
+    "elias": {
+      "name": "Elias Vail",
+      "url": "https://www.viscerium.co.uk/",
+      "avatar": "elias-vail.webp"
     }
   }
 }

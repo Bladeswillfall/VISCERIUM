@@ -82,7 +82,7 @@ Upon ignition, the HiEnA only utilises the dual-electric motors for locomotion, 
 
 [![HiENa](7e1787e61347b4ddcc8dcdf8cd526b6d.png "HiENa")](/i/6355614 "HiENa")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

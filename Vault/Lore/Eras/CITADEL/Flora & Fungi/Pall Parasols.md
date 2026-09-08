@@ -139,7 +139,7 @@ The dread of Pall Parasol lies in how little drama it requires.   A Bloodharrow
 
 [![](d5518ef6560d6d630147cbb14e94f3be.png "ChatGPT Image Mar 21, 2026, 01_20_23 PM.png")](/i/7531498 "ChatGPT Image Mar 21, 2026, 01_20_23 PM.png")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

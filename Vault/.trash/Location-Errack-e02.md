@@ -72,7 +72,7 @@ The season of reaping. As the sun dips and shadows lengthen, Errack enters Haust
 
 Errack by [shinyman](https://www.deviantart.com/schinyman)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 ## Planetary Composition
 
@@ -184,7 +184,7 @@ Every eight (8) years the slightly larger moon of the twin planets causes an inc
 
 [![](48614bf95a6559be42dd93b364db7e3c.png "Errack's-ring-noBG.png")](/i/6639662 "Errack's-ring-noBG.png")
 
-Rings of Errack by Fall (me)
+Rings of Errack by Elias Vail
 
 In addition to its twin moons, Errack also boasts a wide but faint ring system at its equator. These planetary rings are unfortunately the cause of many asteroids and comets becoming meteors. Whilst the meteor showers are usually enjoyed by many, on account of their stunning visuals, some have also been the cause of much destruction on rare occasion.  
 

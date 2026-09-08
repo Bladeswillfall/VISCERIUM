@@ -32,4 +32,4 @@ a representative from each of the forms of Resonance.- Isen
   
   Shrotly before the Svar council leader's tenure is over, they may find and select a shadow. The shadow in theory, will become the next leader for that form of Resonance in the council.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

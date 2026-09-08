@@ -59,7 +59,7 @@ As the House of the Hollow Worm gains power and influence, the surrounding lands
 
 [![Square-image-missing.png](/uploads/images/cfee3cfbe4f069bf4461e43010c13ef2.png "Square-image-missing.png")](/i/2730367 "Square-image-missing.png")
 
-Image_missing_1 by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Image_missing_1 by Elias Vail
 
  
 
@@ -74,7 +74,7 @@ Image_missing_1 by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
 > 
 > — Gastronicrie's chant
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

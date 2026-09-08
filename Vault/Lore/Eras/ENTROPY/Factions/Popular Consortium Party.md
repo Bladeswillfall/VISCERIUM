@@ -5,7 +5,7 @@ sidebar:
     - label: "Government"
       value: "Republic"
 title: "Popular Consortium Party"
-description: "PCPPlaceholder by Me (Fall)"
+description: "PCPPlaceholder by Elias Vail"
 updated:
 status: "draft"
 type: "faction"
@@ -27,9 +27,9 @@ tags:
 
 [![](/uploads/images/ad9f88e8cd1883e2d8c66623c9fc5e99.png "Communist.png")](/i/2632873 "Communist.png")
 
-PCP_Placeholder by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+PCP_Placeholder by Elias Vail
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

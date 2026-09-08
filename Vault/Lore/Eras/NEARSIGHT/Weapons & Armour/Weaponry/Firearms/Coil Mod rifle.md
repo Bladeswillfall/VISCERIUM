@@ -18,4 +18,4 @@ tags:
 ---
 Modified rifle to utilise coils. Alows for an "Over-penetration" mode to be toggle 'on', thus making smaller rounds more effective.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._

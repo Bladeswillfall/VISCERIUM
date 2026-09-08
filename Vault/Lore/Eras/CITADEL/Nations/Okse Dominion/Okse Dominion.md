@@ -13,7 +13,7 @@ climate: Cold highland, tundra, temperate rainforest, coniferous forest, deciduo
 image: 640faf5b8cd2814de13871ff58c900b6.webp
 headerImage: 1d6a04547df953b36f4d6f8ce73e91f2.webp
 imageTitle: Okse Heraldry
-artist: Fall
+artist: Elias Vail
 alt: A stark Oksmun heraldic mark for the Okse Dominion.
 map:
   id:
@@ -93,7 +93,7 @@ sidebar:
         - label: Juggernauts
           href: "[[Juggernauts]]"
         - Resonants
-      note: All artwork that is not an original creation by Fall will be replaced with either original pieces or commissioned art.
+      note: All artwork that is not an original creation by Elias Vail will be replaced with either original pieces or commissioned art.
 tags:
   - okse
   - dominion

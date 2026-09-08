@@ -56,9 +56,9 @@ In the turbulent shadows of the Uxifirar family, the Krass Dominion sprouted fro
 
 [![Krass Heraldry_1.png](8959261124e62edee28ea6301fa6e1f2.png "Krassian flag")](/i/1937601 "Krassian flag")
 
-by [Fall (me)](https://www.worldanvil.com/author/Bladeswillfall)
+by Elias Vail
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
   
 

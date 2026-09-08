@@ -4,7 +4,7 @@ import { formatList } from '../lib/i18n.mjs';
 
 type ContributorProfile = {
   name: string;
-  github: string;
+  url: string;
   avatar: string;
 };
 
@@ -64,7 +64,7 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
             <li>
               <a
                 class:list={{ 'is-author': isAuthor }}
-                href={`https://github.com/${contributor.github}`}
+                href={contributor.url}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={t('viscerium.contributors.profileLabel', {

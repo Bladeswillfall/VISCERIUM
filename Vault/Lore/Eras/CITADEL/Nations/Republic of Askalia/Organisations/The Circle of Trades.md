@@ -124,7 +124,7 @@ The Porters Guild started off as simply a union of workers within King's Cliff w
 
 [![Circle of Trades.png](/uploads/images/aa3ffa93805b3872a4ac44a1ca9c0428.png "Circle of Trades.png")](/i/2152359 "Circle of Trades.png")
 
-Circle of Trades by [Me (Fall)](https://www.worldanvil.com/author/Bladeswillfall)
+Circle of Trades by Elias Vail
 
 Headquarters
 
@@ -144,7 +144,7 @@ Organisational structure
 - The Silver Circle
 - The Copper Circle
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 ## History
 

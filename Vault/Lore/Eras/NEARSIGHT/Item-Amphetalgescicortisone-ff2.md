@@ -45,7 +45,7 @@ import_source_file: Item-Amphetalgescicortisone-ff2.md
 The aerosol acts as a stimulant, pain receptor blocker, visual processing enhancer and trauma preventative - perfect for keeping soldiers fighting, morale high and their shots accurate.   Whilst maintaining freedom of will, intuition and personal decision making, this substance causes people to no longer feel physical pain and suppresses negative emotions like fear, anxiety and depression.  
 It achieves this by inhibiting the process of pain through the parietal lobe, increasing the functional capacity and speed of the occipital lobe, and interacting with the amygdala to prevent trauma being stored for later recall, in turn preventing Post-traumatic stress disorder and similar trauma induced mental health conditions from occurring.
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
   
 

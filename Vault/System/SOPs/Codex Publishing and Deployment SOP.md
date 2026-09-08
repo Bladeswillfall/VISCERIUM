@@ -361,7 +361,7 @@ Verify the domain with Webmention.io before you enable the integration.
 
 ### Giscus
 
-The site is configured for repository `Bladeswillfall/VISCERIUM` and the `Comments` discussion category.
+The site can expose a public repository URL through `PUBLIC_GITHUB_REPO_URL` and uses the `Comments` discussion category.
 
 Giscus is enabled by default when the configured repository and category identifiers are present.
 

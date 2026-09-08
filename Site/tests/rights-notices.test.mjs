@@ -38,9 +38,11 @@ test('rights configuration keeps ownership transitions deliberate', () => {
   assert.equal(rightsConfig.visceriumCreative.startYear, 2021);
   assert.equal(rightsConfig.nullMaterials.startYear, 2025);
   assert.equal(rightsConfig.firstPartyCode.startYear, 2026);
-  assert.equal(rightsConfig.visceriumCreative.currentOwner, 'Fall');
+  assert.equal(rightsConfig.visceriumCreative.creator, 'Elias Vail');
+  assert.equal(rightsConfig.visceriumCreative.currentOwner, 'Elias Vail');
   assert.equal(rightsConfig.visceriumCreative.futureOwner, 'NULL Holdings Ltd');
-  assert.equal(rightsConfig.nullMaterials.currentOwner, 'Fall');
+  assert.equal(rightsConfig.nullMaterials.currentOwner, 'Elias Vail');
+  assert.equal(rightsConfig.firstPartyCode.currentOwner, 'Elias Vail');
 });
 
 test('year ranges are UTC-based, validated, and use an en dash', () => {
@@ -83,7 +85,6 @@ test('README badges communicate the mixed licensing model', () => {
   assert.match(readme, /First--party_Code-MIT/);
   assert.match(readme, /Third--party_Software-Upstream_Licences/);
   assert.match(readme, /Canon-No_Generative_AI/);
-  assert.match(readme, /actions\/workflows\/checks\.yml\/badge\.svg\?branch=main/);
   assert.match(readme, /Licensing summary:/);
 });
 

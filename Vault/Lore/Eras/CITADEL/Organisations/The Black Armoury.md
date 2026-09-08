@@ -24,7 +24,7 @@ The Black Armoury or BA for short was founded in [1323]. Originally created to p
 
 ![](/uploads/images/85f637a81bea8250840f895fb8f32990.png)
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review

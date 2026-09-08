@@ -79,7 +79,7 @@ Adrastus believes in the scientific method above all else. He believes that ther
 
 [![](/uploads/images/3ae03f3e5ed2f81d9f65b378388403d9.jpeg "d6c223584cb1b9b838b8fdb02113.jpeg")](/i/3578951 "d6c223584cb1b9b838b8fdb02113.jpeg")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 ## History
 

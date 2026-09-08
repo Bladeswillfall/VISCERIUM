@@ -19,7 +19,7 @@ Anti Myrkild, Naranor research and development group.
 
 [![](70aa011be42032ce575d250f2e542cce.png "PLACEHOLDER-WYRD-logo")](/i/6600807 "PLACEHOLDER-WYRD-logo")
 
-_All artwork that isn't an original creation by myself ([@Bladeswillfall](https://www.worldanvil.com/author/Bladeswillfall)) will be replaced with either original pieces or commissioned art._
+_All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
 <!-- worldanvil-migration-review:start -->
 ## Import review
