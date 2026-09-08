@@ -7,7 +7,7 @@ const sourcePath = starlightRoute.entry.data.sourcePath;
 const encodedSourcePath = typeof sourcePath === 'string'
   ? sourcePath.split('/').map((segment) => encodeURIComponent(segment)).join('/')
   : undefined;
-const editUrl = encodedSourcePath
+const editUrl = siteConfig.githubRepoUrl && encodedSourcePath
   ? `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/${encodedSourcePath}`
   : undefined;
 ---
