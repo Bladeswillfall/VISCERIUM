@@ -45,7 +45,7 @@ const internalLink = (parent, label, target, className = "vc-home-row-link") => 
 };
 
 const candidates = Array.from(
-  dv.pages("").where((p) => typeof p?.file?.path === "string" && (p.file.path.startsWith("Lore/") || p.file.path.startsWith("Drafts/WorldAnvil Import/")))
+  dv.pages("").where((p) => typeof p?.file?.path === "string" && ((p.file.path.startsWith("Lore/") || p.file.path.startsWith("Drafts/Lore/")) || p.file.path.startsWith("Drafts/WorldAnvil Import/")))
 );
 const flagged = candidates
   .map(analyse)
@@ -54,7 +54,7 @@ const flagged = candidates
 const totalIssues = flagged.reduce((sum, entry) => sum + entry.count, 0);
 const criticalCount = flagged.filter((entry) => entry.severity === "critical").length;
 const ready = candidates
-  .filter((p) => p.file.path.startsWith("Lore/") && String(p.status ?? "") !== "published" && [p.title, p.description, p.type, p.status].filter(isEmpty).length === 0)
+  .filter((p) => (p.file.path.startsWith("Lore/") || p.file.path.startsWith("Drafts/Lore/")) && String(p.status ?? "") !== "published" && [p.title, p.description, p.type, p.status].filter(isEmpty).length === 0)
   .sort((a, b) => (b.file.mtime?.toMillis?.() ?? 0) - (a.file.mtime?.toMillis?.() ?? 0));
 
 const summary = root.createDiv({ cls: "vc-home-attention-summary" });
