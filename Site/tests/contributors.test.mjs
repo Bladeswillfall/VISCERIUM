@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import contributorAssets from '../src/data/contributor-avatars.json' with { type: 'json' };
 import contributorRegistry from '../src/data/contributors.json' with { type: 'json' };
 import {
@@ -12,6 +15,8 @@ import {
   roleClass,
   visualRoles,
 } from '../src/lib/contributors.mjs';
+
+const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 test('role normalization preserves display text while deduplicating comparison keys', () => {
   assert.equal(normalizeRole(' Author '), 'author');
@@ -48,6 +53,7 @@ test('unknown roles remain visible and use the neutral ring class', () => {
 test('GitHub usernames are derived only from GitHub profile URLs', () => {
   assert.equal(githubUsernameFromUrl('https://github.com/Bladeswillfall'), 'Bladeswillfall');
   assert.equal(githubUsernameFromUrl('https://www.github.com/example/'), 'example');
+  assert.equal(githubUsernameFromUrl('https://github.com/owner/repository'), undefined);
   assert.equal(githubUsernameFromUrl('https://example.com/Bladeswillfall'), undefined);
   assert.equal(githubUsernameFromUrl('not a url'), undefined);
 });
@@ -68,9 +74,13 @@ test('Solacons are deterministic SVGs derived from the contributor name', () => 
   assert.doesNotMatch(first, /<script/i);
 });
 
-test('every registered contributor has a checked-in avatar path', () => {
-  for (const id of Object.keys(contributorRegistry.profiles)) {
-    assert.match(contributorAssets[id] ?? '', /^\/assets\/contributors\//, `Missing avatar path for ${id}`);
+test('every registered contributor has a checked-in avatar file', () => {
+  for (const id of [...Object.keys(contributorRegistry.profiles), 'fallback']) {
+    const publicPath = contributorAssets[id] ?? '';
+    assert.match(publicPath, /^\/assets\/contributors\//, `Missing avatar path for ${id}`);
+    assert.ok(
+      existsSync(path.join(siteRoot, 'public', publicPath.replace(/^\//, ''))),
+      `Missing avatar file for ${id}: ${publicPath}`,
+    );
   }
-  assert.match(contributorAssets.fallback, /^\/assets\/contributors\//);
 });
