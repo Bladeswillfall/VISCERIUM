@@ -37,10 +37,12 @@ test('Elias Vail signature remains visible, themed, and responsive', async ({ pa
     document.documentElement.dataset.theme = 'light';
   });
   expect(await signature.evaluate((element) => getComputedStyle(element).filter)).toBe('none');
+  expect(await signature.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.3');
 
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'dark';
   });
   expect(await signature.evaluate((element) => getComputedStyle(element).filter)).not.toBe('none');
+  expect(await signature.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.7');
   await expect(signature).toBeVisible();
 });
