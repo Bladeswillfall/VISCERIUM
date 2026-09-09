@@ -42,19 +42,19 @@ test('calendar edge tooltips stay inside a narrow viewport', async ({ page }) =>
       tooltip.textContent = 'The Corporate Genetic Bidding Programme';
       element.append(tooltip);
     });
+    const tooltip = link.locator('.calendar-day__events');
     await link.hover();
+    await expect(tooltip).toHaveCSS('opacity', '1');
 
-    const rect = await link.locator('.calendar-day__events').evaluate((element) => {
+    const rect = await tooltip.evaluate((element) => {
       const box = element.getBoundingClientRect();
       return {
         left: box.left,
         right: box.right,
         viewportWidth: window.innerWidth,
-        opacity: getComputedStyle(element).opacity,
       };
     });
 
-    expect(rect.opacity).toBe('1');
     expect(rect.left).toBeGreaterThanOrEqual(0);
     expect(rect.right).toBeLessThanOrEqual(rect.viewportWidth);
   }
