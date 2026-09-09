@@ -3,7 +3,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import contributorRegistry from '../src/data/contributors.json' with { type: 'json' };
 import {
-  contributorSlug,
   generateSolaconSvg,
   githubUsernameFromUrl,
 } from '../src/lib/contributors.mjs';
@@ -15,7 +14,7 @@ const assetsPath = path.join(siteRoot, 'src', 'data', 'contributor-avatars.json'
 const fallbackPath = '/assets/contributors/fallback.svg';
 
 async function writeSolacon(id, profile, assets) {
-  const fileName = `${contributorSlug(profile.name)}.svg`;
+  const fileName = `${id}.svg`;
   const outputDir = path.join(publicRoot, 'generated');
   await fs.mkdir(outputDir, { recursive: true });
   await fs.writeFile(path.join(outputDir, fileName), generateSolaconSvg(profile.name), 'utf8');
