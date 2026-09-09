@@ -415,7 +415,7 @@
     padding-block-start: .1rem;
   }
 
-  .calendar-legend h3 {
+  .sl-markdown-content:not(:has(.home-gateway)) .calendar-legend h3 {
     margin: 0 0 .55rem;
     color: var(--calendar-muted);
     font-family: var(--vc-font-ui);
