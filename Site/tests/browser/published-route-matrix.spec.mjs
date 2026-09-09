@@ -30,7 +30,7 @@ for (const [name, viewport] of [
       if (path === '/creator-programme/') {
         await expect(page.locator('.creator-roll__value').nth(0)).toHaveText('£300.00');
         await expect(page.locator('.creator-roll__value').nth(1)).toHaveText('3');
-        await page.locator('.creator-support-metrics').scrollIntoViewIfNeeded();
+        await page.locator('.creator-support-metrics').evaluate((element) => element.scrollIntoView({ block: 'center' }));
         await expect(page.locator('.creator-roll[data-roll-active]')).toHaveCount(2);
         await expect(page.locator('.creator-roll__digit')).toHaveCount(6);
         await page.waitForFunction(() => {
