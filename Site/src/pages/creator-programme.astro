@@ -15,14 +15,14 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     <section class="creator-hero" aria-labelledby="creator-hero-title">
       <span class="creator-hero__mark" aria-hidden="true"></span>
       <div class="creator-shell creator-hero__inner">
-        <div>
-          <p class="creator-kicker">VISCERIUM Creator Programme</p>
-          <h1 id="creator-hero-title">Build something. Keep your name on it.</h1>
-        </div>
-        <div class="creator-hero__copy">
-          <p class="creator-hero__lead">VISCERIUM is built as a coherent universe without making its creators invisible.</p>
-          <p>People who materially contribute to the world should be credited for their work and, where agreed, paid for it.</p>
-          <a class="creator-jump" href="#principles">How it works <span aria-hidden="true">↓</span></a>
+        <h1 id="creator-hero-title">
+          <span>Build something.</span>
+          <span class="creator-hero__line-two">Keep your name on it.</span>
+        </h1>
+
+        <div class="creator-hero__footer">
+          <p>VISCERIUM is built as one coherent universe, with clear credit for the people who help create it.</p>
+          <a class="creator-jump" href="#principles">See the terms <span aria-hidden="true">↓</span></a>
         </div>
       </div>
     </section>
@@ -30,31 +30,28 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     <section class="creator-section" id="principles" aria-labelledby="creator-principles-title">
       <div class="creator-shell">
         <div class="creator-section__header">
-          <div>
-            <p class="creator-index">01 / Principles</p>
-            <h2 id="creator-principles-title">A few rules. Kept simple.</h2>
-          </div>
-          <p>VISCERIUM keeps central ownership and editorial control. Creative contributors keep clear credit and work under agreed terms.</p>
+          <h2 id="creator-principles-title">A few simple rules.</h2>
+          <p>VISCERIUM keeps central ownership and editorial control. Contributors keep clear credit and work under agreed terms.</p>
         </div>
 
         <ol class="creator-principles">
           <li>
-            <p class="creator-index">01</p>
+            <span class="creator-number">01</span>
             <h3>Credit the maker.</h3>
             <p>Accepted creative work names the people responsible for it.</p>
           </li>
           <li>
-            <p class="creator-index">02</p>
+            <span class="creator-number">02</span>
             <h3>Agree before use.</h3>
             <p>Creative rights and usage terms are agreed before material is accepted.</p>
           </li>
           <li>
-            <p class="creator-index">03</p>
+            <span class="creator-number">03</span>
             <h3>Pay where agreed.</h3>
             <p>Substantial work may be commissioned, paid directly, or covered by another written agreement.</p>
           </li>
           <li>
-            <p class="creator-index">04</p>
+            <span class="creator-number">04</span>
             <h3>Canon stays curated.</h3>
             <p>Contribution does not make material canon automatically. VISCERIUM retains editorial control.</p>
           </li>
@@ -65,33 +62,32 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     <section class="creator-section creator-section--participation" id="participation" aria-labelledby="creator-participation-title">
       <div class="creator-shell">
         <div class="creator-section__header">
-          <div>
-            <p class="creator-index">02 / Participation</p>
-            <h2 id="creator-participation-title">Different work needs different terms.</h2>
-          </div>
-          <p>The agreement should match the contribution. Small community input is not treated like commissioned art, writing, or sustained authorship.</p>
+          <h2 id="creator-participation-title">Different work. Different terms.</h2>
+          <p>The agreement should match the contribution. Community input is not treated like commissioned art, writing, or sustained authorship.</p>
         </div>
 
         <div class="creator-tiers">
           <article class="creator-tier">
             <div>
-              <p class="creator-tier__label">01 / Community</p>
+              <p class="creator-tier__kind">Community</p>
               <h3>Suggestions and fixes</h3>
             </div>
             <p>Discussion, corrections, technical fixes, and feedback.</p>
             <p>Usually unpaid. Credit or thanks where appropriate.</p>
           </article>
+
           <article class="creator-tier">
             <div>
-              <p class="creator-tier__label">02 / Contributor</p>
+              <p class="creator-tier__kind">Contributor</p>
               <h3>Accepted creative work</h3>
             </div>
             <p>Lore, writing, artwork, maps, research, design, or similar work.</p>
             <p>Named credit and compensation where agreed.</p>
           </article>
+
           <article class="creator-tier">
             <div>
-              <p class="creator-tier__label">03 / Partner</p>
+              <p class="creator-tier__kind">Partner</p>
               <h3>Sustained authorship</h3>
             </div>
             <p>Commissioned work or substantial ongoing collaboration.</p>
@@ -103,43 +99,40 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
     <section class="creator-fund" id="fund" aria-labelledby="creator-fund-title">
       <div class="creator-shell creator-fund__inner">
-        <div>
-          <p class="creator-index">03 / Creator Fund</p>
-          <h2 id="creator-fund-title">Support beyond a single commission.</h2>
-        </div>
-        <div class="creator-fund__copy">
-          <p>The Creator Fund is intended to give eligible creators another way to participate financially as the programme develops.</p>
-          <p class="creator-note">The final structure and eligibility rules will be published when the scheme is ready.</p>
+        <div class="creator-fund__intro">
+          <h2 id="creator-fund-title">Support beyond commissions.</h2>
+          <div class="creator-fund__copy">
+            <p>The Creator Fund is intended to give eligible creators another way to participate financially as the programme develops.</p>
+            <p class="creator-note">The final structure and eligibility rules will be published when the scheme is ready.</p>
+          </div>
         </div>
 
         <div class="creator-support-log" aria-labelledby="creator-support-log-title">
           <div class="creator-support-log__header">
-            <div>
-              <p class="creator-index">Public record</p>
-              <h3 id="creator-support-log-title">Creator support to date</h3>
-            </div>
+            <h3 id="creator-support-log-title">Creator support to date</h3>
             <p>Aggregate figures only. Individual compensation and contract terms remain private unless a creator chooses otherwise.</p>
           </div>
 
           <dl class="creator-support-metrics">
             <div class="creator-support-metric">
-              <dt>Paid directly to artists and creators</dt>
-              <dd class="creator-support-metric__status">Not published</dd>
+              <dt>Paid to creators</dt>
+              <dd>Not published</dd>
             </div>
             <div class="creator-support-metric">
-              <dt>Unique creators financially supported</dt>
-              <dd class="creator-support-metric__status">Not published</dd>
+              <dt>Creators supported</dt>
+              <dd>Not published</dd>
             </div>
             <div class="creator-support-metric">
-              <dt>NULL / VISCERIUM Creator Fund</dt>
-              <dd class="creator-support-metric__status">Launching</dd>
+              <dt>Creator Fund</dt>
+              <dd>Launching</dd>
             </div>
             <div class="creator-support-metric">
-              <dt>Creator Fund distributions to date</dt>
-              <dd class="creator-support-metric__status">Pending</dd>
+              <dt>Fund distributions</dt>
+              <dd>Pending</dd>
             </div>
           </dl>
-          <p class="creator-support-log__note">Historic direct commissions are reported separately from distributions made through the formal Creator Fund.</p>
+
+          <p class="creator-support-log__note">Historic direct commissions are reported separately from formal Creator Fund distributions.</p>
         </div>
       </div>
     </section>
@@ -153,7 +146,6 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     --creator-text: var(--sl-color-white);
     --creator-body: var(--sl-color-gray-2);
     --creator-muted: var(--sl-color-gray-3);
-    --creator-accent: var(--sl-color-accent-high);
     --creator-void: var(--home-void);
     --creator-fixed-text: var(--home-text-fixed);
     --creator-fixed-body: var(--home-text-soft-fixed);
@@ -185,7 +177,6 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     font-family: var(--vc-font-display);
     font-weight: 400;
     font-synthesis-weight: none;
-    text-wrap: balance;
   }
 
   .creator-programme-page p {
@@ -198,46 +189,26 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     padding-inline: var(--creator-gutter);
   }
 
-  .creator-kicker,
-  .creator-index,
-  .creator-tier__label {
-    margin: 0;
-    color: var(--creator-muted);
-    font-family: var(--vc-font-ui);
-    font-size: .68rem;
-    font-weight: 600;
-    letter-spacing: .14em;
-    line-height: 1.3;
-    text-transform: uppercase;
-  }
-
   .creator-hero {
     position: relative;
     display: grid;
-    min-block-size: min(72rem, calc(100svh - var(--sl-nav-height, 3.5rem)));
+    min-block-size: calc(100svh - var(--sl-nav-height, 3.5rem));
     align-items: end;
     overflow: hidden;
-    border-bottom: 1px solid var(--creator-line);
-    background:
-      radial-gradient(
-        circle at 78% 18%,
-        color-mix(in oklch, var(--codex-palette-deep) 48%, transparent),
-        transparent 30rem
-      ),
-      var(--creator-void);
+    background: var(--creator-void);
     color: var(--creator-fixed-body);
     isolation: isolate;
   }
 
   .creator-hero__mark {
     position: absolute;
-    top: 50%;
-    right: clamp(-12rem, -4vw, -2rem);
+    top: 48%;
+    right: clamp(-15rem, -5vw, -3rem);
     z-index: -1;
-    width: clamp(28rem, 62vw, 68rem);
+    width: clamp(30rem, 64vw, 72rem);
     aspect-ratio: 1756 / 969;
     translate: 0 -50%;
-    background: color-mix(in oklch, var(--creator-fixed-text) 8.5%, transparent);
+    background: color-mix(in oklch, var(--creator-fixed-text) 8%, transparent);
     -webkit-mask: url('/assets/brand/viscerium-logo.svg') center / contain no-repeat;
     mask: url('/assets/brand/viscerium-logo.svg') center / contain no-repeat;
     pointer-events: none;
@@ -245,113 +216,111 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-hero__inner {
-    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .65fr);
-    gap: clamp(2.5rem, 7vw, 9rem);
-    align-items: end;
+    min-height: inherit;
+    align-content: end;
     padding-top: clamp(7rem, 12vw, 12rem);
-    padding-bottom: clamp(4rem, 7vw, 7.5rem);
-  }
-
-  .creator-kicker {
-    margin-bottom: .9rem;
-    color: var(--creator-fixed-text);
-    letter-spacing: .2em;
+    padding-bottom: clamp(3rem, 5vw, 5.5rem);
   }
 
   .creator-hero h1 {
-    max-width: 10ch;
+    width: 100%;
     margin: 0;
     color: var(--creator-fixed-text);
-    font-size: clamp(4rem, 3rem + 7vw, 10rem);
+    font-size: clamp(2rem, 8.2vw, 8.8rem);
     letter-spacing: -.035em;
-    line-height: .84;
+    line-height: .9;
     text-transform: uppercase;
   }
 
-  .creator-hero__copy {
-    align-self: end;
-    padding-top: 1.2rem;
-    padding-bottom: .55rem;
+  .creator-hero h1 > span {
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  .creator-hero__line-two {
+    margin-top: .08em;
+    margin-left: auto;
+    font-size: .78em;
+    letter-spacing: -.02em;
+  }
+
+  .creator-hero__footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    margin-top: clamp(2.5rem, 5vw, 5rem);
+    padding-top: 1.25rem;
     border-top: 1px solid var(--codex-palette-deep);
   }
 
-  .creator-hero__lead {
+  .creator-hero__footer p {
+    max-width: 42rem;
     margin: 0;
-    color: var(--creator-fixed-text);
-    font-size: clamp(1.25rem, 1.05rem + .7vw, 1.75rem);
-    line-height: 1.4;
-  }
-
-  .creator-hero__copy > p:not(.creator-hero__lead) {
-    max-width: 38rem;
-    margin: .85rem 0 0;
     color: var(--creator-fixed-body);
-    font-size: .98rem;
+    font-size: clamp(1.05rem, .98rem + .3vw, 1.3rem);
+    line-height: 1.5;
   }
 
   .creator-jump {
     display: inline-flex;
+    min-block-size: 2.75rem;
     align-items: center;
+    justify-content: center;
     gap: .55rem;
-    margin-top: 1.5rem;
-    padding: .72rem .9rem;
+    padding: .7rem .95rem;
     border: 1px solid var(--creator-fixed-text);
     color: var(--creator-fixed-text) !important;
     font-family: var(--vc-font-ui);
-    font-size: .68rem;
+    font-size: .72rem;
     font-weight: 600;
-    letter-spacing: .12em;
-    line-height: 1;
-    text-decoration: none;
+    letter-spacing: .08em;
+    line-height: 1.2;
+    text-decoration: none !important;
     text-transform: uppercase;
+    transition: background-color 160ms ease, color 160ms ease;
   }
 
   .creator-jump:hover,
   .creator-jump:focus-visible {
     background: var(--creator-fixed-text);
     color: var(--creator-void) !important;
-    outline: none;
-  }
-
-  .creator-jump:focus-visible {
-    box-shadow: 0 0 0 2px var(--creator-void), 0 0 0 4px var(--creator-fixed-text);
   }
 
   .creator-section {
-    padding-block: clamp(4.5rem, 8vw, 8rem);
+    padding-block: clamp(4.5rem, 8vw, 7.5rem);
     border-bottom: 1px solid var(--creator-line);
   }
 
   .creator-section--participation {
-    background: color-mix(in oklch, var(--creator-surface) 65%, var(--creator-bg));
+    background: color-mix(in oklch, var(--creator-surface) 52%, var(--creator-bg));
   }
 
   .creator-section__header {
     display: grid;
-    grid-template-columns: minmax(14rem, .75fr) minmax(22rem, 1.25fr);
-    gap: clamp(2rem, 5vw, 7rem);
+    grid-template-columns: minmax(18rem, .85fr) minmax(24rem, 1.15fr);
+    gap: clamp(2rem, 6vw, 8rem);
     align-items: end;
-    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
   }
 
   .creator-section__header h2,
   .creator-fund h2 {
-    margin: .8rem 0 0;
-    color: var(--creator-text);
-    font-size: clamp(2.5rem, 1.9rem + 2.5vw, 5.4rem);
+    margin: 0;
+    font-size: clamp(2.35rem, 1.8rem + 2.1vw, 4.6rem);
     letter-spacing: 0;
-    line-height: .98;
-    text-transform: none;
+    line-height: 1;
   }
 
   .creator-section__header h2 {
-    max-width: 16ch;
+    max-width: 14ch;
   }
 
   .creator-section__header > p {
-    max-width: 43rem;
+    max-width: 42rem;
     margin: 0;
     color: var(--creator-body);
   }
@@ -367,7 +336,9 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-principles > li {
-    min-height: 15rem;
+    display: grid;
+    min-height: 14rem;
+    align-content: start;
     margin: 0;
     padding: 1.5rem;
     border-right: 1px solid var(--creator-line);
@@ -378,15 +349,23 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     content: none;
   }
 
+  .creator-number {
+    color: var(--creator-muted);
+    font-family: var(--vc-font-ui);
+    font-size: .72rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    line-height: 1;
+  }
+
   .creator-principles h3,
   .creator-tier h3,
   .creator-support-log h3 {
-    margin: .9rem 0 .75rem;
+    margin: 1rem 0 .75rem;
     color: var(--creator-text);
-    font-size: clamp(1.35rem, 1.1rem + .8vw, 2.1rem);
+    font-size: clamp(1.35rem, 1.12rem + .7vw, 2rem);
     letter-spacing: 0;
-    line-height: 1.05;
-    text-transform: none;
+    line-height: 1.08;
   }
 
   .creator-principles p:last-child {
@@ -402,47 +381,59 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-tier {
     display: grid;
-    grid-template-columns: minmax(12rem, .7fr) minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(1.25rem, 4vw, 4rem);
-    padding: 1.6rem 0;
+    grid-template-columns: minmax(13rem, .72fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 4.5rem);
+    align-items: start;
+    padding: 1.75rem 0;
     border-bottom: 1px solid var(--creator-line);
   }
 
+  .creator-tier__kind {
+    margin: 0;
+    color: var(--creator-muted);
+    font-family: var(--vc-font-ui);
+    font-size: .78rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
   .creator-tier h3 {
-    margin-top: .55rem;
+    margin-top: .45rem;
     margin-bottom: 0;
   }
 
   .creator-tier > p {
+    max-width: 34rem;
     margin: 0;
     color: var(--creator-body);
     font-size: .96rem;
   }
 
   .creator-fund {
-    padding-block: clamp(4rem, 7vw, 6.5rem);
+    padding-block: clamp(4.5rem, 8vw, 7rem);
     background: var(--creator-void);
     color: var(--creator-fixed-body);
   }
 
   .creator-fund__inner {
     display: grid;
-    grid-template-columns: minmax(0, .8fr) minmax(24rem, 1.2fr);
-    gap: clamp(2rem, 5vw, 7rem);
+    gap: clamp(3rem, 6vw, 6rem);
+  }
+
+  .creator-fund__intro {
+    display: grid;
+    grid-template-columns: minmax(18rem, .85fr) minmax(24rem, 1.15fr);
+    gap: clamp(2rem, 6vw, 8rem);
     align-items: end;
   }
 
-  .creator-fund .creator-index {
-    color: var(--codex-palette-mid);
-  }
-
   .creator-fund h2 {
-    max-width: 13ch;
+    max-width: 12ch;
     color: var(--creator-fixed-text);
   }
 
   .creator-fund__copy {
-    max-width: 48rem;
+    max-width: 45rem;
   }
 
   .creator-fund__copy p {
@@ -456,29 +447,26 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-fund__copy .creator-note {
     color: var(--codex-palette-mid);
-    font-size: .88rem;
+    font-size: .9rem;
   }
 
   .creator-support-log {
-    grid-column: 1 / -1;
-    margin-top: clamp(1rem, 2vw, 2rem);
-    padding-top: clamp(2rem, 4vw, 3rem);
+    padding-top: clamp(2.5rem, 4vw, 3.5rem);
     border-top: 1px solid var(--creator-line);
   }
 
   .creator-support-log__header {
-    display: flex;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: minmax(18rem, .85fr) minmax(24rem, 1.15fr);
+    gap: clamp(2rem, 6vw, 8rem);
     align-items: end;
-    justify-content: space-between;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
   }
 
   .creator-support-log h3 {
-    margin-top: .55rem;
-    margin-bottom: 0;
+    margin: 0;
     color: var(--creator-fixed-text);
-    font-size: clamp(1.5rem, 1.25rem + 1vw, 2.4rem);
+    font-size: clamp(1.6rem, 1.3rem + .8vw, 2.3rem);
   }
 
   .creator-support-log__header > p {
@@ -497,13 +485,12 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-support-metric {
-    display: flex;
-    min-height: 8.5rem;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 1rem;
+    display: grid;
+    min-height: 7.5rem;
+    align-content: space-between;
+    gap: 1.25rem;
     margin: 0;
-    padding: 1.1rem;
+    padding: 1.2rem;
     border-right: 1px solid var(--creator-line);
     border-bottom: 1px solid var(--creator-line);
   }
@@ -514,25 +501,19 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-support-metric dt {
-    max-width: 16rem;
     color: var(--codex-palette-mid);
     font-family: var(--vc-font-ui);
-    font-size: .68rem;
+    font-size: .76rem;
     font-weight: 500;
-    letter-spacing: .04em;
-    line-height: 1.4;
-    text-transform: uppercase;
+    line-height: 1.35;
   }
 
   .creator-support-metric dd {
     color: var(--creator-fixed-text);
-    font-family: var(--vc-font-display);
-    font-size: clamp(1.35rem, 1.1rem + .8vw, 2rem);
-    line-height: 1.05;
-  }
-
-  .creator-support-metric__status {
-    color: var(--creator-fixed-text);
+    font-family: var(--vc-font-ui);
+    font-size: clamp(.95rem, .9rem + .2vw, 1.08rem);
+    font-weight: 600;
+    line-height: 1.25;
   }
 
   .creator-support-log__note {
@@ -633,51 +614,60 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     display: none !important;
   }
 
-  @media (max-width: 72rem) {
+  @media (max-width: 86rem) {
     .creator-principles,
     .creator-support-metrics {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 54rem) {
-    .creator-hero {
-      min-block-size: auto;
-    }
-
-    .creator-hero__inner,
+  @media (max-width: 70rem) {
     .creator-section__header,
-    .creator-fund__inner {
+    .creator-fund__intro,
+    .creator-support-log__header {
       grid-template-columns: 1fr;
+      gap: 1.25rem;
+      align-items: start;
     }
 
-    .creator-hero__inner {
-      padding-top: 7rem;
-      padding-bottom: 4rem;
+    .creator-section__header h2,
+    .creator-fund h2 {
+      max-width: 16ch;
     }
 
+    .creator-tier {
+      grid-template-columns: minmax(12rem, .8fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.5rem 2.5rem;
+    }
+  }
+
+  @media (max-width: 54rem) {
     .creator-hero__mark {
-      right: -14rem;
+      right: -15rem;
       width: 42rem;
-      opacity: .75;
+      opacity: .72;
     }
 
-    .creator-section__header > p {
-      align-self: start;
+    .creator-hero__footer {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .creator-jump {
+      width: fit-content;
     }
 
     .creator-tier {
       grid-template-columns: 1fr;
-      gap: .65rem;
+      gap: .75rem;
     }
 
-    .creator-support-log__header {
-      display: grid;
-      align-items: start;
+    .creator-tier > p {
+      max-width: 40rem;
     }
   }
 
-  @media (max-width: 38rem) {
+  @media (max-width: 42rem) {
     .creator-principles,
     .creator-support-metrics {
       grid-template-columns: 1fr;
@@ -688,7 +678,11 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     }
 
     .creator-hero h1 {
-      font-size: clamp(3.4rem, 18vw, 6rem);
+      font-size: clamp(2rem, 8.2vw, 3.5rem);
+    }
+
+    .creator-hero__line-two {
+      font-size: .76em;
     }
   }
 
