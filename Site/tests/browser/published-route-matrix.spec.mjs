@@ -27,6 +27,13 @@ for (const [name, viewport] of [
       await page.evaluate(() => document.fonts.ready);
       await expect(page.locator(selector).first(), path).toBeVisible();
 
+      if (path === '/creator-programme/') {
+        await expect(page.locator('.creator-roll__value').nth(0)).toHaveText('£300.00');
+        await expect(page.locator('.creator-roll__value').nth(1)).toHaveText('3');
+        await page.locator('.creator-support-log').scrollIntoViewIfNeeded();
+        await expect(page.locator('.creator-roll[data-roll-active]')).toHaveCount(2);
+      }
+
       const geometry = await page.evaluate(() => ({
         clientWidth: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
