@@ -51,3 +51,31 @@ for (const [name, viewport] of [
     }
   });
 }
+
+test('creator programme keeps header clearance without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  const response = await page.goto('http://127.0.0.1:4321/creator-programme/', { waitUntil: 'domcontentloaded' });
+  expect(response?.ok()).toBe(true);
+
+  const geometry = await page.evaluate(() => {
+    const main = document.querySelector('.main-frame');
+    const header = document.querySelector('header.header');
+    const hero = document.querySelector('.creator-hero');
+    if (!main || !header || !hero) return null;
+
+    return {
+      mainPaddingTop: Number.parseFloat(getComputedStyle(main).paddingTop),
+      headerHeight: header.getBoundingClientRect().height,
+      heroTop: hero.getBoundingClientRect().top,
+    };
+  });
+
+  expect(geometry).not.toBeNull();
+  expect(geometry.mainPaddingTop).toBeGreaterThanOrEqual(geometry.headerHeight - 1);
+  expect(geometry.heroTop).toBeGreaterThanOrEqual(geometry.headerHeight - 1);
+  await context.close();
+});
