@@ -421,8 +421,10 @@
     font-family: var(--vc-font-ui);
     font-size: .74rem;
     font-weight: 650;
+    letter-spacing: 0;
     line-height: 1.15;
     text-align: end;
+    text-transform: none;
   }
 
   .calendar-legend ul {
