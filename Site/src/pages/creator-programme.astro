@@ -116,11 +116,31 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
           <dl class="creator-support-metrics">
             <div class="creator-support-metric">
               <dt>Paid to creators</dt>
-              <dd><span class="creator-roll creator-roll--money">£300.00</span></dd>
+              <dd>
+                <span class="creator-roll">
+                  <span class="creator-roll__value">£300.00</span>
+                  <span class="creator-roll__track" aria-hidden="true">
+                    <span>£000.00</span>
+                    <span>£100.00</span>
+                    <span>£200.00</span>
+                    <span>£300.00</span>
+                  </span>
+                </span>
+              </dd>
             </div>
             <div class="creator-support-metric">
               <dt>Creators supported</dt>
-              <dd><span class="creator-roll creator-roll--count">3</span></dd>
+              <dd>
+                <span class="creator-roll">
+                  <span class="creator-roll__value">3</span>
+                  <span class="creator-roll__track" aria-hidden="true">
+                    <span>0</span>
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                  </span>
+                </span>
+              </dd>
             </div>
             <div class="creator-support-metric">
               <dt>Creator Fund</dt>
@@ -138,6 +158,22 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     </section>
   </div>
 </StarlightPage>
+
+<script>
+  const rolls = document.querySelectorAll('.creator-roll');
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && rolls.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.setAttribute('data-roll-active', '');
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.45 });
+
+    rolls.forEach((roll) => observer.observe(roll));
+  }
+</script>
 
 <style is:global>
   .creator-programme-page {
@@ -527,27 +563,22 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     vertical-align: bottom;
   }
 
-  @supports (animation-timeline: view()) {
-    .creator-roll::after {
-      position: absolute;
-      inset: 0;
-      display: block;
-      background: var(--sl-color-bg);
-      color: inherit;
-      line-height: inherit;
-      white-space: pre;
-      animation: creator-number-roll 1s steps(3, end) both;
-      animation-timeline: view();
-      animation-range: entry 10% entry 70%;
-    }
+  .creator-roll__track {
+    position: absolute;
+    inset: 0;
+    display: none;
+    background: var(--sl-color-bg);
+    color: inherit;
+    line-height: inherit;
+  }
 
-    .creator-roll--money::after {
-      content: "£000.00\A£100.00\A£200.00\A£300.00";
-    }
+  .creator-roll__track > span {
+    display: block;
+  }
 
-    .creator-roll--count::after {
-      content: "0\A1\A2\A3";
-    }
+  .creator-roll[data-roll-active] .creator-roll__track {
+    display: block;
+    animation: creator-number-roll 720ms steps(3, end) both;
   }
 
   @keyframes creator-number-roll {
@@ -741,7 +772,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
       transition: none;
     }
 
-    .creator-roll::after {
+    .creator-roll__track {
       display: none !important;
       animation: none !important;
     }
@@ -749,7 +780,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   @media (forced-colors: active) {
     .creator-hero__mark,
-    .creator-roll::after {
+    .creator-roll__track {
       display: none !important;
     }
   }
