@@ -42,7 +42,7 @@ test('calendar edge tooltips stay inside a narrow viewport', async ({ page }) =>
       tooltip.textContent = 'The Corporate Genetic Bidding Programme';
       element.append(tooltip);
     });
-    await link.focus();
+    await link.hover();
 
     const rect = await link.locator('.calendar-day__events').evaluate((element) => {
       const box = element.getBoundingClientRect();
