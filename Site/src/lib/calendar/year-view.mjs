@@ -19,3 +19,15 @@ export function buildTimelineEventsByDay(events) {
   }
   return eventsByDay;
 }
+
+export function validateCalendarYearDates(dates, year) {
+  if (!Number.isSafeInteger(year) || dates.some((date) => !Number.isSafeInteger(date.absoluteDay))) {
+    throw new RangeError(`Calendar year ${year} exceeds the supported absolute-day range`);
+  }
+  for (let index = 1; index < dates.length; index += 1) {
+    if (dates[index].absoluteDay !== dates[index - 1].absoluteDay + 1) {
+      throw new RangeError(`Calendar year ${year} exceeds the supported absolute-day range`);
+    }
+  }
+  return dates;
+}
