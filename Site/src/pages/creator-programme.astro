@@ -414,8 +414,8 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-fund {
     padding-block: clamp(4.5rem, 8vw, 7rem);
-    background: var(--creator-void);
-    color: var(--creator-fixed-body);
+    background: var(--sl-color-bg);
+    color: var(--creator-body);
   }
 
   .creator-fund__inner {
@@ -432,7 +432,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-fund h2 {
     max-width: 12ch;
-    color: var(--creator-fixed-text);
+    color: var(--creator-text);
   }
 
   .creator-fund__copy {
@@ -441,7 +441,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-fund__copy p {
     margin: 0;
-    color: var(--creator-fixed-body);
+    color: var(--creator-body);
   }
 
   .creator-fund__copy p + p {
@@ -449,7 +449,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-fund__copy .creator-note {
-    color: var(--codex-palette-mid);
+    color: var(--creator-muted);
     font-size: .9rem;
   }
 
@@ -468,14 +468,14 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-support-log h3 {
     margin: 0;
-    color: var(--creator-fixed-text);
+    color: var(--creator-text);
     font-size: clamp(1.6rem, 1.3rem + .8vw, 2.3rem);
   }
 
   .creator-support-log__header > p {
     max-width: 42rem;
     margin: 0;
-    color: var(--codex-palette-mid);
+    color: var(--creator-muted);
     font-size: .9rem;
   }
 
@@ -504,7 +504,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-support-metric dt {
-    color: var(--codex-palette-mid);
+    color: var(--creator-muted);
     font-family: var(--vc-font-ui);
     font-size: .76rem;
     font-weight: 500;
@@ -512,7 +512,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-support-metric dd {
-    color: var(--creator-fixed-text);
+    color: var(--creator-text);
     font-family: var(--vc-font-ui);
     font-size: clamp(.95rem, .9rem + .2vw, 1.08rem);
     font-weight: 600;
@@ -521,7 +521,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-support-log__note {
     margin: 1rem 0 0;
-    color: var(--codex-palette-mid);
+    color: var(--creator-muted);
     font-size: .84rem;
   }
 
