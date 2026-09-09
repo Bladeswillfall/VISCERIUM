@@ -1,6 +1,6 @@
 @layer starlight.core {
   .pagination-links {
-    display: none;
+    display: none !important;
   }
 
   img[src$="/assets/images/elias-vail-signature.svg"] {

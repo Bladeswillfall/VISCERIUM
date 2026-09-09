@@ -3,7 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { isMainModule } from './script-entry.mjs';
 
-const DEFAULT_VAULT = path.resolve(process.cwd(), '../Vault');
+const DEFAULT_VAULT = path.resolve(process.cwd(), '../../VISCERIUM-Workshop/Vault');
 const IMPORT_REL = 'Drafts/WorldAnvil Import';
 const REVIEW_START = '<!-- worldanvil-migration-review:start -->';
 const REVIEW_END = '<!-- worldanvil-migration-review:end -->';
@@ -184,13 +184,15 @@ async function titleIndex(vault, importFiles) {
     const list = index.get(key) ?? [];
     list.push(entry); index.set(key,list);
   };
-  for (const rel of await markdownFiles(vault)) {
-    if (rel.startsWith(`${IMPORT_REL}/`) || rel.startsWith('System/') || rel.startsWith('Templates/') || rel.startsWith('Demo/') || rel.startsWith('Stories/')) continue;
+  // Glob does not descend into Workshop's linked public Lore directory.
+  const canon = (await markdownFiles(path.join(vault, 'Lore'))).map((file) => `Lore/${file}`);
+  for (const rel of new Set([...await markdownFiles(vault), ...canon])) {
+    if (!rel.startsWith('Lore/') && !rel.startsWith('Drafts/Lore/')) continue;
     const raw = await fs.readFile(path.join(vault,rel),'utf8');
     const parts = splitFrontmatter(raw);
     const fallback = path.basename(rel,'.md');
     const title = frontmatterTitle(parts.frontmatter,fallback);
-    add(title, { path: rel, title, current: true });
+    add(title, { path: rel, title, current: rel.startsWith('Lore/') });
   }
   for (const file of importFiles) {
     const { title } = sourceInfo(file);
@@ -203,7 +205,7 @@ export function importBase() {
 }
 function inbox(stats) {
   const count = (id) => stats.issues.get(id) ?? 0;
-  return `---\ntitle: "World Anvil Migration Review"\nstatus: draft\ntype: article\ndevelopment_level: stub\n---\n# World Anvil Migration Review\n\nUse [[System/Bases/World Anvil Import.base|World Anvil Import]] to browse the imported corpus. Individual notes contain precise review tasks where judgement is still required.\n\n## Migration-level next actions\n\n- [ ] Review the **${count('needs-era')}** imports whose era could not be established from the export metadata.\n- [ ] Review the **${count('needs-type-review') + count('legacy-type-review')}** imports whose final Codex structure/type still needs judgement.\n- [ ] Reconcile the **${count('existing-codex-match')}** imports that have an existing Codex note with the same canonical title.\n- [ ] Review meaningful structured relationships for the **${count('relationship-review')}** imports carrying leadership, membership, succession or similar legacy data.\n- [ ] Resolve link/asset exceptions: **${count('unresolved-legacy-links')}** note(s) with legacy links and **${count('missing-inline-assets')}** note(s) with legacy inline asset references.\n\n## Current state\n\n- Total imported articles: **${stats.total}**\n- Mechanically clean (no migration issue flags): **${stats.clean}**\n- Still carrying one or more review flags: **${stats.withIssues}**\n\n→ [[System/Imports/WorldAnvil/report|Full generated report]]\n\n> [!tip]\n> These are migration decisions, not a completeness score. Checking a migration-level task does not automatically resolve the corresponding note-level tasks.\n`;
+  return `---\ntitle: "World Anvil Migration Review"\nstatus: draft\ntype: article\ndevelopment_level: stub\n---\n# World Anvil Migration Review\n\nUse [[System/Bases/World Anvil Import.base|World Anvil Import]] to browse the imported corpus. Individual notes contain precise review tasks where judgement is still required.\n\n## Migration-level next actions\n\n- [ ] Review the **${count('needs-era')}** imports whose era could not be established from the export metadata.\n- [ ] Review the **${count('needs-type-review') + count('legacy-type-review')}** imports whose final Codex structure/type still needs judgement.\n- [ ] Reconcile the **${count('existing-codex-match')}** imports that have an existing Codex note with the same canonical title.\n- [ ] Review meaningful structured relationships for the **${count('relationship-review')}** imports carrying leadership, membership, succession or similar legacy data.\n- [ ] Resolve link/asset exceptions: **${count('unresolved-legacy-links')}** note(s) with legacy links and **${count('missing-inline-assets')}** note(s) with legacy inline asset references.\n\n## Current state\n\n- Total imported articles: **${stats.total}**\n- Mechanically clean (no migration issue flags): **${stats.clean}**\n- Still carrying one or more review flags: **${stats.withIssues}**\n\n→ [[Drafts/WorldAnvil Metadata/report|Full generated report]]\n\n> [!tip]\n> These are migration decisions, not a completeness score. Checking a migration-level task does not automatically resolve the corresponding note-level tasks.\n`;
 }
 function report(stats) {
   const typeLines = [...stats.types].sort((a,b)=>b[1]-a[1]).map(([k,v])=>`- ${k}: ${v}`).join('\n');
@@ -233,7 +235,7 @@ function parseArgs(argv) {
 // eslint-disable-next-line complexity
 export async function runIntegration({ vault=DEFAULT_VAULT, write=false }={}) {
   const importDir=path.join(vault,IMPORT_REL);
-  const data=JSON.parse(await fs.readFile(path.join(vault,'System/Imports/WorldAnvil/integration-data.json'),'utf8'));
+  const data=JSON.parse(await fs.readFile(path.join(vault,'Drafts/WorldAnvil Metadata/integration-data.json'),'utf8'));
   const importFiles=(await fs.readdir(importDir)).filter(isWorldAnvilArticleFile).sort();
   const titles=new Map();
   for (const f of importFiles) { const t=sourceInfo(f).title.toLocaleLowerCase('en'); titles.set(t,(titles.get(t)??0)+1); }
@@ -262,10 +264,10 @@ export async function runIntegration({ vault=DEFAULT_VAULT, write=false }={}) {
   if (write) {
     await fs.mkdir(path.join(vault,'System/Bases'),{recursive:true});
     await fs.mkdir(path.join(vault,'Drafts/Inbox'),{recursive:true});
-    await fs.mkdir(path.join(vault,'System/Imports/WorldAnvil'),{recursive:true});
+    await fs.mkdir(path.join(vault,'Drafts/WorldAnvil Metadata'),{recursive:true});
     await fs.writeFile(path.join(vault,'System/Bases/World Anvil Import.base'),importBase(),'utf8');
     await fs.writeFile(path.join(vault,'Drafts/Inbox/World Anvil Migration Review.md'),inbox(stats),'utf8');
-    await fs.writeFile(path.join(vault,'System/Imports/WorldAnvil/report.md'),report(stats),'utf8');
+    await fs.writeFile(path.join(vault,'Drafts/WorldAnvil Metadata/report.md'),report(stats),'utf8');
     const home=path.join(vault,'Home.md'); await fs.writeFile(home,updateHome(await fs.readFile(home,'utf8')),'utf8');
   }
   console.log(`World Anvil Obsidian integration (${write?'write':'audit'})`);

@@ -41,12 +41,21 @@ The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of
 
 This repository contains both the source archive and the machinery behind the public Codex.
 
-- `Vault/` contains the Obsidian worldbuilding vault and source Lore.
+- `Vault/` is the LIVE Obsidian vault with published Lore and shared creator tools.
+- The private sibling `VISCERIUM-Workshop/Vault/` holds drafts, stories, journals, migration data, and unpublished assets.
 - `Site/` contains the Astro and Starlight website.
 - `Tools/` contains creator-facing tools and integrations.
 - `Architecture/` documents the systems that connect the vault, generators, and public site.
 
 The public website is generated from reviewed, published source notes. The repository is therefore not only a website project; it is the working infrastructure for a growing fictional universe.
+
+## Public and private vaults
+
+Open each repository's `Vault/` folder separately in Obsidian. Keep unpublished Lore in `VISCERIUM-Workshop/Vault/Drafts/Lore/`, preserving the intended Lore folder structure. The Workshop setup script links public canon and shared resources into the private vault and keeps plugin state separate.
+
+To publish, review the note and its assets in Workshop, set `status: published`, and move the approved note into the matching public `Vault/Lore/` path through a pull request. Archive any private working copy in Workshop. Changing status alone does not transfer a file between repositories.
+
+GitHub can read every tracked file in this public repository, including notes the website excludes. Repository checks reject private folders and unpublished Lore. This split removes files from the current tree, not from historical commits.
 
 ## Creation, authorship, and rights
 

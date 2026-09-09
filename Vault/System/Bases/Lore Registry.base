@@ -45,7 +45,7 @@ views:
     name: All lore
     filters:
       and:
-        - file.inFolder("Lore")
+        - file.inFolder("Lore") || file.inFolder("Drafts/Lore")
     order:
       - formula.note_link
       - type
@@ -61,7 +61,7 @@ views:
     name: By era
     filters:
       and:
-        - file.inFolder("Lore")
+        - file.inFolder("Lore") || file.inFolder("Drafts/Lore")
     groupBy:
       property: formula.era_context
       direction: ASC
@@ -78,7 +78,7 @@ views:
     name: By type
     filters:
       and:
-        - file.inFolder("Lore")
+        - file.inFolder("Lore") || file.inFolder("Drafts/Lore")
     groupBy:
       property: type
       direction: ASC
@@ -111,7 +111,7 @@ views:
     name: Published lore
     filters:
       and:
-        - file.inFolder("Lore")
+        - file.inFolder("Lore") || file.inFolder("Drafts/Lore")
         - status == "published"
     order:
       - formula.note_link

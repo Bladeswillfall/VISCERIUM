@@ -14,6 +14,7 @@
     "validate:vault": "node scripts/validate-vault-notes.mjs",
     "validate:timelines": "node scripts/generate-timeline-data.mjs --validate-only",
     "validate:icons": "node scripts/validate-icon-output.mjs",
+    "contributors:sync": "node scripts/sync-contributor-avatars.mjs",
     "notices:update": "node scripts/update-rights-notices.mjs --write",
     "notices:check": "node scripts/update-rights-notices.mjs --check",
     "rights:update": "npm run notices:update",

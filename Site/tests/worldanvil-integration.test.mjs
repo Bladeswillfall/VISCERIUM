@@ -38,9 +38,13 @@ test('review tasks correspond to explicit migration issue flags', () => {
 test('completed review tasks stay completed across integration runs', async (t) => {
   const vault = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-wa-integration-'));
   t.after(() => fs.rm(vault, { recursive: true, force: true }));
+  const canon = await fs.mkdtemp(path.join(os.tmpdir(), 'viscerium-wa-canon-'));
+  t.after(() => fs.rm(canon, { recursive: true, force: true }));
+  await fs.writeFile(path.join(canon, 'Resonance.md'), '---\ntitle: Resonance\nstatus: published\n---\nPublished canon.\n');
+  await fs.symlink(canon, path.join(vault, 'Lore'), 'junction');
 
   const importDir = path.join(vault, 'Drafts/WorldAnvil Import');
-  const dataDir = path.join(vault, 'System/Imports/WorldAnvil');
+  const dataDir = path.join(vault, 'Drafts/WorldAnvil Metadata');
   const note = path.join(importDir, 'Law-Resonance-AbC.md');
   await fs.mkdir(importDir, { recursive: true });
   await fs.mkdir(dataDir, { recursive: true });
@@ -70,10 +74,13 @@ Resonance shapes the setting.
 
   assert.equal(first.issues.get('legacy-type-review'), undefined);
   assert.equal(first.issues.get('needs-era'), 1);
+  assert.equal(first.issues.get('existing-codex-match'), 1);
   assert.match(afterFirst, /^- \[x\] Decide whether legacy World Anvil type/m);
   assert.doesNotMatch(afterFirst, /^  - "legacy-type-review"$/m);
   assert.equal(await fs.readFile(note, 'utf8'), afterFirst);
   assert.equal(second.changed, 0);
+  await fs.access(path.join(dataDir, 'report.md'));
+  await assert.rejects(fs.access(path.join(vault, 'System/Imports/WorldAnvil/report.md')));
 });
 
 test('migration Base provides card browsing and actionable review views', () => {
