@@ -117,28 +117,16 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
             <div class="creator-support-metric">
               <dt>Paid to creators</dt>
               <dd>
-                <span class="creator-roll">
+                <span class="creator-roll" data-roll-value="300.00" data-roll-prefix="£">
                   <span class="creator-roll__value">£300.00</span>
-                  <span class="creator-roll__track" aria-hidden="true">
-                    <span>£000.00</span>
-                    <span>£100.00</span>
-                    <span>£200.00</span>
-                    <span>£300.00</span>
-                  </span>
                 </span>
               </dd>
             </div>
             <div class="creator-support-metric">
               <dt>Creators supported</dt>
               <dd>
-                <span class="creator-roll">
+                <span class="creator-roll" data-roll-value="3">
                   <span class="creator-roll__value">3</span>
-                  <span class="creator-roll__track" aria-hidden="true">
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                  </span>
                 </span>
               </dd>
             </div>
@@ -160,18 +148,70 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 </StarlightPage>
 
 <script>
-  const rolls = document.querySelectorAll('.creator-roll');
+  const rollGroup = document.querySelector('.creator-support-metrics');
+  const rolls = Array.from(document.querySelectorAll('.creator-roll[data-roll-value]'));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const forcedColors = window.matchMedia('(forced-colors: active)').matches;
 
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && rolls.length > 0) {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.setAttribute('data-roll-active', '');
-        observer.unobserve(entry.target);
+  if (rollGroup && rolls.length > 0 && !reducedMotion && !forcedColors && 'IntersectionObserver' in window) {
+    const preparedRolls = rolls.map((roll) => {
+      const visual = document.createElement('span');
+      visual.className = 'creator-roll__visual';
+      visual.setAttribute('aria-hidden', 'true');
+
+      const prefix = roll.dataset.rollPrefix ?? '';
+      if (prefix) {
+        const prefixNode = document.createElement('span');
+        prefixNode.textContent = prefix;
+        visual.append(prefixNode);
       }
-    }, { threshold: 0.45 });
 
-    rolls.forEach((roll) => observer.observe(roll));
+      let digitIndex = 0;
+      for (const character of roll.dataset.rollValue ?? '') {
+        if (!/\d/.test(character)) {
+          const staticNode = document.createElement('span');
+          staticNode.textContent = character;
+          visual.append(staticNode);
+          continue;
+        }
+
+        const targetDigit = Number(character);
+        const steps = targetDigit + (digitIndex === 0 ? 0 : 10);
+        const windowNode = document.createElement('span');
+        const track = document.createElement('span');
+        windowNode.className = 'creator-roll__digit';
+        track.className = 'creator-roll__track';
+
+        for (let step = 0; step <= steps; step += 1) {
+          const digit = document.createElement('span');
+          digit.textContent = String(step % 10);
+          track.append(digit);
+        }
+
+        track.style.setProperty('--creator-roll-end', `${-steps * 1.25}em`);
+        track.style.setProperty('--creator-roll-delay', `${digitIndex * 45}ms`);
+        track.style.setProperty('--creator-roll-duration', `${Math.min(980, 620 + steps * 30)}ms`);
+        windowNode.append(track);
+        visual.append(windowNode);
+        digitIndex += 1;
+      }
+
+      roll.append(visual);
+      return roll;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (!entry?.isIntersecting) return;
+
+      preparedRolls.forEach((roll) => roll.setAttribute('data-roll-active', ''));
+      observer.disconnect();
+    }, {
+      threshold: 0.25,
+      rootMargin: '0px 0px -25% 0px',
+    });
+
+    observer.observe(rollGroup);
   }
 </script>
 
@@ -559,36 +599,46 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   .creator-roll {
     position: relative;
     display: inline-block;
-    overflow: hidden;
     vertical-align: bottom;
   }
 
-  .creator-roll__track {
+  .creator-roll__visual {
     position: absolute;
-    inset: 0;
-    display: none;
+    inset: 0 auto auto 0;
+    display: inline-flex;
+    visibility: hidden;
     background: var(--sl-color-bg);
-    color: inherit;
-    line-height: inherit;
+    line-height: 1.25;
+    pointer-events: none;
+  }
+
+  .creator-roll[data-roll-active] .creator-roll__visual {
+    visibility: visible;
+  }
+
+  .creator-roll__digit {
+    display: inline-block;
+    height: 1.25em;
+    overflow: hidden;
+  }
+
+  .creator-roll__track {
+    display: block;
+    transform: translateY(0);
+    transition-property: transform;
+    transition-duration: var(--creator-roll-duration, 900ms);
+    transition-timing-function: cubic-bezier(.16, 1, .3, 1);
+    transition-delay: var(--creator-roll-delay, 0ms);
   }
 
   .creator-roll__track > span {
     display: block;
+    height: 1.25em;
+    line-height: 1.25;
   }
 
   .creator-roll[data-roll-active] .creator-roll__track {
-    display: block;
-    animation: creator-number-roll 720ms steps(3, end) both;
-  }
-
-  @keyframes creator-number-roll {
-    from {
-      transform: translateY(0);
-    }
-
-    to {
-      transform: translateY(-3.75em);
-    }
+    transform: translateY(var(--creator-roll-end, 0));
   }
 
   .creator-support-log__note {
@@ -772,15 +822,14 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
       transition: none;
     }
 
-    .creator-roll__track {
+    .creator-roll__visual {
       display: none !important;
-      animation: none !important;
     }
   }
 
   @media (forced-colors: active) {
     .creator-hero__mark,
-    .creator-roll__track {
+    .creator-roll__visual {
       display: none !important;
     }
   }
