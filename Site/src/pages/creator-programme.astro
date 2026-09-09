@@ -168,6 +168,10 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     box-sizing: border-box;
   }
 
+  .creator-programme-page > section + section {
+    margin-top: 0 !important;
+  }
+
   .creator-programme-page :where(h1, h2, h3, p) {
     margin-block-start: 0;
   }
@@ -242,7 +246,6 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-hero__line-two {
     margin-top: .08em;
-    margin-left: auto;
     font-size: .78em;
     letter-spacing: -.02em;
   }
@@ -610,7 +613,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   .main-frame:has(.creator-programme-page) .content-panel > .sl-container > .codex-header-figure,
   .main-frame:has(.creator-programme-page) .content-panel > .sl-container > h1#_top,
   .main-frame:has(.creator-programme-page) .content-panel > .sl-container > .codex-breadcrumbs,
-  body:has(.creator-programme-page) .codex-contributors {
+  body:has(.creator-programme-page) .codex-page-deck {
     display: none !important;
   }
 
