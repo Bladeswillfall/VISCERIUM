@@ -8,3 +8,14 @@ export function buildMonthGrid(calendar, month, firstWeekday) {
     return day >= 1 && day <= month.days ? day : null;
   });
 }
+
+export function buildTimelineEventsByDay(events) {
+  const eventsByDay = new Map();
+  for (const event of events) {
+    if (event.precision !== 'day') continue;
+    const dayEvents = eventsByDay.get(event.absoluteStartDay) ?? [];
+    dayEvents.push(event);
+    eventsByDay.set(event.absoluteStartDay, dayEvents);
+  }
+  return eventsByDay;
+}
