@@ -116,11 +116,11 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
           <dl class="creator-support-metrics">
             <div class="creator-support-metric">
               <dt>Paid to creators</dt>
-              <dd>Not published</dd>
+              <dd><span class="creator-roll creator-roll--money">£300.00</span></dd>
             </div>
             <div class="creator-support-metric">
               <dt>Creators supported</dt>
-              <dd>Not published</dd>
+              <dd><span class="creator-roll creator-roll--count">3</span></dd>
             </div>
             <div class="creator-support-metric">
               <dt>Creator Fund</dt>
@@ -514,15 +514,58 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   .creator-support-metric dd {
     color: var(--creator-text);
     font-family: var(--vc-font-ui);
-    font-size: clamp(.95rem, .9rem + .2vw, 1.08rem);
+    font-size: clamp(1.05rem, .98rem + .3vw, 1.25rem);
+    font-variant-numeric: tabular-nums;
     font-weight: 600;
     line-height: 1.25;
   }
 
+  .creator-roll {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  @supports (animation-timeline: view()) {
+    .creator-roll::after {
+      position: absolute;
+      inset: 0;
+      display: block;
+      background: var(--sl-color-bg);
+      color: inherit;
+      line-height: inherit;
+      white-space: pre;
+      animation: creator-number-roll 1s steps(3, end) both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 70%;
+    }
+
+    .creator-roll--money::after {
+      content: "£000.00\A£100.00\A£200.00\A£300.00";
+    }
+
+    .creator-roll--count::after {
+      content: "0\A1\A2\A3";
+    }
+  }
+
+  @keyframes creator-number-roll {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(-3.75em);
+    }
+  }
+
   .creator-support-log__note {
-    margin: 1rem 0 0;
+    max-width: 48rem;
+    margin: clamp(1.5rem, 2vw, 2rem) 0 0;
     color: var(--creator-muted);
     font-size: .84rem;
+    line-height: 1.5;
   }
 
   body:has(.creator-programme-page) .sl-markdown-content :is(
@@ -697,11 +740,17 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     .creator-jump {
       transition: none;
     }
+
+    .creator-roll::after {
+      display: none !important;
+      animation: none !important;
+    }
   }
 
   @media (forced-colors: active) {
-    .creator-hero__mark {
-      display: none;
+    .creator-hero__mark,
+    .creator-roll::after {
+      display: none !important;
     }
   }
 </style>
