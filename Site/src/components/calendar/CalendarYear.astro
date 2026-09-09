@@ -2,7 +2,7 @@
 import { getCalendar } from '../../lib/calendar/registry';
 import { getCalendarYearDates, isLeapYear, resolveCalendarDate } from '../../lib/calendar/convert';
 import type { CalendarEventLink, CalendarEventLinks, CalendarObservance, ResolvedCalendarDate } from '../../lib/calendar/types';
-import { buildMonthGrid } from '../../lib/calendar/year-view.mjs';
+import { buildMonthGrid, buildTimelineEventsByDay } from '../../lib/calendar/year-view.mjs';
 import { formatList } from '../../lib/i18n.mjs';
 import '../../styles/calendar-year.css';
 
@@ -16,6 +16,7 @@ type TimelineEvent = {
   id: string;
   title: string;
   absoluteStartDay: number;
+  precision: 'day' | 'month' | 'year';
 };
 
 type TimelineDataset = {
@@ -37,12 +38,7 @@ const timelineDatasets = import.meta.glob('../../data/timelines/super.json', {
   import: 'default',
 }) as Record<string, TimelineDataset>;
 const worldTimelineEvents = timelineDatasets['../../data/timelines/super.json']?.events ?? [];
-const timelineEventsByDay = new Map<number, TimelineEvent[]>();
-for (const event of worldTimelineEvents) {
-  const events = timelineEventsByDay.get(event.absoluteStartDay) ?? [];
-  events.push(event);
-  timelineEventsByDay.set(event.absoluteStartDay, events);
-}
+const timelineEventsByDay = buildTimelineEventsByDay(worldTimelineEvents) as Map<number, TimelineEvent[]>;
 
 function getDateForMonthDay(month: string, day: number) {
   return datesByAnchor.get(`${month}-${String(day).padStart(2, '0')}`);
@@ -122,7 +118,7 @@ const islandData = {
   year,
   locale,
   observanceLinks,
-  timelineEvents: worldTimelineEvents.map(({ id, title, absoluteStartDay }) => ({ id, title, absoluteStartDay })),
+  timelineEvents: worldTimelineEvents.map(({ id, title, absoluteStartDay, precision }) => ({ id, title, absoluteStartDay, precision })),
   messages: {
     openTarget: t('viscerium.calendar.openTarget', {
       date: '__DATE__',
@@ -336,13 +332,14 @@ const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c')
 <script>
   import { getCalendarYearDates, isLeapYear, resolveCalendarDate } from '../../lib/calendar/convert';
   import { getCalendar } from '../../lib/calendar/registry';
-  import { buildMonthGrid } from '../../lib/calendar/year-view.mjs';
+  import { buildMonthGrid, buildTimelineEventsByDay } from '../../lib/calendar/year-view.mjs';
   import { formatList } from '../../lib/i18n.mjs';
 
   type CalendarIslandEvent = {
     id: string;
     title: string;
     absoluteStartDay: number;
+    precision: 'day' | 'month' | 'year';
   };
 
   type CalendarIslandData = {
@@ -386,12 +383,7 @@ const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c')
     const data = JSON.parse(dataElement.textContent || 'null') as CalendarIslandData | null;
     if (!data) return;
     const calendar = getCalendar(data.calendarId);
-    const timelineEventsByDay = new Map<number, CalendarIslandEvent[]>();
-    for (const event of data.timelineEvents) {
-      const events = timelineEventsByDay.get(event.absoluteStartDay) ?? [];
-      events.push(event);
-      timelineEventsByDay.set(event.absoluteStartDay, events);
-    }
+    const timelineEventsByDay = buildTimelineEventsByDay(data.timelineEvents) as Map<number, CalendarIslandEvent[]>;
 
     function timelineHref(event: CalendarIslandEvent) {
       return `/timelines/super/?calendar=${encodeURIComponent(calendar.id)}&event=${encodeURIComponent(event.id)}`;
