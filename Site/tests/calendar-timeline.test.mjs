@@ -8,7 +8,7 @@ import {
   resolveCalendarDate,
   toAbsoluteDay,
 } from '../src/lib/calendar/runtime.mjs';
-import { buildMonthGrid } from '../src/lib/calendar/year-view.mjs';
+import { buildMonthGrid, buildTimelineEventsByDay } from '../src/lib/calendar/year-view.mjs';
 import {
   absoluteDayToSyntheticDate,
   chooseCalendar,
@@ -57,6 +57,24 @@ test('month grids align day one with the resolved weekday', () => {
   assert.equal(yearFour.weekday, 'Erddag');
   assert.equal(yearFourGrid.indexOf(1), 3);
   assert.equal(yearFourGrid.filter((day) => day !== null).length, month.days);
+});
+
+test('calendar timeline links only index day-precision events', () => {
+  const events = [
+    { id: 'day', title: 'Exact day', absoluteStartDay: 42, precision: 'day' },
+    { id: 'month', title: 'Month only', absoluteStartDay: 42, precision: 'month' },
+    { id: 'year', title: 'Year only', absoluteStartDay: 42, precision: 'year' },
+  ];
+  const eventsByDay = buildTimelineEventsByDay(events);
+
+  assert.deepEqual(eventsByDay.get(42)?.map((event) => event.id), ['day']);
+});
+
+test('calendar arithmetic rejects years that cannot preserve exact absolute days', () => {
+  assert.throws(
+    () => resolveCalendarDate({ calendar: 'okse', year: Number.MAX_SAFE_INTEGER, month: 'niewmonath', day: 1 }),
+    /supported absolute-day range/,
+  );
 });
 
 test('precision changes labels, never chronology', () => {
