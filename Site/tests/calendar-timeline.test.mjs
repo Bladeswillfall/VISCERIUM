@@ -8,6 +8,7 @@ import {
   resolveCalendarDate,
   toAbsoluteDay,
 } from '../src/lib/calendar/runtime.mjs';
+import { buildMonthGrid } from '../src/lib/calendar/year-view.mjs';
 import {
   absoluteDayToSyntheticDate,
   chooseCalendar,
@@ -41,6 +42,21 @@ test('leap and intercalary rules are enforced', () => {
   assert.doesNotThrow(() => toAbsoluteDay({ calendar: 'okse', year: 20004, intercalaryDay: 'engimanutur-02' }));
   assert.throws(() => toAbsoluteDay({ calendar: 'okse', year: 20005, intercalaryDay: 'engimanutur-02' }), /only exists in leap years/);
   assert.throws(() => toAbsoluteDay({ calendar: 'okse', year: 4, month: 'not-a-month', day: 1 }), /Unknown month/);
+});
+
+test('month grids align day one with the resolved weekday', () => {
+  const calendar = getCalendar('okse');
+  const month = calendar.months[0];
+  const yearOne = resolveCalendarDate({ calendar: 'okse', year: 1, month: month.slug, day: 1 });
+  const yearFour = resolveCalendarDate({ calendar: 'okse', year: 4, month: month.slug, day: 1 });
+  const yearOneGrid = buildMonthGrid(calendar, month, yearOne.weekday);
+  const yearFourGrid = buildMonthGrid(calendar, month, yearFour.weekday);
+
+  assert.equal(yearOne.weekday, 'Modirdag');
+  assert.equal(yearOneGrid.indexOf(1), 0);
+  assert.equal(yearFour.weekday, 'Erddag');
+  assert.equal(yearFourGrid.indexOf(1), 3);
+  assert.equal(yearFourGrid.filter((day) => day !== null).length, month.days);
 });
 
 test('precision changes labels, never chronology', () => {

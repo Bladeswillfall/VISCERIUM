@@ -12,11 +12,11 @@
   }
 
   :root[data-theme='light'] .calendar-module {
-    --calendar-winter: #006f9f;
-    --calendar-spring: #b65300;
-    --calendar-summer: #0b8248;
-    --calendar-autumn: #8fa600;
-    --calendar-event-fill: #74443b;
+    --calendar-winter: color-mix(in oklch, var(--codex-info-base) 56%, var(--codex-palette-oled));
+    --calendar-spring: color-mix(in oklch, var(--codex-warning-base) 58%, var(--codex-palette-oled));
+    --calendar-summer: color-mix(in oklch, var(--codex-success-base) 58%, var(--codex-palette-oled));
+    --calendar-autumn: color-mix(in oklch, var(--era-e2-base) 64%, var(--codex-palette-oled));
+    --calendar-event-fill: color-mix(in oklch, var(--codex-danger-base) 44%, var(--codex-palette-oled));
   }
 
   .calendar-module__intro {
@@ -85,6 +85,62 @@
     font-weight: 650;
     letter-spacing: .035em;
     text-transform: uppercase;
+  }
+
+  .calendar-module__year-controls {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+    align-items: end;
+    margin-block-start: .8rem;
+  }
+
+  .calendar-module__year-controls[hidden] {
+    display: none;
+  }
+
+  .calendar-module__year-controls label {
+    display: grid;
+    gap: .18rem;
+    color: var(--calendar-muted);
+    font-family: var(--vc-font-ui);
+    font-size: .68rem;
+    font-weight: 550;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+  }
+
+  .calendar-module__year-controls input,
+  .calendar-module__year-controls button {
+    box-sizing: border-box;
+    min-height: 2.75rem;
+    border: 1px solid var(--calendar-border-strong);
+    border-radius: .38rem;
+    background: var(--calendar-surface-soft);
+    color: var(--calendar-text);
+    font: inherit;
+  }
+
+  .calendar-module__year-controls input {
+    width: 9ch;
+    padding-inline: .6rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .calendar-module__year-controls button {
+    min-width: 2.75rem;
+    padding-inline: .7rem;
+    cursor: pointer;
+  }
+
+  .calendar-module__year-controls button:hover {
+    background: var(--calendar-surface);
+  }
+
+  .calendar-module__year-controls input:focus-visible,
+  .calendar-module__year-controls button:focus-visible {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 2px;
   }
 
   .calendar-year-grid {
@@ -213,6 +269,11 @@
     font-family: var(--vc-font-ui);
   }
 
+  .calendar-day:hover,
+  .calendar-day:focus-within {
+    z-index: 8;
+  }
+
   .calendar-day::before {
     content: '';
     position: absolute;
@@ -265,6 +326,38 @@
     font-weight: 520;
     line-height: 1;
     font-variant-numeric: tabular-nums;
+  }
+
+  .calendar-day__events {
+    position: absolute;
+    z-index: 7;
+    inset-block-end: calc(100% + .28rem);
+    inset-inline-start: 50%;
+    box-sizing: border-box;
+    width: max-content;
+    max-width: min(18rem, calc(100vw - 2rem));
+    padding: .36rem .5rem;
+    border: 1px solid var(--calendar-border-strong);
+    border-radius: .38rem;
+    background: var(--codex-surface-raised);
+    color: var(--sl-color-white);
+    font-size: .66rem;
+    font-weight: 550;
+    letter-spacing: .02em;
+    line-height: 1.25;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    text-align: start;
+    transform: translate(-50%, .18rem);
+    transition: opacity .12s ease, transform .12s ease, visibility .12s ease;
+  }
+
+  .calendar-day a:hover .calendar-day__events,
+  .calendar-day a:focus-visible .calendar-day__events {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
   }
 
   .calendar-day--winter { --calendar-season-color: var(--calendar-winter); }
@@ -404,6 +497,19 @@
   .calendar-key--marker::after { content: '!'; }
   .calendar-key--linked::after { content: '↗'; }
 
+  .calendar-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
   @container (max-width: 68rem) {
     .calendar-year-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -440,7 +546,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .calendar-day a,
-    .calendar-day > span {
+    .calendar-day > span,
+    .calendar-day__events {
       transition: none;
     }
   }
