@@ -28,11 +28,11 @@ for (const [name, viewport] of [
       await expect(page.locator(selector).first(), path).toBeVisible();
 
       if (path === '/creator-programme/') {
-        await expect(page.locator('.creator-roll__value').nth(0)).toHaveText('£300.00');
-        await expect(page.locator('.creator-roll__value').nth(1)).toHaveText('3');
+        await expect(page.locator('.creator-roll__value').nth(0)).toHaveText('£1468.48');
+        await expect(page.locator('.creator-roll__value').nth(1)).toHaveText('6');
         await page.locator('.creator-support-metrics').evaluate((element) => element.scrollIntoView({ block: 'center' }));
         await expect(page.locator('.creator-roll[data-roll-active]')).toHaveCount(2);
-        await expect(page.locator('.creator-roll__digit')).toHaveCount(6);
+        await expect(page.locator('.creator-roll__digit')).toHaveCount(7);
         await page.waitForFunction(() => {
           const track = document.querySelector('.creator-roll__track');
           if (!track) return false;
