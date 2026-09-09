@@ -64,7 +64,6 @@ export function getDaysInYear(calendar, year) {
 }
 
 export function getDaysBeforeYear(calendar, year) {
-  if (!Number.isSafeInteger(year)) throw new RangeError(`Calendar year must be a safe integer: ${year}`);
   const epochYear = calendar.epoch.year;
   if (year === epochYear) return 0;
   const monthDays = calendar.months.reduce((total, month) => total + month.days, 0);
@@ -79,9 +78,6 @@ export function getDaysBeforeYear(calendar, year) {
     leapCount = countCongruentYears(start, end, calendar.leapRule.every, calendar.leapRule.remainder ?? 0);
   }
   const days = yearCount * baseDays + leapCount * leapIntercalaries;
-  if (!Number.isSafeInteger(days)) {
-    throw new RangeError(`Calendar year ${year} exceeds the supported absolute-day range`);
-  }
   return year > epochYear ? days : -days;
 }
 
@@ -108,11 +104,7 @@ export function getDayOfYear(calendar, input) {
 export function toAbsoluteDay(input) {
   if (!input || typeof input !== 'object') throw new Error('Calendar date must be an object');
   const calendar = getCalendar(input.calendar);
-  const absoluteDay = calendar.epoch.absoluteDay + getDaysBeforeYear(calendar, input.year) + getDayOfYear(calendar, input) - 1;
-  if (!Number.isSafeInteger(absoluteDay)) {
-    throw new RangeError(`Calendar date exceeds the supported absolute-day range: ${absoluteDay}`);
-  }
-  return absoluteDay;
+  return calendar.epoch.absoluteDay + getDaysBeforeYear(calendar, input.year) + getDayOfYear(calendar, input) - 1;
 }
 
 function getSeasonForMonthDay(month, day) {
