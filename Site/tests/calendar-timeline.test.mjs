@@ -4,11 +4,12 @@ import {
   fromAbsoluteDay,
   formatAbsoluteDay,
   getCalendar,
+  getCalendarYearDates,
   isLeapYear,
   resolveCalendarDate,
   toAbsoluteDay,
 } from '../src/lib/calendar/runtime.mjs';
-import { buildMonthGrid, buildTimelineEventsByDay } from '../src/lib/calendar/year-view.mjs';
+import { buildMonthGrid, buildTimelineEventsByDay, validateCalendarYearDates } from '../src/lib/calendar/year-view.mjs';
 import {
   absoluteDayToSyntheticDate,
   chooseCalendar,
@@ -71,10 +72,9 @@ test('calendar timeline links only index day-precision events', () => {
 });
 
 test('calendar arithmetic rejects years that cannot preserve exact absolute days', () => {
-  assert.throws(
-    () => resolveCalendarDate({ calendar: 'okse', year: Number.MAX_SAFE_INTEGER, month: 'niewmonath', day: 1 }),
-    /supported absolute-day range/,
-  );
+  const year = Number.MAX_SAFE_INTEGER;
+  const dates = getCalendarYearDates('okse', year);
+  assert.throws(() => validateCalendarYearDates(dates, year), /supported absolute-day range/);
 });
 
 test('precision changes labels, never chronology', () => {
