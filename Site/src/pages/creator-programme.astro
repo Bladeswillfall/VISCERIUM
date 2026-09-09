@@ -1,0 +1,706 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage
+  hasSidebar={false}
+  frontmatter={{
+    title: 'Creator Programme',
+    description: 'How VISCERIUM credits, supports, and works with creative contributors.',
+    tableOfContents: false,
+    giscus: false,
+  }}
+>
+  <div class="creator-programme-page">
+    <section class="creator-hero" aria-labelledby="creator-hero-title">
+      <span class="creator-hero__mark" aria-hidden="true"></span>
+      <div class="creator-shell creator-hero__inner">
+        <div>
+          <p class="creator-kicker">VISCERIUM Creator Programme</p>
+          <h1 id="creator-hero-title">Build something. Keep your name on it.</h1>
+        </div>
+        <div class="creator-hero__copy">
+          <p class="creator-hero__lead">VISCERIUM is built as a coherent universe without making its creators invisible.</p>
+          <p>People who materially contribute to the world should be credited for their work and, where agreed, paid for it.</p>
+          <a class="creator-jump" href="#principles">How it works <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="creator-section" id="principles" aria-labelledby="creator-principles-title">
+      <div class="creator-shell">
+        <div class="creator-section__header">
+          <div>
+            <p class="creator-index">01 / Principles</p>
+            <h2 id="creator-principles-title">A few rules. Kept simple.</h2>
+          </div>
+          <p>VISCERIUM keeps central ownership and editorial control. Creative contributors keep clear credit and work under agreed terms.</p>
+        </div>
+
+        <ol class="creator-principles">
+          <li>
+            <p class="creator-index">01</p>
+            <h3>Credit the maker.</h3>
+            <p>Accepted creative work names the people responsible for it.</p>
+          </li>
+          <li>
+            <p class="creator-index">02</p>
+            <h3>Agree before use.</h3>
+            <p>Creative rights and usage terms are agreed before material is accepted.</p>
+          </li>
+          <li>
+            <p class="creator-index">03</p>
+            <h3>Pay where agreed.</h3>
+            <p>Substantial work may be commissioned, paid directly, or covered by another written agreement.</p>
+          </li>
+          <li>
+            <p class="creator-index">04</p>
+            <h3>Canon stays curated.</h3>
+            <p>Contribution does not make material canon automatically. VISCERIUM retains editorial control.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="creator-section creator-section--participation" id="participation" aria-labelledby="creator-participation-title">
+      <div class="creator-shell">
+        <div class="creator-section__header">
+          <div>
+            <p class="creator-index">02 / Participation</p>
+            <h2 id="creator-participation-title">Different work needs different terms.</h2>
+          </div>
+          <p>The agreement should match the contribution. Small community input is not treated like commissioned art, writing, or sustained authorship.</p>
+        </div>
+
+        <div class="creator-tiers">
+          <article class="creator-tier">
+            <div>
+              <p class="creator-tier__label">01 / Community</p>
+              <h3>Suggestions and fixes</h3>
+            </div>
+            <p>Discussion, corrections, technical fixes, and feedback.</p>
+            <p>Usually unpaid. Credit or thanks where appropriate.</p>
+          </article>
+          <article class="creator-tier">
+            <div>
+              <p class="creator-tier__label">02 / Contributor</p>
+              <h3>Accepted creative work</h3>
+            </div>
+            <p>Lore, writing, artwork, maps, research, design, or similar work.</p>
+            <p>Named credit and compensation where agreed.</p>
+          </article>
+          <article class="creator-tier">
+            <div>
+              <p class="creator-tier__label">03 / Partner</p>
+              <h3>Sustained authorship</h3>
+            </div>
+            <p>Commissioned work or substantial ongoing collaboration.</p>
+            <p>Individually negotiated terms.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="creator-fund" id="fund" aria-labelledby="creator-fund-title">
+      <div class="creator-shell creator-fund__inner">
+        <div>
+          <p class="creator-index">03 / Creator Fund</p>
+          <h2 id="creator-fund-title">Support beyond a single commission.</h2>
+        </div>
+        <div class="creator-fund__copy">
+          <p>The Creator Fund is intended to give eligible creators another way to participate financially as the programme develops.</p>
+          <p class="creator-note">The final structure and eligibility rules will be published when the scheme is ready.</p>
+        </div>
+
+        <div class="creator-support-log" aria-labelledby="creator-support-log-title">
+          <div class="creator-support-log__header">
+            <div>
+              <p class="creator-index">Public record</p>
+              <h3 id="creator-support-log-title">Creator support to date</h3>
+            </div>
+            <p>Aggregate figures only. Individual compensation and contract terms remain private unless a creator chooses otherwise.</p>
+          </div>
+
+          <dl class="creator-support-metrics">
+            <div class="creator-support-metric">
+              <dt>Paid directly to artists and creators</dt>
+              <dd class="creator-support-metric__status">Not published</dd>
+            </div>
+            <div class="creator-support-metric">
+              <dt>Unique creators financially supported</dt>
+              <dd class="creator-support-metric__status">Not published</dd>
+            </div>
+            <div class="creator-support-metric">
+              <dt>NULL / VISCERIUM Creator Fund</dt>
+              <dd class="creator-support-metric__status">Launching</dd>
+            </div>
+            <div class="creator-support-metric">
+              <dt>Creator Fund distributions to date</dt>
+              <dd class="creator-support-metric__status">Pending</dd>
+            </div>
+          </dl>
+          <p class="creator-support-log__note">Historic direct commissions are reported separately from distributions made through the formal Creator Fund.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</StarlightPage>
+
+<style is:global>
+  .creator-programme-page {
+    --creator-bg: var(--sl-color-bg);
+    --creator-surface: var(--codex-surface-raised-color);
+    --creator-text: var(--sl-color-white);
+    --creator-body: var(--sl-color-gray-2);
+    --creator-muted: var(--sl-color-gray-3);
+    --creator-accent: var(--sl-color-accent-high);
+    --creator-void: var(--home-void);
+    --creator-fixed-text: var(--home-text-fixed);
+    --creator-fixed-body: var(--home-text-soft-fixed);
+    --creator-wide: 118rem;
+    --creator-gutter: clamp(1.25rem, 4vw, 5.5rem);
+    --creator-line: color-mix(in oklch, var(--codex-palette-deep) 72%, transparent);
+    min-width: 0;
+    margin: 0;
+    overflow: clip;
+    background: var(--creator-bg);
+    color: var(--creator-body);
+    font-family: var(--vc-font-body);
+    font-size: clamp(1rem, .96rem + .15vw, 1.1rem);
+    line-height: 1.65;
+  }
+
+  .creator-programme-page *,
+  .creator-programme-page *::before,
+  .creator-programme-page *::after {
+    box-sizing: border-box;
+  }
+
+  .creator-programme-page :where(h1, h2, h3, p) {
+    margin-block-start: 0;
+  }
+
+  .creator-programme-page :where(h1, h2, h3) {
+    color: var(--creator-text);
+    font-family: var(--vc-font-display);
+    font-weight: 400;
+    font-synthesis-weight: none;
+    text-wrap: balance;
+  }
+
+  .creator-programme-page p {
+    text-wrap: pretty;
+  }
+
+  .creator-shell {
+    width: min(100%, var(--creator-wide));
+    margin-inline: auto;
+    padding-inline: var(--creator-gutter);
+  }
+
+  .creator-kicker,
+  .creator-index,
+  .creator-tier__label {
+    margin: 0;
+    color: var(--creator-muted);
+    font-family: var(--vc-font-ui);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .creator-hero {
+    position: relative;
+    display: grid;
+    min-block-size: min(72rem, calc(100svh - var(--sl-nav-height, 3.5rem)));
+    align-items: end;
+    overflow: hidden;
+    border-bottom: 1px solid var(--creator-line);
+    background:
+      radial-gradient(
+        circle at 78% 18%,
+        color-mix(in oklch, var(--codex-palette-deep) 48%, transparent),
+        transparent 30rem
+      ),
+      var(--creator-void);
+    color: var(--creator-fixed-body);
+    isolation: isolate;
+  }
+
+  .creator-hero__mark {
+    position: absolute;
+    top: 50%;
+    right: clamp(-12rem, -4vw, -2rem);
+    z-index: -1;
+    width: clamp(28rem, 62vw, 68rem);
+    aspect-ratio: 1756 / 969;
+    translate: 0 -50%;
+    background: color-mix(in oklch, var(--creator-fixed-text) 8.5%, transparent);
+    -webkit-mask: url('/assets/brand/viscerium-logo.svg') center / contain no-repeat;
+    mask: url('/assets/brand/viscerium-logo.svg') center / contain no-repeat;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .creator-hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .65fr);
+    gap: clamp(2.5rem, 7vw, 9rem);
+    align-items: end;
+    padding-top: clamp(7rem, 12vw, 12rem);
+    padding-bottom: clamp(4rem, 7vw, 7.5rem);
+  }
+
+  .creator-kicker {
+    margin-bottom: .9rem;
+    color: var(--creator-fixed-text);
+    letter-spacing: .2em;
+  }
+
+  .creator-hero h1 {
+    max-width: 10ch;
+    margin: 0;
+    color: var(--creator-fixed-text);
+    font-size: clamp(4rem, 3rem + 7vw, 10rem);
+    letter-spacing: -.035em;
+    line-height: .84;
+    text-transform: uppercase;
+  }
+
+  .creator-hero__copy {
+    align-self: end;
+    padding-top: 1.2rem;
+    padding-bottom: .55rem;
+    border-top: 1px solid var(--codex-palette-deep);
+  }
+
+  .creator-hero__lead {
+    margin: 0;
+    color: var(--creator-fixed-text);
+    font-size: clamp(1.25rem, 1.05rem + .7vw, 1.75rem);
+    line-height: 1.4;
+  }
+
+  .creator-hero__copy > p:not(.creator-hero__lead) {
+    max-width: 38rem;
+    margin: .85rem 0 0;
+    color: var(--creator-fixed-body);
+    font-size: .98rem;
+  }
+
+  .creator-jump {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    margin-top: 1.5rem;
+    padding: .72rem .9rem;
+    border: 1px solid var(--creator-fixed-text);
+    color: var(--creator-fixed-text) !important;
+    font-family: var(--vc-font-ui);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .creator-jump:hover,
+  .creator-jump:focus-visible {
+    background: var(--creator-fixed-text);
+    color: var(--creator-void) !important;
+    outline: none;
+  }
+
+  .creator-jump:focus-visible {
+    box-shadow: 0 0 0 2px var(--creator-void), 0 0 0 4px var(--creator-fixed-text);
+  }
+
+  .creator-section {
+    padding-block: clamp(4.5rem, 8vw, 8rem);
+    border-bottom: 1px solid var(--creator-line);
+  }
+
+  .creator-section--participation {
+    background: color-mix(in oklch, var(--creator-surface) 65%, var(--creator-bg));
+  }
+
+  .creator-section__header {
+    display: grid;
+    grid-template-columns: minmax(14rem, .75fr) minmax(22rem, 1.25fr);
+    gap: clamp(2rem, 5vw, 7rem);
+    align-items: end;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .creator-section__header h2,
+  .creator-fund h2 {
+    margin: .8rem 0 0;
+    color: var(--creator-text);
+    font-size: clamp(2.5rem, 1.9rem + 2.5vw, 5.4rem);
+    letter-spacing: 0;
+    line-height: .98;
+    text-transform: none;
+  }
+
+  .creator-section__header h2 {
+    max-width: 16ch;
+  }
+
+  .creator-section__header > p {
+    max-width: 43rem;
+    margin: 0;
+    color: var(--creator-body);
+  }
+
+  .creator-principles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--creator-line);
+    border-left: 1px solid var(--creator-line);
+    list-style: none;
+  }
+
+  .creator-principles > li {
+    min-height: 15rem;
+    margin: 0;
+    padding: 1.5rem;
+    border-right: 1px solid var(--creator-line);
+    border-bottom: 1px solid var(--creator-line);
+  }
+
+  .creator-principles > li::marker {
+    content: none;
+  }
+
+  .creator-principles h3,
+  .creator-tier h3,
+  .creator-support-log h3 {
+    margin: .9rem 0 .75rem;
+    color: var(--creator-text);
+    font-size: clamp(1.35rem, 1.1rem + .8vw, 2.1rem);
+    letter-spacing: 0;
+    line-height: 1.05;
+    text-transform: none;
+  }
+
+  .creator-principles p:last-child {
+    margin: 0;
+    color: var(--creator-body);
+    font-size: .95rem;
+    line-height: 1.5;
+  }
+
+  .creator-tiers {
+    border-top: 1px solid var(--creator-line);
+  }
+
+  .creator-tier {
+    display: grid;
+    grid-template-columns: minmax(12rem, .7fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.25rem, 4vw, 4rem);
+    padding: 1.6rem 0;
+    border-bottom: 1px solid var(--creator-line);
+  }
+
+  .creator-tier h3 {
+    margin-top: .55rem;
+    margin-bottom: 0;
+  }
+
+  .creator-tier > p {
+    margin: 0;
+    color: var(--creator-body);
+    font-size: .96rem;
+  }
+
+  .creator-fund {
+    padding-block: clamp(4rem, 7vw, 6.5rem);
+    background: var(--creator-void);
+    color: var(--creator-fixed-body);
+  }
+
+  .creator-fund__inner {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(24rem, 1.2fr);
+    gap: clamp(2rem, 5vw, 7rem);
+    align-items: end;
+  }
+
+  .creator-fund .creator-index {
+    color: var(--codex-palette-mid);
+  }
+
+  .creator-fund h2 {
+    max-width: 13ch;
+    color: var(--creator-fixed-text);
+  }
+
+  .creator-fund__copy {
+    max-width: 48rem;
+  }
+
+  .creator-fund__copy p {
+    margin: 0;
+    color: var(--creator-fixed-body);
+  }
+
+  .creator-fund__copy p + p {
+    margin-top: .8rem;
+  }
+
+  .creator-fund__copy .creator-note {
+    color: var(--codex-palette-mid);
+    font-size: .88rem;
+  }
+
+  .creator-support-log {
+    grid-column: 1 / -1;
+    margin-top: clamp(1rem, 2vw, 2rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--creator-line);
+  }
+
+  .creator-support-log__header {
+    display: flex;
+    gap: 2rem;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .creator-support-log h3 {
+    margin-top: .55rem;
+    margin-bottom: 0;
+    color: var(--creator-fixed-text);
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2.4rem);
+  }
+
+  .creator-support-log__header > p {
+    max-width: 42rem;
+    margin: 0;
+    color: var(--codex-palette-mid);
+    font-size: .9rem;
+  }
+
+  .creator-support-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    border-top: 1px solid var(--creator-line);
+    border-left: 1px solid var(--creator-line);
+  }
+
+  .creator-support-metric {
+    display: flex;
+    min-height: 8.5rem;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.1rem;
+    border-right: 1px solid var(--creator-line);
+    border-bottom: 1px solid var(--creator-line);
+  }
+
+  .creator-support-metric dt,
+  .creator-support-metric dd {
+    margin: 0;
+  }
+
+  .creator-support-metric dt {
+    max-width: 16rem;
+    color: var(--codex-palette-mid);
+    font-family: var(--vc-font-ui);
+    font-size: .68rem;
+    font-weight: 500;
+    letter-spacing: .04em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .creator-support-metric dd {
+    color: var(--creator-fixed-text);
+    font-family: var(--vc-font-display);
+    font-size: clamp(1.35rem, 1.1rem + .8vw, 2rem);
+    line-height: 1.05;
+  }
+
+  .creator-support-metric__status {
+    color: var(--creator-fixed-text);
+  }
+
+  .creator-support-log__note {
+    margin: 1rem 0 0;
+    color: var(--codex-palette-mid);
+    font-size: .84rem;
+  }
+
+  body:has(.creator-programme-page) .sl-markdown-content :is(
+    .creator-hero h1,
+    .creator-section__header h2,
+    .creator-principles h3,
+    .creator-tier h3,
+    .creator-fund h2,
+    .creator-support-log h3
+  ) {
+    display: block;
+    padding: 0;
+    font-family: var(--vc-font-display);
+    font-weight: 400;
+    font-synthesis-weight: none;
+  }
+
+  body:has(.creator-programme-page) .sl-markdown-content :is(
+    .creator-hero h1,
+    .creator-section__header h2,
+    .creator-principles h3,
+    .creator-tier h3,
+    .creator-fund h2,
+    .creator-support-log h3
+  )::before,
+  body:has(.creator-programme-page) .sl-markdown-content :is(
+    .creator-hero h1,
+    .creator-section__header h2,
+    .creator-principles h3,
+    .creator-tier h3,
+    .creator-fund h2,
+    .creator-support-log h3
+  )::after {
+    content: none;
+    display: none;
+  }
+
+  .main-frame:has(.creator-programme-page) {
+    padding-top: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  .main-frame:has(.creator-programme-page) div.content-panel:nth-child(1) {
+    display: none !important;
+  }
+
+  .main-frame:has(.creator-programme-page) > .codex-two-column-content,
+  .main-frame:has(.creator-programme-page) > .codex-two-column-content > .codex-main-pane,
+  .main-frame:has(.creator-programme-page) > .codex-two-column-content > .codex-main-pane > main,
+  .main-frame:has(.creator-programme-page) main > .content-panel,
+  .main-frame:has(.creator-programme-page) main > .content-panel > .sl-container,
+  .main-frame:has(.creator-programme-page) .sl-markdown-content,
+  .main-frame:has(.creator-programme-page) .creator-programme-page {
+    inline-size: 100% !important;
+    max-inline-size: none !important;
+    margin-inline: 0 !important;
+  }
+
+  .main-frame:has(.creator-programme-page) > .codex-two-column-content > .codex-main-pane {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    column-gap: 0 !important;
+    row-gap: 0 !important;
+  }
+
+  .main-frame:has(.creator-programme-page) > .codex-two-column-content > .codex-main-pane > main {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    min-inline-size: 0;
+    padding: 0 !important;
+  }
+
+  .main-frame:has(.creator-programme-page) main > .content-panel {
+    padding: 0 !important;
+  }
+
+  .main-frame:has(.creator-programme-page) main > .content-panel > .sl-container,
+  .main-frame:has(.creator-programme-page) .sl-markdown-content {
+    padding-inline: 0 !important;
+  }
+
+  .main-frame:has(.creator-programme-page) .sl-markdown-content {
+    margin-block-start: 0 !important;
+    padding-block: 0 !important;
+  }
+
+  .main-frame:has(.creator-programme-page) .content-panel > .sl-container > .codex-header-fade-filter,
+  .main-frame:has(.creator-programme-page) .content-panel > .sl-container > .codex-header-figure,
+  .main-frame:has(.creator-programme-page) .content-panel > .sl-container > h1#_top,
+  .main-frame:has(.creator-programme-page) .content-panel > .sl-container > .codex-breadcrumbs,
+  body:has(.creator-programme-page) .codex-contributors {
+    display: none !important;
+  }
+
+  @media (max-width: 72rem) {
+    .creator-principles,
+    .creator-support-metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 54rem) {
+    .creator-hero {
+      min-block-size: auto;
+    }
+
+    .creator-hero__inner,
+    .creator-section__header,
+    .creator-fund__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .creator-hero__inner {
+      padding-top: 7rem;
+      padding-bottom: 4rem;
+    }
+
+    .creator-hero__mark {
+      right: -14rem;
+      width: 42rem;
+      opacity: .75;
+    }
+
+    .creator-section__header > p {
+      align-self: start;
+    }
+
+    .creator-tier {
+      grid-template-columns: 1fr;
+      gap: .65rem;
+    }
+
+    .creator-support-log__header {
+      display: grid;
+      align-items: start;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .creator-principles,
+    .creator-support-metrics {
+      grid-template-columns: 1fr;
+    }
+
+    .creator-principles > li {
+      min-height: auto;
+    }
+
+    .creator-hero h1 {
+      font-size: clamp(3.4rem, 18vw, 6rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .creator-jump {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .creator-hero__mark {
+      display: none;
+    }
+  }
+</style>
