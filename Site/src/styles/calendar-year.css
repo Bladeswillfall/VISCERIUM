@@ -21,7 +21,6 @@
 
   .calendar-module__intro {
     padding-block-end: clamp(.9rem, 1.5vw, 1.15rem);
-    border-block-end: 1px solid color-mix(in oklch, var(--calendar-border) 48%, transparent);
   }
 
   .calendar-module__summary {
@@ -73,8 +72,6 @@
     font-family: var(--vc-font-ui);
     font-size: .68rem;
     font-weight: 550;
-    letter-spacing: .055em;
-    text-transform: uppercase;
   }
 
   .calendar-module__facts dd {
@@ -83,8 +80,6 @@
     font-family: var(--vc-font-ui);
     font-size: .72rem;
     font-weight: 650;
-    letter-spacing: .035em;
-    text-transform: uppercase;
   }
 
   .calendar-module__year-controls {
@@ -106,8 +101,6 @@
     font-family: var(--vc-font-ui);
     font-size: .68rem;
     font-weight: 550;
-    letter-spacing: .055em;
-    text-transform: uppercase;
   }
 
   .calendar-module__year-controls input,
@@ -232,10 +225,8 @@
     font-family: var(--vc-font-ui);
     font-size: .58rem;
     font-weight: 560;
-    letter-spacing: .07em;
     line-height: 1;
     text-align: center;
-    text-transform: uppercase;
   }
 
   .calendar-days th abbr {
@@ -412,9 +403,7 @@
     grid-template-columns: minmax(14rem, 1fr) minmax(0, 2fr);
     gap: clamp(1.25rem, 2vw, 2rem);
     align-items: start;
-    margin-block-start: clamp(1.7rem, 3vw, 2.8rem);
-    padding-block-start: 1rem;
-    border-block-start: 1px solid color-mix(in oklch, var(--calendar-border) 48%, transparent);
+    margin-block-start: clamp(2rem, 3.4vw, 3.1rem);
   }
 
   .calendar-month--intercalary .calendar-day {
@@ -430,12 +419,10 @@
     margin: 0 0 .55rem;
     color: var(--calendar-muted);
     font-family: var(--vc-font-ui);
-    font-size: .68rem;
-    font-weight: 600;
-    letter-spacing: .09em;
-    line-height: 1;
+    font-size: .74rem;
+    font-weight: 650;
+    line-height: 1.15;
     text-align: end;
-    text-transform: uppercase;
   }
 
   .calendar-legend ul {
@@ -524,6 +511,24 @@
 
     .calendar-day {
       height: 3rem;
+    }
+
+    .calendar-days--month tr > .calendar-day:first-child .calendar-day__events {
+      inset-inline-start: 0;
+      transform: translate(0, .18rem);
+    }
+
+    .calendar-days--month tr > .calendar-day:last-child .calendar-day__events {
+      inset-inline-start: auto;
+      inset-inline-end: 0;
+      transform: translate(0, .18rem);
+    }
+
+    .calendar-days--month tr > .calendar-day:first-child a:hover .calendar-day__events,
+    .calendar-days--month tr > .calendar-day:first-child a:focus-visible .calendar-day__events,
+    .calendar-days--month tr > .calendar-day:last-child a:hover .calendar-day__events,
+    .calendar-days--month tr > .calendar-day:last-child a:focus-visible .calendar-day__events {
+      transform: translate(0, 0);
     }
 
     .calendar-module__tail {
