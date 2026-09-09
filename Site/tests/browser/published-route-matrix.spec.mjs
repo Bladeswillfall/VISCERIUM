@@ -35,7 +35,9 @@ for (const [name, viewport] of [
         await expect(page.locator('.creator-roll__digit')).toHaveCount(6);
         await page.waitForFunction(() => {
           const track = document.querySelector('.creator-roll__track');
-          return track && getComputedStyle(track).transform !== 'none' && getComputedStyle(track).transform !== 'matrix(1, 0, 0, 1, 0, 0)';
+          if (!track) return false;
+          const transform = getComputedStyle(track).transform;
+          return transform !== 'none' && transform !== 'matrix(1, 0, 0, 1, 0, 0)';
         });
       }
 
