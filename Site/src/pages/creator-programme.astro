@@ -75,7 +75,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
       </div>
     </section>
 
-    <section class="creator-section" id="principles" aria-labelledby="creator-principles-title">
+    <section class="creator-section creator-section--principles" id="principles" aria-labelledby="creator-principles-title">
       <div class="creator-shell">
         <div class="creator-section__header">
           <h2 id="creator-principles-title">A few simple rules.</h2>
@@ -374,8 +374,12 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     border-bottom: 1px solid var(--creator-line);
   }
 
-  .creator-section--participation {
+  .creator-section--principles {
     background: color-mix(in oklch, var(--creator-surface) 52%, var(--creator-bg));
+  }
+
+  .creator-section--participation {
+    background: var(--creator-bg);
   }
 
   .creator-section__header {
@@ -406,21 +410,23 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
   .creator-principles {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 82rem;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--creator-line);
-    border-left: 1px solid var(--creator-line);
     list-style: none;
   }
 
   .creator-principles > li {
     display: grid;
-    min-height: 14rem;
-    align-content: start;
+    grid-template-columns: clamp(2.75rem, 6vw, 5rem) minmax(0, 1fr);
+    column-gap: clamp(1.25rem, 5vw, 5rem);
+    align-items: start;
     margin: 0;
-    padding: 1.5rem;
-    border-right: 1px solid var(--creator-line);
+    padding-block: clamp(1.4rem, 3vw, 2.35rem);
+    border-top: 1px solid var(--creator-line);
+  }
+
+  .creator-principles > li:last-child {
     border-bottom: 1px solid var(--creator-line);
   }
 
@@ -429,12 +435,13 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   .creator-number {
+    grid-row: 1 / span 2;
     color: var(--creator-muted);
     font-family: var(--vc-font-ui);
-    font-size: .72rem;
+    font-size: .76rem;
     font-variant-numeric: tabular-nums;
     font-weight: 500;
-    line-height: 1;
+    line-height: 1.1;
   }
 
   .creator-principles h3,
@@ -447,7 +454,14 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     line-height: 1.08;
   }
 
+  .creator-principles h3 {
+    grid-column: 2;
+    margin: 0 0 .55rem;
+  }
+
   .creator-principles p:last-child {
+    grid-column: 2;
+    max-width: 44rem;
     margin: 0;
     color: var(--creator-body);
     font-size: .95rem;
@@ -690,6 +704,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     padding-inline: 0 !important;
   }
 
+  html:not([data-codex-wide-header]):not([data-codex-mobile-header]) .main-frame:has(.creator-programme-page),
   html[data-codex-mobile-header] .main-frame:has(.creator-programme-page) {
     padding-top: var(--sl-nav-height, 3.5rem) !important;
   }
@@ -747,7 +762,6 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   @media (max-width: 86rem) {
-    .creator-principles,
     .creator-support-metrics {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -800,13 +814,23 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   }
 
   @media (max-width: 42rem) {
-    .creator-principles,
-    .creator-support-metrics {
+    .creator-principles > li {
       grid-template-columns: 1fr;
+      row-gap: .75rem;
     }
 
-    .creator-principles > li {
-      min-height: auto;
+    .creator-number,
+    .creator-principles h3,
+    .creator-principles p:last-child {
+      grid-column: 1;
+    }
+
+    .creator-number {
+      grid-row: auto;
+    }
+
+    .creator-support-metrics {
+      grid-template-columns: 1fr;
     }
 
     .creator-hero h1 {
