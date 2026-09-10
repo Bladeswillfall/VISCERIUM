@@ -69,7 +69,7 @@ h1#_top {
   letter-spacing: .01em;
 }
 
-.sl-markdown-content h3,
+.sl-markdown-content h3:not(.calendar-module *),
 .sl-markdown-content h4,
 .sl-markdown-content h5,
 .sl-markdown-content h6,
@@ -115,7 +115,7 @@ h1#_top {
   pointer-events: none;
 }
 
-.sl-markdown-content:not(:has(.home-gateway)) h3 {
+.sl-markdown-content:not(:has(.home-gateway)) h3:not(.calendar-module *) {
   margin-block: 2.55rem .4rem;
   color: var(--era-heading-accent, var(--sl-color-accent-high));
   font-family: var(--vc-font-ui);
