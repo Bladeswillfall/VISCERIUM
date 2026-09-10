@@ -559,3 +559,27 @@
     }
   }
 }
+
+/*
+  Calendar month and legend headings are interface text, not article subsections.
+  Keep these declarations unlayered to outrank the article typography cascade bridge.
+*/
+.sl-markdown-content .calendar-module .calendar-month h3 {
+  margin: 0 0 .38rem;
+  color: var(--sl-color-white);
+  font-size: clamp(.79rem, .88vw, .93rem);
+  font-weight: 600;
+  letter-spacing: .16em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.sl-markdown-content .calendar-module .calendar-legend h3 {
+  margin: 0 0 .55rem;
+  color: var(--calendar-muted);
+  font-size: .74rem;
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.15;
+  text-transform: none;
+}
