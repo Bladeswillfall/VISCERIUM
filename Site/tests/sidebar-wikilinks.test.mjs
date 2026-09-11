@@ -4,7 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { parseSidebarWikilink } from '../src/lib/sidebar-links.mjs';
-import { sidebarMigrationCandidates } from '../scripts/migrate-sidebar-wikilinks.mjs';
+import { sidebarMigrationCandidates, slugFromSourcePath } from '../scripts/migrate-sidebar-wikilinks.mjs'
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const migrationScript = path.join(siteRoot, 'scripts/migrate-sidebar-wikilinks.mjs');
@@ -29,6 +29,13 @@ test('sidebar wikilinks preserve heading fragments', () => {
   );
   assert.equal(parseSidebarWikilink('/calendar/okse/'), null);
 });
+
+test('sidebar migration uses the public source-slug rules', () => {
+  assert.equal(
+    slugFromSourcePath('Eras/CITADEL/Nations/Okse Dominion/Okse Dominion.md'),
+    'eras/citadel/nations/okse-dominion',
+  )
+})
 
 test('the public sidebar resolves authored Obsidian wikilinks through the docs collection', async () => {
   const source = await fs.readFile(sidebarComponent, 'utf8');

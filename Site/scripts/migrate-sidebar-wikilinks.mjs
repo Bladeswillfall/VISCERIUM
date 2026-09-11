@@ -3,7 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
-import { cleanSlug, toPosixPath } from '../src/lib/codex-paths.mjs';
+import { toPosixPath, vaultSourceSlug } from '../src/lib/codex-paths.mjs'
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(scriptDir, '..');
@@ -27,12 +27,8 @@ function key(value) {
     .toLowerCase();
 }
 
-function slugFromSourcePath(sourcePath) {
-  return sourcePath
-    .replace(/\.(md|mdx)$/i, '')
-    .split('/')
-    .map((segment) => cleanSlug(segment).replace(/\s+/g, '-'))
-    .join('/');
+export function slugFromSourcePath(sourcePath) {
+  return vaultSourceSlug(sourcePath)
 }
 
 function addIndex(index, rawKey, candidate) {

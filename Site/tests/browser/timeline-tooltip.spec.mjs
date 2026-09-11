@@ -133,3 +133,13 @@ test('event hover uses one VISCERIUM hovercard in dark and light themes', async 
   await page.locator('[data-vc-search]').hover();
   await expect(page.locator('body > .vc-timeline-hovercard:not([hidden])')).toHaveCount(0);
 });
+
+test('Escape dismisses an active timeline hovercard', async ({ page }) => {
+  await openEntropyTimeline(page)
+  const item = page.locator('.vis-item.vc-timeline-item', { hasText: 'The Pathfinder Exodus' }).first()
+  await item.hover()
+  await expect(page.locator('body > .vc-timeline-hovercard:not([hidden])')).toHaveCount(1)
+
+  await page.keyboard.press('Escape')
+  await expect(page.locator('body > .vc-timeline-hovercard:not([hidden])')).toHaveCount(0)
+})

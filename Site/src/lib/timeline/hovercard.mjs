@@ -156,6 +156,13 @@ export function installTimelineHovercard(root, dataset, options = {}) {
     hide();
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key !== 'Escape' || !activeItem) return
+    const item = activeItem
+    hide()
+    item.focus?.({ preventScroll: true })
+  }
+
   const handleCalendarChange = () => {
     if (activeItem && activeEvent) show(activeItem);
   };
@@ -186,6 +193,7 @@ export function installTimelineHovercard(root, dataset, options = {}) {
   root.addEventListener('focusin', handleFocusIn, true);
   root.addEventListener('focusout', handleFocusOut, true);
   calendarSelect?.addEventListener('change', handleCalendarChange);
+  window.addEventListener('keydown', handleKeyDown)
   window.addEventListener('scroll', schedulePosition, true);
   window.addEventListener('resize', schedulePosition);
   window.visualViewport?.addEventListener('resize', schedulePosition);
@@ -200,6 +208,7 @@ export function installTimelineHovercard(root, dataset, options = {}) {
     root.removeEventListener('focusin', handleFocusIn, true);
     root.removeEventListener('focusout', handleFocusOut, true);
     calendarSelect?.removeEventListener('change', handleCalendarChange);
+    window.removeEventListener('keydown', handleKeyDown)
     window.removeEventListener('scroll', schedulePosition, true);
     window.removeEventListener('resize', schedulePosition);
     window.visualViewport?.removeEventListener('resize', schedulePosition);

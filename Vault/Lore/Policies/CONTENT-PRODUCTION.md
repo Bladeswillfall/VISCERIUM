@@ -1,6 +1,6 @@
 ---
 title: Content & Production Statement
-description: "VISCERIUM's policy on human-made creative work, AI-assisted tools, responsible use, and accountability."
+description: VISCERIUM's policy on human-made creative work, AI-assisted tools, responsible use, and accountability.
 status: published
 type: article
 tags:
@@ -14,6 +14,8 @@ community: false
 giscus: false
 prev: false
 next: false
+updated: 2026-09-10
+word_count: 666
 ---
 
 VISCERIUM is a human-created fictional universe.
@@ -31,6 +33,13 @@ Its lore, fiction, characters, names, cultures, places, creatures, histories, ma
 
 Human authorship means more than approving or lightly editing a generated result. The finished creative work itself is made by people.
 
+## Supporting human creators
+VISCERIUM explicitly supports human creative work.
+
+Where finished creative material is required, we create it ourselves or work with human writers, artists, designers and other creators.
+Generative AI is not used as a substitute for commissioned VISCERIUM artwork, fiction or other published creative material.
+Human creative labour has value. Where appropriate, it should be credited, licensed and compensated accordingly.
+
 ## AI-assisted creative support
 AI-assisted tools may be used around the creative process for research, critique, analysis, organisation, comparison, contradiction-finding and testing ideas.
 
@@ -38,6 +47,13 @@ Their output holds no authorship or canon authority.
 
 A suggestion may inform a person's thinking; it does not become VISCERIUM simply because it was generated. 
 **A tool may help us think about VISCERIUM. It does not make VISCERIUM for us.**
+
+## Technical use
+AI-assisted tools may be used in the technical development, operation, security and maintenance of VISCERIUM and the VISCERIUM Codex.
+This includes areas such as software development, debugging, testing, security analysis, accessibility, performance, automation, documentation and internal tooling.
+
+AI-assisted technical output may therefore form part of VISCERIUM's software and infrastructure.
+Such work remains subject to human inspection, testing and acceptance.
 
 ## Responsible AI use
 AI use within VISCERIUM is a conscious choice, not a default.
@@ -60,13 +76,6 @@ These positions are not contradictory. Where practical, we favour transparency, 
 
 **The availability of automation does not create an obligation to use it.**
 
-## Technical use
-AI-assisted tools may be used in the technical development, operation, security and maintenance of VISCERIUM and the VISCERIUM Codex.  
-This includes areas such as software development, debugging, testing, security analysis, accessibility, performance, automation, documentation and internal tooling.
-
-AI-assisted technical output may therefore form part of VISCERIUM's software and infrastructure.  
-Such work remains subject to human inspection, testing and acceptance.
-
 ## Accountability
 AI systems cannot establish VISCERIUM canon, approve their own work, exercise authority on behalf of VISCERIUM or assume responsibility for decisions.
 
@@ -74,13 +83,6 @@ Accountability remains with people.
 
 For technical work, this means human review and responsibility.  
 For creative work, the standard is stronger: **the finished creative work remains human-authored.**
-
-## Supporting human creators
-VISCERIUM explicitly supports human creative work.
-
-Where finished creative material is required, we create it ourselves or work with human writers, artists, designers and other creators.  
-Generative AI is not used as a substitute for commissioned VISCERIUM artwork, fiction or other published creative material.  
-Human creative labour has value. Where appropriate, it should be credited, licensed and compensated accordingly.
 
 ## What "human-made" means
 When VISCERIUM describes its creative work as **human-made**, we mean that literally.
