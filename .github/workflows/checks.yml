@@ -249,7 +249,8 @@ jobs:
 
       - name: Start preview
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
+          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/viscerium-preview.pid"
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0
             sleep 1
@@ -273,7 +274,17 @@ jobs:
             --browser=chromium --reporter=line --workers=1 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
 
       - name: Stop preview before enabled contact fixture
-        run: npx --no-install astro preview stop
+        run: |
+          PREVIEW_PID="$(cat "$RUNNER_TEMP/viscerium-preview.pid")"
+          if kill -0 "$PREVIEW_PID" 2>/dev/null; then
+            kill "$PREVIEW_PID"
+          fi
+          for attempt in {1..30}; do
+            ! kill -0 "$PREVIEW_PID" 2>/dev/null && exit 0
+            sleep 1
+          done
+          echo "Preview process $PREVIEW_PID did not stop"
+          exit 1
 
       - name: Build enabled contact browser fixture
         env:
