@@ -21,21 +21,21 @@ jobs:
       - name: Patch Cytoscape colour boundary
         shell: bash
         run: |
+          git fetch origin main --depth=1
+          git checkout origin/main -- Site/src/styles/graph.css
           python - <<'PY'
           from pathlib import Path
 
           graph = Path('Site/src/components/WorldGraph.astro')
           source = graph.read_text()
-          old = """  function colour(root: Element, name: string) {
-            const probe = document.createElement('span');
-            probe.style.color = `var(${name})`;
-            root.append(probe);
-            const value = getComputedStyle(probe).color;
-            probe.remove();
-            return value;
-          }
-          """
-          new = """  function colour(root: Element, name: string) {
+          start_marker = '  function colour(root: Element, name: string) {'
+          end_marker = '\n\n  function labelStyle(root: Element, size: number) {'
+          start = source.find(start_marker)
+          end = source.find(end_marker, start)
+          if start < 0 or end < 0:
+              raise SystemExit('WorldGraph colour helper boundaries were not found')
+
+          replacement = """  function colour(root: Element, name: string) {
             const probe = document.createElement('span');
             probe.style.color = `var(${name})`;
             root.append(probe);
@@ -54,41 +54,8 @@ jobs:
             const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
             if (alpha === 255) return `rgb(${red}, ${green}, ${blue})`;
             return `rgba(${red}, ${green}, ${blue}, ${alpha / 255})`;
-          }
-          """
-          if old not in source:
-              raise SystemExit('WorldGraph colour helper did not match expected source')
-          graph.write_text(source.replace(old, new, 1))
-
-          css = Path('Site/src/styles/graph.css')
-          source = css.read_text()
-          old_dark = """  /* Cytoscape 3.34 consumes these two values through getComputedStyle(). Keep
-             them in legacy sRGB syntax so canvas labels do not fall back to black when
-             the site palette resolves to OKLCH in modern browsers. */
-            --world-graph-canvas: rgb(16, 16, 16);
-            --world-graph-surface: var(--codex-palette-oled);
-            --world-graph-border: var(--codex-palette-deep);
-            --world-graph-text: rgb(200, 191, 168);
-          """
-          new_dark = """  --world-graph-canvas: var(--codex-palette-ink);
-            --world-graph-surface: var(--codex-palette-oled);
-            --world-graph-border: var(--codex-palette-deep);
-            --world-graph-text: var(--codex-palette-light);
-          """
-          old_light = """  --world-graph-canvas: rgb(185, 180, 169);
-            --world-graph-surface: var(--codex-palette-light);
-            --world-graph-border: var(--codex-palette-mid);
-            --world-graph-text: rgb(0, 0, 0);
-          """
-          new_light = """  --world-graph-canvas: var(--codex-palette-page-light);
-            --world-graph-surface: var(--codex-palette-light);
-            --world-graph-border: var(--codex-palette-mid);
-            --world-graph-text: var(--codex-palette-oled);
-          """
-          if old_dark not in source or old_light not in source:
-              raise SystemExit('graph.css compatibility literals did not match expected source')
-          source = source.replace(old_dark, new_dark, 1).replace(old_light, new_light, 1)
-          css.write_text(source)
+          }"""
+          graph.write_text(source[:start] + replacement + source[end:])
 
           Path('.github/workflows/temp-world-graph-label-fix.yml').unlink()
           PY
