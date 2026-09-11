@@ -49,6 +49,13 @@ const eraBoundaryTokens = {
   entropy: '--era-e4-accent',
 };
 
+async function installTheme(page, theme) {
+  await page.emulateMedia({ colorScheme: theme });
+  await page.addInitScript((selectedTheme) => {
+    localStorage.setItem('starlight-theme', selectedTheme);
+  }, theme);
+}
+
 function formatViolations(violations) {
   return violations
     .map(({ id, impact, help, nodes }) => {
@@ -84,10 +91,8 @@ for (const path of skipTargetRoutes) {
 for (const theme of ['dark', 'light']) {
   for (const [name, path, selectors] of boundaryRoutes) {
     test(`${name} uses the strong control boundary in ${theme} mode`, async ({ page }) => {
+      await installTheme(page, theme);
       await page.goto(`${baseUrl}${path}`, { waitUntil: 'networkidle' });
-      await page.evaluate((nextTheme) => {
-        document.documentElement.dataset.theme = nextTheme;
-      }, theme);
 
       const boundaries = await page.evaluate((controlSelectors) => {
         const probe = document.createElement('span');
@@ -110,10 +115,8 @@ for (const theme of ['dark', 'light']) {
   }
 
   test(`Start Here era choices use AA-tuned era boundaries in ${theme} mode`, async ({ page }) => {
+    await installTheme(page, theme);
     await page.goto(`${baseUrl}/start-here/`, { waitUntil: 'networkidle' });
-    await page.evaluate((nextTheme) => {
-      document.documentElement.dataset.theme = nextTheme;
-    }, theme);
 
     const boundaries = await page.evaluate((tokenMap) => {
       const probe = document.createElement('span');
