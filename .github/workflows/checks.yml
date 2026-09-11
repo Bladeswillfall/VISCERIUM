@@ -272,6 +272,9 @@ jobs:
           npx --no-install playwright test tests/accessibility/axe.spec.mjs \
             --browser=chromium --reporter=line --workers=1 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
 
+      - name: Stop preview before enabled contact fixture
+        run: npx --no-install astro preview stop
+
       - name: Build enabled contact browser fixture
         env:
           PUBLIC_CONTACT_FORM_ENABLED: '1'
@@ -304,9 +307,7 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: browser-check-log
-          path: |
-            ${{ runner.temp }}/playwright.log
-            ${{ runner.temp }}/viscerium-contact-preview.log
+          path: ${{ runner.temp }}/playwright.log
           if-no-files-found: warn
           retention-days: 1
 
