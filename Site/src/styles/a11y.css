@@ -39,6 +39,18 @@
     outline-offset: 3px;
   }
 
+  /* Interactive boundaries need the stronger token. The ordinary border token is intentionally decorative and is too subtle in dark mode. */
+  :where(
+    .relationship-search input,
+    .relationship-control select,
+    .relationship-explorer__reset,
+    .atlas-search input,
+    .atlas__reset,
+    .start-here-primer .start-choice
+  ) {
+    border-color: var(--codex-border-strong) !important;
+  }
+
   :where(
     .codex-sidebar-toggle,
     .codex-header-search button[data-open-modal],
