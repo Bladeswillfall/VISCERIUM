@@ -30,16 +30,16 @@ community_id: 2dd5253c-480c-40e2-92a9-e09c74482de7
 ---
 The _golden nation_ of Askalia is the pinacle of trade in Errack. Money flows here like water through a river and as such, anything can be bought for the right price. The landscape is temperate and rather flat, serving well for larger cities and quick transport. clusters of rolling hills and woodland are scattered across the yellow-green grasslands for the soil is not the most fertile but serves it's purpose.  
 
-### History
+## History
 
 Formely named The _Kingdom_ of Askalia, the _Republic_ of Askalia was founded upon the assassination of King Briar Remonnet by The Circle of Trades after much pressure from the local guilds and Senate to remove the then King from power.   The Circle of Trades now acts as an entirely private entity separate from the Senate. The Circle does however strongly influence and sway the Senate through back-room conversations, blackmail and under-the-table deals.  
 
-### People
+## People
 
 The people of Askalia range from the most wealthy individuals across all of Errack to some of the poorest. Coin moves quickly from hand to hand. Those with coin hold all the power and those without, need the coin to survive.  
 Askalians are often seen as entrepreneurial types - always looking to make a profit. That being said, life for the have-nots is hard and quite brutal... they get treated like they are less-than people and are instead treated like _things_.  
 
-### Major Exports
+## Major Exports
 
 **Wine**
 
@@ -55,13 +55,9 @@ Much like the growth of berries, citrus fruits also tend to grow quite well here
 
  
 
-### Wildlife
+## Wildlife
 
 The Republic is brimming with a wide variety of wildlife. Some of the more stand-out creatures are the giant devil rays, sharks and turtles that swim amongs the seas. Monkeys, foxes and Lynx that roam across the lands and various birds from golden eagles, black shouldered kites and the exoticly crowned hoopoe.
-
-[![Republic of Askalia.png](acda2a2a2b7cf4e2756fda53d9b6bc7e.png "Republic of Askalia.png")](/i/1990843 "Republic of Askalia.png")
-
-by Elias Vail
 
 Previously
 
