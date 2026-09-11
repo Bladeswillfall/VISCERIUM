@@ -12,7 +12,7 @@ sidebar:
           href: '[[Krassian]]'
         - label: Sister Nation
           value: Okse Dominion
-          href: /w/viscerium/a/okse-dominion-article
+          href: /eras/citadel/nations/okse-dominion/
         - label: Rulers (current)
           value: Kónungsdóttir - Lilja Ulfrikdottir
         - label: Rulers (deceased)
@@ -54,10 +54,6 @@ community_id: c3144040-6bfb-425e-98a9-4ce579882fa5
 
 In the turbulent shadows of the Uxifirar family, the Krass Dominion sprouted from the rift that cleaved kin from kin. Asgrim Torradsson, would come to stand as its humble founder. A man deeply attuned to the pulse of his father's realm, he took the mantle of leadership, birthing the Krass Dominion from the soil’s womb. His focus? To till the land and cling fiercely to the threads of independent culture and the unyielding mindset of the Vetruxi Kingdom.   Meanwhile, Asgrim's elder brother, Ralof, a commander of the Vetruxi Kingdom's armies under their father Torrad Uxifadir, clung steadfast to his militaristic and defensive philosophies. In the wake of the schism, he breathed life into the [[Archived - Okse Dominion]], a realm fortified against the relentless tides of brutality. Bound by blood, yet split by divergent ambitions, the two brothers navigated a tumultuous partnership. Each harnessed their unique strengths to pursue their individual aspirations, transforming their brotherhood into a strategic alliance that would carve two distinct destinies.   In a solemn tradition, the Krassians, like their Oksmun kin, would elect their once leader to bear the esteemed title of _'Kóngr Eilífr'_. It was a pact born of shared reverence for Torrad, the _'Ox-Father'_, the mighty Bulwark of the Vetruxi Kingdom. They swore to forever eschew the titles of Kóngr or Dróttning, for their people continued to hold Torrad in the highest regard. He remained their father figure, revered leader, and a figure of living legend, uniting both Dominions under his enduring legacy.
 
-[![Krass Heraldry_1.png](8959261124e62edee28ea6301fa6e1f2.png "Krassian flag")](/i/1937601 "Krassian flag")
-
-by Elias Vail
-
 _All artwork that isn't an original creation by Elias Vail will be replaced with either original pieces or commissioned art._
 
   
@@ -76,7 +72,7 @@ Amid the Krass Dominion's wild highlands, its people don attire as unyielding as
 
 While few possess the mastery of such formidable power, denizens of the Krass Dominion frequently find themselves attuned to the arts of Firmus sorcery - the power to shape and mold solid matter. This mastery has allowed the Dominion to sculpt imposing, natural-appearing defenses and cunning traps. It has granted them the ability to shroud vital locations within the landscape's embrace and harness the environment's natural strengths to their advantage. Moreover, Firmus sorcerers lend their talents to cultivate the fertile lands and provide succor to the wounded. They can mend shattered bones and craft form-fitting splints, among their myriad of capabilities.
 
-[![Krassian_woman.png](/uploads/images/4142e774a9e096ea5f2e8b2e062b1f33.png "Krassian_woman.png")](/i/4963599 "Krassian_woman.png")
+![Portrait of a Krassian woman](/uploads/images/4142e774a9e096ea5f2e8b2e062b1f33.png "Krassian woman")
 
 by [Generated using Midjourney (edited)](https://www.midjourney.com)
 
@@ -102,7 +98,7 @@ Through the swathes of land in the Krass Dominion that grow grains, barley is qu
 
 Within the rugged terrain of the Krass Dominion, one encounters creatures as wild and unforgiving as the land itself. Here, you might cross paths with the majestic deer, their graceful forms a fleeting blur amidst the shrubbery. Small and nimble stoats dart through the underbrush, evading both predator and prey, while powerful wolves, shadows of the wilderness, prowl with an aura of menace.   Above, the skies bear witness to the crimson kites and osprey, their predatory gaze scouring the land for vulnerable souls. A prime example of those soaring through the winds, Stormkites: Avian scavengers that crack open skulls with rock-hard beaks. Whilst the small kingfisher is more likely to be found flitting along the Dominions waterways.   In the icy embrace of the coastal waters, you'll find basking sharks, hulking behemoths of the deep, though their nature remains unexpectedly affable. Mischievous dolphins cut through the frigid waves, their laughter echoing in the depths. And the seals, known as the dogs of the sea, patrol the waters with a watchful eye, a testament to nature's cunning and ruthless determination.
 
-[![](/uploads/images/71e701b105d5fc6dddefba15ed5de996.png "Krassian_stag.png")](/i/4963657 "Krassian_stag.png")
+![Krassian stag](/uploads/images/71e701b105d5fc6dddefba15ed5de996.png "Krassian stag")
 
 by [Generated using Midjourney](https://www.midjourney.com)
 
