@@ -39,7 +39,6 @@
     outline-offset: 3px;
   }
 
-  /* Interactive boundaries need the stronger token. The ordinary border token is intentionally decorative and is too subtle in dark mode. */
   :where(
     .relationship-search input,
     .relationship-control select,
@@ -51,43 +50,36 @@
     border-color: var(--codex-border-strong) !important;
   }
 
-  .start-here-primer .start-choice:hover,
-  .start-here-primer .start-choice:focus-visible,
-  .start-here-primer .start-choice.is-selected {
+  .start-here-primer .start-choice:is(:hover, :focus-visible, .is-selected) {
     border-color: var(--start-accent) !important;
   }
 
-  /* Era choices keep their visual identity while using the existing AA-tuned era accents for their control boundaries. */
   .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='citadel'] {
-    border-color: var(--era-e1-accent-high) !important;
+    --a11y-choice-border: var(--era-e1-accent);
+    --a11y-choice-border-active: var(--era-e1-accent-high);
   }
 
   .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='smog'] {
-    border-color: var(--era-e2-accent-high) !important;
+    --a11y-choice-border: var(--era-e2-accent);
+    --a11y-choice-border-active: var(--era-e2-accent-high);
   }
 
   .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='nearsight'] {
-    border-color: var(--era-e3-accent-high) !important;
+    --a11y-choice-border: var(--era-e3-accent);
+    --a11y-choice-border-active: var(--era-e3-accent-high);
   }
 
   .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='entropy'] {
-    border-color: var(--era-e4-accent-high) !important;
+    --a11y-choice-border: var(--era-e4-accent);
+    --a11y-choice-border-active: var(--era-e4-accent-high);
   }
 
-  .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='citadel']:is(:hover, :focus-visible, .is-selected) {
-    border-color: var(--era-e1-accent) !important;
+  .start-here-primer [data-breadcrumb-group='era'] .start-choice {
+    border-color: var(--a11y-choice-border) !important;
   }
 
-  .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='smog']:is(:hover, :focus-visible, .is-selected) {
-    border-color: var(--era-e2-accent) !important;
-  }
-
-  .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='nearsight']:is(:hover, :focus-visible, .is-selected) {
-    border-color: var(--era-e3-accent) !important;
-  }
-
-  .start-here-primer [data-breadcrumb-group='era'] .start-choice[data-value='entropy']:is(:hover, :focus-visible, .is-selected) {
-    border-color: var(--era-e4-accent) !important;
+  .start-here-primer [data-breadcrumb-group='era'] .start-choice:is(:hover, :focus-visible, .is-selected) {
+    border-color: var(--a11y-choice-border-active) !important;
   }
 
   :where(
