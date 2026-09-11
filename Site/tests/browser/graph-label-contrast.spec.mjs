@@ -9,17 +9,8 @@ async function installDarkTheme(page) {
   });
 }
 
-test('World Graph canvas labels keep readable dark-mode contrast', async ({ page }) => {
-  await installDarkTheme(page);
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
-
-  const graph = page.locator('[data-world-graph]');
-  const canvas = graph.locator('[data-world-graph-canvas]');
-  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
-  await canvas.focus();
-  await expect(graph).toHaveAttribute('data-world-graph-context', 'keyboard');
-
-  const label = await canvas.evaluate((element) => {
+async function readActiveLabel(canvas) {
+  return canvas.evaluate((element) => {
     const cy = element._cyreg?.cy;
     const node = cy?.nodes('.is-active').first();
     if (!node?.length) return null;
@@ -52,15 +43,76 @@ test('World Graph canvas labels keep readable dark-mode contrast', async ({ page
 
     return {
       contrast,
-      text: node.style('color'),
-      background: node.style('text-background-color'),
+      text,
+      background,
       textLuminance,
       backgroundLuminance,
+      ruleCount: cy.style().json().length,
     };
   });
+}
 
+async function chooseTheme(page, value, resolvedTheme) {
+  const panel = page.locator('[data-reader-settings-panel]');
+  if (await panel.isHidden()) {
+    await page.locator('[data-reader-settings-trigger]').click();
+    await expect(panel).toBeVisible();
+  }
+  await page.locator(`.reader-theme-options label:has(input[value="${value}"])`).click();
+  await expect.poll(() => page.locator('html').getAttribute('data-theme')).toBe(resolvedTheme);
+}
+
+test('World Graph canvas labels keep readable dark-mode contrast', async ({ page }) => {
+  await installDarkTheme(page);
+  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+
+  const graph = page.locator('[data-world-graph]');
+  const canvas = graph.locator('[data-world-graph-canvas]');
+  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+  await canvas.focus();
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'keyboard');
+
+  const label = await readActiveLabel(canvas);
   expect(label).not.toBeNull();
   expect(label.contrast).toBeGreaterThanOrEqual(4.5);
   expect(label.textLuminance).toBeGreaterThan(label.backgroundLuminance);
-  expect(label.text).not.toBe(label.background);
+  expect(label.text).not.toEqual(label.background);
+});
+
+test('World Graph theme colours replace rather than stack across view modes', async ({ page }) => {
+  await installDarkTheme(page);
+  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+
+  const graph = page.locator('[data-world-graph]');
+  const canvas = graph.locator('[data-world-graph-canvas]');
+  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+  await canvas.focus();
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'keyboard');
+
+  const initial = await readActiveLabel(canvas);
+  expect(initial).not.toBeNull();
+  expect(initial.text).toEqual([200, 191, 168, 255]);
+  expect(initial.background).toEqual([16, 16, 16, 255]);
+
+  await chooseTheme(page, 'light', 'light');
+  await expect.poll(() => readActiveLabel(canvas)).toMatchObject({
+    text: [0, 0, 0, 255],
+    background: [185, 180, 169, 255],
+    ruleCount: initial.ruleCount,
+  });
+
+  await chooseTheme(page, 'dark', 'dark');
+  await expect.poll(() => readActiveLabel(canvas)).toMatchObject({
+    text: [200, 191, 168, 255],
+    background: [16, 16, 16, 255],
+    ruleCount: initial.ruleCount,
+  });
+
+  await page.emulateMedia({ colorScheme: 'light' });
+  await chooseTheme(page, 'auto', 'light');
+  await expect.poll(() => readActiveLabel(canvas)).toMatchObject({
+    text: [0, 0, 0, 255],
+    background: [185, 180, 169, 255],
+    ruleCount: initial.ruleCount,
+  });
 });
