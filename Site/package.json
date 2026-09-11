@@ -49,7 +49,6 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.3",
-    "@astrojs/partytown": "^2.1.7",
     "@astrojs/sitemap": "3.7.3",
     "@astrojs/starlight": "^0.41.3",
     "astro": "^7.1.1",

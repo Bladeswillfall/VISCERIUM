@@ -54,16 +54,6 @@
 .vc-timeline-app {
   display: grid;
   gap: .8rem;
-  margin-block: 1.5rem;
-  padding: clamp(.65rem, 2vw, 1.15rem);
-  overflow: clip;
-  border: 1px solid var(--vc-timeline-border);
-  border-radius: var(--codex-radius, .25rem);
-  background:
-    linear-gradient(135deg, color-mix(in oklch, var(--vc-timeline-accent) 5%, transparent), transparent 32%),
-    repeating-linear-gradient(0deg, transparent 0 31px, color-mix(in oklch, var(--vc-timeline-border) 20%, transparent) 32px),
-    var(--vc-timeline-surface-deep);
-  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--codex-fixed-light) 4%, transparent), 0 1rem 3rem color-mix(in oklch, var(--codex-shadow-color) 25%, transparent);
 }
 
 .vc-timeline-toolbar {
@@ -239,37 +229,6 @@
   min-width: 0;
   border: 1px solid var(--vc-timeline-border);
   background: color-mix(in oklch, var(--vc-timeline-surface-deep) 94%, transparent);
-}
-
-.vc-timeline-axis {
-  position: relative;
-  z-index: 4;
-  height: 3.1rem;
-  overflow: hidden;
-  border-bottom: 1px solid var(--vc-timeline-border-strong);
-  background: linear-gradient(180deg, color-mix(in oklch, var(--vc-timeline-surface) 95%, transparent), var(--vc-timeline-surface-deep));
-}
-
-.vc-timeline-axis span {
-  position: absolute;
-  bottom: .55rem;
-  max-width: 10rem;
-  translate: -50% 0;
-  color: var(--vc-timeline-muted);
-  font: 800 .68rem/1.15 var(--vc-font-ui, ui-sans-serif, system-ui);
-  letter-spacing: .04em;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.vc-timeline-axis span::after {
-  content: '';
-  position: absolute;
-  top: calc(100% + .35rem);
-  left: 50%;
-  width: 1px;
-  height: .7rem;
-  background: var(--vc-timeline-border-strong);
 }
 
 .vc-timeline-canvas {
@@ -666,10 +625,6 @@
 
   .vc-timeline-index-card:first-child {
     grid-column: auto;
-  }
-
-  .vc-timeline-axis span {
-    font-size: .6rem;
   }
 
   .vc-timeline-canvas {

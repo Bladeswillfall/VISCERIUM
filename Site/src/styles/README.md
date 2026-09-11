@@ -37,7 +37,9 @@ The order is deliberate: layers and tokens, theme, typography, layout, shared co
 | `maps.css` | `WorldMap.astro` and the Atlas index route |
 | `relationships.css` | `RelationshipGraph.astro` |
 | `exploration-pages.css` | `WorldMap.astro` and `RelationshipGraph.astro` |
-| `support.css` | Support and contact routes |
+| `editorial-shell.css` | Shared full-width shell for Support, Contact and `StartHerePrimer.astro` |
+| `support-redesign.css` | Support route |
+| `contact.css` | Contact route |
 | `graph.css` | `WorldGraph.astro` on the Graph route |
 | `calendar-date-badge.css` | `CalendarDateBadge.astro` |
 | `calendar-year.css` | `CalendarYear.astro` |

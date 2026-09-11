@@ -446,6 +446,36 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
   expect(afterPageMode / beforePageMode).toBeGreaterThanOrEqual(.82);
 });
 
+test('World Graph releases DOM listeners on a page swap and remounts once', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  const graph = page.locator('[data-world-graph]');
+  const canvas = graph.locator('[data-world-graph-canvas]');
+  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+
+  for (let swap = 0; swap < 2; swap += 1) {
+    await canvas.focus();
+    await page.keyboard.press('Home');
+    const firstId = await graph.getAttribute('data-world-graph-active-id');
+    await page.evaluate(() => document.dispatchEvent(new Event('astro:before-swap')));
+    await expect(canvas.locator('canvas')).toHaveCount(0);
+    await canvas.dispatchEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true });
+    await expect(graph).toHaveAttribute('data-world-graph-active-id', firstId);
+    expect(await dispatchSyntheticWheel(page, canvas, -120, 0)).toBe(false);
+
+    await page.evaluate(() => document.dispatchEvent(new Event('astro:page-load')));
+    await expect(canvas.locator('canvas').first()).toBeVisible();
+    await canvas.dispatchEvent('keydown', { key: 'Home' });
+    await expect(graph).toHaveAttribute('data-world-graph-active-id', firstId);
+    await canvas.dispatchEvent('keydown', { key: 'ArrowRight' });
+    await expect(graph).not.toHaveAttribute('data-world-graph-active-id', firstId);
+    await graph.getByRole('button', { name: 'Reset view' }).click();
+    await expect(graph.locator('[data-world-graph-status]')).toHaveText(readyStatus);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('World Graph keeps the text view when interactive data fails', async ({ page }) => {
   await page.route('**/sitegraph/sitemap.json', (route) => route.abort());
   await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
