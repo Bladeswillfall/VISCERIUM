@@ -113,7 +113,7 @@ This article contains references to slavery, coercion, brutality, and systemic e
 
 This article is a work in progress.
 
-#### Iron roots, blood fruit.
+**Iron roots, blood fruit.**
 The **Okse Dominion does not wait to learn what will kill it. It braces first.** Across the [[Halvmane Mountains]], the Oksmun have taken an old Vetruxi virtue - endurance - and built walls, armies, mines and laws around it until survival became something that could be counted, stocked, guarded and forced from somebody else's back.
 
 They are still fishers, farmers, herders, smiths, sailors and families huddled around timber halls while shit weather rattles the roof. They still raid. They still sing old songs, carve bone charms and wear black and gold. The difference is what grew around them: stone where timber once sufficed, oil where tallow once burned, registries where a Jarl once relied on memory, and an industrial appetite that has learned the value of every captive pair of hands.

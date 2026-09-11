@@ -45,28 +45,24 @@ const messages = {
     </div>
 
     <details open>
-      <summary>
-        <span class="codex-webmentions__summary-row">
-          <span>{t('viscerium.webmentions.title')}</span>
-          <a
-            class="codex-webmentions__provider"
-            href="https://webmention.io/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Webmention.io${t('viscerium.common.newTab')}`}
-            title="Webmention.io"
-          >
-            <img
-              src="/assets/services/webmention-io.webp"
-              alt=""
-              width="128"
-              height="128"
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-        </span>
-      </summary>
+      <summary>{t('viscerium.webmentions.title')}</summary>
+      <a
+        class="codex-webmentions__provider"
+        href="https://webmention.io/"
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`Webmention.io${t('viscerium.common.newTab')}`}
+        title="Webmention.io"
+      >
+        <img
+          src="/assets/services/webmention-io.webp"
+          alt=""
+          width="128"
+          height="128"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
       <p data-state role="status">{t('viscerium.webmentions.loading')}</p>
       <div class="codex-webmention-list" data-list></div>
     </details>
@@ -113,17 +109,14 @@ const messages = {
     font-weight: 700;
   }
 
-  .codex-webmentions__summary-row {
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-  }
-
   .codex-webmentions__provider {
-    display: inline-block;
-    flex: none;
-    inline-size: 1.3rem;
-    block-size: 1.3rem;
+    display: flex;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    margin-block-start: .25rem;
+    margin-inline-start: auto;
     opacity: .55;
     filter: brightness(.9);
     transition: opacity 160ms ease, filter 160ms ease;
@@ -142,8 +135,8 @@ const messages = {
 
   .codex-webmentions__provider img {
     display: block;
-    inline-size: 100%;
-    block-size: 100%;
+    inline-size: 1.3rem;
+    block-size: 1.3rem;
   }
 
   [data-state] {

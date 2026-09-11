@@ -1,7 +1,7 @@
 @import './article-layout.css';
 
 @layer starlight.core {
-  .codex-sr-only:not(:focus):not(:active) {
+  .codex-sr-only:not(:focus, :active) {
     position: absolute !important;
     inline-size: 1px !important;
     block-size: 1px !important;
@@ -20,23 +20,31 @@
     text-underline-offset: .18em;
   }
 
-  .sl-markdown-content a:hover,
-  .sl-markdown-content a:focus-visible {
+  .sl-markdown-content a:is(:hover, :focus-visible) {
     text-decoration-thickness: .14em;
   }
 
-  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link {
+  html[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link {
     color: color-mix(in oklch, var(--start-link-hue) 32%, var(--codex-palette-ink)) !important;
   }
 
-  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:hover,
-  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:focus-visible {
+  html[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:is(:hover, :focus-visible) {
     color: color-mix(in oklch, var(--start-link-hue) 24%, var(--codex-palette-ink)) !important;
   }
 
   :where(a[href], button, summary, input, select, textarea, [tabindex]:not([tabindex='-1'])):focus-visible {
     outline: 2px solid var(--sl-color-accent-high);
     outline-offset: 3px;
+  }
+
+  :where(
+    [data-relationship-search],
+    .relationship-control select,
+    .relationship-explorer__reset,
+    [data-atlas-search],
+    .atlas__reset
+  ) {
+    border-color: var(--codex-border-strong) !important;
   }
 
   :where(
@@ -87,9 +95,41 @@
       color: CanvasText;
     }
 
-    :where(a[href], button, summary, input, select, textarea, [tabindex]:not([tabindex='-1'])):focus-visible {
+    :focus-visible {
       outline: 3px solid Highlight;
       outline-offset: 3px;
     }
   }
+}
+
+[data-breadcrumb-group]:not([data-breadcrumb-group='era']) .start-choice {
+  border-color: var(--codex-border-strong) !important;
+}
+
+[data-breadcrumb-group='era'] [data-value='citadel'] {
+  --b: var(--era-e1-accent);
+  --ba: var(--era-e1-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='smog'] {
+  --b: var(--era-e2-accent);
+  --ba: var(--era-e2-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='nearsight'] {
+  --b: var(--era-e3-accent);
+  --ba: var(--era-e3-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='entropy'] {
+  --b: var(--era-e4-accent);
+  --ba: var(--era-e4-accent-high);
+}
+
+[data-breadcrumb-group='era'] .start-choice {
+  border-color: var(--b) !important;
+}
+
+[data-breadcrumb-group='era'] .start-choice:is(:hover, :focus-visible, .is-selected) {
+  border-color: var(--ba) !important;
 }
