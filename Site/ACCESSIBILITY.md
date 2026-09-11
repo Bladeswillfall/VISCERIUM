@@ -34,4 +34,6 @@ Do not duplicate those global rules across component stylesheets without a compo
 
 The repository test suite contains contract tests for the global accessibility layer. Component tests should be added when an interactive component introduces keyboard, focus, labelling or fallback behaviour that cannot be covered by the global contract.
 
+CI also runs `axe-core` through the existing Playwright browser environment against representative public routes. The Axe run is scoped to automatically testable WCAG Level A and AA rules through the available WCAG 2.2 rule tags.
+
 Automated checks are a regression net, not a substitute for keyboard and assistive-technology review. Release review should include keyboard-only navigation and reduced-motion/high-contrast spot checks for materially changed interactive surfaces.
