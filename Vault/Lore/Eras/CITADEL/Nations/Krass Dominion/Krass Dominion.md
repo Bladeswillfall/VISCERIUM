@@ -12,7 +12,7 @@ sidebar:
           href: '[[Krassian]]'
         - label: Sister Nation
           value: Okse Dominion
-          href: /eras/citadel/nations/okse-dominion/
+          href: '[[Okse Dominion]]'
         - label: Rulers (current)
           value: Kónungsdóttir - Lilja Ulfrikdottir
         - label: Rulers (deceased)
