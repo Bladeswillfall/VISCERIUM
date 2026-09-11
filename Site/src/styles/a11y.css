@@ -25,6 +25,15 @@
     text-decoration-thickness: .14em;
   }
 
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link {
+    color: color-mix(in oklch, var(--start-link-hue) 32%, var(--codex-palette-ink)) !important;
+  }
+
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:hover,
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:focus-visible {
+    color: color-mix(in oklch, var(--start-link-hue) 24%, var(--codex-palette-ink)) !important;
+  }
+
   :where(a[href], button, summary, input, select, textarea, [tabindex]:not([tabindex='-1'])):focus-visible {
     outline: 2px solid var(--sl-color-accent-high);
     outline-offset: 3px;
