@@ -235,6 +235,9 @@ jobs:
 
       - run: npm ci --silent --no-audit --no-fund
 
+      - name: Install Axe accessibility runtime
+        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund @axe-core/playwright@4.13.0
+
       - name: Download production build
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -246,7 +249,8 @@ jobs:
 
       - name: Start preview
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
+          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/viscerium-preview.pid"
           for attempt in {1..30}; do
             curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0
             sleep 1
@@ -262,6 +266,25 @@ jobs:
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
           } 2>&1 | tee "$RUNNER_TEMP/playwright.log"
+
+      - name: Run Axe accessibility checks
+        run: |
+          set -o pipefail
+          npx --no-install playwright test tests/accessibility/axe.spec.mjs \
+            --browser=chromium --reporter=line --workers=1 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
+
+      - name: Stop preview before enabled contact fixture
+        run: |
+          PREVIEW_PID="$(cat "$RUNNER_TEMP/viscerium-preview.pid")"
+          if kill -0 "$PREVIEW_PID" 2>/dev/null; then
+            kill "$PREVIEW_PID"
+          fi
+          for attempt in {1..30}; do
+            ! kill -0 "$PREVIEW_PID" 2>/dev/null && exit 0
+            sleep 1
+          done
+          echo "Preview process $PREVIEW_PID did not stop"
+          exit 1
 
       - name: Build enabled contact browser fixture
         env:
