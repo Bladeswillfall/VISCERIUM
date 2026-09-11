@@ -1,5 +1,9 @@
 /* Storyteller view refinements kept outside the component so era geometry can evolve independently. */
 
+.codex-article-view-switcher .codex-article-view-tab:is(:hover, :focus-visible, [aria-selected='true']) {
+  color: var(--era-button-text) !important;
+}
+
 /*
   CITADEL: the selected chronicle tab is physically taller, not translated.
   Both leaves share one baseline. The baseline itself is now deliberate: it
