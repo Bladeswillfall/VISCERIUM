@@ -39,8 +39,15 @@ const boundaryRoutes = [
     '.atlas-search input',
     '.atlas__reset',
   ]],
-  ['start here', '/start-here/', ['.start-choice']],
+  ['start here', '/start-here/', ['[data-breadcrumb-group="world"] .start-choice']],
 ];
+
+const eraBoundaryTokens = {
+  citadel: '--era-e1-accent-high',
+  smog: '--era-e2-accent-high',
+  nearsight: '--era-e3-accent-high',
+  entropy: '--era-e4-accent-high',
+};
 
 function formatViolations(violations) {
   return violations
@@ -101,6 +108,34 @@ for (const theme of ['dark', 'light']) {
       }
     });
   }
+
+  test(`Start Here era choices use AA-tuned era boundaries in ${theme} mode`, async ({ page }) => {
+    await page.goto(`${baseUrl}/start-here/`, { waitUntil: 'networkidle' });
+    await page.evaluate((nextTheme) => {
+      document.documentElement.dataset.theme = nextTheme;
+    }, theme);
+
+    const boundaries = await page.evaluate((tokenMap) => {
+      const probe = document.createElement('span');
+      document.body.append(probe);
+      const results = Object.entries(tokenMap).map(([era, token]) => {
+        const element = document.querySelector(`[data-breadcrumb-group="era"] .start-choice[data-value="${era}"]`);
+        probe.style.color = `var(${token})`;
+        return {
+          era,
+          border: element instanceof HTMLElement ? getComputedStyle(element).borderTopColor : null,
+          expected: getComputedStyle(probe).color,
+        };
+      });
+      probe.remove();
+      return results;
+    }, eraBoundaryTokens);
+
+    for (const { era, border, expected } of boundaries) {
+      expect(border, `${era} should use its AA-tuned accent-high boundary`).toBe(expected);
+    }
+    expect(new Set(boundaries.map(({ border }) => border)).size).toBe(4);
+  });
 }
 
 test('audited legacy articles expose semantic headings and no dead image wrappers', async ({ page }) => {
