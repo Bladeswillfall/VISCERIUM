@@ -54,10 +54,13 @@ test('World Graph canvas labels keep readable dark-mode contrast', async ({ page
       contrast,
       text: node.style('color'),
       background: node.style('text-background-color'),
+      textLuminance,
+      backgroundLuminance,
     };
   });
 
   expect(label).not.toBeNull();
   expect(label.contrast).toBeGreaterThanOrEqual(4.5);
+  expect(label.textLuminance).toBeGreaterThan(label.backgroundLuminance);
   expect(label.text).not.toBe(label.background);
 });
