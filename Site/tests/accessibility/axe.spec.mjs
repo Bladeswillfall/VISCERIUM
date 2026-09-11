@@ -43,10 +43,10 @@ const boundaryRoutes = [
 ];
 
 const eraBoundaryTokens = {
-  citadel: '--era-e1-accent-high',
-  smog: '--era-e2-accent-high',
-  nearsight: '--era-e3-accent-high',
-  entropy: '--era-e4-accent-high',
+  citadel: '--era-e1-accent',
+  smog: '--era-e2-accent',
+  nearsight: '--era-e3-accent',
+  entropy: '--era-e4-accent',
 };
 
 function formatViolations(violations) {
@@ -132,7 +132,7 @@ for (const theme of ['dark', 'light']) {
     }, eraBoundaryTokens);
 
     for (const { era, border, expected } of boundaries) {
-      expect(border, `${era} should use its AA-tuned accent-high boundary`).toBe(expected);
+      expect(border, `${era} should use its AA-tuned era boundary`).toBe(expected);
     }
     expect(new Set(boundaries.map(({ border }) => border)).size).toBe(4);
   });
