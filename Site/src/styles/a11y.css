@@ -42,38 +42,9 @@
     .relationship-control select,
     .relationship-explorer__reset,
     [data-atlas-search],
-    .atlas__reset,
-    [data-breadcrumb-group]:not([data-breadcrumb-group='era']) .start-choice
+    .atlas__reset
   ) {
     border-color: var(--codex-border-strong) !important;
-  }
-
-  [data-breadcrumb-group='era'] [data-value='citadel'] {
-    --b: var(--era-e1-accent);
-    --ba: var(--era-e1-accent-high);
-  }
-
-  [data-breadcrumb-group='era'] [data-value='smog'] {
-    --b: var(--era-e2-accent);
-    --ba: var(--era-e2-accent-high);
-  }
-
-  [data-breadcrumb-group='era'] [data-value='nearsight'] {
-    --b: var(--era-e3-accent);
-    --ba: var(--era-e3-accent-high);
-  }
-
-  [data-breadcrumb-group='era'] [data-value='entropy'] {
-    --b: var(--era-e4-accent);
-    --ba: var(--era-e4-accent-high);
-  }
-
-  [data-breadcrumb-group='era'] .start-choice {
-    border-color: var(--b) !important;
-  }
-
-  [data-breadcrumb-group='era'] .start-choice:is(:hover, :focus-visible, .is-selected) {
-    border-color: var(--ba) !important;
   }
 
   :where(
@@ -129,4 +100,36 @@
       outline-offset: 3px;
     }
   }
+}
+
+[data-breadcrumb-group]:not([data-breadcrumb-group='era']) .start-choice {
+  border-color: var(--codex-border-strong) !important;
+}
+
+[data-breadcrumb-group='era'] [data-value='citadel'] {
+  --b: var(--era-e1-accent);
+  --ba: var(--era-e1-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='smog'] {
+  --b: var(--era-e2-accent);
+  --ba: var(--era-e2-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='nearsight'] {
+  --b: var(--era-e3-accent);
+  --ba: var(--era-e3-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='entropy'] {
+  --b: var(--era-e4-accent);
+  --ba: var(--era-e4-accent-high);
+}
+
+[data-breadcrumb-group='era'] .start-choice {
+  border-color: var(--b) !important;
+}
+
+[data-breadcrumb-group='era'] .start-choice:is(:hover, :focus-visible, .is-selected) {
+  border-color: var(--ba) !important;
 }
