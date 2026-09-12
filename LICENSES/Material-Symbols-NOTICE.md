@@ -1,9 +1,9 @@
 # Material Symbols notice
 
-VISCERIUM redistributes selected Material Symbols Sharp SVG glyphs from Google's `material-design-icons` repository under the Apache License 2.0.
+VISCERIUM redistributes selected Material Symbols Sharp and Material Symbols Rounded SVG glyphs from Google's `material-design-icons` repository under the Apache License 2.0.
 
 - Upstream: https://github.com/google/material-design-icons
-- Style: Material Symbols Sharp
+- Styles: Material Symbols Sharp, plus Material Symbols Rounded for generic folder and article icons
 - Fill axis: `FILL=1`
 - Local use: `Site/public/icons/`
 - Licence: `LICENSES/Material-Symbols-Apache-2.0.txt`
