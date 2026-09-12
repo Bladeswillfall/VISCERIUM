@@ -3,7 +3,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { slugToRoute, toPosixPath } from './src/lib/codex-paths.mjs';
 import { walk } from './scripts/lib/walk.mjs';
-import { parseIconLabel, parseIconSpec } from './src/lib/icon-spec.mjs';
+import { iconLabel, parseIconLabel, parseIconSpec } from './src/lib/icon-spec.mjs';
 import {
   canonicalSidebarGroup,
   ERA_SIDEBAR_SECTIONS,
@@ -61,7 +61,7 @@ function groupPresentation(segment, context) {
   return {
     key,
     label: definition?.label ?? labelFromSegment(segment),
-    icon: definition?.icon ?? fallbackGroupIcons[key],
+    icon: definition?.icon ?? fallbackGroupIcons[key] ?? 'folder',
     order: definition?.order ?? sidebarGroupRank(segment, context),
   };
 }
@@ -100,7 +100,7 @@ function buildEntries(groups) {
         : links;
 
       return {
-        label: group.label,
+        label: iconLabel(group.icon, group.label),
         items: [
           ...pinnedLinks.map(cleanLink),
           ...buildEntries(group.groups),
@@ -118,7 +118,7 @@ function hideGeneratedDetailRoute(segments) {
 }
 
 function articleEntry(data, title, link, label = title, order = undefined) {
-  const attrs = iconAttrs(data.sidebarIcon ?? data.icon);
+  const attrs = iconAttrs(data.sidebarIcon ?? data.icon ?? 'article');
   return {
     label,
     link,
