@@ -133,6 +133,10 @@ html[data-codex-wide-header] .main-frame {
   padding-top: var(--sl-mobile-toc-height, 0rem);
 }
 
+html:not([data-codex-wide-header]):not([data-codex-mobile-header]) .main-frame:has(.creator-programme-page) {
+  padding-top: var(--sl-nav-height, 3.5rem) !important;
+}
+
 /*
   Mobile keeps Starlight's fixed-header geometry while the ribbon translates in
   and out of view. Main-frame retains the normal nav-height padding, preserving
