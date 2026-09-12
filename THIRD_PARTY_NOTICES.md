@@ -42,7 +42,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^1.0.0` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.1` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
-| Codex (`Site/`) | `eslint` | development | `10.9.0` |
+| Codex (`Site/`) | `eslint` | development | `10.10.0` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.1` |
 | Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |
