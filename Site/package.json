@@ -96,6 +96,6 @@
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
-    "eslint": "10.9.0"
+    "eslint": "10.10.0"
   }
 }
