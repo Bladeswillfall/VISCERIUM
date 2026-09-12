@@ -29,7 +29,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `@astrojs/partytown` | runtime | `^2.1.7` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
 | Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
-| Codex (`Site/`) | `astro` | runtime | `^7.1.1` |
+| Codex (`Site/`) | `astro` | runtime | `^7.2.8` |
 | Codex (`Site/`) | `cytoscape` | runtime | `3.34.0` |
 | Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.0` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
