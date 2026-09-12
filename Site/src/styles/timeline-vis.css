@@ -82,7 +82,7 @@
   background: var(--vc-timeline-surface) !important;
 }
 
-.vc-timeline-refit-button .codex-icon {
+.vc-timeline-refit-button svg {
   display: block;
   width: 1rem;
   height: 1rem;
