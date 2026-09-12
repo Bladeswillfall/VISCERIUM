@@ -36,10 +36,10 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `gray-matter` | runtime | `^4.0.3` |
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
-| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.6.0` |
-| Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^1.0.1` |
-| Codex (`Site/`) | `starlight-tags` | runtime | `^1.0.1` |
-| Codex (`Site/`) | `starlight-telescope` | runtime | `^1.0.0` |
+| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
+| Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.1` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
 | Codex (`Site/`) | `eslint` | development | `10.10.0` |
