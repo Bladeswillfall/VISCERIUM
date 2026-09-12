@@ -3,7 +3,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { slugToRoute, toPosixPath } from './src/lib/codex-paths.mjs';
 import { walk } from './scripts/lib/walk.mjs';
-import { parseIconLabel, parseIconSpec } from './src/lib/icon-spec.mjs';
+import { iconLabel, parseIconLabel, parseIconSpec } from './src/lib/icon-spec.mjs';
 import {
   canonicalSidebarGroup,
   ERA_SIDEBAR_SECTIONS,
@@ -100,14 +100,13 @@ function buildEntries(groups) {
         : links;
 
       return {
-        label: group.label,
+        label: iconLabel(group.icon, group.label),
         items: [
           ...pinnedLinks.map(cleanLink),
           ...buildEntries(group.groups),
           ...ordinaryLinks.map(cleanLink),
         ],
         collapsed: true,
-        attrs: { 'data-sidebar-icon': group.icon },
       };
     });
 }
