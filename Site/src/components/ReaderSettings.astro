@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import CodexIcon from './CodexIcon.astro';
 
 const { t } = Astro.locals;
 const docs = await getCollection('docs');
@@ -32,9 +33,7 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
     title={t('viscerium.settings.open')}
     data-reader-settings-trigger
   >
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M19.4 13a7.5 7.5 0 0 0 .05-1 7.5 7.5 0 0 0-.05-1l2.08-1.62-2-3.46-2.53 1a7.65 7.65 0 0 0-1.73-1L14.83 3h-4l-.39 2.92a7.65 7.65 0 0 0-1.73 1l-2.53-1-2 3.46L6.26 11a7.5 7.5 0 0 0-.05 1 7.5 7.5 0 0 0 .05 1l-2.08 1.62 2 3.46 2.53-1a7.65 7.65 0 0 0 1.73 1l.39 2.92h4l.39-2.92a7.65 7.65 0 0 0 1.73-1l2.53 1 2-3.46L19.4 13Zm-6.57 2.5A3.5 3.5 0 1 1 16.33 12a3.5 3.5 0 0 1-3.5 3.5Z" fill="currentColor" />
-    </svg>
+    <CodexIcon spec="settings" />
   </button>
 
   <div
@@ -56,49 +55,34 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
         aria-label={t('viscerium.settings.close')}
         data-reader-settings-close
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M6 6l12 12M18 6 6 18" />
-        </svg>
+        <CodexIcon spec="close" />
       </button>
     </div>
 
     <fieldset class="reader-settings-section" data-reader-theme-group>
       <legend>
-        <svg class="reader-settings-section-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M12 3a9 9 0 1 0 9 9c0-1.2-.8-2-2-2h-2.2a2 2 0 0 1-2-2V5.8c0-1.7-1.2-2.8-2.8-2.8Z" />
-          <circle cx="7.5" cy="10" r="1" />
-          <circle cx="9.5" cy="6.8" r="1" />
-          <circle cx="7.3" cy="14" r="1" />
-        </svg>
+        <CodexIcon spec="palette" class="reader-settings-section-icon" />
         <span>{t('viscerium.settings.appearance')}</span>
       </legend>
       <div class="reader-theme-options">
         <label>
           <input type="radio" name="reader-theme" value="auto" data-reader-theme-option />
           <span>
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <rect x="3" y="4" width="18" height="13" rx="2" />
-              <path d="M8 21h8M12 17v4" />
-            </svg>
+            <CodexIcon spec="desktop" />
             <span>{t('themeSelect.auto')}</span>
           </span>
         </label>
         <label>
           <input type="radio" name="reader-theme" value="light" data-reader-theme-option />
           <span>
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-            </svg>
+            <CodexIcon spec="light-mode" />
             <span>{t('themeSelect.light')}</span>
           </span>
         </label>
         <label>
           <input type="radio" name="reader-theme" value="dark" data-reader-theme-option />
           <span>
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M20.6 15.6A8.5 8.5 0 0 1 8.4 3.4 9 9 0 1 0 20.6 15.6Z" />
-            </svg>
+            <CodexIcon spec="dark-mode" />
             <span>{t('themeSelect.dark')}</span>
           </span>
         </label>
@@ -110,10 +94,7 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
 
     <fieldset class="reader-settings-section">
       <legend>
-        <svg class="reader-settings-section-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
-          <circle cx="12" cy="12" r="2.5" />
-        </svg>
+        <CodexIcon spec="visibility" class="reader-settings-section-icon" />
         <span>{t('viscerium.settings.content')}</span>
       </legend>
       <label class="reader-settings-switch-row">
