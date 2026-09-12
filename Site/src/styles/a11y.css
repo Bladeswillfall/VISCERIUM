@@ -95,6 +95,11 @@
       color: CanvasText;
     }
 
+    :where(.codex-local-icon, .local-icon) {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+
     :focus-visible {
       outline: 3px solid Highlight;
       outline-offset: 3px;
