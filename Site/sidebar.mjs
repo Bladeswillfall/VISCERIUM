@@ -61,7 +61,7 @@ function groupPresentation(segment, context) {
   return {
     key,
     label: definition?.label ?? labelFromSegment(segment),
-    icon: definition?.icon ?? fallbackGroupIcons[key],
+    icon: definition?.icon ?? fallbackGroupIcons[key] ?? 'folder',
     order: definition?.order ?? sidebarGroupRank(segment, context),
   };
 }
@@ -107,6 +107,7 @@ function buildEntries(groups) {
           ...ordinaryLinks.map(cleanLink),
         ],
         collapsed: true,
+        attrs: { 'data-sidebar-icon': group.icon },
       };
     });
 }
@@ -118,7 +119,7 @@ function hideGeneratedDetailRoute(segments) {
 }
 
 function articleEntry(data, title, link, label = title, order = undefined) {
-  const attrs = iconAttrs(data.sidebarIcon ?? data.icon);
+  const attrs = iconAttrs(data.sidebarIcon ?? data.icon ?? 'article');
   return {
     label,
     link,
