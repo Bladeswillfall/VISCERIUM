@@ -97,6 +97,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
 <script>
   import { installTimelineChronicle } from '../../lib/timeline/chronicle-view.mjs';
   import { installTimelineHovercard } from '../../lib/timeline/hovercard.mjs';
+  import { installTimelineSiteIcons } from '../../lib/timeline/site-icons.mjs';
   import { installTimelineToolbar } from '../../lib/timeline/toolbar-ui.mjs';
 
   type TimelineState = {
@@ -140,6 +141,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
       state.cleanups.push(installTimelineHovercard(mount, dataset, options));
       state.cleanups.push(installTimelineChronicle(mount, dataset, options));
       state.cleanups.push(installTimelineToolbar(mount, options));
+      state.cleanups.push(installTimelineSiteIcons(mount));
 
       mount.setAttribute('data-vc-island-mounted', 'true');
       mount.setAttribute('aria-busy', 'false');
