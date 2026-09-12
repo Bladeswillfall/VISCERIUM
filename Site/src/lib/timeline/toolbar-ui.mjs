@@ -1,20 +1,21 @@
 import { timelineMessage } from './i18n.mjs';
 
 const icons = {
-  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path>',
-  search: '<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>',
-  grouping: '<path d="M4 6h6M14 6h6M7 6v12M17 6v12M4 18h6M14 18h6"></path>',
-  previous: '<path d="m15 18-6-6 6-6"></path>',
-  next: '<path d="m9 18 6-6-6-6"></path>',
-  zoomOut: '<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4M8 11h6"></path>',
-  zoomIn: '<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4M11 8v6M8 11h6"></path>',
-  reset: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path>',
-  chronicle: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22.5z"></path><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5a2.5 2.5 0 0 1 2.5 2.5z"></path>',
-  graph: '<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path>',
+  calendar: 'event',
+  search: 'search',
+  grouping: 'view-column',
+  previous: 'chevron-left',
+  next: 'chevron-right',
+  zoomOut: 'zoom-out',
+  zoomIn: 'zoom-in',
+  reset: 'restart-alt',
+  chronicle: 'codex',
+  graph: 'bar-chart',
 };
 
 function icon(name) {
-  return `<svg class="vc-timeline-control-icon" data-vc-toolbar-icon="${name}" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icons[name] ?? ''}</svg>`;
+  const asset = icons[name];
+  return `<span class="codex-icon codex-local-icon vc-timeline-control-icon" data-vc-toolbar-icon="${name}" aria-hidden="true" style="--icon: url('/icons/${asset}.svg')"></span>`;
 }
 
 function decorateField(control, iconName, label, hint) {
