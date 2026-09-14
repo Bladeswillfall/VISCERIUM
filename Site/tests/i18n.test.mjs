@@ -97,6 +97,8 @@ test('accessible flag language menu is staged beside reader settings without bei
   assert.match(menu, /!menu\.contains\(event\.target\)/);
   assert.match(menu, /querySelector<HTMLElement>\('summary'\)\?\.focus\(\)/);
   assert.match(menu, /url\('\/icons\/i18n\.svg'\)/);
+  assert.match(menu, /@media \(forced-colors: active\)[\s\S]*\.codex-language-menu__icon[\s\S]*forced-color-adjust:\s*none[\s\S]*background:\s*CanvasText/);
+  assert.match(menu, /@media \(forced-colors: active\)[\s\S]*\.codex-language-menu__flag[\s\S]*forced-color-adjust:\s*none/);
   assert.doesNotMatch(menu, /<select\b/);
   assert.match(icon, /viewBox="0 0 32 32"/);
   assert.match(icon, /fill="#7986cb"/);
