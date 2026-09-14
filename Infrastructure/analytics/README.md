@@ -22,13 +22,27 @@ Historical backfills do not invent historical comment or Kudos snapshots. Snapsh
 
 ## Inputs
 
-The public site exposes `/reporting-pages.json`. It contains only page metadata needed to map Rybbit pathnames, Remark42 threads and Kudos records to the same permanent `community_id`.
+The public site exposes `/reporting-pages.json`. It contains only page metadata needed to map Rybbit pathnames, Remark42 threads and Kudos records to the same permanent `community_id`. Each page includes its current pathname plus any recorded historical pathnames.
 
 The collector reads Rybbit's local `analytics.events` table through `docker exec clickhouse clickhouse-client`. It uses the same session-level effective-user rule as current Rybbit: prefer a non-empty `identified_user_id`, otherwise use the anonymous `user_id`. Older Rybbit tables without `identified_user_id` automatically fall back to `user_id`.
 
 Remark42 activity comes from its public aggregate/list APIs. The job reads recent comment records only to count creation timestamps by thread and never writes comment text to ClickHouse.
 
 Kudos snapshots come from VISCERIUM's existing `/api/kudos/:community_id` endpoint. No second Kudos store is created.
+
+## Route history
+
+`community_id` is permanent but Rybbit pageviews are recorded against the URL that existed at the time of the visit. Historical routes therefore live in:
+
+```text
+Site/src/data/reporting-route-aliases.json
+```
+
+When a Community page moves, add its old route to that file in the same change that moves the page. Do not reuse one historical pathname for two different `community_id` values.
+
+`reconcile-route-aliases.mjs` recalculates pageviews and unique visitors from all known paths for an article before updating its aggregate row. Unique visitors are calculated once across the combined raw events, not summed from per-path counts.
+
+The September 2026 rename of the human-authorship commentary is already recorded, so the initial backfill includes traffic from both its original filename-derived route and `/statements/human-authorship-and-ai/`.
 
 ## Apply the schema
 
@@ -58,25 +72,28 @@ There are no analytics API keys in this file. The job talks to the local ClickHo
 
 ## First run
 
-Deploy the site change first so `/reporting-pages.json` exists. Then run a dry run for yesterday:
+Deploy the site change first so `/reporting-pages.json` exists. Then run dry reads for yesterday:
 
 ```bash
 set -a
 . /etc/viscerium/analytics.env
 set +a
 node archive.mjs --dry-run
+node reconcile-route-aliases.mjs --dry-run
 ```
 
-A normal single-day run collects current comment and Kudos snapshots by default:
+A normal single-day run collects current comment and Kudos snapshots, then reconciles any historical URL aliases:
 
 ```bash
 node archive.mjs
+node reconcile-route-aliases.mjs
 ```
 
 An explicit historical date does not attach today's snapshots unless you ask for them:
 
 ```bash
 node archive.mjs --date=2026-09-13
+node reconcile-route-aliases.mjs --date=2026-09-13
 ```
 
 ## Backfill
@@ -85,6 +102,7 @@ The current Rybbit history starts on 26 August 2026. Backfill daily page traffic
 
 ```bash
 node archive.mjs --from=2026-08-26 --to=2026-09-13
+node reconcile-route-aliases.mjs --from=2026-08-26 --to=2026-09-13
 ```
 
 Backfill does not fabricate historical snapshot totals. It leaves those columns `NULL`.
@@ -93,9 +111,10 @@ After daily validation, create a whole-month aggregate directly from the raw Ryb
 
 ```bash
 node archive.mjs --month=2026-08
+node reconcile-route-aliases.mjs --month=2026-08
 ```
 
-Monthly snapshot totals are off by default. Add `--snapshots` only when you deliberately want a current snapshot attached to that month row.
+Monthly snapshot totals are off by default. Add `--snapshots` to `archive.mjs` only when you deliberately want a current snapshot attached to that month row.
 
 ## Validate before retention changes
 
@@ -115,24 +134,25 @@ FROM viscerium_metrics.site_daily
 WHERE date = '2026-09-13';
 ```
 
-Also inspect several articles by `community_id` and pathname. Re-run the same date and confirm the archive still contains one row per page for that date.
+Also inspect several articles by `community_id` and pathname, including `11e8b074-d296-478b-8d90-29b11cf24e4b` around 8 September 2026 to verify its renamed route. Re-run the same date and confirm the archive still contains one row per page for that date.
 
 Do not add or change a TTL on `analytics.events` until the backfill and these comparisons pass.
 
 ## Install the daily timer
 
-Copy the collector and units:
+Copy the collector, route reconciler and units:
 
 ```bash
 sudo install -d -m 0755 /opt/viscerium-analytics
 sudo install -m 0644 archive.mjs /opt/viscerium-analytics/archive.mjs
+sudo install -m 0644 reconcile-route-aliases.mjs /opt/viscerium-analytics/reconcile-route-aliases.mjs
 sudo install -m 0644 systemd/viscerium-analytics-archive.service /etc/systemd/system/
 sudo install -m 0644 systemd/viscerium-analytics-archive.timer /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now viscerium-analytics-archive.timer
 ```
 
-The timer runs at 00:15 Europe/London and uses `Persistent=true`, so a missed run executes after the host comes back.
+The timer runs at 00:15 Europe/London and uses `Persistent=true`, so a missed run executes after the host comes back. The service archives first and reconciles known historical routes second.
 
 Check it with:
 
@@ -143,9 +163,9 @@ journalctl -u viscerium-analytics-archive.service -n 100 --no-pager
 
 ## Idempotence
 
-Before inserting a period, the collector synchronously deletes existing aggregate rows for that same date or month. Re-running a period replaces it instead of double-counting it.
+Before inserting a period, the collector synchronously deletes existing aggregate rows for that same date or month. Re-running a period replaces it instead of double-counting it. Route reconciliation then updates only pageviews and unique visitors for pages with historical aliases.
 
-The source Rybbit tables are read-only to this job. The only ClickHouse writes are to `viscerium_metrics`.
+The source Rybbit tables are read-only to these jobs. The only ClickHouse writes are to `viscerium_metrics`.
 
 ## Known ceilings
 
