@@ -7,6 +7,7 @@ import {
   monthRange,
   parseArgs,
 } from '../../Infrastructure/analytics/archive.mjs';
+import { buildAliasStatsQuery } from '../../Infrastructure/analytics/reconcile-route-aliases.mjs';
 
 const id = '2bef0971-7237-40d5-b247-b7812c0dad55';
 
@@ -44,4 +45,25 @@ test('Remark42 activity is counted by permanent community thread ID and London d
     { time: '2026-09-14T23:00:00Z', locator: { url: `https://www.viscerium.co.uk/community/${id}/` } },
   ], '2026-09-14', '2026-09-15');
   assert.equal(counts.get(id), 2);
+});
+
+test('route alias reconciliation counts visitors once across old and current paths', () => {
+  const query = buildAliasStatsQuery({
+    columns: new Set(['identified_user_id']),
+    hostnames: ['www.viscerium.co.uk', 'viscerium.co.uk'],
+    start: '2026-09-08',
+    end: '2026-09-09',
+    page: {
+      community_id: '11e8b074-d296-478b-8d90-29b11cf24e4b',
+      pathname: '/statements/human-authorship-and-ai/',
+      pathnames: [
+        '/statements/human-authorship-and-ai/',
+        '/statements/human-authorship,-ai-&-the-tools-we-use/',
+      ],
+    },
+  });
+  assert.match(query, /uniqExactIf\(s\.effective_user_id/);
+  assert.match(query, /anyIf\(identified_user_id/);
+  assert.match(query, /\/statements\/human-authorship-and-ai\//);
+  assert.match(query, /\/statements\/human-authorship,-ai-&-the-tools-we-use\//);
 });
