@@ -25,13 +25,10 @@ test('i18n defaults to British English without enabling translated routes', asyn
   assert.equal(siteConfig.i18n.defaultLocale, DEFAULT_LOCALE);
 
   const config = await fs.readFile(astroConfigUrl, 'utf8');
-  const localesBlock = config.match(/locales:\s*{([\s\S]*?)\n\s{6}},\n\s{6}pagefind:/)?.[1];
-  assert.ok(localesBlock, 'missing Starlight locales block');
   assert.match(
-    localesBlock,
-    /^\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale/s,
+    config,
+    /locales:\s*{\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale,?\s*},\s*},\s*pagefind:/s,
   );
-  assert.doesNotMatch(localesBlock, /^\s*(?!root:)[\w-]+:\s*{/m);
 });
 
 test('the default Starlight catalog contains non-empty VISCERIUM UI strings', () => {
