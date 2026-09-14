@@ -35,7 +35,9 @@ test('footer uses the agreed navigation groups and keeps HUMAN MADE separate', a
     assert.match(footer, new RegExp(`href=["{]${href.replaceAll('/', '\\/').replaceAll('.', '\\.')}["}]`));
   }
 
-  assert.match(footer, /class="footer-wayfinder__primary" href="\/start-here\/"/);
+  assert.match(footer, /<a href="\/start-here\/">\{t\('viscerium\.footer\.startHere'\)\}<\/a>/);
+  assert.doesNotMatch(footer, /footer-wayfinder__primary/);
+  assert.match(footer, /\.footer-wayfinder__links a\s*\{[^}]*font-weight:\s*400;/s);
   assert.match(footer, /class="footer-policy"/);
   assert.match(footer, /href="\/policies\/content-production\/"/);
 });
