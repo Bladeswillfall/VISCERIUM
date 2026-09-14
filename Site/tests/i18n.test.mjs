@@ -27,7 +27,7 @@ test('i18n defaults to British English without enabling translated routes', asyn
   const config = await fs.readFile(astroConfigUrl, 'utf8');
   assert.match(
     config,
-    /locales:\s*{\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale,?\s*},\s*},\s*pagefind:/s,
+    /locales:\s*{\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale,?\s*},?\s*},\s*pagefind:/s,
   );
 });
 
