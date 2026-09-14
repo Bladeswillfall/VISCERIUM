@@ -16,7 +16,6 @@ interface Props {
 }
 
 const { triggerLabel, panelLabel, options } = Astro.props;
-const panelId = 'codex-language-menu-panel';
 const flagSrc = {
   gb: '/flags/gb.svg',
   fr: '/flags/fr.svg',
@@ -24,24 +23,13 @@ const flagSrc = {
 } as const;
 ---
 
-<codex-language-menu class="codex-language-menu">
-  <button
-    class="codex-language-menu__trigger"
-    type="button"
-    aria-label={triggerLabel}
-    aria-expanded="false"
-    aria-controls={panelId}
-  >
+<details class="codex-language-menu" data-codex-language-menu>
+  <summary class="codex-language-menu__trigger">
     <span class="codex-language-menu__icon" aria-hidden="true"></span>
-  </button>
+    <span class="codex-language-menu__sr-only">{triggerLabel}</span>
+  </summary>
 
-  <nav
-    id={panelId}
-    class="codex-language-menu__panel"
-    aria-label={panelLabel}
-    data-language-panel
-    hidden
-  >
+  <nav class="codex-language-menu__panel" aria-label={panelLabel}>
     <p class="codex-language-menu__title">{panelLabel}</p>
     <ul class="codex-language-menu__list">
       {
@@ -59,8 +47,6 @@ const flagSrc = {
                 alt=""
                 width="28"
                 height="18"
-                loading="eager"
-                decoding="async"
               />
               <span class="codex-language-menu__names">
                 <span class="codex-language-menu__native" lang={option.locale}>
@@ -81,12 +67,11 @@ const flagSrc = {
       }
     </ul>
   </nav>
-</codex-language-menu>
+</details>
 
 <style>
   .codex-language-menu {
     position: relative;
-    display: block;
     width: 2.5rem;
     height: 2.5rem;
     flex: 0 0 2.5rem;
@@ -98,16 +83,19 @@ const flagSrc = {
     width: 2.5rem;
     height: 2.5rem;
     place-items: center;
-    border: 0;
     border-radius: 999px;
-    padding: 0;
     background: var(--sl-color-bg-nav, var(--sl-color-black));
     color: var(--sl-color-gray-2);
     cursor: pointer;
+    list-style: none;
+  }
+
+  .codex-language-menu__trigger::-webkit-details-marker {
+    display: none;
   }
 
   .codex-language-menu__trigger:hover,
-  .codex-language-menu__trigger[aria-expanded='true'] {
+  .codex-language-menu[open] .codex-language-menu__trigger {
     background: var(--sl-color-gray-6);
     color: var(--sl-color-white);
   }
@@ -124,7 +112,6 @@ const flagSrc = {
     background: currentColor;
     -webkit-mask: url('/icons/i18n.svg') center / contain no-repeat;
     mask: url('/icons/i18n.svg') center / contain no-repeat;
-    pointer-events: none;
   }
 
   .codex-language-menu__panel {
@@ -204,60 +191,38 @@ const flagSrc = {
     visibility: hidden;
     justify-self: end;
     color: var(--sl-color-white);
-    font-size: .95rem;
-    line-height: 1;
   }
 
   .codex-language-menu__link[aria-current='page'] .codex-language-menu__current {
     visibility: visible;
   }
 
-  @media (forced-colors: active) {
-    .codex-language-menu__trigger,
-    .codex-language-menu__panel,
-    .codex-language-menu__link {
-      border: 1px solid ButtonText;
-    }
-
-    .codex-language-menu__flag {
-      forced-color-adjust: none;
-    }
+  .codex-language-menu__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
   }
 </style>
 
 <script>
-  class CodexLanguageMenu extends HTMLElement {
-    connectedCallback() {
-      if (this.dataset.ready === 'true') return;
-      this.dataset.ready = 'true';
+  const languageMenus = [...document.querySelectorAll<HTMLDetailsElement>('[data-codex-language-menu]')];
 
-      const trigger = this.querySelector('button[aria-controls]');
-      const panel = this.querySelector('[data-language-panel]');
-      if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
-
-      const close = (restoreFocus = false) => {
-        panel.hidden = true;
-        trigger.setAttribute('aria-expanded', 'false');
-        if (restoreFocus) trigger.focus();
-      };
-
-      trigger.addEventListener('click', () => {
-        const opening = panel.hidden;
-        panel.hidden = !opening;
-        trigger.setAttribute('aria-expanded', String(opening));
-      });
-
-      document.addEventListener('click', (event) => {
-        if (!panel.hidden && event.target instanceof Node && !this.contains(event.target)) close();
-      });
-
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !panel.hidden) close(true);
-      });
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Node)) return;
+    for (const menu of languageMenus) {
+      if (menu.open && !menu.contains(event.target)) menu.open = false;
     }
-  }
+  });
 
-  if (!customElements.get('codex-language-menu')) {
-    customElements.define('codex-language-menu', CodexLanguageMenu);
-  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const menu = languageMenus.find(({ open }) => open);
+    if (!menu) return;
+    menu.open = false;
+    menu.querySelector<HTMLElement>('summary')?.focus();
+  });
 </script>
