@@ -1,10 +1,13 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import reportingRouteAliases from '../data/reporting-route-aliases.json';
 import { slugToRoute } from '../lib/codex-paths.mjs';
 import { pageEra, validEntityId } from '../lib/era-context.mjs';
 import { resolveCommunityForPage } from '../lib/page-kind.mjs';
 
 export const prerender = true;
+
+const routeAliases = reportingRouteAliases as Record<string, string[]>;
 
 export const GET: APIRoute = async () => {
   const docs = await getCollection('docs');
@@ -16,10 +19,14 @@ export const GET: APIRoute = async () => {
       || !resolveCommunityForPage(entry.data, entry.id)
     ) return [];
 
+    const pathname = slugToRoute(entry.data.slug ?? entry.id);
+    const pathnames = [...new Set([pathname, ...(routeAliases[communityId] ?? [])])];
+
     return [{
       community_id: communityId,
       entity_id: validEntityId(entry.data.entity_id) ? entry.data.entity_id : null,
-      pathname: slugToRoute(entry.data.slug ?? entry.id),
+      pathname,
+      pathnames,
       title: String(entry.data.title ?? ''),
       era: pageEra(entry.data, entry.id) ?? null,
       content_type: String(entry.data.type ?? 'article'),
