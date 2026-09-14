@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import i18next from 'i18next';
 import siteConfig, { DEFAULT_LOCALE } from '../site.config.mjs';
 import defaultTranslations from '../src/content/i18n/en-GB.json' with { type: 'json' };
+import { I18N_PLACEHOLDERS, I18N_ROADMAP } from '../src/lib/i18n-roadmap.mjs';
 import { formatDate, formatList, formatNumber } from '../src/lib/i18n.mjs';
 import { timelineMessage, timelinePlural } from '../src/lib/timeline/i18n.mjs';
 
@@ -26,9 +27,8 @@ test('i18n defaults to British English without enabling translated routes', asyn
   const config = await fs.readFile(astroConfigUrl, 'utf8');
   assert.match(
     config,
-    /locales:\s*{\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale/s,
+    /locales:\s*{\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale,?\s*},?\s*},\s*pagefind:/s,
   );
-  assert.doesNotMatch(config, /locales:\s*{\s*(?!root:)[a-z]{2}/i);
 });
 
 test('the default Starlight catalog contains non-empty VISCERIUM UI strings', () => {
@@ -45,6 +45,21 @@ test('the default Starlight catalog contains non-empty VISCERIUM UI strings', ()
     'viscerium.relationship.controls',
     'viscerium.webmentions.responses.other',
   ]) assert.ok(defaultTranslations[key], `missing ${key}`);
+});
+
+test('French and German placeholders cover every custom UI key without publishing either locale', () => {
+  const expectedKeys = Object.keys(defaultTranslations)
+    .filter((key) => key.startsWith('viscerium.'));
+
+  assert.deepEqual(I18N_ROADMAP.published.map(({ locale }) => locale), ['en-GB']);
+  assert.deepEqual(I18N_ROADMAP.placeholders.map(({ locale }) => locale), ['fr-FR', 'de-DE']);
+  assert.deepEqual(I18N_ROADMAP.nextPriorities.map(({ label }) => label), ['Spanish', 'Chinese', 'Russian']);
+
+  for (const locale of ['fr-FR', 'de-DE']) {
+    const placeholder = I18N_PLACEHOLDERS[locale];
+    assert.deepEqual(Object.keys(placeholder), expectedKeys);
+    assert.ok(Object.values(placeholder).every((value) => value === null));
+  }
 });
 
 test('the native i18next layer falls back to the default catalog', async () => {
