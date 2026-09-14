@@ -42,7 +42,7 @@ The source of the public Codex and the machinery that builds it.
 - `Tools/` — creator-facing tools and integrations.
 - `Architecture/` — how the pieces fit together.
   
-Unpublished Lore, stories, working files and private material live in the separate `VISCERIUM-Workshop` repository.
+Unpublished Lore, stories, working files and private material live in the separate `VISCERIUM-Workshop` repository.  
 **If GitHub can read it here, it is public.** Hiding a file from the website does not make it private.
 
 ## Authorship & rights
