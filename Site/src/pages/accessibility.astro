@@ -1,5 +1,6 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import siteConfig from '../../site.config.mjs';
 import articlePagesStylesheet from '../styles/article-pages.css?url';
 ---
 
@@ -27,31 +28,31 @@ import articlePagesStylesheet from '../styles/article-pages.css?url';
     <p>VISCERIUM should be open to everyone who wants to explore it. We are committed to making the Codex accessible to disabled people and to removing barriers that make it harder to read, navigate, understand or interact with the site.</p>
 
     <h2>Target</h2>
-    <p>We are working toward WCAG 2.2 Level AA across the public VISCERIUM Codex where reasonably practicable. We are not claiming full conformance yet.</p>
+    <p>We are working toward <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> Level AA across the public VISCERIUM Codex where reasonably practicable. We are not claiming full conformance yet.</p>
 
     <h2>What we are doing</h2>
     <ul>
-      <li>Use semantic HTML before ARIA, with landmarks, headings and labels that describe the structure of the page.</li>
+      <li>Use semantic HTML before <a href="https://www.w3.org/WAI/standards-guidelines/aria/">ARIA</a>, with landmarks, headings and labels that describe the structure of the page.</li>
       <li>Support keyboard navigation and visible focus states for interactive controls.</li>
       <li>Aim for usable pointer and touch targets, with a 44 CSS pixel minimum where VISCERIUM controls their dimensions.</li>
       <li>Avoid relying on colour alone to communicate state, selection, errors or relationships.</li>
       <li>Respect reduced-motion and forced-colour or high-contrast preferences.</li>
       <li>Provide useful alternative text for meaningful images and explicitly mark decorative images as decorative.</li>
       <li>Provide readable alternatives where interactive maps, graphs, timelines or other visualisations cannot convey the same information accessibly.</li>
-      <li>Treat accessibility (A11y) and internationalisation (I18n) as connected parts of the same interface, so that language, direction, labels and keyboard behaviour remain usable across locales.</li>
+      <li>Treat accessibility (A11y) and <a href="https://www.w3.org/International/">internationalisation (I18n)</a> as connected parts of the same interface, so that language, direction, labels and keyboard behaviour remain usable across locales.</li>
       <li>Provide reader settings for selected presentation and content preferences.</li>
       <li>Announce important dynamic interface changes to assistive technology where appropriate.</li>
-      <li>Run automated Axe accessibility checks in our continuous integration tests to catch common WCAG A and AA accessibility regressions, alongside keyboard-only and manual accessibility testing.</li>
+      <li>Run automated <a href="https://github.com/dequelabs/axe-core">Axe</a> accessibility checks in our continuous integration tests to catch common WCAG A and AA accessibility regressions, alongside keyboard-only and manual accessibility testing.</li>
       <li>Continue to identify and fix accessibility problems as the Codex develops.</li>
     </ul>
 
     <h2>Known limitations</h2>
     <p>[Drafting note: replace this paragraph with the verified list of known accessibility issues from the current audit. For each issue, state what is affected, who may be affected, any available workaround and the planned fix or review point. Do not claim full WCAG conformance while known failures remain.]</p>
 
-    <p>Interactive maps, graphs, timelines and other worldbuilding tools are harder to make accessible than ordinary text. Some barriers may remain while those systems are reviewed and improved.</p>
+    <p>Interactive <a href="/maps/">maps</a>, <a href="/graph/">graphs</a>, timelines and other worldbuilding tools are harder to make accessible than ordinary text. Some barriers may remain while those systems are reviewed and improved.</p>
 
     <h2>Reporting an accessibility problem</h2>
-    <p>If VISCERIUM is difficult to use because of an accessibility barrier, use the Contact page. Public site bugs can also go through Support or the public repository when appropriate. Do not post private or sensitive information in a public issue.</p>
+    <p>If VISCERIUM is difficult to use because of an accessibility barrier, use the <a href="/contact/">Contact page</a>. Public site bugs can also go through <a href="/support/">Support</a> or the {siteConfig.githubRepoUrl ? <a href={siteConfig.githubRepoUrl}>public repository</a> : 'public repository'} when appropriate. Do not post private or sensitive information in a public issue.</p>
 
     <p>Useful reports identify the page or feature, what you expected, what happened instead, and - if you are comfortable sharing it - the browser or assistive technology involved. Technical detail is optional. The problem is enough to start.</p>
 
