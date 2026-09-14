@@ -28,6 +28,25 @@ test('StoryLine state helper is syntactically valid and seeds native scene field
   assert.match(script, /storyLine\?\.fieldTemplates/);
 });
 
+test('StoryLine project inference preserves nested project roots', () => {
+  const loadInferProjectBase = new Function('module', 'exports', `${script}\nreturn inferProjectBase;`);
+  const inferProjectBase = loadInferProjectBase({ exports: {} }, {});
+  const tp = {
+    app: {
+      plugins: {
+        plugins: {
+          storyline: { settings: { storyLineRoot: 'Stories' } },
+        },
+      },
+    },
+  };
+
+  assert.equal(inferProjectBase(tp, 'Stories/My Novel/Scenes/Opening.md'), 'Stories/My Novel');
+  assert.equal(inferProjectBase(tp, 'Stories/My Novel/My Novel.md'), 'Stories/My Novel');
+  assert.equal(inferProjectBase(tp, 'Stories/My Series/Book One/Scenes/Opening.md'), 'Stories/My Series/Book One');
+  assert.equal(inferProjectBase(tp, 'Lore/Events/Battle.md'), null);
+});
+
 test('story changes are appended as authored event history', () => {
   assert.match(script, /viscerium_events/);
   assert.match(script, /kind: "information"/);
@@ -48,6 +67,12 @@ test('Templater exposes one story-change action and one derived state view', () 
   assert.ok(templaterConfig.startup_templates.includes('Templates/_Startup/Ensure StoryLine Fields.md'));
 });
 
+test('Open Story State passes the selected project into the shared state view', () => {
+  assert.match(script, /workspace\.__visceriumStoryStateProjectBase = project\.base/);
+  assert.match(stateView, /workspace\?\.__visceriumStoryStateProjectBase/);
+  assert.match(stateView, /delete app\.workspace\.__visceriumStoryStateProjectBase/);
+});
+
 test('Story State derives the four working views from scene events', () => {
   assert.match(stateView, /```dataviewjs/);
   assert.match(stateView, /viscerium_events/);
@@ -57,12 +82,15 @@ test('Story State derives the four working views from scene events', () => {
   assert.match(stateView, /Relationships \/ Power/);
   assert.match(stateView, /consequence-update/);
   assert.match(stateView, /Dependence is rising while trust is falling/);
+  assert.match(stateView, /latestByActorType\.set\(`\$\{event\.actor\}\\u0000\$\{event\.type\}`/);
   assert.doesNotMatch(stateView, /processFrontMatter|vault\.modify/);
 });
 
 test('Story State presentation follows the creator UI grammar', () => {
   assert.match(stateStyles, /\.vc-story-state/);
-  assert.match(stateStyles, /border-bottom: 1px solid/);
+  assert.match(stateStyles, /\.vc-story-state-title-row/);
+  assert.doesNotMatch(stateView, /vc-story-state-kicker|STORYLINE/);
+  assert.doesNotMatch(stateStyles, /border-bottom:\s*1px solid/);
   assert.doesNotMatch(stateStyles, /box-shadow|linear-gradient|border-radius:\s*(?!4px)/);
   assert.ok(appearance.enabledCssSnippets.includes('Story State'));
 });
