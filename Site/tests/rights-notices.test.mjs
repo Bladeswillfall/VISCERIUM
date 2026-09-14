@@ -83,9 +83,10 @@ test('README badges communicate the mixed licensing model', () => {
   const readme = read('README.md');
   assert.match(readme, /Creative_IP-All_Rights_Reserved/);
   assert.match(readme, /First--party_Code-MIT/);
+  assert.match(readme, /Creative_Canon-Human--made/);
   assert.match(readme, /Third--party_Software-Upstream_Licences/);
-  assert.match(readme, /Canon-No_Generative_AI/);
-  assert.match(readme, /Licensing summary:/);
+  assert.match(readme, /Published VISCERIUM Lore and creative canon are human-made\./);
+  assert.match(readme, /Original first-party code is separately available under the \*\*\[MIT License\]/);
 });
 
 test('package scripts and workflows protect managed notice freshness', () => {
