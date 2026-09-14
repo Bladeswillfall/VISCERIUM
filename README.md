@@ -30,7 +30,7 @@ Different centuries. Same history.
 Every era inherits what the last one built, buried, misunderstood or failed to kill.
 
 ## Enter the Codex
-The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of the setting.
+The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of the setting.  
 **[Start here](https://www.viscerium.co.uk/start-here/)** for the introduction.  
 **[Follow the timeline](https://www.viscerium.co.uk/timelines/super/)** to watch history accumulate.  
 **[Enter the Codex](https://www.viscerium.co.uk/)** to explore directly.
@@ -41,6 +41,7 @@ The source of the public Codex and the machinery that builds it.
 - `Site/` — the Astro/Starlight website.
 - `Tools/` — creator-facing tools and integrations.
 - `Architecture/` — how the pieces fit together.
+  
 Unpublished Lore, stories, working files and private material live in the separate `VISCERIUM-Workshop` repository.
 **If GitHub can read it here, it is public.** Hiding a file from the website does not make it private.
 
@@ -67,11 +68,11 @@ If that changes, it changes formally — not retroactively by aspiration.
 <!-- RIGHTS:VISCERIUM_PLANNED:END -->
 
 ## Get involved
-Found a typo, broken link, bad fact or site bug? **[Report it](https://www.viscerium.co.uk/support/).**
-Want to improve the code, documentation, accessibility, tooling or interface? Read **[CONTRIBUTING.md](CONTRIBUTING.md)** and open a pull request.
-Want to make something stranger? Writing, artwork and other creative collaborations start through the **[contact page](https://www.viscerium.co.uk/contact/)**.
-A pull request does not transfer copyright or make something canon.
-VISCERIUM remains curated.
+Found a typo, broken link, bad fact or site bug? **[Report it](https://www.viscerium.co.uk/support/).**  
+Want to improve the code, documentation, accessibility, tooling or interface? Read **[CONTRIBUTING.md](CONTRIBUTING.md)** and open a pull request.  
+Want to make something stranger? Writing, artwork and other creative collaborations start through the **[contact page](https://www.viscerium.co.uk/contact/)**.  
+A pull request does not transfer copyright or make something canon.  
+VISCERIUM remains curated.  
 
 ## Working here
 **Creators:** [`Vault/Home.md`](Vault/Home.md)  
