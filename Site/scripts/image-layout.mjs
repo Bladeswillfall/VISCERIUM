@@ -21,6 +21,16 @@ function safeClassToken(value) {
   return String(value ?? '').toLowerCase().replace(/[^a-z0-9_-]+/g, '');
 }
 
+function readableImageAlt(target) {
+  const filename = String(target ?? '').replace(/\\/g, '/').split('/').pop() ?? '';
+  const label = filename
+    .replace(/\.[^.]+$/, '')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return label ? `${label[0].toUpperCase()}${label.slice(1)}` : undefined;
+}
+
 export function parseObsidianImageEmbed(rawSpec) {
   const parts = String(rawSpec ?? '').split('|').map((part) => part.trim());
   const target = parts.shift() ?? '';
@@ -71,7 +81,7 @@ export function parseObsidianImageEmbed(rawSpec) {
     shape = false;
   }
 
-  const alt = explicitAlt || altParts.join(' | ') || undefined;
+  const alt = explicitAlt || altParts.join(' | ') || readableImageAlt(target);
   const hasLayout = Boolean(alignment || width || gap !== undefined || shape);
 
   return {

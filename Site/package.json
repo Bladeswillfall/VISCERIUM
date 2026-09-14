@@ -52,18 +52,18 @@
     "@astrojs/partytown": "^2.1.7",
     "@astrojs/sitemap": "3.7.3",
     "@astrojs/starlight": "^0.41.3",
-    "astro": "^7.1.1",
-    "cytoscape": "3.34.0",
+    "astro": "^7.2.8",
+    "cytoscape": "3.34.3",
     "cytoscape-dagre": "4.0.0",
     "fuse.js": "7.5.0",
     "gray-matter": "^4.0.3",
     "leaflet": "1.9.4",
     "leaflet.control.layers.tree": "1.2.0",
-    "starlight-changelogs": "^0.6.0",
-    "starlight-scroll-to-top": "^1.0.1",
-    "starlight-tags": "^1.0.1",
-    "starlight-telescope": "^1.0.0",
-    "vis-timeline": "8.5.1"
+    "starlight-changelogs": "^0.7.0",
+    "starlight-scroll-to-top": "^2.0.0",
+    "starlight-tags": "^2.0.0",
+    "starlight-telescope": "^2.0.0",
+    "vis-timeline": "8.5.4"
   },
   "engines": {
     "node": ">=24 <25"
@@ -96,6 +96,6 @@
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
-    "eslint": "10.9.0"
+    "eslint": "10.10.0"
   }
 }
