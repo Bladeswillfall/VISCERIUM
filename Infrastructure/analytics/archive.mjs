@@ -168,12 +168,17 @@ function customPropertyExpression(columns, key) {
   return null;
 }
 
-function fetchPageStats({ columns, hostnames, start, end }) {
+export function buildPageStatsQuery({ columns, hostnames, start, end, pages }) {
   const userExpr = sessionUserExpression(columns);
   const hosts = hostnameFilter(hostnames);
   const time = timeFilter(start, end);
-  return queryClickHouse(`
-    WITH SessionUsers AS (
+  const aliases = pages.flatMap((page) => page.pathnames.map((pathname) =>
+    `tuple(${sqlString(page.community_id)}, ${sqlString(pathname)})`,
+  ));
+  if (!aliases.length) throw new Error('Reporting manifest did not contain any page paths');
+  return `
+    WITH
+    SessionUsers AS (
       SELECT
         session_id,
         ${userExpr} AS effective_user_id
@@ -181,19 +186,29 @@ function fetchPageStats({ columns, hostnames, start, end }) {
       WHERE ${hosts}
         AND ${time}
       GROUP BY session_id
+    ),
+    PageAliases AS (
+      SELECT
+        tupleElement(alias, 1) AS community_id,
+        tupleElement(alias, 2) AS pathname
+      FROM (SELECT arrayJoin([${aliases.join(', ')}]) AS alias)
     )
     SELECT
-      e.pathname AS pathname,
-      count() AS pageviews,
-      uniqExactIf(s.effective_user_id, s.effective_user_id != '') AS unique_visitors
+      a.community_id AS community_id,
+      toUInt64(count()) AS pageviews,
+      toUInt64(uniqExactIf(s.effective_user_id, s.effective_user_id != '')) AS unique_visitors
     FROM analytics.events e
     INNER JOIN SessionUsers s USING (session_id)
+    INNER JOIN PageAliases a ON e.pathname = a.pathname
     WHERE ${hosts.replaceAll('hostname', 'e.hostname')}
       AND ${time.replaceAll('timestamp', 'e.timestamp')}
       AND e.type = 'pageview'
-      AND e.pathname != ''
-    GROUP BY e.pathname
-  `);
+    GROUP BY a.community_id
+  `;
+}
+
+function fetchPageStats(input) {
+  return queryClickHouse(buildPageStatsQuery(input));
 }
 
 function fetchSiteStats({ columns, hostnames, start, end }) {
@@ -258,15 +273,30 @@ async function fetchJson(url, init = {}) {
 async function fetchManifest(url) {
   const payload = await fetchJson(url, { headers: { Accept: 'application/json' } });
   if (!Array.isArray(payload.pages)) throw new Error('Reporting manifest did not contain a pages array');
-  const seen = new Set();
+  const communityIds = new Set();
+  const claimedPaths = new Map();
   return payload.pages.map((page) => {
     if (!UUID_RE.test(page.community_id)) throw new Error(`Invalid community_id in reporting manifest: ${page.community_id}`);
-    if (seen.has(page.community_id)) throw new Error(`Duplicate community_id in reporting manifest: ${page.community_id}`);
-    seen.add(page.community_id);
+    if (communityIds.has(page.community_id)) throw new Error(`Duplicate community_id in reporting manifest: ${page.community_id}`);
+    communityIds.add(page.community_id);
     if (typeof page.pathname !== 'string' || !page.pathname.startsWith('/')) {
       throw new Error(`Invalid pathname for ${page.community_id}`);
     }
-    return page;
+    if (page.pathnames !== undefined && !Array.isArray(page.pathnames)) {
+      throw new Error(`Invalid pathname list for ${page.community_id}`);
+    }
+    const pathnames = [...new Set([page.pathname, ...(page.pathnames ?? [])])];
+    if (pathnames.some((pathname) => typeof pathname !== 'string' || !pathname.startsWith('/'))) {
+      throw new Error(`Invalid pathname list for ${page.community_id}`);
+    }
+    for (const pathname of pathnames) {
+      const previous = claimedPaths.get(pathname);
+      if (previous && previous !== page.community_id) {
+        throw new Error(`Reporting pathname ${pathname} is claimed by both ${previous} and ${page.community_id}`);
+      }
+      claimedPaths.set(pathname, page.community_id);
+    }
+    return { ...page, pathnames };
   });
 }
 
@@ -390,14 +420,15 @@ function toUInt(value) {
 }
 
 function buildRows({ task, pages, pageStats, siteStats, activity, commentsCreated, commentTotals, kudosTotals, snapshots }) {
-  const statsByPath = new Map(pageStats.map((row) => [row.pathname, row]));
+  const statsByCommunity = new Map(pageStats.map((row) => [row.community_id, row]));
   const collectedAt = new Date().toISOString().replace('T', ' ').replace('Z', '');
   const pageRows = pages.map((page) => {
-    const stats = statsByPath.get(page.pathname) ?? {};
+    const stats = statsByCommunity.get(page.community_id) ?? {};
     const events = activity.get(page.community_id) ?? { kudos_added: 0, kudos_removed: 0, shares: 0 };
     const kudos = snapshots ? kudosTotals.get(page.community_id) : undefined;
     return {
-      [task.kind === 'monthly' ? 'month' : 'date']: task.key,
+      period_start: task.key,
+      period_kind: task.kind,
       community_id: page.community_id,
       entity_id: page.entity_id ?? null,
       pathname: page.pathname,
@@ -406,7 +437,7 @@ function buildRows({ task, pages, pageStats, siteStats, activity, commentsCreate
       content_type: page.content_type ?? 'article',
       pageviews: toUInt(stats.pageviews),
       unique_visitors: toUInt(stats.unique_visitors),
-      comments_created: commentsCreated.has(page.community_id) ? commentsCreated.get(page.community_id) : 0,
+      comments_created: commentsCreated.get(page.community_id) ?? 0,
       comments_total: snapshots ? (commentTotals.get(page.community_id) ?? 0) : null,
       kudos_added: toUInt(events.kudos_added),
       kudos_removed: toUInt(events.kudos_removed),
@@ -419,7 +450,8 @@ function buildRows({ task, pages, pageStats, siteStats, activity, commentsCreate
   });
 
   const siteRow = {
-    [task.kind === 'monthly' ? 'month' : 'date']: task.key,
+    period_start: task.key,
+    period_kind: task.kind,
     pageviews: toUInt(siteStats.pageviews),
     unique_visitors: toUInt(siteStats.unique_visitors),
     comments_created: [...commentsCreated.values()].reduce((sum, value) => sum + value, 0),
@@ -436,24 +468,24 @@ function buildRows({ task, pages, pageStats, siteStats, activity, commentsCreate
 }
 
 function writeRows(task, pageRows, siteRow) {
-  const pageTable = `viscerium_metrics.page_${task.kind}`;
-  const siteTable = `viscerium_metrics.site_${task.kind}`;
-  const key = task.kind === 'monthly' ? 'month' : 'date';
+  const pageTable = 'viscerium_metrics.page_periods';
+  const siteTable = 'viscerium_metrics.site_periods';
   const literal = sqlString(task.key);
+  const kind = sqlString(task.kind);
   execClickHouse(`
-    ALTER TABLE ${pageTable} DELETE WHERE ${key} = toDate(${literal}) SETTINGS mutations_sync = 2;
-    ALTER TABLE ${siteTable} DELETE WHERE ${key} = toDate(${literal}) SETTINGS mutations_sync = 2;
+    ALTER TABLE ${pageTable} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
+    ALTER TABLE ${siteTable} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
   `);
   insertClickHouse(pageTable, pageRows);
   insertClickHouse(siteTable, [siteRow]);
 }
 
 async function archiveTask({ task, config, columns, pages, snapshots, dryRun }) {
-  const input = { columns, hostnames: config.rybbitHostnames, start: task.start, end: task.end };
+  const input = { columns, hostnames: config.rybbitHostnames, start: task.start, end: task.end, pages };
   const [pageStats, siteStats, activity, commentsCreated] = await Promise.all([
-    Promise.resolve(fetchPageStats(input)),
-    Promise.resolve(fetchSiteStats(input)),
-    Promise.resolve(fetchActivityStats(input)),
+    fetchPageStats(input),
+    fetchSiteStats(input),
+    fetchActivityStats(input),
     fetchCommentActivity({
       baseUrl: config.commentsUrl,
       siteId: config.commentsSiteId,
@@ -511,7 +543,7 @@ async function main() {
   };
 
   const [columns, pages] = await Promise.all([
-    Promise.resolve(eventsColumns()),
+    eventsColumns(),
     fetchManifest(config.manifestUrl),
   ]);
   for (const required of ['session_id', 'user_id', 'hostname', 'pathname', 'type', 'timestamp']) {

@@ -40,7 +40,7 @@ Site/src/data/reporting-route-aliases.json
 
 When a Community page moves, add its old route to that file in the same change that moves the page. Do not reuse one historical pathname for two different `community_id` values.
 
-`reconcile-route-aliases.mjs` recalculates pageviews and unique visitors from all known paths for an article before updating its aggregate row. Unique visitors are calculated once across the combined raw events, not summed from per-path counts.
+The collector calculates pageviews and unique visitors from all known paths for an article before inserting its aggregate row. Unique visitors are calculated once across the combined raw events, not summed from per-path counts.
 
 The September 2026 rename of the human-authorship commentary is already recorded, so the initial backfill includes traffic from both its original filename-derived route and `/statements/human-authorship-and-ai/`.
 
@@ -79,21 +79,18 @@ set -a
 . /etc/viscerium/analytics.env
 set +a
 node archive.mjs --dry-run
-node reconcile-route-aliases.mjs --dry-run
 ```
 
-A normal single-day run collects current comment and Kudos snapshots, then reconciles any historical URL aliases:
+A normal single-day run collects current comment and Kudos snapshots. Historical URL aliases are included in the page query:
 
 ```bash
 node archive.mjs
-node reconcile-route-aliases.mjs
 ```
 
 An explicit historical date does not attach today's snapshots unless you ask for them:
 
 ```bash
 node archive.mjs --date=2026-09-13
-node reconcile-route-aliases.mjs --date=2026-09-13
 ```
 
 ## Backfill
@@ -102,7 +99,6 @@ The current Rybbit history starts on 26 August 2026. Backfill daily page traffic
 
 ```bash
 node archive.mjs --from=2026-08-26 --to=2026-09-13
-node reconcile-route-aliases.mjs --from=2026-08-26 --to=2026-09-13
 ```
 
 Backfill does not fabricate historical snapshot totals. It leaves those columns `NULL`.
@@ -111,7 +107,6 @@ After daily validation, create a whole-month aggregate directly from the raw Ryb
 
 ```bash
 node archive.mjs --month=2026-08
-node reconcile-route-aliases.mjs --month=2026-08
 ```
 
 Monthly snapshot totals are off by default. Add `--snapshots` to `archive.mjs` only when you deliberately want a current snapshot attached to that month row.
@@ -122,16 +117,16 @@ Compare archived pageviews with the source for the same day:
 
 ```sql
 SELECT sum(pageviews)
-FROM viscerium_metrics.page_daily
-WHERE date = '2026-09-13';
+FROM viscerium_metrics.page_periods
+WHERE period_start = '2026-09-13' AND period_kind = 'daily';
 ```
 
 That total covers Community article pages only. Compare whole-site traffic with:
 
 ```sql
 SELECT pageviews, unique_visitors
-FROM viscerium_metrics.site_daily
-WHERE date = '2026-09-13';
+FROM viscerium_metrics.site_periods
+WHERE period_start = '2026-09-13' AND period_kind = 'daily';
 ```
 
 Also inspect several articles by `community_id` and pathname, including `11e8b074-d296-478b-8d90-29b11cf24e4b` around 8 September 2026 to verify its renamed route. Re-run the same date and confirm the archive still contains one row per page for that date.
@@ -140,19 +135,18 @@ Do not add or change a TTL on `analytics.events` until the backfill and these co
 
 ## Install the daily timer
 
-Copy the collector, route reconciler and units:
+Copy the collector and units:
 
 ```bash
 sudo install -d -m 0755 /opt/viscerium-analytics
 sudo install -m 0644 archive.mjs /opt/viscerium-analytics/archive.mjs
-sudo install -m 0644 reconcile-route-aliases.mjs /opt/viscerium-analytics/reconcile-route-aliases.mjs
 sudo install -m 0644 systemd/viscerium-analytics-archive.service /etc/systemd/system/
 sudo install -m 0644 systemd/viscerium-analytics-archive.timer /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now viscerium-analytics-archive.timer
 ```
 
-The timer runs at 00:15 Europe/London and uses `Persistent=true`, so a missed run executes after the host comes back. The service archives first and reconciles known historical routes second.
+The timer runs at 00:15 Europe/London and uses `Persistent=true`, so a missed run executes after the host comes back.
 
 Check it with:
 
@@ -163,7 +157,7 @@ journalctl -u viscerium-analytics-archive.service -n 100 --no-pager
 
 ## Idempotence
 
-Before inserting a period, the collector synchronously deletes existing aggregate rows for that same date or month. Re-running a period replaces it instead of double-counting it. Route reconciliation then updates only pageviews and unique visitors for pages with historical aliases.
+Before inserting a period, the collector synchronously deletes existing aggregate rows for that period start and kind. Re-running a period replaces it instead of double-counting it.
 
 The source Rybbit tables are read-only to these jobs. The only ClickHouse writes are to `viscerium_metrics`.
 
