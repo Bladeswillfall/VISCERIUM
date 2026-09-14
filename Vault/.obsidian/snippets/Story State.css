@@ -112,9 +112,9 @@
 }
 
 .viscerium-story-state .vc-story-state-tension {
-  border-left: 2px solid var(--color-orange);
+  color: var(--text-muted);
+  font-style: italic;
   margin: 4px 0;
-  padding-left: 12px;
 }
 
 .viscerium-story-state .vc-story-state-empty {
