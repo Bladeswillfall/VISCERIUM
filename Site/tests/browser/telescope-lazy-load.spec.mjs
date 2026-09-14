@@ -49,12 +49,12 @@ test('mobile footer keeps readable text and full-size route targets in light mod
   await page.goto('http://127.0.0.1:4321/', { waitUntil: 'networkidle' });
 
   const footer = page.locator('.ion-codex-footer');
-  await expect(footer.locator('.footer-wayfinder__primary')).toHaveAttribute('href', '/start-here/');
+  await expect(footer.locator('.footer-wayfinder__links a[href="/start-here/"]')).toHaveCount(1);
 
   const state = await footer.evaluate((element) => {
     const notice = element.querySelector('.footer-brand__notice');
     const description = element.querySelector('.policy-link__description');
-    const routes = [...element.querySelectorAll('.footer-wayfinder__routes a')];
+    const routes = [...element.querySelectorAll('.footer-wayfinder__links a')];
     if (!(notice instanceof HTMLElement) || !(description instanceof HTMLElement)) {
       throw new Error('Missing footer text');
     }
