@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from './archive.mjs';
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{12}$/i;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const HOST_RE = /^[a-z0-9.-]+$/i;
 
 function requiredEnv(name, fallback) {
@@ -156,7 +156,7 @@ function updateAggregateRow(task, communityId, stats) {
 
 async function reconcileTask({ task, pages, columns, hostnames, dryRun }) {
   for (const page of pages) {
-    if (!aggregateRowExists(task, page.community_id)) {
+    if (!dryRun && !aggregateRowExists(task, page.community_id)) {
       throw new Error(`Missing ${task.kind} aggregate row for ${page.community_id} at ${task.key}`);
     }
     const stats = queryClickHouse(buildAliasStatsQuery({
