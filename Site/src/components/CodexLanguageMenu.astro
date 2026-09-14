@@ -205,6 +205,17 @@ const flagSrc = {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
   }
+
+  @media (forced-colors: active) {
+    .codex-language-menu__icon {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+
+    .codex-language-menu__flag {
+      forced-color-adjust: none;
+    }
+  }
 </style>
 
 <script>
