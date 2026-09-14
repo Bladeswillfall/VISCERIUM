@@ -1,0 +1,78 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import articlePagesStylesheet from '../styles/article-pages.css?url';
+---
+
+<StarlightPage
+  hasSidebar={false}
+  frontmatter={{
+    title: 'Privacy',
+    description: 'How VISCERIUM handles analytics, comments, browser storage, logs, security, and privacy requests.',
+    pagefind: false,
+    tableOfContents: false,
+    giscus: false,
+    head: [
+      { tag: 'link', attrs: { rel: 'stylesheet', href: articlePagesStylesheet } },
+      { tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' } },
+    ],
+  }}
+>
+  <article class="sl-markdown-content" data-draft-footer-page>
+    <h1>Privacy</h1>
+    <p><em>First draft for review. Remove this note before publication.</em></p>
+    <p>Last updated: 11 September 2026</p>
+
+    <p><strong>You should be able to read VISCERIUM without introducing yourself first.</strong></p>
+
+    <p>We collect less on purpose. No advertising profiles. No cross-site behavioural tracking. No data hoarding because it might be useful one day.</p>
+
+    <h2>Read without an account</h2>
+    <p>You do not need an account to browse the Codex. Your browser still has to talk to the server, so hosting and security systems may temporarily process technical data such as IP addresses, request times, requested URLs and browser details. That is infrastructure, not a reader profile.</p>
+
+    <h2>Analytics without surveillance</h2>
+    <p>VISCERIUM uses a self-hosted Rybbit service at analytics.viscerium.co.uk to understand broad site use: pages read, referrals, browser and device types, approximate location and navigation patterns.</p>
+
+    <p>Rybbit visitor identifiers are salted daily, deliberately breaking persistent day-to-day tracking. Blocking analytics does not stop the Codex from working. We accept less precise long-term counts in exchange for knowing less about you.</p>
+
+    <h2>Comments</h2>
+    <p>Comments use VISCERIUM-hosted Remark42 at comments.viscerium.co.uk. Anonymous commenting is supported.</p>
+
+    <p>If you sign in through a provider, the service receives the identity needed to associate you with your comments. It also processes what you publish and enough metadata to display, moderate and protect the conversation. Short-lived network signals may be used for rate limiting, spam prevention and moderation.</p>
+
+    <p>Published comments remain until you remove them where available, a moderator removes them, or an applicable deletion request is completed. Deleted data may remain in rotating backups until those backups expire.</p>
+
+    <h2>What stays in your browser</h2>
+    <p>The Codex uses local browser storage for site preferences and state, including sensitive-media preferences, remembered era context and a local identifier used by Kudos. Clear VISCERIUM site data in your browser to remove it.</p>
+
+    <p>Remark42 and any sign-in provider you choose may also use cookies or similar storage to keep you signed in. VISCERIUM does not use advertising cookies or advertising profiles.</p>
+
+    <h2>Open-web features</h2>
+    <p>VISCERIUM can use Webmention.io to receive public references to Codex pages from other websites. Webmentions are public web references, not private messages.</p>
+
+    <h2>Security</h2>
+    <p>We use HTTPS, restrictive browser and security policies, and hardened DNS and network configuration where those controls are available. Cloudflare-served connections can use hybrid post-quantum TLS key agreement when the browser supports it.</p>
+
+    <p>We avoid invasive browser fingerprinting by default and aim to give each service only the data it needs. Your browser, operating system, internet provider and DNS resolver are outside our control. No website can promise perfect anonymity or perfect security. We will not pretend otherwise.</p>
+
+    <h2>What we do not do</h2>
+    <p>We do not sell visitor data, build advertising profiles, track readers across unrelated websites, require an account to read public material, or collect personal information merely because it may become useful later. If that changes, this policy changes with it.</p>
+
+    <h2>Logs and retention</h2>
+    <p>Servers keep logs. Hosting, network and security systems may temporarily record IP addresses, timestamps, requested URLs, browser details and suspicious requests so we can run the site, diagnose faults and investigate abuse. We do not use those logs as a second analytics system.</p>
+
+    <p>BEFORE PUBLICATION: add verified retention periods for infrastructure logs, analytics, moderation records and backups.</p>
+
+    <h2>Your information and rights</h2>
+    <p>Depending on your circumstances, data-protection law may give you rights to access, correct, delete, restrict or object to processing of personal data about you. Remark42 users should retain the export and deletion options provided by the comment system. Privacy questions and requests can be sent through the VISCERIUM Contact page.</p>
+
+    <p>Privacy-friendly analytics has a consequence: if a record cannot be linked to you, we may not be able to find "your" record either. We will not collect extra identifying information just to reconnect you with data deliberately collected without your identity.</p>
+
+    <h2>Who is responsible</h2>
+    <p>BEFORE PUBLICATION: add the controller legal name and contact details; identify the lawful basis for each processing purpose; confirm applicable recipients, international transfers and retention periods; and state the right to complain to the relevant supervisory authority. Do not name NULL Holdings Ltd unless it has been incorporated and is actually responsible.</p>
+
+    <h2>Changes</h2>
+    <p>If VISCERIUM materially changes how it handles data, we update this page and the date above. We would rather rewrite the policy than stretch old wording until it stops being true.</p>
+
+    <p>Knowing less is part of the design.</p>
+  </article>
+</StarlightPage>
