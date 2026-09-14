@@ -9,6 +9,9 @@ import { formatDate, formatList, formatNumber } from '../src/lib/i18n.mjs';
 import { timelineMessage, timelinePlural } from '../src/lib/timeline/i18n.mjs';
 
 const astroConfigUrl = new URL('../astro.config.mjs', import.meta.url);
+const codexHeaderUrl = new URL('../src/components/CodexHeader.astro', import.meta.url);
+const languageSelectUrl = new URL('../src/components/CodexLanguageSelect.astro', import.meta.url);
+const languageIconUrl = new URL('../public/icons/i18n.svg', import.meta.url);
 const sourceRoot = new URL('../src/', import.meta.url);
 
 async function sourceFiles(directory) {
@@ -60,6 +63,23 @@ test('French and German placeholders cover every custom UI key without publishin
     assert.deepEqual(Object.keys(placeholder), expectedKeys);
     assert.ok(Object.values(placeholder).every((value) => value === null));
   }
+});
+
+test('dormant language selector is staged beside reader settings', async () => {
+  const [header, selector, icon] = await Promise.all([
+    fs.readFile(codexHeaderUrl, 'utf8'),
+    fs.readFile(languageSelectUrl, 'utf8'),
+    fs.readFile(languageIconUrl, 'utf8'),
+  ]);
+  const settingsIndex = header.indexOf('<ReaderSettings />');
+  const languageIndex = header.indexOf('<CodexLanguageSelect />');
+
+  assert.ok(settingsIndex !== -1 && languageIndex > settingsIndex);
+  assert.match(selector, /virtual:starlight\/components\/LanguageSelect/);
+  assert.match(selector, /starlight-lang-select select/);
+  assert.match(selector, /url\('\/icons\/i18n\.svg'\)/);
+  assert.match(icon, /viewBox="0 0 32 32"/);
+  assert.match(icon, /fill="#7986cb"/);
 });
 
 test('the native i18next layer falls back to the default catalog', async () => {
