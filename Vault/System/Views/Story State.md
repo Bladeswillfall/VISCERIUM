@@ -3,7 +3,6 @@ title: Story State
 cssclasses:
   - viscerium-story-state
 ---
-# Story State
 
 ```dataviewjs
 const clean = (value) => String(value ?? "").trim();
@@ -16,14 +15,36 @@ const list = (value) => {
 const cleanLink = (value) => clean(value).replace(/^\[\[/, "").replace(/\]\]$/, "").split("|")[0].trim();
 const root = clean(app.plugins?.plugins?.storyline?.settings?.storyLineRoot) || "Stories";
 const inferBase = (path) => {
-  const normalized = String(path ?? "").replace(/\\/g, "/");
-  const prefix = `${root.replace(/\/$/, "")}/`;
+  const normalized = String(path ?? "").replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
+  const normalizedRoot = root.replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
+  const prefix = `${normalizedRoot}/`;
   if (!normalized.startsWith(prefix)) return null;
-  const project = normalized.slice(prefix.length).split("/")[0];
-  return project ? `${prefix}${project}`.replace(/\/$/, "") : null;
+
+  for (const marker of ["/Scenes/", "/Codex/", "/Notes/", "/SceneNotes/", "/Archive/", "/Research/", "/System/"]) {
+    const index = normalized.indexOf(marker);
+    if (index > prefix.length) return normalized.slice(0, index);
+  }
+
+  if (normalized.toLowerCase().endsWith(".md")) {
+    const withoutExtension = normalized.slice(0, -3);
+    const parts = withoutExtension.split("/");
+    const basename = parts.at(-1) ?? "";
+    const parent = parts.at(-2) ?? "";
+    if (basename === parent) return parts.slice(0, -1).join("/");
+    return withoutExtension;
+  }
+
+  return null;
 };
 
 function resolveProject() {
+  const requestedProjectBase = clean(app.workspace?.__visceriumStoryStateProjectBase);
+  if (requestedProjectBase) {
+    delete app.workspace.__visceriumStoryStateProjectBase;
+    const normalizedRoot = root.replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
+    if (requestedProjectBase.startsWith(`${normalizedRoot}/`)) return requestedProjectBase;
+  }
+
   const active = app.workspace.getActiveFile();
   const fromActive = active ? inferBase(active.path) : null;
   if (fromActive) return fromActive;
@@ -129,9 +150,10 @@ for (const event of events) {
 }
 
 const heading = dv.container.createDiv({ cls: "vc-story-state-heading" });
-heading.createEl("div", { text: "STORYLINE", cls: "vc-story-state-kicker" });
-heading.createEl("h1", { text: projectTitle });
-heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; do not maintain this view by hand." });
+const titleRow = heading.createDiv({ cls: "vc-story-state-title-row" });
+titleRow.createEl("h1", { text: projectTitle });
+titleRow.createEl("span", { text: "Story state", cls: "vc-story-state-context" });
+heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; this view stays read-only." });
 
 // CURRENT PRESSURES
 {
@@ -173,7 +195,7 @@ heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; do not 
         body.createEl("h3", { text: "Information" });
         for (const event of relevantInfo) {
           const row = body.createDiv({ cls: "vc-story-state-compact-row" });
-          row.createSpan({ text: `${informationLabels.get(event.subject) || event.subject} — ${event.change}` });
+          row.createSpan({ text: `${informationLabels.get(event.subject) || event.subject}: ${event.change}` });
           if (event.detail) row.createSpan({ text: clean(event.detail), cls: "vc-story-state-note" });
           sceneLink(row, event);
         }
@@ -182,7 +204,7 @@ heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; do not 
         body.createEl("h3", { text: "Relationships" });
         for (const event of relevantRelationships) {
           const row = body.createDiv({ cls: "vc-story-state-compact-row" });
-          row.createSpan({ text: `${event.target} — ${event.dimension} ${event.change === "up" ? "↑" : "↓"}` });
+          row.createSpan({ text: `${event.target}: ${event.dimension} ${event.change === "up" ? "↑" : "↓"}` });
           if (event.cause) row.createSpan({ text: clean(event.cause), cls: "vc-story-state-note" });
           sceneLink(row, event);
         }
@@ -191,7 +213,7 @@ heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; do not 
         body.createEl("h3", { text: "Power / leverage" });
         for (const event of relevantPower.slice(-5).reverse()) {
           const row = body.createDiv({ cls: "vc-story-state-compact-row" });
-          row.createSpan({ text: `${event.change} ${event.type}${event.source ? ` — ${event.source}` : ""}` });
+          row.createSpan({ text: `${event.change} ${event.type}${event.source ? `: ${event.source}` : ""}` });
           if (event.limit) row.createSpan({ text: `Limit: ${clean(event.limit)}`, cls: "vc-story-state-note" });
           sceneLink(row, event);
         }
@@ -220,7 +242,7 @@ heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; do not 
       body.createEl("h3", { text: "Current explicit state" });
       for (const event of states) {
         const row = body.createDiv({ cls: "vc-story-state-compact-row" });
-        row.createSpan({ text: `${event.actor} — ${event.change}` });
+        row.createSpan({ text: `${event.actor}: ${event.change}` });
         if (event.detail) row.createSpan({ text: clean(event.detail), cls: "vc-story-state-note" });
         sceneLink(row, event);
       }
@@ -230,7 +252,7 @@ heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; do not 
       body.createEl("h3", { text: "Disclosure history" });
       for (const event of history) {
         const row = body.createDiv({ cls: "vc-story-state-compact-row" });
-        row.createSpan({ text: `${event.actor} — ${event.change}${event.target ? ` → ${event.target}` : ""}` });
+        row.createSpan({ text: `${event.actor}: ${event.change}${event.target ? ` → ${event.target}` : ""}` });
         if (event.detail) row.createSpan({ text: clean(event.detail), cls: "vc-story-state-note" });
         sceneLink(row, event);
       }
@@ -276,13 +298,13 @@ heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; do not 
 
   if (powerEvents.length) {
     section.createEl("h3", { text: "Power / leverage" });
-    const latestByActor = new Map();
-    for (const event of powerEvents) latestByActor.set(event.actor, event);
-    for (const event of latestByActor.values()) {
+    const latestByActorType = new Map();
+    for (const event of powerEvents) latestByActorType.set(`${event.actor}\u0000${event.type}`, event);
+    for (const event of latestByActorType.values()) {
       const row = section.createDiv({ cls: "vc-story-state-row" });
       const body = row.createDiv();
       body.createEl("strong", { text: event.actor });
-      body.createEl("span", { text: `${event.change} ${event.type}${event.source ? ` — ${event.source}` : ""}` });
+      body.createEl("span", { text: `${event.change} ${event.type}${event.source ? `: ${event.source}` : ""}` });
       if (event.limit) body.createEl("small", { text: `Limit: ${clean(event.limit)}` });
       sceneLink(body, event, "Source scene");
     }
