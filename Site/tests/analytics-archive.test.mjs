@@ -2,10 +2,12 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   countCommentsByCommunity,
+  dailyCatchupTasks,
   dateRange,
   buildPageStatsQuery,
   londonBoundaryMs,
   monthRange,
+  nullableSum,
   parseArgs,
 } from '../../Infrastructure/analytics/archive.mjs';
 
@@ -30,6 +32,23 @@ test('historical ranges do not attach current snapshots by default', () => {
   assert.equal(parseArgs(['--from=2026-08-26', '--to=2026-08-27']).snapshots, false);
   assert.equal(parseArgs(['--date=2026-08-26']).snapshots, false);
   assert.equal(parseArgs(['--date=2026-08-26', '--snapshots']).snapshots, true);
+});
+
+test('automatic daily catch-up replays every missing period', () => {
+  assert.deepEqual(dailyCatchupTasks('2026-09-10', '2026-09-13'), [
+    { kind: 'daily', key: '2026-09-11', start: '2026-09-11', end: '2026-09-12' },
+    { kind: 'daily', key: '2026-09-12', start: '2026-09-12', end: '2026-09-13' },
+    { kind: 'daily', key: '2026-09-13', start: '2026-09-13', end: '2026-09-14' },
+  ]);
+  assert.deepEqual(dailyCatchupTasks(null, '2026-09-13'), [
+    { kind: 'daily', key: '2026-09-13', start: '2026-09-13', end: '2026-09-14' },
+  ]);
+  assert.deepEqual(dailyCatchupTasks('2026-09-13', '2026-09-13'), []);
+});
+
+test('site snapshot totals stay null when any page snapshot is unavailable', () => {
+  assert.equal(nullableSum([4, 0, 2]), 6);
+  assert.equal(nullableSum([4, null, 2]), null);
 });
 
 test('Europe/London boundaries follow BST and GMT', () => {
