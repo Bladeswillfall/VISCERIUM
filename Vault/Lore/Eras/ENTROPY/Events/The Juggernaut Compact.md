@@ -36,6 +36,7 @@ tags:
   - "timeline-showcase"
   - "juggernauts"
   - Events
+community_id: dc65db16-4aec-478e-b915-2dae301d0a7a
 ---
 
 # The Juggernaut Compact

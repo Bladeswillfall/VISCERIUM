@@ -37,6 +37,7 @@ tags:
   - "krg"
   - "same-day"
   - Events
+community_id: a200c28b-0bd2-4fc5-8d73-99e821c183f6
 ---
 
 # The Kraal Nine Signal Return

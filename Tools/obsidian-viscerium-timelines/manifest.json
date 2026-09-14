@@ -4,6 +4,6 @@
   "version": "1.2.0",
   "minAppVersion": "1.5.0",
   "description": "Renders canonical VISCERIUM timelines and private StoryLine projects through the shared calendar and timeline renderer.",
-  "author": "Bladeswillfall",
+  "author": "Elias Vail",
   "isDesktopOnly": false
 }

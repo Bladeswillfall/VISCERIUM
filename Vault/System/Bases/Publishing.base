@@ -1,7 +1,7 @@
 filters:
   and:
     - file.ext == "md"
-    - file.inFolder("Lore")
+    - file.inFolder("Lore") || file.inFolder("Drafts/Lore")
 formulas:
   display_title: if(title.isEmpty(), file.name, title)
   note_link: file.asLink(formula.display_title)

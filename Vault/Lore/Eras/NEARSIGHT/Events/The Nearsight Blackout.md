@@ -43,6 +43,7 @@ tags:
   - "timeline-showcase"
   - "blackout"
   - Events
+community_id: 71450a4b-11e3-4402-a975-9b6d79434362
 ---
 
 # The Nearsight Blackout

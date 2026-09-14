@@ -153,3 +153,9 @@ Confirm these conditions:
 Stop when the highest-priority imports have no unresolved structural decisions and every newly filed note passes Vault Doctor.
 
 Do not block new article creation on low-priority World Anvil cleanup. Tier 4 imports can remain deferred when they do not obstruct the setting spine, an era anchor, or an active story.
+
+## Two-vault location
+
+Run integration and frontmatter preparation from the public repository's `Site/` directory. Their default target is the sibling `VISCERIUM-Workshop/Vault/`. Use `--vault PATH` for a different private checkout. Migration metadata and reports live under Workshop `Drafts/WorldAnvil Metadata/`.
+
+Filed unpublished notes live under Workshop `Drafts/Lore/`. Keep drafts there until review, then move approved notes and assets into the public repository through a pull request.

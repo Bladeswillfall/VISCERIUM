@@ -3,7 +3,7 @@ document_type: worksheet
 worksheet_id: WKS-013-01
 parent_sop: SOP-013
 contributors:
-  - name: Fall
+  - name: Elias Vail
     role: VISCERIUM adaptation and setting decisions
 sources:
   - source_id: SRC-001

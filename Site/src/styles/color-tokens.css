@@ -52,6 +52,18 @@
     --codex-radius: 0;
     --codex-radius-lg: 0;
 
+    /* World Graph renderer palette. */
+    /* ponytail: Cytoscape 3.34 needs legacy sRGB values. Use progressive
+       palette tokens here when its colour parser accepts CSS Color 4. */
+    --world-graph-canvas: #101010;
+    --world-graph-surface: #000;
+    --world-graph-border: #484137;
+    --world-graph-text: #c8bfa8;
+    --world-graph-muted: #888070;
+    --world-graph-node: #c8bfa8;
+    --world-graph-selected: #ffd166;
+    --world-graph-edge: #888070;
+
     /* High-contrast status colours. */
     --codex-danger: var(--codex-danger-base);
     --codex-danger-high: #ffc1d0;
@@ -188,6 +200,15 @@
     --codex-warning: #201400;
     --codex-info: #001b1f;
     --codex-important: #240b35;
+
+    --world-graph-canvas: #b9b4a9;
+    --world-graph-surface: #c8bfa8;
+    --world-graph-border: #888070;
+    --world-graph-text: #000;
+    --world-graph-muted: #484137;
+    --world-graph-node: #484137;
+    --world-graph-selected: #000;
+    --world-graph-edge: #484137;
 
     --sl-color-bg: var(--codex-page-bg);
     --sl-color-bg-nav: var(--codex-nav-bg);

@@ -4,7 +4,7 @@ description: "A single authoring reference for the Markdown, Codex layout, media
 headerImage: /assets/images/viscerium-banner.webp
 image: /assets/images/640faf5b8cd2814de13871ff58c900b6.webp
 imageTitle: Demo sidebar artwork
-artist: Fall
+artist: Elias Vail
 alt: "A VISCERIUM artwork sample used to demonstrate the standard page sidebar image treatment."
 status: published
 type: system

@@ -30,7 +30,7 @@ test('comments and webmentions sit below the complete article frame', async ({ p
   const pageFrame = page.locator('.page');
   const pagination = page.locator('.codex-pagination .pagination-links');
   await expect(discussions).toBeVisible();
-  await expect(discussions.getByRole('heading', { level: 1, name: 'Discussions' })).toBeVisible();
+  await expect(discussions.getByRole('heading', { level: 1, name: 'Community' })).toBeVisible();
   await expect(discussions.locator('viscerium-comments')).toHaveCount(1);
   await expect(discussions.locator('.codex-webmentions')).toHaveCount(1);
   await expect(pagination).toHaveCount(1);

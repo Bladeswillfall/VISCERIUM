@@ -1,0 +1,26 @@
+/* VISCERIUM private/workshop vault identity.
+ * This file is shared from the public Vault's snippet library but should
+ * only be enabled in the private Workshop vault.
+ */
+body {
+  --viscerium-vault-identity: #2f7f7f;
+}
+
+.workspace {
+  border-top: 3px solid var(--viscerium-vault-identity);
+}
+
+.status-bar::before {
+  content: "WORKSHOP";
+  display: inline-flex;
+  align-items: center;
+  margin-inline-end: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--viscerium-vault-identity) 70%, transparent);
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--viscerium-vault-identity) 14%, transparent);
+  color: var(--text-normal);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}

@@ -21,9 +21,11 @@ const { t } = Astro.locals;
         <a href="/graph/">{t('viscerium.footer.worldGraph')}</a>
         <a href="/support/">{t('viscerium.footer.support')}</a>
         <a href="/contact/">{t('viscerium.footer.contact')}</a>
-        <a href={siteConfig.githubRepoUrl} target="_blank" rel="noreferrer">
-          GitHub<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
-        </a>
+        {siteConfig.githubRepoUrl && (
+          <a href={siteConfig.githubRepoUrl} target="_blank" rel="noreferrer">
+            GitHub<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
+          </a>
+        )}
         <a href="/rss.xml">RSS</a>
         <a href="/atom.xml">Atom</a>
       </div>

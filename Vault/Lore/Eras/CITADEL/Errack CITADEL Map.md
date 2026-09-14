@@ -15,6 +15,7 @@ tags:
   - errack
   - atlas
   - Maps
+community_id: e77074e2-e5d9-42f6-bf3e-7a0bef726bc3
 ---
 
 This map presents Errack as it is understood during **CITADEL**. Use the Atlas view to pan and zoom across the full-resolution artwork. Canonical locations can be added over time without exposing the non-canon test markers used by the separate exploration demonstration.

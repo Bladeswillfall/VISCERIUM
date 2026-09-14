@@ -69,7 +69,7 @@ function renderTemplate(dataset, options, instanceId) {
       <div class="vc-timeline-stage">
         <div class="vc-timeline-canvas" data-vc-canvas tabindex="0" aria-label="${message('canvasLabel')}"></div>
       </div>
-      ${options.showMinimap ? `<details class="vc-timeline-minimap-wrap" data-vc-minimap-wrap open><summary>${message('overview')}</summary><div class="vc-timeline-minimap" data-vc-minimap aria-label="${message('overviewLabel')}"></div></details>` : ''}
+      ${options.showMinimap ? `<details class="vc-timeline-minimap-wrap" data-vc-minimap-wrap open><summary>${message('overview')}</summary><div class="vc-timeline-minimap" data-vc-minimap></div></details>` : ''}
       <div class="vc-timeline-status" data-vc-status role="status" aria-live="polite"></div>
       <div class="vc-timeline-list" data-vc-list-panel hidden></div>
       <aside class="vc-timeline-details" data-vc-details hidden aria-labelledby="${detailsTitleId}">

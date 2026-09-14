@@ -43,6 +43,7 @@ sidebar:
       href: "[[Degel]]"
 updated: 2026-08-16
 word_count: 2377
+community_id: d833d093-b73c-4bf0-859e-4fbf31dda9fd
 ---
 Nestled in the [[Degel System/Degel|Degel system]], Errack presents a paradox: a life-sustaining planet teeming with rich plant life and biodiversity, yet a world of savage beauty and unforgiving extremes. Towering mountains pierce skies above expansive jungles teeming with both vibrant life and lurking horrors, while arid deserts push the limits of ecological adaptation. Every corner of Errack showcases nature's ingenuity and ferocity, demanding respect and resilience from all who dare to inhabit it.
 
@@ -158,7 +159,7 @@ Errack is orbited by two moons, **[[Degel System/Eye of Vordr|the Eye of Vordr]]
 [cols:7-3 gap=lg align=start]
 [col]In addition to its twin moons, Errack boasts a wide but faint ring system around its equator. These planetary rings are unfortunately the cause of many asteroids and comets becoming meteors. Whilst the resulting meteor showers are usually enjoyed for their stunning displays, some have also caused substantial destruction on rare occasions.[/col]
 [col]![[errack-rings.webp]]
-*Rings of Errack — artwork by [Fall](https://github.com/Bladeswillfall).*[/col][/cols]
+*Rings of Errack — artwork by Elias Vail.*[/col][/cols]
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >

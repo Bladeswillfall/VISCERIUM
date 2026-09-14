@@ -1,5 +1,9 @@
 @layer ion {
   /* Border radii adjustments & color changes for code blocks */
+  .expressive-code {
+    --ec-frm-edBg: var(--ec-codeBg) !important;
+  }
+
   .expressive-code pre {
     /* background: var(--sl-color-gray-6) !important; */
     border-bottom-left-radius: 12px !important;

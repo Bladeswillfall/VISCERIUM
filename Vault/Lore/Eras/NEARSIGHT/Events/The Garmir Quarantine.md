@@ -45,6 +45,7 @@ tags:
   - "garmir"
   - "myrkild"
   - Events
+community_id: 5846289e-326c-4fa8-b980-8274bd35ca09
 ---
 
 # The Garmir Quarantine

@@ -35,6 +35,7 @@ tags:
   - "timeline-showcase"
   - "aesir"
   - Events
+community_id: ac76bebb-5c16-434b-9d40-79cb829db432
 ---
 
 # First AESIR Mk-2 Fielding

@@ -4,7 +4,7 @@ worksheet_id: WKS-013-02
 parent_sop: SOP-013
 model_status: planning-estimate
 contributors:
-  - name: Fall
+  - name: Elias Vail
     role: VISCERIUM adaptation and canon decisions
 sources:
   - source_id: SRC-001

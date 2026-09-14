@@ -4,7 +4,7 @@ The VISCERIUM site remains a static Astro application on Cloudflare Pages. Creat
 
 ## Build settings
 
-Connect the new Pages project to `Bladeswillfall/VISCERIUM` and use:
+Connect the Pages project to the VISCERIUM repository and use:
 
 ```text
 Production branch: main
@@ -13,11 +13,13 @@ Build command: npm run build
 Build output directory: dist
 Node version: 24
 SITE_URL=https://www.viscerium.co.uk
+PUBLIC_GITHUB_REPO_URL=<public repository URL, if repository/edit/issue links should be shown>
+PUBLIC_GITHUB_PROFILE_URL=<public creator profile URL, only if rel="me authn" is required>
 ```
 
 Choose the new Cloudflare project name in the dashboard. No project name or Cloudflare identifier is committed because those values do not exist yet.
 
-The build regenerates public content from `Vault/Lore/` before Astro creates `Site/dist/`. No committed Wrangler file is required for the static Pages project.
+The build regenerates public content from `Vault/Lore/` before Astro creates `Site/dist/`.
 
 After Cloudflare assigns the real `pages.dev` hostname, either redirect it to the canonical domain or add hostname-specific `X-Robots-Tag: noindex` rules. The old project hostname was removed from `Site/public/_headers`, and a replacement cannot be written accurately before Cloudflare creates the project.
 
@@ -35,7 +37,37 @@ Cloudflare Pages `_redirects` rules cannot perform a hostname-to-hostname redire
 
 ## Pages environment variables
 
-Only public build-time values belong in Pages.
+Only public build-time values belong in Pages variables. Runtime secrets belong in Pages secrets.
+
+### Community kudos
+
+Community kudos use Pages Functions and D1. The repository contains the D1 binding names and database IDs in `Site/wrangler.toml`.
+
+The required runtime secret is:
+
+```text
+KUDOS_HMAC_KEY
+```
+
+Generate a random value outside the repository and add it as a Cloudflare Pages secret. Do not commit it or paste it into documentation, issues, logs, or chat.
+
+Use the preview D1 database for branch previews:
+
+```text
+viscerium-community-preview
+```
+
+Use the production D1 database for the production environment:
+
+```text
+viscerium-community
+```
+
+Apply D1 migrations to preview first. Apply them to production only immediately before the production rollout.
+
+Pages Functions are limited by `Site/public/_routes.json` to `/api/kudos/*`, so normal static requests do not invoke the Function.
+
+The initial rollout uses one pilot article. Keep the production `KUDOS_HMAC_KEY` unset until the preview API and UI pass their checks.
 
 ### Comments
 
@@ -70,9 +102,9 @@ PUBLIC_WEBMENTIONS_ENABLED=1
 PUBLIC_WEBMENTION_IO_USERNAME=www.viscerium.co.uk
 ```
 
-No secret is required in Cloudflare Pages for the current public JF2 API integration. The site advertises `https://github.com/Bladeswillfall` as its explicit IndieLogin authentication identity using `rel="me authn"`. The corresponding GitHub profile Website field must point back to `https://www.viscerium.co.uk/` so IndieLogin can verify the relationship in both directions.
+No secret is required in Cloudflare Pages for the current public JF2 API integration. `PUBLIC_GITHUB_PROFILE_URL` is optional; when set, the site advertises that URL using `rel="me authn"`. Keep it unset unless the selected IndieLogin identity is intentionally public and its profile links back to `https://www.viscerium.co.uk/`.
 
-Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, authenticate through the advertised GitHub identity, complete the domain verification, and confirm that the assigned username is `www.viscerium.co.uk`.
+Before relying on the service in production, sign in to Webmention.io with `https://www.viscerium.co.uk`, complete the domain verification using the public identity you have deliberately configured, and confirm that the assigned username is `www.viscerium.co.uk`.
 
 `PUBLIC_WEBMENTIONS_ENABLED=0` remains available as an emergency off switch. Use the endpoint override variables in `Site/.env.example` only if Webmention.io supplies different endpoints.
 

@@ -1,13 +1,2 @@
-# Security-sensitive files should always receive an explicit owner review before
-# repository rules are later configured to require CODEOWNER approval.
-/.github/                         @Bladeswillfall
-/Site/package.json                @Bladeswillfall
-/Site/package-lock.json           @Bladeswillfall
-/Site/scripts/                    @Bladeswillfall
-/Site/src/components/             @Bladeswillfall
-/Site/src/lib/                    @Bladeswillfall
-/Site/public/_headers             @Bladeswillfall
-/Tools/**/package.json            @Bladeswillfall
-/Tools/**/package-lock.json       @Bladeswillfall
-/Vault/**/*.mdx                   @Bladeswillfall
-/Vault/Assets/**/*.svg            @Bladeswillfall
+# CODEOWNER rules intentionally omit a personal account handle.
+# Repository permissions and branch rules remain the source of maintainer authority.

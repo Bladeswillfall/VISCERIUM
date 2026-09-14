@@ -11,7 +11,7 @@ Original first-party software is open source under the MIT License.
 Third-party software remains subject to its own licence terms.
 
 <!-- RIGHTS:VISCERIUM_CURRENT:START -->
-> **VISCERIUM created by Fall. © 2021–2026 Fall. All rights reserved.**
+> **VISCERIUM created by Elias Vail. © 2021–2026 Elias Vail. All rights reserved.**
 <!-- RIGHTS:VISCERIUM_CURRENT:END -->
 
 ## Licence map
@@ -77,7 +77,7 @@ See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the day-one inventory
 
 ## Contributions
 
-Opening an issue or pull request does not transfer copyright to Fall, VISCERIUM, or any future company.
+Opening an issue or pull request does not transfer copyright to Elias Vail, VISCERIUM, or any future company.
 
 Unless separate written terms apply, a contributor who submits code for inclusion in an MIT-covered path agrees that the accepted code may be distributed under the MIT License in `LICENSE-CODE.md`.
 
@@ -103,7 +103,7 @@ NULL Holdings Ltd has not yet been incorporated. It is therefore not named here 
 After incorporation and a formal written assignment, the intended creative-rights notice is:
 
 <!-- RIGHTS:VISCERIUM_PLANNED:START -->
-> **VISCERIUM created by Fall. © 2021–2026 NULL Holdings Ltd. All rights reserved.**
+> **VISCERIUM created by Elias Vail. © 2021–2026 NULL Holdings Ltd. All rights reserved.**
 <!-- RIGHTS:VISCERIUM_PLANNED:END -->
 
 The software copyright notice in `LICENSE-CODE.md` and other rights documents must also be reviewed when that legal structure is established.

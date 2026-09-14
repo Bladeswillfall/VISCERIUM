@@ -3,6 +3,14 @@ import '../styles/graph.css';
 
 const { graph } = Astro.props;
 const pages = graph.nodes.filter((node) => node.kind === 'page');
+const pageById = new Map(pages.map((page) => [page.id, page]));
+const relationships = graph.edges
+  .filter((edge) => edge.kind === 'link' && pageById.has(edge.source) && pageById.has(edge.target))
+  .map((edge) => ({ source: pageById.get(edge.source), target: pageById.get(edge.target) }))
+  .sort((left, right) => (
+    left.source.title.localeCompare(right.source.title)
+    || left.target.title.localeCompare(right.target.title)
+  ));
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
 
@@ -26,9 +34,19 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   </div>
   <p class="world-graph__status" data-world-graph-status role="status">Loading interactive graph…</p>
   <details class="world-graph__fallback" data-world-graph-fallback open>
-    <summary>Browse all public pages</summary>
-    <ul>
-      {pages.map((page) => <li><a href={page.href}>{page.title}</a></li>)}
+    <summary>Browse the graph as text</summary>
+    <p>This text view lists the same public pages and internal links as the canvas.</p>
+    <h2 class="world-graph__fallback-heading">{pages.length} public pages</h2>
+    <ul class="world-graph__fallback-list">
+      {pages.map((page) => <li data-world-graph-page><a href={page.href}>{page.title}</a></li>)}
+    </ul>
+    <h2 class="world-graph__fallback-heading">{relationships.length} internal links</h2>
+    <ul class="world-graph__fallback-list world-graph__fallback-list--connections">
+      {relationships.map(({ source, target }) => (
+        <li data-world-graph-connection>
+          <a href={source.href}>{source.title}</a> links to <a href={target.href}>{target.title}</a>
+        </li>
+      ))}
     </ul>
   </details>
 </section>
@@ -39,7 +57,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   const instances = new WeakMap<Element, () => void>();
   const interactionClasses = 'is-active is-neighbour is-context is-muted';
   const readyStatus = 'Interactive graph ready. Use pointer or arrow keys to explore pages.';
-  const pointerHitRadius = 18;
+  const pointerHitRadius = 22;
   const touchHitRadius = 24;
   const pointerHitPadding = 6;
   const dragThreshold = 5;
@@ -231,8 +249,10 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         layout: {
           name: 'cose',
           animate: false,
+          randomize: true,
           padding: 48,
           nodeRepulsion: 9_000,
+          nodeOverlap: 40,
           idealEdgeLength: 90,
           gravity: .18,
         },
@@ -625,7 +645,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     } catch (error) {
       console.error(error);
       canvas.setAttribute('aria-busy', 'false');
-      if (status) status.textContent = 'The interactive graph is unavailable. Use the page list below.';
+      if (status) status.textContent = 'The interactive graph is unavailable. Use the text view below.';
     }
   }
 

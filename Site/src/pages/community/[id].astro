@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import siteConfig from '../../../site.config.mjs';
+import { slugToRoute } from '../../lib/codex-paths.mjs';
+import { resolveCommunityForPage } from '../../lib/page-kind.mjs';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  return docs.flatMap((entry) => {
+    const communityId = entry.data.community_id;
+    if (!communityId || !resolveCommunityForPage(entry.data, entry.id)) return [];
+
+    const currentUrl = new URL(slugToRoute(entry.data.slug ?? entry.id), siteConfig.site).href;
+    return [{
+      params: { id: communityId },
+      props: {
+        communityId,
+        currentUrl,
+        title: entry.data.title,
+      },
+    }];
+  });
+}
+
+const { communityId, currentUrl, title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={`0;url=${currentUrl}`} />
+    <link rel="canonical" href={currentUrl} />
+    <title>{title} | VISCERIUM</title>
+  </head>
+  <body>
+    <div
+      hidden
+      data-viscerium-community-id={communityId}
+      data-viscerium-community-url={currentUrl}
+    ></div>
+    <p>
+      This Community link now points to <a href={currentUrl}>{title}</a>.
+    </p>
+    <script is:inline define:vars={{ currentUrl }}>
+      location.replace(currentUrl);
+    </script>
+  </body>
+</html>

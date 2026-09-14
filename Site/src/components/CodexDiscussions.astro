@@ -1,19 +1,20 @@
 ---
 import siteConfig from '../../site.config.mjs';
-import { classifyCodexPage } from '../lib/page-kind.mjs';
+import { resolveCommunityForPage } from '../lib/page-kind.mjs';
 import Comments from './Comments.astro';
+import Kudos from './Kudos.astro';
 import Webmentions from './Webmentions.astro';
 
 const { entry } = Astro.locals.starlightRoute;
-const pageKind = classifyCodexPage(entry.data, entry.id);
-const discussionsEnabled = siteConfig.comments.enabled && (entry.data.giscus ?? true) && !pageKind.isEraHomepage;
+const communityEnabled = resolveCommunityForPage(entry.data, entry.id);
 ---
 
-{discussionsEnabled && (
-  <section class="codex-discussions" aria-label="Discussions">
+{communityEnabled && (
+  <section class="codex-discussions" aria-label="Community">
     <div class="codex-discussions__inner">
-      <h1>Discussions</h1>
-      <Comments />
+      <h1>Community</h1>
+      <Kudos />
+      {siteConfig.comments.enabled && <Comments />}
       <Webmentions />
     </div>
   </section>

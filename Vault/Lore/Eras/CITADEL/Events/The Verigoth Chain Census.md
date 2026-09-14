@@ -43,6 +43,7 @@ tags:
   - "timeline-showcase"
   - "verigoth"
   - Events
+community_id: 9f97dd14-2c98-498d-aed9-ef074eaac03d
 ---
 
 # The Verigoth Chain Census

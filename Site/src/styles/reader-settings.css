@@ -31,7 +31,7 @@
   background: var(--sl-color-bg-nav, var(--sl-color-black));
 }
 
-.reader-settings-trigger svg {
+.reader-settings-trigger .codex-icon {
   width: 1.15rem;
   height: 1.15rem;
 }
@@ -104,13 +104,9 @@
   flex: 0 0 2rem;
 }
 
-.reader-settings-close svg {
+.reader-settings-close .codex-icon {
   width: 1rem;
   height: 1rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
 }
 
 .reader-settings-section {
@@ -149,11 +145,7 @@
   width: 1rem;
   height: 1rem;
   flex: 0 0 1rem;
-  fill: none;
-  stroke: var(--sl-color-gray-3);
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  color: var(--sl-color-gray-3);
 }
 
 .reader-theme-options {
@@ -234,15 +226,10 @@
   color: var(--sl-color-white);
 }
 
-.reader-theme-options svg {
+.reader-theme-options .codex-icon {
   width: .9rem;
   height: .9rem;
   flex: 0 0 .9rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .reader-theme-bridge {

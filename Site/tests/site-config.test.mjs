@@ -6,6 +6,8 @@ const integrationKeys = [
   'SITE_DESCRIPTION',
   'SITE_URL',
   'LORE_SOURCE_DIR',
+  'PUBLIC_GITHUB_REPO_URL',
+  'PUBLIC_GITHUB_PROFILE_URL',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_ENABLED',
   'PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN',
   'PUBLIC_RYBBIT_ENABLED',
@@ -41,13 +43,14 @@ async function loadConfig(overrides = {}) {
   }
 }
 
-test('replacement defaults use the repository, canonical domain, identity, comments, and webmentions', async () => {
+test('replacement defaults use the canonical domain, Elias identity, comments, and webmentions', async () => {
   const config = await loadConfig();
 
   assert.equal(config.title, 'VISCERIUM');
   assert.equal(config.site, 'https://www.viscerium.co.uk');
-  assert.equal(config.githubRepoUrl, 'https://github.com/Bladeswillfall/VISCERIUM');
-  assert.equal(config.identity.githubProfileUrl, 'https://github.com/Bladeswillfall');
+  assert.equal(config.githubRepoUrl, '');
+  assert.equal(config.identity.creatorName, 'Elias Vail');
+  assert.equal(config.identity.githubProfileUrl, '');
   assert.equal(config.comments.host, 'https://comments.viscerium.co.uk');
   assert.equal(config.comments.siteId, 'viscerium');
   assert.equal(config.webmentions.enabled, true);
@@ -99,14 +102,18 @@ test('webmentions retain an explicit emergency off switch', async () => {
   assert.equal(config.webmentions.enabled, false);
 });
 
-test('site identity and lore source support environment overrides', async () => {
+test('site identity, repository links, and lore source support environment overrides', async () => {
   const config = await loadConfig({
     SITE_TITLE: 'Test Codex',
     SITE_DESCRIPTION: 'Test description',
     LORE_SOURCE_DIR: '../Test/Lore',
+    PUBLIC_GITHUB_REPO_URL: 'https://github.com/example/viscerium/',
+    PUBLIC_GITHUB_PROFILE_URL: 'https://github.com/example/',
   });
 
   assert.equal(config.title, 'Test Codex');
   assert.equal(config.description, 'Test description');
   assert.equal(config.loreSourceDir, '../Test/Lore');
+  assert.equal(config.githubRepoUrl, 'https://github.com/example/viscerium');
+  assert.equal(config.identity.githubProfileUrl, 'https://github.com/example');
 });

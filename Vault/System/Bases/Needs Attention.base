@@ -2,12 +2,12 @@ filters:
   and:
     - file.ext == "md"
     - or:
-        - file.inFolder("Lore")
+        - file.inFolder("Lore") || file.inFolder("Drafts/Lore")
         - file.inFolder("Drafts/WorldAnvil Import")
 formulas:
   display_title: if(title.isEmpty(), file.name, title)
   note_link: file.asLink(formula.display_title)
-  area: if(file.inFolder("Lore"), "CANON", "IMPORT")
+  area: if(file.inFolder("Lore"), "CANON", if(file.inFolder("Drafts/Lore"), "WIP", "IMPORT"))
   era_context: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).join(" · "), if(era.isEmpty(), "—", era))
   era_count: if(!list(eras).filter(value != null).isEmpty(), list(eras).filter(value != null).length, if(era.isEmpty(), 0, 1))
   era_sensitive_types: '["character", "faction", "location", "event", "species", "fauna", "flora", "fungi", "item", "myrkild-unit"]'

@@ -4,7 +4,7 @@ import process from 'node:process';
 import { descriptionFromBody, isWorldAnvilArticleFile } from './integrate-worldanvil-import.mjs';
 import { isMainModule } from './script-entry.mjs';
 
-const DEFAULT_VAULT = path.resolve(process.cwd(), '../Vault');
+const DEFAULT_VAULT = path.resolve(process.cwd(), '../../VISCERIUM-Workshop/Vault');
 const IMPORT_REL = 'Drafts/WorldAnvil Import';
 const REVIEW_BLOCK_RE = /<!-- worldanvil-migration-review:start -->[\s\S]*?<!-- worldanvil-migration-review:end -->\n?/g;
 

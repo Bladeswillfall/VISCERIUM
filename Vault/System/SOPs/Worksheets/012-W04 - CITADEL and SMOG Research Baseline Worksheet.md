@@ -3,7 +3,7 @@ document_type: worksheet
 worksheet_id: WKS-012-04
 parent_sop: SOP-012
 contributors:
-  - name: Fall
+  - name: Elias Vail
     role: VISCERIUM adaptation and canon decisions
 sources:
   - source_id: SRC-002

@@ -29,20 +29,20 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `@astrojs/partytown` | runtime | `^2.1.7` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
 | Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
-| Codex (`Site/`) | `astro` | runtime | `^7.1.1` |
-| Codex (`Site/`) | `cytoscape` | runtime | `3.34.0` |
+| Codex (`Site/`) | `astro` | runtime | `^7.2.8` |
+| Codex (`Site/`) | `cytoscape` | runtime | `3.34.3` |
 | Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.0` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
 | Codex (`Site/`) | `gray-matter` | runtime | `^4.0.3` |
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
-| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.6.0` |
-| Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^1.0.1` |
-| Codex (`Site/`) | `starlight-tags` | runtime | `^1.0.1` |
-| Codex (`Site/`) | `starlight-telescope` | runtime | `^1.0.0` |
-| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.1` |
+| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
+| Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
-| Codex (`Site/`) | `eslint` | development | `10.9.0` |
+| Codex (`Site/`) | `eslint` | development | `10.10.0` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.1` |
 | Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |

@@ -13,21 +13,6 @@ async function installTheme(page, theme) {
   }, theme);
 }
 
-async function selectRenderedNode(page, graph, canvas) {
-  const box = await canvas.boundingBox();
-  if (!box) return false;
-  let seed = 17;
-  for (let index = 0; index < 180; index += 1) {
-    seed = (seed * 48_271) % 2_147_483_647;
-    const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
-    seed = (seed * 48_271) % 2_147_483_647;
-    const y = box.y + 12 + (seed % Math.max(1, Math.floor(box.height - 24)));
-    await page.mouse.click(x, y);
-    if (await graph.getAttribute('data-world-graph-context') === 'selected') return true;
-  }
-  return false;
-}
-
 async function hoverConnectedNode(page, graph, canvas) {
   const box = await canvas.boundingBox();
   if (!box) return null;
@@ -141,6 +126,8 @@ async function inspectGraph(page, viewport, theme) {
   const fallback = graph.locator('[data-world-graph-fallback]');
 
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+  await expect(canvasHost).toHaveAttribute('role', 'application');
+  await expect(canvasHost).toHaveAttribute('aria-label', /Interactive graph/);
   await expect(canvasHost).toHaveAttribute('aria-busy', 'false');
   await expect(canvas).toBeVisible();
   await expect(reset).toBeEnabled();
@@ -148,6 +135,12 @@ async function inspectGraph(page, viewport, theme) {
   await expect(fallback).not.toHaveAttribute('open', '');
   await expect(fallback.locator('a')).not.toHaveCount(0);
   await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+
+  const controlHeights = await Promise.all([
+    reset.evaluate((element) => element.getBoundingClientRect().height),
+    fallback.locator('summary').evaluate((element) => element.getBoundingClientRect().height),
+  ]);
+  expect(Math.min(...controlHeights)).toBeGreaterThanOrEqual(44);
 
   const graphData = await page.evaluate(async () => {
     const response = await fetch('/sitegraph/sitemap.json');
@@ -157,6 +150,21 @@ async function inspectGraph(page, viewport, theme) {
   expect(graphData.nodes.every((node) => node.kind === 'page')).toBe(true);
   expect(graphData.edges.every((edge) => edge.kind === 'link')).toBe(true);
   expect(graphData.nodes.some((node) => String(node.id).startsWith('tag:'))).toBe(false);
+
+  const fallbackSummary = fallback.locator('summary');
+  await fallbackSummary.focus();
+  await page.keyboard.press('Enter');
+  await expect(fallback).toHaveAttribute('open', '');
+  await expect(fallback.locator('[data-world-graph-page]')).toHaveCount(graphData.nodes.length);
+  await expect(fallback.locator('[data-world-graph-connection]')).toHaveCount(graphData.edges.length);
+  const firstConnection = fallback.locator('[data-world-graph-connection]').first();
+  await expect(firstConnection.locator('a')).toHaveCount(2);
+  await firstConnection.locator('a').first().focus();
+  await expect(firstConnection.locator('a').first()).toBeFocused();
+  await expect(fallback.locator('[data-world-graph-connection]').first()).toContainText('links to');
+  await fallbackSummary.focus();
+  await page.keyboard.press(' ');
+  await expect(fallback).not.toHaveAttribute('open', '');
 
   const colours = await graph.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -205,7 +213,9 @@ async function inspectGraph(page, viewport, theme) {
   });
   expect(edgeContrast).toBeGreaterThanOrEqual(3);
 
-  expect(await selectRenderedNode(page, graph, canvasHost)).toBe(true);
+  await canvasHost.focus();
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'keyboard');
+  await page.keyboard.press('Enter');
   await expect(graph).toHaveAttribute('data-world-graph-context', 'selected');
   await expect(details.getByRole('heading')).toBeVisible();
   await expect(details.getByRole('link')).toHaveAttribute('href', /^\//);
@@ -217,12 +227,27 @@ async function inspectGraph(page, viewport, theme) {
   const geometry = await canvasHost.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     const renderedCanvas = element.querySelector('canvas');
+    const nodes = element._cyreg?.cy?.nodes().toArray() ?? [];
+    let overlappingNodes = false;
+    for (let left = 0; left < nodes.length && !overlappingNodes; left += 1) {
+      for (let right = left + 1; right < nodes.length; right += 1) {
+        const leftPosition = nodes[left].renderedPosition();
+        const rightPosition = nodes[right].renderedPosition();
+        const distance = Math.hypot(leftPosition.x - rightPosition.x, leftPosition.y - rightPosition.y);
+        const minimumDistance = (nodes[left].renderedOuterWidth() + nodes[right].renderedOuterWidth()) / 2;
+        if (distance < minimumDistance) {
+          overlappingNodes = true;
+          break;
+        }
+      }
+    }
     return {
       width: rect.width,
       height: rect.height,
       bitmapWidth: renderedCanvas?.width ?? 0,
       bitmapHeight: renderedCanvas?.height ?? 0,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      overlappingNodes,
     };
   });
   expect(geometry.width).toBeGreaterThan(240);
@@ -230,6 +255,7 @@ async function inspectGraph(page, viewport, theme) {
   expect(geometry.bitmapWidth).toBeGreaterThan(240);
   expect(geometry.bitmapHeight).toBeGreaterThan(180);
   expect(geometry.overflow).toBe(false);
+  expect(geometry.overlappingNodes).toBe(false);
   expect(pageErrors).toEqual([]);
   expect(firstPartyFailures).toEqual([]);
 
@@ -266,7 +292,7 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   const zoom = Number(await graph.getAttribute('data-world-graph-zoom'));
   const visibleActiveRadius = 10 * zoom;
   let retainedExpandedTarget = false;
-  for (const distance of [16, 15, 14, 13, 12]) {
+  for (const distance of [21, 20, 19, 18]) {
     if (distance <= visibleActiveRadius + 1) continue;
     const diagonal = distance / Math.SQRT2;
     for (const [dx, dy] of [
@@ -420,14 +446,30 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
   expect(afterPageMode / beforePageMode).toBeGreaterThanOrEqual(.82);
 });
 
-test('World Graph keeps the page list when interactive data fails', async ({ page }) => {
+test('World Graph keeps the text view when interactive data fails', async ({ page }) => {
   await page.route('**/sitegraph/sitemap.json', (route) => route.abort());
   await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
   const graph = page.locator('[data-world-graph]');
   await expect(graph.locator('[data-world-graph-status]')).toHaveText(
-    'The interactive graph is unavailable. Use the page list below.',
+    'The interactive graph is unavailable. Use the text view below.',
   );
   await expect(graph.locator('[data-world-graph-fallback]')).toHaveAttribute('open', '');
-  await expect(graph.locator('[data-world-graph-fallback] a').first()).toBeVisible();
+  await expect(graph.locator('[data-world-graph-page]').first()).toBeVisible();
+  await expect(graph.locator('[data-world-graph-connection]').first()).toBeVisible();
   await expect(graph.getByRole('button', { name: 'Reset view' })).toBeDisabled();
+});
+
+test('World Graph exposes pages and relationships without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
+
+  const fallback = page.locator('[data-world-graph-fallback]');
+  const firstConnection = fallback.locator('[data-world-graph-connection]').first();
+  await expect(fallback).toHaveAttribute('open', '');
+  await expect(fallback.locator('[data-world-graph-page]').first()).toBeVisible();
+  await expect(firstConnection).toBeVisible();
+  await expect(firstConnection.locator('a')).toHaveCount(2);
+
+  await context.close();
 });

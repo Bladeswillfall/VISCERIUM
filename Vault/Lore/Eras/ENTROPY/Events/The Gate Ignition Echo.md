@@ -37,6 +37,7 @@ tags:
   - "garmir"
   - "same-day"
   - Events
+community_id: b8d97577-48c4-4fb3-8a72-121822dabf35
 ---
 
 # The Gate Ignition Echo
