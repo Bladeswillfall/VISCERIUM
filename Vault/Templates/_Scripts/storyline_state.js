@@ -35,11 +35,26 @@ function storyRoot(tp) {
 }
 
 function inferProjectBase(tp, path, root = storyRoot(tp)) {
-  const normalized = String(path ?? "").replace(/\\/g, "/");
-  const prefix = `${String(root).replace(/\\/g, "/").replace(/\/$/, "")}/`;
+  const normalized = String(path ?? "").replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
+  const normalizedRoot = String(root).replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
+  const prefix = `${normalizedRoot}/`;
   if (!normalized.startsWith(prefix)) return null;
-  const project = normalized.slice(prefix.length).split("/")[0];
-  return project ? `${prefix}${project}`.replace(/\/$/, "") : null;
+
+  for (const marker of ["/Scenes/", "/Codex/", "/Notes/", "/SceneNotes/", "/Archive/", "/Research/", "/System/"]) {
+    const index = normalized.indexOf(marker);
+    if (index > prefix.length) return normalized.slice(0, index);
+  }
+
+  if (normalized.toLowerCase().endsWith(".md")) {
+    const withoutExtension = normalized.slice(0, -3);
+    const parts = withoutExtension.split("/");
+    const basename = parts.at(-1) ?? "";
+    const parent = parts.at(-2) ?? "";
+    if (basename === parent) return parts.slice(0, -1).join("/");
+    return withoutExtension;
+  }
+
+  return null;
 }
 
 function frontmatter(tp, file) {
@@ -333,6 +348,7 @@ async function openState(tp) {
     new tp.obsidian.Notice("Story State view is missing from System/Views.");
     return;
   }
+  tp.app.workspace.__visceriumStoryStateProjectBase = project.base;
   const leaf = tp.app.workspace.getRightLeaf(false) ?? tp.app.workspace.getLeaf(true);
   await leaf.openFile(file);
   await tp.app.workspace.revealLeaf(leaf);
