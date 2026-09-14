@@ -25,7 +25,6 @@ test('footer uses the agreed navigation groups and keeps HUMAN MADE separate', a
     '/about/',
     '/contact/',
     '/support/',
-    'https://github.com/Bladeswillfall/VISCERIUM',
     '/rss.xml',
     '/atom.xml',
     '/privacy/',
@@ -35,6 +34,9 @@ test('footer uses the agreed navigation groups and keeps HUMAN MADE separate', a
     assert.match(footer, new RegExp(`href=["{]${href.replaceAll('/', '\\/').replaceAll('.', '\\.')}["}]`));
   }
 
+  assert.match(footer, /siteConfig\.githubRepoUrl\s*&&/);
+  assert.match(footer, /href=\{siteConfig\.githubRepoUrl\}/);
+  assert.doesNotMatch(footer, /https:\/\/github\.com\/Bladeswillfall\/VISCERIUM/);
   assert.match(footer, /<a href="\/start-here\/">\{t\('viscerium\.footer\.startHere'\)\}<\/a>/);
   assert.doesNotMatch(footer, /footer-wayfinder__primary/);
   assert.match(footer, /\.footer-wayfinder__links a\s*\{[^}]*font-weight:\s*400;/s);
