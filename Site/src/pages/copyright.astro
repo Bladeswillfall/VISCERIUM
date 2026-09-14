@@ -1,0 +1,56 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import articlePagesStylesheet from '../styles/article-pages.css?url';
+---
+
+<StarlightPage
+  hasSidebar={false}
+  frontmatter={{
+    title: 'Copyright & permissions',
+    description: 'Copyright, permissions, fan works, software licensing, contributions, and ownership for VISCERIUM.',
+    pagefind: false,
+    tableOfContents: false,
+    giscus: false,
+    head: [
+      { tag: 'link', attrs: { rel: 'stylesheet', href: articlePagesStylesheet } },
+      { tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' } },
+    ],
+  }}
+>
+  <article class="sl-markdown-content" data-draft-footer-page>
+    <h1>Copyright &amp; permissions</h1>
+    <p><em>First draft for review. Remove this note before publication.</em></p>
+    <p>Last updated: 11 September 2026</p>
+
+    <p><strong>VISCERIUM created by Elias Vail. © 2021-2026 Elias Vail. All rights reserved.</strong></p>
+
+    <p>Read it. Discuss it. Make fan work. Public access does not mean public ownership.</p>
+
+    <h2>VISCERIUM creative material</h2>
+    <p>Unless a file or page says otherwise, original VISCERIUM lore, canon, fiction, worldbuilding, characters, factions, creatures, terminology, artwork, maps, diagrams, logos, branding and other creative assets are proprietary. Publishing them on the Codex or in a public repository does not place them in the public domain or grant a general licence to reuse them.</p>
+
+    <h2>When you need permission</h2>
+    <p>Except where applicable law already permits the use, get prior written permission before reproducing, publishing, distributing, selling, commercially exploiting, adapting, translating or creating derivative works from proprietary VISCERIUM material. No permission is granted to use that material as generative-AI training material.</p>
+
+    <h2>Fan works</h2>
+    <p>Non-commercial fan works are welcome. Fan fiction, fan art, videos, wikis and similar projects may refer to and adapt VISCERIUM material where reasonably necessary, provided the work is clearly unofficial and does not claim or imply canon status, endorsement, commission, publication by, or official affiliation with VISCERIUM.</p>
+
+    <p>Do not redistribute substantial portions of official text, artwork or other assets, or use VISCERIUM branding in a way that could reasonably look official. A simple label works: "Unofficial fan work based on VISCERIUM. Not endorsed by or affiliated with VISCERIUM." Commercial merchandise, paid games, commercial publications and other commercial uses require prior written permission. If money enters the room, ask first.</p>
+
+    <h2>Quotation, criticism and review</h2>
+    <p>Nothing here removes rights granted by applicable law, including lawful quotation, criticism, review or other statutory exceptions. If your use goes beyond them, request permission.</p>
+
+    <h2>Code, third-party material and branding</h2>
+    <p>Original first-party VISCERIUM software is MIT-licensed only where the repository identifies it as MIT-covered. That licence covers code, not VISCERIUM lore, artwork, maps, branding, canon or other creative assets.</p>
+
+    <p>Third-party software, fonts, icons, frameworks and other components keep their own licences and attribution requirements. The VISCERIUM name, logos and visual identity also remain protected; open-source code is not a licence to make an unofficial project look official.</p>
+
+    <h2>Contributions</h2>
+    <p>Opening an issue or pull request does not transfer copyright. Accepted original code contributions to MIT-covered paths may be distributed under the repository MIT licence unless separate written terms apply. Creative canon contributions require separate written contributor terms before acceptance.</p>
+
+    <h2>Ownership and permission</h2>
+    <p>VISCERIUM was created by and is currently owned by Elias Vail, the public creative name used by its creator. NULL Holdings Ltd is an intended future IP-holding company; it has not yet been incorporated and no VISCERIUM rights have been assigned to it.</p>
+
+    <p>For licensing, reproduction, adaptation, commercial use, collaboration, attribution or other permissions, use the VISCERIUM Contact page. Identify the material, intended use, where it will appear and whether the use is commercial. Silence is not permission. Permission exists when the relevant rights holder gives it in writing.</p>
+  </article>
+</StarlightPage>
