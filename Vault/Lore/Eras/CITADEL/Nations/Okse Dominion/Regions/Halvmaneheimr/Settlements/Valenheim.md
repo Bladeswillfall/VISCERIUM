@@ -8,7 +8,7 @@ sidebar:
     - title: Details
       fields:
         - label: Faction
-          value: "[[Archived - Okse Dominion]]"
+          value: "[[Lore/Eras/CITADEL/Nations/Okse Dominion/Okse Dominion|Okse Dominion]]"
         - label: Region
           value: "[[Halvmaneheimr]]"
         - label: Population
@@ -29,8 +29,7 @@ sidebar:
           href: "[[Hofn Fagrvatn]]"
         - label: Mestrvirki
           href: "[[Mestrvirki]]"
-        - label: Rauthrbak Min
-          href: "[[Drafts/Inbox/Locations/Rauthrbak Min]]"
+        - Rauthrbak Min
 title: Valenheim
 description: Capital of the Okse Dominion, Valenheim is a black-walled river city where survival is engineered, faith clings to every lintel, and comfort depends less on the weather than on who you are.
 created: 2026-08-23
@@ -291,7 +290,7 @@ Mead belongs almost everywhere. Sloe and juniper spirits belong wherever cold, p
 ### The Road North
 Some mornings Brattrstein goes quieter before the bells because somebody hears chains.
 
-Prisoner columns gather near [[Hrimbru]] and leave for [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]] linked wrist-to-wrist or neck-to-neck. Officials call them *labour transfers*. Mine clerks prefer *northern service*. Gamaltrappir calls them *redbacks*. Families call whatever name is being taken from them.
+Prisoner columns gather near [[Hrimbru]] and leave for Rauthrbak Min linked wrist-to-wrist or neck-to-neck. Officials call them *labour transfers*. Mine clerks prefer *northern service*. Gamaltrappir calls them *redbacks*. Families call whatever name is being taken from them.
 
 Grey-blue ribbons appear on Hrimbru before a column leaves. The Guard cuts them down every few months. They return before the next chain does.
 
