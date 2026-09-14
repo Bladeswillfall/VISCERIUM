@@ -61,6 +61,19 @@ function dateRange(from, to) {
   return dates;
 }
 
+function dailyTask(date) {
+  const key = parseIsoDate(date);
+  return { kind: 'daily', key, start: key, end: nextDate(key) };
+}
+
+export function dailyCatchupTasks(latest, yesterday = londonYesterday()) {
+  const target = parseIsoDate(yesterday);
+  if (!latest) return [dailyTask(target)];
+  const start = nextDate(parseIsoDate(latest));
+  if (start > target) return [];
+  return dateRange(start, target).map(dailyTask);
+}
+
 export function parseArgs(argv) {
   const values = new Map();
   const flags = new Set();
@@ -87,16 +100,16 @@ export function parseArgs(argv) {
     const { start, end } = monthRange(month);
     tasks = [{ kind: 'monthly', key: start, start, end }];
   } else if (values.has('--from')) {
-    tasks = dateRange(values.get('--from'), values.get('--to'))
-      .map((date) => ({ kind: 'daily', key: date, start: date, end: nextDate(date) }));
+    tasks = dateRange(values.get('--from'), values.get('--to')).map(dailyTask);
   } else {
     const date = parseIsoDate(values.get('--date') ?? defaultDate);
-    tasks = [{ kind: 'daily', key: date, start: date, end: nextDate(date) }];
+    tasks = [dailyTask(date)];
     snapshotsByDefault = !values.has('--date') || date === defaultDate;
   }
 
   return {
     tasks,
+    automatic: modes === 0,
     snapshots: flags.has('--snapshots') || (!flags.has('--no-snapshots') && snapshotsByDefault),
     dryRun: flags.has('--dry-run'),
   };
@@ -141,6 +154,15 @@ function eventsColumns() {
     FROM system.columns
     WHERE database = 'analytics' AND table = 'events'
   `).map((row) => row.name));
+}
+
+function latestArchivedDailyDate() {
+  const latest = queryClickHouse(`
+    SELECT maxOrNull(period_start) AS latest
+    FROM viscerium_metrics.site_periods
+    WHERE period_kind = 'daily'
+  `)[0]?.latest;
+  return typeof latest === 'string' && latest ? parseIsoDate(latest) : null;
 }
 
 function timeFilter(start, end) {
@@ -409,10 +431,10 @@ async function fetchKudosTotals({ siteUrl, pages }) {
   return new Map(rows);
 }
 
-function nullableSum(values) {
-  return values.some((value) => value !== null)
-    ? values.reduce((sum, value) => sum + (value ?? 0), 0)
-    : null;
+export function nullableSum(values) {
+  return values.some((value) => value === null)
+    ? null
+    : values.reduce((sum, value) => sum + value, 0);
 }
 
 function toUInt(value) {
@@ -550,8 +572,12 @@ async function main() {
     if (!columns.has(required)) throw new Error(`Rybbit analytics.events is missing required column: ${required}`);
   }
 
-  for (const task of args.tasks) {
-    await archiveTask({ task, config, columns, pages, snapshots: args.snapshots, dryRun: args.dryRun });
+  const tasks = args.automatic
+    ? dailyCatchupTasks(latestArchivedDailyDate(), args.tasks[0].key)
+    : args.tasks;
+  for (const [index, task] of tasks.entries()) {
+    const snapshots = args.snapshots && (!args.automatic || index === tasks.length - 1);
+    await archiveTask({ task, config, columns, pages, snapshots, dryRun: args.dryRun });
   }
 }
 
