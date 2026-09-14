@@ -1,13 +1,18 @@
 .viscerium-story-state .vc-story-state {
-  --vc-story-line: var(--background-modifier-border);
   display: grid;
-  gap: 24px;
+  gap: 28px;
   max-width: 72rem;
 }
 
 .viscerium-story-state .vc-story-state-heading {
-  border-bottom: 1px solid var(--vc-story-line);
-  padding-bottom: 16px;
+  padding-bottom: 8px;
+}
+
+.viscerium-story-state .vc-story-state-title-row {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
 }
 
 .viscerium-story-state .vc-story-state-heading h1,
@@ -18,30 +23,31 @@
   margin-top: 0;
 }
 
+.viscerium-story-state .vc-story-state-heading h1 {
+  margin-bottom: 4px;
+}
+
 .viscerium-story-state .vc-story-state-heading p,
 .viscerium-story-state .vc-story-state-help,
 .viscerium-story-state .vc-story-state-meta,
 .viscerium-story-state .vc-story-state-note,
-.viscerium-story-state .vc-story-state-row small {
+.viscerium-story-state .vc-story-state-row small,
+.viscerium-story-state .vc-story-state-context {
   color: var(--text-muted);
   font-size: var(--font-ui-small);
 }
 
-.viscerium-story-state .vc-story-state-kicker {
-  color: var(--text-muted);
-  font-size: var(--font-ui-smaller);
-  font-weight: 700;
-  letter-spacing: .12em;
+.viscerium-story-state .vc-story-state-context {
+  font-weight: 600;
 }
 
 .viscerium-story-state .vc-story-state-section {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .viscerium-story-state .vc-story-state-section > h2 {
-  border-bottom: 1px solid var(--vc-story-line);
-  padding-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .viscerium-story-state .vc-story-state-section > h3,
@@ -53,16 +59,15 @@
 .viscerium-story-state .vc-story-state-list,
 .viscerium-story-state .vc-story-state-detail-body {
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 .viscerium-story-state .vc-story-state-row,
 .viscerium-story-state .vc-story-state-compact-row {
-  border-bottom: 1px solid var(--vc-story-line);
   display: flex;
   gap: 8px 16px;
   justify-content: space-between;
-  padding: 8px 0;
+  padding: 6px 0;
 }
 
 .viscerium-story-state .vc-story-state-row > div,
@@ -83,18 +88,17 @@
 }
 
 .viscerium-story-state .vc-story-state-details {
-  border-bottom: 1px solid var(--vc-story-line);
-  padding: 0 0 8px;
+  padding: 2px 0 10px;
 }
 
 .viscerium-story-state .vc-story-state-details > summary {
   cursor: pointer;
   font-weight: 600;
-  padding: 8px 0;
+  padding: 6px 0;
 }
 
 .viscerium-story-state .vc-story-state-detail-body {
-  padding: 0 0 8px 20px;
+  padding: 2px 0 6px 20px;
 }
 
 .viscerium-story-state .vc-story-state-compact-row {
