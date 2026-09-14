@@ -10,7 +10,13 @@ import { timelineMessage, timelinePlural } from '../src/lib/timeline/i18n.mjs';
 
 const astroConfigUrl = new URL('../astro.config.mjs', import.meta.url);
 const codexHeaderUrl = new URL('../src/components/CodexHeader.astro', import.meta.url);
+const languageMenuUrl = new URL('../src/components/CodexLanguageMenu.astro', import.meta.url);
 const languageIconUrl = new URL('../public/icons/i18n.svg', import.meta.url);
+const flagUrls = {
+  gb: new URL('../public/flags/gb.svg', import.meta.url),
+  fr: new URL('../public/flags/fr.svg', import.meta.url),
+  de: new URL('../public/flags/de.svg', import.meta.url),
+};
 const sourceRoot = new URL('../src/', import.meta.url);
 
 async function sourceFiles(directory) {
@@ -64,20 +70,41 @@ test('French and German placeholders cover every custom UI key without publishin
   }
 });
 
-test('dormant language selector is staged beside reader settings', async () => {
-  const [header, icon] = await Promise.all([
+test('accessible flag language menu is staged beside reader settings without being mounted', async () => {
+  const [header, menu, icon, gbFlag, frFlag, deFlag] = await Promise.all([
     fs.readFile(codexHeaderUrl, 'utf8'),
+    fs.readFile(languageMenuUrl, 'utf8'),
     fs.readFile(languageIconUrl, 'utf8'),
+    fs.readFile(flagUrls.gb, 'utf8'),
+    fs.readFile(flagUrls.fr, 'utf8'),
+    fs.readFile(flagUrls.de, 'utf8'),
   ]);
   const settingsIndex = header.indexOf('<ReaderSettings />');
-  const languageIndex = header.indexOf('<LanguageSelect />');
+  const dormantIndex = header.indexOf('CodexLanguageMenu');
 
-  assert.ok(settingsIndex !== -1 && languageIndex > settingsIndex);
-  assert.match(header, /virtual:starlight\/components\/LanguageSelect/);
-  assert.match(header, /starlight-lang-select select/);
-  assert.match(header, /url\('\/icons\/i18n\.svg'\)/);
+  assert.ok(settingsIndex !== -1 && dormantIndex > settingsIndex);
+  assert.doesNotMatch(header, /virtual:starlight\/components\/LanguageSelect/);
+  assert.doesNotMatch(header, /<CodexLanguageMenu/);
+  assert.match(menu, /aria-expanded="false"/);
+  assert.match(menu, /aria-controls={panelId}/);
+  assert.match(menu, /data-language-panel/);
+  assert.match(menu, /hreflang={option\.locale}/);
+  assert.match(menu, /lang={option\.locale}/);
+  assert.match(menu, /aria-current={option\.current \? 'page' : undefined}/);
+  assert.match(menu, /alt=""/);
+  assert.match(menu, /min-height:\s*3rem/);
+  assert.match(menu, /event\.key === 'Escape'/);
+  assert.match(menu, /!this\.contains\(event\.target\)/);
+  assert.match(menu, /url\('\/icons\/i18n\.svg'\)/);
+  assert.doesNotMatch(menu, /<select\b/);
   assert.match(icon, /viewBox="0 0 32 32"/);
   assert.match(icon, /fill="#7986cb"/);
+  assert.match(gbFlag, /#012169/);
+  assert.match(gbFlag, /#c8102e/);
+  assert.match(frFlag, /#0055a4/);
+  assert.match(frFlag, /#ef4135/);
+  assert.match(deFlag, /#dd0000/);
+  assert.match(deFlag, /#ffce00/);
 });
 
 test('the native i18next layer falls back to the default catalog', async () => {
