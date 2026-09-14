@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { slugToRoute, vaultSourceSlug } from '../src/lib/codex-paths.mjs';
 
 const endpoint = readFileSync(new URL('../src/pages/reporting-pages.json.ts', import.meta.url), 'utf8');
+const redirects = readFileSync(new URL('../public/_redirects', import.meta.url), 'utf8');
 const routeAliases = JSON.parse(
   readFileSync(new URL('../src/data/reporting-route-aliases.json', import.meta.url), 'utf8'),
 );
@@ -30,10 +31,12 @@ test('historical reporting routes are unique and keyed by permanent Community id
   }
 });
 
-test('the September 2026 human-authorship route rename keeps its original reporting path', () => {
+test('the September 2026 human-authorship route rename keeps its original reporting path and redirect', () => {
   const communityId = '11e8b074-d296-478b-8d90-29b11cf24e4b';
   const previousPath = slugToRoute(
     vaultSourceSlug('Statements/Human Authorship, AI & the Tools We Use.md'),
   );
+  const currentPath = '/statements/human-authorship-and-ai/';
   assert.ok(routeAliases[communityId]?.includes(previousPath));
+  assert.ok(redirects.includes(`${previousPath} ${currentPath} 301`));
 });
