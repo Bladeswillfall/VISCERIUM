@@ -1,4 +1,5 @@
 ---
+import siteConfig from '../../site.config.mjs';
 import { visceriumCreativeNotice } from '../config/rights.mjs';
 
 const creativeRightsNotice = visceriumCreativeNotice();
@@ -35,11 +36,13 @@ const { t } = Astro.locals;
         <h2 class="footer-wayfinder__heading">{t('viscerium.footer.getInvolved')}</h2>
         <ul class="footer-wayfinder__links">
           <li><a href="/support/">{t('viscerium.footer.supportUs')}</a></li>
-          <li>
-            <a href="https://github.com/Bladeswillfall/VISCERIUM" target="_blank" rel="noreferrer">
-              GitHub<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
-            </a>
-          </li>
+          {siteConfig.githubRepoUrl && (
+            <li>
+              <a href={siteConfig.githubRepoUrl} target="_blank" rel="noreferrer">
+                GitHub<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
+              </a>
+            </li>
+          )}
         </ul>
       </div>
 
