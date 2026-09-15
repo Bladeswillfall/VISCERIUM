@@ -74,6 +74,32 @@ export function dailyCatchupTasks(latest, yesterday = londonYesterday()) {
   return dateRange(start, target).map(dailyTask);
 }
 
+function monthlyTask(monthStart) {
+  const start = parseIsoDate(monthStart);
+  const { end } = monthRange(start.slice(0, 7));
+  return { kind: 'monthly', key: start, start, end };
+}
+
+function previousMonthStart(date) {
+  const monthStart = new Date(`${parseIsoDate(date).slice(0, 7)}-01T00:00:00Z`);
+  monthStart.setUTCMonth(monthStart.getUTCMonth() - 1);
+  return monthStart.toISOString().slice(0, 10);
+}
+
+export function monthlyCatchupTasks(latest, yesterday = londonYesterday()) {
+  const target = previousMonthStart(nextDate(parseIsoDate(yesterday)));
+  if (!latest) return [monthlyTask(target)];
+
+  const tasks = [];
+  let start = monthRange(parseIsoDate(latest).slice(0, 7)).end;
+  while (start <= target) {
+    const task = monthlyTask(start);
+    tasks.push(task);
+    start = task.end;
+  }
+  return tasks;
+}
+
 export function parseArgs(argv) {
   const values = new Map();
   const flags = new Set();
@@ -156,11 +182,11 @@ function eventsColumns() {
   `).map((row) => row.name));
 }
 
-function latestArchivedDailyDate() {
+function latestArchivedDate(kind) {
   const latest = queryClickHouse(`
     SELECT maxOrNull(period_start) AS latest
     FROM viscerium_metrics.site_periods
-    WHERE period_kind = 'daily'
+    WHERE period_kind = ${sqlString(kind)}
   `)[0]?.latest;
   return typeof latest === 'string' && latest ? parseIsoDate(latest) : null;
 }
@@ -572,11 +598,20 @@ async function main() {
     if (!columns.has(required)) throw new Error(`Rybbit analytics.events is missing required column: ${required}`);
   }
 
-  const tasks = args.automatic
-    ? dailyCatchupTasks(latestArchivedDailyDate(), args.tasks[0].key)
-    : args.tasks;
+  let dailyTasks = [];
+  let tasks = args.tasks;
+  if (args.automatic) {
+    dailyTasks = dailyCatchupTasks(latestArchivedDate('daily'), args.tasks[0].key);
+    tasks = [
+      ...dailyTasks,
+      ...monthlyCatchupTasks(latestArchivedDate('monthly'), args.tasks[0].key),
+    ];
+  }
+
   for (const [index, task] of tasks.entries()) {
-    const snapshots = args.snapshots && (!args.automatic || index === tasks.length - 1);
+    const snapshots = args.automatic
+      ? args.snapshots && task.kind === 'daily' && index === dailyTasks.length - 1
+      : args.snapshots;
     await archiveTask({ task, config, columns, pages, snapshots, dryRun: args.dryRun });
   }
 }
