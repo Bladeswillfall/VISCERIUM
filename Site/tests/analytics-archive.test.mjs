@@ -47,18 +47,19 @@ test('automatic daily catch-up replays every missing period', () => {
   assert.deepEqual(dailyCatchupTasks('2026-09-13', '2026-09-13'), []);
 });
 
-test('automatic monthly catch-up archives only completed months and replays gaps', () => {
-  assert.deepEqual(monthlyCatchupTasks('2026-08-01', '2026-09-14'), []);
-  assert.deepEqual(monthlyCatchupTasks('2026-08-01', '2026-09-30'), [
-    { kind: 'monthly', key: '2026-09-01', start: '2026-09-01', end: '2026-10-01' },
+test('automatic monthly catch-up archives every missing completed month', () => {
+  assert.deepEqual(monthlyCatchupTasks([], '2026-09-14'), [
+    { kind: 'monthly', key: '2026-08-01', start: '2026-08-01', end: '2026-09-01' },
   ]);
-  assert.deepEqual(monthlyCatchupTasks('2026-08-01', '2026-11-04'), [
+  assert.deepEqual(monthlyCatchupTasks([], '2026-11-04'), [
+    { kind: 'monthly', key: '2026-08-01', start: '2026-08-01', end: '2026-09-01' },
     { kind: 'monthly', key: '2026-09-01', start: '2026-09-01', end: '2026-10-01' },
     { kind: 'monthly', key: '2026-10-01', start: '2026-10-01', end: '2026-11-01' },
   ]);
-  assert.deepEqual(monthlyCatchupTasks(null, '2026-09-14'), [
-    { kind: 'monthly', key: '2026-08-01', start: '2026-08-01', end: '2026-09-01' },
+  assert.deepEqual(monthlyCatchupTasks(['2026-08-01', '2026-10-01'], '2026-11-04'), [
+    { kind: 'monthly', key: '2026-09-01', start: '2026-09-01', end: '2026-10-01' },
   ]);
+  assert.deepEqual(monthlyCatchupTasks(['2026-08-01'], '2026-09-14'), []);
 });
 
 test('site snapshot totals stay null when any page snapshot is unavailable', () => {
