@@ -13,7 +13,7 @@ Build command: npm run build
 Build output directory: dist
 Node version: 24
 SITE_URL=https://www.viscerium.co.uk
-PUBLIC_GITHUB_REPO_URL=<optional override; defaults to https://github.com/Bladeswillfall/VISCERIUM>
+PUBLIC_GITHUB_REPO_URL=<omit to use the canonical VISCERIUM repo; blank hides repository/edit/issue links; another URL overrides>
 PUBLIC_GITHUB_PROFILE_URL=<public creator profile URL, only if rel="me authn" is required>
 ```
 
