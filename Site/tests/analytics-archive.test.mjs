@@ -1,12 +1,16 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
+  buildAcquisitionStatsQuery,
+  buildInteractionStatsQuery,
+  buildPageStatsQuery,
+  buildTrafficDimensionStatsQuery,
   countCommentsByCommunity,
   dailyCatchupTasks,
   dateRange,
-  buildPageStatsQuery,
   londonBoundaryMs,
   monthRange,
+  monthlyCatchupTasks,
   nullableSum,
   parseArgs,
 } from '../../Infrastructure/analytics/archive.mjs';
@@ -44,6 +48,21 @@ test('automatic daily catch-up replays every missing period', () => {
     { kind: 'daily', key: '2026-09-13', start: '2026-09-13', end: '2026-09-14' },
   ]);
   assert.deepEqual(dailyCatchupTasks('2026-09-13', '2026-09-13'), []);
+});
+
+test('automatic monthly catch-up archives every missing completed month', () => {
+  assert.deepEqual(monthlyCatchupTasks([], '2026-09-14'), [
+    { kind: 'monthly', key: '2026-08-01', start: '2026-08-01', end: '2026-09-01' },
+  ]);
+  assert.deepEqual(monthlyCatchupTasks([], '2026-11-04'), [
+    { kind: 'monthly', key: '2026-08-01', start: '2026-08-01', end: '2026-09-01' },
+    { kind: 'monthly', key: '2026-09-01', start: '2026-09-01', end: '2026-10-01' },
+    { kind: 'monthly', key: '2026-10-01', start: '2026-10-01', end: '2026-11-01' },
+  ]);
+  assert.deepEqual(monthlyCatchupTasks(['2026-08-01', '2026-10-01'], '2026-11-04'), [
+    { kind: 'monthly', key: '2026-09-01', start: '2026-09-01', end: '2026-10-01' },
+  ]);
+  assert.deepEqual(monthlyCatchupTasks(['2026-08-01'], '2026-09-14'), []);
 });
 
 test('site snapshot totals stay null when any page snapshot is unavailable', () => {
@@ -85,4 +104,46 @@ test('page stats count visitors once across current and historical paths', () =>
   assert.match(query, /anyIf\(identified_user_id/);
   assert.match(query, /\/statements\/human-authorship-and-ai\//);
   assert.match(query, /\/statements\/human-authorship,-ai-&-the-tools-we-use\//);
+});
+
+test('Rybbit archive queries preserve interactions, session acquisition and coarse traffic dimensions', () => {
+  const columns = new Set([
+    'identified_user_id',
+    'event_name',
+    'props',
+    'tag',
+    'channel',
+    'referrer',
+    'url_parameters',
+    'device_type',
+    'browser',
+    'operating_system',
+    'country',
+    'region',
+    'is_datacenter_asn',
+  ]);
+  const input = {
+    columns,
+    hostnames: ['www.viscerium.co.uk', 'viscerium.co.uk'],
+    start: '2026-09-08',
+    end: '2026-09-09',
+  };
+
+  const interactions = buildInteractionStatsQuery(input);
+  assert.match(interactions, /e\.type != 'pageview'/);
+  assert.match(interactions, /CAST\(e\.props AS String\) AS properties/);
+  assert.match(interactions, /uniqExact\(e\.session_id\)/);
+  assert.match(interactions, /is_datacenter_asn = 1, 'yes', 'no'/);
+
+  const acquisition = buildAcquisitionStatsQuery(input);
+  assert.match(acquisition, /CandidateSessions AS/);
+  assert.match(acquisition, /argMin\(url_parameters\['utm_campaign'\], timestamp\) AS utm_campaign/);
+  assert.match(acquisition, /f\.first_timestamp >= toDateTime/);
+  assert.match(acquisition, /toUInt64\(count\(\)\) AS sessions/);
+
+  const traffic = buildTrafficDimensionStatsQuery(input);
+  assert.match(traffic, /e\.type = 'pageview'/);
+  assert.match(traffic, /e\.device_type AS device_type/);
+  assert.match(traffic, /e\.country AS country/);
+  assert.match(traffic, /uniqExact\(e\.session_id\)/);
 });
