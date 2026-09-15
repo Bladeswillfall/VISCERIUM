@@ -19,7 +19,7 @@ import articlePagesStylesheet from '../styles/article-pages.css?url';
 >
   <article class="sl-markdown-content" data-draft-footer-page>
     <h1>Privacy</h1>
-    <p>Last updated: 11 September 2026</p>
+    <p>Last updated: 15 September 2026</p>
 
     <p><strong>You should be able to read VISCERIUM without introducing yourself first.</strong></p>
     <p>We collect less on purpose. No advertising profiles. No cross-site behavioural tracking. No data hoarding because it might be useful one day.</p>
@@ -29,7 +29,9 @@ import articlePagesStylesheet from '../styles/article-pages.css?url';
 
     <h2>Analytics without surveillance</h2>
     <p>VISCERIUM uses a self-hosted <a href="https://rybbit.com/">Rybbit</a> service at <a href="https://analytics.viscerium.co.uk/">analytics.viscerium.co.uk</a> to understand broad site use: pages read, referrals, browser and device types, approximate location and navigation patterns.</p>
-    <p>Rybbit visitor identifiers are salted daily, deliberately breaking persistent day-to-day tracking. Blocking analytics does not stop the Codex from working. We accept less precise long-term counts in exchange for knowing less about you.</p>
+    <p>Rybbit visitor identifiers are salted daily, deliberately breaking persistent day-to-day tracking. In the current VISCERIUM configuration, analytics records do not store visitor IP addresses or identified-user IDs, and session replay is not used. Blocking analytics does not stop the Codex from working.</p>
+    <p>For long-term reporting, VISCERIUM copies only aggregate statistics into a separate metrics database. These include period totals such as pageviews, unique visitors, comments, Kudos and shares where those measurements are available. The archive does not copy visitor IDs, session IDs, IP addresses, user agents, locations, referrers, query strings, comment bodies or raw event properties.</p>
+    <p>A self-hosted Metabase dashboard reads those aggregate metrics for historical comparison. It does not receive the underlying Rybbit visitor events.</p>
 
     <h2>Comments</h2>
     <p>Comments use VISCERIUM-hosted <a href="https://remark42.com/">Remark42</a> at <a href="https://comments.viscerium.co.uk/">comments.viscerium.co.uk</a>. Anonymous commenting is supported.</p>
@@ -52,7 +54,9 @@ import articlePagesStylesheet from '../styles/article-pages.css?url';
 
     <h2>Logs and retention</h2>
     <p>Servers keep logs. Hosting, network and security systems may temporarily record IP addresses, timestamps, requested URLs, browser details and suspicious requests so we can run the site, diagnose faults and investigate abuse. We do not use those logs as a second analytics system.</p>
-    <p>BEFORE PUBLICATION: add verified retention periods for infrastructure logs, analytics, moderation records and backups.</p>
+    <p>Comment-service rate-limit state normally expires after 60 seconds and duplicate-submission state after 5 minutes. Remark42 keeps up to 10 automatic daily backups. Application logs use size-based rotation rather than a fixed age limit.</p>
+    <p>Long-term aggregate metrics may be kept for historical comparison because the archive does not contain the visitor-level identifiers and event detail listed above.</p>
+    <p>BEFORE PUBLICATION: configure and verify the agreed 30-month expiry for raw Rybbit analytics; set explicit time-based retention for host and infrastructure logs and any manual or off-site backups; then replace this note with those verified periods.</p>
 
     <h2>Your information and rights</h2>
     <p>Depending on your circumstances, data-protection law may give you rights to access, correct, delete, restrict or object to processing of personal data about you. Remark42 users should retain the export and deletion options provided by the comment system. Privacy questions and requests can be sent through the VISCERIUM <a href="/contact/">Contact page</a>.</p>
