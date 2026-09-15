@@ -102,6 +102,14 @@ test('webmentions retain an explicit emergency off switch', async () => {
   assert.equal(config.webmentions.enabled, false);
 });
 
+test('blank GitHub repository override disables public repository links', async () => {
+  const config = await loadConfig({
+    PUBLIC_GITHUB_REPO_URL: '   ',
+  });
+
+  assert.equal(config.githubRepoUrl, '');
+});
+
 test('site identity, repository links, and lore source support environment overrides', async () => {
   const config = await loadConfig({
     SITE_TITLE: 'Test Codex',
