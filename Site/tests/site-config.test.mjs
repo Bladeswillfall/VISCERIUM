@@ -48,7 +48,7 @@ test('replacement defaults use the canonical domain, Elias identity, comments, a
 
   assert.equal(config.title, 'VISCERIUM');
   assert.equal(config.site, 'https://www.viscerium.co.uk');
-  assert.equal(config.githubRepoUrl, '');
+  assert.equal(config.githubRepoUrl, 'https://github.com/Bladeswillfall/VISCERIUM');
   assert.equal(config.identity.creatorName, 'Elias Vail');
   assert.equal(config.identity.githubProfileUrl, '');
   assert.equal(config.comments.host, 'https://comments.viscerium.co.uk');
