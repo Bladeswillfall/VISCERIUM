@@ -30,7 +30,7 @@ import articlePagesStylesheet from '../styles/article-pages.css?url';
     <h2>Analytics without surveillance</h2>
     <p>VISCERIUM uses a self-hosted <a href="https://rybbit.com/">Rybbit</a> service at <a href="https://analytics.viscerium.co.uk/">analytics.viscerium.co.uk</a> to understand broad site use: pages read, referrals, browser and device types, approximate location and navigation patterns.</p>
     <p>Rybbit visitor identifiers are salted daily, deliberately breaking persistent day-to-day tracking. In the current VISCERIUM configuration, analytics records do not store visitor IP addresses or identified-user IDs, and session replay is not used. Blocking analytics does not stop the Codex from working.</p>
-    <p>For long-term reporting, VISCERIUM copies only aggregate statistics into a separate metrics database. These include period totals such as pageviews, unique visitors, comments, Kudos and shares where those measurements are available. The archive does not copy visitor IDs, session IDs, IP addresses, user agents, locations, referrers, query strings, comment bodies or raw event properties.</p>
+    <p>For long-term reporting, VISCERIUM stores selected daily and monthly aggregates in a separate metrics database. These include page and site totals plus reporting dimensions for interactions, acquisition, device and browser types, operating system, country and region, and datacenter classification. The archive does not copy visitor IDs, session IDs, IP addresses, city, coordinates, full query strings or comment bodies. Standard UTM values and the small event properties used for reporting can be retained as aggregate dimensions.</p>
     <p>A self-hosted Metabase dashboard reads those aggregate metrics for historical comparison. It does not receive the underlying Rybbit visitor events.</p>
 
     <h2>Comments</h2>
@@ -55,15 +55,16 @@ import articlePagesStylesheet from '../styles/article-pages.css?url';
     <h2>Logs and retention</h2>
     <p>Servers keep logs. Hosting, network and security systems may temporarily record IP addresses, timestamps, requested URLs, browser details and suspicious requests so we can run the site, diagnose faults and investigate abuse. We do not use those logs as a second analytics system.</p>
     <p>Comment-service rate-limit state normally expires after 60 seconds and duplicate-submission state after 5 minutes. Remark42 keeps up to 10 automatic daily backups. Application logs use size-based rotation rather than a fixed age limit.</p>
-    <p>Long-term aggregate metrics may be kept for historical comparison because the archive does not contain the visitor-level identifiers and event detail listed above.</p>
-    <p>BEFORE PUBLICATION: configure and verify the agreed 30-month expiry for raw Rybbit analytics; set explicit time-based retention for host and infrastructure logs and any manual or off-site backups; then replace this note with those verified periods.</p>
+    <p>Rybbit raw events currently remain available while the aggregate archive is validated. The intended production retention is 60 days. Do not enable that shorter TTL until the historical backfill and source-comparison checks pass.</p>
+    <p>Long-term aggregate metrics may be kept for historical comparison because the archive does not contain the visitor-level identifiers listed above.</p>
+    <p>BEFORE PUBLICATION: verify the 60-day Rybbit TTL is active; set explicit time-based retention for host and infrastructure logs and any manual or off-site backups; then replace this note with those verified periods.</p>
 
     <h2>Your information and rights</h2>
     <p>Depending on your circumstances, data-protection law may give you rights to access, correct, delete, restrict or object to processing of personal data about you. Remark42 users should retain the export and deletion options provided by the comment system. Privacy questions and requests can be sent through the VISCERIUM <a href="/contact/">Contact page</a>.</p>
     <p>Privacy-friendly analytics has a consequence: if a record cannot be linked to you, we may not be able to find "your" record either. We will not collect extra identifying information just to reconnect you with data deliberately collected without your identity.</p>
 
     <h2>Who is responsible</h2>
-    <p>BEFORE PUBLICATION: add the controller legal name and contact details; identify the lawful basis for each processing purpose; confirm applicable recipients, international transfers and retention periods; and state the right to complain to the relevant supervisory authority. Do not name NULL Holdings Ltd unless it has been incorporated and is actually responsible.</p>
+    <p>BEFORE PUBLICATION: identify the person or organisation that actually decides why and how VISCERIUM processes personal data, and provide a reliable privacy contact route. Do not name VISCERIUM, NULL Holdings Ltd or another entity as the controller unless it actually is the controller. Do not publish a residential address merely to clear this note. If the final legal setup requires a postal or geographic address, resolve that before publication. Also identify the lawful basis for each processing purpose, confirm applicable recipients, international transfers and retention periods, and state the right to complain to the relevant supervisory authority.</p>
 
     <h2>Changes</h2>
     <p>If VISCERIUM materially changes how it handles data, we update this page and the date above. We would rather rewrite the policy than stretch old wording until it stops being true.</p>
