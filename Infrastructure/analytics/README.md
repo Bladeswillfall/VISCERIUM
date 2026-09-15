@@ -2,7 +2,7 @@
 
 This directory contains the long-term aggregate reporting job for VISCERIUM. It does not change Rybbit retention.
 
-The archive keeps content statistics and discards visitor-level detail. Individual article rows use `community_id` as the permanent page identity. `entity_id` remains an optional continuity-family dimension because several era editions can share one `entity_id`.
+The archive keeps reporting aggregates and discards visitor-level identifiers. Individual article rows use `community_id` as the permanent page identity. `entity_id` remains an optional continuity-family dimension because several era editions can share one `entity_id`.
 
 ## What the job stores
 
@@ -16,7 +16,19 @@ Per article and period:
 - current native, Webmention and combined Kudos snapshots when enabled;
 - `content_share` events when that event exists.
 
-It does not copy visitor IDs, session IDs, IP addresses, user agents, locations, referrers, query strings, comment bodies or raw event properties into `viscerium_metrics`.
+For whole-site Rybbit reporting, the archive also stores:
+
+- every non-pageview interaction grouped by event type, event name, pathname, event properties, tag and datacenter classification;
+- interaction counts plus exact unique visitors and sessions at that stored row grain;
+- session acquisition grouped by channel, referrer, landing pathname, the standard `utm_source`, `utm_medium`, `utm_campaign`, `utm_term` and `utm_content` values, and datacenter classification;
+- acquisition sessions plus exact unique visitors at that stored row grain;
+- pageview dimensions for device type, browser, operating system, country, region and datacenter classification, with pageviews plus exact unique visitors and sessions at that stored row grain.
+
+The archive does not copy visitor IDs, session IDs, IP addresses, city, latitude, longitude or full query strings into `viscerium_metrics`. It keeps only standard UTM campaign values from URL parameters. Rybbit Web Vital columns are not archived because production currently has no samples.
+
+Interaction properties are retained as an aggregate key because current VISCERIUM events use them for UI labels, routes, directions, era names and outbound targets. If instrumentation starts sending user-entered or high-cardinality values, replace that generic property retention with an allow-list before shortening raw Rybbit retention.
+
+`unique_visitors` and `unique_sessions` in the interaction, acquisition and traffic-dimension tables are exact only for the full stored row grain and period. Do not sum them after regrouping across dimensions. Pageviews, events and acquisition-session counts are additive where their stored rows are mutually exclusive.
 
 Historical backfills do not invent historical comment or Kudos snapshots. Snapshot columns remain `NULL` unless snapshot collection is explicitly enabled. The `collected_at` column records when a snapshot was taken.
 
@@ -25,6 +37,8 @@ Historical backfills do not invent historical comment or Kudos snapshots. Snapsh
 The public site exposes `/reporting-pages.json`. It contains only page metadata needed to map Rybbit pathnames, Remark42 threads and Kudos records to the same permanent `community_id`. Each page includes its current pathname plus any recorded historical pathnames.
 
 The collector reads Rybbit's local `analytics.events` table through `docker exec clickhouse clickhouse-client`. It uses the same session-level effective-user rule as current Rybbit: prefer a non-empty `identified_user_id`, otherwise use the anonymous `user_id`. Older Rybbit tables without `identified_user_id` automatically fall back to `user_id`.
+
+Acquisition is assigned from the first pageview in a Rybbit session. A session is counted in the period in which that first pageview occurred. This prevents later clicks or pageviews in the same session from becoming additional acquisition sessions.
 
 Remark42 activity comes from its public aggregate/list APIs. The job reads recent comment records only to count creation timestamps by thread and never writes comment text to ClickHouse.
 
@@ -53,7 +67,9 @@ cd /path/to/VISCERIUM/Infrastructure/analytics
 docker exec -i clickhouse clickhouse-client --multiquery < schema.sql
 ```
 
-This creates a separate `viscerium_metrics` database. It does not modify Rybbit's `analytics` database.
+This creates or updates the separate `viscerium_metrics` database. It does not modify Rybbit's `analytics` database.
+
+Apply `schema.sql` before deploying a collector version that writes any newly added archive tables.
 
 ## Environment
 
@@ -111,6 +127,8 @@ node archive.mjs --month=2026-08
 
 Monthly snapshot totals are off by default. Add `--snapshots` to `archive.mjs` only when you deliberately want a current snapshot attached to that month row.
 
+When a release adds a new aggregate table, apply the schema and rerun the historical daily and completed-month commands while the corresponding raw Rybbit events still exist. Existing page and site rows are recomputed idempotently while the new tables are filled.
+
 ## Validate before retention changes
 
 Compare archived pageviews with the source for the same day:
@@ -131,7 +149,7 @@ WHERE period_start = '2026-09-13' AND period_kind = 'daily';
 
 Also inspect several articles by `community_id` and pathname, including `11e8b074-d296-478b-8d90-29b11cf24e4b` around 8 September 2026 to verify its renamed route. Re-run the same date and confirm the archive still contains one row per page for that date.
 
-Do not add or change a TTL on `analytics.events` until the backfill and these comparisons pass.
+Before shortening Rybbit retention, also compare interaction counts, acquisition sessions and traffic-dimension pageviews against `analytics.events` for the same period. Do not shorten the raw TTL until the new aggregate tables are backfilled and those comparisons pass.
 
 ## Install the daily timer
 
@@ -159,12 +177,14 @@ journalctl -u viscerium-analytics-archive.service -n 100 --no-pager
 
 ## Idempotence
 
-Before inserting a period, the collector synchronously deletes existing aggregate rows for that period start and kind. Re-running a period replaces it instead of double-counting it.
+Before inserting a period, the collector synchronously deletes existing aggregate rows for that period start and kind from every archive table. Re-running a period replaces it instead of double-counting it.
 
 The source Rybbit tables are read-only to these jobs. The only ClickHouse writes are to `viscerium_metrics`.
 
 ## Known ceilings
 
 Remark42's recent-comment fetch is capped at 10,000 comments per archive window. The job fails rather than silently under-count if that limit is reached. If VISCERIUM approaches that volume, replace the recent-comment call with Remark42 export processing or a comment webhook counter.
+
+Interaction properties can create many aggregate rows if future instrumentation sends high-cardinality values. Keep event properties to small reporting dimensions or replace generic property storage with an allow-list before that happens.
 
 `content_share` is reserved in the schema and collector, but the current site has no share control that emits that event. Until one exists, `shares` remains zero.

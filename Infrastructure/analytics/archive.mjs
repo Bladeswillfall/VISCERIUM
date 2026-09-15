@@ -224,6 +224,26 @@ function customPropertyExpression(columns, key) {
   return null;
 }
 
+function optionalStringExpression(columns, name, prefix = '') {
+  return columns.has(name) ? `${prefix}${name}` : "''";
+}
+
+function eventPropertiesExpression(columns, prefix = '') {
+  if (columns.has('props')) return `CAST(${prefix}props AS String)`;
+  if (columns.has('properties')) return `${prefix}properties`;
+  return "''";
+}
+
+function datacenterExpression(columns, prefix = '') {
+  return columns.has('is_datacenter_asn')
+    ? `if(${prefix}is_datacenter_asn = 1, 'yes', 'no')`
+    : "'unknown'";
+}
+
+function urlParameterExpression(columns, key) {
+  return columns.has('url_parameters') ? `url_parameters[${sqlString(key)}]` : "''";
+}
+
 export function buildPageStatsQuery({ columns, hostnames, start, end, pages }) {
   const userExpr = sessionUserExpression(columns);
   const hosts = hostnameFilter(hostnames);
@@ -263,6 +283,171 @@ export function buildPageStatsQuery({ columns, hostnames, start, end, pages }) {
   `;
 }
 
+export function buildInteractionStatsQuery({ columns, hostnames, start, end }) {
+  const userExpr = sessionUserExpression(columns);
+  const hosts = hostnameFilter(hostnames);
+  const time = timeFilter(start, end);
+  const eventName = optionalStringExpression(columns, 'event_name', 'e.');
+  const properties = eventPropertiesExpression(columns, 'e.');
+  const tag = optionalStringExpression(columns, 'tag', 'e.');
+  const datacenter = datacenterExpression(columns, 'e.');
+  return `
+    WITH SessionUsers AS (
+      SELECT
+        session_id,
+        ${userExpr} AS effective_user_id
+      FROM analytics.events
+      WHERE ${hosts}
+        AND ${time}
+      GROUP BY session_id
+    )
+    SELECT
+      e.type AS event_type,
+      ${eventName} AS event_name,
+      e.pathname AS pathname,
+      ${properties} AS properties,
+      ${tag} AS tag,
+      ${datacenter} AS datacenter_traffic,
+      toUInt64(count()) AS events,
+      toUInt64(uniqExactIf(s.effective_user_id, s.effective_user_id != '')) AS unique_visitors,
+      toUInt64(uniqExact(e.session_id)) AS unique_sessions
+    FROM analytics.events e
+    INNER JOIN SessionUsers s USING (session_id)
+    WHERE ${hosts.replaceAll('hostname', 'e.hostname')}
+      AND ${time.replaceAll('timestamp', 'e.timestamp')}
+      AND e.type != 'pageview'
+    GROUP BY
+      event_type,
+      event_name,
+      pathname,
+      properties,
+      tag,
+      datacenter_traffic
+  `;
+}
+
+export function buildAcquisitionStatsQuery({ columns, hostnames, start, end }) {
+  const userExpr = sessionUserExpression(columns);
+  const hosts = hostnameFilter(hostnames);
+  const time = timeFilter(start, end);
+  const channel = optionalStringExpression(columns, 'channel');
+  const referrer = optionalStringExpression(columns, 'referrer');
+  const datacenter = datacenterExpression(columns);
+  const utmSource = urlParameterExpression(columns, 'utm_source');
+  const utmMedium = urlParameterExpression(columns, 'utm_medium');
+  const utmCampaign = urlParameterExpression(columns, 'utm_campaign');
+  const utmTerm = urlParameterExpression(columns, 'utm_term');
+  const utmContent = urlParameterExpression(columns, 'utm_content');
+  return `
+    WITH
+    CandidateSessions AS (
+      SELECT DISTINCT session_id
+      FROM analytics.events
+      WHERE ${hosts}
+        AND ${time}
+        AND type = 'pageview'
+    ),
+    SessionFirst AS (
+      SELECT
+        session_id,
+        min(timestamp) AS first_timestamp,
+        argMin(${channel}, timestamp) AS channel,
+        argMin(${referrer}, timestamp) AS referrer,
+        argMin(pathname, timestamp) AS landing_pathname,
+        argMin(${utmSource}, timestamp) AS utm_source,
+        argMin(${utmMedium}, timestamp) AS utm_medium,
+        argMin(${utmCampaign}, timestamp) AS utm_campaign,
+        argMin(${utmTerm}, timestamp) AS utm_term,
+        argMin(${utmContent}, timestamp) AS utm_content,
+        argMin(${datacenter}, timestamp) AS datacenter_traffic
+      FROM analytics.events
+      WHERE ${hosts}
+        AND type = 'pageview'
+        AND session_id IN (SELECT session_id FROM CandidateSessions)
+      GROUP BY session_id
+    ),
+    SessionUsers AS (
+      SELECT
+        session_id,
+        ${userExpr} AS effective_user_id
+      FROM analytics.events
+      WHERE ${hosts}
+        AND session_id IN (SELECT session_id FROM CandidateSessions)
+      GROUP BY session_id
+    )
+    SELECT
+      f.channel AS channel,
+      f.referrer AS referrer,
+      f.landing_pathname AS landing_pathname,
+      f.utm_source AS utm_source,
+      f.utm_medium AS utm_medium,
+      f.utm_campaign AS utm_campaign,
+      f.utm_term AS utm_term,
+      f.utm_content AS utm_content,
+      f.datacenter_traffic AS datacenter_traffic,
+      toUInt64(count()) AS sessions,
+      toUInt64(uniqExactIf(u.effective_user_id, u.effective_user_id != '')) AS unique_visitors
+    FROM SessionFirst f
+    INNER JOIN SessionUsers u USING (session_id)
+    WHERE ${time.replaceAll('timestamp', 'f.first_timestamp')}
+    GROUP BY
+      channel,
+      referrer,
+      landing_pathname,
+      utm_source,
+      utm_medium,
+      utm_campaign,
+      utm_term,
+      utm_content,
+      datacenter_traffic
+  `;
+}
+
+export function buildTrafficDimensionStatsQuery({ columns, hostnames, start, end }) {
+  const userExpr = sessionUserExpression(columns);
+  const hosts = hostnameFilter(hostnames);
+  const time = timeFilter(start, end);
+  const deviceType = optionalStringExpression(columns, 'device_type', 'e.');
+  const browser = optionalStringExpression(columns, 'browser', 'e.');
+  const operatingSystem = optionalStringExpression(columns, 'operating_system', 'e.');
+  const country = optionalStringExpression(columns, 'country', 'e.');
+  const region = optionalStringExpression(columns, 'region', 'e.');
+  const datacenter = datacenterExpression(columns, 'e.');
+  return `
+    WITH SessionUsers AS (
+      SELECT
+        session_id,
+        ${userExpr} AS effective_user_id
+      FROM analytics.events
+      WHERE ${hosts}
+        AND ${time}
+      GROUP BY session_id
+    )
+    SELECT
+      ${deviceType} AS device_type,
+      ${browser} AS browser,
+      ${operatingSystem} AS operating_system,
+      ${country} AS country,
+      ${region} AS region,
+      ${datacenter} AS datacenter_traffic,
+      toUInt64(count()) AS pageviews,
+      toUInt64(uniqExactIf(s.effective_user_id, s.effective_user_id != '')) AS unique_visitors,
+      toUInt64(uniqExact(e.session_id)) AS unique_sessions
+    FROM analytics.events e
+    INNER JOIN SessionUsers s USING (session_id)
+    WHERE ${hosts.replaceAll('hostname', 'e.hostname')}
+      AND ${time.replaceAll('timestamp', 'e.timestamp')}
+      AND e.type = 'pageview'
+    GROUP BY
+      device_type,
+      browser,
+      operating_system,
+      country,
+      region,
+      datacenter_traffic
+  `;
+}
+
 function fetchPageStats(input) {
   return queryClickHouse(buildPageStatsQuery(input));
 }
@@ -287,6 +472,18 @@ function fetchSiteStats({ columns, hostnames, start, end }) {
       toUInt64(uniqExactIf(effective_user_id, effective_user_id != '')) AS unique_visitors
     FROM SessionStats
   `)[0] ?? { pageviews: 0, unique_visitors: 0 };
+}
+
+function fetchInteractionStats(input) {
+  return queryClickHouse(buildInteractionStatsQuery(input));
+}
+
+function fetchAcquisitionStats(input) {
+  return queryClickHouse(buildAcquisitionStatsQuery(input));
+}
+
+function fetchTrafficDimensionStats(input) {
+  return queryClickHouse(buildTrafficDimensionStatsQuery(input));
 }
 
 function fetchActivityStats({ columns, hostnames, start, end }) {
@@ -475,16 +672,33 @@ function toUInt(value) {
   return Math.max(0, Number(value) || 0);
 }
 
-function buildRows({ task, pages, pageStats, siteStats, activity, commentsCreated, commentTotals, kudosTotals, snapshots }) {
+function buildRows({
+  task,
+  pages,
+  pageStats,
+  siteStats,
+  activity,
+  commentsCreated,
+  commentTotals,
+  kudosTotals,
+  interactions,
+  acquisition,
+  trafficDimensions,
+  snapshots,
+}) {
   const statsByCommunity = new Map(pageStats.map((row) => [row.community_id, row]));
   const collectedAt = new Date().toISOString().replace('T', ' ').replace('Z', '');
+  const period = {
+    period_start: task.key,
+    period_kind: task.kind,
+    collected_at: collectedAt,
+  };
   const pageRows = pages.map((page) => {
     const stats = statsByCommunity.get(page.community_id) ?? {};
     const events = activity.get(page.community_id) ?? { kudos_added: 0, kudos_removed: 0, shares: 0 };
     const kudos = snapshots ? kudosTotals.get(page.community_id) : undefined;
     return {
-      period_start: task.key,
-      period_kind: task.kind,
+      ...period,
       community_id: page.community_id,
       entity_id: page.entity_id ?? null,
       pathname: page.pathname,
@@ -501,13 +715,11 @@ function buildRows({ task, pages, pageStats, siteStats, activity, commentsCreate
       kudos_webmention_total: kudos ? kudos.webmentions : null,
       kudos_total: kudos ? kudos.total : null,
       shares: toUInt(events.shares),
-      collected_at: collectedAt,
     };
   });
 
   const siteRow = {
-    period_start: task.key,
-    period_kind: task.kind,
+    ...period,
     pageviews: toUInt(siteStats.pageviews),
     unique_visitors: toUInt(siteStats.unique_visitors),
     comments_created: [...commentsCreated.values()].reduce((sum, value) => sum + value, 0),
@@ -518,27 +730,88 @@ function buildRows({ task, pages, pageStats, siteStats, activity, commentsCreate
     kudos_webmention_total: snapshots ? nullableSum(pageRows.map((row) => row.kudos_webmention_total)) : null,
     kudos_total: snapshots ? nullableSum(pageRows.map((row) => row.kudos_total)) : null,
     shares: pageRows.reduce((sum, row) => sum + (row.shares ?? 0), 0),
-    collected_at: collectedAt,
   };
-  return { pageRows, siteRow };
+
+  // ponytail: event properties are stored as an aggregate key. If site instrumentation starts sending user-entered or high-cardinality values, replace this with an allow-list before shortening raw Rybbit retention.
+  const interactionRows = interactions.map((row) => ({
+    ...period,
+    event_type: row.event_type ?? '',
+    event_name: row.event_name ?? '',
+    pathname: row.pathname ?? '',
+    properties: row.properties ?? '',
+    tag: row.tag ?? '',
+    datacenter_traffic: row.datacenter_traffic ?? 'unknown',
+    events: toUInt(row.events),
+    unique_visitors: toUInt(row.unique_visitors),
+    unique_sessions: toUInt(row.unique_sessions),
+  }));
+
+  const acquisitionRows = acquisition.map((row) => ({
+    ...period,
+    channel: row.channel ?? '',
+    referrer: row.referrer ?? '',
+    landing_pathname: row.landing_pathname ?? '',
+    utm_source: row.utm_source ?? '',
+    utm_medium: row.utm_medium ?? '',
+    utm_campaign: row.utm_campaign ?? '',
+    utm_term: row.utm_term ?? '',
+    utm_content: row.utm_content ?? '',
+    datacenter_traffic: row.datacenter_traffic ?? 'unknown',
+    sessions: toUInt(row.sessions),
+    unique_visitors: toUInt(row.unique_visitors),
+  }));
+
+  const trafficDimensionRows = trafficDimensions.map((row) => ({
+    ...period,
+    device_type: row.device_type ?? '',
+    browser: row.browser ?? '',
+    operating_system: row.operating_system ?? '',
+    country: row.country ?? '',
+    region: row.region ?? '',
+    datacenter_traffic: row.datacenter_traffic ?? 'unknown',
+    pageviews: toUInt(row.pageviews),
+    unique_visitors: toUInt(row.unique_visitors),
+    unique_sessions: toUInt(row.unique_sessions),
+  }));
+
+  return { pageRows, siteRow, interactionRows, acquisitionRows, trafficDimensionRows };
 }
 
-function writeRows(task, pageRows, siteRow) {
-  const pageTable = 'viscerium_metrics.page_periods';
-  const siteTable = 'viscerium_metrics.site_periods';
+function writeRows(task, rows) {
+  const tables = {
+    page: 'viscerium_metrics.page_periods',
+    site: 'viscerium_metrics.site_periods',
+    interaction: 'viscerium_metrics.interaction_periods',
+    acquisition: 'viscerium_metrics.acquisition_periods',
+    trafficDimension: 'viscerium_metrics.traffic_dimension_periods',
+  };
   const literal = sqlString(task.key);
   const kind = sqlString(task.kind);
   execClickHouse(`
-    ALTER TABLE ${pageTable} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
-    ALTER TABLE ${siteTable} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
+    ALTER TABLE ${tables.page} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
+    ALTER TABLE ${tables.site} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
+    ALTER TABLE ${tables.interaction} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
+    ALTER TABLE ${tables.acquisition} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
+    ALTER TABLE ${tables.trafficDimension} DELETE WHERE period_start = toDate(${literal}) AND period_kind = ${kind} SETTINGS mutations_sync = 2;
   `);
-  insertClickHouse(pageTable, pageRows);
-  insertClickHouse(siteTable, [siteRow]);
+  insertClickHouse(tables.page, rows.pageRows);
+  insertClickHouse(tables.site, [rows.siteRow]);
+  insertClickHouse(tables.interaction, rows.interactionRows);
+  insertClickHouse(tables.acquisition, rows.acquisitionRows);
+  insertClickHouse(tables.trafficDimension, rows.trafficDimensionRows);
 }
 
 async function archiveTask({ task, config, columns, pages, snapshots, dryRun }) {
   const input = { columns, hostnames: config.rybbitHostnames, start: task.start, end: task.end, pages };
-  const [pageStats, siteStats, activity, commentsCreated] = await Promise.all([
+  const [
+    pageStats,
+    siteStats,
+    activity,
+    commentsCreated,
+    interactions,
+    acquisition,
+    trafficDimensions,
+  ] = await Promise.all([
     fetchPageStats(input),
     fetchSiteStats(input),
     fetchActivityStats(input),
@@ -548,6 +821,9 @@ async function archiveTask({ task, config, columns, pages, snapshots, dryRun }) 
       start: task.start,
       end: task.end,
     }),
+    fetchInteractionStats(input),
+    fetchAcquisitionStats(input),
+    fetchTrafficDimensionStats(input),
   ]);
 
   let commentTotals = new Map();
@@ -568,10 +844,13 @@ async function archiveTask({ task, config, columns, pages, snapshots, dryRun }) 
     commentsCreated,
     commentTotals,
     kudosTotals,
+    interactions,
+    acquisition,
+    trafficDimensions,
     snapshots,
   });
 
-  if (!dryRun) writeRows(task, rows.pageRows, rows.siteRow);
+  if (!dryRun) writeRows(task, rows);
   console.log(JSON.stringify({
     period: task.kind,
     key: task.key,
@@ -579,6 +858,9 @@ async function archiveTask({ task, config, columns, pages, snapshots, dryRun }) 
     pageviews: rows.siteRow.pageviews,
     unique_visitors: rows.siteRow.unique_visitors,
     comments_created: rows.siteRow.comments_created,
+    interaction_events: rows.interactionRows.reduce((sum, row) => sum + row.events, 0),
+    acquisition_sessions: rows.acquisitionRows.reduce((sum, row) => sum + row.sessions, 0),
+    traffic_dimension_rows: rows.trafficDimensionRows.length,
     snapshots,
     dry_run: dryRun,
   }));
