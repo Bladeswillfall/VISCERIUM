@@ -206,6 +206,12 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
     color: var(--codex-palette-light) !important;
   }
 
+  @media (min-width: 70.001rem) {
+    body:has(.support-page) .sl-markdown-content .support-hero h1 {
+      font-size: clamp(4rem, 2.5rem + 6vw, 10.5rem);
+    }
+  }
+
   @media (max-width: 48rem) {
     body:has(.support-page) .support-hero h1 {
       font-size: clamp(2.75rem, 13.5vw, 6.2rem);
