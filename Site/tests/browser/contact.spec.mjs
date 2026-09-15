@@ -16,14 +16,17 @@ test('contact page keeps public issues secondary when private messaging is unava
   await expect(page.getByRole('heading', { name: 'Send a message.' })).toBeVisible();
   await expect(page.getByText('Private messages are unavailable.')).toBeVisible();
   await expect(page.locator('.contact-hero__body')).toContainText('Private contact is temporarily unavailable.');
-  await expect(page.locator('.contact-hero__body')).toContainText('the support page so it can be tracked publicly.');
+  await expect(page.locator('.contact-hero__body')).toContainText('GitHub so it can be tracked publicly.');
   await expect(page.locator('.contact-hero__body')).not.toContainText('use the contact form below');
-  await expect(page.locator('.contact-public__intro > p')).toContainText('the support page so it can be tracked publicly.');
-  await expect(page.locator('.contact-github-card > p')).toContainText('the support page so the discussion and fix stay attached');
+  await expect(page.locator('.contact-public__intro > p')).toContainText('GitHub so it can be tracked publicly.');
+  await expect(page.locator('.contact-github-card > p')).toContainText('GitHub so the discussion and fix stay attached');
   await expect(page.locator('.contact-hero__mark')).toHaveCSS('mask-image', /viscerium-logo\.svg/);
-  await expect(page.locator('.contact-github-card .codex-icon')).toHaveCount(0);
+  await expect(page.locator('.contact-github-card .codex-icon')).toHaveCount(1);
   const submitIssue = page.getByRole('link', { name: 'Submit an issue', exact: true });
-  await expect(submitIssue).toHaveAttribute('href', '/support/');
+  await expect(submitIssue).toHaveAttribute(
+    'href',
+    'https://github.com/Bladeswillfall/VISCERIUM/issues/new/choose',
+  );
 
   await expect(page.locator('form')).toHaveCount(0);
   await expect(page.locator('.cf-turnstile')).toHaveCount(0);
