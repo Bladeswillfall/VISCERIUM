@@ -17,6 +17,19 @@ const readSurface = (locator) => locator.evaluate((element) => {
   };
 });
 
+test('support hero wordmark stays clear of the intro copy at desktop widths', async ({ page }) => {
+  for (const width of [1280, 1830]) {
+    await page.setViewportSize({ width, height: 1024 });
+    await page.goto(supportUrl, { waitUntil: 'networkidle' });
+
+    const wordmarkBox = await page.locator('.support-wordmark').boundingBox();
+    const copyBox = await page.locator('.support-hero__copy').boundingBox();
+    if (!wordmarkBox || !copyBox) throw new Error(`Support hero geometry was unavailable at ${width}px`);
+
+    expect(wordmarkBox.x + wordmarkBox.width).toBeLessThan(copyBox.x);
+  }
+});
+
 test('support surfaces stay legible when repository links are disabled', async ({ page }) => {
   await page.goto(supportUrl, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
