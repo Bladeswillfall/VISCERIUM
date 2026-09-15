@@ -16,10 +16,10 @@ const worldParagraphs = Array.isArray(primer.worldNow.body)
   ? primer.worldNow.body
   : [primer.worldNow.body];
 const eraAccent = {
-  citadel: 'var(--era-e1-base)',
-  smog: 'var(--era-e2-base)',
-  nearsight: 'var(--era-e3-base)',
-  entropy: 'var(--era-e4-base)',
+  citadel: 'var(--era-e1-accent)',
+  smog: 'var(--era-e2-accent)',
+  nearsight: 'var(--era-e3-accent)',
+  entropy: 'var(--era-e4-accent)',
 }[primer.id] ?? 'var(--sl-color-accent)';
 
 const docs = await getCollection('docs');

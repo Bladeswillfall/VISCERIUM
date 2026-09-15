@@ -1,27 +1,8 @@
 .world-graph {
-  --world-graph-canvas: var(--codex-palette-ink);
-  --world-graph-surface: var(--codex-palette-oled);
-  --world-graph-border: var(--codex-palette-deep);
-  --world-graph-text: var(--codex-palette-light);
-  --world-graph-muted: var(--codex-palette-mid);
-  --world-graph-node: var(--codex-palette-light);
-  --world-graph-selected: var(--codex-warning-base);
-  --world-graph-edge: var(--codex-palette-mid);
   --world-graph-edge-opacity: .75;
   display: grid;
   gap: .75rem;
   min-inline-size: 0;
-}
-
-:root[data-theme='light'] .world-graph {
-  --world-graph-canvas: var(--codex-palette-page-light);
-  --world-graph-surface: var(--codex-palette-light);
-  --world-graph-border: var(--codex-palette-mid);
-  --world-graph-text: var(--codex-palette-oled);
-  --world-graph-muted: var(--codex-palette-deep);
-  --world-graph-node: var(--codex-palette-deep);
-  --world-graph-selected: var(--codex-palette-oled);
-  --world-graph-edge: var(--codex-palette-deep);
 }
 
 .world-graph__toolbar {

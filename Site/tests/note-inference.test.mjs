@@ -42,6 +42,20 @@ test('infers factions and locations from semantic subfolders', () => {
   assert.equal(inferNoteType(settlement, sourceDir), 'location');
 });
 
+test('infers specialised lore types from their authoring folders', () => {
+  const cases = [
+    ['Cultures/Okse.md', 'culture'],
+    ['Religions/The Light.md', 'belief'],
+    ['Naming Languages/Oksean.md', 'naming_language'],
+    ['Resonant Practices/Chorus.md', 'resonance_practice'],
+  ]
+
+  for (const [folder, type] of cases) {
+    const file = path.resolve(`/vault/Lore/Eras/CITADEL/${folder}`)
+    assert.equal(inferNoteType(file, sourceDir), type)
+  }
+})
+
 test('only infers era for direct children of the Eras index folder', () => {
   const era = path.resolve('/vault/Lore/Eras/CITADEL.md');
   const ordinaryArticle = path.resolve('/vault/Lore/Eras/CITADEL/Overview.md');

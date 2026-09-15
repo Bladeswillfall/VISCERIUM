@@ -1,4 +1,5 @@
 import * as runtime from './runtime.mjs';
+import { validateCalendarYearDates } from './year-view.mjs';
 import type {
   CalendarDateInput,
   CalendarDatePrecision,
@@ -32,4 +33,6 @@ export const formatAbsoluteDay: (
 ) => string = runtime.formatAbsoluteDay;
 export const resolveCalendarDate: (input: CalendarDateInput, options?: CalendarFormatOptions) => ResolvedCalendarDate = runtime.resolveCalendarDate;
 export const resolveEquivalentDates: (input: CalendarDateInput, calendarIds?: string[], options?: CalendarFormatOptions) => ResolvedCalendarDate[] = runtime.resolveEquivalentDates;
-export const getCalendarYearDates: (calendarId: string, year: number, options?: CalendarFormatOptions) => ResolvedCalendarDate[] = runtime.getCalendarYearDates;
+export const getCalendarYearDates = (calendarId: string, year: number, options?: CalendarFormatOptions): ResolvedCalendarDate[] => (
+  validateCalendarYearDates(runtime.getCalendarYearDates(calendarId, year, options), year)
+);

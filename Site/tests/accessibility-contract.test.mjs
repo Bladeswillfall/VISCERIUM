@@ -25,5 +25,9 @@ test('the global accessibility layer preserves focus, target size and user displ
   assert.match(css, /min-block-size:\s*2\.75rem/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(css, /@media \(forced-colors: active\)/);
+  assert.match(
+    css,
+    /:where\(\.codex-local-icon, \.local-icon\)\s*\{\s*forced-color-adjust:\s*none;\s*background-color:\s*CanvasText;\s*\}/s,
+  );
   assert.match(css, /outline:\s*3px solid Highlight/);
 });

@@ -44,3 +44,9 @@ test('Story Entity routing recovers the rendered frontmatter title before moving
   assert.match(story, /const documentTitle = renderedDocumentTitle\(rendered\)/);
   assert.match(story, /tp\.file\.move\(`\$\{targetFolder\}\/\$\{documentTitle\}`\)/);
 });
+
+test('Story Entity wrapper reads the Templater suggester prompt argument', async () => {
+  const story = await read('Vault/Templates/Databases/New Story Entity.md')
+
+  assert.equal((story.match(/const prompt = args\[3\]/g) ?? []).length, 2)
+})
