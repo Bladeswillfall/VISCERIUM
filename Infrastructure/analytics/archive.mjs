@@ -8,6 +8,7 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f
 const HOST_RE = /^[a-z0-9.-]+$/i;
 const COMMENT_LIMIT = 10_000;
 const SNAPSHOT_CONCURRENCY = 8;
+const ANALYTICS_HISTORY_START = '2026-08-26';
 
 function requiredEnv(name, fallback) {
   const value = process.env[name]?.trim() || fallback;
@@ -86,15 +87,14 @@ function previousMonthStart(date) {
   return monthStart.toISOString().slice(0, 10);
 }
 
-export function monthlyCatchupTasks(latest, yesterday = londonYesterday()) {
+export function monthlyCatchupTasks(archivedMonths, yesterday = londonYesterday()) {
   const target = previousMonthStart(nextDate(parseIsoDate(yesterday)));
-  if (!latest) return [monthlyTask(target)];
-
+  const archived = new Set([...archivedMonths].map(parseIsoDate));
   const tasks = [];
-  let start = monthRange(parseIsoDate(latest).slice(0, 7)).end;
+  let start = `${ANALYTICS_HISTORY_START.slice(0, 7)}-01`;
   while (start <= target) {
     const task = monthlyTask(start);
-    tasks.push(task);
+    if (!archived.has(start)) tasks.push(task);
     start = task.end;
   }
   return tasks;
@@ -189,6 +189,14 @@ function latestArchivedDate(kind) {
     WHERE period_kind = ${sqlString(kind)}
   `)[0]?.latest;
   return typeof latest === 'string' && latest ? parseIsoDate(latest) : null;
+}
+
+function archivedPeriodStarts(kind) {
+  return new Set(queryClickHouse(`
+    SELECT period_start
+    FROM viscerium_metrics.site_periods
+    WHERE period_kind = ${sqlString(kind)}
+  `).map((row) => parseIsoDate(row.period_start)));
 }
 
 function timeFilter(start, end) {
@@ -604,7 +612,7 @@ async function main() {
     dailyTasks = dailyCatchupTasks(latestArchivedDate('daily'), args.tasks[0].key);
     tasks = [
       ...dailyTasks,
-      ...monthlyCatchupTasks(latestArchivedDate('monthly'), args.tasks[0].key),
+      ...monthlyCatchupTasks(archivedPeriodStarts('monthly'), args.tasks[0].key),
     ];
   }
 
