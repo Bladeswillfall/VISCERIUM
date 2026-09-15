@@ -148,6 +148,8 @@ sudo systemctl enable --now viscerium-analytics-archive.timer
 
 The timer runs at 00:15 Europe/London and uses `Persistent=true`, so a missed run executes after the host comes back.
 
+Each normal timer run also fills any missing completed monthly periods through the previous London calendar month. Monthly rows are calculated directly from raw events, so monthly unique visitors are not summed from daily values. Automatic monthly catch-up leaves snapshot totals `NULL`.
+
 Check it with:
 
 ```bash
