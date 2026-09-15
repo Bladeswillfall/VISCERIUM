@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 
 const baseUrl = process.env.SUPPORT_TEST_BASE_URL ?? process.env.CONTACT_TEST_BASE_URL ?? 'http://127.0.0.1:4321';
 const supportUrl = `${baseUrl}/support/`;
-const repoFixtureEnabled = process.env.SUPPORT_REPO_TEST_ENABLED === '1';
 
 test.use({ viewport: { width: 1280, height: 900 } });
 
@@ -30,15 +29,11 @@ test('support hero wordmark stays clear of the intro copy at desktop widths', as
   }
 });
 
-test('support surfaces stay legible when repository links are disabled', async ({ page }) => {
+test('support surfaces stay legible with the canonical repository links', async ({ page }) => {
   await page.goto(supportUrl, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
   });
-
-  if (!repoFixtureEnabled) {
-    await expect(page.locator('.support-card')).toHaveCount(0);
-  }
 
   const activeSocial = page.locator('.support-social--active').first();
   await activeSocial.hover();
@@ -109,9 +104,7 @@ test('support surfaces stay legible when repository links are disabled', async (
   );
 });
 
-test('configured repository support cards retain their geometry and light-mode surface', async ({ page }) => {
-  test.skip(!repoFixtureEnabled, 'repository support fixture is not enabled');
-
+test('canonical repository support cards retain their geometry and light-mode surface', async ({ page }) => {
   await page.goto(supportUrl, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
@@ -129,7 +122,7 @@ test('configured repository support cards retain their geometry and light-mode s
 
   const repositoryCard = issueCards.last();
   await expect(repositoryCard).toHaveClass(/support-card--wide/);
-  await expect(repositoryCard).toHaveAttribute('href', /github\.com\//);
+  await expect(repositoryCard).toHaveAttribute('href', 'https://github.com/Bladeswillfall/VISCERIUM');
 });
 
 test('support serves the supplied black Discord icon without changing its geometry', async ({ request }) => {
