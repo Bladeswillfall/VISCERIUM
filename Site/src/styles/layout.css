@@ -66,6 +66,11 @@
   border: 0;
 }
 
+.codex-discussions__inner,
+.footer-grid {
+  margin-inline: auto;
+}
+
 @media (min-width: 72rem) {
   .main-frame:has(> .codex-two-column-content) {
     box-sizing: border-box;
