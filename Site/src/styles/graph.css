@@ -171,6 +171,10 @@
   margin-inline: 0 !important;
 }
 
+.main-frame:has(.world-graph) .sl-markdown-content {
+  padding-inline: 0 !important;
+}
+
 @media (min-width: 72rem) {
   .main-frame:has(.world-graph) > .codex-two-column-content {
     max-inline-size: none !important;
