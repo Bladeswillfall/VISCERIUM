@@ -6,17 +6,21 @@ const RENDERED_INDENT_CLASS = 'vc-layout-indent-rendered';
 const RENDERED_COLUMNS_CLASS = 'vc-layout-cols-rendered';
 const RENDERED_COLUMN_CLASS = 'vc-layout-col-rendered';
 const INDENT_MARKER = `<span class="${INDENT_MARKER_CLASS}" aria-hidden="true" hidden></span>`;
-const INDENT_HEADER_RE = /^(?:\s*>\s*)+\[!vc-indent\](?:[-+])?(?:\s+<span class="vc-layout-indent-marker" aria-hidden="true"(?: hidden)?><\/span>)?\s*$/;
-const LEGACY_INDENT_HEADER_RE = /^(\s*(?:>\s*)+)\[!vc-indent\][-+]\s*(?:<span class="vc-layout-indent-marker" aria-hidden="true"><\/span>)?\s*$/;
-const INDENT_MARKER_RE = /^(?:\s*>\s*)+<span class="vc-layout-indent-marker" aria-hidden="true"(?: hidden)?><\/span>\s*$/;
+const QUOTE_PREFIX_RE = /^[\t >]*/;
+const INDENT_HEADER_RE = /^\[!vc-indent\](?:[-+])?(?:\s+<span class="vc-layout-indent-marker" aria-hidden="true"(?: hidden)?><\/span>)?\s*$/;
+const LEGACY_INDENT_HEADER_RE = /^\[!vc-indent\][-+]\s*(?:<span class="vc-layout-indent-marker" aria-hidden="true"><\/span>)?\s*$/;
+const INDENT_MARKER_RE = /^<span class="vc-layout-indent-marker" aria-hidden="true"(?: hidden)?><\/span>\s*$/;
 const INDENT_LABEL_RE = /^\[!vc-indent\](?:[-+])?$/;
 const LAYOUT_TAG_RE = /^\[(\/)?(cols|col)(?:(?::|\s+)([^\]]*))?\]$/i;
 const LAYOUT_GAPS = { none: '0', xs: '.35rem', sm: '.65rem', md: '1rem', lg: '1.5rem', xl: '2.25rem' };
 const LAYOUT_ALIGN = new Set(['start', 'center', 'end', 'stretch']);
 
+function quotePrefixText(line) {
+  return String(line ?? '').match(QUOTE_PREFIX_RE)?.[0] ?? '';
+}
+
 function quoteDepth(line) {
-  const match = String(line ?? '').match(/^\s*((?:>\s*)*)/);
-  return match ? (match[1].match(/>/g) ?? []).length : 0;
+  return (quotePrefixText(line).match(/>/g) ?? []).length;
 }
 
 function quotePrefix(depth) {
@@ -28,8 +32,24 @@ function stripOneQuote(line) {
   return String(line ?? '').replace(/^(\s*)>\s?/, '$1');
 }
 
+function hasQuotedBody(line, pattern) {
+  const source = String(line ?? '');
+  const prefix = quotePrefixText(source);
+  return prefix.includes('>') && pattern.test(source.slice(prefix.length));
+}
+
+function isIndentHeaderLine(line) {
+  return hasQuotedBody(line, INDENT_HEADER_RE);
+}
+
+function isIndentMarkerLine(line) {
+  return hasQuotedBody(line, INDENT_MARKER_RE);
+}
+
 function isQuoteOnlyLine(line) {
-  return quoteDepth(line) > 0 && String(line ?? '').replace(/^\s*(?:>\s*)+/, '').trim() === '';
+  const source = String(line ?? '');
+  const prefix = quotePrefixText(source);
+  return prefix.includes('>') && source.slice(prefix.length).trim() === '';
 }
 
 function minimumQuoteDepth(markdown) {
@@ -107,7 +127,7 @@ function wrapVisualIndent(editor) {
 function enclosingIndent(editor, targetLine = editor.getCursor().line) {
   for (let headerLine = targetLine; headerLine >= 0; headerLine -= 1) {
     const header = editor.getLine(headerLine);
-    if (!INDENT_HEADER_RE.test(header)) continue;
+    if (!isIndentHeaderLine(header)) continue;
 
     const depth = quoteDepth(header);
     if (!depth) continue;
@@ -133,12 +153,12 @@ function unwrapVisualIndent(editor) {
   }
 
   let contentStart = container.headerLine + 1;
-  if (contentStart <= container.endLine && INDENT_MARKER_RE.test(editor.getLine(contentStart))) contentStart += 1;
+  if (contentStart <= container.endLine && isIndentMarkerLine(editor.getLine(contentStart))) contentStart += 1;
   if (contentStart <= container.endLine && !stripOneQuote(editor.getLine(contentStart)).trim()) contentStart += 1;
 
   const content = [];
   for (let line = contentStart; line <= container.endLine; line += 1) {
-    if (INDENT_MARKER_RE.test(editor.getLine(line))) continue;
+    if (isIndentMarkerLine(editor.getLine(line))) continue;
     content.push(stripOneQuote(editor.getLine(line)));
   }
 
@@ -158,10 +178,9 @@ function repairLegacyVisualIndents(editor) {
 
   for (let line = editor.lineCount() - 1; line >= 0; line -= 1) {
     const source = editor.getLine(line);
-    const match = source.match(LEGACY_INDENT_HEADER_RE);
-    if (!match) continue;
+    const prefix = quotePrefixText(source);
+    if (!prefix.includes('>') || !LEGACY_INDENT_HEADER_RE.test(source.slice(prefix.length))) continue;
 
-    const prefix = match[1];
     const replacement = `${prefix}[!vc-indent]\n${prefix}${INDENT_MARKER}`;
     editor.replaceRange(replacement, { line, ch: 0 }, { line, ch: source.length });
     repaired += 1;
@@ -184,7 +203,7 @@ function repairMalformedNestedVisualIndents(editor) {
 
   for (let line = editor.lineCount() - 4; line >= 0; line -= 1) {
     const header = editor.getLine(line);
-    if (!INDENT_HEADER_RE.test(header)) continue;
+    if (!isIndentHeaderLine(header)) continue;
 
     const depth = quoteDepth(header);
     if (!depth) continue;
@@ -192,7 +211,7 @@ function repairMalformedNestedVisualIndents(editor) {
     const marker = editor.getLine(line + 1);
     const spacer = editor.getLine(line + 2);
     const firstContent = editor.getLine(line + 3);
-    if (!INDENT_MARKER_RE.test(marker) || quoteDepth(marker) !== depth) continue;
+    if (!isIndentMarkerLine(marker) || quoteDepth(marker) !== depth) continue;
     if (!isQuoteOnlyLine(spacer) || quoteDepth(spacer) !== depth) continue;
     if (quoteDepth(firstContent) <= depth) continue;
 
