@@ -66,7 +66,7 @@ She eventually returned to service. The body that returned was not the one that 
 
 ## Personality
 
-<figure class="vc-image-embed vc-image-right vc-image-shape" style="--vc-image-width:340px;--vc-image-gap:18px;--vc-image-shape:polygon(100% 0,100% 100%,0% 100%,0% 95%,3% 90%,39% 85%,39% 80%,36% 75%,34% 70%,34% 65%,36% 60%,32% 55%,20% 50%,10% 45%,4% 40%,11% 35%,21% 30%,27% 25%,23% 20%,21% 15%,39% 10%,42% 5%,100% 0)"><img src="/assets/images/bailey-pittman-fieldwear.webp" alt="Bailey Pittman wearing Delta Two fieldwear and biomechanical prosthetics" loading="lazy" decoding="async"></figure>
+![[bailey-pittman-fieldwear.webp|right|340|shape|gap=18|alt=Bailey Pittman wearing Delta Two fieldwear and biomechanical prosthetics]]
 
 Bailey is easiest to know while nothing serious is being discussed. She jokes, needles her peers and reaches for sarcasm whenever a conversation drifts too close to something she would rather leave buried. Around Delta Two she is energetic, generous and regularly accused of being a bad influence.
 
@@ -84,19 +84,19 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Protective instinct
->>
+>
 > > You don't get to die before me! No one else is dying before me... Not again! Not ever again!
 > >
 > > — Tpr. Bailey Pittman
 >
 > Bailey’s morality is immediate. She has little interest in why the Myrkild and their Nadirs are on Errack, or why there are only eight stars in the sky. Those questions can belong to somebody with the time and patience for them. Bailey cares about the person standing beside her, the person unable to defend themselves, and the person responsible when either is hurt.
-
-She is intensely loyal to her peers and quick to divide a crisis into ours and theirs. Once Bailey decides somebody knowingly harmed another person, sympathy for their reasoning tends to disappear. That makes her dependable when seconds matter and dangerously heavy-handed when her first judgement is wrong.
+>
+> She is intensely loyal to her peers and quick to divide a crisis into ours and theirs. Once Bailey decides somebody knowingly harmed another person, sympathy for their reasoning tends to disappear. That makes her dependable when seconds matter and dangerously heavy-handed when her first judgement is wrong.
 >
 > > I don't care if you're stealing to feed your children, or whatever, I care if you hurt someone whilst doing it. You don't have the right to destroy some innocent person's life for your own gains.
 > >
 > > — Tpr. Bailey Pittman
-> 
+>
 > There is an uncomfortable contradiction in this. Bailey is terrified that the power in her artificial limbs might hurt somebody she cares about, yet she fought for years to return to a profession built around violence. To her, these are not opposing impulses. They are the same promise taken too far: if somebody is going to stand between danger and the people around her, Bailey wants it to be her.
 
 ## History
@@ -136,7 +136,7 @@ She is intensely loyal to her peers and quick to divide a crisis into ours and t
 >
 > ### Prosthetics
 >
-> <figure class="vc-image-embed vc-image-left vc-image-shape" style="--vc-image-width:360px;--vc-image-gap:18px;--vc-image-shape:polygon(0 0,56% 5%,78% 10%,78% 15%,75% 20%,75% 25%,79% 30%,89% 35%,96% 40%,90% 45%,81% 50%,72% 55%,75% 60%,72% 65%,68% 70%,64% 75%,60% 80%,57% 85%,59% 90%,100% 95%,100% 100%,0 100%)"><img src="/assets/images/bailey-pittman-prosthetics.webp" alt="Bailey Pittman displaying her biomechanical prosthetic arms and legs" loading="lazy" decoding="async"></figure>
+> ![[bailey-pittman-prosthetics.webp|left|360|shape|gap=18|alt=Bailey Pittman displaying her biomechanical prosthetic arms and legs]]
 >
 > Bailey is fitted with synthetic biomechanical prosthetics that, for the most part, mimic human biology and form. Her amputations are at the: shoulder disarticulation for her right arm, transhumeral point for her left arm, and both legs are hemipelvectomies.
 >
