@@ -70,7 +70,16 @@ Before you add or change a tracked plugin setting:
 5. Update `Vault/System/Obsidian Plugin Profile.json` when the tested version or settings path changes.
 6. Test the affected creator workflow.
 
-First-party `viscerium-*` plugins are repository software and remain tracked.
+First-party `viscerium-*` plugins are repository software and remain tracked. Edit their maintained source under `Tools/`. Treat `Vault/.obsidian/plugins/viscerium-*` as checked-in runtime payloads.
+
+For Creator Tools, Layout Tools, Image Tools, and Journal Tools, sync the runtime payloads after a source change:
+
+```bash
+node Tools/scripts/sync-obsidian-plugins.mjs --write
+node Tools/scripts/sync-obsidian-plugins.mjs --check
+```
+
+VISCERIUM Timelines keeps its existing build and sync workflow under `Tools/obsidian-viscerium-timelines/`.
 
 The modified MySnippets compatibility runtime is an explicit MPL-2.0 exception. Do not treat that exception as permission to vendor other community plugins.
 
@@ -180,6 +189,12 @@ npm run validate
 npm run generate:maps
 npm run generate:timelines
 npm run test:unit
+```
+
+Check the plain first-party Obsidian runtime payloads after plugin source changes:
+
+```bash
+node Tools/scripts/sync-obsidian-plugins.mjs --check
 ```
 
 Build the VISCERIUM Timelines plugin after timeline plugin or shared timeline changes:
