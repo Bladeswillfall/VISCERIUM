@@ -70,119 +70,137 @@ Whilst maintaining a positive persona and generous attitude on the outside, when
 
 When your training dictates that you get on with it or die, Bailey has yet to properly process what happened to her and instead throws herself into intense situations or shuts off her emotions in order to mask the trauma. Life is never dull around Tpr. Pittman — she won't let it be.
 
-### Morality and Philosophy
-
-#### Morality
-
-> You don't get to die before me! No one else is dying before me... Not again! Not ever again!
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
-> — Tpr. Bailey Pittman
-
-Bailey has an inexplicably strong drive to protect the innocent and bring judgement to the guilty. She values her peers above all else and, as such, views the world through an "us versus them" lens. This can sometimes cause Bailey to act in a heavy-handed manner and be impulsive when dealing with people she believes have done wrong.
-
-#### Philosophy
-
-Bailey doesn't care _why_ the Myrkilds and their Nadirs are here, on [[Lore/Degel System/Errack]]. Nor does she care why there are only eight stars in the sky. Bailey's only concern is the lives of those around her and those who can't defend themselves.
-
-> I don't care if you're stealing to feed your children, or whatever, I care if you hurt someone whilst doing it. You don't have the right to destroy some innocent person's life for your own gains.
+> ### Morality and Philosophy
 >
-> — Tpr. Bailey Pittman
+> #### Morality
+>
+> > You don't get to die before me! No one else is dying before me... Not again! Not ever again!
+> >
+> > — Tpr. Bailey Pittman
+>
+> Bailey has an inexplicably strong drive to protect the innocent and bring judgement to the guilty. She values her peers above all else and, as such, views the world through an "us versus them" lens. This can sometimes cause Bailey to act in a heavy-handed manner and be impulsive when dealing with people she believes have done wrong.
+>
+> #### Philosophy
+>
+> Bailey doesn't care _why_ the Myrkilds and their Nadirs are here, on [[Lore/Degel System/Errack]]. Nor does she care why there are only eight stars in the sky. Bailey's only concern is the lives of those around her and those who can't defend themselves.
+>
+> > I don't care if you're stealing to feed your children, or whatever, I care if you hurt someone whilst doing it. You don't have the right to destroy some innocent person's life for your own gains.
+> >
+> > — Tpr. Bailey Pittman
 
 ## History
 
-### Personal History
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Personal History
+>
+> From adolescence, Bailey showed great skill in athletics and shooting. Participating in three teen CrossFit championships and winning a "Run 'n' Gun" competition by the age of fifteen. These two factors no doubt played a role in the local ICDF branch head-hunting her for enlistment at sixteen.
 
-From adolescence, Bailey showed great skill in athletics and shooting. Participating in three teen CrossFit championships and winning a "Run 'n' Gun" competition by the age of fifteen. These two factors no doubt played a role in the local ICDF branch head-hunting her for enlistment at sixteen.
-
-### Professional History
-
-#### ICDF
-
-Bailey began her career with the Imperium Coalition Defence Force as a Rifleman in the 101st Battalion, eventually specialising in reconnaissance. She served for almost three years in this role before everything went wrong.
-
-During deployment to a mission for the ICDF, Bailey's insertion vehicle was sabotaged, along with the rest of her platoon's. The destruction caused the death and dismemberment of five soldiers, the permanent paralysis of two more and irreversible damage to Bailey's limbs.
-
-Following the devastation and toll inflicted upon Bailey's platoon, she was benched from service until she could pass both mental and physical health assessments as well as the basic entrance exams again.
-
-Following roughly four years of persistent training, exercising and tuning her prosthetics, Bailey re-took her entrance exams for the third year in a row and passed near-top of the class. Once again, entering the ICDF.
-
-#### ICSSAS
-
-Following her re-enlistment to the ICDF, Bailey applied for a role within the ICSSAS straight away.
-
-Joining Delta Squadron, Bailey specialised as a demolitions expert and has held this position for over two years — making her the youngest operator of Delta Two One.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Professional History
+>
+> #### ICDF
+>
+> Bailey began her career with the Imperium Coalition Defence Force as a Rifleman in the 101st Battalion, eventually specialising in reconnaissance. She served for almost three years in this role before everything went wrong.
+>
+> During deployment to a mission for the ICDF, Bailey's insertion vehicle was sabotaged, along with the rest of her platoon's. The destruction caused the death and dismemberment of five soldiers, the permanent paralysis of two more and irreversible damage to Bailey's limbs.
+>
+> Following the devastation and toll inflicted upon Bailey's platoon, she was benched from service until she could pass both mental and physical health assessments as well as the basic entrance exams again.
+>
+> Following roughly four years of persistent training, exercising and tuning her prosthetics, Bailey re-took her entrance exams for the third year in a row and passed near-top of the class. Once again, entering the ICDF.
+>
+> #### ICSSAS
+>
+> Following her re-enlistment to the ICDF, Bailey applied for a role within the ICSSAS straight away.
+>
+> Joining Delta Squadron, Bailey specialised as a demolitions expert and has held this position for over two years — making her the youngest operator of Delta Two One.
 
 ## Equipment
 
-### Prosthetics
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Prosthetics
+>
+> ![[bailey-pittman-prosthetics.webp|left|360|shape|gap=18|alt=Bailey Pittman displaying her biomechanical prosthetic arms and legs]]
+>
+> Bailey is fitted with synthetic biomechanical prosthetics that, for the most part, mimic human biology and form. Her amputations are at the: shoulder disarticulation for her right arm, transhumeral point for her left arm, and both legs are hemipelvectomies.
+>
+> As Bailey's prosthetics are 'military-grade', they have less fine-motor control than the average human would typically possess. This is due to the prosthetics being focused on athletic and physical peaks of performance in terms of speed and power delivery. Additionally, there are intentionally less artificial nerves installed in her spec of prosthetics to reduce feelings of pain. These artificial nerves also send weaker signals to the brain for the same aforementioned reason.
+>
+> Because of these design decisions, Bailey has developed a form of OCD, focused on the idea that she will hurt somebody due to the lack of fine motor-control and tactile feedback she feels from her prosthetics.
 
-![[bailey-pittman-prosthetics.webp|left|360|shape|gap=18|alt=Bailey Pittman displaying her biomechanical prosthetic arms and legs]]
-
-Bailey is fitted with synthetic biomechanical prosthetics that, for the most part, mimic human biology and form. Her amputations are at the: shoulder disarticulation for her right arm, transhumeral point for her left arm, and both legs are hemipelvectomies.
-
-As Bailey's prosthetics are 'military-grade', they have less fine-motor control than the average human would typically possess. This is due to the prosthetics being focused on athletic and physical peaks of performance in terms of speed and power delivery. Additionally, there are intentionally less artificial nerves installed in her spec of prosthetics to reduce feelings of pain. These artificial nerves also send weaker signals to the brain for the same aforementioned reason.
-
-Because of these design decisions, Bailey has developed a form of OCD, focused on the idea that she will hurt somebody due to the lack of fine motor-control and tactile feedback she feels from her prosthetics.
-
-### ICSSAS standard gear
-
-#### Outfit
-
-Outfitted with a waterproof, skin-tight, anti-microbial bodysuit beneath their fatigues to prevent smell, promote healthy conditions and keep the user warm. The bodysuit also has key areas lined with an ultra-durable fibre to prevent piercing and cuts via typical means.
-
-Combat fatigues are a dark grey colour with subtle camouflage patterning, with plain dark grey interior colouration, tailored to fit each ICSSAS operator.
-
-Armour is a matte dark grey colour, matching the slightly lighter inner material of the fatigues. Made from solid plates of armour, backed by a layer of pressure-responsive gel to reduce harsh impacts and physical shock.
-
-#### Preferred equipment
-
-- 1× SAR-41 semi-automatic rifle chambered in .458CTA 'pocket poppers'.
-- 1× Beamblade high-amplitude UVc laser sidearm.
-- 1× M44 shoulder-mounted belt-fed 20mm grenade launcher.
-- 2× CN47 Chaff Grenade.
-- 2× 2.2m Breaching strip.
-- 4× UVc ChemLights.
-- 1× Grapple harpoon.
-- 1× Trauma kit.
-- 1× Water bladder.
-- 1× 24hr rations pack.
-
-In addition to their dark grey armour-tailored fatigues and bodysuits, each ICSSAS operator is supplied with a choice of helmet and helmet modifications. However, each helmet comes with some standard features, such as: an electrochromic transparent metal lens, an AR HUD capable of switching between multiple light-spectrum filters, displaying sensor information and visuals, in-built microphone and speaker arrays for communication and improved situational awareness, and a filtered rebreather for temporary oxygen supply in hostile environments.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### ICSSAS standard gear
+>
+> #### Outfit
+>
+> Outfitted with a waterproof, skin-tight, anti-microbial bodysuit beneath their fatigues to prevent smell, promote healthy conditions and keep the user warm. The bodysuit also has key areas lined with an ultra-durable fibre to prevent piercing and cuts via typical means.
+>
+> Combat fatigues are a dark grey colour with subtle camouflage patterning, with plain dark grey interior colouration, tailored to fit each ICSSAS operator.
+>
+> Armour is a matte dark grey colour, matching the slightly lighter inner material of the fatigues. Made from solid plates of armour, backed by a layer of pressure-responsive gel to reduce harsh impacts and physical shock.
+>
+> #### Preferred equipment
+>
+> - 1× SAR-41 semi-automatic rifle chambered in .458CTA 'pocket poppers'.
+> - 1× Beamblade high-amplitude UVc laser sidearm.
+> - 1× M44 shoulder-mounted belt-fed 20mm grenade launcher.
+> - 2× CN47 Chaff Grenade.
+> - 2× 2.2m Breaching strip.
+> - 4× UVc ChemLights.
+> - 1× Grapple harpoon.
+> - 1× Trauma kit.
+> - 1× Water bladder.
+> - 1× 24hr rations pack.
+>
+> In addition to their dark grey armour-tailored fatigues and bodysuits, each ICSSAS operator is supplied with a choice of helmet and helmet modifications. However, each helmet comes with some standard features, such as: an electrochromic transparent metal lens, an AR HUD capable of switching between multiple light-spectrum filters, displaying sensor information and visuals, in-built microphone and speaker arrays for communication and improved situational awareness, and a filtered rebreather for temporary oxygen supply in hostile environments.
 
 ## Relationships
 
-### Delta Two
-
-#### (D-21) Delta Two One Patrol
-
-_Bailey has served with Delta Two One for over two years. She has an incredibly close bond with all operators of Delta Two One, and regards Delta Two Two as some of her closest friends. Namely, Mía and Bailey are best friends._
-
-##### Cpl. May Zhang
-
-1st In Command of Delta Two One, the motherly May Zhang is the 'firm but fair' leader. Tactically and strategically minded, May has a quiet persona and is all too happy to sit and watch the antics of her Squadron as they bicker or party between assignments.
-
-##### Tpr. Tobi Schöler
-
-Designated machine gunner of Delta Two One, Tobi is a gentle giant — with muscles to show for it. Armed with a light-weight, gimballed exo-frame mount for his weapon and a back case of ammo, most things tend to run or hide once rounds start flying.
-
-##### Tpr. Louis Hodari
-
-Louis is the designated marksman for Delta Two One, with wicked reflexes and a history in recon. Louis is a lethal hunter and, surprisingly, an amazing chef — all those emergency rations gave him a real strong love for good food.
-
-#### (D-22) Delta Two Two Patrol
-
-##### LCpl. Akanni Balogun
-
-2nd In Command of Delta Two One. As a CQB and hand-to-hand specialist, Akanni earned his surname upon joining the ICSSAS and has since only gotten more and more effective in his role as a now team leader.
-
-##### [[Drafts/Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko]]
-
-The designated marksman for Delta Two Two, Hannah has proven to be a truly lethal operator. Though Hannah is a bit more introverted and quiet than her comrades, when in uniform or on mission, she is focused and determined to be useful.
-
-##### Tpr. Mía Alvarado
-
-Mía and Bailey have a sister-like bond. As best friends they often spend their free time together, almost all of it in fact, in each other's presence. As the designated machine gunner for Delta Two Two, Mía is short tempered and all too happy to saturate an area with high-calibre rounds.
-
-##### Tpr. Ilya Artemiy Valerianovich
-
-Designated demolitions specialist, Ilya has an innate ability to make things set on fire or go "boom" with minimal resources, and often just scraps left laying about. Chemistry has always been a passion of Ilya's, and now he gets to fight for and defend his team with that same passion.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Delta Two
+>
+> #### (D-21) Delta Two One Patrol
+>
+> _Bailey has served with Delta Two One for over two years. She has an incredibly close bond with all operators of Delta Two One, and regards Delta Two Two as some of her closest friends. Namely, Mía and Bailey are best friends._
+>
+> ##### Cpl. May Zhang
+>
+> 1st In Command of Delta Two One, the motherly May Zhang is the 'firm but fair' leader. Tactically and strategically minded, May has a quiet persona and is all too happy to sit and watch the antics of her Squadron as they bicker or party between assignments.
+>
+> ##### Tpr. Tobi Schöler
+>
+> Designated machine gunner of Delta Two One, Tobi is a gentle giant — with muscles to show for it. Armed with a light-weight, gimballed exo-frame mount for his weapon and a back case of ammo, most things tend to run or hide once rounds start flying.
+>
+> ##### Tpr. Louis Hodari
+>
+> Louis is the designated marksman for Delta Two One, with wicked reflexes and a history in recon. Louis is a lethal hunter and, surprisingly, an amazing chef — all those emergency rations gave him a real strong love for good food.
+>
+> #### (D-22) Delta Two Two Patrol
+>
+> ##### LCpl. Akanni Balogun
+>
+> 2nd In Command of Delta Two One. As a CQB and hand-to-hand specialist, Akanni earned his surname upon joining the ICSSAS and has since only gotten more and more effective in his role as a now team leader.
+>
+> ##### [[Drafts/Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko]]
+>
+> The designated marksman for Delta Two Two, Hannah has proven to be a truly lethal operator. Though Hannah is a bit more introverted and quiet than her comrades, when in uniform or on mission, she is focused and determined to be useful.
+>
+> ##### Tpr. Mía Alvarado
+>
+> Mía and Bailey have a sister-like bond. As best friends they often spend their free time together, almost all of it in fact, in each other's presence. As the designated machine gunner for Delta Two Two, Mía is short tempered and all too happy to saturate an area with high-calibre rounds.
+>
+> ##### Tpr. Ilya Artemiy Valerianovich
+>
+> Designated demolitions specialist, Ilya has an innate ability to make things set on fire or go "boom" with minimal resources, and often just scraps left laying about. Chemistry has always been a passion of Ilya's, and now he gets to fight for and defend his team with that same passion.
