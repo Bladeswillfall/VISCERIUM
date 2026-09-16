@@ -40,6 +40,7 @@ published: 2022-05-28
 updated: 2026-09-16
 status: "published"
 type: "character"
+community_id: "d4b057dc-4b0e-4a59-ac25-9833d1b787ef"
 icon: "character"
 era: "ENTROPY"
 image: "bailey-pittman-portrait.webp"
