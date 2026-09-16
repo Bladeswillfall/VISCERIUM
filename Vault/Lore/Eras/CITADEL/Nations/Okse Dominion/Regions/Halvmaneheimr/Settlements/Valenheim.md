@@ -157,155 +157,173 @@ Valenheim is easier to remember by smell, incline and who is allowed to stand st
 
 Then a ragged clerk produces the right [[Maelihus]] seal and everyone gets out of his fucking way.
 
-### Hofn Brattrstein
-
-At [[Hofn Brattrstein]], the day begins before the light. Pike and [[Elvormr]] are split on black boards while dockers shout berth numbers through fog. Blood runs pink between quay stones. [[Sigdfugl]] circle the roofs and wait for the gulls to miss something.
-
-Yrsa Hrafnsdottir is usually shouting before sunrise. One winter morning a fish cart broke an axle across an oil berth as three horn-blasts announced a convoy. Men swore; the owner swore louder. [[Svartskjoldr]] came down in blackened armour beside sealed casks and fire-tubes, paid to imagine the entire fucking quay on fire. Yrsa kept gutting pike while everyone else dragged the cart aside.
-
-The oil got its berth.
-
-It always does.
-
-The river makes the city possible and spends most days making that fact inconvenient. Barges arrive with masts lowered for the stone bridges. Tow-lines snag against old piers. Ice scours mooring posts in winter and springwater brings whole trees down from the north. In a dry summer, heavily laden hulls scrape where a lighter boat passed the year before. Boatmen know the river by sound; harbour clerks know it by how many lies appear on the cargo tallies.
-
-Northbound water does not solve every journey. Beyond Fagrvatn, broken water and the fall sever easy navigation toward the upper country. Loads intended for the northern road come ashore, are counted, argued over, stacked, stolen from, counted again and put onto carts or pack animals. A barrel may travel three streets inland before anybody notices the cooper used a green stave. A snapped hoop can sour half a merchant's week.
-
-Grain, salt, timber, livestock, ore and people share the same wet congestion. So do hay bales for draught animals, bark for leatherworkers, charcoal under patched covers, coils of rope, bundles of wool, replacement axles and cheap shoes nobody expects to remain waterproof. Free porters work beside [[Thralls]] and [[Ambátts]] marked by collars, brands or an overseer close enough to strike them. A dropped barrel enters the tally; a dislocated shoulder usually does not. Toll disputes make salt dear, seized barges provoke searches and foreign coin is cursed according to whichever border lord last fucked with it. Merchants keep three prices: peace, rumour and soldiers asking for wagons.
-
-The trades that need the river but offend everybody else have been pushed outward by generations of complaint. Hides are landed here, but much of the soaking, scraping and tanning happens farther down-water where bark liquor and lime can be blamed on somebody else's stretch of bank. The smell ignores jurisdiction. So does runoff. On warm days the fishwives can tell whether the tanners emptied a pit before they can see the colour in the water, and the argument begins again over whose trade is fouling whose dinner.
-
-Nothing at Brattrstein stays singular for long. A crane belongs to a warehouse but its rope came from another ward, its ironwork from [[Svartsmidja]] and the timber arm from a tree felled weeks away. The man who knows how to replace the pawl may be drunk, ill, conscripted or under arrest. When a hoist fails, six other trades stop and watch their own wages hanging over the quay.
-
-Over the gutting tables hang little pike-bone cages knotted with black wool and copper. Priests say they do nothing. Fishwives retie them before first frost anyway, because priests sleep farther from the river.
-
-Warehouses crowd chandlers, brokers, brothels, cheap beds and the [[Klofinn Kjolr]], its floor sanded against fish slime and blood. A dried Elvormr jaw hangs over the bar. The proprietor says the beast was longer than his boat. Every fisherman knows this is bullshit. Every fisherman has seen a larger one. The board lists pot, mead, hot water, bed-space and “damage to furniture”; only the last changes nightly.
-
-[[Ulfrvaldar]] are easy to spot by old bite-scars and the habit of checking every doorway before sitting. Their wolves stay in the yard after what happened to Orri's hand. Ask three regulars what happened and you will get four answers, two of which involve Orri being drunk and one in which he deserved it.
-
-> Move your fucking boots. The river's already had its share.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
-> — Yrsa Hrafnsdottir, to a man bleeding beside her stall
-
-The smell of Brattrstein follows you uphill.
-
-### Gamaltrappir
-
-The [[Gamaltrappir]] climb through foundations older than the families living on them. One doorway opens at another man's roof. Cellars stop against masonry too expensive to remove. During thaw, water remembers streets that people have forgotten and comes up through the floor to prove it.
-
-A house can be older at the bottom than the street beside it and younger at the top than the child sleeping under its eaves. Stone ground floors take timber second storeys; second storeys grow lean-tos; lean-tos bridge alleys until neighbours can pass bread between windows without putting on boots. One abandoned watch stair now serves four homes and a cobbler. An old defensive gutter carries sewage because nobody living remembers it as anything else. A blocked arch has a shrine in it. Behind the shrine is another room. Nobody agrees who owns it.
-
-Every few years somebody buys a cheap house, opens a floor to fix a rotten joist and discovers dressed stone continuing below the cellar. This is exciting for exactly as long as it takes to learn that the wall cannot be removed, the drain now has to go around it and the survey clerk has decided the extra underground room is taxable.
-
-Three families may share one stove; lodging houses rent the same bed to different bodies by shift. Chamber pots are meant for the cesspits. They do not always reach them. Lice are too normal for conversation. Rats are not.
-
-> DO NOT SHIT ABOVE THE THIRD STEP.
+> ### Hofn Brattrstein
 >
-> — painted beside a runoff channel
-
-Somebody crosses out *NOT* often enough that the ward clerk now repaints only the missing letters.
-
-Gamaltrappir lives by repair because replacement costs more. Boots are resoled until there is more patch than boot. Rivets are saved in cups. Wool is turned, redyed and cut down from one child to the next. A cooper's apprentice may spend a morning fixing a wash-tub, an afternoon patching a grain barrel and the evening being sent back because the landlord insists the leak was not there before. Laundresses queue at the cleaner channels before dawn; later water belongs to dyers, beasts, piss, ash and everyone pretending the order does not matter.
-
-Rent is remembered with greater accuracy than birthdays. A widow can keep a room because a married daughter pays the difference; a soldier's family can lose one because the pay stopped before the casualty notice arrived. Apprentices sleep beneath benches. Old people trade childcare for hearth-space. A broken wrist can become a household problem long before it becomes a healer's.
-
-This closeness is useful until somebody goes wrong.
-
-There is no single name for every [[Myrkild]] change. Gamaltrappir uses the practical one. Fever is ordinary; flesh knitting in the wrong shape is not. Nor are translucent growths, teeth falling loose without rot, or a wound refusing to behave like a wound. When suspicion falls on a room, neighbours listen through walls. Work stops before hunger does.
-
-One thaw, a laundress kept her youngest boy in two shirts after something pale webbed beneath his shoulder. She said he had burned himself. The woman downstairs knew she was lying, and knew what an emptied household meant. For three days she brought soup and said nothing. On the fourth, the boy screamed hard enough for the whole stair to hear.
-
-Valenheim remembers outbreaks better than the families inside them.
-
-Poor households learn which symptoms wool can hide. Wealthy ones can afford private healers and better words for the same thing. Nobody calls concealment cowardice when it is their child.
-
-Door-lintels carry wards layered like old handwriting—teeth, beads, red thread, carved bone. When somebody dies, some families press a soot-black thumb to the frame; others knot grey-blue cloth to [[Hrimbru]], where the [[Hnutverdir]] remember names the official rolls have misplaced.
-
-Cross the river and the smell changes first.
-
-### Fagrvatnhlid
-
-[[Fagrvatnhlid]] rises toward [[Hofn Fagrvatn]], and almost everything unpleasant is removed before residents are expected to notice it. Courtyards are swept before dawn. Covered drains carry away what [[Gamaltrappir]] leaves in gutters. Even the arguments tend to happen behind better doors.
-
-Cleanliness here is not an absence of dirt. It is organised dirt. Ash carts leave before breakfast. Stable boys shovel dung through service gates. Kitchen waste goes downhill in lidded tubs instead of open buckets. Drain covers are lifted, cleared and replaced by men residents learn not to see. Snow is moved from noble steps into streets used by everyone else. The district smells better because somebody is paid, ordered or owned to carry the smell away.
-
-Most people experience Kónungsson Erlend Nautleif and Kónungsdóttir Signy Gunnvidottir through wax: harbour tallies, ration marks, labour summons and requisitions. The [[Maelihus]] can turn a household decision into grain release, quay-space or punishment before breakfast. The wrong seal on the right piece of parchment can ruin a merchant's week.
-
-Its clerks also know how fragile comfort is. They count granaries, fodder yards, bridge inspections, hearth allocations and the carts still expected from [[Sudrvellir]] after a road washout. A rich household can buy around a shortage for a while. The Maelihus cannot. Forty-six thousand mouths make arithmetic political.
-
-Old families boast that their names predate the oil yards. New *cask-lords* need only point at the lamps. At the [[Hvitgufulaug]] both soak in mineral heat while servants warm towels and carry imported wine upstairs where the bottle can be seen. Winter gardens survive behind high walls, fed with soil hauled uphill by people returning to rooms without gardens.
-
-The houses carry old Valenheim under their plaster. One family dining hall rests on a foundation wider than the building above it; another courtyard preserves the curve of a wall demolished three generations earlier because nobody could afford to straighten the property line afterward. A noble garden includes a dressed stone trough said to be Vetruxi, though the gardener insists it is older because that makes visitors listen longer.
-
-The rich are not immune to Valenheim. They are simply better at paying somebody else to shovel it.
-
-When the wind turns south, even Fagrvatnhlid smells [[Svartsmidja]].
-
-### Svartsmidja
-
-Smoke thickens before the district appears. Armourers, foundries, oil yards and [[Svar Resonants]] crowd the roads feeding [[Mestrvirki]]. Hammer blows overlap until no forge keeps another's rhythm; quench troughs hiss, burners roar and soot settles into snow, hair and bread. [[Svartsmidja]] is warmer than most of Valenheim and correspondingly worse for the lungs.
-
-Oil changed more than the lamps. Masters call steady winter light Oksmun ingenuity. Labourers call it “a longer day with a brighter fucking lamp.” Skilled free workers can demand higher wages. [[Thralls]] haul slag and fuel through the same yards, sometimes becoming indispensable to work they still have no right to refuse.
-
-No armour begins with an armourer. Charcoal comes in black-dusted sacks from managed woodland and roadside clamps. Ore arrives heavy enough to ruin axles. Leather straps bring the tanners' stink with them. Wool and linen become padding. Rivets, buckles, wire, wax, oil, horn, timber, clay and salt all vanish into work whose finished form is credited to one master. A breastplate may wear a maker's mark. The carter who brought the charcoal usually remains anonymous unless he is late.
-
-Lateness matters. One washed-out bridge can delay charcoal for three days. Three days means furnaces banked low, repairs queued and smiths arguing over which contract has priority. A broken hoist at Brattrstein can become a missing shipment of iron. Missing iron becomes fewer picks repaired for the northern mines. The mine does not stop needing picks because Valenheim has had bad weather. Somebody, somewhere, pays for the delay.
-
-At shift-change, [[Hrolfs Blodpylsa]] does its best business. Smiths eat onion, oat-blackened sausage and whatever grey substance Hrolf insists has always been part of the recipe. He says anyone calling it sawdust is free to buy something dearer. Nobody has yet discovered what the dearer thing is.
-
-The workshops keep Mestrvirki alive. [[Svartskjoldr]] arrive with scorched cast-bronze valves and split reinforced leather hose; [[Steinnbendir]] are called where foundations crack or collapsed galleries must be made safe before the bodies are counted. Before a new furnace is worked, smiths strike three blows against a cold anvil for Vordr. At [[Thrineisti Smidja]], Svar workers trap the first sparks beneath copper until the new moon. The master insists this is technical procedure.
-
-His workers grin every time the bastard says it.
-
-Resonance has not abolished lifting things. A replacement wall block can still require twelve labourers, two oxen, timber rollers, a capstan and half a day of increasingly theological profanity. The Steinnbendir who arrives afterward may shift the final hand's breadth in moments. Masons admire the trick. They also know who will still be there in twenty winters when frost opens the joint.
-
-The yard around every impressive forge is full of unimpressive things keeping it alive: broken handles, drying hose, scrap sorted by size, barrels of quench water, heaps of charcoal under hide covers, a boy straightening nails because new ones cost money. Valenheim's famous weapons are born in places where somebody is always looking for the fucking hammer.
-
-Follow the repaired armour and the road eventually reaches [[Virkivordr]].
-
-### Virkivordr
-
-[[Virkivordr]] presses into [[Mestrvirki]] until neighbourhood and fortress become the same thing. Barracks stand above workshops, workshops above magazines, families beside armouries and signal towers. Children learn bell-codes before letters and drill with barrel-lid shields. Veterans sit outside cookshops criticising every company that passes, including those they once commanded.
-
-The fortress eats ordinary things in military quantities. Horses need hay even when no cavalry rides. Bowstrings hate wet. Leather harness cracks. Wheels lose rims. Boots wear through. Grain becomes bread, bread becomes shit and somebody has to carry both in opposite directions. The armoury may hold enough steel to frighten an envoy while the quartermaster is losing sleep over oats.
-
-Whole lanes exist because a cart once needed to reach a magazine quickly; whole buildings lean into those lanes because families later needed rooms more than dead engineers needed their intended clearances. Kitchen smoke curls from former arrow galleries. A rope-maker uses a covered stretch of wall walk in bad weather. One old gate chamber stores onions. Nothing remains sacred to its first purpose for long unless the Guard is paid to keep people out.
-
-Valenheim keeps only four [[Juggernauts]], which is enough. Children know their names. Adults pretend not to stare. Doors look smaller around them; horses dislike them; tavern benches suffer in their wake. When one crosses toward [[Uxagrind]] in full plate the street opens without an order, then closes again behind him as though embarrassed by the interruption.
-
-The effect is sharper because most soldiers are not Juggernauts. They are men and women drying socks over barrack braziers, trading guard shifts, stitching torn arming coats and wondering whether a boot will last until next pay. A Juggernaut can break a gate. A company still needs cooks, farriers, wagoners, fletchers, clerks and somebody willing to clean blood out of a harness before it sets.
-
-Not every company passing those streets returns from a war anyone has declared. A burned watchtower, disputed pasture, seized toll-boat or dead cousin can keep two holds raiding for a season while both courts insist the peace stands. Valenheim experiences geopolitics as dearer salt, missing wool, requisitioned carts and names added to casualty boards. One dead son can be honour. Three can be a farm without enough hands to keep its lease.
-
-Veterans remember who held the line. Widows remember who ordered them there.
-
-The severe [[Raudvordr]] keep a soot-black shrine near Uxagrind, its ceiling hung with named spearheads from sentries killed at post. Their priests teach that vigilance is worship and mercy becomes vanity when it endangers those behind stone.
-
-Outside, quartermasters repeatedly issue a notice forbidding soldiers to throw bones from the west parapet. It now specifies that chicken counts.
-
-> VISI CAN JUDGE ME WHEN VORDR GETS ME HOME.
+> At [[Hofn Brattrstein]], the day begins before the light. Pike and [[Elvormr]] are split on black boards while dockers shout berth numbers through fog. Blood runs pink between quay stones. [[Sigdfugl]] circle the roofs and wait for the gulls to miss something.
 >
-> — anonymous Virkivordr graffito
+> Yrsa Hrafnsdottir is usually shouting before sunrise. One winter morning a fish cart broke an axle across an oil berth as three horn-blasts announced a convoy. Men swore; the owner swore louder. [[Svartskjoldr]] came down in blackened armour beside sealed casks and fire-tubes, paid to imagine the entire fucking quay on fire. Yrsa kept gutting pike while everyone else dragged the cart aside.
+>
+> The oil got its berth.
+>
+> It always does.
+>
+> The river makes the city possible and spends most days making that fact inconvenient. Barges arrive with masts lowered for the stone bridges. Tow-lines snag against old piers. Ice scours mooring posts in winter and springwater brings whole trees down from the north. In a dry summer, heavily laden hulls scrape where a lighter boat passed the year before. Boatmen know the river by sound; harbour clerks know it by how many lies appear on the cargo tallies.
+>
+> Northbound water does not solve every journey. Beyond Fagrvatn, broken water and the fall sever easy navigation toward the upper country. Loads intended for the northern road come ashore, are counted, argued over, stacked, stolen from, counted again and put onto carts or pack animals. A barrel may travel three streets inland before anybody notices the cooper used a green stave. A snapped hoop can sour half a merchant's week.
+>
+> Grain, salt, timber, livestock, ore and people share the same wet congestion. So do hay bales for draught animals, bark for leatherworkers, charcoal under patched covers, coils of rope, bundles of wool, replacement axles and cheap shoes nobody expects to remain waterproof. Free porters work beside [[Thralls]] and [[Ambátts]] marked by collars, brands or an overseer close enough to strike them. A dropped barrel enters the tally; a dislocated shoulder usually does not. Toll disputes make salt dear, seized barges provoke searches and foreign coin is cursed according to whichever border lord last fucked with it. Merchants keep three prices: peace, rumour and soldiers asking for wagons.
+>
+> The trades that need the river but offend everybody else have been pushed outward by generations of complaint. Hides are landed here, but much of the soaking, scraping and tanning happens farther down-water where bark liquor and lime can be blamed on somebody else's stretch of bank. The smell ignores jurisdiction. So does runoff. On warm days the fishwives can tell whether the tanners emptied a pit before they can see the colour in the water, and the argument begins again over whose trade is fouling whose dinner.
+>
+> Nothing at Brattrstein stays singular for long. A crane belongs to a warehouse but its rope came from another ward, its ironwork from [[Svartsmidja]] and the timber arm from a tree felled weeks away. The man who knows how to replace the pawl may be drunk, ill, conscripted or under arrest. When a hoist fails, six other trades stop and watch their own wages hanging over the quay.
+>
+> Over the gutting tables hang little pike-bone cages knotted with black wool and copper. Priests say they do nothing. Fishwives retie them before first frost anyway, because priests sleep farther from the river.
+>
+> Warehouses crowd chandlers, brokers, brothels, cheap beds and the [[Klofinn Kjolr]], its floor sanded against fish slime and blood. A dried Elvormr jaw hangs over the bar. The proprietor says the beast was longer than his boat. Every fisherman knows this is bullshit. Every fisherman has seen a larger one. The board lists pot, mead, hot water, bed-space and “damage to furniture”; only the last changes nightly.
+>
+> [[Ulfrvaldar]] are easy to spot by old bite-scars and the habit of checking every doorway before sitting. Their wolves stay in the yard after what happened to Orri's hand. Ask three regulars what happened and you will get four answers, two of which involve Orri being drunk and one in which he deserved it.
+>
+> > Move your fucking boots. The river's already had its share.
+> >
+> > — Yrsa Hrafnsdottir, to a man bleeding beside her stall
+>
+> The smell of Brattrstein follows you uphill.
 
-Beyond the gate, Valenheim becomes somebody else's problem.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Gamaltrappir
+>
+> The [[Gamaltrappir]] climb through foundations older than the families living on them. One doorway opens at another man's roof. Cellars stop against masonry too expensive to remove. During thaw, water remembers streets that people have forgotten and comes up through the floor to prove it.
+>
+> A house can be older at the bottom than the street beside it and younger at the top than the child sleeping under its eaves. Stone ground floors take timber second storeys; second storeys grow lean-tos; lean-tos bridge alleys until neighbours can pass bread between windows without putting on boots. One abandoned watch stair now serves four homes and a cobbler. An old defensive gutter carries sewage because nobody living remembers it as anything else. A blocked arch has a shrine in it. Behind the shrine is another room. Nobody agrees who owns it.
+>
+> Every few years somebody buys a cheap house, opens a floor to fix a rotten joist and discovers dressed stone continuing below the cellar. This is exciting for exactly as long as it takes to learn that the wall cannot be removed, the drain now has to go around it and the survey clerk has decided the extra underground room is taxable.
+>
+> Three families may share one stove; lodging houses rent the same bed to different bodies by shift. Chamber pots are meant for the cesspits. They do not always reach them. Lice are too normal for conversation. Rats are not.
+>
+> > DO NOT SHIT ABOVE THE THIRD STEP.
+> >
+> > — painted beside a runoff channel
+>
+> Somebody crosses out *NOT* often enough that the ward clerk now repaints only the missing letters.
+>
+> Gamaltrappir lives by repair because replacement costs more. Boots are resoled until there is more patch than boot. Rivets are saved in cups. Wool is turned, redyed and cut down from one child to the next. A cooper's apprentice may spend a morning fixing a wash-tub, an afternoon patching a grain barrel and the evening being sent back because the landlord insists the leak was not there before. Laundresses queue at the cleaner channels before dawn; later water belongs to dyers, beasts, piss, ash and everyone pretending the order does not matter.
+>
+> Rent is remembered with greater accuracy than birthdays. A widow can keep a room because a married daughter pays the difference; a soldier's family can lose one because the pay stopped before the casualty notice arrived. Apprentices sleep beneath benches. Old people trade childcare for hearth-space. A broken wrist can become a household problem long before it becomes a healer's.
+>
+> This closeness is useful until somebody goes wrong.
+>
+> There is no single name for every [[Myrkild]] change. Gamaltrappir uses the practical one. Fever is ordinary; flesh knitting in the wrong shape is not. Nor are translucent growths, teeth falling loose without rot, or a wound refusing to behave like a wound. When suspicion falls on a room, neighbours listen through walls. Work stops before hunger does.
+>
+> One thaw, a laundress kept her youngest boy in two shirts after something pale webbed beneath his shoulder. She said he had burned himself. The woman downstairs knew she was lying, and knew what an emptied household meant. For three days she brought soup and said nothing. On the fourth, the boy screamed hard enough for the whole stair to hear.
+>
+> Valenheim remembers outbreaks better than the families inside them.
+>
+> Poor households learn which symptoms wool can hide. Wealthy ones can afford private healers and better words for the same thing. Nobody calls concealment cowardice when it is their child.
+>
+> Door-lintels carry wards layered like old handwriting—teeth, beads, red thread, carved bone. When somebody dies, some families press a soot-black thumb to the frame; others knot grey-blue cloth to [[Hrimbru]], where the [[Hnutverdir]] remember names the official rolls have misplaced.
+>
+> Cross the river and the smell changes first.
 
-### Sudrvellir
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Fagrvatnhlid
+>
+> [[Fagrvatnhlid]] rises toward [[Hofn Fagrvatn]], and almost everything unpleasant is removed before residents are expected to notice it. Courtyards are swept before dawn. Covered drains carry away what [[Gamaltrappir]] leaves in gutters. Even the arguments tend to happen behind better doors.
+>
+> Cleanliness here is not an absence of dirt. It is organised dirt. Ash carts leave before breakfast. Stable boys shovel dung through service gates. Kitchen waste goes downhill in lidded tubs instead of open buckets. Drain covers are lifted, cleared and replaced by men residents learn not to see. Snow is moved from noble steps into streets used by everyone else. The district smells better because somebody is paid, ordered or owned to carry the smell away.
+>
+> Most people experience Kónungsson Erlend Nautleif and Kónungsdóttir Signy Gunnvidottir through wax: harbour tallies, ration marks, labour summons and requisitions. The [[Maelihus]] can turn a household decision into grain release, quay-space or punishment before breakfast. The wrong seal on the right piece of parchment can ruin a merchant's week.
+>
+> Its clerks also know how fragile comfort is. They count granaries, fodder yards, bridge inspections, hearth allocations and the carts still expected from [[Sudrvellir]] after a road washout. A rich household can buy around a shortage for a while. The Maelihus cannot. Forty-six thousand mouths make arithmetic political.
+>
+> Old families boast that their names predate the oil yards. New *cask-lords* need only point at the lamps. At the [[Hvitgufulaug]] both soak in mineral heat while servants warm towels and carry imported wine upstairs where the bottle can be seen. Winter gardens survive behind high walls, fed with soil hauled uphill by people returning to rooms without gardens.
+>
+> The houses carry old Valenheim under their plaster. One family dining hall rests on a foundation wider than the building above it; another courtyard preserves the curve of a wall demolished three generations earlier because nobody could afford to straighten the property line afterward. A noble garden includes a dressed stone trough said to be Vetruxi, though the gardener insists it is older because that makes visitors listen longer.
+>
+> The rich are not immune to Valenheim. They are simply better at paying somebody else to shovel it.
+>
+> When the wind turns south, even Fagrvatnhlid smells [[Svartsmidja]].
 
-The [[Sudrvellir]] look peaceful from [[Mestrvirki]]: rye, barley, sheep, goats and thick-furred cattle spread over softer hills beneath the mountain ring. Up close they smell of dung, wet fleece and smoke. Farm families maintain stone refuges and livestock lanes because the wall protecting Valenheim does not automatically protect the people feeding it.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Svartsmidja
+>
+> Smoke thickens before the district appears. Armourers, foundries, oil yards and [[Svar Resonants]] crowd the roads feeding [[Mestrvirki]]. Hammer blows overlap until no forge keeps another's rhythm; quench troughs hiss, burners roar and soot settles into snow, hair and bread. [[Svartsmidja]] is warmer than most of Valenheim and correspondingly worse for the lungs.
+>
+> Oil changed more than the lamps. Masters call steady winter light Oksmun ingenuity. Labourers call it “a longer day with a brighter fucking lamp.” Skilled free workers can demand higher wages. [[Thralls]] haul slag and fuel through the same yards, sometimes becoming indispensable to work they still have no right to refuse.
+>
+> No armour begins with an armourer. Charcoal comes in black-dusted sacks from managed woodland and roadside clamps. Ore arrives heavy enough to ruin axles. Leather straps bring the tanners' stink with them. Wool and linen become padding. Rivets, buckles, wire, wax, oil, horn, timber, clay and salt all vanish into work whose finished form is credited to one master. A breastplate may wear a maker's mark. The carter who brought the charcoal usually remains anonymous unless he is late.
+>
+> Lateness matters. One washed-out bridge can delay charcoal for three days. Three days means furnaces banked low, repairs queued and smiths arguing over which contract has priority. A broken hoist at Brattrstein can become a missing shipment of iron. Missing iron becomes fewer picks repaired for the northern mines. The mine does not stop needing picks because Valenheim has had bad weather. Somebody, somewhere, pays for the delay.
+>
+> At shift-change, [[Hrolfs Blodpylsa]] does its best business. Smiths eat onion, oat-blackened sausage and whatever grey substance Hrolf insists has always been part of the recipe. He says anyone calling it sawdust is free to buy something dearer. Nobody has yet discovered what the dearer thing is.
+>
+> The workshops keep Mestrvirki alive. [[Svartskjoldr]] arrive with scorched cast-bronze valves and split reinforced leather hose; [[Steinnbendir]] are called where foundations crack or collapsed galleries must be made safe before the bodies are counted. Before a new furnace is worked, smiths strike three blows against a cold anvil for Vordr. At [[Thrineisti Smidja]], Svar workers trap the first sparks beneath copper until the new moon. The master insists this is technical procedure.
+>
+> His workers grin every time the bastard says it.
+>
+> Resonance has not abolished lifting things. A replacement wall block can still require twelve labourers, two oxen, timber rollers, a capstan and half a day of increasingly theological profanity. The Steinnbendir who arrives afterward may shift the final hand's breadth in moments. Masons admire the trick. They also know who will still be there in twenty winters when frost opens the joint.
+>
+> The yard around every impressive forge is full of unimpressive things keeping it alive: broken handles, drying hose, scrap sorted by size, barrels of quench water, heaps of charcoal under hide covers, a boy straightening nails because new ones cost money. Valenheim's famous weapons are born in places where somebody is always looking for the fucking hammer.
+>
+> Follow the repaired armour and the road eventually reaches [[Virkivordr]].
 
-The city depends on these fields with a confidence the fields do not share. Hay has to be cut dry enough to keep. Fodder has to last longer than winter does. Ditches clog, fences sag, sheep find every gap and a lame ox can turn a day's ploughing into three. A family may own enough land to look prosperous in summer and still spend February deciding which animal becomes food because there is not enough stored grass for all of them.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Virkivordr
+>
+> [[Virkivordr]] presses into [[Mestrvirki]] until neighbourhood and fortress become the same thing. Barracks stand above workshops, workshops above magazines, families beside armouries and signal towers. Children learn bell-codes before letters and drill with barrel-lid shields. Veterans sit outside cookshops criticising every company that passes, including those they once commanded.
+>
+> The fortress eats ordinary things in military quantities. Horses need hay even when no cavalry rides. Bowstrings hate wet. Leather harness cracks. Wheels lose rims. Boots wear through. Grain becomes bread, bread becomes shit and somebody has to carry both in opposite directions. The armoury may hold enough steel to frighten an envoy while the quartermaster is losing sleep over oats.
+>
+> Whole lanes exist because a cart once needed to reach a magazine quickly; whole buildings lean into those lanes because families later needed rooms more than dead engineers needed their intended clearances. Kitchen smoke curls from former arrow galleries. A rope-maker uses a covered stretch of wall walk in bad weather. One old gate chamber stores onions. Nothing remains sacred to its first purpose for long unless the Guard is paid to keep people out.
+>
+> Valenheim keeps only four [[Juggernauts]], which is enough. Children know their names. Adults pretend not to stare. Doors look smaller around them; horses dislike them; tavern benches suffer in their wake. When one crosses toward [[Uxagrind]] in full plate the street opens without an order, then closes again behind him as though embarrassed by the interruption.
+>
+> The effect is sharper because most soldiers are not Juggernauts. They are men and women drying socks over barrack braziers, trading guard shifts, stitching torn arming coats and wondering whether a boot will last until next pay. A Juggernaut can break a gate. A company still needs cooks, farriers, wagoners, fletchers, clerks and somebody willing to clean blood out of a harness before it sets.
+>
+> Not every company passing those streets returns from a war anyone has declared. A burned watchtower, disputed pasture, seized toll-boat or dead cousin can keep two holds raiding for a season while both courts insist the peace stands. Valenheim experiences geopolitics as dearer salt, missing wool, requisitioned carts and names added to casualty boards. One dead son can be honour. Three can be a farm without enough hands to keep its lease.
+>
+> Veterans remember who held the line. Widows remember who ordered them there.
+>
+> The severe [[Raudvordr]] keep a soot-black shrine near Uxagrind, its ceiling hung with named spearheads from sentries killed at post. Their priests teach that vigilance is worship and mercy becomes vanity when it endangers those behind stone.
+>
+> Outside, quartermasters repeatedly issue a notice forbidding soldiers to throw bones from the west parapet. It now specifies that chicken counts.
+>
+> > VISI CAN JUDGE ME WHEN VORDR GETS ME HOME.
+> >
+> > — anonymous Virkivordr graffito
+>
+> Beyond the gate, Valenheim becomes somebody else's problem.
 
-Boundary stones cause arguments old enough to inherit. A marriage can join two strips of field; a death can split them again. One brother wants to sell a meadow to pay a debt, another needs it for winter grazing, and their sister remembers it was part of her dowry. The [[Maelihus]] sees acreage. The family sees every person who has ever bled into it.
-
-Black ribbons mark trees struck by unfamiliar blight. Iron nails pin strange claws to fence posts. Bowls of watered blood sometimes appear beside culverts after dark. Priests dismiss much of this as frightened nonsense. Farmers answer that priests sleep on the correct side of [[Uxagrind]].
-
-A malformed lamb presents a harder theology. Some are burned immediately. Others are watched because destroying half a flock whenever something is born wrong means starving correctly and piously in winter. One farmer is said to have kept a two-jawed calf alive for six weeks because his children liked it and it still drank milk. The story always ends badly. The ending changes depending on who tells it.
-
-[[Ulfrvaldar]] work the rough country beyond with hunting packs bred to follow scents ordinary hounds will not. Farmers know them by their whistles, scars and the argument that starts whenever a valuable ewe disappears. The wolf-master blames a wild animal. The farmer blames his wolves. The ewe remains dead either way.
-
-Old earthworks survive between fields as humps too broad to plough cleanly. Some farmers build walls along them because the stone is already there; others avoid cutting into them after finding bone. A line of ancient bank can become a sheep track, then a cart road, then the reason a later farm boundary bends for no obvious reason. The dead still decide where the living put a fence.
-
-*Virkivarmr* is the Sudrvellir word for anyone giving brave advice from behind Mestrvirki. Priests dislike the expression, which has done wonders for its popularity.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Sudrvellir
+>
+> The [[Sudrvellir]] look peaceful from [[Mestrvirki]]: rye, barley, sheep, goats and thick-furred cattle spread over softer hills beneath the mountain ring. Up close they smell of dung, wet fleece and smoke. Farm families maintain stone refuges and livestock lanes because the wall protecting Valenheim does not automatically protect the people feeding it.
+>
+> The city depends on these fields with a confidence the fields do not share. Hay has to be cut dry enough to keep. Fodder has to last longer than winter does. Ditches clog, fences sag, sheep find every gap and a lame ox can turn a day's ploughing into three. A family may own enough land to look prosperous in summer and still spend February deciding which animal becomes food because there is not enough stored grass for all of them.
+>
+> Boundary stones cause arguments old enough to inherit. A marriage can join two strips of field; a death can split them again. One brother wants to sell a meadow to pay a debt, another needs it for winter grazing, and their sister remembers it was part of her dowry. The [[Maelihus]] sees acreage. The family sees every person who has ever bled into it.
+>
+> Black ribbons mark trees struck by unfamiliar blight. Iron nails pin strange claws to fence posts. Bowls of watered blood sometimes appear beside culverts after dark. Priests dismiss much of this as frightened nonsense. Farmers answer that priests sleep on the correct side of [[Uxagrind]].
+>
+> A malformed lamb presents a harder theology. Some are burned immediately. Others are watched because destroying half a flock whenever something is born wrong means starving correctly and piously in winter. One farmer is said to have kept a two-jawed calf alive for six weeks because his children liked it and it still drank milk. The story always ends badly. The ending changes depending on who tells it.
+>
+> [[Ulfrvaldar]] work the rough country beyond with hunting packs bred to follow scents ordinary hounds will not. Farmers know them by their whistles, scars and the argument that starts whenever a valuable ewe disappears. The wolf-master blames a wild animal. The farmer blames his wolves. The ewe remains dead either way.
+>
+> Old earthworks survive between fields as humps too broad to plough cleanly. Some farmers build walls along them because the stone is already there; others avoid cutting into them after finding bone. A line of ancient bank can become a sheep track, then a cart road, then the reason a later farm boundary bends for no obvious reason. The dead still decide where the living put a fence.
+>
+> *Virkivarmr* is the Sudrvellir word for anyone giving brave advice from behind Mestrvirki. Priests dislike the expression, which has done wonders for its popularity.
 
 ## Stone Beneath Stone
 
@@ -329,31 +347,34 @@ When ordinary crews meet stone that refuses to behave, a [[Steinnbendir]] may be
 
 A Steinnbendir can make one part of Valenheim stranger. They cannot make it new. Resonant work sits among hand-set walls, reused stone, warped timber and repairs done by people who never touched Resonance in their lives. Whatever miracle first persuaded a foundation to hold, somebody still has to clear its drains.
 
-### The Scars People Still Name
-
-Valenheim counts history by the winters that fucked something up badly enough to earn a name.
-
-The [[Svartthidna]] is remembered for the smell: sudden warmth ruptured cesspits and sent old filth through forgotten drains. Wealth climbed uphill. The poor boiled what they could. The flood also rediscovered channels that had been sealed for generations. For years afterward, landlords argued over who owned the newly accessible undercrofts and ward crews bricked openings they could not explain. One was reopened the following spring because it turned out to be carrying half a street's meltwater.
-
-The [[Saltvetr]] came when southern traffic failed and reserve houses opened under guard; laws written in that shortage still let the [[Maelihus]] seize private stores. Three taverns claim the first salt-riot tooth landed on their floor. Granary doors were widened afterward so guarded carts could load faster. Two of those doors are now inside shops whose owners complain whenever officials remind them why the hinges are so large.
-
-The [[Tannvetr]] taught Valenheim that the northern heights could kill as efficiently as the southern breach. Farmsteads vanished; refugees reached [[Uxagrind]] frost-black and terrified. Then the gate closed.
-
-The official stone says the decision saved the city. Some families still refuse to pass beneath that inscription on Tannvetr's anniversary. They take the longer way around and call the dead by name.
-
-The [[Uxagrindskjalfti]] left a different scar. Gatehouse stone began to hum, shifted less than a hand's breadth and killed seven men during repair. New inspection rites, engineering law and the first form of the [[Steinbokr]] followed. Whether the failure was Resonant, structural or both remains disputed, which has not stopped everyone from using it to prove whatever they believed already.
-
-Children make all four disasters smaller enough to carry:
-
-> Black water, white teeth,
-> salt gone, stone sings.
-> Stay by the fire,
-> mind the bells,
-> don't ask what winter brings.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
-> — [[Gamaltrappir]] skipping rhyme
-
-The named disasters matter because thousands of unnamed failures do not. Roofs collapse without a winter being named after them. Barges sink. Babies die. A kiln cracks. A storehouse burns. A bridge pier needs rebuilding one stone at a time. Most of Valenheim's history is not catastrophe. It is repair.
+> ### The Scars People Still Name
+>
+> Valenheim counts history by the winters that fucked something up badly enough to earn a name.
+>
+> The [[Svartthidna]] is remembered for the smell: sudden warmth ruptured cesspits and sent old filth through forgotten drains. Wealth climbed uphill. The poor boiled what they could. The flood also rediscovered channels that had been sealed for generations. For years afterward, landlords argued over who owned the newly accessible undercrofts and ward crews bricked openings they could not explain. One was reopened the following spring because it turned out to be carrying half a street's meltwater.
+>
+> The [[Saltvetr]] came when southern traffic failed and reserve houses opened under guard; laws written in that shortage still let the [[Maelihus]] seize private stores. Three taverns claim the first salt-riot tooth landed on their floor. Granary doors were widened afterward so guarded carts could load faster. Two of those doors are now inside shops whose owners complain whenever officials remind them why the hinges are so large.
+>
+> The [[Tannvetr]] taught Valenheim that the northern heights could kill as efficiently as the southern breach. Farmsteads vanished; refugees reached [[Uxagrind]] frost-black and terrified. Then the gate closed.
+>
+> The official stone says the decision saved the city. Some families still refuse to pass beneath that inscription on Tannvetr's anniversary. They take the longer way around and call the dead by name.
+>
+> The [[Uxagrindskjalfti]] left a different scar. Gatehouse stone began to hum, shifted less than a hand's breadth and killed seven men during repair. New inspection rites, engineering law and the first form of the [[Steinbokr]] followed. Whether the failure was Resonant, structural or both remains disputed, which has not stopped everyone from using it to prove whatever they believed already.
+>
+> Children make all four disasters smaller enough to carry:
+>
+> > Black water, white teeth,
+> > salt gone, stone sings.
+> > Stay by the fire,
+> > mind the bells,
+> > don't ask what winter brings.
+> >
+> > — [[Gamaltrappir]] skipping rhyme
+>
+> The named disasters matter because thousands of unnamed failures do not. Roofs collapse without a winter being named after them. Barges sink. Babies die. A kiln cracks. A storehouse burns. A bridge pier needs rebuilding one stone at a time. Most of Valenheim's history is not catastrophe. It is repair.
 
 ## What Feeds the City
 
@@ -375,40 +396,46 @@ A city this large can be wounded without anybody drawing a sword. A bridge washe
 
 Valenheim's wars begin long before battlefields. They begin with stores.
 
-### The Road North
-
-Some mornings Brattrstein goes quieter before the bells because somebody hears chains.
-
-Prisoner columns gather near [[Hrimbru]] and leave for [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]] linked wrist-to-wrist or neck-to-neck. Officials call them *labour transfers*. Mine clerks prefer *northern service*. [[Gamaltrappir]] calls them *redbacks*. Families call whatever name is being taken from them.
-
-The road does not carry prisoners alone. Wagons go north with grain, dried fish, timber, charcoal, rope, lamp oil, leather, cloth, replacement tools and cheap boots. They return with what the mine has taken from stone and earth, or with broken equipment somebody in [[Svartsmidja]] is expected to make useful again. Contractors make fortunes on quantities too dull for songs. A merchant can condemn Rauthrbak over supper and bid for its rope contract the next morning.
-
-A mine large enough to matter to the Dominion is also large enough to consume a landscape. Timber props disappear underground. Cart wheels fail. Rope wears. Men eat. Lamps burn. Waste has to go somewhere. Valenheim sees the mine's needs as columns of figures until the road is blocked and suddenly every number develops a face.
-
-Grey-blue ribbons appear on Hrimbru before a column leaves. The Guard cuts them down every few months. They return before the next chain does.
-
-Children sing:
-
-> Redback, redback, count the chain.
-> One comes home and nine remain.
-
-Adults tell them to shut up when prisoners can hear. The children mostly remember when an adult is looking.
-
-### What Keeps the Hearths Burning
-
-Valenheim eats fuel like a living thing. Timber and charcoal keep ordinary hearths going; [[Okse oil]] feeds lamps, specialised furnaces, wall stores and houses wealthy enough to value steady light over cost. Children gather broken packing wood. Oil disappears from yards a cup at a time. In the coldest weeks, the fine for stealing heat can be less frightening than behaving yourself.
-
-Fuel begins outside the city. Woodland is cut, coppiced, argued over and guarded. Charcoal burners spend days beside clamps whose smoke gets into skin and clothes. Wet timber weighs more, burns worse and still has to be hauled. A winter road that hardens enough for sledges can make transport easier; a thaw at the wrong time can turn the same route into axle-deep mud. Hearth allocation in Valenheim begins with weather miles away.
-
-Fodder is fuel by another name. Without hay and oats, the oxen and horses moving food, stone and timber stop. During a hard winter, the city can possess full granaries and still struggle to put them where they are needed because the animals doing the hauling have been eating too.
-
-A stolen cup of lamp oil is a *warm finger*. A stolen barrel is “something you never heard about.”
-
-> HEARTH ALLOCATION FOLLOWS SERVICE, HOUSEHOLD AND NECESSITY, IN THAT ORDER.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
-> — [[Maelihus]] emergency proclamation
+> ### The Road North
+>
+> Some mornings Brattrstein goes quieter before the bells because somebody hears chains.
+>
+> Prisoner columns gather near [[Hrimbru]] and leave for [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]] linked wrist-to-wrist or neck-to-neck. Officials call them *labour transfers*. Mine clerks prefer *northern service*. [[Gamaltrappir]] calls them *redbacks*. Families call whatever name is being taken from them.
+>
+> The road does not carry prisoners alone. Wagons go north with grain, dried fish, timber, charcoal, rope, lamp oil, leather, cloth, replacement tools and cheap boots. They return with what the mine has taken from stone and earth, or with broken equipment somebody in [[Svartsmidja]] is expected to make useful again. Contractors make fortunes on quantities too dull for songs. A merchant can condemn Rauthrbak over supper and bid for its rope contract the next morning.
+>
+> A mine large enough to matter to the Dominion is also large enough to consume a landscape. Timber props disappear underground. Cart wheels fail. Rope wears. Men eat. Lamps burn. Waste has to go somewhere. Valenheim sees the mine's needs as columns of figures until the road is blocked and suddenly every number develops a face.
+>
+> Grey-blue ribbons appear on Hrimbru before a column leaves. The Guard cuts them down every few months. They return before the next chain does.
+>
+> Children sing:
+>
+> > Redback, redback, count the chain.
+> > One comes home and nine remain.
+>
+> Adults tell them to shut up when prisoners can hear. The children mostly remember when an adult is looking.
 
-Nobody misses which word comes first.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### What Keeps the Hearths Burning
+>
+> Valenheim eats fuel like a living thing. Timber and charcoal keep ordinary hearths going; [[Okse oil]] feeds lamps, specialised furnaces, wall stores and houses wealthy enough to value steady light over cost. Children gather broken packing wood. Oil disappears from yards a cup at a time. In the coldest weeks, the fine for stealing heat can be less frightening than behaving yourself.
+>
+> Fuel begins outside the city. Woodland is cut, coppiced, argued over and guarded. Charcoal burners spend days beside clamps whose smoke gets into skin and clothes. Wet timber weighs more, burns worse and still has to be hauled. A winter road that hardens enough for sledges can make transport easier; a thaw at the wrong time can turn the same route into axle-deep mud. Hearth allocation in Valenheim begins with weather miles away.
+>
+> Fodder is fuel by another name. Without hay and oats, the oxen and horses moving food, stone and timber stop. During a hard winter, the city can possess full granaries and still struggle to put them where they are needed because the animals doing the hauling have been eating too.
+>
+> A stolen cup of lamp oil is a *warm finger*. A stolen barrel is “something you never heard about.”
+>
+> > HEARTH ALLOCATION FOLLOWS SERVICE, HOUSEHOLD AND NECESSITY, IN THAT ORDER.
+> >
+> > — [[Maelihus]] emergency proclamation
+>
+> Nobody misses which word comes first.
 
 ## Behind the Wall
 
@@ -446,25 +473,31 @@ The [[Tviaugahof]] is not a cathedral but a weather-beaten compound of standing 
 
 Vordr's altar is larger.
 
-### The Ox-Father
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### The Ox-Father
+>
+> [[Hof Uxifadir]] honours [[Torrad Uxifadir]] as Ox-Father, Kóngr Eilífr and root of Vetruxi inheritance—not a third eye beside the gods, officially. The distinction softens near a fire. [[Hornbundnir]] veterans, engineers and traditionalists maintain ancestral names and old banners; some pray to Torrad whenever nobody is asking the theological question too precisely.
+>
+> At first-freeze, households gather to carry fire from the Hof and relight winter lamps. From the front steps it looks like one people sharing one flame. Then rank starts sorting the queue. Noble households stand where they can be seen. Soldiers receive precedence. [[Thralls]] carry fuel and clean blood from the sacrificial stone without standing among the households the rite claims to bind together.
+>
+> A child once asked why Visi did not mind. His mother covered his mouth before the priest could answer.
 
-[[Hof Uxifadir]] honours [[Torrad Uxifadir]] as Ox-Father, Kóngr Eilífr and root of Vetruxi inheritance—not a third eye beside the gods, officially. The distinction softens near a fire. [[Hornbundnir]] veterans, engineers and traditionalists maintain ancestral names and old banners; some pray to Torrad whenever nobody is asking the theological question too precisely.
-
-At first-freeze, households gather to carry fire from the Hof and relight winter lamps. From the front steps it looks like one people sharing one flame. Then rank starts sorting the queue. Noble households stand where they can be seen. Soldiers receive precedence. [[Thralls]] carry fuel and clean blood from the sacrificial stone without standing among the households the rite claims to bind together.
-
-A child once asked why Visi did not mind. His mother covered his mouth before the priest could answer.
-
-### Little Wards Against a Large World
-
-The Hof explains doctrine. Valenheim prefers things that can be scratched, knotted, burned or nailed down.
-
-Runes are recut after children survive fever. River-workers carry drilled stones. Tavernkeepers hide teeth above doors. A [[Myrkild]] claw has survived three repaintings over the [[Klofinn Kjolr]]'s back entrance because nobody is sufficiently convinced it does nothing to be the cunt who removes it.
-
-At [[Galdrgata]], three adjacent sellers offer incompatible wards against the same curse and each can explain why the other two are trying to get customers killed. The [[Raudvordr]] survive because soldiers admire them; the [[Hnutverdir]] because cutting mourning ribbons creates more trouble than leaving them; the [[Hornbundnir]] because they have patrons. Smaller devotions gather around widows, veterans, shrine-keepers and Resonants whenever neighbours decide somebody has started listening.
-
-Belief also attaches itself to infrastructure. Boatmen touch the same pier before difficult water. Masons leave a copper shaving in cracks they have repaired twice. Carters spit over one old bridge joint and not the next. A ritual may begin because somebody once survived; three generations later nobody remembers the person, only that failing to perform it would be stupid when it costs nothing.
-
-Darker things travel south from [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]]. Sevenfold marks of the [[Heptad Synod]] appear on confiscated objects. A few northern-road cellars host private suppers for officials and wealthy men who have learned to call suffering revelation when they are not the ones bleeding.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+>
+> ### Little Wards Against a Large World
+>
+> The Hof explains doctrine. Valenheim prefers things that can be scratched, knotted, burned or nailed down.
+>
+> Runes are recut after children survive fever. River-workers carry drilled stones. Tavernkeepers hide teeth above doors. A [[Myrkild]] claw has survived three repaintings over the [[Klofinn Kjolr]]'s back entrance because nobody is sufficiently convinced it does nothing to be the cunt who removes it.
+>
+> At [[Galdrgata]], three adjacent sellers offer incompatible wards against the same curse and each can explain why the other two are trying to get customers killed. The [[Raudvordr]] survive because soldiers admire them; the [[Hnutverdir]] because cutting mourning ribbons creates more trouble than leaving them; the [[Hornbundnir]] because they have patrons. Smaller devotions gather around widows, veterans, shrine-keepers and Resonants whenever neighbours decide somebody has started listening.
+>
+> Belief also attaches itself to infrastructure. Boatmen touch the same pier before difficult water. Masons leave a copper shaving in cracks they have repaired twice. Carters spit over one old bridge joint and not the next. A ritual may begin because somebody once survived; three generations later nobody remembers the person, only that failing to perform it would be stupid when it costs nothing.
+>
+> Darker things travel south from [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]]. Sevenfold marks of the [[Heptad Synod]] appear on confiscated objects. A few northern-road cellars host private suppers for officials and wealthy men who have learned to call suffering revelation when they are not the ones bleeding.
 
 ## Power That Must Be Counted
 
