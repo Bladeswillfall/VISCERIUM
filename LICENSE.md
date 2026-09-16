@@ -52,8 +52,8 @@ The MIT scope includes original software in these locations, except for generate
 - `Site/tests/`;
 - original configuration and build files under `Site/`;
 - first-party services under `Services/`;
-- `Tools/obsidian-viscerium-timelines/`;
-- first-party VISCERIUM plugin code under `Vault/.obsidian/plugins/viscerium-*`;
+- maintained first-party Obsidian plugin source under `Tools/obsidian-viscerium-*/`;
+- checked-in first-party plugin runtime payloads under `Vault/.obsidian/plugins/viscerium-*`;
 - original repository automation under `.github/`; and
 - other source-code files that expressly identify `LICENSE-CODE.md` as their licence.
 
