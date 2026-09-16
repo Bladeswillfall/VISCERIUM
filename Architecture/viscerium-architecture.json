@@ -11,9 +11,9 @@
   "snapshot": {
     "repository": "VISCERIUM",
     "branch": "main",
-    "source_state": "Validated replacement working tree for the Initial release root commit",
-    "date": "2026-07-30",
-    "scope": "Architecture reflects the intended initial state of the VISCERIUM replacement repository."
+    "source_state": "Current repository architecture after first-party Obsidian plugin source separation",
+    "date": "2026-09-16",
+    "scope": "Architecture reflects the current main-target repository state."
   },
   "summary": "Obsidian is the creator workspace. Markdown and YAML notes are authoritative. Node scripts validate and compile public Lore. Astro and Starlight build the static Codex. Generated views never replace the source notes.",
   "source_of_truth": {
