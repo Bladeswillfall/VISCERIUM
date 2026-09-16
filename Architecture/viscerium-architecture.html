@@ -14,7 +14,7 @@
 <div class="eyebrow">VISCERIUM · SYSTEM AND WORKFLOW ARCHITECTURE</div>
 <h1>Codex system map</h1>
 <p class="lede">This page shows where VISCERIUM data starts, which program handles it, and which outputs are generated.</p>
-<p class="meta">Repository: VISCERIUM · architecture update: 2026-07-30 · source state: Initial release working tree · machine handoff: viscerium-architecture.json</p>
+<p class="meta">Repository: VISCERIUM · architecture update: 2026-09-16 · source state: current architecture · machine handoff: viscerium-architecture.json</p>
 </header>
 <nav class="tabs" aria-label="Architecture views">
 <button class="active" data-view="system">System map</button>
@@ -30,12 +30,12 @@
 <div class="stage build"><div class="eyebrow">3 · CHECK</div><h3>Node pipeline</h3><ul><li>Vault Doctor</li><li>publication validation</li><li>asset validation</li><li>continuity checks</li></ul></div>
 <div class="stage shared"><div class="eyebrow">4 · COMPILE</div><h3>Generators</h3><ul><li>links</li><li>era hubs</li><li>maps</li><li>timelines</li><li>relationships</li><li>search scope</li></ul></div>
 <div class="stage web"><div class="eyebrow">5 · BUILD</div><h3>Astro + Starlight</h3><ul><li>articles</li><li>Telescope</li><li>Atlas</li><li>graphs</li><li>timelines</li></ul></div>
-<div class="stage quality"><div class="eyebrow">6 · TEST</div><h3>GitHub Actions</h3><ul><li>unit tests</li><li>build</li><li>plugin build</li><li>browser checks</li></ul></div>
+<div class="stage quality"><div class="eyebrow">6 · TEST</div><h3>GitHub Actions</h3><ul><li>unit tests</li><li>build</li><li>plugin build</li><li>runtime parity</li><li>browser checks</li></ul></div>
 <div class="stage web"><div class="eyebrow">7 · SERVE</div><h3>Cloudflare Pages</h3><p>Serves the static files from <code>Site/dist/</code>.</p></div>
 </div>
 <div class="rules">
-<div class="card"><h2>Authoritative sources</h2><ul><li>Creator facts: Markdown/YAML in <code>Vault/</code>.</li><li>Public canon: <code>Vault/Lore/</code>.</li><li>Private stories: <code>Vault/Stories/</code>.</li><li>Source media: <code>Vault/Assets/</code>.</li><li>Timeline plugin source: <code>Tools/obsidian-viscerium-timelines/</code>.</li></ul></div>
-<div class="card"><h2>Generated outputs</h2><ul><li><code>Site/src/content/docs/</code></li><li>map, timeline, relationship, and search data</li><li>continuity hubs and era tag pages</li><li><code>Site/dist/</code></li><li>compiled Obsidian timeline plugin bundles</li></ul><p><strong>Do not hand-edit generated output.</strong></p></div>
+<div class="card"><h2>Authoritative sources</h2><ul><li>Creator facts: Markdown/YAML in <code>Vault/</code>.</li><li>Public canon: <code>Vault/Lore/</code>.</li><li>Private stories: <code>Vault/Stories/</code>.</li><li>Source media: <code>Vault/Assets/</code>.</li><li>First-party Obsidian plugin source: <code>Tools/obsidian-viscerium-*/</code>.</li></ul></div>
+<div class="card"><h2>Generated outputs</h2><ul><li><code>Site/src/content/docs/</code></li><li>map, timeline, relationship, and search data</li><li>continuity hubs and era tag pages</li><li><code>Site/dist/</code></li><li>checked-in Obsidian runtime payloads under <code>Vault/.obsidian/plugins/viscerium-*</code></li></ul><p><strong>Do not hand-edit generated output.</strong></p></div>
 </div>
 </section>
 <section id="programs" class="view">
@@ -57,7 +57,10 @@ const programs=[
 ['Bases','creator','Show card and table views of note properties.','The source data stays in the notes.'],
 ['Templater','creator','Run guided creation and edit workflows.','Use creator-facing templates, not _Internals directly.'],
 ['Dataview','creator','Build live dashboard lists from vault notes.','Dashboard output is not canonical data.'],
-['VISCERIUM Creator Tools','creator','Set controlled eras, continuity IDs, and era editions.','Use the commands instead of arbitrary era strings.'],
+['VISCERIUM Creator Tools','creator','Set controlled eras, continuity IDs, and era editions.','Edit the Tools source and sync the Vault runtime.'],
+['VISCERIUM Layout Tools','creator','Provide presentation-only Markdown layout helpers.','Edit the Tools source and sync the Vault runtime.'],
+['VISCERIUM Image Tools','creator','Render article images and authored image-layout flags.','Edit the Tools source and sync the Vault runtime.'],
+['VISCERIUM Journal Tools','creator','Copy Daily Activity into Chronicle daily-note snapshots.','Edit the Tools source and sync the Vault runtime.'],
 ['StoryLine','private writing','Manage private story projects, scenes, and storyDate.','Do not scan Stories as public canon.'],
 ['VISCERIUM Timelines','creator','Render canonical and read-only StoryLine timelines in Obsidian.','Edit the Tools source before the generated runtime bundle.'],
 ['Chronos','creator','Render note-local timeline blocks.','Chronos presentation does not replace canonical chronology.'],
@@ -92,7 +95,7 @@ const routes=[
 ['StoryLine integration','StoryLine Integration.md + Tools/obsidian-viscerium-timelines','Do not scan Stories as canon.'],
 ['Map behaviour','Atlas Authoring SOP + generate-map-data.mjs + WorldMap.astro','Do not hand-edit maps.json.'],
 ['Relationship behaviour','Relationship Authoring SOP + generate-relationship-data.mjs','Do not turn every wikilink into a relationship.'],
-['Creator UX','Vault/Home.md + Creator Command Reference + Vault/.obsidian','Do not assume local plugin permissions are Git-controlled.'],
+['Creator UX','Vault/Home.md + Creator Command Reference + Tools/obsidian-viscerium-*','Do not edit first-party Vault runtime payloads as primary source.'],
 ['Deployment','site.config.mjs + astro.config.mjs','Do not put private secrets in static client code.']
 ];
 const grid=document.getElementById('program-grid');programs.forEach(([name,scope,purpose,rule])=>{const x=document.createElement('article');x.className='program';x.innerHTML=`<span class="tag">${scope}</span><h3>${name}</h3><p>${purpose}</p><p class="small"><strong>Rule:</strong> ${rule}</p>`;grid.appendChild(x)});
