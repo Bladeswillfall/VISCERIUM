@@ -58,38 +58,46 @@ tags:
 >
 > — Tpr. Bailey Pittman
 
-A member of Delta Two One under the lead of Cpl. May Zhang, Bailey is the first of her family to be accepted into the ICSSAS. Bailey is a quadruple amputee — transfemoral and transhumeral, her limbs were irreversibly damaged from trauma and frostbite after she was ejected into vacuum following the successful and devastating sabotage of her platoon's deployment ships.
+Bailey Pittman is the demolitions specialist of Delta Two One, serving under Cpl. May Zhang within the Imperium Coalition Special Shock Assault Service. Before Delta, she was an ICDF rifleman with the 101st Battalion, later specialising in reconnaissance. She is the first member of her family to be accepted into the ICSSAS.
+
+Her first military career ended in vacuum. Bailey was thrown clear when her platoon’s deployment craft were sabotaged during an ICDF operation. Five soldiers were killed or dismembered, two were left permanently paralysed, and Bailey survived with all four limbs damaged beyond recovery by trauma and frostbite.
+
+She eventually returned to service. The body that returned was not the one that left.
 
 ## Personality
 
 <figure class="vc-image-embed vc-image-right vc-image-shape" style="--vc-image-width:340px;--vc-image-gap:18px;--vc-image-shape:polygon(100% 0,100% 100%,0% 100%,0% 95%,3% 90%,39% 85%,39% 80%,36% 75%,34% 70%,34% 65%,36% 60%,32% 55%,20% 50%,10% 45%,4% 40%,11% 35%,21% 30%,27% 25%,23% 20%,21% 15%,39% 10%,42% 5%,100% 0)"><img src="https://www.worldanvil.com/uploads/images/bd76fe92de1eab05b448dd79f22f941e.png" alt="Bailey Pittman wearing Delta Two fieldwear and biomechanical prosthetics" loading="lazy" decoding="async"></figure>
 
-Bailey has quite a reserved, closed-off personality. She's not one to open up or dwell on serious topics — instead choosing to rely on jokes and sarcasm to avoid the subject. On the surface, she is often energetic and frequently labelled as a "bad influence" on her peers.
+Bailey is easiest to know while nothing serious is being discussed. She jokes, needles her peers and reaches for sarcasm whenever a conversation drifts too close to something she would rather leave buried. Around Delta Two she is energetic, generous and regularly accused of being a bad influence.
 
-Whilst maintaining a positive persona and generous attitude on the outside, when alone Bailey is a rather different person. Her facade drops and pain often surfaces for a moment before being buried again, or an emotional breakdown occurs. Bailey suffers from PTSD and OCD _(fear of hurting those she cares about)_. These diagnoses are the direct result of the sabotage and from the quality of prosthetics she was given — military grade. After living with this new reality for over four years, she has managed to, for the most part, live with the symptoms thanks to the help of medication and rage. As Bailey's medication isn't sourced through subscription, she technically passed for service once more.
+It is not quite an act. Bailey genuinely enjoys being loud, reckless and difficult to bore. It is also useful camouflage.
 
-When your training dictates that you get on with it or die, Bailey has yet to properly process what happened to her and instead throws herself into intense situations or shuts off her emotions in order to mask the trauma. Life is never dull around Tpr. Pittman — she won't let it be.
+Alone, the momentum tends to stop. Bailey lives with post-traumatic stress and obsessive fears centred on hurting the people closest to her. The sabotage is part of that. So are the prosthetics that put her back in uniform. Their strength is easy to trust; their touch is not.
+
+Military-grade limbs prioritise speed, force and resilience over delicate sensation. Bailey can trust them to carry her through a breach or absorb punishment a natural limb could not. She is less certain when the thing in her hand is somebody she loves. Reduced tactile feedback means she cannot always judge pressure as instinctively as she once could, and that uncertainty has become fertile ground for obsession.
+
+Medication helps. So does work. Bailey obtains her medication outside the subscription route used by the service, which meant it did not prevent her from technically passing the assessments required to return. Whether that counts as recovery is another matter. Bailey mostly treats the question as irrelevant.
+
+When training teaches you to get on with it or die, getting on with it can look remarkably similar to healing from a distance.
 
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
-> ### Morality and Philosophy
->
-> #### Morality
->
+> ### Protective instinct
+>>
 > > You don't get to die before me! No one else is dying before me... Not again! Not ever again!
 > >
 > > — Tpr. Bailey Pittman
 >
-> Bailey has an inexplicably strong drive to protect the innocent and bring judgement to the guilty. She values her peers above all else and, as such, views the world through an "us versus them" lens. This can sometimes cause Bailey to act in a heavy-handed manner and be impulsive when dealing with people she believes have done wrong.
->
-> #### Philosophy
->
-> Bailey doesn't care _why_ the Myrkilds and their Nadirs are here, on [[Lore/Degel System/Errack]]. Nor does she care why there are only eight stars in the sky. Bailey's only concern is the lives of those around her and those who can't defend themselves.
+> Bailey’s morality is immediate. She has little interest in why the Myrkild and their Nadirs are on Errack, or why there are only eight stars in the sky. Those questions can belong to somebody with the time and patience for them. Bailey cares about the person standing beside her, the person unable to defend themselves, and the person responsible when either is hurt.
+
+She is intensely loyal to her peers and quick to divide a crisis into ours and theirs. Once Bailey decides somebody knowingly harmed another person, sympathy for their reasoning tends to disappear. That makes her dependable when seconds matter and dangerously heavy-handed when her first judgement is wrong.
 >
 > > I don't care if you're stealing to feed your children, or whatever, I care if you hurt someone whilst doing it. You don't have the right to destroy some innocent person's life for your own gains.
 > >
 > > — Tpr. Bailey Pittman
+> 
+> There is an uncomfortable contradiction in this. Bailey is terrified that the power in her artificial limbs might hurt somebody she cares about, yet she fought for years to return to a profession built around violence. To her, these are not opposing impulses. They are the same promise taken too far: if somebody is going to stand between danger and the people around her, Bailey wants it to be her.
 
 ## History
 
