@@ -83,13 +83,15 @@
       "name": "VISCERIUM Timelines",
       "testedVersion": "1.2.0",
       "source": "first-party",
-      "sourcePath": "Tools/obsidian-viscerium-timelines"
+      "sourcePath": "Tools/obsidian-viscerium-timelines",
+      "runtimePath": "Vault/.obsidian/plugins/viscerium-timelines"
     },
     {
       "id": "viscerium-creator-tools",
       "name": "VISCERIUM Creator Tools",
       "testedVersion": "0.2.0",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-creator-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-creator-tools"
     },
     {
@@ -97,6 +99,7 @@
       "name": "VISCERIUM Layout Tools",
       "testedVersion": "0.2.0",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-layout-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-layout-tools"
     },
     {
@@ -104,6 +107,7 @@
       "name": "VISCERIUM Image Tools",
       "testedVersion": "0.2.1",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-image-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-image-tools"
     },
     {
@@ -111,6 +115,7 @@
       "name": "VISCERIUM Journal Tools",
       "testedVersion": "0.1.0",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-journal-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-journal-tools"
     },
     {
