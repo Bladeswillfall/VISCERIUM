@@ -67,7 +67,7 @@ test('sidebar hides Overview rows without breaking category overview navigation'
   await page.goto(`${preview}/eras/citadel/events/`, { waitUntil: 'networkidle' });
 
   await expect(page.locator('[data-sidebar-row="Overview"]')).toHaveCount(0);
-  await expect(page.locator('[data-sidebar-row="Events"] > details')).toHaveAttribute('open', '');
+  await expect(page.locator('[data-era-sidebar-branch="CITADEL"] [data-sidebar-row="Events"] > details')).toHaveAttribute('open', '');
 });
 
 test.describe('mobile era context', () => {
