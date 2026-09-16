@@ -1,4 +1,4 @@
-/* ==========================================================================
+/* ============================================================================
    Site and authored-content layout
 
    Consolidated from layout.css, layout-indents.css. Section order is intentional:
@@ -64,6 +64,11 @@
   box-sizing: border-box;
   max-width: none;
   border: 0;
+}
+
+.codex-discussions__inner,
+.footer-grid {
+  margin-inline: auto;
 }
 
 @media (min-width: 72rem) {
