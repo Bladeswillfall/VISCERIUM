@@ -158,13 +158,9 @@ Do not add competing global `markdown-preview-sizer`, `.cm-sizer`, readable-line
 
 ## MySnippets plugin
 
-The enabled community-plugin list includes `mysnippets-plugin`. The repository vendors its compatibility runtime so a normal Git pull delivers the working plugin code and configuration.
+The enabled community-plugin list includes `mysnippets-plugin`. Install it from the Obsidian Community Store. The repository tracks only the shared MySnippets settings in `.obsidian/plugins/mysnippets-plugin/data.json`.
 
 Original repository: https://github.com/chetachiezikeuzor/MySnippets-Plugin
-
-Compatibility baseline: https://github.com/Moyf/MySnippets
-
-Local notes: `Vault/.obsidian/plugins/mysnippets-plugin/COMPATIBILITY.md`
 
 ## Compatibility rule
 

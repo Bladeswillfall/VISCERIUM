@@ -1,0 +1,115 @@
+/* Temporary World Anvil migration context for VISCERIUM Creator Tools. */
+.vc-import-review {
+  --vc-review-border: var(--background-modifier-border);
+  --vc-review-surface: var(--background-secondary);
+  --vc-review-danger: var(--vc-state-danger, var(--color-red));
+  --vc-review-warning: var(--vc-state-warning, var(--color-yellow));
+  --vc-review-reference: var(--vc-state-reference, var(--color-blue));
+  --vc-review-success: var(--vc-state-success, var(--color-green));
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 14px 12px 18px;
+  font-family: var(--font-interface);
+  font-size: 0.86rem;
+}
+
+.vc-import-review h4 {
+  margin: 3px 0 5px;
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: 1.04rem;
+  line-height: 1.2;
+}
+
+.vc-import-review p { margin: 5px 0 0; line-height: 1.45; }
+.vc-import-review button { border-radius: var(--vc-radius-control, 4px); }
+.vc-import-review-empty { color: var(--text-muted); }
+
+.vc-import-review-kicker,
+.vc-import-review-section-label {
+  color: var(--text-faint);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.vc-import-review-header {
+  border-bottom: 1px solid var(--vc-review-border);
+  padding-bottom: 10px;
+}
+
+.vc-import-review-tier {
+  border-left: 2px solid var(--text-faint);
+  padding-left: 7px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+.vc-import-review-tier-1 { border-left-color: var(--vc-review-danger); color: color-mix(in srgb, var(--vc-review-danger) 58%, var(--text-normal)); }
+.vc-import-review-tier-2 { border-left-color: var(--vc-review-warning); }
+.vc-import-review-tier-3 { border-left-color: var(--vc-review-reference); }
+.vc-import-review-tier-4 { border-left-color: var(--text-faint); }
+.vc-import-review-reason { color: var(--text-muted); font-size: 0.76rem; }
+
+.vc-import-review-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--vc-review-border);
+  padding-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+.vc-import-review-progress .is-open { color: var(--vc-review-warning); font-weight: 750; }
+.vc-import-review-progress .is-complete { color: var(--vc-review-success); font-weight: 750; }
+
+.vc-import-review-next {
+  border-left: 2px solid var(--text-faint);
+  background: color-mix(in srgb, var(--vc-review-surface) 72%, transparent);
+  padding: 9px 10px;
+}
+.vc-import-review-next.is-danger { border-left-color: var(--vc-review-danger); }
+.vc-import-review-next.is-warning { border-left-color: var(--vc-review-warning); }
+.vc-import-review-next.is-reference { border-left-color: var(--vc-review-reference); }
+.vc-import-review-next strong { display: block; margin-top: 3px; }
+.vc-import-review-next p { color: var(--text-muted); font-size: 0.76rem; }
+.vc-import-review-next button { margin-top: 9px; width: 100%; }
+
+.vc-import-review-tasks {
+  display: grid;
+  gap: 4px;
+}
+.vc-import-review-task {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--vc-review-border) 68%, transparent);
+  padding: 7px 1px;
+  color: var(--text-normal);
+  cursor: pointer;
+  line-height: 1.35;
+}
+.vc-import-review-task input { margin-top: 2px; accent-color: var(--vc-review-success); }
+.vc-import-review-task.is-done { color: var(--text-faint); text-decoration: line-through; }
+
+.vc-import-review-complete {
+  border-left: 2px solid var(--vc-review-success);
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--vc-review-success) 6%, transparent);
+}
+.vc-import-review-complete strong { color: color-mix(in srgb, var(--vc-review-success) 58%, var(--text-normal)); }
+.vc-import-review-complete p { color: var(--text-muted); font-size: 0.76rem; }
+.vc-import-review-complete button { margin-top: 8px; width: 100%; }
+
+.vc-import-review-utility,
+.vc-import-review-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+.vc-import-review-utility { border-top: 1px solid var(--vc-review-border); padding-top: 10px; }
+.vc-import-review-nav button { font-size: 0.76rem; }
