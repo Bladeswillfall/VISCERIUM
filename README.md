@@ -1,13 +1,20 @@
-[![VISCERIUM banner](Vault/Assets/Images/viscerium-banner.webp)](https://www.viscerium.co.uk/)
+<div align="center">
+  <a href="https://www.viscerium.co.uk/">
+    <img src="Vault/Assets/Images/viscerium-banner.webp" alt="VISCERIUM banner" width="100%" />
+  </a>
 
-# VISCERIUM
+  <h1>VISCERIUM</h1>
 
-> **One timeline. Four eras. Infinite stories.**
+  <p><strong><em>One timeline. Four eras. Infinite stories.</em></strong></p>
 
-[![Creative IP: All Rights Reserved](https://img.shields.io/badge/Creative_IP-All_Rights_Reserved-8B1E1E?style=flat-square)](LICENSE.md)
-[![First-party code: MIT](https://img.shields.io/badge/First--party_Code-MIT-2E7D32?style=flat-square)](LICENSE-CODE.md)
-[![Creative canon: Human-made](https://img.shields.io/badge/Creative_Canon-Human--made-624A7B?style=flat-square)](ATTRIBUTION.md)
-[![Third-party software: Upstream licences](https://img.shields.io/badge/Third--party_Software-Upstream_Licences-355C7D?style=flat-square)](THIRD_PARTY_NOTICES.md)
+  <p>
+    <a href="LICENSE.md"><img src="https://img.shields.io/badge/Creative_IP-All_Rights_Reserved-484137?style=for-the-badge&labelColor=101010" alt="Creative IP: All Rights Reserved" /></a>
+    <a href="LICENSE-CODE.md"><img src="https://img.shields.io/badge/First--party_Code-MIT-484137?style=for-the-badge&labelColor=101010" alt="First-party code: MIT" /></a>
+    <a href="ATTRIBUTION.md"><img src="https://img.shields.io/badge/Creative_Canon-Human--made-484137?style=for-the-badge&labelColor=101010" alt="Creative canon: Human-made" /></a>
+    <a href="THIRD_PARTY_NOTICES.md"><img src="https://img.shields.io/badge/Third--party_Software-Upstream_Licences-484137?style=for-the-badge&labelColor=101010" alt="Third-party software: Upstream licences" /></a>
+    <a href="https://github.com/Bladeswillfall/VISCERIUM"><img src="https://img.shields.io/github/repo-size/Bladeswillfall/VISCERIUM?style=for-the-badge&color=484137&labelColor=101010&logo=github&logoColor=c8bfa8" alt="Repository size" /></a>
+  </p>
+</div>
 
 VISCERIUM is a dark transmedia universe built across one continuous history.
 On Errack, beneath the shadow-veiled Degel System, humanity survives lethal beauty, inherited warfare, occult power and things that should not exist.
