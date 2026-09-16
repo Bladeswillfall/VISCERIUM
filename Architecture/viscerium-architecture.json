@@ -25,6 +25,7 @@
     "calendar_definitions": "Site/src/data/calendars",
     "calendar_runtime": "Site/src/lib/calendar",
     "timeline_domain_logic": "Site/src/lib/timeline",
+    "obsidian_plugin_sources": "Tools/obsidian-viscerium-*",
     "obsidian_timeline_plugin": "Tools/obsidian-viscerium-timelines",
     "worldanvil_migration_guide": "Vault/Drafts/Inbox/World Anvil Migration Review.md"
   },
@@ -37,7 +38,7 @@
     "generated continuity hubs and era tag pages",
     "Site/dist",
     "Tools/obsidian-viscerium-timelines/dist",
-    "Vault/.obsidian/plugins/viscerium-timelines runtime bundle"
+    "Vault/.obsidian/plugins/viscerium-* runtime payloads"
   ],
   "programs": [
     {
@@ -71,8 +72,33 @@
       "name": "VISCERIUM Creator Tools",
       "scope": "creator",
       "purpose": "Set controlled era values, continuity IDs, and independent era editions.",
-      "source": "Vault/.obsidian/plugins/viscerium-creator-tools",
-      "rule": "Use the controlled commands instead of arbitrary era text."
+      "source": "Tools/obsidian-viscerium-creator-tools",
+      "runtime": "Vault/.obsidian/plugins/viscerium-creator-tools",
+      "rule": "Edit the Tools source and sync the runtime. Use the controlled commands instead of arbitrary era text."
+    },
+    {
+      "name": "VISCERIUM Layout Tools",
+      "scope": "creator",
+      "purpose": "Provide presentation-only Markdown layout helpers inside Obsidian.",
+      "source": "Tools/obsidian-viscerium-layout-tools",
+      "runtime": "Vault/.obsidian/plugins/viscerium-layout-tools",
+      "rule": "Edit the Tools source and sync the runtime."
+    },
+    {
+      "name": "VISCERIUM Image Tools",
+      "scope": "creator",
+      "purpose": "Render article header images and authored image-layout flags inside Obsidian.",
+      "source": "Tools/obsidian-viscerium-image-tools",
+      "runtime": "Vault/.obsidian/plugins/viscerium-image-tools",
+      "rule": "Edit the Tools source and sync the runtime."
+    },
+    {
+      "name": "VISCERIUM Journal Tools",
+      "scope": "creator",
+      "purpose": "Bridge Daily Activity into the Chronicle daily-note snapshot workflow.",
+      "source": "Tools/obsidian-viscerium-journal-tools",
+      "runtime": "Vault/.obsidian/plugins/viscerium-journal-tools",
+      "rule": "Edit the Tools source and sync the runtime."
     },
     {
       "name": "StoryLine",
@@ -201,16 +227,16 @@
     },
     {
       "id": "plugin",
-      "label": "First-party Obsidian runtime",
-      "paths": ["Tools/obsidian-viscerium-timelines", "Vault/.obsidian/plugins/viscerium-timelines", "Vault/.obsidian/plugins/viscerium-creator-tools"],
-      "responsibilities": ["timeline rendering", "StoryLine timeline", "controlled era authoring", "era edition creation"],
-      "rule": "Use maintained source for compiled plugins. Keep creator-tool behaviour aligned with SOPs."
+      "label": "First-party Obsidian plugins",
+      "paths": ["Tools/obsidian-viscerium-*", "Vault/.obsidian/plugins/viscerium-*"],
+      "responsibilities": ["timeline rendering", "StoryLine timeline", "controlled era authoring", "era edition creation", "article layout", "article image rendering", "journal activity snapshots"],
+      "rule": "Edit maintained source under Tools. Treat the Vault plugin directories as checked-in runtime payloads."
     },
     {
       "id": "quality",
       "label": "Tests and GitHub Actions",
       "paths": ["Site/tests", ".github/workflows/checks.yml"],
-      "responsibilities": ["Vault Doctor", "unit tests", "timeline benchmark", "production build", "plugin build", "Playwright browser checks"],
+      "responsibilities": ["Vault Doctor", "unit tests", "timeline benchmark", "production build", "plugin build", "runtime parity checks", "Playwright browser checks"],
       "rule": "Fix objective failures before merge."
     },
     {
@@ -305,7 +331,7 @@
       "Make a focused source change.",
       "Run relevant local checks.",
       "Push a feature branch and open a pull request.",
-      "Run Vault Doctor, unit tests, benchmarks, production build, plugin build, and browser checks in GitHub Actions.",
+      "Run Vault Doctor, unit tests, benchmarks, production build, plugin build, runtime parity checks, and browser checks in GitHub Actions.",
       "Merge only after required checks pass."
     ]
   },
@@ -322,7 +348,8 @@
     "VISCERIUM never silently resolves a conceptual link into a different historical era.",
     "Telescope is the public search provider. Pagefind is disabled.",
     "Raster repository artwork must be WebP. Use SVG only for genuine vector media.",
-    "Tools/obsidian-viscerium-timelines is the timeline plugin implementation source.",
+    "First-party Obsidian plugin implementation source lives under Tools/obsidian-viscerium-*.",
+    "Vault/.obsidian/plugins/viscerium-* contains checked-in runtime payloads, not the primary implementation source.",
     "Schema changes must stay synchronized across affected templates, Bases, validators, public schema, tests, and documentation.",
     "The public Codex is static. Do not put private server secrets in client code."
   ],
@@ -383,9 +410,9 @@
     },
     {
       "feature": "Obsidian creator UX",
-      "start": ["Vault/Home.md", "Vault/System/SOPs/Creator Command Reference.md", "Vault/.obsidian"],
-      "never": ["assume device-local Templater permissions are Git-controlled"],
-      "tests": ["vault homepage tests", "vault template tests", "npm run doctor:vault"]
+      "start": ["Vault/Home.md", "Vault/System/SOPs/Creator Command Reference.md", "Tools/obsidian-viscerium-*", "Vault/.obsidian"],
+      "never": ["assume device-local Templater permissions are Git-controlled", "edit first-party Vault runtime payloads as the primary implementation"],
+      "tests": ["vault homepage tests", "vault template tests", "plugin source/runtime parity", "npm run doctor:vault"]
     },
     {
       "feature": "deployment",
@@ -408,6 +435,10 @@
       "npm run build": "Run the production content pipeline and Astro build.",
       "npm test": "Run Vault Doctor, unit tests, and the production build.",
       "npm run preview": "Serve the existing production build."
+    },
+    "obsidian_plugins": {
+      "node Tools/scripts/sync-obsidian-plugins.mjs --check": "Check plain first-party plugin source against the tracked Vault runtime payloads.",
+      "node Tools/scripts/sync-obsidian-plugins.mjs --write": "Copy plain first-party plugin source to the tracked Vault runtime payloads."
     },
     "timeline_plugin": {
       "cwd": "Tools/obsidian-viscerium-timelines",
@@ -439,6 +470,8 @@
     "Vault/System/SOPs/Era Edition Workflow SOP.md",
     "Vault/System/SOPs/Schema Change SOP.md",
     "Vault/System/StoryLine Integration.md",
+    "Tools/README.md",
+    "Tools/scripts/sync-obsidian-plugins.mjs",
     "Tools/obsidian-viscerium-timelines/README.md",
     ".github/workflows/checks.yml"
   ]
