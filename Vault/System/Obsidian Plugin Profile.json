@@ -49,10 +49,9 @@
     {
       "id": "mysnippets-plugin",
       "name": "MySnippets",
-      "testedVersion": "1.2.4",
-      "source": "vendored-modified",
-      "sharedSettings": "Vault/.obsidian/plugins/mysnippets-plugin/data.json",
-      "note": "The repository tracks the compatibility runtime because it contains VISCERIUM-specific Obsidian compatibility work under MPL-2.0."
+      "testedVersion": "1.2.3",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/mysnippets-plugin/data.json"
     },
     {
       "id": "storyline",

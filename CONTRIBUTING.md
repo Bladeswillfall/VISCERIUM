@@ -81,8 +81,6 @@ node Tools/scripts/sync-obsidian-plugins.mjs --check
 
 VISCERIUM Timelines keeps its existing build and sync workflow under `Tools/obsidian-viscerium-timelines/`.
 
-The modified MySnippets compatibility runtime is an explicit MPL-2.0 exception. Do not treat that exception as permission to vendor other community plugins.
-
 ## Source-of-truth rules
 
 1. Edit public source Lore under `Vault/Lore/`.
