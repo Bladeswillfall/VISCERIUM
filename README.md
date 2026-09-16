@@ -39,7 +39,9 @@ The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of
 The source of the public Codex and the machinery that builds it.
 - `Vault/` — published Lore and shared creator documentation.
 - `Site/` — the Astro/Starlight website.
-- `Tools/` — creator-facing tools and integrations.
+- `Tools/` — maintained creator-facing tools and first-party Obsidian plugin source.
+- `Services/` — standalone first-party services.
+- `Infrastructure/` — deployment and runtime infrastructure.
 - `Architecture/` — how the pieces fit together.
   
 Unpublished Lore, stories, working files and private material live in the separate `VISCERIUM-Workshop` repository.  

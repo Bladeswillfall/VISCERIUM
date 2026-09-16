@@ -194,6 +194,7 @@ test('Daily Activity is configured as a quiet local event ledger', async () => {
 
   const journalTools = profile.plugins.find((plugin) => plugin.id === 'viscerium-journal-tools');
   assert.equal(journalTools?.source, 'first-party');
+  assert.equal(journalTools?.sourcePath, 'Tools/obsidian-viscerium-journal-tools');
   assert.equal(journalTools?.runtimePath, 'Vault/.obsidian/plugins/viscerium-journal-tools');
 
   assert.match(gitignore, /!Vault\/\.obsidian\/plugins\/daily-activity\/data\.json/);
@@ -201,8 +202,8 @@ test('Daily Activity is configured as a quiet local event ledger', async () => {
 });
 
 test("Seal Today's Activity keeps the established Daily path and Vault Activity target", async () => {
-  const plugin = await readVaultText('.obsidian/plugins/viscerium-journal-tools/main.js');
-  const manifest = await readVaultJson('.obsidian/plugins/viscerium-journal-tools/manifest.json');
+  const plugin = await readText('Tools/obsidian-viscerium-journal-tools/src/main.js');
+  const manifest = JSON.parse(await readText('Tools/obsidian-viscerium-journal-tools/manifest.json'));
   const workflow = await readVaultText('System/SOPs/015 - Daily Journal Workflow SOP.md');
 
   assert.equal(manifest.id, 'viscerium-journal-tools');
