@@ -54,7 +54,7 @@
     "@astrojs/starlight": "^0.41.3",
     "astro": "^7.2.8",
     "cytoscape": "3.34.3",
-    "cytoscape-dagre": "4.0.0",
+    "cytoscape-dagre": "4.0.1",
     "fuse.js": "7.5.0",
     "gray-matter": "^4.0.3",
     "leaflet": "1.9.4",
