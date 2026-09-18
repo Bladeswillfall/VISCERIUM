@@ -17,7 +17,8 @@ const artist = entry.artist ?? entry.credit;
 const originalArtworkHref = externalHref(entry.sourceUrl);
 const artistHref = externalHref(entry.artistUrl);
 const altText = isPresent(entry.alt) ? entry.alt : t('viscerium.attribution.notRecorded');
-const rights = presentImageRights(entry.rights ?? entry.license, t('viscerium.attribution.notRecorded'));
+const rightsValue = isPresent(entry.rights) ? entry.rights : entry.license;
+const rights = presentImageRights(rightsValue, t('viscerium.attribution.notRecorded'));
 ---
 
 <section class="codex-attribution-record" aria-labelledby="codex-attribution-caption">
@@ -214,6 +215,19 @@ const rights = presentImageRights(entry.rights ?? entry.license, t('viscerium.at
       .codex-attribution-table th {
         width: 38%;
         font-size: 0.64rem;
+      }
+
+      .codex-rights-badge {
+        gap: 0.4rem;
+      }
+
+      .codex-rights-icons {
+        gap: 0.12rem;
+      }
+
+      .codex-rights-icon {
+        width: 1.65rem;
+        height: 1.65rem;
       }
     }
   }
