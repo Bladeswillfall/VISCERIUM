@@ -7,6 +7,7 @@ asset: "/assets/images/bailey-pittman-prosthetics.webp"
 image: "/assets/images/bailey-pittman-prosthetics.webp"
 alt:
 artist: 
+artistUrl:
 editor:
 source:
 sourceUrl: 
