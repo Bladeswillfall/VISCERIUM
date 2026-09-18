@@ -103,12 +103,11 @@ When training teaches you to get on with it or die, getting on with it can look 
 > ### Personal History
 > From adolescence, Bailey showed great skill in athletics and shooting. Participating in three teen CrossFit championships and winning a "Run 'n' Gun" competition by the age of fifteen. These two factors no doubt played a role in the local ICDF branch head-hunting her for enlistment at sixteen.
 >
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
->> ### Professional History
->> > [!vc-indent]
+> ### Professional History
+>
+> > [!vc-indent]
 > > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> >> > #### ICDF
+> > #### ICDF
 > > Bailey began her career with the Imperium Coalition Defence Force as a Rifleman in the 101st Battalion, eventually specialising in reconnaissance. She served for almost three years in this role before everything went wrong.
 > >
 > > During deployment to a mission for the ICDF, Bailey's insertion vehicle was sabotaged, along with the rest of her platoon's. The destruction caused the death and dismemberment of five soldiers, the permanent paralysis of two more and irreversible damage to Bailey's limbs.
@@ -144,9 +143,10 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### ICSSAS standard gear
->> > [!vc-indent]
+>
+> > [!vc-indent]
 > > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> >> > #### Outfit
+> > #### Outfit
 > > Outfitted with a waterproof, skin-tight, anti-microbial bodysuit beneath their fatigues to prevent smell, promote healthy conditions and keep the user warm. The bodysuit also has key areas lined with an ultra-durable fibre to prevent piercing and cuts via typical means.
 > >
 > > Combat fatigues are a dark grey colour with subtle camouflage patterning, with plain dark grey interior colouration, tailored to fit each ICSSAS operator.
@@ -171,9 +171,10 @@ When training teaches you to get on with it or die, getting on with it can look 
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >> ### Delta Two
->> > [!vc-indent]
+>
+> > [!vc-indent]
 > > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
->> > #### (D-21) Delta Two One Patrol
+> > #### (D-21) Delta Two One Patrol
 > > _Bailey has served with Delta Two One for over two years. She has an incredibly close bond with all operators of Delta Two One, and regards Delta Two Two as some of her closest friends. Namely, Mía and Bailey are best friends._
 > >
 > > ##### Cpl. May Zhang
