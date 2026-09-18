@@ -35,7 +35,7 @@ const feedHead = [
   },
 ];
 
-const fontStylesheetUrl = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400&family=Source+Serif+4:opsz,wght@8..60,400..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap';
+const fontStylesheetUrl = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400&family=Nothing+You+Could+Do&family=Source+Serif+4:opsz,wght@8..60,400..900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap';
 const fontHead = [
   {
     tag: 'link',

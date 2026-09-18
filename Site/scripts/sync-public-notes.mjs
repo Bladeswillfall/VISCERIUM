@@ -314,6 +314,40 @@ function stripDataviewBlocks(content) {
   return String(content).replace(/```dataviewjs[\s\S]*?```\s*/gi, '');
 }
 
+function escapeQuoteAttribution(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+export function transformQuoteAttributions(content) {
+  let fence = null;
+
+  return String(content).split(/\r?\n/).map((line) => {
+    const prefixMatch = line.match(/^(\s*(?:>\s*)+)/);
+    const prefix = prefixMatch?.[1] ?? '';
+    const body = prefix ? line.slice(prefix.length) : line;
+    const fenceMatch = body.match(/^(`{3,}|~{3,})/);
+
+    if (fence) {
+      if (fenceMatch && fenceMatch[1][0] === fence.marker && fenceMatch[1].length >= fence.length) fence = null;
+      return line;
+    }
+
+    if (fenceMatch) {
+      fence = { marker: fenceMatch[1][0], length: fenceMatch[1].length };
+      return line;
+    }
+
+    if (!prefix) return line;
+    const attribution = body.match(/^—\s*(.+?)\s*$/);
+    if (!attribution) return line;
+
+    return `${prefix}<cite class="vc-quote-attribution">${escapeQuoteAttribution(attribution[1])}</cite>`;
+  }).join('\n');
+}
+
 function normaliseEventLinks(links) {
   if (!links || typeof links !== 'object' || Array.isArray(links)) return undefined;
   const normalised = {};
@@ -452,6 +486,8 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
     }
     return `[${label}](${route})`;
   });
+
+  converted = transformQuoteAttributions(converted);
 
   converted = transformCodexFormatting(converted, {
     jsx: outputRequiresMdx,
