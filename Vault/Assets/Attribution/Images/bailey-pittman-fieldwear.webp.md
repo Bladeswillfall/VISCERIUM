@@ -5,16 +5,16 @@ status: published
 type: image
 asset: "/assets/images/bailey-pittman-fieldwear.webp"
 image: "/assets/images/bailey-pittman-fieldwear.webp"
-alt:
-artist: 
-artistUrl:
+alt: "Bailey Pittman wearing Delta Two fieldwear and biomechanical prosthetics."
+artist: "MrBizcocho"
+artistUrl: "https://x.com/Mrbizc8"
 editor:
 source:
 sourceUrl: 
-credit:
+credit: "MrBizcocho"
 license:
-rights:
-usage: "Provisional Bailey Pittman fieldwear illustration. Creator attribution and final rights details are pending review."
+rights: "Copyright"
+usage: "Bailey Pittman fieldwear illustration by MrBizcocho."
 sensitiveMedia: false
 contentWarnings: []
 tags: [attribution]
@@ -27,7 +27,7 @@ giscus: false
 
 ## Usage notes
 
-Provisional Bailey Pittman fieldwear illustration. Creator attribution and final rights details are pending review.
+Bailey Pittman fieldwear illustration by MrBizcocho.
 
 ## Related
 
