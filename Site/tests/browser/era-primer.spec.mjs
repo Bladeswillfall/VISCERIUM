@@ -159,7 +159,7 @@ test('CITADEL retains its supplied map and flat editorial information blocks', a
 
 test('CITADEL map opens the canonical Atlas entry', async ({ page }) => {
   await page.goto(eraUrl('citadel'), { waitUntil: 'domcontentloaded' });
-  await page.locator('[data-era-primer="citadel"] .era-primer__map').click();
+  await page.locator('[data-era-primer="citadel"] .era-primer__map-action').click();
 
   await expect(page).toHaveURL(`${preview}/maps/errack-citadel/`);
   await expect(page.getByRole('heading', { name: 'Errack — CITADEL', level: 1 })).toBeVisible();

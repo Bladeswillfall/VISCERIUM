@@ -34,29 +34,33 @@ test('reader-facing artwork links to attribution records', async ({ page }) => {
   );
 });
 
-test('header and sidebar artwork stay centered inside their links', async ({ page }) => {
+test('header and sidebar artwork are visually centered inside their links', async ({ page }) => {
   await page.goto(`${baseUrl}/eras/entropy/characters/tpr.-bailey-pittman/`, { waitUntil: 'domcontentloaded' });
 
   const alignment = await page.evaluate(() => {
-    const header = document.querySelector('.codex-header-image');
-    const sidebar = document.querySelector('.codex-sidebar-image');
-    const read = (image) => {
-      const style = image ? getComputedStyle(image) : null;
-      return style ? {
-        marginLeft: style.marginLeft,
-        marginRight: style.marginRight,
-        objectPosition: style.objectPosition,
-      } : null;
+    const measure = (linkSelector, imageSelector) => {
+      const link = document.querySelector(linkSelector);
+      const image = document.querySelector(imageSelector);
+      if (!(link instanceof HTMLElement) || !(image instanceof HTMLImageElement)) return null;
+
+      const linkRect = link.getBoundingClientRect();
+      const imageRect = image.getBoundingClientRect();
+      return {
+        linkCenter: linkRect.left + (linkRect.width / 2),
+        imageCenter: imageRect.left + (imageRect.width / 2),
+      };
     };
-    return { header: read(header), sidebar: read(sidebar) };
+
+    return {
+      header: measure('.codex-header-image-link', '.codex-header-image'),
+      sidebar: measure('.codex-sidebar-image-link', '.codex-sidebar-image'),
+    };
   });
 
   expect(alignment.header).not.toBeNull();
   expect(alignment.sidebar).not.toBeNull();
-  expect(alignment.header.objectPosition).toBe('50% 50%');
-  expect(alignment.sidebar.objectPosition).toBe('50% 50%');
-  expect(alignment.header.marginLeft).toBe(alignment.header.marginRight);
-  expect(alignment.sidebar.marginLeft).toBe(alignment.sidebar.marginRight);
+  expect(Math.abs(alignment.header.linkCenter - alignment.header.imageCenter)).toBeLessThanOrEqual(1);
+  expect(Math.abs(alignment.sidebar.linkCenter - alignment.sidebar.imageCenter)).toBeLessThanOrEqual(1);
 });
 
 test('attribution records expose their asset source for GitHub editing', async ({ page }) => {

@@ -171,7 +171,9 @@
   }
 
   body:not(:has(.home-gateway)) .codex-sidebar-image-link {
+    display: flex;
     width: 100%;
+    justify-content: center;
   }
 
   body:not(:has(.home-gateway)) .codex-sidebar-image {
