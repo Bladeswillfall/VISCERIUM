@@ -104,7 +104,7 @@
     {
       "id": "viscerium-image-tools",
       "name": "VISCERIUM Image Tools",
-      "testedVersion": "0.2.1",
+      "testedVersion": "0.3.0",
       "source": "first-party",
       "sourcePath": "Tools/obsidian-viscerium-image-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-image-tools"
