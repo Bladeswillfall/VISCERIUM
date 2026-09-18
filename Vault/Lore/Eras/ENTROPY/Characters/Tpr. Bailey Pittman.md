@@ -83,7 +83,7 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Protective instinct
->> > You don't get to die before me! No one else is dying before me... Not again! Not ever again!
+> > You don't get to die before me! No one else is dying before me... Not again! Not ever again!
 > >
 > > — Tpr. Bailey Pittman
 >
