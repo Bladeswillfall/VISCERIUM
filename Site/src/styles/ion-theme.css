@@ -100,9 +100,12 @@
     padding: 0;
   }
 
-  /* Link styles */
+  /* Link styles. Text links may shrink to their label; media wrappers own their own geometry. */
   a:not(.sidebar a):not(footer a) {
     transition: color 0.1s ease;
+  }
+
+  a:not(.sidebar a):not(footer a):not(:has(> img)):not(:has(> picture)) {
     width: fit-content;
   }
 
