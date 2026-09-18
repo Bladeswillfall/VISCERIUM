@@ -102,14 +102,14 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Personal History
->> From adolescence, Bailey showed great skill in athletics and shooting. Participating in three teen CrossFit championships and winning a "Run 'n' Gun" competition by the age of fifteen. These two factors no doubt played a role in the local ICDF branch head-hunting her for enlistment at sixteen.
+> From adolescence, Bailey showed great skill in athletics and shooting. Participating in three teen CrossFit championships and winning a "Run 'n' Gun" competition by the age of fifteen. These two factors no doubt played a role in the local ICDF branch head-hunting her for enlistment at sixteen.
 
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Professional History
 >> #### ICDF
->> Bailey began her career with the Imperium Coalition Defence Force as a Rifleman in the 101st Battalion, eventually specialising in reconnaissance. She served for almost three years in this role before everything went wrong.
+> Bailey began her career with the Imperium Coalition Defence Force as a Rifleman in the 101st Battalion, eventually specialising in reconnaissance. She served for almost three years in this role before everything went wrong.
 >
 > During deployment to a mission for the ICDF, Bailey's insertion vehicle was sabotaged, along with the rest of her platoon's. The destruction caused the death and dismemberment of five soldiers, the permanent paralysis of two more and irreversible damage to Bailey's limbs.
 >
@@ -118,7 +118,7 @@ When training teaches you to get on with it or die, getting on with it can look 
 > Following roughly four years of persistent training, exercising and tuning her prosthetics, Bailey re-took her entrance exams for the third year in a row and passed near-top of the class. Once again, entering the ICDF.
 >
 > #### ICSSAS
->> Following her re-enlistment to the ICDF, Bailey applied for a role within the ICSSAS straight away.
+> Following her re-enlistment to the ICDF, Bailey applied for a role within the ICSSAS straight away.
 >
 > Joining Delta Squadron, Bailey specialised as a demolitions expert and has held this position for over two years — making her the youngest operator of Delta Two One.
 
@@ -175,23 +175,23 @@ When training teaches you to get on with it or die, getting on with it can look 
 >> _Bailey has served with Delta Two One for over two years. She has an incredibly close bond with all operators of Delta Two One, and regards Delta Two Two as some of her closest friends. Namely, Mía and Bailey are best friends._
 >
 > ##### Cpl. May Zhang
->> 1st In Command of Delta Two One, the motherly May Zhang is the 'firm but fair' leader. Tactically and strategically minded, May has a quiet persona and is all too happy to sit and watch the antics of her Squadron as they bicker or party between assignments.
+> 1st In Command of Delta Two One, the motherly May Zhang is the 'firm but fair' leader. Tactically and strategically minded, May has a quiet persona and is all too happy to sit and watch the antics of her Squadron as they bicker or party between assignments.
 >
 > ##### Tpr. Tobi Schöler
->> Designated machine gunner of Delta Two One, Tobi is a gentle giant — with muscles to show for it. Armed with a light-weight, gimballed exo-frame mount for his weapon and a back case of ammo, most things tend to run or hide once rounds start flying.
+> Designated machine gunner of Delta Two One, Tobi is a gentle giant — with muscles to show for it. Armed with a light-weight, gimballed exo-frame mount for his weapon and a back case of ammo, most things tend to run or hide once rounds start flying.
 >
 > ##### Tpr. Louis Hodari
->> Louis is the designated marksman for Delta Two One, with wicked reflexes and a history in recon. Louis is a lethal hunter and, surprisingly, an amazing chef — all those emergency rations gave him a real strong love for good food.
+>Louis is the designated marksman for Delta Two One, with wicked reflexes and a history in recon. Louis is a lethal hunter and, surprisingly, an amazing chef — all those emergency rations gave him a real strong love for good food.
 >
 > #### (D-22) Delta Two Two Patrol
 >> ##### LCpl. Akanni Balogun
->> 2nd In Command of Delta Two One. As a CQB and hand-to-hand specialist, Akanni earned his surname upon joining the ICSSAS and has since only gotten more and more effective in his role as a now team leader.
+>2nd In Command of Delta Two One. As a CQB and hand-to-hand specialist, Akanni earned his surname upon joining the ICSSAS and has since only gotten more and more effective in his role as a now team leader.
 >
 > ##### [[Drafts/Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko]]
->> The designated marksman for Delta Two Two, Hannah has proven to be a truly lethal operator. Though Hannah is a bit more introverted and quiet than her comrades, when in uniform or on mission, she is focused and determined to be useful.
+>The designated marksman for Delta Two Two, Hannah has proven to be a truly lethal operator. Though Hannah is a bit more introverted and quiet than her comrades, when in uniform or on mission, she is focused and determined to be useful.
 >
 > ##### Tpr. Mía Alvarado
->> Mía and Bailey have a sister-like bond. As best friends they often spend their free time together, almost all of it in fact, in each other's presence. As the designated machine gunner for Delta Two Two, Mía is short tempered and all too happy to saturate an area with high-calibre rounds.
+>Mía and Bailey have a sister-like bond. As best friends they often spend their free time together, almost all of it in fact, in each other's presence. As the designated machine gunner for Delta Two Two, Mía is short tempered and all too happy to saturate an area with high-calibre rounds.
 >
 > ##### Tpr. Ilya Artemiy Valerianovich
->> Designated demolitions specialist, Ilya has an innate ability to make things set on fire or go "boom" with minimal resources, and often just scraps left laying about. Chemistry has always been a passion of Ilya's, and now he gets to fight for and defend his team with that same passion.
+>Designated demolitions specialist, Ilya has an innate ability to make things set on fire or go "boom" with minimal resources, and often just scraps left laying about. Chemistry has always been a passion of Ilya's, and now he gets to fight for and defend his team with that same passion.
