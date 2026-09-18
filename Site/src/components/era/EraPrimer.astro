@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import '../../styles/era-primer-pages.css';
 import { normaliseInternalRoute, slugToRoute } from '../../lib/codex-paths.mjs';
 import { validateEraPrimerData } from '../../lib/era-primer-data.mjs';
+import { attributionRouteForAsset } from '../../lib/image-attribution.mjs';
 
 const { primer } = Astro.props;
 const primerErrors = validateEraPrimerData(primer);
@@ -72,15 +73,21 @@ const powers = primer.powers.map((power) => {
   </section>
 
   <section class="era-primer__world" id={sectionId('world')} aria-labelledby={sectionId('world-title')}>
-    <a class="era-primer__map" href={primer.map.href} aria-label={`${primer.map.action}: ${primer.map.label}`}>
-      <img src={primer.map.src} alt={primer.map.alt} loading="lazy" />
+    <div class="era-primer__map">
+      <a
+        class="era-primer__map-art"
+        href={attributionRouteForAsset(primer.map.src)}
+        aria-label={`Image attribution: ${primer.map.label}`}
+      >
+        <img src={primer.map.src} alt={primer.map.alt} loading="lazy" />
+      </a>
       <span class="era-primer__map-vignette" aria-hidden="true"></span>
-      <span class="era-primer__map-label">
+      <a class="era-primer__map-label" href={primer.map.href}>
         <small>{primer.map.eyebrow}</small>
         <strong>{primer.map.label}</strong>
-      </span>
-      <span class="era-primer__map-action">{primer.map.action} <span aria-hidden="true">→</span></span>
-    </a>
+      </a>
+      <a class="era-primer__map-action" href={primer.map.href}>{primer.map.action} <span aria-hidden="true">→</span></a>
+    </div>
 
     <div class="era-primer__world-copy">
       <p class="era-primer__eyebrow">{primer.worldNow.eyebrow}</p>
@@ -148,7 +155,13 @@ const powers = primer.powers.map((power) => {
     <div class="era-primer__powers">
       {powers.map((power) => (
         <article class="era-primer__power">
-          <img src={power.sigil} alt="" loading="lazy" aria-hidden="true" />
+          <a
+            class="era-primer__power-sigil"
+            href={attributionRouteForAsset(power.sigil)}
+            aria-label={`Image attribution: ${power.title}`}
+          >
+            <img src={power.sigil} alt="" loading="lazy" aria-hidden="true" />
+          </a>
           <div>
             <h4>
               {power.href

@@ -2,6 +2,7 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import maps from '../../data/maps.json';
 import '../../styles/maps.css';
+import { attributionRouteForAsset } from '../../lib/image-attribution.mjs';
 
 const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeCompare(String(b.title ?? '')));
 ---
@@ -16,7 +17,11 @@ const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeC
       <div class="codex-map-grid not-content">
         {entries.map((map) => (
           <article class="codex-map-card">
-            {map.image && <img src={map.image} alt="" loading="lazy" />}
+            {map.image && (
+              <a class="codex-map-card__image-link" href={attributionRouteForAsset(map.image)} aria-label={`Image attribution: ${map.title}`}>
+                <img src={map.image} alt="" loading="lazy" />
+              </a>
+            )}
             <div class="codex-map-card__body">
               <h2><a href={`/maps/${encodeURIComponent(map.id)}/`}>{map.title}</a></h2>
               {map.description && <p>{map.description}</p>}
@@ -48,13 +53,19 @@ const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeC
     }
   }
 
-  .atlas-index .codex-map-card > img {
+  .atlas-index .codex-map-card__image-link {
+    display: block;
+    flex: none;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .atlas-index .codex-map-card__image-link > img {
     display: block;
     width: 100%;
     height: clamp(10.5rem, 20vw, 15rem);
     max-height: 15rem;
     margin: 0;
-    flex: none;
     object-fit: cover;
     object-position: center;
   }

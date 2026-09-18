@@ -58,7 +58,9 @@ for (const era of eraPages) {
     await expect(editPage).toHaveAttribute('href', /github\.com\/Bladeswillfall\/VISCERIUM\/edit\/main\/Vault\/Lore\//);
 
     const map = primer.locator('.era-primer__map');
-    await expect(map).toHaveAttribute('href', era.mapHref);
+    await expect(map.locator('.era-primer__map-label')).toHaveAttribute('href', era.mapHref);
+    await expect(map.locator('.era-primer__map-action')).toHaveAttribute('href', era.mapHref);
+    await expect(map.locator('.era-primer__map-art')).toHaveAttribute('href', /\/attribution\//);
     await expect(map.locator('img')).toHaveAttribute('src', era.map);
 
     const geometry = await primer.evaluate((element) => {

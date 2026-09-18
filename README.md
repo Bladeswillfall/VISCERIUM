@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://www.viscerium.co.uk/">
+  <a href="https://www.viscerium.co.uk/attribution/images/viscerium-banner-webp/">
     <img src="Vault/Assets/Images/viscerium-banner.webp" alt="VISCERIUM banner" width="100%" />
   </a>
 

@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';
 import matter from 'gray-matter';
 import { slugToRoute, toPosixPath, vaultSourceSlug } from '../src/lib/codex-paths.mjs';
+import { attributionRouteForAsset, attributionSlugForAsset } from '../src/lib/image-attribution.mjs';
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
@@ -22,6 +23,7 @@ import { isMainModule } from './script-entry.mjs';
 const siteRoot = process.cwd();
 const sourceDir = path.resolve(siteRoot, siteConfig.loreSourceDir);
 const assetRoot = path.resolve(siteRoot, siteConfig.vaultAssetDir);
+const attributionDir = path.join(assetRoot, 'Attribution');
 const outDir = path.resolve(siteRoot, 'src/content/docs');
 const publicAssetDir = path.resolve(siteRoot, 'public/assets');
 const missingImagePath = '/assets/images/missing-image.svg';
@@ -73,10 +75,6 @@ function linkKey(input) {
     .toLowerCase();
 }
 
-function assetKey(input) {
-  return path.basename(String(input).trim()).toLowerCase();
-}
-
 function isExternalUrl(value) {
   return typeof value === 'string' && /^[a-z][a-z0-9+.-]*:/i.test(value);
 }
@@ -96,9 +94,15 @@ function managedAssetReference(value) {
   const pathOnly = stripUrlSuffix(trimmed);
   const filename = path.basename(pathOnly);
 
-  if (trimmed.startsWith('/assets/images/')) return { category: 'Images', filename };
-  if (trimmed.startsWith('/assets/maps/')) return { category: 'Maps', filename };
-  if (isPlainAssetFilename(trimmed) && imageExtensions.test(filename)) return { category: 'Images', filename };
+  if (pathOnly.startsWith('/assets/images/')) {
+    return { category: 'Images', filename, relativePath: pathOnly.slice('/assets/images/'.length) };
+  }
+  if (pathOnly.startsWith('/assets/maps/')) {
+    return { category: 'Maps', filename, relativePath: pathOnly.slice('/assets/maps/'.length) };
+  }
+  if (isPlainAssetFilename(trimmed) && imageExtensions.test(filename)) {
+    return { category: 'Images', filename, relativePath: filename };
+  }
   return null;
 }
 
@@ -168,7 +172,6 @@ export async function syncPublicNotes() {
 const files = (await walk(sourceDir)).filter((file) => /\.(md|mdx)$/i.test(file)).sort();
 const publicNotes = [];
 const targetIndex = new Map();
-const imageSlugByAsset = new Map();
 const warnings = [];
 
 function addTarget(key, candidate) {
@@ -212,11 +215,27 @@ for (const file of files) {
   addTarget(slug, candidate);
 }
 
-for (const note of publicNotes) {
-  const asset = note.parsed.data.asset;
-  if (note.parsed.data.type === 'image' && typeof asset === 'string' && asset.trim()) {
-    imageSlugByAsset.set(assetKey(asset), note.slug);
+const attributionFiles = (await walk(attributionDir)).filter((file) => /\.md$/i.test(file)).sort();
+for (const file of attributionFiles) {
+  const raw = await fs.readFile(file, 'utf8');
+  const parsed = parseFrontmatter(raw, file);
+  if (parsed.data.status !== 'published') continue;
+  const assetReference = parsed.data.asset ?? parsed.data.image;
+  const slug = attributionSlugForAsset(assetReference);
+  if (!slug) throw new Error(`Attribution note needs a supported image asset reference: ${path.relative(siteRoot, file)}`);
+  if (publicNotes.some((note) => note.slug === slug)) throw new Error(`Duplicate published route "${slug}" in ${path.relative(siteRoot, file)}`);
+  parsed.data.slug = slug;
+  parsed.data.type = 'image';
+  for (const field of requiredFields) {
+    if (!parsed.data[field]) throw new Error(`Public attribution note is missing required frontmatter "${field}": ${path.relative(siteRoot, file)}`);
   }
+  publicNotes.push({
+    file,
+    parsed,
+    slug,
+    sourcePath: toPosixPath(path.relative(sourceDir, file)),
+    candidate: null,
+  });
 }
 
 function contextualResolution(rawTarget, currentFile, parsed) {
@@ -276,31 +295,42 @@ async function ensureMissingImagePlaceholder() {
 
 await ensureMissingImagePlaceholder();
 
-async function copyAsset(category, filename) {
-  const source = path.join(assetRoot, category, filename);
+async function copyAsset(category, relativePath) {
+  const safeRelativePath = toPosixPath(String(relativePath ?? '')).replace(/^\/+/, '');
+  if (!safeRelativePath || safeRelativePath.split('/').includes('..')) return null;
+  const source = path.join(assetRoot, category, safeRelativePath);
   if (!(await pathExists(source))) return null;
-  const target = path.join(publicAssetDir, category.toLowerCase(), filename);
+  const target = path.join(publicAssetDir, category.toLowerCase(), safeRelativePath);
   await fs.mkdir(path.dirname(target), { recursive: true });
   await fs.copyFile(source, target);
-  return `/assets/${category.toLowerCase()}/${filename}`;
+  return `/assets/${category.toLowerCase()}/${safeRelativePath}`;
+}
+
+async function existingPublicAssetUrl(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw.startsWith('/assets/')) return null;
+  const pathOnly = stripUrlSuffix(raw).replace(/^\/+/, '');
+  return await pathExists(path.join(siteRoot, 'public', pathOnly)) ? raw : null;
 }
 
 async function resolveReferencedAsset(value, currentFile, label) {
   const reference = managedAssetReference(value);
   if (!reference) return { managed: false, url: value };
 
-  const url = await copyAsset(reference.category, reference.filename);
+  const url = await copyAsset(reference.category, reference.relativePath);
   if (url) return { managed: true, url, filename: reference.filename };
+  const existingPublicUrl = await existingPublicAssetUrl(value);
+  if (existingPublicUrl) return { managed: true, url: existingPublicUrl, filename: reference.filename };
 
-  warnings.push(`Missing ${label} asset "${reference.filename}" in ${path.relative(sourceDir, currentFile)}; using ${missingImagePath}`);
+  warnings.push(`Missing ${label} asset "${reference.relativePath}" in ${path.relative(sourceDir, currentFile)}; using ${missingImagePath}`);
   return { managed: true, url: missingImagePath, filename: reference.filename };
 }
 
 function renderMarkdownImage(alt, filename, url, title = '') {
   const suffix = title ? ` ${title}` : '';
   const image = `![${alt || filename}](${url}${suffix})`;
-  const imageSlug = imageSlugByAsset.get(assetKey(filename));
-  return imageSlug ? `[${image}](${slugToRoute(imageSlug)})` : image;
+  const href = url === missingImagePath ? undefined : attributionRouteForAsset(url);
+  return href ? `[${image}](${href})` : image;
 }
 
 function markdownImage(filename, url) {
@@ -462,8 +492,7 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
       warnings.push(`Image layout "${match[1]}" in ${path.relative(sourceDir, currentFile)}: ${issue}`);
     }
 
-    const imageSlug = imageSlugByAsset.get(assetKey(filename));
-    const href = imageSlug ? slugToRoute(imageSlug) : undefined;
+    const href = url === missingImagePath ? undefined : attributionRouteForAsset(url);
     const rendered = imageSpec.hasLayout
       ? renderArticleImage({ spec: imageSpec, filename, url, href, jsx: outputRequiresMdx })
       : renderMarkdownImage(imageSpec.alt || filename, filename, url);
@@ -507,7 +536,10 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
     const resolved = await resolveReferencedAsset(parsed.data[field], file, `frontmatter ${field}`);
     if (resolved.managed) frontmatterAssets[field] = resolved.url;
   }
-  if (parsed.data.asset && parsed.data.type === 'image') await copyAsset('Images', parsed.data.asset);
+  if (parsed.data.asset && parsed.data.type === 'image') {
+    const reference = managedAssetReference(parsed.data.asset);
+    if (reference) await copyAsset(reference.category, reference.relativePath);
+  }
   const result = await convertContent(parsed.content, file, parsed, outFile, extension === '.mdx');
   await fs.writeFile(outFile, `${stringifyGeneratedFrontmatter(parsed.frontmatter, {
     slug,
