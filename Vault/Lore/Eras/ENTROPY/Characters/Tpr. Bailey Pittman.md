@@ -65,7 +65,6 @@ Her first military career ended in vacuum. Bailey was thrown clear when her plat
 She eventually returned to service. The body that returned was not the one that left.
 
 ## Personality
-
 ![[bailey-pittman-fieldwear.webp|right|340|shape|gap=18|alt=Bailey Pittman wearing Delta Two fieldwear and biomechanical prosthetics]]
 
 Bailey is easiest to know while nothing serious is being discussed. She jokes, needles her peers and reaches for sarcasm whenever a conversation drifts too close to something she would rather leave buried. Around Delta Two she is energetic, generous and regularly accused of being a bad influence.
@@ -84,8 +83,7 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Protective instinct
->
-> > You don't get to die before me! No one else is dying before me... Not again! Not ever again!
+>> > You don't get to die before me! No one else is dying before me... Not again! Not ever again!
 > >
 > > — Tpr. Bailey Pittman
 >
@@ -100,22 +98,18 @@ When training teaches you to get on with it or die, getting on with it can look 
 > There is an uncomfortable contradiction in this. Bailey is terrified that the power in her artificial limbs might hurt somebody she cares about, yet she fought for years to return to a profession built around violence. To her, these are not opposing impulses. They are the same promise taken too far: if somebody is going to stand between danger and the people around her, Bailey wants it to be her.
 
 ## History
-
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Personal History
->
-> From adolescence, Bailey showed great skill in athletics and shooting. Participating in three teen CrossFit championships and winning a "Run 'n' Gun" competition by the age of fifteen. These two factors no doubt played a role in the local ICDF branch head-hunting her for enlistment at sixteen.
+>> From adolescence, Bailey showed great skill in athletics and shooting. Participating in three teen CrossFit championships and winning a "Run 'n' Gun" competition by the age of fifteen. These two factors no doubt played a role in the local ICDF branch head-hunting her for enlistment at sixteen.
 
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Professional History
->
-> #### ICDF
->
-> Bailey began her career with the Imperium Coalition Defence Force as a Rifleman in the 101st Battalion, eventually specialising in reconnaissance. She served for almost three years in this role before everything went wrong.
+>> #### ICDF
+>> Bailey began her career with the Imperium Coalition Defence Force as a Rifleman in the 101st Battalion, eventually specialising in reconnaissance. She served for almost three years in this role before everything went wrong.
 >
 > During deployment to a mission for the ICDF, Bailey's insertion vehicle was sabotaged, along with the rest of her platoon's. The destruction caused the death and dismemberment of five soldiers, the permanent paralysis of two more and irreversible damage to Bailey's limbs.
 >
@@ -124,19 +118,16 @@ When training teaches you to get on with it or die, getting on with it can look 
 > Following roughly four years of persistent training, exercising and tuning her prosthetics, Bailey re-took her entrance exams for the third year in a row and passed near-top of the class. Once again, entering the ICDF.
 >
 > #### ICSSAS
->
-> Following her re-enlistment to the ICDF, Bailey applied for a role within the ICSSAS straight away.
+>> Following her re-enlistment to the ICDF, Bailey applied for a role within the ICSSAS straight away.
 >
 > Joining Delta Squadron, Bailey specialised as a demolitions expert and has held this position for over two years — making her the youngest operator of Delta Two One.
 
 ## Equipment
-
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Prosthetics
->
-> ![[bailey-pittman-prosthetics.webp|left|360|shape|gap=18|alt=Bailey Pittman displaying her biomechanical prosthetic arms and legs]]
+>> ![[bailey-pittman-prosthetics.webp|left|360|shape|gap=18|alt=Bailey Pittman displaying her biomechanical prosthetic arms and legs]]
 >
 > Bailey is fitted with synthetic biomechanical prosthetics that, for the most part, mimic human biology and form. Her amputations are at the: shoulder disarticulation for her right arm, transhumeral point for her left arm, and both legs are hemipelvectomies.
 >
@@ -148,18 +139,15 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### ICSSAS standard gear
->
-> #### Outfit
->
-> Outfitted with a waterproof, skin-tight, anti-microbial bodysuit beneath their fatigues to prevent smell, promote healthy conditions and keep the user warm. The bodysuit also has key areas lined with an ultra-durable fibre to prevent piercing and cuts via typical means.
+>> #### Outfit
+>> Outfitted with a waterproof, skin-tight, anti-microbial bodysuit beneath their fatigues to prevent smell, promote healthy conditions and keep the user warm. The bodysuit also has key areas lined with an ultra-durable fibre to prevent piercing and cuts via typical means.
 >
 > Combat fatigues are a dark grey colour with subtle camouflage patterning, with plain dark grey interior colouration, tailored to fit each ICSSAS operator.
 >
 > Armour is a matte dark grey colour, matching the slightly lighter inner material of the fatigues. Made from solid plates of armour, backed by a layer of pressure-responsive gel to reduce harsh impacts and physical shock.
 >
 > #### Preferred equipment
->
-> - 1× SAR-41 semi-automatic rifle chambered in .458CTA 'pocket poppers'.
+>> - 1× SAR-41 semi-automatic rifle chambered in .458CTA 'pocket poppers'.
 > - 1× Beamblade high-amplitude UVc laser sidearm.
 > - 1× M44 shoulder-mounted belt-fed 20mm grenade launcher.
 > - 2× CN47 Chaff Grenade.
@@ -173,42 +161,31 @@ When training teaches you to get on with it or die, getting on with it can look 
 > In addition to their dark grey armour-tailored fatigues and bodysuits, each ICSSAS operator is supplied with a choice of helmet and helmet modifications. However, each helmet comes with some standard features, such as: an electrochromic transparent metal lens, an AR HUD capable of switching between multiple light-spectrum filters, displaying sensor information and visuals, in-built microphone and speaker arrays for communication and improved situational awareness, and a filtered rebreather for temporary oxygen supply in hostile environments.
 
 ## Relationships
-
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Delta Two
->
-> #### (D-21) Delta Two One Patrol
->
-> _Bailey has served with Delta Two One for over two years. She has an incredibly close bond with all operators of Delta Two One, and regards Delta Two Two as some of her closest friends. Namely, Mía and Bailey are best friends._
+>> #### (D-21) Delta Two One Patrol
+>> _Bailey has served with Delta Two One for over two years. She has an incredibly close bond with all operators of Delta Two One, and regards Delta Two Two as some of her closest friends. Namely, Mía and Bailey are best friends._
 >
 > ##### Cpl. May Zhang
->
-> 1st In Command of Delta Two One, the motherly May Zhang is the 'firm but fair' leader. Tactically and strategically minded, May has a quiet persona and is all too happy to sit and watch the antics of her Squadron as they bicker or party between assignments.
+>> 1st In Command of Delta Two One, the motherly May Zhang is the 'firm but fair' leader. Tactically and strategically minded, May has a quiet persona and is all too happy to sit and watch the antics of her Squadron as they bicker or party between assignments.
 >
 > ##### Tpr. Tobi Schöler
->
-> Designated machine gunner of Delta Two One, Tobi is a gentle giant — with muscles to show for it. Armed with a light-weight, gimballed exo-frame mount for his weapon and a back case of ammo, most things tend to run or hide once rounds start flying.
+>> Designated machine gunner of Delta Two One, Tobi is a gentle giant — with muscles to show for it. Armed with a light-weight, gimballed exo-frame mount for his weapon and a back case of ammo, most things tend to run or hide once rounds start flying.
 >
 > ##### Tpr. Louis Hodari
->
-> Louis is the designated marksman for Delta Two One, with wicked reflexes and a history in recon. Louis is a lethal hunter and, surprisingly, an amazing chef — all those emergency rations gave him a real strong love for good food.
+>> Louis is the designated marksman for Delta Two One, with wicked reflexes and a history in recon. Louis is a lethal hunter and, surprisingly, an amazing chef — all those emergency rations gave him a real strong love for good food.
 >
 > #### (D-22) Delta Two Two Patrol
->
-> ##### LCpl. Akanni Balogun
->
-> 2nd In Command of Delta Two One. As a CQB and hand-to-hand specialist, Akanni earned his surname upon joining the ICSSAS and has since only gotten more and more effective in his role as a now team leader.
+>> ##### LCpl. Akanni Balogun
+>> 2nd In Command of Delta Two One. As a CQB and hand-to-hand specialist, Akanni earned his surname upon joining the ICSSAS and has since only gotten more and more effective in his role as a now team leader.
 >
 > ##### [[Drafts/Lore/Eras/ENTROPY/Characters/Tpr. Hannah Moeko]]
->
-> The designated marksman for Delta Two Two, Hannah has proven to be a truly lethal operator. Though Hannah is a bit more introverted and quiet than her comrades, when in uniform or on mission, she is focused and determined to be useful.
+>> The designated marksman for Delta Two Two, Hannah has proven to be a truly lethal operator. Though Hannah is a bit more introverted and quiet than her comrades, when in uniform or on mission, she is focused and determined to be useful.
 >
 > ##### Tpr. Mía Alvarado
->
-> Mía and Bailey have a sister-like bond. As best friends they often spend their free time together, almost all of it in fact, in each other's presence. As the designated machine gunner for Delta Two Two, Mía is short tempered and all too happy to saturate an area with high-calibre rounds.
+>> Mía and Bailey have a sister-like bond. As best friends they often spend their free time together, almost all of it in fact, in each other's presence. As the designated machine gunner for Delta Two Two, Mía is short tempered and all too happy to saturate an area with high-calibre rounds.
 >
 > ##### Tpr. Ilya Artemiy Valerianovich
->
-> Designated demolitions specialist, Ilya has an innate ability to make things set on fire or go "boom" with minimal resources, and often just scraps left laying about. Chemistry has always been a passion of Ilya's, and now he gets to fight for and defend his team with that same passion.
+>> Designated demolitions specialist, Ilya has an innate ability to make things set on fire or go "boom" with minimal resources, and often just scraps left laying about. Chemistry has always been a passion of Ilya's, and now he gets to fight for and defend his team with that same passion.
