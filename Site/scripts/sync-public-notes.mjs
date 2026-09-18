@@ -7,7 +7,12 @@ import { slugToRoute, toPosixPath, vaultSourceSlug } from '../src/lib/codex-path
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
-import { parseObsidianImageEmbed, renderArticleImage } from './image-layout.mjs';
+import {
+  markdownQuotePrefixAt,
+  parseObsidianImageEmbed,
+  renderArticleImage,
+  renderInsideMarkdownQuote,
+} from './image-layout.mjs';
 import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';
 import { resolveGiscusForPage } from '../src/lib/page-kind.mjs';
@@ -409,7 +414,7 @@ function transformCalendarShortcodes(content, parsed, currentFile, outFile) {
 async function convertContent(content, currentFile, parsed, outFile, outputRequiresMdx) {
   let converted = stripDataviewBlocks(content).replace(/^%%[\s\S]*?%%\s*/gm, '');
   const embeds = [...converted.matchAll(/!\[\[([^\]]+)\]\]/g)];
-  for (const match of embeds) {
+  for (const match of embeds.reverse()) {
     const imageSpec = parseObsidianImageEmbed(match[1]);
     const rawTarget = imageSpec.target.trim();
     const filename = path.basename(rawTarget);
@@ -428,7 +433,9 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
     const rendered = imageSpec.hasLayout
       ? renderArticleImage({ spec: imageSpec, filename, url, href, jsx: outputRequiresMdx })
       : renderMarkdownImage(imageSpec.alt || filename, filename, url);
-    converted = converted.replace(match[0], rendered);
+    const quotePrefix = markdownQuotePrefixAt(converted, match.index);
+    const replacement = renderInsideMarkdownQuote(rendered, quotePrefix);
+    converted = `${converted.slice(0, match.index)}${replacement}${converted.slice(match.index + match[0].length)}`;
   }
 
   converted = await rewriteMarkdownImages(converted, currentFile);
