@@ -7,9 +7,10 @@ asset: "/assets/images/bailey-pittman-portrait.webp"
 image: "/assets/images/bailey-pittman-portrait.webp"
 alt:
 artist: "Jake Saunders / MrBizcocho"
+artistUrl: "https://twitter.com/Mrbizc8"
 editor:
 source:
-sourceUrl: "https://twitter.com/Mrbizc8"
+sourceUrl:
 credit: "Jake Saunders / MrBizcocho"
 license:
 rights:
