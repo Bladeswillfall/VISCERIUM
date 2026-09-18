@@ -139,11 +139,15 @@ test('Obsidian loads the first-party image renderer and matching snippet rules',
 
   assert.ok(plugins.includes('viscerium-image-tools'));
   assert.equal(manifest.id, 'viscerium-image-tools');
-  assert.equal(manifest.version, '0.2.1');
+  assert.equal(manifest.version, '0.3.0');
   assert.doesNotThrow(() => new Function(runtime));
   assert.match(runtime, /registerMarkdownPostProcessor/);
   assert.match(runtime, /currentSrc/);
   assert.match(runtime, /--vc-image-shape/);
+  assert.match(runtime, /vault\.on\('create'/);
+  assert.match(runtime, /rights: "Copyright"/);
+  assert.match(runtime, /Assets\/Attribution\/Images\//);
+  assert.match(runtime, /Assets\/Attribution\/Maps\//);
   assert.match(css, /\.vc-layout-col-rendered[\s\S]*?display:\s*flow-root/);
   assert.match(css, /\.vc-image-shape[\s\S]*?shape-image-threshold/);
   assert.match(css, /@media \(max-width:\s*700px\)[\s\S]*?shape-outside:\s*none/);
