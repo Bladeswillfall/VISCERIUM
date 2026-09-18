@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Provisional placeholder artwork for Degel in the interactive system chart."
 sensitiveMedia: false
 contentWarnings: []

@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Provisional placeholder artwork for Errack in the interactive system chart."
 sensitiveMedia: false
 contentWarnings: []

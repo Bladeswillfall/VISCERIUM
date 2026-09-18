@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Handwritten signature mark used on creator statements."
 sensitiveMedia: false
 contentWarnings: []
