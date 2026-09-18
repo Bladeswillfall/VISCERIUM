@@ -1,0 +1,54 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import siteConfig from '../../site.config.mjs';
+import articlePagesStylesheet from '../styles/article-pages.css?url';
+
+const repositoryLicenseUrl = siteConfig.githubRepoUrl
+  ? `${siteConfig.githubRepoUrl}/blob/main/LICENSE.md`
+  : '';
+---
+
+<StarlightPage
+  hasSidebar={false}
+  frontmatter={{
+    title: 'About us',
+    description: 'About VISCERIUM, the Codex, how the project is made, and how to contribute.',
+    pagefind: false,
+    tableOfContents: false,
+    giscus: false,
+    head: [
+      { tag: 'link', attrs: { rel: 'stylesheet', href: articlePagesStylesheet } },
+      { tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' } },
+    ],
+  }}
+>
+  <article class="sl-markdown-content" data-draft-footer-page>
+    <h1>About us</h1>
+    <p><em>First draft for review. Remove this note before publication.</em></p>
+    <p>Last updated: 11 September 2026</p>
+
+    <p>VISCERIUM is a dark transmedia universe built across one continuous history. Its stories take place on and around Errack, in the Degel System, across four connected eras: CITADEL, SMOG, NEARSIGHT and ENTROPY.</p>
+
+    <p>The setting was created by Elias Vail. VISCERIUM began in 2021 and continues to grow through worldbuilding, fiction, visual work, software and the public <a href="/start-here/">VISCERIUM Codex</a>.</p>
+
+    <h2>The VISCERIUM Codex</h2>
+    <p>The VISCERIUM Codex is the public archive of the setting. It brings together published material about its peoples, creatures, factions, histories, technologies, mysteries and connected timeline.</p>  
+    <p>The four eras are not separate settings. Each inherits the discoveries, damage, cultures, conflicts and consequences of the eras before it. The Codex is designed to let readers enter at one point and follow those connections across the wider history.</p>
+
+    <h2>How VISCERIUM is made</h2>
+    <p>Published VISCERIUM lore and creative canon are human-made.</p>  
+    <p>Creative material is conceived, written, edited, designed and approved by people.</p>  
+    <p>Generative AI is not used to produce published VISCERIUM lore, fiction, artwork or other creative canon.</p>  
+    <p>Modern software, automation and AI-assisted tools may be used around the work for research, critique, organisation, testing, accessibility, software development and other technical tasks. Those tools do not hold authorship or canon authority. The <a href="/policies/content-production/">Content &amp; Production Statement</a> explains this boundary in full.</p>  
+
+    <h2>The project and its software</h2>
+    <p>The public Codex is generated from reviewed, published source material. The {siteConfig.githubRepoUrl ? <a href={siteConfig.githubRepoUrl}>public VISCERIUM repository</a> : 'public VISCERIUM repository'} also contains the website, build systems, tests, creator tools and technical documentation used to maintain it.</p>  
+    <p>VISCERIUM creative material remains proprietary and all rights are reserved. Original first-party software is open source under the {repositoryLicenseUrl ? <a href={repositoryLicenseUrl}>MIT License</a> : 'MIT License'}. Third-party software and assets remain subject to their own licence terms.</p>
+
+    <h2>Contributing and collaboration</h2>
+    <p>Readers can report typos, broken links, content corrections, site bugs and feature ideas through the <a href="/support/">Support page</a>. Code, documentation, accessibility, testing, tooling and interface improvements may be proposed through the {siteConfig.githubRepoUrl ? <a href={siteConfig.githubRepoUrl}>public repository</a> : 'public repository'}. Creative collaborations are handled separately and do not become VISCERIUM canon simply because they are suggested, discussed or submitted.</p>  
+    <p>For private questions about collaboration, licensing, attribution, rights or other matters, use the <a href="/contact/">Contact page</a>.</p>
+
+    <p>VISCERIUM created by Elias Vail. © 2021-2026 Elias Vail. All rights reserved.</p>
+  </article>
+</StarlightPage>
