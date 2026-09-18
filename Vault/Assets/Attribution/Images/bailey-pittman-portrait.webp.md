@@ -6,11 +6,11 @@ type: image
 asset: "/assets/images/bailey-pittman-portrait.webp"
 image: "/assets/images/bailey-pittman-portrait.webp"
 alt:
-artist: 
+artist: "Jake Saunders / MrBizcocho"
 editor:
 source:
-sourceUrl: 
-credit:
+sourceUrl: "https://twitter.com/Mrbizc8"
+credit: "Jake Saunders / MrBizcocho"
 license:
 rights:
 usage: "Provisional Bailey Pittman portrait. Creator attribution and final rights details are pending review."
