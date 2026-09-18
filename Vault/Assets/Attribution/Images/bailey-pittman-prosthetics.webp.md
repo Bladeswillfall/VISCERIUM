@@ -13,7 +13,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Provisional Bailey Pittman prosthetics illustration. Creator attribution and final rights details are pending review."
 sensitiveMedia: false
 contentWarnings: []

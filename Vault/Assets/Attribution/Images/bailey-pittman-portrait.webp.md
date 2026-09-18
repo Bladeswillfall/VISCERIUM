@@ -13,7 +13,7 @@ source:
 sourceUrl:
 credit: "Jake Saunders / MrBizcocho"
 license:
-rights:
+rights: "Copyright"
 usage: "Provisional Bailey Pittman portrait. Creator attribution and final rights details are pending review."
 sensitiveMedia: false
 contentWarnings: []

@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "CITADEL-era map thumbnail used by the era primer."
 sensitiveMedia: false
 contentWarnings: []
