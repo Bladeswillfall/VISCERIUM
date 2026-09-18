@@ -1,4 +1,6 @@
 ---
+import { presentImageRights } from '../lib/image-rights.mjs';
+
 const { starlightRoute, t } = Astro.locals;
 const entry = starlightRoute.entry.data;
 
@@ -11,36 +13,11 @@ function externalHref(value) {
   return /^https?:\/\//i.test(href) ? href : undefined;
 }
 
-function rightsPresentation() {
-  const licence = String(entry.license ?? '').trim();
-  const rights = String(entry.rights ?? '').trim();
-  const combined = [licence, rights].filter(Boolean).join(' · ');
-  const normalised = combined.toLowerCase();
-
-  if (/\bcc0\b/.test(normalised)) {
-    return { symbol: 'CC0', label: combined || 'CC0', kind: 'public-domain' };
-  }
-  if (/public domain/.test(normalised)) {
-    return { symbol: 'PD', label: combined || 'Public domain', kind: 'public-domain' };
-  }
-  if (/creative commons|\bcc(?:\s|[-_])/.test(normalised)) {
-    return { symbol: 'CC', label: combined, kind: 'creative-commons' };
-  }
-  if (/copyright|all rights reserved|proprietary/.test(normalised)) {
-    return { symbol: '©', label: combined, kind: 'copyright' };
-  }
-  return {
-    symbol: '?',
-    label: combined || t('viscerium.attribution.notRecorded'),
-    kind: 'unknown',
-  };
-}
-
 const artist = entry.artist ?? entry.credit;
 const originalArtworkHref = externalHref(entry.sourceUrl);
 const artistHref = externalHref(entry.artistUrl);
 const altText = isPresent(entry.alt) ? entry.alt : t('viscerium.attribution.notRecorded');
-const rights = rightsPresentation();
+const rights = presentImageRights(entry.rights ?? entry.license, t('viscerium.attribution.notRecorded'));
 ---
 
 <section class="codex-attribution-record" aria-labelledby="codex-attribution-caption">
@@ -81,8 +58,23 @@ const rights = rightsPresentation();
         <th scope="row">{t('viscerium.attribution.rights')}</th>
         <td>
           <span class="codex-rights-badge" data-rights-kind={rights.kind}>
-            <span class="codex-rights-symbol" aria-hidden="true">{rights.symbol}</span>
-            <span>{rights.label}</span>
+            {rights.icons.length > 0 ? (
+              <span class="codex-rights-icons" aria-hidden="true">
+                {rights.icons.map((icon) => (
+                  <img
+                    class="codex-rights-icon"
+                    src={icon.src}
+                    alt=""
+                    width="32"
+                    height="32"
+                    decoding="async"
+                  />
+                ))}
+              </span>
+            ) : (
+              <span class="codex-rights-symbol" aria-hidden="true">{rights.symbol}</span>
+            )}
+            <span class="codex-rights-label">{rights.label}</span>
           </span>
         </td>
       </tr>
@@ -154,7 +146,31 @@ const rights = rightsPresentation();
       display: inline-flex;
       align-items: center;
       gap: 0.55rem;
+      max-width: 100%;
       line-height: 1.35;
+      overflow-wrap: normal;
+      white-space: nowrap;
+    }
+
+    .codex-rights-icons {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      gap: 0.18rem;
+    }
+
+    .codex-rights-icon {
+      display: block;
+      width: 2rem;
+      height: 2rem;
+    }
+
+    :global(:root:not([data-theme='light'])) .codex-rights-icon {
+      filter: invert(1);
+    }
+
+    .codex-rights-label {
+      font-weight: 700;
     }
 
     .codex-rights-symbol {
