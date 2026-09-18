@@ -24,6 +24,7 @@ const siteRoot = process.cwd();
 const sourceDir = path.resolve(siteRoot, siteConfig.loreSourceDir);
 const assetRoot = path.resolve(siteRoot, siteConfig.vaultAssetDir);
 const attributionDir = path.join(assetRoot, 'Attribution');
+const repoRoot = path.resolve(siteRoot, '..');
 const outDir = path.resolve(siteRoot, 'src/content/docs');
 const publicAssetDir = path.resolve(siteRoot, 'public/assets');
 const missingImagePath = '/assets/images/missing-image.svg';
@@ -526,6 +527,7 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
 }
 
 for (const { file, parsed, slug, sourcePath } of publicNotes) {
+  const sourceRepoPath = toPosixPath(path.relative(repoRoot, file));
   const sourceIsMdx = path.extname(file).toLowerCase() === '.mdx';
   const shortcodeRequiresMdx = hasCalendarShortcodes(parsed.content);
   const extension = sourceIsMdx || shortcodeRequiresMdx || requiresCodexMdx(parsed.content) ? '.mdx' : '.md';
@@ -549,6 +551,7 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
     giscus: resolveGiscusForPage(parsed.data, slug),
     links: graphLinks(parsed.data, slug, file, parsed),
     sourcePath,
+    sourceRepoPath,
     assets: frontmatterAssets,
   })}${result.content}`);
   console.log(`Published ${path.relative(sourceDir, file)} -> ${path.relative(outDir, outFile)}`);

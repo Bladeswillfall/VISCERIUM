@@ -224,6 +224,7 @@ export const collections = {
         status: optionalString,
         slug: optionalString,
         sourcePath: optionalString,
+        sourceRepoPath: optionalString,
         type: optionalString,
         pronunciation: optionalString,
         icon: optionalString,
