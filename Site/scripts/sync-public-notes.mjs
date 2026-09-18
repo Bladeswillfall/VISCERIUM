@@ -129,6 +129,40 @@ async function emptyDir(dir) {
   await fs.mkdir(dir, { recursive: true });
 }
 
+function escapeQuoteAttribution(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+export function transformQuoteAttributions(content) {
+  let fence = null;
+
+  return String(content).split(/\r?\n/).map((line) => {
+    const prefixMatch = line.match(/^(\s*(?:>\s*)+)/);
+    const prefix = prefixMatch?.[1] ?? '';
+    const body = prefix ? line.slice(prefix.length) : line;
+    const fenceMatch = body.match(/^(`{3,}|~{3,})/);
+
+    if (fence) {
+      if (fenceMatch && fenceMatch[1][0] === fence.marker && fenceMatch[1].length >= fence.length) fence = null;
+      return line;
+    }
+
+    if (fenceMatch) {
+      fence = { marker: fenceMatch[1][0], length: fenceMatch[1].length };
+      return line;
+    }
+
+    if (!prefix) return line;
+    const attribution = body.match(/^—\s*(.+?)\s*$/);
+    if (!attribution) return line;
+
+    return `${prefix}<cite class="vc-quote-attribution">${escapeQuoteAttribution(attribution[1])}</cite>`;
+  }).join('\n');
+}
+
 // eslint-disable-next-line complexity
 export async function syncPublicNotes() {
 const files = (await walk(sourceDir)).filter((file) => /\.(md|mdx)$/i.test(file)).sort();
@@ -312,40 +346,6 @@ function hasCalendarShortcodes(content) {
 
 function stripDataviewBlocks(content) {
   return String(content).replace(/```dataviewjs[\s\S]*?```\s*/gi, '');
-}
-
-function escapeQuoteAttribution(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-export function transformQuoteAttributions(content) {
-  let fence = null;
-
-  return String(content).split(/\r?\n/).map((line) => {
-    const prefixMatch = line.match(/^(\s*(?:>\s*)+)/);
-    const prefix = prefixMatch?.[1] ?? '';
-    const body = prefix ? line.slice(prefix.length) : line;
-    const fenceMatch = body.match(/^(`{3,}|~{3,})/);
-
-    if (fence) {
-      if (fenceMatch && fenceMatch[1][0] === fence.marker && fenceMatch[1].length >= fence.length) fence = null;
-      return line;
-    }
-
-    if (fenceMatch) {
-      fence = { marker: fenceMatch[1][0], length: fenceMatch[1].length };
-      return line;
-    }
-
-    if (!prefix) return line;
-    const attribution = body.match(/^—\s*(.+?)\s*$/);
-    if (!attribution) return line;
-
-    return `${prefix}<cite class="vc-quote-attribution">${escapeQuoteAttribution(attribution[1])}</cite>`;
-  }).join('\n');
 }
 
 function normaliseEventLinks(links) {
