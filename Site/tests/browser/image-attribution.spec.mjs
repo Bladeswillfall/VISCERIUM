@@ -66,10 +66,30 @@ test('header and sidebar artwork are visually centered inside their links', asyn
   expect(Math.abs(alignment.sidebar.linkCenter - alignment.sidebar.imageCenter)).toBeLessThanOrEqual(1);
 });
 
-test('attribution records expose their asset source for GitHub editing', async ({ page }) => {
+test('attribution records use a dedicated metadata table without the article sidebar', async ({ page }) => {
   await page.goto(`${baseUrl}/attribution/images/bailey-pittman-portrait-webp/`, { waitUntil: 'domcontentloaded' });
 
   await expect(page.getByRole('heading', { level: 1, name: 'Bailey Pittman — portrait' })).toBeVisible();
+  await expect(page.locator('.right-sidebar-container')).toHaveCount(0);
+  await expect(page.locator('.codex-header-image')).toBeVisible();
+  await expect(page.locator('.codex-header-image-link')).toHaveCount(0);
+
+  const table = page.locator('.codex-attribution-table');
+  await expect(table).toBeVisible();
+  await expect(table).toContainText('Jake Saunders / MrBizcocho');
+
+  const artistWebsite = table.getByRole('link', { name: /Visit artist website/ });
+  await expect(artistWebsite).toHaveAttribute('href', 'https://twitter.com/Mrbizc8');
+
+  const originalArtworkRow = table.getByRole('row').filter({ hasText: 'Original artwork' });
+  await expect(originalArtworkRow).toContainText('Not recorded');
+
+  const altTextRow = table.getByRole('row').filter({ hasText: 'Alt text' });
+  await expect(altTextRow).toContainText('Not recorded');
+
+  const rightsBadge = table.locator('.codex-rights-badge');
+  await expect(rightsBadge).toHaveAttribute('data-rights-kind', 'unknown');
+  await expect(rightsBadge).toContainText('Not recorded');
 
   const editLink = page.locator('a[href*="/edit/main/Vault/Assets/Attribution/Images/bailey-pittman-portrait.webp.md"]');
   await expect(editLink).toHaveCount(1);
