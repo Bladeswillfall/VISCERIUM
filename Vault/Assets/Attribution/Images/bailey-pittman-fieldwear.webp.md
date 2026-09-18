@@ -7,6 +7,7 @@ asset: "/assets/images/bailey-pittman-fieldwear.webp"
 image: "/assets/images/bailey-pittman-fieldwear.webp"
 alt:
 artist: 
+artistUrl:
 editor:
 source:
 sourceUrl: 
