@@ -1,0 +1,194 @@
+---
+const { starlightRoute, t } = Astro.locals;
+const entry = starlightRoute.entry.data;
+
+function isPresent(value) {
+  return value !== undefined && value !== null && String(value).trim() !== '';
+}
+
+function externalHref(value) {
+  const href = String(value ?? '').trim();
+  return /^https?:\/\//i.test(href) ? href : undefined;
+}
+
+function rightsPresentation() {
+  const licence = String(entry.license ?? '').trim();
+  const rights = String(entry.rights ?? '').trim();
+  const combined = [licence, rights].filter(Boolean).join(' · ');
+  const normalised = combined.toLowerCase();
+
+  if (/\bcc0\b/.test(normalised)) {
+    return { symbol: 'CC0', label: combined || 'CC0', kind: 'public-domain' };
+  }
+  if (/public domain/.test(normalised)) {
+    return { symbol: 'PD', label: combined || 'Public domain', kind: 'public-domain' };
+  }
+  if (/creative commons|\bcc(?:\s|[-_])/.test(normalised)) {
+    return { symbol: 'CC', label: combined, kind: 'creative-commons' };
+  }
+  if (/copyright|all rights reserved|proprietary/.test(normalised)) {
+    return { symbol: '©', label: combined, kind: 'copyright' };
+  }
+  return {
+    symbol: '?',
+    label: combined || t('viscerium.attribution.notRecorded'),
+    kind: 'unknown',
+  };
+}
+
+const artist = entry.artist ?? entry.credit;
+const originalArtworkHref = externalHref(entry.sourceUrl);
+const artistHref = externalHref(entry.artistUrl);
+const altText = isPresent(entry.alt) ? entry.alt : t('viscerium.attribution.notRecorded');
+const rights = rightsPresentation();
+---
+
+<section class="codex-attribution-record" aria-labelledby="codex-attribution-caption">
+  <table class="codex-attribution-table">
+    <caption id="codex-attribution-caption">{t('viscerium.attribution.details')}</caption>
+    <tbody>
+      <tr>
+        <th scope="row">{t('viscerium.attribution.artist')}</th>
+        <td>{isPresent(artist) ? artist : t('viscerium.attribution.notRecorded')}</td>
+      </tr>
+      <tr>
+        <th scope="row">{t('viscerium.attribution.originalArtwork')}</th>
+        <td>
+          {originalArtworkHref ? (
+            <a href={originalArtworkHref} target="_blank" rel="noreferrer">
+              {isPresent(entry.source) ? entry.source : t('viscerium.attribution.openOriginal')}
+              <span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
+            </a>
+          ) : t('viscerium.attribution.notRecorded')}
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">{t('viscerium.attribution.artistWebsite')}</th>
+        <td>
+          {artistHref ? (
+            <a href={artistHref} target="_blank" rel="noreferrer">
+              {t('viscerium.attribution.openArtistWebsite')}
+              <span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
+            </a>
+          ) : t('viscerium.attribution.notRecorded')}
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">{t('viscerium.attribution.altText')}</th>
+        <td class="codex-attribution-alt">{altText}</td>
+      </tr>
+      <tr>
+        <th scope="row">{t('viscerium.attribution.rights')}</th>
+        <td>
+          <span class="codex-rights-badge" data-rights-kind={rights.kind}>
+            <span class="codex-rights-symbol" aria-hidden="true">{rights.symbol}</span>
+            <span>{rights.label}</span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<style>
+  @layer starlight.core {
+    .codex-attribution-record {
+      margin-block: 1rem 1.5rem;
+    }
+
+    .codex-attribution-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-block: 1px solid var(--codex-border);
+      font-family: var(--vc-font-ui);
+      font-size: var(--sl-text-sm);
+    }
+
+    .codex-attribution-table caption {
+      padding-block: 0 0.55rem;
+      color: var(--sl-color-gray-3);
+      font-size: var(--sl-text-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-align: start;
+      text-transform: uppercase;
+    }
+
+    .codex-attribution-table :is(th, td) {
+      padding: 0.7rem 0.8rem;
+      border-block-start: 1px solid color-mix(in oklch, var(--codex-border), transparent 35%);
+      text-align: start;
+      vertical-align: top;
+    }
+
+    .codex-attribution-table tr:first-child :is(th, td) {
+      border-block-start: 0;
+    }
+
+    .codex-attribution-table th {
+      width: 34%;
+      color: var(--sl-color-gray-3);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .codex-attribution-table td {
+      color: var(--sl-color-gray-1);
+      overflow-wrap: anywhere;
+    }
+
+    .codex-attribution-table a {
+      color: var(--sl-color-accent-high);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.16em;
+    }
+
+    .codex-attribution-alt {
+      font-family: var(--vc-font-reading);
+      line-height: 1.5;
+    }
+
+    .codex-rights-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      line-height: 1.35;
+    }
+
+    .codex-rights-symbol {
+      display: inline-grid;
+      place-items: center;
+      min-width: 2.2rem;
+      min-height: 2.2rem;
+      padding-inline: 0.35rem;
+      border: 1px solid var(--codex-border-strong);
+      border-radius: 999px;
+      color: var(--sl-color-white);
+      font-family: var(--vc-font-ui);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .codex-rights-badge[data-rights-kind='unknown'] .codex-rights-symbol {
+      color: var(--sl-color-gray-3);
+    }
+
+    @media (max-width: 40rem) {
+      .codex-attribution-table {
+        font-size: var(--sl-text-xs);
+      }
+
+      .codex-attribution-table :is(th, td) {
+        padding-inline: 0.55rem;
+      }
+
+      .codex-attribution-table th {
+        width: 38%;
+        font-size: 0.64rem;
+      }
+    }
+  }
+</style>
