@@ -127,7 +127,7 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### Prosthetics
->> ![[bailey-pittman-prosthetics.webp|left|360|shape|gap=18|alt=Bailey Pittman displaying her biomechanical prosthetic arms and legs]]
+> ![[bailey-pittman-prosthetics.webp|left|360|shape|gap=18|alt=Bailey Pittman displaying her biomechanical prosthetic arms and legs]]
 >
 > Bailey is fitted with synthetic biomechanical prosthetics built to reproduce human proportions and movement closely enough that, beneath clothing, much of their extent can be easy to miss. The resemblance is only skin-deep. Her right arm begins at a shoulder-disarticulation interface, her left at a transhumeral interface, while both legs are transfemoral amputations, with prosthetic interfaces on the residual thighs above the knee. Her natural hips remain intact; the leg assemblies continue from the shortened femurs to replace both knees, lower legs and feet.
 >
@@ -145,15 +145,15 @@ When training teaches you to get on with it or die, getting on with it can look 
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
 >
 > ### ICSSAS standard gear
->> #### Outfit
->> Outfitted with a waterproof, skin-tight, anti-microbial bodysuit beneath their fatigues to prevent smell, promote healthy conditions and keep the user warm. The bodysuit also has key areas lined with an ultra-durable fibre to prevent piercing and cuts via typical means.
+> #### Outfit
+> Outfitted with a waterproof, skin-tight, anti-microbial bodysuit beneath their fatigues to prevent smell, promote healthy conditions and keep the user warm. The bodysuit also has key areas lined with an ultra-durable fibre to prevent piercing and cuts via typical means.
 >
 > Combat fatigues are a dark grey colour with subtle camouflage patterning, with plain dark grey interior colouration, tailored to fit each ICSSAS operator.
 >
 > Armour is a matte dark grey colour, matching the slightly lighter inner material of the fatigues. Made from solid plates of armour, backed by a layer of pressure-responsive gel to reduce harsh impacts and physical shock.
 >
 > #### Preferred equipment
->> - 1× SAR-41 semi-automatic rifle chambered in .458CTA 'pocket poppers'.
+> - 1× SAR-41 semi-automatic rifle chambered in .458CTA 'pocket poppers'.
 > - 1× Beamblade high-amplitude UVc laser sidearm.
 > - 1× M44 shoulder-mounted belt-fed 20mm grenade launcher.
 > - 2× CN47 Chaff Grenade.
