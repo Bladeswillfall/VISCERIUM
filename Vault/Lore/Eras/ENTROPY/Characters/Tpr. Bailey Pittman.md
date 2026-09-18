@@ -170,7 +170,7 @@ When training teaches you to get on with it or die, getting on with it can look 
 ## Relationships
 > [!vc-indent]
 > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
->> ### Delta Two
+> ### Delta Two
 >
 > > [!vc-indent]
 > > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
