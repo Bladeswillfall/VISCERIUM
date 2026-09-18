@@ -59,6 +59,9 @@ test('layout-tools quote parsing avoids nested repeated regexes', async () => {
   assert.equal(context.isIndentHeaderLine(`${deepPrefix}[!vc-indent]`), true);
   assert.equal(context.isIndentMarkerLine(`${deepPrefix}${marker}`), true);
   assert.equal(context.isIndentHeaderLine(`${deepPrefix}not-an-indent`), false);
+  assert.equal(context.compactNestedIndentBody('>> #### Nested heading').body, '#### Nested heading');
+  assert.equal(context.compactNestedIndentBody('>> > Nested quotation').body, '> Nested quotation');
+  assert.equal(context.compactNestedIndentBody('> > Real quotation'), null);
 });
 
 test('plugin profile records maintained source and Vault runtime paths', async () => {
