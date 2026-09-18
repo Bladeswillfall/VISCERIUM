@@ -510,3 +510,9 @@ body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
   max-height: min(70vh, 48rem);
   background: color-mix(in oklch, var(--codex-fixed-dark) 22%, transparent);
 }
+
+/* Attribution records use structured metadata rather than article body Markdown. */
+.codex-image-attribution-page .sl-markdown-content:not([hidden]) {
+  display: none;
+}
+
