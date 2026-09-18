@@ -11,6 +11,7 @@ asset:
 image:
 alt:
 artist:
+artistUrl:
 editor:
 source:
 sourceUrl:
@@ -29,7 +30,7 @@ navigation:
 giscus: false
 ---
 
-%% Image metadata notes are provenance records. Store public attribution notes in Vault/Assets/Attribution/ using the public asset path plus .md, for example Assets/Images/example.webp -> Assets/Attribution/Images/example.webp.md. Store raster artwork in Vault/Assets/Images/ as .webp; genuine vector artwork may remain .svg. Keep PNG/JPEG or other archival originals outside the repository. Use `asset` for the public asset path (`/assets/images/...` or `/assets/maps/...`) and mirror that value in `image` when the attribution page should display the artwork itself. Before publishing, set published to the date this article first becomes public, provide meaningful alt text, and include enough rights/provenance information to know whether the artwork may be used. Set `sensitiveMedia: true` only when readers may reasonably want the optional conceal-sensitive-imagery preference to cover the artwork; describe why with controlled `contentWarnings` values rather than generic NSFW tags. %%
+%% Image metadata notes are provenance records. Store public attribution notes in Vault/Assets/Attribution/ using the public asset path plus .md, for example Assets/Images/example.webp -> Assets/Attribution/Images/example.webp.md. Store raster artwork in Vault/Assets/Images/ as .webp; genuine vector artwork may remain .svg. Keep PNG/JPEG or other archival originals outside the repository. Use `asset` for the public asset path (`/assets/images/...` or `/assets/maps/...`) and mirror that value in `image` when the attribution page should display the artwork itself. Before publishing, set published to the date this article first becomes public, provide meaningful alt text, use `artistUrl` for the creator's own site/profile and `sourceUrl` for the original artwork/source page, and include enough rights/provenance information to know whether the artwork may be used. Set `sensitiveMedia: true` only when readers may reasonably want the optional conceal-sensitive-imagery preference to cover the artwork; describe why with controlled `contentWarnings` values rather than generic NSFW tags. %%
 
 ## Description
 
