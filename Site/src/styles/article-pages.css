@@ -178,7 +178,9 @@
 
   body:not(:has(.home-gateway)) .codex-sidebar-image {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
+    height: auto;
     max-height: 17rem;
     margin-inline: auto;
     object-fit: contain;
@@ -492,7 +494,9 @@ body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
 
 .codex-header-image {
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  height: auto;
   max-height: 18rem;
   margin: 0 auto;
   object-fit: contain;

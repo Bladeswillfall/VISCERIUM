@@ -48,6 +48,8 @@ test('header and sidebar artwork are visually centered inside their links', asyn
       return {
         linkCenter: linkRect.left + (linkRect.width / 2),
         imageCenter: imageRect.left + (imageRect.width / 2),
+        linkWidth: linkRect.width,
+        imageWidth: imageRect.width,
       };
     };
 
@@ -60,6 +62,7 @@ test('header and sidebar artwork are visually centered inside their links', asyn
   expect(alignment.header).not.toBeNull();
   expect(alignment.sidebar).not.toBeNull();
   expect(Math.abs(alignment.header.linkCenter - alignment.header.imageCenter)).toBeLessThanOrEqual(1);
+  expect(alignment.header.imageWidth).toBeLessThan(alignment.header.linkWidth);
   expect(Math.abs(alignment.sidebar.linkCenter - alignment.sidebar.imageCenter)).toBeLessThanOrEqual(1);
 });
 
