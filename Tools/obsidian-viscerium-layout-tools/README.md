@@ -30,6 +30,8 @@ Use **Visual indent: move block left** to remove one VISCERIUM indent layer.
 
 The source is stored as a dedicated, non-collapsible `vc-indent` callout. Plugin CSS removes all callout chrome so it behaves as a layout container rather than a quotation or aside. Normal Markdown inside the block remains Markdown.
 
+For a second visual-indent level, use **Visual indent: move block right** again. This creates a nested `vc-indent` wrapper. Do not represent layout indentation with bare `>>` Markdown; that is blockquote syntax and can render as a quotation. Use `> >` only when you genuinely want a quotation nested inside an indented layout block. The repair command converts legacy compact `>>` visual indents into explicit nested `vc-indent` wrappers.
+
 Do not use ordinary `Tab` for this purpose. Obsidian treats leading indentation as Markdown structure, so tabs or spaces can turn text into nested lists or code blocks. The VISCERIUM command is separate from that behaviour.
 
 A hidden publishing marker is stored on its own line inside the wrapper rather than in the callout title. The public Codex recognises that marker and removes its normal quotation styling while preserving the same horizontal offset.
