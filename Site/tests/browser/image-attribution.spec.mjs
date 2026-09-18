@@ -34,6 +34,31 @@ test('reader-facing artwork links to attribution records', async ({ page }) => {
   );
 });
 
+test('header and sidebar artwork stay centered inside their links', async ({ page }) => {
+  await page.goto(`${baseUrl}/eras/entropy/characters/tpr.-bailey-pittman/`, { waitUntil: 'domcontentloaded' });
+
+  const alignment = await page.evaluate(() => {
+    const header = document.querySelector('.codex-header-image');
+    const sidebar = document.querySelector('.codex-sidebar-image');
+    const read = (image) => {
+      const style = image ? getComputedStyle(image) : null;
+      return style ? {
+        marginLeft: style.marginLeft,
+        marginRight: style.marginRight,
+        objectPosition: style.objectPosition,
+      } : null;
+    };
+    return { header: read(header), sidebar: read(sidebar) };
+  });
+
+  expect(alignment.header).not.toBeNull();
+  expect(alignment.sidebar).not.toBeNull();
+  expect(alignment.header.objectPosition).toBe('50% 50%');
+  expect(alignment.sidebar.objectPosition).toBe('50% 50%');
+  expect(alignment.header.marginLeft).toBe(alignment.header.marginRight);
+  expect(alignment.sidebar.marginLeft).toBe(alignment.sidebar.marginRight);
+});
+
 test('attribution records expose their asset source for GitHub editing', async ({ page }) => {
   await page.goto(`${baseUrl}/attribution/images/bailey-pittman-portrait-webp/`, { waitUntil: 'domcontentloaded' });
 
