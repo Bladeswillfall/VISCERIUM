@@ -3,6 +3,7 @@ import {
   normaliseInternalRoute,
   slugToRoute,
 } from './codex-paths.mjs';
+import { isReadingTimeArticle } from './reading-time.mjs';
 
 function routeForEntry(entry) {
   const slug = entry.data?.slug || String(entry.id).replace(/\.(md|mdx)$/i, '').replace(/\/index$/i, '') || 'index';
@@ -17,7 +18,11 @@ function generatedRoute(value) {
 
 export function buildSiteGraph(entries) {
   const pages = entries
-    .filter((entry) => !entry.data?.draft)
+    .filter((entry) => (
+      entry.data?.status === 'published'
+      && !entry.data?.draft
+      && isReadingTimeArticle(entry.data, entry.id)
+    ))
     .map((entry) => ({
       entry,
       id: routeForEntry(entry),
