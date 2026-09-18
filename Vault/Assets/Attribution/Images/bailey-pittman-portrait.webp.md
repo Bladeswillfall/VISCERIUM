@@ -24,9 +24,6 @@ navigation:
 giscus: false
 ---
 
-## Attribution
-
-This attribution record is intentionally editable. Add or correct the creator, source link, licence, rights and usage fields above as provenance is confirmed.
 
 ## Usage notes
 
