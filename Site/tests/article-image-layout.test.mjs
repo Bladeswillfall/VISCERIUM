@@ -3,7 +3,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseObsidianImageEmbed, renderArticleImage } from '../scripts/image-layout.mjs';
+import {
+  markdownQuotePrefixAt,
+  parseObsidianImageEmbed,
+  renderArticleImage,
+  renderInsideMarkdownQuote,
+} from '../scripts/image-layout.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, '..');
@@ -65,6 +70,30 @@ test('public image markup carries layout data while keeping accessible alt text 
   assert.match(markup, /alt="An Abberath emerging from vapour"/);
   assert.match(markup, /href="\/images\/abberath\/"/);
   assert.doesNotMatch(markup, /alt="[^"]*(?:right|shape|gap=16)/i);
+});
+
+test('quoted image markup stays inside its Markdown quote container', () => {
+  const source = '> [!vc-indent]\n> marker\n>\n> ![[image.webp|left|320]]\n>\n> Body';
+  const token = '![[image.webp|left|320]]';
+  const index = source.indexOf(token);
+  const prefix = markdownQuotePrefixAt(source, index);
+
+  assert.equal(prefix, '> ');
+
+  const markup = '\n\n<figure class="vc-image-embed">image</figure>\n\n';
+  assert.equal(renderInsideMarkdownQuote(markup, prefix), '<figure class="vc-image-embed">image</figure>');
+});
+
+test('nested quoted image markup preserves every quote depth on multiline output', () => {
+  const source = '> > ![[image.webp]]';
+  const token = '![[image.webp]]';
+  const prefix = markdownQuotePrefixAt(source, source.indexOf(token));
+
+  assert.equal(prefix, '> > ');
+  assert.equal(
+    renderInsideMarkdownQuote('\n<figure>\n<img>\n</figure>\n', prefix),
+    '<figure>\n> > <img>\n> > </figure>',
+  );
 });
 
 test('MDX image markup remains valid inside authored columns', () => {
@@ -167,6 +196,9 @@ test('public sync preserves pipe flags and selects MDX-safe output for columns',
   const sync = await readSite('scripts/sync-public-notes.mjs');
 
   assert.match(sync, /parseObsidianImageEmbed\(match\[1\]\)/);
+  assert.match(sync, /for \(const match of embeds\.reverse\(\)\)/);
+  assert.match(sync, /markdownQuotePrefixAt\(converted, match\.index\)/);
+  assert.match(sync, /renderInsideMarkdownQuote\(rendered, quotePrefix\)/);
   assert.match(sync, /renderArticleImage/);
   assert.match(sync, /jsx:\s*outputRequiresMdx/);
   assert.doesNotMatch(sync, /match\[1\]\.split\('\|'\)\[0\]/);
