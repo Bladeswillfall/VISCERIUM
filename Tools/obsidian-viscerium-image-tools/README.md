@@ -12,6 +12,12 @@ After a source change, run `node Tools/scripts/sync-obsidian-plugins.mjs --write
 
 Do not edit the Vault runtime as the primary implementation.
 
+## Attribution sidecars
+
+When a new publishable image is created under `Vault/Assets/Images/` or `Vault/Assets/Maps/`, the plugin creates the matching record under `Vault/Assets/Attribution/`.
+
+Only `.webp` and `.svg` assets are handled. Existing sidecars are never overwritten. New records default to `rights: "Copyright"`; change that field manually when the artwork is CC-licensed, public-domain, or otherwise uses different terms.
+
 ## Frontmatter header images
 
 When an open Markdown note contains `headerImage`, the plugin resolves the image from `Vault/Assets/Images` and renders a generated banner at the top of the note in Reading View and Live Preview.

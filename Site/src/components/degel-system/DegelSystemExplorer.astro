@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import degelSystemMap from '../../data/degel-system-map.mjs';
 import '../../styles/degel-system.css';
+import { attributionRouteForAsset } from '../../lib/image-attribution.mjs';
 
 const publishedEntries = await getCollection('docs', ({ data }) => (
   data.status === 'published'
@@ -112,25 +113,30 @@ function objectId(slug) {
         {objects.map((object) => {
           const id = objectId(object.slug);
           return (
-            <a
+            <div
               id={id}
               class:list={[
                 'degel-system-object',
                 `degel-system-object--${object.visual}`,
                 `degel-system-object--label-${object.labelSide}`,
               ]}
-              href={object.href}
               style={placementStyle(object)}
             >
-              <span class="degel-system-object__art" aria-hidden="true">
-                {object.image ? (
+              {object.image ? (
+                <a
+                  class="degel-system-object__art"
+                  href={attributionRouteForAsset(object.image)}
+                  aria-label={`Image attribution: ${object.title}`}
+                >
                   <img src={object.image} alt="" loading="lazy" decoding="async" fetchpriority="low" />
-                ) : (
+                </a>
+              ) : (
+                <span class="degel-system-object__art" aria-hidden="true">
                   <span class="degel-system-object__placeholder"></span>
-                )}
-              </span>
+                </span>
+              )}
 
-              <span class="degel-system-object__annotation">
+              <a class="degel-system-object__annotation" href={object.href}>
                 <svg class="degel-system-object__leader" viewBox="0 0 96 16" preserveAspectRatio="none" aria-hidden="true" focusable="false">
                   <path d="M 2 8 H 74 L 94 2" vector-effect="non-scaling-stroke" />
                 </svg>
@@ -138,9 +144,9 @@ function objectId(slug) {
                   <strong>{object.title}</strong>
                   <span>{object.kind}</span>
                 </span>
-              </span>
-              {object.description && <span class="codex-sr-only">. {object.description}</span>}
-            </a>
+                {object.description && <span class="codex-sr-only">. {object.description}</span>}
+              </a>
+            </div>
           );
         })}
 

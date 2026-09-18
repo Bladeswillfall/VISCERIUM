@@ -171,15 +171,20 @@
   }
 
   body:not(:has(.home-gateway)) .codex-sidebar-image-link {
+    display: flex;
     width: 100%;
+    justify-content: center;
   }
 
   body:not(:has(.home-gateway)) .codex-sidebar-image {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
+    height: auto;
     max-height: 17rem;
     margin-inline: auto;
     object-fit: contain;
+    object-position: center;
     background: transparent;
   }
 
@@ -489,10 +494,13 @@ body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
 
 .codex-header-image {
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  height: auto;
   max-height: 18rem;
-  margin: 0;
+  margin: 0 auto;
   object-fit: contain;
+  object-position: center;
   border: 0;
   border-radius: var(--codex-radius);
   box-shadow: none;
@@ -502,3 +510,9 @@ body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
   max-height: min(70vh, 48rem);
   background: color-mix(in oklch, var(--codex-fixed-dark) 22%, transparent);
 }
+
+/* Attribution records use structured metadata rather than article body Markdown. */
+.codex-image-attribution-page .sl-markdown-content:not([hidden]) {
+  display: none;
+}
+

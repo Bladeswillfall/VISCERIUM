@@ -35,7 +35,7 @@ test('Atlas cards use a flush, readable and consistently aligned composition', a
   expect(await cards.count()).toBe(1);
 
   const layouts = await cards.evaluateAll((elements) => elements.map((card) => {
-    const image = card.querySelector(':scope > img');
+    const image = card.querySelector(':scope > .codex-map-card__image-link > img');
     const body = card.querySelector('.codex-map-card__body');
     const title = body?.querySelector(':scope > h2');
     const description = body?.querySelector(':scope > p:not(.atlas-index__meta)');

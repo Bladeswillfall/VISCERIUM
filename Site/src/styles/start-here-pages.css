@@ -2084,3 +2084,10 @@ body:has(.start-here-primer) .codex-webmentions {
     margin-inline-start: .4rem !important;
   }
 }
+
+
+.start-attribution-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

@@ -85,6 +85,16 @@
   background: transparent;
 }
 
+/*
+ * Bailey's prosthetics artwork has generous transparent canvas around the figure.
+ * Tighten only its public presentation; keep the source asset and authored embed unchanged.
+ */
+.sl-markdown-content .vc-image-left.vc-image-shape:has(img[src$="/bailey-pittman-prosthetics.webp"]) {
+  width: min(21.25rem, 100%);
+  margin-inline-start: -3.75rem;
+}
+
+
 /* Each authored column owns its floats. A full image inside a column becomes column-wide. */
 .sl-markdown-content .cx-col {
   display: flow-root;
@@ -104,6 +114,15 @@
   clear: both;
 }
 
+/*
+ * Visual-indent callouts are continuation content, not a new composition.
+ * Let their line boxes keep flowing around an active authored float while
+ * leaving ordinary blockquotes and other structural elements cleared.
+ */
+.sl-markdown-content > blockquote:has(.vc-layout-indent-marker) {
+  clear: none;
+}
+
 @media (max-width: 42rem) {
   .sl-markdown-content .vc-image-left,
   .sl-markdown-content .vc-image-right,
@@ -112,6 +131,11 @@
     width: min(var(--vc-image-width, 100%), 100%);
     margin-inline: auto;
     shape-outside: none;
+  }
+
+  .sl-markdown-content .vc-image-left.vc-image-shape:has(img[src$="/bailey-pittman-prosthetics.webp"]) {
+    width: min(21.25rem, 100%);
+    margin-inline: auto;
   }
 
   .sl-markdown-content .vc-image-full {

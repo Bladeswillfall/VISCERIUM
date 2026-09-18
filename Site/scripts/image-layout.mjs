@@ -17,6 +17,25 @@ function escapeAttribute(value) {
     .replace(/>/g, '&gt;');
 }
 
+export function markdownQuotePrefixAt(markdown, index) {
+  const source = String(markdown ?? '');
+  const offset = Number.isInteger(index) ? Math.max(0, index) : 0;
+  const lineStart = source.lastIndexOf('\n', Math.max(0, offset - 1)) + 1;
+  const prefix = source.slice(lineStart, offset);
+  return /^[\t ]*(?:>[\t ]*)+$/.test(prefix) ? prefix : '';
+}
+
+export function renderInsideMarkdownQuote(markup, prefix) {
+  const quotePrefix = String(prefix ?? '');
+  if (!/^[\t ]*(?:>[\t ]*)+$/.test(quotePrefix)) return markup;
+
+  return String(markup ?? '')
+    .trim()
+    .split(/\r?\n/)
+    .map((line, index) => (index === 0 ? line : `${quotePrefix}${line}`))
+    .join('\n');
+}
+
 function safeClassToken(value) {
   return String(value ?? '').toLowerCase().replace(/[^a-z0-9_-]+/g, '');
 }
