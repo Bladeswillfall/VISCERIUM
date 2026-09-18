@@ -144,8 +144,8 @@ function objectId(slug) {
                   <strong>{object.title}</strong>
                   <span>{object.kind}</span>
                 </span>
+                {object.description && <span class="codex-sr-only">. {object.description}</span>}
               </a>
-              {object.description && <span class="codex-sr-only">. {object.description}</span>}
             </div>
           );
         })}
