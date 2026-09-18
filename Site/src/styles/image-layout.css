@@ -124,6 +124,11 @@
     shape-outside: none;
   }
 
+  .sl-markdown-content .vc-image-left.vc-image-shape:has(img[src$="/bailey-pittman-prosthetics.webp"]) {
+    width: min(19rem, 100%);
+    margin-inline: auto;
+  }
+
   .sl-markdown-content .vc-image-full {
     width: 100%;
     max-width: 100%;
