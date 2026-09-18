@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Header artwork used by the Errack article and related presentation."
 sensitiveMedia: false
 contentWarnings: []

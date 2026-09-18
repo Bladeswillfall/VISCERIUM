@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Wide VISCERIUM banner artwork used in the Codex and repository README."
 sensitiveMedia: false
 contentWarnings: []

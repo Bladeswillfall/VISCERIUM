@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Canonical Atlas raster for Errack during the CITADEL era."
 sensitiveMedia: false
 contentWarnings: []

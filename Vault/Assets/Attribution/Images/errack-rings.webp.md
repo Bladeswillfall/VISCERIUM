@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Artwork depicting Errack's ring system."
 sensitiveMedia: false
 contentWarnings: []

@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Planet artwork used for Errack and several era/navigation surfaces. Artist name is inherited from the current Errack article metadata and should be verified against the source artwork."
 sensitiveMedia: false
 contentWarnings: []

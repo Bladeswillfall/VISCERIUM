@@ -12,7 +12,7 @@ source:
 sourceUrl: 
 credit:
 license:
-rights:
+rights: "Copyright"
 usage: "Fallback sigil artwork used when a power has no published header image."
 sensitiveMedia: false
 contentWarnings: []
