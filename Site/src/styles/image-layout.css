@@ -114,6 +114,15 @@
   clear: both;
 }
 
+/*
+ * Visual-indent callouts are continuation content, not a new composition.
+ * Let their line boxes keep flowing around an active authored float while
+ * leaving ordinary blockquotes and other structural elements cleared.
+ */
+.sl-markdown-content > blockquote:has(.vc-layout-indent-marker) {
+  clear: none;
+}
+
 @media (max-width: 42rem) {
   .sl-markdown-content .vc-image-left,
   .sl-markdown-content .vc-image-right,

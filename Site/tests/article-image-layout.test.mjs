@@ -124,6 +124,10 @@ test('image layout CSS contains floats without overriding hidden Storyteller pan
   assert.match(css, /\.vc-image-shape[\s\S]*?shape-outside:\s*var\(--vc-image-shape\)/);
   assert.match(css, /\.cx-col\s*\{[\s\S]*?display:\s*flow-root/);
   assert.match(css, /\.cx-col \.vc-image-full[\s\S]*?width:\s*100%/);
+  assert.match(
+    css,
+    /> blockquote:has\(\.vc-layout-indent-marker\)\s*\{[\s\S]*?clear:\s*none/,
+  );
   assert.match(css, /@media \(max-width:\s*42rem\)[\s\S]*?shape-outside:\s*none/);
 });
 
