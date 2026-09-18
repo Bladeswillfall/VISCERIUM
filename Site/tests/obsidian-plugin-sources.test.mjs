@@ -64,6 +64,56 @@ test('layout-tools quote parsing avoids nested repeated regexes', async () => {
   assert.equal(context.compactNestedIndentBody('> > Real quotation'), null);
 });
 
+
+test('image-tools sidecars default to Copyright without overwriting unsupported assets', async () => {
+  const source = await readFile(
+    path.join(repoRoot, sourcePaths['viscerium-image-tools'], 'src/main.js'),
+    'utf8',
+  );
+
+  const context = vm.createContext({
+    module: { exports: {} },
+    exports: {},
+    console,
+    require: (id) => {
+      assert.equal(id, 'obsidian');
+      return { Notice: class {}, Plugin: class {} };
+    },
+  });
+  new vm.Script(source, { filename: 'viscerium-image-tools/main.js' }).runInContext(context);
+
+  const image = context.attributionSidecarSpec({
+    path: 'Assets/Images/degel-system/test-art.webp',
+    extension: 'webp',
+    basename: 'test-art',
+    name: 'test-art.webp',
+  });
+  assert.equal(image.sidecarPath, 'Assets/Attribution/Images/degel-system/test-art.webp.md');
+  assert.equal(image.asset, '/assets/images/degel-system/test-art.webp');
+  assert.match(context.attributionSidecarMarkdown(image), /rights: "Copyright"/);
+
+  const map = context.attributionSidecarSpec({
+    path: 'Assets/Maps/Errack.svg',
+    extension: 'svg',
+    basename: 'Errack',
+    name: 'Errack.svg',
+  });
+  assert.equal(map.sidecarPath, 'Assets/Attribution/Maps/Errack.svg.md');
+  assert.equal(map.asset, '/assets/maps/Errack.svg');
+
+  assert.equal(context.attributionSidecarSpec({
+    path: 'Assets/Images/source.png',
+    extension: 'png',
+    basename: 'source',
+  }), null);
+  assert.equal(context.attributionSidecarSpec({
+    path: 'Assets/Documents/example.webp',
+    extension: 'webp',
+    basename: 'example',
+  }), null);
+});
+
+
 test('plugin profile records maintained source and Vault runtime paths', async () => {
   const profile = JSON.parse(await readFile(path.join(repoRoot, 'Vault/System/Obsidian Plugin Profile.json'), 'utf8'));
 
