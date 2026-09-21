@@ -51,7 +51,7 @@ function suggestedEntityId(title) {
 const originalSuggester = tp.system.suggester;
 const originalMultiSuggester = tp.system.multi_suggester;
 tp.system.suggester = async (...args) => {
-  const prompt = args[4];
+  const prompt = args[3]
   if (prompt === "What are you creating?") {
     if (selectedType) return selectedType;
     selectedType = await originalSuggester(...args);
@@ -60,7 +60,7 @@ tp.system.suggester = async (...args) => {
   return originalSuggester(...args);
 };
 tp.system.multi_suggester = async (...args) => {
-  const prompt = args[4];
+  const prompt = args[3]
   if (typeof prompt === "string" && prompt.startsWith("Which eras can it exist in?")) {
     const era = await originalSuggester(
       ["Leave undefined", ...ERA_OPTIONS],

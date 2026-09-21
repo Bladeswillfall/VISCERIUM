@@ -33,6 +33,8 @@ test('sidebar follows the canonical global and era hierarchy', async () => {
   const degel = groups.find((entry) => labelOf(entry) === 'Degel System');
   assert.ok(degel);
   assert.equal(degel.items.some((entry) => labelOf(entry) === 'Atlas' && entry.link === '/maps/'), true);
+  const crucibus = degel.items.find((entry) => labelOf(entry) === 'Crucibus');
+  assert.equal(crucibus?.attrs?.['data-sidebar-icon'], 'article');
 
   const eras = groups.find((entry) => labelOf(entry) === 'Eras');
   assert.ok(eras);
@@ -61,9 +63,14 @@ test('sidebar follows the canonical global and era hierarchy', async () => {
   assert.equal(nations.items.some((entry) => labelOf(entry) === 'Okse Dominion'), true);
 
   assert.equal(citadel.items[1].attrs?.['data-sidebar-icon'], 'relationships');
-  assert.equal(sidebarIconForLabel(nations.label), 'faction');
+  assert.equal(parseIconLabel(nations.label).icon, 'local faction');
   assert.equal(sidebarIconForLabel('Naranoricon'), 'naranor');
-  assert.equal(flattenSidebar(sidebar).some((entry) => /\[Icon:/i.test(entry.label ?? '')), false);
+  assert.equal(
+    flattenSidebar(sidebar)
+      .filter((entry) => Array.isArray(entry.items))
+      .every((entry) => parseIconLabel(entry.label).icon?.startsWith('local ')),
+    true,
+  );
 });
 
 test('desktop sidebar overlay uses an explicit unlayered state', () => {

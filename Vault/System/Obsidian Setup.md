@@ -37,7 +37,7 @@ Use these files as the source of truth:
 
 Third-party `main.js`, `styles.css`, `manifest.json`, workers, maps, binaries and caches are ignored by Git.
 
-The repository tracks first-party VISCERIUM plugins because their code is maintained here. It also tracks the modified MySnippets compatibility runtime under its upstream MPL-2.0 terms.
+The repository tracks first-party VISCERIUM plugins because their code is maintained here.
 
 ### Install the community plugins
 

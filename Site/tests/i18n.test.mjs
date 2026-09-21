@@ -4,10 +4,19 @@ import fs from 'node:fs/promises';
 import i18next from 'i18next';
 import siteConfig, { DEFAULT_LOCALE } from '../site.config.mjs';
 import defaultTranslations from '../src/content/i18n/en-GB.json' with { type: 'json' };
+import { I18N_PLACEHOLDERS, I18N_ROADMAP } from '../src/lib/i18n-roadmap.mjs';
 import { formatDate, formatList, formatNumber } from '../src/lib/i18n.mjs';
 import { timelineMessage, timelinePlural } from '../src/lib/timeline/i18n.mjs';
 
 const astroConfigUrl = new URL('../astro.config.mjs', import.meta.url);
+const codexHeaderUrl = new URL('../src/components/CodexHeader.astro', import.meta.url);
+const languageMenuUrl = new URL('../src/components/CodexLanguageMenu.astro', import.meta.url);
+const languageIconUrl = new URL('../public/icons/i18n.svg', import.meta.url);
+const flagUrls = {
+  gb: new URL('../public/flags/gb.svg', import.meta.url),
+  fr: new URL('../public/flags/fr.svg', import.meta.url),
+  de: new URL('../public/flags/de.svg', import.meta.url),
+};
 const sourceRoot = new URL('../src/', import.meta.url);
 
 async function sourceFiles(directory) {
@@ -26,9 +35,8 @@ test('i18n defaults to British English without enabling translated routes', asyn
   const config = await fs.readFile(astroConfigUrl, 'utf8');
   assert.match(
     config,
-    /locales:\s*{\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale/s,
+    /locales:\s*{\s*root:\s*{\s*label:\s*['"]English['"],\s*lang:\s*siteConfig\.i18n\.defaultLocale,?\s*},?\s*},\s*pagefind:/s,
   );
-  assert.doesNotMatch(config, /locales:\s*{\s*(?!root:)[a-z]{2}/i);
 });
 
 test('the default Starlight catalog contains non-empty VISCERIUM UI strings', () => {
@@ -45,6 +53,61 @@ test('the default Starlight catalog contains non-empty VISCERIUM UI strings', ()
     'viscerium.relationship.controls',
     'viscerium.webmentions.responses.other',
   ]) assert.ok(defaultTranslations[key], `missing ${key}`);
+});
+
+test('French and German placeholders cover every custom UI key without publishing either locale', () => {
+  const expectedKeys = Object.keys(defaultTranslations)
+    .filter((key) => key.startsWith('viscerium.'));
+
+  assert.deepEqual(I18N_ROADMAP.published.map(({ locale }) => locale), ['en-GB']);
+  assert.deepEqual(I18N_ROADMAP.placeholders.map(({ locale }) => locale), ['fr-FR', 'de-DE']);
+  assert.deepEqual(I18N_ROADMAP.nextPriorities.map(({ label }) => label), ['Spanish', 'Chinese', 'Russian']);
+
+  for (const locale of ['fr-FR', 'de-DE']) {
+    const placeholder = I18N_PLACEHOLDERS[locale];
+    assert.deepEqual(Object.keys(placeholder), expectedKeys);
+    assert.ok(Object.values(placeholder).every((value) => value === null));
+  }
+});
+
+test('accessible flag language menu is staged beside reader settings without being mounted', async () => {
+  const [header, menu, icon, gbFlag, frFlag, deFlag] = await Promise.all([
+    fs.readFile(codexHeaderUrl, 'utf8'),
+    fs.readFile(languageMenuUrl, 'utf8'),
+    fs.readFile(languageIconUrl, 'utf8'),
+    fs.readFile(flagUrls.gb, 'utf8'),
+    fs.readFile(flagUrls.fr, 'utf8'),
+    fs.readFile(flagUrls.de, 'utf8'),
+  ]);
+  const settingsIndex = header.indexOf('<ReaderSettings />');
+  const dormantIndex = header.indexOf('CodexLanguageMenu');
+
+  assert.ok(settingsIndex !== -1 && dormantIndex > settingsIndex);
+  assert.doesNotMatch(header, /virtual:starlight\/components\/LanguageSelect/);
+  assert.doesNotMatch(header, /<CodexLanguageMenu/);
+  assert.match(menu, /<details[^>]+data-codex-language-menu/);
+  assert.match(menu, /<summary class="codex-language-menu__trigger">/);
+  assert.match(menu, /<nav class="codex-language-menu__panel" aria-label={panelLabel}>/);
+  assert.match(menu, /hreflang={option\.locale}/);
+  assert.match(menu, /lang={option\.locale}/);
+  assert.match(menu, /aria-current={option\.current \? 'page' : undefined}/);
+  assert.match(menu, /alt=""/);
+  assert.match(menu, /min-height:\s*3rem/);
+  assert.match(menu, /event\.key !== 'Escape'/);
+  assert.match(menu, /!menu\.contains\(event\.target\)/);
+  assert.match(menu, /querySelector<HTMLElement>\('summary'\)\?\.focus\(\)/);
+  assert.match(menu, /url\('\/icons\/i18n\.svg'\)/);
+  assert.match(menu, /@media \(forced-colors: active\)[\s\S]*\.codex-language-menu__icon[\s\S]*forced-color-adjust:\s*none[\s\S]*background:\s*CanvasText/);
+  assert.match(menu, /@media \(forced-colors: active\)[\s\S]*\.codex-language-menu__flag[\s\S]*forced-color-adjust:\s*none/);
+  assert.doesNotMatch(menu, /<select\b/);
+  assert.match(icon, /viewBox="0 0 32 32"/);
+  assert.match(icon, /fill="#7986cb"/);
+  assert.match(gbFlag, /#012169/);
+  assert.match(gbFlag, /#c8102e/);
+  assert.match(frFlag, /#0055a4/);
+  assert.match(frFlag, /#ef4135/);
+  assert.match(deFlag, /#dd0000/);
+  assert.match(deFlag, /#ffce00/);
 });
 
 test('the native i18next layer falls back to the default catalog', async () => {

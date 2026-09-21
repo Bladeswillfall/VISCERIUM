@@ -15,6 +15,40 @@ Story projects must remain portable Markdown and YAML.
 - VISCERIUM Timelines reads StoryLine scene frontmatter and builds its timeline view in memory.
 - Do not manually duplicate StoryLine chronology into `calendarDate`, native Chronos blocks, or generated timeline files.
 
+## VISCERIUM story-state layer
+
+Write the story in StoryLine. The VISCERIUM layer should lead from the interface rather than require a separate worksheet.
+
+StoryLine's native custom scene fields carry the five recurring scene prompts:
+
+- **Want** — what the POV character wants in this scene;
+- **Pressure** — what makes that difficult now;
+- **After** — what is true after the scene that was not true before;
+- **Turn** — what changes the direction of the scene;
+- **Cost** — what is lost, risked, sacrificed or worsened.
+
+The fields are seeded into the active StoryLine project's own `System/field-templates.json`. StoryLine continues to own their Inspector presentation and stores the entered values in scene frontmatter. Templater seeds or repairs the definitions on startup and on first use; do not maintain a second copy of the scene state elsewhere.
+
+For a meaningful change that needs to carry forward, run the hotkey-enabled **Add Story Change** Templater template from the active scene. It records only the change that occurred:
+
+- **Information** — learning, suspicion, belief, revelation, concealment or misleading;
+- **Relationship** — a directional shift in trust, affection, dependence, resentment or fear;
+- **Power / leverage** — authority, access, resources, obligations or position gained, lost or committed;
+- **Consequence** — future pressure created by the scene, later resolved, transformed or expired.
+
+These entries are appended to the scene's `viscerium_events` frontmatter array. Treat that array as an authored event history. Do not rewrite earlier scene events merely to make a later state look tidy.
+
+Run the hotkey-enabled **Open Story State** Templater template to open `System/Views/Story State.md`. Dataview derives four read-only working views from the StoryLine scenes:
+
+1. Current Pressures
+2. Character State
+3. Information Map
+4. Relationships / Power
+
+Derived current state is deliberately not written back into scene YAML. Edit the source scene when the story changes; let the view recalculate the result.
+
+No tracked story-change module is mandatory. A simple scene can use only Want, Pressure and After. Add structured changes only when the change matters beyond the current scene.
+
 ## Story dates
 
 For StoryLine scenes, `storyDate` is the single date field used by the VISCERIUM story-timeline adapter.
@@ -68,13 +102,15 @@ StoryLine's executable bundle is managed normally by Obsidian Community Plugins.
 }
 ```
 
-The active project may also be stored there as `activeProjectFile`. VISCERIUM Timelines intentionally reads that value rather than asking authors to duplicate project selection elsewhere. Pulls and repository maintenance therefore leave each creator's active-project state untouched.
+The active project may also be stored there as `activeProjectFile`. VISCERIUM Timelines and the story-state helpers intentionally read that value rather than asking authors to duplicate project selection elsewhere. Pulls and repository maintenance therefore leave each creator's active-project state untouched.
 
 VISCERIUM Timelines is maintained in this repository and its runnable bundle is tracked beneath:
 
 `Vault/.obsidian/plugins/viscerium-timelines/`
 
 That plugin is enabled alongside StoryLine and Chronos, so pulling the vault is sufficient to install the bridge. The source remains in `Tools/obsidian-viscerium-timelines/`, and CI rebuilds the same bundle for verification.
+
+The VISCERIUM story-state workflow additionally relies on the already-required Templater and Dataview plugins. Its Templater user script is `Templates/_Scripts/storyline_state.js`; the derived view is `System/Views/Story State.md`.
 
 ## Canonical Lore as StoryLine source material
 

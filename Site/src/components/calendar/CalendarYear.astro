@@ -2,6 +2,7 @@
 import { getCalendar } from '../../lib/calendar/registry';
 import { getCalendarYearDates, isLeapYear, resolveCalendarDate } from '../../lib/calendar/convert';
 import type { CalendarEventLink, CalendarEventLinks, CalendarObservance, ResolvedCalendarDate } from '../../lib/calendar/types';
+import { buildMonthGrid, buildTimelineEventsByDay } from '../../lib/calendar/year-view.mjs';
 import { formatList } from '../../lib/i18n.mjs';
 import '../../styles/calendar-year.css';
 
@@ -11,6 +12,17 @@ interface Props {
   eventLinks?: CalendarEventLinks;
 }
 
+type TimelineEvent = {
+  id: string;
+  title: string;
+  absoluteStartDay: number;
+  precision: 'day' | 'month' | 'year';
+};
+
+type TimelineDataset = {
+  events?: TimelineEvent[];
+};
+
 const { calendarId = 'okse', eventLinks = {} } = Astro.props as Props;
 const { starlightRoute, t } = Astro.locals;
 const locale = starlightRoute.lang;
@@ -19,8 +31,14 @@ const year = (Astro.props as Props).year ?? calendar.defaultYear;
 const dates = getCalendarYearDates(calendar.id, year, { locale });
 const datesByAnchor = new Map(dates.map((date) => [date.anchor, date]));
 const seasonLabels = ['winter', 'spring', 'summer', 'autumn'];
-const daysPerWeek = 7;
+const daysPerWeek = calendar.weekdays.length;
 const intercalaryColumns = 2;
+const timelineDatasets = import.meta.glob('../../data/timelines/super.json', {
+  eager: true,
+  import: 'default',
+}) as Record<string, TimelineDataset>;
+const worldTimelineEvents = timelineDatasets['../../data/timelines/super.json']?.events ?? [];
+const timelineEventsByDay = buildTimelineEventsByDay(worldTimelineEvents) as Map<number, TimelineEvent[]>;
 
 function getDateForMonthDay(month: string, day: number) {
   return datesByAnchor.get(`${month}-${String(day).padStart(2, '0')}`);
@@ -46,8 +64,13 @@ function resolveLinkValue(link?: CalendarEventLink): { href?: string; label?: st
   };
 }
 
+const observanceLinks = Object.fromEntries(calendar.observances.map((observance) => [
+  observance.slug,
+  resolveLinkValue(eventLinks[observance.slug] ?? observance.href ?? observance.article),
+]));
+
 function getObservanceLink(observance: CalendarObservance) {
-  return resolveLinkValue(eventLinks[observance.slug] ?? observance.href ?? observance.article);
+  return observanceLinks[observance.slug] ?? {};
 }
 
 function getLinkedObservances(resolved: ResolvedCalendarDate) {
@@ -56,16 +79,29 @@ function getLinkedObservances(resolved: ResolvedCalendarDate) {
     .filter((item) => Boolean(item.link.href));
 }
 
+function timelineHref(event: TimelineEvent) {
+  return `/timelines/super/?calendar=${encodeURIComponent(calendar.id)}&event=${encodeURIComponent(event.id)}`;
+}
+
 function getCellMeta(resolved: ResolvedCalendarDate) {
+  const timelineEvents = timelineEventsByDay.get(resolved.absoluteDay) ?? [];
+  const primaryTimelineEvent = timelineEvents[0];
   const linkedObservances = getLinkedObservances(resolved);
   const primaryLinkedObservance = linkedObservances[0];
-  const observanceNames = resolved.observances.map((observance) => observance.name);
-  const targetLabel = primaryLinkedObservance?.link.label ?? primaryLinkedObservance?.observance.name;
-  const label = formatList([resolved.label, ...observanceNames], locale);
+  const eventNames = [...new Set([
+    ...resolved.observances.map((observance) => observance.name),
+    ...timelineEvents.map((event) => event.title),
+  ])];
+  const targetLabel = primaryTimelineEvent?.title
+    ?? primaryLinkedObservance?.link.label
+    ?? primaryLinkedObservance?.observance.name;
+  const label = formatList([resolved.label, ...eventNames], locale);
 
   return {
-    href: primaryLinkedObservance?.link.href ?? `#${resolved.anchor}`,
-    hasLinkedEvent: Boolean(primaryLinkedObservance?.link.href),
+    href: primaryTimelineEvent
+      ? timelineHref(primaryTimelineEvent)
+      : primaryLinkedObservance?.link.href ?? `#${resolved.anchor}`,
+    hasLinkedEvent: Boolean(primaryTimelineEvent || primaryLinkedObservance?.link.href),
     ariaLabel: targetLabel
       ? t('viscerium.calendar.openTarget', {
           date: label,
@@ -73,85 +109,142 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
           interpolation: { escapeValue: false },
         })
       : label,
-    eventNames: observanceNames,
+    eventLabel: eventNames.length > 0 ? formatList(eventNames, locale) : undefined,
   };
 }
+
+const islandData = {
+  calendarId: calendar.id,
+  year,
+  locale,
+  observanceLinks,
+  timelineEvents: worldTimelineEvents.map(({ id, title, absoluteStartDay, precision }) => ({ id, title, absoluteStartDay, precision })),
+  messages: {
+    openTarget: t('viscerium.calendar.openTarget', {
+      date: '__DATE__',
+      target: '__TARGET__',
+      interpolation: { escapeValue: false },
+    }),
+    leapOnly: t('viscerium.calendar.leapOnlyDescription', {
+      name: '__NAME__',
+      day: '__DAY__',
+      interpolation: { escapeValue: false },
+    }),
+    yes: t('viscerium.common.yes'),
+    no: t('viscerium.common.no'),
+  },
+};
+const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c');
 ---
 
-<section class="calendar-module" aria-labelledby="calendar-module-title">
-  <div class="calendar-module__intro">
+<section class="calendar-module" aria-labelledby="calendar-module-title" data-vc-calendar-year-island>
+  <header class="calendar-module__intro">
     <div class="calendar-module__summary">
       <p class="codex-kicker">{t('viscerium.calendar.worldTime')}</p>
       <h2 id="calendar-module-title">{calendar.name}</h2>
       {calendar.description && <p>{calendar.description}</p>}
     </div>
-    <dl class="calendar-module__facts codex-frame">
+    <dl class="calendar-module__facts">
       <div class="calendar-module__fact">
         <dt>{t('viscerium.calendar.renderedYear')}</dt>
-        <dd>{year}</dd>
+        <dd data-vc-calendar-rendered-year aria-live="polite">{year}</dd>
+      </div>
+      <div class="calendar-module__fact">
+        <dt>{t('viscerium.calendar.leapYear')}</dt>
+        <dd data-vc-calendar-leap-year>{t(isLeapYear(calendar, year) ? 'viscerium.common.yes' : 'viscerium.common.no')}</dd>
       </div>
       <div class="calendar-module__fact">
         <dt>{t('viscerium.calendar.leapRule')}</dt>
         <dd>{calendar.leapRule?.label ?? t('viscerium.calendar.noLeapYears')}</dd>
       </div>
-      <div class="calendar-module__fact">
-        <dt>{t('viscerium.calendar.leapYear')}</dt>
-        <dd>{t(isLeapYear(calendar, year) ? 'viscerium.common.yes' : 'viscerium.common.no')}</dd>
-      </div>
     </dl>
-  </div>
+    <div class="calendar-module__year-controls" data-vc-calendar-year-controls hidden>
+      <button
+        type="button"
+        data-vc-calendar-year-step="-1"
+        aria-label={`${t('viscerium.timeline.previous')} ${t('viscerium.calendar.renderedYear')}`}
+      >←</button>
+      <label>
+        <span>{t('viscerium.calendar.renderedYear')}</span>
+        <input type="number" step="1" inputmode="numeric" value={year} data-vc-calendar-year-input />
+      </label>
+      <button
+        type="button"
+        data-vc-calendar-year-step="1"
+        aria-label={`${t('viscerium.timeline.next')} ${t('viscerium.calendar.renderedYear')}`}
+      >→</button>
+    </div>
+  </header>
 
   <div class="calendar-year-grid">
-    {calendar.months.map((month) => (
-      <section class="calendar-month" aria-labelledby={`calendar-${month.slug}`}>
-        <h3 id={`calendar-${month.slug}`}>{month.name} <span>({month.ordinal})</span></h3>
-        <table class="calendar-days calendar-days--month" aria-label={t('viscerium.calendar.monthDays', { month: month.name, interpolation: { escapeValue: false } })}>
-          <tbody>
-            {Array.from({ length: Math.ceil(month.days / daysPerWeek) }, (_, weekIndex) => (
-              <tr class="calendar-week">
-                {Array.from({ length: daysPerWeek }, (_, weekdayIndex) => {
-                  const day = weekIndex * daysPerWeek + weekdayIndex + 1;
-                  if (day > month.days) {
-                    return <td class="calendar-day calendar-day--empty" aria-hidden="true"></td>;
-                  }
-
-                  const resolved = getDateForMonthDay(month.slug, day) ?? resolveCalendarDate({ calendar: calendar.id, year, month: month.slug, day }, { locale });
-                  const hasHoliday = resolved.observances.some((observance) => observance.type === 'holiday');
-                  const hasSeasonMarker = resolved.observances.some((observance) => observance.type !== 'holiday');
-                  const meta = getCellMeta(resolved);
-
-                  return (
-                    <td
-                      id={resolved.anchor}
-                      class:list={[
-                        'calendar-day',
-                        `calendar-day--${resolved.season}`,
-                        hasHoliday && 'calendar-day--holiday',
-                        hasSeasonMarker && 'calendar-day--marker',
-                        meta.hasLinkedEvent && 'calendar-day--linked-event',
-                      ]}
-                    >
-                      <a href={meta.href} aria-label={meta.ariaLabel}>
-                        <span class="calendar-day__number">{day}</span>
-                        <span class="calendar-day__weekday">{resolved.weekday}</span>
-                        {meta.eventNames.length > 0 && (
-                            <span class="calendar-day__events">{formatList(meta.eventNames, locale)}</span>
-                        )}
-                      </a>
-                    </td>
-                  );
-                })}
+    {calendar.months.map((month) => {
+      const firstDate = getDateForMonthDay(month.slug, 1)
+        ?? resolveCalendarDate({ calendar: calendar.id, year, month: month.slug, day: 1 }, { locale });
+      const grid = buildMonthGrid(calendar, month, firstDate.weekday);
+      return (
+        <section class="calendar-month" aria-labelledby={`calendar-${month.slug}`}>
+          <h3 id={`calendar-${month.slug}`}>{month.name} <span>({month.ordinal})</span></h3>
+          <table
+            class="calendar-days calendar-days--month"
+            data-vc-calendar-month={month.slug}
+            aria-label={t('viscerium.calendar.monthDays', { month: month.name, interpolation: { escapeValue: false } })}
+          >
+            <thead>
+              <tr>
+                {calendar.weekdays.map((weekday) => (
+                  <th scope="col"><abbr title={weekday} aria-label={weekday}>{weekday.slice(0, 2)}</abbr></th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-    ))}
+            </thead>
+            <tbody>
+              {Array.from({ length: grid.length / daysPerWeek }, (_, weekIndex) => (
+                <tr class="calendar-week">
+                  {grid.slice(weekIndex * daysPerWeek, (weekIndex + 1) * daysPerWeek).map((day) => {
+                    if (day === null) {
+                      return <td class="calendar-day calendar-day--empty" aria-hidden="true"></td>;
+                    }
 
+                    const resolved = getDateForMonthDay(month.slug, day)
+                      ?? resolveCalendarDate({ calendar: calendar.id, year, month: month.slug, day }, { locale });
+                    const hasHoliday = resolved.observances.some((observance) => observance.type === 'holiday');
+                    const hasSeasonMarker = resolved.observances.some((observance) => observance.type !== 'holiday');
+                    const meta = getCellMeta(resolved);
+
+                    return (
+                      <td
+                        id={resolved.anchor}
+                        class:list={[
+                          'calendar-day',
+                          `calendar-day--${resolved.season}`,
+                          hasHoliday && 'calendar-day--holiday',
+                          hasSeasonMarker && 'calendar-day--marker',
+                          meta.hasLinkedEvent && 'calendar-day--linked-event',
+                        ]}
+                      >
+                        <a href={meta.href} aria-label={meta.ariaLabel}>
+                          <span class="calendar-day__number">{day}</span>
+                          {meta.eventLabel && <span class="calendar-day__events" aria-hidden="true">{meta.eventLabel}</span>}
+                        </a>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      );
+    })}
+  </div>
+
+  <div class="calendar-module__tail">
     <section class="calendar-month calendar-month--intercalary" aria-labelledby="calendar-engimanutur">
       <h3 id="calendar-engimanutur">Engimanutur <span>(0th/14th)</span></h3>
-      <table class="calendar-days calendar-days--intercalary" aria-label={t('viscerium.calendar.monthDays', { month: 'Engimanutur', interpolation: { escapeValue: false } })}>
-        <tbody>
+      <table
+        class="calendar-days calendar-days--intercalary"
+        aria-label={t('viscerium.calendar.monthDays', { month: 'Engimanutur', interpolation: { escapeValue: false } })}
+      >
+        <tbody data-vc-calendar-intercalary>
           {Array.from({ length: Math.ceil(calendar.intercalaryDays.length / intercalaryColumns) }, (_, rowIndex) => (
             <tr class="calendar-week">
               {Array.from({ length: intercalaryColumns }, (_, columnIndex) => {
@@ -163,6 +256,8 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
                 const resolved = getDateForIntercalary(intercalaryDay.slug);
                 const visible = Boolean(resolved);
                 const meta = resolved ? getCellMeta(resolved) : undefined;
+                const hasHoliday = resolved?.observances.some((observance) => observance.type === 'holiday');
+                const hasSeasonMarker = resolved?.observances.some((observance) => observance.type !== 'holiday');
 
                 return (
                   <td
@@ -172,7 +267,8 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
                       'calendar-day--intercalary',
                       `calendar-day--${intercalaryDay.season}`,
                       intercalaryDay.leapOnly && 'calendar-day--leap',
-                      resolved?.observances.some((observance) => observance.type !== 'holiday') && 'calendar-day--marker',
+                      hasHoliday && 'calendar-day--holiday',
+                      hasSeasonMarker && 'calendar-day--marker',
                       meta?.hasLinkedEvent && 'calendar-day--linked-event',
                       !visible && 'calendar-day--inactive',
                     ]}
@@ -180,10 +276,7 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
                     {resolved && meta ? (
                       <a href={meta.href} aria-label={meta.ariaLabel}>
                         <span class="calendar-day__number">{String(intercalaryDay.day).padStart(2, '0')}</span>
-                        <span class="calendar-day__weekday">{resolved.weekday}</span>
-                        {meta.eventNames.length > 0 && (
-                          <span class="calendar-day__events">{formatList(meta.eventNames, locale)}</span>
-                        )}
+                        {meta.eventLabel && <span class="calendar-day__events" aria-hidden="true">{meta.eventLabel}</span>}
                       </a>
                     ) : (
                       <span aria-label={t('viscerium.calendar.leapOnlyDescription', {
@@ -192,7 +285,6 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
                         interpolation: { escapeValue: false },
                       })}>
                         <span class="calendar-day__number">{String(intercalaryDay.day).padStart(2, '0')}</span>
-                        <span class="calendar-day__weekday">{t('viscerium.calendar.leapOnly')}</span>
                       </span>
                     )}
                   </td>
@@ -204,63 +296,270 @@ function getCellMeta(resolved: ResolvedCalendarDate) {
       </table>
     </section>
 
-    <section class="calendar-legend codex-frame" aria-labelledby="calendar-legend-title">
+    <section class="calendar-legend" aria-labelledby="calendar-legend-title">
       <h3 id="calendar-legend-title">{t('viscerium.calendar.key')}</h3>
-      <dl>
+      <ul>
         {seasonLabels.map((season) => (
-          <div>
-            <dt><span class={`calendar-key calendar-key--${season}`}></span>{t(`viscerium.calendar.season.${season}`)}</dt>
-            <dd>{t('viscerium.calendar.seasonBand')}</dd>
-          </div>
+          <li>
+            <span class={`calendar-key calendar-key--${season}`}></span>
+            {t(`viscerium.calendar.season.${season}`)}
+            <span class="calendar-visually-hidden">, {t('viscerium.calendar.seasonBand')}</span>
+          </li>
         ))}
-        <div>
-          <dt><span class="calendar-key calendar-key--leap"></span>{t('viscerium.calendar.leapDay')}</dt>
-          <dd>{t('viscerium.calendar.leapDayDescription')}</dd>
-        </div>
-        <div>
-          <dt><span class="calendar-key calendar-key--holiday"></span>{t('viscerium.calendar.holiday')}</dt>
-          <dd>{t('viscerium.calendar.holidayDescription')}</dd>
-        </div>
-        <div>
-          <dt><span class="calendar-key calendar-key--marker"></span>{t('viscerium.calendar.seasonMarker')}</dt>
-          <dd>{t('viscerium.calendar.seasonMarkerDescription')}</dd>
-        </div>
-        <div>
-          <dt><span class="calendar-key calendar-key--linked"></span>{t('viscerium.calendar.linkedEvent')}</dt>
-          <dd>{t('viscerium.calendar.linkedEventDescription')}</dd>
-        </div>
-      </dl>
+        <li>
+          <span class="calendar-key calendar-key--leap"></span>{t('viscerium.calendar.leapDay')}
+          <span class="calendar-visually-hidden">, {t('viscerium.calendar.leapDayDescription')}</span>
+        </li>
+        <li>
+          <span class="calendar-key calendar-key--holiday"></span>{t('viscerium.calendar.holiday')}
+          <span class="calendar-visually-hidden">, {t('viscerium.calendar.holidayDescription')}</span>
+        </li>
+        <li>
+          <span class="calendar-key calendar-key--marker"></span>{t('viscerium.calendar.seasonMarker')}
+          <span class="calendar-visually-hidden">, {t('viscerium.calendar.seasonMarkerDescription')}</span>
+        </li>
+        <li>
+          <span class="calendar-key calendar-key--linked"></span>{t('viscerium.calendar.linkedEvent')}
+          <span class="calendar-visually-hidden">, {t('viscerium.calendar.linkedEventDescription')}</span>
+        </li>
+      </ul>
     </section>
   </div>
+
+  <script type="application/json" data-vc-calendar-year-data set:html={serializedIslandData}></script>
 </section>
 
-<style is:global>
-  @layer starlight.core {
-    @media (max-width: 95rem) {
-      .calendar-module .calendar-module__intro {
-        grid-template-columns: minmax(0, 1fr) !important;
-      }
+<script>
+  import { getCalendarYearDates, isLeapYear, resolveCalendarDate } from '../../lib/calendar/convert';
+  import { getCalendar } from '../../lib/calendar/registry';
+  import { buildMonthGrid, buildTimelineEventsByDay } from '../../lib/calendar/year-view.mjs';
+  import { formatList } from '../../lib/i18n.mjs';
 
-      .calendar-module .calendar-module__summary,
-      .calendar-module .calendar-module__facts {
-        grid-column: 1 / -1 !important;
-        min-width: 0 !important;
-        inline-size: auto !important;
-        max-inline-size: none !important;
-      }
+  type CalendarIslandEvent = {
+    id: string;
+    title: string;
+    absoluteStartDay: number;
+    precision: 'day' | 'month' | 'year';
+  };
 
-      .calendar-module .calendar-module__summary *,
-      .calendar-module .calendar-module__facts * {
-        overflow-wrap: normal !important;
-        word-break: normal !important;
-        hyphens: manual !important;
-      }
-    }
+  type CalendarIslandData = {
+    calendarId: string;
+    year: number;
+    locale: string;
+    observanceLinks: Record<string, { href?: string; label?: string }>;
+    timelineEvents: CalendarIslandEvent[];
+    messages: {
+      openTarget: string;
+      leapOnly: string;
+      yes: string;
+      no: string;
+    };
+  };
 
-    @media (min-width: 95.001rem) {
-      .calendar-module .calendar-module__intro {
-        grid-template-columns: minmax(24rem, 1fr) minmax(18rem, 24rem) !important;
-      }
-    }
+  const boundCalendars = new WeakSet<Element>();
+
+  function fillTemplate(template: string, values: Record<string, string | number>) {
+    let result = template;
+    for (const [key, value] of Object.entries(values)) result = result.replaceAll(`__${key}__`, String(value));
+    return result;
   }
-</style>
+
+  function createEmptyCell() {
+    const cell = document.createElement('td');
+    cell.className = 'calendar-day calendar-day--empty';
+    cell.setAttribute('aria-hidden', 'true');
+    return cell;
+  }
+
+  function mountCalendar(root: Element) {
+    if (boundCalendars.has(root)) return;
+    const dataElement = root.querySelector('[data-vc-calendar-year-data]');
+    const controls = root.querySelector('[data-vc-calendar-year-controls]');
+    const input = root.querySelector('[data-vc-calendar-year-input]');
+    const renderedYear = root.querySelector('[data-vc-calendar-rendered-year]');
+    const leapYear = root.querySelector('[data-vc-calendar-leap-year]');
+    if (!(dataElement instanceof HTMLScriptElement) || !(input instanceof HTMLInputElement)) return;
+
+    const data = JSON.parse(dataElement.textContent || 'null') as CalendarIslandData | null;
+    if (!data) return;
+    const calendar = getCalendar(data.calendarId);
+    const timelineEventsByDay = buildTimelineEventsByDay(data.timelineEvents) as Map<number, CalendarIslandEvent[]>;
+
+    function timelineHref(event: CalendarIslandEvent) {
+      return `/timelines/super/?calendar=${encodeURIComponent(calendar.id)}&event=${encodeURIComponent(event.id)}`;
+    }
+
+    function getCellMeta(resolved: ReturnType<typeof resolveCalendarDate>) {
+      const timelineEvents = timelineEventsByDay.get(resolved.absoluteDay) ?? [];
+      const primaryTimelineEvent = timelineEvents[0];
+      const linkedObservances = resolved.observances
+        .map((observance) => ({ observance, link: data.observanceLinks[observance.slug] ?? {} }))
+        .filter((item) => Boolean(item.link.href));
+      const primaryLinkedObservance = linkedObservances[0];
+      const eventNames = [...new Set([
+        ...resolved.observances.map((observance) => observance.name),
+        ...timelineEvents.map((event) => event.title),
+      ])];
+      const targetLabel = primaryTimelineEvent?.title
+        ?? primaryLinkedObservance?.link.label
+        ?? primaryLinkedObservance?.observance.name;
+      const label = formatList([resolved.label, ...eventNames], data.locale);
+      return {
+        href: primaryTimelineEvent
+          ? timelineHref(primaryTimelineEvent)
+          : primaryLinkedObservance?.link.href ?? `#${resolved.anchor}`,
+        hasLinkedEvent: Boolean(primaryTimelineEvent || primaryLinkedObservance?.link.href),
+        ariaLabel: targetLabel
+          ? fillTemplate(data.messages.openTarget, { DATE: label, TARGET: targetLabel })
+          : label,
+        eventLabel: eventNames.length > 0 ? formatList(eventNames, data.locale) : undefined,
+      };
+    }
+
+    function createResolvedCell(resolved: ReturnType<typeof resolveCalendarDate>, number: string) {
+      const cell = document.createElement('td');
+      const hasHoliday = resolved.observances.some((observance) => observance.type === 'holiday');
+      const hasSeasonMarker = resolved.observances.some((observance) => observance.type !== 'holiday');
+      const meta = getCellMeta(resolved);
+      cell.id = resolved.anchor;
+      cell.classList.add('calendar-day', `calendar-day--${resolved.season}`);
+      if (hasHoliday) cell.classList.add('calendar-day--holiday');
+      if (hasSeasonMarker) cell.classList.add('calendar-day--marker');
+      if (meta.hasLinkedEvent) cell.classList.add('calendar-day--linked-event');
+
+      const link = document.createElement('a');
+      link.href = meta.href;
+      link.setAttribute('aria-label', meta.ariaLabel);
+      const dayNumber = document.createElement('span');
+      dayNumber.className = 'calendar-day__number';
+      dayNumber.textContent = number;
+      link.append(dayNumber);
+      if (meta.eventLabel) {
+        const eventLabel = document.createElement('span');
+        eventLabel.className = 'calendar-day__events';
+        eventLabel.setAttribute('aria-hidden', 'true');
+        eventLabel.textContent = meta.eventLabel;
+        link.append(eventLabel);
+      }
+      cell.append(link);
+      return cell;
+    }
+
+    function renderMonth(month: (typeof calendar.months)[number], datesByAnchor: Map<string, ReturnType<typeof resolveCalendarDate>>, year: number) {
+      const table = root.querySelector(`[data-vc-calendar-month="${CSS.escape(month.slug)}"]`);
+      const body = table?.querySelector('tbody');
+      if (!(body instanceof HTMLTableSectionElement)) return;
+      const firstDate = datesByAnchor.get(`${month.slug}-01`)
+        ?? resolveCalendarDate({ calendar: calendar.id, year, month: month.slug, day: 1 }, { locale: data.locale });
+      const grid = buildMonthGrid(calendar, month, firstDate.weekday);
+      const rows: HTMLTableRowElement[] = [];
+      for (let index = 0; index < grid.length; index += calendar.weekdays.length) {
+        const row = document.createElement('tr');
+        row.className = 'calendar-week';
+        for (const day of grid.slice(index, index + calendar.weekdays.length)) {
+          if (day === null) {
+            row.append(createEmptyCell());
+            continue;
+          }
+          const resolved = datesByAnchor.get(`${month.slug}-${String(day).padStart(2, '0')}`)
+            ?? resolveCalendarDate({ calendar: calendar.id, year, month: month.slug, day }, { locale: data.locale });
+          row.append(createResolvedCell(resolved, String(day)));
+        }
+        rows.push(row);
+      }
+      body.replaceChildren(...rows);
+    }
+
+    function renderIntercalary(datesByAnchor: Map<string, ReturnType<typeof resolveCalendarDate>>) {
+      const body = root.querySelector('[data-vc-calendar-intercalary]');
+      if (!(body instanceof HTMLTableSectionElement)) return;
+      const rows: HTMLTableRowElement[] = [];
+      for (let index = 0; index < calendar.intercalaryDays.length; index += 2) {
+        const row = document.createElement('tr');
+        row.className = 'calendar-week';
+        for (const intercalaryDay of calendar.intercalaryDays.slice(index, index + 2)) {
+          const resolved = datesByAnchor.get(intercalaryDay.slug);
+          if (resolved) {
+            const cell = createResolvedCell(resolved, String(intercalaryDay.day).padStart(2, '0'));
+            cell.classList.add('calendar-day--intercalary', `calendar-day--${intercalaryDay.season}`);
+            if (intercalaryDay.leapOnly) cell.classList.add('calendar-day--leap');
+            row.append(cell);
+            continue;
+          }
+
+          const cell = document.createElement('td');
+          cell.id = intercalaryDay.slug;
+          cell.classList.add(
+            'calendar-day',
+            'calendar-day--intercalary',
+            `calendar-day--${intercalaryDay.season}`,
+            'calendar-day--inactive',
+          );
+          if (intercalaryDay.leapOnly) cell.classList.add('calendar-day--leap');
+          const wrapper = document.createElement('span');
+          wrapper.setAttribute('aria-label', fillTemplate(data.messages.leapOnly, {
+            NAME: intercalaryDay.name,
+            DAY: intercalaryDay.day,
+          }));
+          const dayNumber = document.createElement('span');
+          dayNumber.className = 'calendar-day__number';
+          dayNumber.textContent = String(intercalaryDay.day).padStart(2, '0');
+          wrapper.append(dayNumber);
+          cell.append(wrapper);
+          row.append(cell);
+        }
+        while (row.cells.length < 2) row.append(createEmptyCell());
+        rows.push(row);
+      }
+      body.replaceChildren(...rows);
+    }
+
+    function renderYear(nextYear: number) {
+      if (!Number.isSafeInteger(nextYear)) {
+        input.setCustomValidity('Year must be an integer.');
+        input.reportValidity();
+        return;
+      }
+
+      try {
+        const dates = getCalendarYearDates(calendar.id, nextYear, { locale: data.locale });
+        const datesByAnchor = new Map(dates.map((date) => [date.anchor, date]));
+        for (const month of calendar.months) renderMonth(month, datesByAnchor, nextYear);
+        renderIntercalary(datesByAnchor);
+        input.setCustomValidity('');
+        input.value = String(nextYear);
+        if (renderedYear) renderedYear.textContent = new Intl.NumberFormat(data.locale).format(nextYear);
+        if (leapYear) leapYear.textContent = isLeapYear(calendar, nextYear) ? data.messages.yes : data.messages.no;
+      } catch (error) {
+        input.setCustomValidity(error instanceof Error ? error.message : String(error));
+        input.reportValidity();
+      }
+    }
+
+    for (const button of root.querySelectorAll('[data-vc-calendar-year-step]')) {
+      button.addEventListener('click', () => {
+        const delta = Number((button as HTMLElement).dataset.vcCalendarYearStep);
+        const current = Number(input.value);
+        if (Number.isSafeInteger(delta) && Number.isSafeInteger(current)) renderYear(current + delta);
+      });
+    }
+    input.addEventListener('change', () => renderYear(Number(input.value)));
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        renderYear(Number(input.value));
+      }
+    });
+
+    if (controls instanceof HTMLElement) controls.hidden = false;
+    root.setAttribute('data-vc-calendar-year-mounted', 'true');
+    boundCalendars.add(root);
+  }
+
+  function mountCalendars() {
+    for (const root of document.querySelectorAll('[data-vc-calendar-year-island]')) mountCalendar(root);
+  }
+
+  mountCalendars();
+  document.addEventListener('astro:page-load', mountCalendars);
+</script>

@@ -28,20 +28,20 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `@astrojs/mdx` | runtime | `^7.0.3` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
 | Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
-| Codex (`Site/`) | `astro` | runtime | `^7.1.1` |
-| Codex (`Site/`) | `cytoscape` | runtime | `3.34.0` |
+| Codex (`Site/`) | `astro` | runtime | `^7.2.8` |
+| Codex (`Site/`) | `cytoscape` | runtime | `3.34.3` |
 | Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.0` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
 | Codex (`Site/`) | `gray-matter` | runtime | `^4.0.3` |
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
-| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.6.0` |
-| Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^1.0.1` |
-| Codex (`Site/`) | `starlight-tags` | runtime | `^1.0.1` |
-| Codex (`Site/`) | `starlight-telescope` | runtime | `^1.0.0` |
-| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.1` |
+| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
+| Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
-| Codex (`Site/`) | `eslint` | development | `10.9.0` |
+| Codex (`Site/`) | `eslint` | development | `10.10.0` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.1` |
 | Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |
@@ -108,7 +108,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Templater](https://community.obsidian.md/plugins/templater-obsidian) | SilentVoid13; maintained by Zachatoo | AGPL-3.0 |
 | [Auto-Properties](https://community.obsidian.md/plugins/auto-properties) | Aaron Gillespie | MIT |
 | [Metadata Menu](https://community.obsidian.md/plugins/metadata-menu) | mdelobelle | MIT |
-| [MySnippets](https://community.obsidian.md/plugins/mysnippets-plugin) | Chetachi; compatibility work also credits Moyf | MPL-2.0 |
+| [MySnippets](https://community.obsidian.md/plugins/mysnippets-plugin) | Chetachi | MPL-2.0 |
 | [StoryLine](https://community.obsidian.md/plugins/storyline) | Jan Sandström | MIT |
 | [Daily Activity](https://community.obsidian.md/plugins/daily-activity) | Trevor Rydalch / trydalch | No licence file published upstream; runtime is installed separately and is not redistributed here |
 | [Journal Bases](https://github.com/dsebastien/obsidian-journal-base) | Sébastien Dubois / dsebastien | MIT |
@@ -122,23 +122,6 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Style Settings](https://community.obsidian.md/plugins/obsidian-style-settings) | mgmeyers / obsidian-community | GPL-3.0 |
 | [Harper](https://community.obsidian.md/plugins/harper) | Automattic and Harper contributors | Apache-2.0 |
 | [Calendar](https://github.com/liamcain/obsidian-calendar-plugin) | Liam Cain | MIT |
-
-### Vendored MySnippets compatibility runtime
-
-Unlike most third-party plugin bundles, these files are intentionally tracked:
-
-- `Vault/.obsidian/plugins/mysnippets-plugin/main.js`;
-- `Vault/.obsidian/plugins/mysnippets-plugin/styles.css`; and
-- the related manifest and configuration.
-
-The compatibility runtime is based on MySnippets by Chetachi and compatibility work maintained in `Moyf/MySnippets`.
-
-That runtime remains under the Mozilla Public License 2.0. Its file header identifies the applicable licence and upstream work. The repository MIT licence does not apply to it.
-
-The complete local compliance record is:
-
-- [`LICENSES/MPL-2.0.txt`](LICENSES/MPL-2.0.txt) — official Mozilla Public License 2.0 text; and
-- [`LICENSES/MySnippets-NOTICE.md`](LICENSES/MySnippets-NOTICE.md) — upstream basis, covered files, recorded VISCERIUM modifications, and source-availability notice.
 
 ### First-party VISCERIUM plugins
 
@@ -186,9 +169,8 @@ The repository checks that:
 
 - the managed direct-dependency declaration matches the current `package.json` files, including declared version constraints;
 - the managed lifecycle-script approval table matches the exact `allowScripts` entries in the npm package manifests;
-- every direct `Site/package.json` dependency is still named or explicitly covered in the human-authored attribution sections outside the managed dependency block;
-- every enabled non-first-party Obsidian plugin is represented here; and
-- the vendored MySnippets exception retains its MPL header, licence text, modification notice, and source-availability notice.
+- every direct `Site/package.json` dependency is still named or explicitly covered in the human-authored attribution sections outside the managed dependency block; and
+- every enabled non-first-party Obsidian plugin is represented here.
 
 These checks prevent silent dependency and attribution drift, but they do not replace a complete release audit of transitive dependencies and distributed artefacts.
 

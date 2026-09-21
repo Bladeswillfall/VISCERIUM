@@ -49,10 +49,9 @@
     {
       "id": "mysnippets-plugin",
       "name": "MySnippets",
-      "testedVersion": "1.2.4",
-      "source": "vendored-modified",
-      "sharedSettings": "Vault/.obsidian/plugins/mysnippets-plugin/data.json",
-      "note": "The repository tracks the compatibility runtime because it contains VISCERIUM-specific Obsidian compatibility work under MPL-2.0."
+      "testedVersion": "1.2.3",
+      "source": "obsidian-community",
+      "sharedSettings": "Vault/.obsidian/plugins/mysnippets-plugin/data.json"
     },
     {
       "id": "storyline",
@@ -83,13 +82,15 @@
       "name": "VISCERIUM Timelines",
       "testedVersion": "1.2.0",
       "source": "first-party",
-      "sourcePath": "Tools/obsidian-viscerium-timelines"
+      "sourcePath": "Tools/obsidian-viscerium-timelines",
+      "runtimePath": "Vault/.obsidian/plugins/viscerium-timelines"
     },
     {
       "id": "viscerium-creator-tools",
       "name": "VISCERIUM Creator Tools",
       "testedVersion": "0.2.0",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-creator-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-creator-tools"
     },
     {
@@ -97,6 +98,7 @@
       "name": "VISCERIUM Layout Tools",
       "testedVersion": "0.2.0",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-layout-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-layout-tools"
     },
     {
@@ -104,6 +106,7 @@
       "name": "VISCERIUM Image Tools",
       "testedVersion": "0.2.1",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-image-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-image-tools"
     },
     {
@@ -111,6 +114,7 @@
       "name": "VISCERIUM Journal Tools",
       "testedVersion": "0.1.0",
       "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-journal-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-journal-tools"
     },
     {

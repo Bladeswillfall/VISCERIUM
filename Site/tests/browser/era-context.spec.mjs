@@ -58,6 +58,18 @@ test('Telescope search is scoped to the active era plus Universal pages', async 
   expect(leakage).toEqual([]);
 });
 
+test('sidebar hides Overview rows without breaking category overview navigation', async ({ page }) => {
+  await page.goto(`${preview}/eras/citadel/events/the-ash-winter-pilgrimage/`, { waitUntil: 'networkidle' });
+
+  await expect(page.locator('[data-sidebar-row="Overview"]')).toHaveCount(0);
+  await expect(page.locator('.codex-breadcrumbs a[href="/eras/citadel/events/"]')).toContainText('Events');
+
+  await page.goto(`${preview}/eras/citadel/events/`, { waitUntil: 'networkidle' });
+
+  await expect(page.locator('[data-sidebar-row="Overview"]')).toHaveCount(0);
+  await expect(page.locator('[data-era-sidebar-branch="CITADEL"] [data-sidebar-row="Events"] > details')).toHaveAttribute('open', '');
+});
+
 test.describe('mobile era context', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
@@ -173,7 +185,7 @@ test.describe('mobile era context', () => {
       const eraLabel = eraRow?.querySelector('.large');
       const categoryRow = eraBranch?.querySelector('[data-sidebar-row="Events"] > details > summary');
       const categoryLabel = categoryRow?.querySelector('.large');
-      const leafRow = eraBranch?.querySelector('[data-sidebar-row="Overview"] > a');
+      const leafRow = eraBranch?.querySelector('[data-sidebar-row="Relationships"] > a');
 
       if (!(toolbar instanceof HTMLElement)
         || !(rootRow instanceof HTMLElement)

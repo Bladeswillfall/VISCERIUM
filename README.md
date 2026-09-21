@@ -1,133 +1,91 @@
-[![VISCERIUM banner](Vault/Assets/Images/viscerium-banner.webp)](https://www.viscerium.co.uk/)
+<div align="center">
+  <a href="https://www.viscerium.co.uk/">
+    <img src="Vault/Assets/Images/viscerium-banner.webp" alt="VISCERIUM banner" width="100%" />
+  </a>
 
-# VISCERIUM
+  <h1>VISCERIUM</h1>
 
-> **One timeline. Four eras. Infinite stories.**
+  <p><strong><em>One timeline. Four eras. Infinite stories.</em></strong></p>
 
-[![Creative IP: All Rights Reserved](https://img.shields.io/badge/Creative_IP-All_Rights_Reserved-8B1E1E?style=flat-square)](LICENSE.md)
-[![First-party code: MIT](https://img.shields.io/badge/First--party_Code-MIT-2E7D32?style=flat-square)](LICENSE-CODE.md)
-[![Third-party software: Upstream licences](https://img.shields.io/badge/Third--party_Software-Upstream_Licences-355C7D?style=flat-square)](THIRD_PARTY_NOTICES.md)
-
-[![Canon: No generative AI](https://img.shields.io/badge/Canon-No_Generative_AI-624A7B?style=flat-square)](ATTRIBUTION.md)
-
-**Licensing summary:** VISCERIUM's creative universe is proprietary and all rights reserved. Original first-party software is open source under the MIT License. Third-party components remain governed by their respective upstream licences.
+  <p>
+    <a href="LICENSE.md"><img src="https://img.shields.io/badge/Creative_IP-All_Rights_Reserved-484137?style=for-the-badge&labelColor=101010" alt="Creative IP: All Rights Reserved" /></a>
+    <a href="LICENSE-CODE.md"><img src="https://img.shields.io/badge/First--party_Code-MIT-484137?style=for-the-badge&labelColor=101010" alt="First-party code: MIT" /></a>
+    <a href="ATTRIBUTION.md"><img src="https://img.shields.io/badge/Creative_Canon-Human--made-484137?style=for-the-badge&labelColor=101010" alt="Creative canon: Human-made" /></a>
+    <a href="THIRD_PARTY_NOTICES.md"><img src="https://img.shields.io/badge/Third--party_Software-Upstream_Licences-484137?style=for-the-badge&labelColor=101010" alt="Third-party software: Upstream licences" /></a>
+    <a href="https://github.com/Bladeswillfall/VISCERIUM"><img src="https://img.shields.io/github/repo-size/Bladeswillfall/VISCERIUM?style=for-the-badge&color=484137&labelColor=101010&logo=github&logoColor=c8bfa8" alt="Repository size" /></a>
+  </p>
+</div>
 
 VISCERIUM is a dark transmedia universe built across one continuous history.
-
-On Errack, within the shadow-veiled Degel System, humanity survives a world of lethal beauty, inherited warfare, occult power, and abominable incursions. Resonance can reshape matter and reality, but every use carries consequences. Kingdoms become republics. Rituals become sciences. Fortress walls become orbital defences.
+On Errack, beneath the shadow-veiled Degel System, humanity survives lethal beauty, inherited warfare, occult power and things that should not exist.
+Resonance can reshape matter and reality. Kingdoms become republics. Ritual becomes science. Fortress walls become orbital defences.
+Nothing resets between eras.
+History accumulates.
 
 **The world advances. The struggle does not.**
-
 ## Four eras. One wounded history.
 
 | Era | The world at that moment |
 | --- | --- |
-| **[CITADEL](https://www.viscerium.co.uk/eras/citadel/)** | Steel, bone, siegecraft, and early gunpowder. Horrors are still mistaken for folklore. |
-| **[SMOG](https://www.viscerium.co.uk/eras/smog/)** | Industry, trenches, and occult machinery. Civilisation industrialises war faster than it learns from it. |
-| **[NEARSIGHT](https://www.viscerium.co.uk/eras/nearsight/)** | Satellites, exoskeletons, and cassette futurism. Humanity believes the world is finally observable. |
-| **[ENTROPY](https://www.viscerium.co.uk/eras/entropy/)** | Orbital war, altered flesh, and extinction pressure. The old struggle escapes the planet. |
+| **[CITADEL](https://www.viscerium.co.uk/eras/citadel/)** | Steel, bone, siegecraft and early gunpowder. Horrors still pass for folklore. |
+| **[SMOG](https://www.viscerium.co.uk/eras/smog/)** | Industry, trenches and occult machinery. War industrialises faster than humanity learns from it. |
+| **[NEARSIGHT](https://www.viscerium.co.uk/eras/nearsight/)** | Satellites, exoskeletons and cassette futurism. Humanity thinks the world is finally observable. |
+| **[ENTROPY](https://www.viscerium.co.uk/eras/entropy/)** | Orbital war, altered flesh and extinction pressure. The old struggle leaves the planet. |
 
-These are not separate settings. Each era inherits the damage, discoveries, cultures, lies, and unfinished conflicts of the one before it.
+Different centuries. Same history.
+
+Every era inherits what the last one built, buried, misunderstood or failed to kill.
 
 ## Enter the Codex
+The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of the setting.  
+**[Start here](https://www.viscerium.co.uk/start-here/)** for the introduction.  
+**[Follow the timeline](https://www.viscerium.co.uk/timelines/super/)** to watch history accumulate.  
+**[Enter the Codex](https://www.viscerium.co.uk/)** to explore directly.
 
-The **[VISCERIUM Codex](https://www.viscerium.co.uk/)** is the public archive of the setting: its peoples, creatures, factions, histories, technologies, mysteries, and connected timeline.
+## What is this repository?
+The source of the public Codex and the machinery that builds it.
+- `Vault/` — published Lore and shared creator documentation.
+- `Site/` — the Astro/Starlight website.
+- `Tools/` — maintained creator-facing tools and first-party Obsidian plugin source.
+- `Services/` — standalone first-party services.
+- `Infrastructure/` — deployment and runtime infrastructure.
+- `Architecture/` — how the pieces fit together.
+  
+Unpublished Lore, stories, working files and private material live in the separate `VISCERIUM-Workshop` repository.  
+**If GitHub can read it here, it is public.** Hiding a file from the website does not make it private.
 
-- **[Start Here](https://www.viscerium.co.uk/start-here/)**: the guided introduction to VISCERIUM and the Degel System.
-- **[Explore the timeline](https://www.viscerium.co.uk/timelines/super/)**: trace the events that connect all four eras.
-- **[Browse the Codex](https://www.viscerium.co.uk/)**: choose an era and enter the world directly.
-
-## What lives in this repository
-
-This repository contains both the source archive and the machinery behind the public Codex.
-
-- `Vault/` is the LIVE Obsidian vault with published Lore and shared creator tools.
-- The private sibling `VISCERIUM-Workshop/Vault/` holds drafts, stories, journals, migration data, and unpublished assets.
-- `Site/` contains the Astro and Starlight website.
-- `Tools/` contains creator-facing tools and integrations.
-- `Architecture/` documents the systems that connect the vault, generators, and public site.
-
-The public website is generated from reviewed, published source notes. The repository is therefore not only a website project; it is the working infrastructure for a growing fictional universe.
-
-## Public and private vaults
-
-Open each repository's `Vault/` folder separately in Obsidian. Keep unpublished Lore in `VISCERIUM-Workshop/Vault/Drafts/Lore/`, preserving the intended Lore folder structure. The Workshop setup script links public canon and shared resources into the private vault and keeps plugin state separate.
-
-To publish, review the note and its assets in Workshop, set `status: published`, and move the approved note into the matching public `Vault/Lore/` path through a pull request. Archive any private working copy in Workshop. Changing status alone does not transfer a file between repositories.
-
-GitHub can read every tracked file in this public repository, including notes the website excludes. Repository checks reject private folders and unpublished Lore. This split removes files from the current tree, not from historical commits.
-
-## Creation, authorship, and rights
-
+## Authorship & rights
 **Elias Vail — Founder and Creator of VISCERIUM**
 
-> **VISCERIUM was created and authored by Elias Vail. Its published lore and creative canon are human-made and are not generated by AI.**
-
-The current creative-rights notice is:
-
+Published VISCERIUM Lore and creative canon are human-made.
 <!-- RIGHTS:VISCERIUM_CURRENT:START -->
 > **VISCERIUM created by Elias Vail. © 2021–2026 Elias Vail. All rights reserved.**
 <!-- RIGHTS:VISCERIUM_CURRENT:END -->
+VISCERIUM's Lore, fiction, artwork, maps, characters, factions, branding and other creative material remain proprietary.
 
-NULL Holdings Ltd is the intended future IP-holding company for VISCERIUM. It has not yet been incorporated, and no VISCERIUM rights have been assigned to it.
+**Public repository does not mean public domain.**
+Original first-party code is separately available under the **[MIT License](LICENSE-CODE.md)**. Third-party software keeps its own upstream licences.
 
-The planned role upon incorporation is:
+The software licence does not grant rights to the world it happens to display.
 
-> **Elias Vail — Founder and Creator of VISCERIUM; Founder and Group Creative Director of NULL Holdings Ltd.**
-
-After incorporation and a formal written assignment, the intended creative-rights notice is:
+See **[LICENSE.md](LICENSE.md)** for the full licence map, **[ATTRIBUTION.md](ATTRIBUTION.md)** for authorship and contributor credit, and **[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)** for external components.
+NULL Holdings Ltd is the intended future IP-holding company for VISCERIUM. It has not been incorporated and no VISCERIUM rights have been assigned to it.
+If that changes, it changes formally — not retroactively by aspiration.
 
 <!-- RIGHTS:VISCERIUM_PLANNED:START -->
 > **VISCERIUM created by Elias Vail. © 2021–2026 NULL Holdings Ltd. All rights reserved.**
 <!-- RIGHTS:VISCERIUM_PLANNED:END -->
 
-### Creative material
-
-VISCERIUM Lore, canon, fiction, articles, artwork, maps, characters, factions, branding, and other original creative material remain proprietary and all rights reserved.
-
-Public access does not place that material in the public domain or grant permission to reproduce, adapt, distribute, commercially exploit, or use it as generative-AI training material.
-
-### Software
-
-Original first-party website code, build scripts, tests, and VISCERIUM creator-tool code are open source under the **[MIT License](LICENSE-CODE.md)**.
-
-That software licence does not grant rights to VISCERIUM's Lore, artwork, maps, branding, canon, or other creative assets processed or displayed by the software.
-
-Astro, Starlight, Obsidian integrations, map tools, graph tools, timeline libraries, search libraries, fonts, and other third-party components remain subject to their respective upstream licences. See **[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)**.
-
-Read **[LICENSE.md](LICENSE.md)** for the full repository licence map and **[ATTRIBUTION.md](ATTRIBUTION.md)** for creator and contributor credit.
-
 ## Get involved
+Found a typo, broken link, bad fact or site bug? **[Report it](https://www.viscerium.co.uk/support/).**  
+Want to improve the code, documentation, accessibility, tooling or interface? Read **[CONTRIBUTING.md](CONTRIBUTING.md)** and open a pull request.  
+Want to make something stranger? Writing, artwork and other creative collaborations start through the **[contact page](https://www.viscerium.co.uk/contact/)**.  
+A pull request does not transfer copyright or make something canon.  
+VISCERIUM remains curated.  
 
-VISCERIUM is intended to grow through readers, players, artists, writers, developers, and other collaborators who care about deep worlds and strong creative identity.
-
-### Improve the Codex
-
-Report typos, broken links, content corrections, site bugs, or feature ideas through the **[support page](https://www.viscerium.co.uk/support/)**.
-
-### Contribute to the repository
-
-Code, documentation, accessibility, tooling, testing, and interface improvements are welcome through pull requests. Read **[CONTRIBUTING.md](CONTRIBUTING.md)** before changing the repository.
-
-Opening a pull request does not transfer copyright or make a contribution part of VISCERIUM canon. Accepted code contributions to MIT-covered paths are distributed under the repository's MIT software licence. Creative canon contributions require separate written contributor terms before acceptance.
-
-### Propose a creative collaboration
-
-For writing, artwork, games, animation, film, rights, credit, or other collaboration discussions, use the **[contact page](https://www.viscerium.co.uk/contact/)**. If private contact is paused, use the public support channels for non-sensitive proposals and keep confidential details out of public issues.
-
-VISCERIUM remains a curated setting. Suggestions and contributions are reviewed for continuity, quality, tone, and technical fit before they become part of the published Codex.
-
-## Maintainer documentation
-
-Operational instructions have been moved out of this front page.
-
-- **Creators:** start in **[`Vault/Home.md`](Vault/Home.md)**.
-- **Repository operations:** use the **[Creator Command Reference](Vault/System/SOPs/Creator%20Command%20Reference.md)** for exact commands and working directories.
-- **Contributors:** start with **[CONTRIBUTING.md](CONTRIBUTING.md)**.
-- **[Repository licence map](LICENSE.md)**
-- **[Open-source code licence](LICENSE-CODE.md)**
-- **[Third-party notices](THIRD_PARTY_NOTICES.md)**
-- **[Attribution and creator credit](ATTRIBUTION.md)**
-- **[Standard Operating Procedures](Vault/System/SOPs/SOP%20Index.md)**
-- **[Codex Publishing and Deployment SOP](Vault/System/SOPs/Codex%20Publishing%20and%20Deployment%20SOP.md)**
-- **[Architecture Guide](Architecture/README.md)**
+## Working here
+**Creators:** [`Vault/Home.md`](Vault/Home.md)  
+**Contributors:** [CONTRIBUTING.md](CONTRIBUTING.md)  
+**Repository operations:** [Creator Command Reference](Vault/System/SOPs/Creator%20Command%20Reference.md)  
+**Publishing:** [Codex Publishing and Deployment SOP](Vault/System/SOPs/Codex%20Publishing%20and%20Deployment%20SOP.md)  
+**Architecture:** [Architecture Guide](Architecture/README.md)

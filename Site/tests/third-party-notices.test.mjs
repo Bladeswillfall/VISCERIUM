@@ -66,20 +66,3 @@ test('every enabled Obsidian community plugin is represented in third-party noti
     );
   }
 });
-
-test('the vendored MySnippets exception carries MPL source and modification notices', () => {
-  const runtime = read('Vault/.obsidian/plugins/mysnippets-plugin/main.js');
-  const notice = read('LICENSES/MySnippets-NOTICE.md');
-  const licence = read('LICENSES/MPL-2.0.txt');
-  const thirdParty = read('THIRD_PARTY_NOTICES.md');
-
-  assert.match(runtime, /This Source Code Form is subject to the terms of the Mozilla Public/);
-  assert.match(runtime, /License, v\. 2\.0/);
-  assert.match(runtime, /Additional compatibility work in this repository/);
-  assert.match(notice, /Recorded VISCERIUM modifications/);
-  assert.match(notice, /Source Code Form/);
-  assert.match(licence, /^Mozilla Public License Version 2\.0/m);
-  assert.match(licence, /Exhibit A - Source Code Form License Notice/);
-  assert.match(thirdParty, /LICENSES\/MPL-2\.0\.txt/);
-  assert.match(thirdParty, /LICENSES\/MySnippets-NOTICE\.md/);
-});

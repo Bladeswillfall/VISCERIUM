@@ -1,6 +1,7 @@
 ---
 import siteConfig from '../../site.config.mjs';
 import { slugToRoute } from '../lib/codex-paths.mjs';
+import CodexIcon from './CodexIcon.astro';
 
 const { entry } = Astro.locals.starlightRoute;
 const communityId = entry.data.community_id;
@@ -23,9 +24,7 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
         aria-describedby={breakdownId}
         disabled
       >
-        <svg class="kudos-heart" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"></path>
-        </svg>
+        <CodexIcon spec="favorite" class="kudos-heart" />
         <span data-kudos-count hidden></span>
         <span>Appreciate</span>
       </button>
@@ -302,13 +301,6 @@ const breakdownId = communityId ? `kudos-breakdown-${communityId}` : undefined;
     inline-size: 1.15rem;
     block-size: 1.15rem;
     flex: none;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-  }
-
-  .kudos-button[aria-pressed='true'] .kudos-heart {
-    fill: currentColor;
   }
 
   .kudos-breakdown {
