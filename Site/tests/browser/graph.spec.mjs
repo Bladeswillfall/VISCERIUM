@@ -229,40 +229,43 @@ async function inspectGraph(page, viewport, theme) {
     const renderedCanvas = element.querySelector('canvas');
     const cy = element._cyreg?.cy;
     const nodes = cy?.nodes().toArray() ?? [];
-    const components = cy?.elements().components()
-      .map((component) => component.nodes())
-      .filter((componentNodes) => componentNodes.length)
-      .sort((left, right) => right.length - left.length) ?? [];
-    const core = components[0]?.length > 1 ? components.shift() : null;
-    const orbit = components;
-    const centre = core
-      ? (() => {
-          const box = core.boundingBox();
-          return { x: box.x1 + box.w / 2, y: box.y1 + box.h / 2 };
-        })()
-      : orbit.length
-        ? orbit.reduce((sum, componentNodes) => {
-            const box = componentNodes.boundingBox();
-            return {
-              x: sum.x + box.x1 + box.w / 2,
-              y: sum.y + box.y1 + box.h / 2,
-            };
-          }, { x: 0, y: 0 })
-        : { x: 0, y: 0 };
-    if (!core && orbit.length) {
-      centre.x /= orbit.length;
-      centre.y /= orbit.length;
-    }
-    const orbitDistances = orbit.map((componentNodes) => {
-      const box = componentNodes.boundingBox();
-      return Math.hypot(
-        box.x1 + box.w / 2 - centre.x,
-        box.y1 + box.h / 2 - centre.y,
-      );
-    });
-    const orbitRadiusSpread = orbitDistances.length
-      ? Math.max(...orbitDistances) - Math.min(...orbitDistances)
-      : 0;
+    const radialLayout = (() => {
+      const components = cy?.elements().components()
+        .map((component) => component.nodes())
+        .filter((componentNodes) => componentNodes.length)
+        .sort((left, right) => right.length - left.length) ?? [];
+      const core = components[0]?.length > 1 ? components.shift() : null;
+      const orbit = components;
+      if (!orbit.length) return { orbitCount: 0, orbitRadiusSpread: 0 };
+
+      let centre;
+      if (core) {
+        const box = core.boundingBox();
+        centre = { x: box.x1 + box.w / 2, y: box.y1 + box.h / 2 };
+      } else {
+        centre = orbit.reduce((sum, componentNodes) => {
+          const box = componentNodes.boundingBox();
+          return {
+            x: sum.x + box.x1 + box.w / 2,
+            y: sum.y + box.y1 + box.h / 2,
+          };
+        }, { x: 0, y: 0 });
+        centre.x /= orbit.length;
+        centre.y /= orbit.length;
+      }
+
+      const distances = orbit.map((componentNodes) => {
+        const box = componentNodes.boundingBox();
+        return Math.hypot(
+          box.x1 + box.w / 2 - centre.x,
+          box.y1 + box.h / 2 - centre.y,
+        );
+      });
+      return {
+        orbitCount: orbit.length,
+        orbitRadiusSpread: Math.max(...distances) - Math.min(...distances),
+      };
+    })();
     let overlappingNodes = false;
     for (let left = 0; left < nodes.length && !overlappingNodes; left += 1) {
       for (let right = left + 1; right < nodes.length; right += 1) {
@@ -283,8 +286,7 @@ async function inspectGraph(page, viewport, theme) {
       bitmapHeight: renderedCanvas?.height ?? 0,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       overlappingNodes,
-      orbitCount: orbit.length,
-      orbitRadiusSpread,
+      ...radialLayout,
     };
   });
   expect(geometry.width).toBeGreaterThan(240);
