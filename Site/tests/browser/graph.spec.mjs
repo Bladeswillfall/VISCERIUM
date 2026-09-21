@@ -14,39 +14,25 @@ async function installTheme(page, theme) {
 }
 
 async function hoverConnectedNode(page, graph, canvas) {
-  const box = await canvas.boundingBox();
-  if (!box) return null;
-  let seed = 29;
-  for (let index = 0; index < 220; index += 1) {
-    seed = (seed * 48_271) % 2_147_483_647;
-    const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
-    seed = (seed * 48_271) % 2_147_483_647;
-    const y = box.y + 12 + (seed % Math.max(1, Math.floor(box.height - 24)));
-    await page.mouse.move(x, y);
-    const source = await graph.getAttribute('data-world-graph-context');
-    const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
-    const id = await graph.getAttribute('data-world-graph-active-id');
-    if (source === 'pointer' && neighbours === 1 && id) return { x, y, id };
-  }
-  return null;
-}
-
-async function approximateNodeCentre(page, graph, hovered) {
-  const xs = [];
-  for (let dx = -26; dx <= 26; dx += 2) {
-    await page.mouse.move(hovered.x + dx, hovered.y);
-    if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) xs.push(hovered.x + dx);
-  }
-  if (!xs.length) return hovered;
-  const x = (Math.min(...xs) + Math.max(...xs)) / 2;
-
-  const ys = [];
-  for (let dy = -26; dy <= 26; dy += 2) {
-    await page.mouse.move(x, hovered.y + dy);
-    if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) ys.push(hovered.y + dy);
-  }
-  if (!ys.length) return { x, y: hovered.y, id: hovered.id };
-  return { x, y: (Math.min(...ys) + Math.max(...ys)) / 2, id: hovered.id };
+  const point = await canvas.evaluate((element) => {
+    const cy = element._cyreg?.cy;
+    const node = cy?.nodes()
+      .filter((candidate) => candidate.connectedEdges().length === 1)
+      .first();
+    if (!node?.length) return null;
+    const position = node.renderedPosition();
+    const bounds = element.getBoundingClientRect();
+    return {
+      x: bounds.left + position.x,
+      y: bounds.top + position.y,
+      id: node.id(),
+    };
+  });
+  if (!point) return null;
+  await page.mouse.move(point.x, point.y);
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
+  await expect(graph).toHaveAttribute('data-world-graph-active-id', point.id);
+  return point;
 }
 
 async function emitSyntheticTouch(page, canvas, type, point, identifier = 91) {
@@ -324,7 +310,7 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
-  const centre = await approximateNodeCentre(page, graph, hovered);
+  const centre = hovered;
   await page.mouse.move(centre.x, centre.y);
   await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
   expect(Number(await graph.getAttribute('data-world-graph-neighbour-count'))).toBeGreaterThan(0);
@@ -398,7 +384,7 @@ test('World Graph expanded touch target selects a node without becoming backgrou
 
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
-  const centre = await approximateNodeCentre(page, graph, hovered);
+  const centre = hovered;
   const candidates = [];
   for (let distance = 16; distance <= 26; distance += 1) {
     for (let direction = 0; direction < 16; direction += 1) {
@@ -451,7 +437,7 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
 
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
-  const centre = await approximateNodeCentre(page, graph, hovered);
+  const centre = hovered;
   await page.mouse.move(centre.x, centre.y);
   await expect(graph).toHaveAttribute('data-world-graph-active-id', hovered.id);
   const initialZoom = Number(await graph.getAttribute('data-world-graph-zoom'));
