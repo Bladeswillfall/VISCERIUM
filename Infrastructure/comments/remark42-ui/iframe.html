@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="modulepreload" href="remark.mjs" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Comments</title>
+    <base target="_blank" />
+    <!--
+      Based on Remark42 v1.16.4's production iframe template (MIT).
+      VISCERIUM's only behavioural change is the no-upload UI guard below.
+      Review this file whenever the pinned Remark42 release changes.
+    -->
+    <style>
+      /* Hide the upload affordance immediately; the script below also removes
+         dynamically-created upload controls from reply/edit forms. */
+      label:has(input[type='file']) {
+        display: none !important;
+      }
+    </style>
+    <script>
+      if (window.location.search === '?selfClose') {
+        window.close();
+      }
+      (function () {
+        try {
+          var pairs = window.location.search.substring(1).split('&');
+          var theme = '';
+
+          for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i].split('=');
+            if (pair[0] === 'theme') {
+              theme = decodeURIComponent(pair[1] || '');
+              break;
+            }
+          }
+
+          document.documentElement.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
+        } catch (e) {}
+      })();
+      (function () {
+        function isCSSVariablesSupported() {
+          if (typeof window === 'undefined') {
+            return true;
+          }
+
+          return window.CSS && window.CSS.supports && window.CSS.supports('color', 'var(--fake-var)');
+        }
+        if (isCSSVariablesSupported()) {
+          try {
+            var name = JSON.parse(window.name);
+            var colors = name.__colors__;
+            var root = document.documentElement;
+            if (colors) {
+              for (var color in colors) {
+                if (!color.startsWith('--')) {
+                  console.info('Key ' + color + ' must start with `--`');
+                  continue;
+                }
+                root.style.setProperty(color, colors[color]);
+              }
+            }
+          } catch (e) {}
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="remark.css" />
+  </head>
+  <body>
+    <div id="remark42">
+      <div class="preloader preloader_view_iframe"></div>
+    </div>
+    <script>
+      var commentHashPattern = /^#remark42__comment-([A-Za-z0-9_-]{1,128})$/;
+
+      window.addEventListener('message', function receiveMessages(event) {
+        try {
+          // The embedding page is the only legitimate sender. This mirrors
+          // Remark42's own isFromParent() check and rejects messages from any
+          // other window that happens to hold a reference to the iframe.
+          if (event.source !== window.parent) return;
+
+          const data = event.data;
+          const isObj = typeof data === 'object' && data !== null && !Array.isArray(data);
+          if (!isObj) return;
+
+          const hashMatch = typeof data.hash === 'string' ? commentHashPattern.exec(data.hash) : null;
+          if (hashMatch) {
+            // Reconstruct the fragment from a strict comment-id alphabet and
+            // URL-encode the captured value before it reaches a navigation API.
+            const safeCommentId = encodeURIComponent(hashMatch[1]);
+            location.replace('#remark42__comment-' + safeCommentId);
+          }
+
+          if (typeof data.title === 'string') {
+            document.title = data.title.slice(0, 512);
+          }
+        } catch (e) {}
+      });
+
+      var remark_config =
+        window.location.search.length < 2
+          ? {}
+          : window.location.search
+              .substring(1)
+              .split('&')
+              .reduce(function (c, x) {
+                var splitted = x.split('=');
+                if (!splitted[1]) {
+                  splitted[1] = '';
+                }
+                c[splitted[0]] = decodeURIComponent(splitted[1]);
+                return c;
+              }, {});
+
+      window.parent.postMessage({ inited: true }, '*');
+    </script>
+    <script>
+      (function () {
+        'use strict';
+
+        function removeInput(input) {
+          if (!input) return;
+          var label = input.closest && input.closest('label');
+          (label || input).remove();
+        }
+
+        function removeUploadControls(root) {
+          if (!root) return;
+          if (root.matches && root.matches("input[type='file']")) removeInput(root);
+          if (!root.querySelectorAll) return;
+          root.querySelectorAll("input[type='file']").forEach(removeInput);
+        }
+
+        function containsImageTransfer(event) {
+          var transfer = event.clipboardData || event.dataTransfer;
+          if (!transfer) return false;
+
+          if (transfer.files) {
+            for (var i = 0; i < transfer.files.length; i++) {
+              if ((transfer.files[i].type || '').indexOf('image/') === 0) return true;
+            }
+          }
+
+          if (transfer.items) {
+            for (var j = 0; j < transfer.items.length; j++) {
+              var item = transfer.items[j];
+              if (item.kind === 'file' && (item.type || '').indexOf('image/') === 0) return true;
+            }
+          }
+
+          return false;
+        }
+
+        function blockImageTransfer(event) {
+          if (!containsImageTransfer(event)) return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+
+        document.addEventListener('paste', blockImageTransfer, true);
+        document.addEventListener('drop', blockImageTransfer, true);
+        document.addEventListener('dragover', blockImageTransfer, true);
+
+        function startGuard() {
+          removeUploadControls(document);
+          var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              mutation.addedNodes.forEach(function (node) {
+                if (node.nodeType === 1) removeUploadControls(node);
+              });
+            });
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', startGuard, { once: true });
+        } else {
+          startGuard();
+        }
+      })();
+    </script>
+    <script>
+      (function (d) {
+        var r = d.head || d.body;
+        var s = d.createElement('script');
+        var m = 'noModule' in s;
+        s.src = 'remark' + (m ? '.mjs' : '.js');
+        m && (s.type = 'module');
+        s.async = true;
+        s.defer = true;
+        r.appendChild(s);
+      })(document);
+    </script>
+  </body>
+</html>

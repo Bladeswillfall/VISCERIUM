@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+repo_root="$(git rev-parse --show-toplevel)"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "VISCERIUM pre-commit guard requires Node.js in PATH." >&2
+  echo "Commit stopped so repository governance files cannot be removed silently." >&2
+  exit 1
+fi
+
+exec node "$repo_root/Site/scripts/check-repository-baseline.mjs" --staged

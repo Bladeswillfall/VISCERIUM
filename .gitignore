@@ -30,16 +30,6 @@ Site/playwright-report/
 Tools/obsidian-viscerium-timelines/node_modules/
 Tools/obsidian-viscerium-timelines/dist/
 
-# Local AI tooling and review artifacts
-Tools/.ollama/
-slopo.conf.yaml
-slopo.db
-slopo.agent.log
-slopo.ignore.txt
-slopo-report/
-plans/
-result.json
-
 # Installed Obsidian community plugins
 # Track enabled plugin IDs in Vault/.obsidian/community-plugins.json.
 # Track tested versions in Vault/System/Obsidian Plugin Profile.json.
