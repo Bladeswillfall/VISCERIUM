@@ -42,6 +42,15 @@ import articlePagesStylesheet from '../styles/article-pages.css?url';
     <p>The Codex uses local browser storage for site preferences and state, including sensitive-media preferences, remembered era context and a local identifier used by Kudos. Clear VISCERIUM site data in your browser to remove it.</p>
     <p>Remark42 and any sign-in provider you choose may also use cookies or similar storage to keep you signed in. VISCERIUM does not use advertising cookies or advertising profiles.</p>
 
+    <h2>Kudos</h2>
+    <p>When you use Kudos, the site creates a random identifier in your browser and sends it to VISCERIUM's same-origin Kudos API. The API derives an HMAC from that identifier with a server secret. It does not store the browser identifier itself.</p>
+    <p>When you appreciate a page, the Kudos database stores the page's community ID, that HMAC and the time of the appreciation. Removing your appreciation deletes the matching record. The current database schema has no automatic expiry for Kudos records. Clearing VISCERIUM site data removes the browser identifier, but it does not delete an appreciation record that was already stored on the server.</p>
+
+    <h2>Private contact</h2>
+    <p>When the private contact form is enabled, it collects your name, email address, subject and message. It also sends the Turnstile response produced by the anti-abuse check. The form submits this data to a separate Cloudflare Worker.</p>
+    <p>The repository-owned Worker contract requires the Worker to verify the Turnstile response, validate the request and form fields, avoid logging message bodies or credentials, and use Resend to deliver the message by email. Your submitted email address is used as Reply-To, not as the sender address.</p>
+    <p>BEFORE PUBLICATION: verify the live contact Worker and the retention periods that apply to Cloudflare, Resend and any related infrastructure logs; then replace this note with the verified details.</p>
+
     <h2>Open-web features</h2>
     <p>VISCERIUM can use <a href="https://webmention.io/">Webmention.io</a> to receive public references to Codex pages from other websites. Webmentions are public web references, not private messages.</p>
 
