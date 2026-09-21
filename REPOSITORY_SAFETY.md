@@ -12,8 +12,6 @@ The following governance/compliance files are required:
 - `LICENSE.md`
 - `LICENSE-CODE.md`
 - `THIRD_PARTY_NOTICES.md`
-- `LICENSES/MPL-2.0.txt`
-- `LICENSES/MySnippets-NOTICE.md`
 
 `Site/scripts/check-repository-baseline.mjs` fails when one of these files is absent. In pre-commit mode it also fails when one is staged for deletion.
 
@@ -47,7 +45,7 @@ The native Git pre-commit hook is the local hard stop when the commit path execu
 For an accidental local deletion, restore the protected files from the current commit:
 
 ```bash
-git restore --source=HEAD -- ATTRIBUTION.md LICENSE.md LICENSE-CODE.md THIRD_PARTY_NOTICES.md LICENSES/MPL-2.0.txt LICENSES/MySnippets-NOTICE.md
+git restore --source=HEAD -- ATTRIBUTION.md LICENSE.md LICENSE-CODE.md THIRD_PARTY_NOTICES.md
 ```
 
 Then review `git status --short` before committing again.

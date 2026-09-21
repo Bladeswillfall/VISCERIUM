@@ -1,6 +1,7 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import SupportHub from '../components/support/SupportHub.astro';
+import editorialShellStylesHref from '../styles/editorial-shell.css?url&no-inline';
 import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inline';
 ---
 
@@ -12,6 +13,7 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
     tableOfContents: false,
     giscus: false,
     head: [
+      { tag: 'link', attrs: { rel: 'stylesheet', href: editorialShellStylesHref } },
       { tag: 'link', attrs: { rel: 'stylesheet', href: supportRedesignStylesHref } },
     ],
   }}
@@ -204,6 +206,12 @@ import supportRedesignStylesHref from '../styles/support-redesign.css?url&no-inl
     border-color: var(--codex-palette-mid);
     background: var(--codex-palette-deep);
     color: var(--codex-palette-light) !important;
+  }
+
+  @media (min-width: 70.001rem) {
+    body:has(.support-page) .sl-markdown-content .support-hero h1 {
+      font-size: clamp(4rem, 2.5rem + 6vw, 10.5rem);
+    }
   }
 
   @media (max-width: 48rem) {

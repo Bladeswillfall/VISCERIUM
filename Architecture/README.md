@@ -27,6 +27,7 @@ Bases, dashboards, the public website, maps, timelines, search, and graphs are v
 5. Do not hand-edit generated files under `Site/src/content/docs/`.
 6. Do not hand-edit generated map, timeline, relationship, or search data.
 7. Change the source note or generator when generated output is wrong.
+8. Edit first-party Obsidian plugin source under `Tools/`. Treat `Vault/.obsidian/plugins/viscerium-*` as checked-in runtime payloads.
 
 ## System map
 
@@ -124,13 +125,17 @@ Important rule: Dataview reads the notes. It does not own the facts.
 
 Purpose: Control era and continuity metadata on existing notes.
 
+Implementation source: `Tools/obsidian-viscerium-creator-tools/`.
+
+Runtime payload: `Vault/.obsidian/plugins/viscerium-creator-tools/`.
+
 Commands:
 
 - **Set controlled era / Universal scope**;
 - **Set continuity entity ID**;
 - **Create era edition from current note**.
 
-Important rule: Use these commands instead of typing arbitrary era values.
+Important rule: Edit the `Tools/` source and sync the runtime payload. Use these commands instead of typing arbitrary era values.
 
 ### StoryLine
 
@@ -149,6 +154,36 @@ Implementation source: `Tools/obsidian-viscerium-timelines/`.
 Runtime bundle: `Vault/.obsidian/plugins/viscerium-timelines/`.
 
 Important rule: Edit the `Tools/` source. Do not patch the generated runtime bundle as the primary implementation.
+
+### VISCERIUM Layout Tools
+
+Purpose: Provide presentation-only Markdown layout helpers inside Obsidian.
+
+Implementation source: `Tools/obsidian-viscerium-layout-tools/`.
+
+Runtime payload: `Vault/.obsidian/plugins/viscerium-layout-tools/`.
+
+Important rule: Edit the `Tools/` source and sync the runtime payload.
+
+### VISCERIUM Image Tools
+
+Purpose: Render article header images and authored image-layout flags inside Obsidian.
+
+Implementation source: `Tools/obsidian-viscerium-image-tools/`.
+
+Runtime payload: `Vault/.obsidian/plugins/viscerium-image-tools/`.
+
+Important rule: Edit the `Tools/` source and sync the runtime payload.
+
+### VISCERIUM Journal Tools
+
+Purpose: Bridge Daily Activity into the Chronicle daily-note snapshot workflow.
+
+Implementation source: `Tools/obsidian-viscerium-journal-tools/`.
+
+Runtime payload: `Vault/.obsidian/plugins/viscerium-journal-tools/`.
+
+Important rule: Edit the `Tools/` source and sync the runtime payload.
 
 ### Chronos
 
@@ -381,7 +416,7 @@ The normal checks perform these operations:
 6. Build the VISCERIUM Timelines Obsidian plugin.
 7. Install the browser runtime.
 8. Run Playwright browser checks against the preview site.
-9. Confirm that the generated plugin bundle matches the committed runtime.
+9. Confirm that first-party Obsidian source or build output matches the checked-in Vault runtime payloads.
 
 ## Generated files
 
@@ -394,7 +429,7 @@ Treat these paths as generated output:
 - generated search-scope metadata;
 - `Site/dist/`;
 - `Tools/obsidian-viscerium-timelines/dist/`;
-- the tracked VISCERIUM Timelines runtime bundle under `Vault/.obsidian/plugins/`.
+- the tracked first-party runtime payloads under `Vault/.obsidian/plugins/viscerium-*/`.
 
 Change the authoritative source instead of editing generated output.
 
@@ -404,6 +439,7 @@ Change the authoritative source instead of editing generated output.
 | --- | --- |
 | Creator property or schema | `Vault/System/SOPs/Schema Change SOP.md` |
 | Creator workflow or command | `Vault/System/SOPs/Creator Command Reference.md` |
+| First-party Obsidian plugin | `Tools/obsidian-viscerium-*/` and `Tools/scripts/sync-obsidian-plugins.mjs` |
 | Era or continuity behaviour | `Vault/System/SOPs/Era Edition Workflow SOP.md` and `Site/src/lib/era-context.mjs` |
 | World Anvil migration UX | `VISCERIUM-Workshop/Vault/Drafts/Inbox/World Anvil Migration Review.md` and `Site/scripts/apply-worldanvil-base-triage.mjs` |
 | Public content transformation | `Site/scripts/sync-public-notes.mjs` |

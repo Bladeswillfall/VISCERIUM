@@ -1,0 +1,238 @@
+---
+interface LanguageOption {
+  locale: string;
+  href: string;
+  nativeLabel: string;
+  secondaryLabel?: string;
+  secondaryLang?: string;
+  flag: 'gb' | 'fr' | 'de';
+  current?: boolean;
+}
+
+interface Props {
+  triggerLabel: string;
+  panelLabel: string;
+  options: LanguageOption[];
+}
+
+const { triggerLabel, panelLabel, options } = Astro.props;
+const flagSrc = {
+  gb: '/flags/gb.svg',
+  fr: '/flags/fr.svg',
+  de: '/flags/de.svg',
+} as const;
+---
+
+<details class="codex-language-menu" data-codex-language-menu>
+  <summary class="codex-language-menu__trigger">
+    <span class="codex-language-menu__icon" aria-hidden="true"></span>
+    <span class="codex-language-menu__sr-only">{triggerLabel}</span>
+  </summary>
+
+  <nav class="codex-language-menu__panel" aria-label={panelLabel}>
+    <p class="codex-language-menu__title">{panelLabel}</p>
+    <ul class="codex-language-menu__list">
+      {
+        options.map((option) => (
+          <li>
+            <a
+              class="codex-language-menu__link"
+              href={option.href}
+              hreflang={option.locale}
+              aria-current={option.current ? 'page' : undefined}
+            >
+              <img
+                class="codex-language-menu__flag"
+                src={flagSrc[option.flag]}
+                alt=""
+                width="28"
+                height="18"
+              />
+              <span class="codex-language-menu__names">
+                <span class="codex-language-menu__native" lang={option.locale}>
+                  {option.nativeLabel}
+                </span>
+                {
+                  option.secondaryLabel && (
+                    <span class="codex-language-menu__secondary" lang={option.secondaryLang}>
+                      {option.secondaryLabel}
+                    </span>
+                  )
+                }
+              </span>
+              <span class="codex-language-menu__current" aria-hidden="true">✓</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</details>
+
+<style>
+  .codex-language-menu {
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 2.5rem;
+    font-family: var(--vc-font-ui, system-ui, sans-serif);
+  }
+
+  .codex-language-menu__trigger {
+    display: inline-grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--sl-color-bg-nav, var(--sl-color-black));
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .codex-language-menu__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .codex-language-menu__trigger:hover,
+  .codex-language-menu[open] .codex-language-menu__trigger {
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-white);
+  }
+
+  .codex-language-menu__trigger:focus-visible,
+  .codex-language-menu__link:focus-visible {
+    outline: 2px solid var(--sl-color-accent-high);
+    outline-offset: 2px;
+  }
+
+  .codex-language-menu__icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    background: currentColor;
+    -webkit-mask: url('/icons/i18n.svg') center / contain no-repeat;
+    mask: url('/icons/i18n.svg') center / contain no-repeat;
+  }
+
+  .codex-language-menu__panel {
+    position: absolute;
+    inset-block-start: calc(100% + .55rem);
+    inset-inline-end: 0;
+    z-index: 2;
+    width: min(19rem, calc(100vw - .8rem));
+    padding: .55rem;
+    background: color-mix(in srgb, var(--sl-color-bg-nav, var(--sl-color-black)) 88%, var(--codex-palette-deep));
+    color: var(--sl-color-white);
+  }
+
+  .codex-language-menu__title {
+    margin: 0;
+    padding: .35rem .55rem .45rem;
+    color: var(--sl-color-gray-3);
+    font-size: .72rem;
+    font-weight: 600;
+  }
+
+  .codex-language-menu__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .codex-language-menu__link {
+    display: grid;
+    grid-template-columns: 1.85rem minmax(0, 1fr) 1.25rem;
+    min-height: 3rem;
+    align-items: center;
+    gap: .7rem;
+    padding: .45rem .55rem;
+    color: var(--sl-color-white);
+    text-decoration: none;
+  }
+
+  .codex-language-menu__link:hover {
+    background: var(--sl-color-gray-6);
+  }
+
+  .codex-language-menu__link[aria-current='page'] {
+    background: color-mix(in srgb, var(--sl-color-gray-6) 76%, var(--codex-palette-deep));
+    font-weight: 600;
+  }
+
+  .codex-language-menu__flag {
+    display: block;
+    width: 1.75rem;
+    height: 1.125rem;
+    object-fit: contain;
+    justify-self: center;
+  }
+
+  .codex-language-menu__names {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    gap: .45rem;
+    line-height: 1.2;
+  }
+
+  .codex-language-menu__native {
+    color: var(--sl-color-white);
+    font-size: .9rem;
+  }
+
+  .codex-language-menu__secondary {
+    color: var(--sl-color-gray-3);
+    font-size: .74rem;
+    font-weight: 400;
+  }
+
+  .codex-language-menu__current {
+    visibility: hidden;
+    justify-self: end;
+    color: var(--sl-color-white);
+  }
+
+  .codex-language-menu__link[aria-current='page'] .codex-language-menu__current {
+    visibility: visible;
+  }
+
+  .codex-language-menu__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  @media (forced-colors: active) {
+    .codex-language-menu__icon {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+
+    .codex-language-menu__flag {
+      forced-color-adjust: none;
+    }
+  }
+</style>
+
+<script>
+  const languageMenus = [...document.querySelectorAll<HTMLDetailsElement>('[data-codex-language-menu]')];
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Node)) return;
+    for (const menu of languageMenus) {
+      if (menu.open && !menu.contains(event.target)) menu.open = false;
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const menu = languageMenus.find(({ open }) => open);
+    if (!menu) return;
+    menu.open = false;
+    menu.querySelector<HTMLElement>('summary')?.focus();
+  });
+</script>

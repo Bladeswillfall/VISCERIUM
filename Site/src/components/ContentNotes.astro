@@ -1,14 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
-import { normalisePageSlug } from '../lib/page-kind.mjs';
-
-const { starlightRoute } = Astro.locals;
-const entry = starlightRoute.entry.data;
-const fallbackId = starlightRoute.entry.id;
-const targetSlug = normalisePageSlug(entry.slug ?? fallbackId);
-const docs = await getCollection('docs');
-const sourceEntry = docs.find((doc) => doc.id === fallbackId)
-  ?? docs.find((doc) => normalisePageSlug(doc.data.slug ?? doc.id) === targetSlug);
+const { docs, sourceEntry } = Astro.props;
+const entry = Astro.locals.starlightRoute.entry.data;
 
 const authoredWarnings = Array.isArray(entry.contentWarnings)
   ? entry.contentWarnings.filter((warning) => typeof warning === 'string' && warning.trim())

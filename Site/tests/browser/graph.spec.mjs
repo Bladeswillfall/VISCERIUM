@@ -14,39 +14,25 @@ async function installTheme(page, theme) {
 }
 
 async function hoverConnectedNode(page, graph, canvas) {
-  const box = await canvas.boundingBox();
-  if (!box) return null;
-  let seed = 29;
-  for (let index = 0; index < 220; index += 1) {
-    seed = (seed * 48_271) % 2_147_483_647;
-    const x = box.x + 12 + (seed % Math.max(1, Math.floor(box.width - 24)));
-    seed = (seed * 48_271) % 2_147_483_647;
-    const y = box.y + 12 + (seed % Math.max(1, Math.floor(box.height - 24)));
-    await page.mouse.move(x, y);
-    const source = await graph.getAttribute('data-world-graph-context');
-    const neighbours = Number(await graph.getAttribute('data-world-graph-neighbour-count') ?? 0);
-    const id = await graph.getAttribute('data-world-graph-active-id');
-    if (source === 'pointer' && neighbours === 1 && id) return { x, y, id };
-  }
-  return null;
-}
-
-async function approximateNodeCentre(page, graph, hovered) {
-  const xs = [];
-  for (let dx = -26; dx <= 26; dx += 2) {
-    await page.mouse.move(hovered.x + dx, hovered.y);
-    if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) xs.push(hovered.x + dx);
-  }
-  if (!xs.length) return hovered;
-  const x = (Math.min(...xs) + Math.max(...xs)) / 2;
-
-  const ys = [];
-  for (let dy = -26; dy <= 26; dy += 2) {
-    await page.mouse.move(x, hovered.y + dy);
-    if (await graph.getAttribute('data-world-graph-active-id') === hovered.id) ys.push(hovered.y + dy);
-  }
-  if (!ys.length) return { x, y: hovered.y, id: hovered.id };
-  return { x, y: (Math.min(...ys) + Math.max(...ys)) / 2, id: hovered.id };
+  const point = await canvas.evaluate((element) => {
+    const cy = element._cyreg?.cy;
+    const node = cy?.nodes()
+      .filter((candidate) => candidate.connectedEdges().length === 1)
+      .first();
+    if (!node?.length) return null;
+    const position = node.renderedPosition();
+    const bounds = element.getBoundingClientRect();
+    return {
+      x: bounds.left + position.x,
+      y: bounds.top + position.y,
+      id: node.id(),
+    };
+  });
+  if (!point) return null;
+  await page.mouse.move(point.x, point.y);
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
+  await expect(graph).toHaveAttribute('data-world-graph-active-id', point.id);
+  return point;
 }
 
 async function emitSyntheticTouch(page, canvas, type, point, identifier = 91) {
@@ -227,7 +213,45 @@ async function inspectGraph(page, viewport, theme) {
   const geometry = await canvasHost.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     const renderedCanvas = element.querySelector('canvas');
-    const nodes = element._cyreg?.cy?.nodes().toArray() ?? [];
+    const cy = element._cyreg?.cy;
+    const nodes = cy?.nodes().toArray() ?? [];
+    const radialLayout = (() => {
+      const components = cy?.elements().components()
+        .map((component) => component.nodes())
+        .filter((componentNodes) => componentNodes.length)
+        .sort((left, right) => right.length - left.length) ?? [];
+      const core = components[0]?.length > 1 ? components.shift() : null;
+      const orbit = components;
+      if (!orbit.length) return { orbitCount: 0, orbitRadiusSpread: 0 };
+
+      let centre;
+      if (core) {
+        const box = core.boundingBox();
+        centre = { x: box.x1 + box.w / 2, y: box.y1 + box.h / 2 };
+      } else {
+        centre = orbit.reduce((sum, componentNodes) => {
+          const box = componentNodes.boundingBox();
+          return {
+            x: sum.x + box.x1 + box.w / 2,
+            y: sum.y + box.y1 + box.h / 2,
+          };
+        }, { x: 0, y: 0 });
+        centre.x /= orbit.length;
+        centre.y /= orbit.length;
+      }
+
+      const distances = orbit.map((componentNodes) => {
+        const box = componentNodes.boundingBox();
+        return Math.hypot(
+          box.x1 + box.w / 2 - centre.x,
+          box.y1 + box.h / 2 - centre.y,
+        );
+      });
+      return {
+        orbitCount: orbit.length,
+        orbitRadiusSpread: Math.max(...distances) - Math.min(...distances),
+      };
+    })();
     let overlappingNodes = false;
     for (let left = 0; left < nodes.length && !overlappingNodes; left += 1) {
       for (let right = left + 1; right < nodes.length; right += 1) {
@@ -248,6 +272,7 @@ async function inspectGraph(page, viewport, theme) {
       bitmapHeight: renderedCanvas?.height ?? 0,
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       overlappingNodes,
+      ...radialLayout,
     };
   });
   expect(geometry.width).toBeGreaterThan(240);
@@ -256,6 +281,7 @@ async function inspectGraph(page, viewport, theme) {
   expect(geometry.bitmapHeight).toBeGreaterThan(180);
   expect(geometry.overflow).toBe(false);
   expect(geometry.overlappingNodes).toBe(false);
+  if (geometry.orbitCount > 2) expect(geometry.orbitRadiusSpread).toBeLessThan(2);
   expect(pageErrors).toEqual([]);
   expect(firstPartyFailures).toEqual([]);
 
@@ -284,7 +310,7 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
-  const centre = await approximateNodeCentre(page, graph, hovered);
+  const centre = hovered;
   await page.mouse.move(centre.x, centre.y);
   await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
   expect(Number(await graph.getAttribute('data-world-graph-neighbour-count'))).toBeGreaterThan(0);
@@ -358,7 +384,7 @@ test('World Graph expanded touch target selects a node without becoming backgrou
 
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
-  const centre = await approximateNodeCentre(page, graph, hovered);
+  const centre = hovered;
   const candidates = [];
   for (let distance = 16; distance <= 26; distance += 1) {
     for (let direction = 0; direction < 16; direction += 1) {
@@ -411,7 +437,7 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
 
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
-  const centre = await approximateNodeCentre(page, graph, hovered);
+  const centre = hovered;
   await page.mouse.move(centre.x, centre.y);
   await expect(graph).toHaveAttribute('data-world-graph-active-id', hovered.id);
   const initialZoom = Number(await graph.getAttribute('data-world-graph-zoom'));
@@ -444,6 +470,36 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
   const afterPageMode = Number(await graph.getAttribute('data-world-graph-zoom'));
   expect(afterPageMode).toBeLessThan(beforePageMode);
   expect(afterPageMode / beforePageMode).toBeGreaterThanOrEqual(.82);
+});
+
+test('World Graph releases DOM listeners on a page swap and remounts once', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  const graph = page.locator('[data-world-graph]');
+  const canvas = graph.locator('[data-world-graph-canvas]');
+  await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
+
+  for (let swap = 0; swap < 2; swap += 1) {
+    await canvas.focus();
+    await page.keyboard.press('Home');
+    const firstId = await graph.getAttribute('data-world-graph-active-id');
+    await page.evaluate(() => document.dispatchEvent(new Event('astro:before-swap')));
+    await expect(canvas.locator('canvas')).toHaveCount(0);
+    await canvas.dispatchEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true });
+    await expect(graph).toHaveAttribute('data-world-graph-active-id', firstId);
+    expect(await dispatchSyntheticWheel(page, canvas, -120, 0)).toBe(false);
+
+    await page.evaluate(() => document.dispatchEvent(new Event('astro:page-load')));
+    await expect(canvas.locator('canvas').first()).toBeVisible();
+    await canvas.dispatchEvent('keydown', { key: 'Home' });
+    await expect(graph).toHaveAttribute('data-world-graph-active-id', firstId);
+    await canvas.dispatchEvent('keydown', { key: 'ArrowRight' });
+    await expect(graph).not.toHaveAttribute('data-world-graph-active-id', firstId);
+    await graph.getByRole('button', { name: 'Reset view' }).click();
+    await expect(graph.locator('[data-world-graph-status]')).toHaveText(readyStatus);
+  }
+  expect(errors).toEqual([]);
 });
 
 test('World Graph keeps the text view when interactive data fails', async ({ page }) => {

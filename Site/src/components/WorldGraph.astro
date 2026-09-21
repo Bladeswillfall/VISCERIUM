@@ -78,6 +78,41 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     return clamp(delta, -maxWheelDelta, maxWheelDelta);
   }
 
+  function arrangeDisconnectedComponents(cy: any) {
+    const components = cy.elements().components()
+      .map((component: any) => component.nodes())
+      .filter((nodes: any) => nodes.length)
+      .sort((left: any, right: any) => right.length - left.length);
+    if (components.length < 2) return;
+
+    const core = components[0].length > 1 ? components.shift() : null;
+    const orbit = components;
+    const centreBox = core?.boundingBox() ?? cy.nodes().boundingBox();
+    const centre = {
+      x: centreBox.x1 + centreBox.w / 2,
+      y: centreBox.y1 + centreBox.h / 2,
+    };
+    const coreRadius = core ? Math.max(centreBox.w, centreBox.h) / 2 : 0;
+    const maxOrbitRadius = Math.max(...orbit.map((nodes: any) => {
+      const box = nodes.boundingBox();
+      return Math.max(box.w, box.h) / 2;
+    }));
+    const radius = Math.max(180, coreRadius + maxOrbitRadius + 100, orbit.length * 12);
+
+    orbit.forEach((nodes: any, index: number) => {
+      const angle = -Math.PI / 2 + index * Math.PI * 2 / orbit.length;
+      const box = nodes.boundingBox();
+      const dx = centre.x + Math.cos(angle) * radius - (box.x1 + box.w / 2);
+      const dy = centre.y + Math.sin(angle) * radius - (box.y1 + box.h / 2);
+      nodes.positions((node: any) => ({
+        x: node.position('x') + dx,
+        y: node.position('y') + dy,
+      }));
+    });
+
+    cy.fit(undefined, 48);
+  }
+
   function colour(root: Element, name: string) {
     const probe = document.createElement('span');
     probe.style.color = `var(${name})`;
@@ -257,6 +292,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           gravity: .18,
         },
       });
+      arrangeDisconnectedComponents(cy);
 
       const orderedNodes = cy.nodes().toArray().sort((left: any, right: any) => (
         String(left.data('title')).localeCompare(String(right.data('title')))
@@ -598,19 +634,21 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
         if (!pointerGesture && !touchGesture && pointerNode) clearPointerContext();
       };
 
-      reset?.addEventListener('click', handleReset);
-      root.addEventListener('wheel', handleWheel, { passive: false, capture: true });
-      root.addEventListener('touchstart', handleTouchStart, { passive: false, capture: true });
-      root.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
-      root.addEventListener('touchend', handleTouchEnd, { passive: false, capture: true });
-      root.addEventListener('touchcancel', handleTouchCancel, { passive: false, capture: true });
-      canvas.addEventListener('pointerdown', handlePointerDown, true);
-      canvas.addEventListener('pointermove', handlePointerMove, true);
-      canvas.addEventListener('pointerup', handlePointerUp, true);
-      canvas.addEventListener('pointercancel', handlePointerCancel, true);
-      canvas.addEventListener('pointerleave', handlePointerLeave);
-      canvas.addEventListener('keydown', handleKeydown);
-      canvas.addEventListener('focus', handleFocus);
+      const controller = new AbortController();
+      const { signal } = controller;
+      reset?.addEventListener('click', handleReset, { signal });
+      root.addEventListener('wheel', handleWheel, { signal, passive: false, capture: true });
+      root.addEventListener('touchstart', handleTouchStart, { signal, passive: false, capture: true });
+      root.addEventListener('touchmove', handleTouchMove, { signal, passive: false, capture: true });
+      root.addEventListener('touchend', handleTouchEnd, { signal, passive: false, capture: true });
+      root.addEventListener('touchcancel', handleTouchCancel, { signal, passive: false, capture: true });
+      canvas.addEventListener('pointerdown', handlePointerDown, { signal, capture: true });
+      canvas.addEventListener('pointermove', handlePointerMove, { signal, capture: true });
+      canvas.addEventListener('pointerup', handlePointerUp, { signal, capture: true });
+      canvas.addEventListener('pointercancel', handlePointerCancel, { signal, capture: true });
+      canvas.addEventListener('pointerleave', handlePointerLeave, { signal });
+      canvas.addEventListener('keydown', handleKeydown, { signal });
+      canvas.addEventListener('focus', handleFocus, { signal });
       cy.on('pan zoom', handleViewportMove);
       setZoomState();
       if (reset) reset.disabled = false;
@@ -626,19 +664,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       instances.set(root, () => {
         resizeObserver.disconnect();
         themeObserver.disconnect();
-        reset?.removeEventListener('click', handleReset);
-        root.removeEventListener('wheel', handleWheel, true);
-        root.removeEventListener('touchstart', handleTouchStart, true);
-        root.removeEventListener('touchmove', handleTouchMove, true);
-        root.removeEventListener('touchend', handleTouchEnd, true);
-        root.removeEventListener('touchcancel', handleTouchCancel, true);
-        canvas.removeEventListener('pointerdown', handlePointerDown, true);
-        canvas.removeEventListener('pointermove', handlePointerMove, true);
-        canvas.removeEventListener('pointerup', handlePointerUp, true);
-        canvas.removeEventListener('pointercancel', handlePointerCancel, true);
-        canvas.removeEventListener('pointerleave', handlePointerLeave);
-        canvas.removeEventListener('keydown', handleKeydown);
-        canvas.removeEventListener('focus', handleFocus);
+        controller.abort();
         cy.off('pan zoom', handleViewportMove);
         cy.destroy();
       });

@@ -44,6 +44,7 @@ Vault/.obsidian/plugins/*/*
 !Vault/.obsidian/plugins/templater-obsidian/data.json
 !Vault/.obsidian/plugins/auto-properties/data.json
 !Vault/.obsidian/plugins/metadata-menu/data.json
+!Vault/.obsidian/plugins/mysnippets-plugin/data.json
 !Vault/.obsidian/plugins/iconic/data.json
 !Vault/.obsidian/plugins/zoom-map/data.json
 !Vault/.obsidian/plugins/table-editor-obsidian/data.json
@@ -53,11 +54,6 @@ Vault/.obsidian/plugins/*/*
 !Vault/.obsidian/plugins/obsidian-style-settings/data.json
 !Vault/.obsidian/plugins/daily-activity/data.json
 !Vault/.obsidian/plugins/journal-bases/data.json
-
-# MySnippets is intentionally vendored because the community-store 1.2.3
-# bundle is incompatible with current Obsidian menu/toggle behaviour.
-!Vault/.obsidian/plugins/mysnippets-plugin/
-!Vault/.obsidian/plugins/mysnippets-plugin/**
 
 # VISCERIUM Timelines is maintained in this repository. Track the runnable
 # bundle so the vault integration works immediately after pulling.

@@ -26,7 +26,6 @@ The block below is maintained from the existing npm package manifests. It record
 | Project | Package | Scope | Declared version |
 | --- | --- | --- | --- |
 | Codex (`Site/`) | `@astrojs/mdx` | runtime | `^7.0.3` |
-| Codex (`Site/`) | `@astrojs/partytown` | runtime | `^2.1.7` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
 | Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
 | Codex (`Site/`) | `astro` | runtime | `^7.2.8` |
@@ -65,7 +64,7 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 
 | Component | Role in VISCERIUM | Upstream licence |
 | --- | --- | --- |
-| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, sitemap, and Partytown integrations | MIT |
+| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, and sitemap integrations | MIT |
 | [Starlight](https://github.com/withastro/starlight) | Documentation-site shell and content framework | MIT |
 | `starlight-changelogs` | Changelog presentation | MIT |
 | `starlight-scroll-to-top` | Scroll-to-top interface | MIT |
@@ -109,7 +108,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Templater](https://community.obsidian.md/plugins/templater-obsidian) | SilentVoid13; maintained by Zachatoo | AGPL-3.0 |
 | [Auto-Properties](https://community.obsidian.md/plugins/auto-properties) | Aaron Gillespie | MIT |
 | [Metadata Menu](https://community.obsidian.md/plugins/metadata-menu) | mdelobelle | MIT |
-| [MySnippets](https://community.obsidian.md/plugins/mysnippets-plugin) | Chetachi; compatibility work also credits Moyf | MPL-2.0 |
+| [MySnippets](https://community.obsidian.md/plugins/mysnippets-plugin) | Chetachi | MPL-2.0 |
 | [StoryLine](https://community.obsidian.md/plugins/storyline) | Jan Sandström | MIT |
 | [Daily Activity](https://community.obsidian.md/plugins/daily-activity) | Trevor Rydalch / trydalch | No licence file published upstream; runtime is installed separately and is not redistributed here |
 | [Journal Bases](https://github.com/dsebastien/obsidian-journal-base) | Sébastien Dubois / dsebastien | MIT |
@@ -123,23 +122,6 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Style Settings](https://community.obsidian.md/plugins/obsidian-style-settings) | mgmeyers / obsidian-community | GPL-3.0 |
 | [Harper](https://community.obsidian.md/plugins/harper) | Automattic and Harper contributors | Apache-2.0 |
 | [Calendar](https://github.com/liamcain/obsidian-calendar-plugin) | Liam Cain | MIT |
-
-### Vendored MySnippets compatibility runtime
-
-Unlike most third-party plugin bundles, these files are intentionally tracked:
-
-- `Vault/.obsidian/plugins/mysnippets-plugin/main.js`;
-- `Vault/.obsidian/plugins/mysnippets-plugin/styles.css`; and
-- the related manifest and configuration.
-
-The compatibility runtime is based on MySnippets by Chetachi and compatibility work maintained in `Moyf/MySnippets`.
-
-That runtime remains under the Mozilla Public License 2.0. Its file header identifies the applicable licence and upstream work. The repository MIT licence does not apply to it.
-
-The complete local compliance record is:
-
-- [`LICENSES/MPL-2.0.txt`](LICENSES/MPL-2.0.txt) — official Mozilla Public License 2.0 text; and
-- [`LICENSES/MySnippets-NOTICE.md`](LICENSES/MySnippets-NOTICE.md) — upstream basis, covered files, recorded VISCERIUM modifications, and source-availability notice.
 
 ### First-party VISCERIUM plugins
 
@@ -187,9 +169,8 @@ The repository checks that:
 
 - the managed direct-dependency declaration matches the current `package.json` files, including declared version constraints;
 - the managed lifecycle-script approval table matches the exact `allowScripts` entries in the npm package manifests;
-- every direct `Site/package.json` dependency is still named or explicitly covered in the human-authored attribution sections outside the managed dependency block;
-- every enabled non-first-party Obsidian plugin is represented here; and
-- the vendored MySnippets exception retains its MPL header, licence text, modification notice, and source-availability notice.
+- every direct `Site/package.json` dependency is still named or explicitly covered in the human-authored attribution sections outside the managed dependency block; and
+- every enabled non-first-party Obsidian plugin is represented here.
 
 These checks prevent silent dependency and attribution drift, but they do not replace a complete release audit of transitive dependencies and distributed artefacts.
 

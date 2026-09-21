@@ -75,8 +75,9 @@ test('content notes stay compact and include image-sidecar warnings before JavaS
   const script = read('../src/scripts/reader-settings.js');
 
   assert.match(readingTime, /import ContentNotes from '\.\/ContentNotes\.astro'/);
-  assert.match(readingTime, /<ContentNotes \/>/);
-  assert.match(notes, /getCollection\('docs'\)/);
+  assert.match(readingTime, /<ContentNotes \{docs\} \{sourceEntry\} \/>/);
+  assert.match(notes, /const \{ docs, sourceEntry \} = Astro.props/);
+  assert.doesNotMatch(notes, /getCollection|docs\.find/);
   assert.match(notes, /sourceEntry\?\.body/);
   assert.match(notes, /doc\.data\.type !== 'image'/);
   assert.match(notes, /referenceCorpus\.includes\(filename\)/);
