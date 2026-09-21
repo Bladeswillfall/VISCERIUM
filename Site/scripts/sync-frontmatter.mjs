@@ -18,6 +18,7 @@ export function stringifyGeneratedFrontmatter(frontmatter, generated) {
     lines.push(`links: ${JSON.stringify(generated.links)}`);
   }
   setField('sourcePath', JSON.stringify(generated.sourcePath));
+  setField('sourceRepoPath', JSON.stringify(generated.sourceRepoPath));
   setField('giscus', generated.giscus);
 
   return `---\n${lines.join('\n')}\n---\n\n`;

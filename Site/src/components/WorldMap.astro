@@ -2,6 +2,7 @@
 import '../styles/maps.css';
 import '../styles/exploration-pages.css';
 import { DEFAULT_LOCALE } from '../../site.config.mjs';
+import { attributionRouteForAsset } from '../lib/image-attribution.mjs';
 
 const { map } = Astro.props;
 const { t } = Astro.locals;
@@ -37,7 +38,11 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
         <h1>{map.title}</h1>
         {map.description && <p>{map.description}</p>}
       </div>
-      {map.page && <a class="atlas__article-link" href={map.page} data-mobile-label={t('viscerium.map.notes')}>{t('viscerium.map.readNotes')}</a>}
+      <div>
+        {map.image && <a class="atlas__article-link" href={attributionRouteForAsset(map.image)}>Artwork & attribution</a>}
+        {' '}
+        {map.page && <a class="atlas__article-link" href={map.page} data-mobile-label={t('viscerium.map.notes')}>{t('viscerium.map.readNotes')}</a>}
+      </div>
     </header>
 
     {map.image ? (

@@ -11,12 +11,13 @@ asset:
 image:
 alt:
 artist:
+artistUrl:
 editor:
 source:
 sourceUrl:
 credit:
 license:
-rights:
+rights: "Copyright"
 usage:
 sensitiveMedia: false
 contentWarnings: []
@@ -24,17 +25,16 @@ width:
 height:
 tags: []
 related: []
+navigation:
+  hidden: true
+giscus: false
 ---
 
-%% Image metadata notes are provenance records. Store raster artwork in Vault/Assets/Images/ as .webp; genuine vector artwork may remain .svg. Keep PNG/JPEG or other archival originals outside the repository. Use `asset` for the stored filename and `image` when another Codex surface needs the same asset as its display image. Before publishing, set published to the date this article first becomes public, provide meaningful alt text, and include enough rights/provenance information to know whether the artwork may be used. Set `sensitiveMedia: true` only when readers may reasonably want the optional conceal-sensitive-imagery preference to cover the artwork; describe why with controlled `contentWarnings` values rather than generic NSFW tags. %%
+%% Image metadata notes are provenance records. Store public attribution notes in Vault/Assets/Attribution/ using the public asset path plus .md, for example Assets/Images/example.webp -> Assets/Attribution/Images/example.webp.md. Store raster artwork in Vault/Assets/Images/ as .webp; genuine vector artwork may remain .svg. Keep PNG/JPEG or other archival originals outside the repository. Use `asset` for the public asset path (`/assets/images/...` or `/assets/maps/...`) and mirror that value in `image` when the attribution page should display the artwork itself. Before publishing, set published to the date this article first becomes public, provide meaningful alt text, use `artistUrl` for the creator's own site/profile and `sourceUrl` for the original artwork/source page, and include enough rights/provenance information to know whether the artwork may be used. New image records default to `rights: "Copyright"`; overwrite that field when the artwork uses different terms. For `rights`, shorthand such as `Copyright`, `CC0`, `Public Domain`, `CC BY`, `BY-SA`, `BY-NC`, `BY-ND`, `BY-NC-SA`, or `BY-NC-ND` is accepted; the site normalises Creative Commons shorthand and renders the matching icons automatically. Set `sensitiveMedia: true` only when readers may reasonably want the optional conceal-sensitive-imagery preference to cover the artwork; describe why with controlled `contentWarnings` values rather than generic NSFW tags. %%
 
-## Description
+## Notes
 
-Describe what the image depicts and why it exists in the VISCERIUM project.
-
-## Provenance
-
-Record who made it, where it came from, who edited it, and whether it is original, commissioned, AI-generated, placeholder/reference material, or due to be replaced.
+Add any provenance context that does not fit the structured fields above.
 
 ## Usage Notes
 

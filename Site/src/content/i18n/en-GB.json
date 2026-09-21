@@ -76,6 +76,16 @@
   "viscerium.sidebar.openField": "Open {{label}}",
   "viscerium.sidebar.imageText": "Text shown in image: {{text}}",
 
+  "viscerium.attribution.details": "Image attribution",
+  "viscerium.attribution.artist": "Artist",
+  "viscerium.attribution.originalArtwork": "Original artwork",
+  "viscerium.attribution.artistWebsite": "Artist website",
+  "viscerium.attribution.altText": "Alt text",
+  "viscerium.attribution.rights": "Rights",
+  "viscerium.attribution.openOriginal": "View original artwork",
+  "viscerium.attribution.openArtistWebsite": "Visit artist website",
+  "viscerium.attribution.notRecorded": "Not recorded",
+
   "viscerium.settings.open": "Reader settings",
   "viscerium.settings.close": "Close reader settings",
   "viscerium.settings.kicker": "Reader controls",

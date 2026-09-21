@@ -2,9 +2,11 @@
 import { getCollection } from 'astro:content';
 import '../styles/storyteller-view.css';
 import { resolveFrontmatterReference } from '../lib/frontmatter-reference.mjs';
+import { attributionRouteForAsset } from '../lib/image-attribution.mjs';
 import ArticleReadingTime from './ArticleReadingTime.astro';
 import CalendarDateBadge from './calendar/CalendarDateBadge.astro';
 import CodexIcon from './CodexIcon.astro';
+import ImageAttributionTable from './ImageAttributionTable.astro';
 import ContinuitySwitcher from './ContinuitySwitcher.astro';
 import DegelSystemExplorer from './degel-system/DegelSystemExplorer.astro';
 import StorytellerSwitcher from './StorytellerSwitcher.astro';
@@ -13,6 +15,9 @@ const { starlightRoute } = Astro.locals;
 const { t } = Astro.locals;
 const entry = starlightRoute.entry.data;
 const isExplorationPage = entry.explorationPage === true;
+const isImageAttributionPage = entry.type === 'image'
+  && Array.isArray(entry.tags)
+  && entry.tags.some((tag) => String(tag).trim().toLowerCase() === 'attribution');
 
 const breadcrumbGroupIcons = {
   calendar: 'event',
@@ -47,6 +52,7 @@ function breadcrumbIconForSegment(segment) {
 
 const imageSource = entry.headerImage ?? entry.image ?? (entry.type === 'image' ? entry.asset : undefined);
 const headerImage = resolveFrontmatterReference(imageSource, { kind: 'asset' });
+const headerImageHref = isImageAttributionPage ? undefined : (attributionRouteForAsset(headerImage) ?? entry.imagePage);
 const isDecorativeImage = entry.decorativeImage === true;
 const headerAlt = isDecorativeImage ? '' : imageTextAlternative(entry.alt ?? `${entry.title} header image`, entry.imageText);
 const headerDescription = [entry.imageDescription, entry.imageText ? `Text shown in image: ${entry.imageText}` : undefined]
@@ -156,14 +162,27 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
     </svg>
 
     <figure class="codex-header-figure">
-      <img
-        class={headerClass}
-        src={headerImage}
-        alt={headerAlt}
-        aria-describedby={headerDescriptionId}
-        loading="eager"
-        decoding="async"
-      />
+      {headerImageHref ? (
+        <a class="codex-header-image-link" href={headerImageHref}>
+          <img
+            class={headerClass}
+            src={headerImage}
+            alt={headerAlt}
+            aria-describedby={headerDescriptionId}
+            loading="eager"
+            decoding="async"
+          />
+        </a>
+      ) : (
+        <img
+          class={headerClass}
+          src={headerImage}
+          alt={headerAlt}
+          aria-describedby={headerDescriptionId}
+          loading="eager"
+          decoding="async"
+        />
+      )}
       {headerDescription && <figcaption id={headerDescriptionId} class="codex-sr-only">{headerDescription}</figcaption>}
     </figure>
   </>
@@ -200,6 +219,7 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
     ))}
   </nav>
 )}
+{!isExplorationPage && isImageAttributionPage && <ImageAttributionTable />}
 {!isExplorationPage && <ContinuitySwitcher />}
 {!isExplorationPage && entry.calendarDate && <CalendarDateBadge date={entry.calendarDate} title={t('viscerium.article.eventDate')} />}
 {!isExplorationPage && <StorytellerSwitcher />}
@@ -219,6 +239,14 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
       z-index: 0;
       margin: 0;
       filter: url('#codex-header-bottom-fade');
+    }
+
+    .codex-header-image-link {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      color: inherit;
+      text-decoration: none;
     }
 
     .codex-header-image {

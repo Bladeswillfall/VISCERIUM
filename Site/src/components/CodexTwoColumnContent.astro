@@ -10,6 +10,9 @@ const canonicalUrl = isIndieWebEntry ? new URL(Astro.url.pathname, siteConfig.si
 const eraStyle = starlightRoute.entry.data.eraStyle;
 const timelinePage = entry.timelinePage === true;
 const explorationPage = entry.explorationPage === true;
+const isImageAttributionPage = entry.type === 'image'
+  && Array.isArray(entry.tags)
+  && entry.tags.some((tag) => String(tag).trim().toLowerCase() === 'attribution');
 const slugPath = entry.slug ?? starlightRoute.entry.id.replace(/\.(md|mdx)$/, '');
 const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel-system';
 ---
@@ -22,11 +25,13 @@ const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel
     timelinePage && "codex-timeline-page",
     explorationPage && "codex-exploration-page",
     isDegelSystemIndex && "codex-degel-system-page",
+    isImageAttributionPage && "codex-image-attribution-page",
   ]}
   data-era-style={eraStyle}
   data-timeline-page={timelinePage || undefined}
   data-exploration-page={explorationPage || undefined}
   data-degel-system-page={isDegelSystemIndex || undefined}
+  data-image-attribution-page={isImageAttributionPage || undefined}
 >
   <div class="main-pane codex-main-pane">
     {isIndieWebEntry && (
@@ -35,7 +40,7 @@ const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel
         <a class="u-url" href={canonicalUrl}>{entry.title}</a>
       </div>
     )}
-    {!timelinePage && !explorationPage && starlightRoute.toc && !isDegelSystemIndex && (
+    {!timelinePage && !explorationPage && !isImageAttributionPage && starlightRoute.toc && !isDegelSystemIndex && (
       <aside class="right-sidebar-container">
         <div class="right-sidebar">
           <slot name="right-sidebar" />

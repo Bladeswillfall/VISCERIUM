@@ -4,6 +4,7 @@ import { isExternalNavigationReference, resolveFrontmatterReference } from '../l
 import MobileTableOfContents from 'virtual:starlight/components/MobileTableOfContents';
 import TableOfContents from 'virtual:starlight/components/TableOfContents';
 import { formatList } from '../lib/i18n.mjs';
+import { attributionRouteForAsset } from '../lib/image-attribution.mjs';
 
 const { starlightRoute, t } = Astro.locals;
 const locale = starlightRoute.lang;
@@ -140,7 +141,7 @@ function normaliseSidebarSection(section) {
 
 const rawImageSource = entry.image ?? (entry.type === 'image' ? entry.asset : undefined);
 const sidebarImage = resolveFrontmatterReference(rawImageSource, { kind: 'asset' });
-const imageDetailHref = normaliseRoute(entry.imagePage);
+const imageDetailHref = attributionRouteForAsset(sidebarImage) ?? normaliseRoute(entry.imagePage);
 const isDecorativeImage = entry.decorativeImage === true;
 const imageAlt = isDecorativeImage ? '' : imageTextAlternative(entry.alt ?? `${entry.title} image`, entry.imageText);
 const imageDescription = [entry.imageDescription, entry.imageText ? `Text shown in image: ${entry.imageText}` : undefined]

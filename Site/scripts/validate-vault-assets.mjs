@@ -4,6 +4,8 @@ import fs from 'node:fs/promises';
 import siteConfig from '../site.config.mjs';
 import { walk } from './lib/walk.mjs';
 import { isMainModule } from './script-entry.mjs';
+import matter from 'gray-matter';
+import { attributionRouteForAsset } from '../src/lib/image-attribution.mjs';
 
 const siteRoot = process.cwd();
 const defaultAssetRoot = path.resolve(siteRoot, siteConfig.vaultAssetDir);
@@ -16,6 +18,15 @@ const imageExtensions = new Set([
 ]);
 const detectableImageExtensions = new Set(['avif', 'bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']);
 const allowedImageExtensions = new Set(['svg', 'webp']);
+const attributionRoot = path.join(defaultAssetRoot, 'Attribution');
+const publicArtworkRoots = [
+  { root: path.resolve(siteRoot, 'public/assets/images'), category: 'Images' },
+  { root: path.resolve(siteRoot, 'public/assets/maps'), category: 'Maps' },
+];
+const attributionExclusions = new Set([
+  'Images/codex-noise-v2.webp',
+  'Images/missing-image.svg',
+]);
 const unsafeSvgPatterns = [
   { label: 'script element', pattern: /<\s*script\b/i },
   { label: 'foreignObject element', pattern: /<\s*foreignObject\b/i },
@@ -186,8 +197,70 @@ async function validateImageRoots(roots, { verifyContents = true, checkSvgSafety
   return !failed;
 }
 
+function toPosixAttributionPath(value) {
+  return String(value).replace(/\\/g, '/');
+}
+
+async function fileExists(file) {
+  try {
+    await fs.access(file);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function validateAttributionSidecars() {
+  const expected = new Map();
+
+  for (const { root, category } of publicArtworkRoots) {
+    for (const file of await walkIfPresent(root)) {
+      if (!allowedImageExtensions.has(extensionOf(file))) continue;
+      const relativeAsset = toPosixAttributionPath(path.relative(root, file));
+      if (relativeAsset.split('/').includes('variants')) continue;
+      const key = `${category}/${relativeAsset}`;
+      if (attributionExclusions.has(key)) continue;
+      expected.set(key, `/assets/${category.toLowerCase()}/${relativeAsset}`);
+    }
+  }
+
+  for (const category of ['Images', 'Maps']) {
+    const root = path.join(defaultAssetRoot, category);
+    for (const file of await walkIfPresent(root)) {
+      if (!allowedImageExtensions.has(extensionOf(file))) continue;
+      const relativeAsset = toPosixAttributionPath(path.relative(root, file));
+      expected.set(`${category}/${relativeAsset}`, `/assets/${category.toLowerCase()}/${relativeAsset}`);
+    }
+  }
+
+  let failed = false;
+  for (const [sidecarRelative, assetUrl] of expected) {
+    const sidecar = path.join(attributionRoot, `${sidecarRelative}.md`);
+    if (!(await fileExists(sidecar))) {
+      console.error(`Missing image attribution sidecar: ${relative(sidecar)} for ${assetUrl}`);
+      failed = true;
+      continue;
+    }
+    const parsed = matter(await fs.readFile(sidecar, 'utf8')).data ?? {};
+    const recordedAsset = parsed.asset ?? parsed.image;
+    if (
+      parsed.status !== 'published'
+      || parsed.type !== 'image'
+      || attributionRouteForAsset(recordedAsset) !== attributionRouteForAsset(assetUrl)
+    ) {
+      console.error(`Invalid image attribution sidecar metadata: ${relative(sidecar)}`);
+      failed = true;
+    }
+  }
+
+  if (!failed) console.log(`Validated ${expected.size} image attribution sidecar${expected.size === 1 ? '' : 's'}.`);
+  return !failed;
+}
+
 export async function validateVaultAssets({ rootDir = defaultAssetRoot } = {}) {
-  return validateImageRoots([rootDir]);
+  const imagesValid = await validateImageRoots([rootDir]);
+  const attributionValid = rootDir === defaultAssetRoot ? await validateAttributionSidecars() : true;
+  return imagesValid && attributionValid;
 }
 
 export async function validateRepositoryImages({ siteRoots = defaultSiteImageRoots } = {}) {
@@ -196,7 +269,8 @@ export async function validateRepositoryImages({ siteRoots = defaultSiteImageRoo
     verifyContents: false,
     checkSvgSafety: false,
   });
-  return vaultValid && siteFormatValid;
+  const attributionValid = await validateAttributionSidecars();
+  return vaultValid && siteFormatValid && attributionValid;
 }
 
 if (isMainModule(import.meta.url)) {

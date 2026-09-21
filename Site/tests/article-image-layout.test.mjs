@@ -3,7 +3,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseObsidianImageEmbed, renderArticleImage } from '../scripts/image-layout.mjs';
+import {
+  markdownQuotePrefixAt,
+  parseObsidianImageEmbed,
+  renderArticleImage,
+  renderInsideMarkdownQuote,
+} from '../scripts/image-layout.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, '..');
@@ -67,6 +72,30 @@ test('public image markup carries layout data while keeping accessible alt text 
   assert.doesNotMatch(markup, /alt="[^"]*(?:right|shape|gap=16)/i);
 });
 
+test('quoted image markup stays inside its Markdown quote container', () => {
+  const source = '> [!vc-indent]\n> marker\n>\n> ![[image.webp|left|320]]\n>\n> Body';
+  const token = '![[image.webp|left|320]]';
+  const index = source.indexOf(token);
+  const prefix = markdownQuotePrefixAt(source, index);
+
+  assert.equal(prefix, '> ');
+
+  const markup = '\n\n<figure class="vc-image-embed">image</figure>\n\n';
+  assert.equal(renderInsideMarkdownQuote(markup, prefix), '<figure class="vc-image-embed">image</figure>');
+});
+
+test('nested quoted image markup preserves every quote depth on multiline output', () => {
+  const source = '> > ![[image.webp]]';
+  const token = '![[image.webp]]';
+  const prefix = markdownQuotePrefixAt(source, source.indexOf(token));
+
+  assert.equal(prefix, '> > ');
+  assert.equal(
+    renderInsideMarkdownQuote('\n<figure>\n<img>\n</figure>\n', prefix),
+    '<figure>\n> > <img>\n> > </figure>',
+  );
+});
+
 test('MDX image markup remains valid inside authored columns', () => {
   const spec = parseObsidianImageEmbed('abberath.webp|left|220|shape|gap=12');
   const markup = renderArticleImage({
@@ -95,6 +124,10 @@ test('image layout CSS contains floats without overriding hidden Storyteller pan
   assert.match(css, /\.vc-image-shape[\s\S]*?shape-outside:\s*var\(--vc-image-shape\)/);
   assert.match(css, /\.cx-col\s*\{[\s\S]*?display:\s*flow-root/);
   assert.match(css, /\.cx-col \.vc-image-full[\s\S]*?width:\s*100%/);
+  assert.match(
+    css,
+    /> blockquote:has\(\.vc-layout-indent-marker\)\s*\{[\s\S]*?clear:\s*none/,
+  );
   assert.match(css, /@media \(max-width:\s*42rem\)[\s\S]*?shape-outside:\s*none/);
 });
 
@@ -106,11 +139,15 @@ test('Obsidian loads the first-party image renderer and matching snippet rules',
 
   assert.ok(plugins.includes('viscerium-image-tools'));
   assert.equal(manifest.id, 'viscerium-image-tools');
-  assert.equal(manifest.version, '0.2.1');
+  assert.equal(manifest.version, '0.3.0');
   assert.doesNotThrow(() => new Function(runtime));
   assert.match(runtime, /registerMarkdownPostProcessor/);
   assert.match(runtime, /currentSrc/);
   assert.match(runtime, /--vc-image-shape/);
+  assert.match(runtime, /vault\.on\('create'/);
+  assert.match(runtime, /rights: "Copyright"/);
+  assert.match(runtime, /Assets\/Attribution\/Images\//);
+  assert.match(runtime, /Assets\/Attribution\/Maps\//);
   assert.match(css, /\.vc-layout-col-rendered[\s\S]*?display:\s*flow-root/);
   assert.match(css, /\.vc-image-shape[\s\S]*?shape-image-threshold/);
   assert.match(css, /@media \(max-width:\s*700px\)[\s\S]*?shape-outside:\s*none/);
@@ -167,6 +204,9 @@ test('public sync preserves pipe flags and selects MDX-safe output for columns',
   const sync = await readSite('scripts/sync-public-notes.mjs');
 
   assert.match(sync, /parseObsidianImageEmbed\(match\[1\]\)/);
+  assert.match(sync, /for \(const match of embeds\.reverse\(\)\)/);
+  assert.match(sync, /markdownQuotePrefixAt\(converted, match\.index\)/);
+  assert.match(sync, /renderInsideMarkdownQuote\(rendered, quotePrefix\)/);
   assert.match(sync, /renderArticleImage/);
   assert.match(sync, /jsx:\s*outputRequiresMdx/);
   assert.doesNotMatch(sync, /match\[1\]\.split\('\|'\)\[0\]/);

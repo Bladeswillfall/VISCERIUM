@@ -3,6 +3,11 @@ const { Notice, Plugin } = require('obsidian');
 const ALIGNMENTS = new Set(['left', 'right', 'center', 'wide', 'full']);
 const SHAPE_FLAGS = new Set(['shape', 'contour']);
 const IMAGE_EXTENSIONS = new Set(['avif', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']);
+const ATTRIBUTION_EXTENSIONS = new Set(['svg', 'webp']);
+const ATTRIBUTION_ROOTS = [
+  { assetRoot: 'Assets/Images/', sidecarRoot: 'Assets/Attribution/Images/', publicRoot: '/assets/images/' },
+  { assetRoot: 'Assets/Maps/', sidecarRoot: 'Assets/Attribution/Maps/', publicRoot: '/assets/maps/' },
+];
 const IMAGE_CLASSES = [
   'vc-image-embed',
   'vc-image-left',
@@ -274,6 +279,87 @@ function renderHeaderImage({ app, container, file }) {
   return true;
 }
 
+function attributionSidecarSpec(file) {
+  if (!file?.path || !ATTRIBUTION_EXTENSIONS.has(String(file.extension ?? '').toLowerCase())) return null;
+
+  const root = ATTRIBUTION_ROOTS.find(({ assetRoot }) => file.path.startsWith(assetRoot));
+  if (!root) return null;
+
+  const relativePath = file.path.slice(root.assetRoot.length);
+  if (!relativePath || relativePath.split('/').includes('variants')) return null;
+
+  const title = String(file.basename ?? file.name ?? relativePath).replace(/\.(?:svg|webp)$/i, '');
+  const asset = `${root.publicRoot}${relativePath}`;
+  const sidecarPath = `${root.sidecarRoot}${relativePath}.md`;
+
+  return { title, asset, sidecarPath };
+}
+
+function attributionSidecarMarkdown(spec) {
+  const title = JSON.stringify(spec.title);
+  const asset = JSON.stringify(spec.asset);
+  return `---
+title: ${title}
+description: ${JSON.stringify(`Attribution and provenance record for ${spec.title}.`)}
+status: published
+type: image
+asset: ${asset}
+image: ${asset}
+alt:
+artist:
+artistUrl:
+editor:
+source:
+sourceUrl:
+credit:
+license:
+rights: "Copyright"
+usage:
+sensitiveMedia: false
+contentWarnings: []
+tags: [attribution]
+related: []
+navigation:
+  hidden: true
+giscus: false
+---
+
+## Notes
+
+Add any provenance context that does not fit the structured fields above.
+
+## Usage Notes
+
+Record where the image is used and any restrictions or expectations around reuse.
+
+## Related
+
+Link the lore, project, faction, character, location, or other material this image meaningfully depicts or supports.
+`;
+}
+
+async function ensureVaultFolder(vault, folderPath) {
+  const segments = String(folderPath ?? '').split('/').filter(Boolean);
+  let current = '';
+
+  for (const segment of segments) {
+    current = current ? `${current}/${segment}` : segment;
+    if (!vault.getAbstractFileByPath(current)) await vault.createFolder(current);
+  }
+}
+
+async function ensureAttributionSidecar(app, file) {
+  const spec = attributionSidecarSpec(file);
+  if (!spec || app.vault.getAbstractFileByPath(spec.sidecarPath)) return null;
+
+  const folderPath = spec.sidecarPath.slice(0, spec.sidecarPath.lastIndexOf('/'));
+  await ensureVaultFolder(app.vault, folderPath);
+
+  if (app.vault.getAbstractFileByPath(spec.sidecarPath)) return null;
+  await app.vault.create(spec.sidecarPath, attributionSidecarMarkdown(spec));
+  return spec.sidecarPath;
+}
+
 module.exports = class VisceriumImageToolsPlugin extends Plugin {
   async onload() {
     let refreshTimer;
@@ -311,6 +397,17 @@ module.exports = class VisceriumImageToolsPlugin extends Plugin {
     this.registerEvent(this.app.workspace.on('file-open', scheduleRefresh));
     this.registerEvent(this.app.workspace.on('editor-change', scheduleRefresh));
     this.registerEvent(this.app.metadataCache.on('changed', scheduleRefresh));
+    this.registerEvent(this.app.vault.on('create', (file) => {
+      void ensureAttributionSidecar(this.app, file)
+        .then((sidecarPath) => {
+          if (sidecarPath) new Notice(`Created image attribution record: ${sidecarPath}`);
+        })
+        .catch((error) => {
+          console.error('Failed to create image attribution sidecar', error);
+          new Notice('Could not create the image attribution record. Check the developer console for details.');
+        });
+      scheduleRefresh();
+    }));
     this.registerEvent(this.app.vault.on('rename', scheduleRefresh));
     this.registerEvent(this.app.vault.on('delete', scheduleRefresh));
 

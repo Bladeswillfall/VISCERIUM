@@ -142,6 +142,7 @@ The Codex typography uses open font families under the SIL Open Font License 1.1
 | Font family | Copyright project | Licence |
 | --- | --- | --- |
 | [Cinzel](https://github.com/googlefonts/Cinzel) | Cinzel project authors | OFL-1.1 |
+| [Nothing You Could Do](https://fonts.google.com/specimen/Nothing+You+Could+Do) | Kimberly Geswein / Nothing You Could Do project | OFL-1.1 |
 | [Source Serif 4](https://github.com/adobe-fonts/source-serif) | Adobe and Source Serif project authors | OFL-1.1 |
 | [IBM Plex Sans](https://github.com/IBM/plex) | IBM and IBM Plex project authors | OFL-1.1 |
 | [IBM Plex Mono](https://github.com/IBM/plex) | IBM and IBM Plex project authors | OFL-1.1 |

@@ -197,6 +197,63 @@ function repairLegacyVisualIndents(editor) {
   return repaired;
 }
 
+function compactNestedIndentBody(line) {
+  const match = String(line ?? '').match(/^(\s*)>>[\t ]?(.*)$/);
+  if (!match) return null;
+  return { leading: match[1], body: match[2] };
+}
+
+function repairCompactNestedVisualIndents(editor) {
+  if (!editor) return 0;
+  let repaired = 0;
+
+  for (let line = editor.lineCount() - 1; line >= 0;) {
+    const parsed = compactNestedIndentBody(editor.getLine(line));
+    if (!parsed) {
+      line -= 1;
+      continue;
+    }
+
+    const container = enclosingIndent(editor, line);
+    if (!container || container.depth !== 1 || quoteDepth(editor.getLine(line)) !== 2) {
+      line -= 1;
+      continue;
+    }
+
+    let startLine = line;
+    while (startLine > container.headerLine + 2) {
+      const previous = compactNestedIndentBody(editor.getLine(startLine - 1));
+      const previousContainer = enclosingIndent(editor, startLine - 1);
+      if (!previous || previousContainer?.headerLine !== container.headerLine || quoteDepth(editor.getLine(startLine - 1)) !== 2) break;
+      startLine -= 1;
+    }
+
+    const prefix = quotePrefix(container.depth + 1);
+    const body = [];
+    for (let sourceLine = startLine; sourceLine <= line; sourceLine += 1) {
+      const current = compactNestedIndentBody(editor.getLine(sourceLine));
+      body.push(`${prefix}${current?.body ?? ''}`.trimEnd());
+    }
+
+    const replacement = [
+      `${prefix}[!${INDENT_CALLOUT}]`,
+      `${prefix}${INDENT_MARKER}`,
+      prefix.trimEnd(),
+      ...body,
+    ].join('\n');
+
+    editor.replaceRange(
+      replacement,
+      { line: startLine, ch: 0 },
+      { line, ch: editor.getLine(line).length },
+    );
+    repaired += 1;
+    line = startLine - 1;
+  }
+
+  return repaired;
+}
+
 function repairMalformedNestedVisualIndents(editor) {
   if (!editor) return 0;
   let repaired = 0;
@@ -529,8 +586,9 @@ module.exports = class VisceriumLayoutToolsPlugin extends Plugin {
       name: 'Repair visual indents created by previous versions',
       editorCallback: (editor) => {
         const repairedLegacy = repairLegacyVisualIndents(editor);
+        const repairedCompact = repairCompactNestedVisualIndents(editor);
         const repairedNested = repairMalformedNestedVisualIndents(editor);
-        const repaired = repairedLegacy + repairedNested;
+        const repaired = repairedLegacy + repairedCompact + repairedNested;
         new Notice(repaired ? `Repaired ${repaired} visual indent${repaired === 1 ? '' : 's'}.` : 'No legacy visual indents found.');
       },
     });

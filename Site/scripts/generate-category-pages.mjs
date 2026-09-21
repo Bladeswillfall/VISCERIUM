@@ -212,14 +212,16 @@ for (const category of categoryList) {
   }
 
   const outFile = path.join(docsDir, category.slug, 'index.md');
+  const isAttributionIndex = category.slug === 'attribution' || category.slug.startsWith('attribution/');
   const frontmatter = {
     title: category.title,
     description: `Index of public VISCERIUM pages in the ${category.title} category.`,
     status: 'published',
     slug: category.slug,
     type: 'category',
-    pagefind: true,
+    pagefind: !isAttributionIndex,
     tableOfContents: false,
+    ...(isAttributionIndex ? { navigation: { hidden: true } } : {}),
   };
   const intro = `Browse every public Codex page filed beneath **${category.title}**.`;
   await fs.mkdir(path.dirname(outFile), { recursive: true });
