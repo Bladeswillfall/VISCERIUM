@@ -1,123 +1,4 @@
 @layer starlight.core {
-  .support-page {
-    display: grid;
-    gap: 2.5rem;
-    margin-block: 2rem;
-  }
-
-  .support-hero,
-  .support-section,
-  .support-contact,
-  .support-note {
-    min-width: 0;
-  }
-
-  .support-hero h1,
-  .support-section h2,
-  .support-contact h2,
-  .support-note h2 {
-    margin-block: 0 .5rem;
-    color: var(--sl-color-white);
-    font-family: var(--vc-font-display);
-  }
-
-  .support-hero p,
-  .support-section header p,
-  .support-contact p,
-  .support-note p {
-    max-width: 68ch;
-    margin-block: 0;
-    color: var(--sl-color-gray-2);
-  }
-
-  .support-section {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .support-placeholders {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
-    gap: 1rem;
-  }
-
-  .support-placeholders > div {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: .75rem;
-    align-items: start;
-    padding: 1rem;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: .5rem;
-  }
-
-  .support-placeholders .codex-icon,
-  .support-socials .codex-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--sl-color-accent-high);
-  }
-
-  .support-placeholders span {
-    display: grid;
-  }
-
-  .support-placeholders small,
-  .support-socials small {
-    color: var(--sl-color-gray-3);
-  }
-
-  .support-socials {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .75rem 1.25rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .support-socials li {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 0 .5rem;
-    align-items: center;
-  }
-
-  .support-socials small {
-    grid-column: 2;
-  }
-
-  .support-contact,
-  .support-note {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: space-between;
-    border-block-start: 0;
-    padding-block-start: 1.5rem;
-  }
-
-  .support-button {
-    display: inline-flex;
-    min-height: 2.75rem;
-    flex: 0 0 auto;
-    align-items: center;
-    padding-inline: 1rem;
-    border: 0;
-    border-radius: .25rem;
-    background: transparent;
-    color: var(--sl-color-white);
-    cursor: pointer;
-    font: inherit;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .support-button:hover {
-    background: var(--sl-color-accent-low);
-    color: var(--sl-color-white);
-  }
-
   .support-form__honeypot {
     position: absolute;
     width: 1px;
@@ -125,63 +6,6 @@
     overflow: hidden;
     clip-path: inset(50%);
   }
-
-  @media (max-width: 42rem) {
-    .support-contact,
-    .support-note {
-      display: grid;
-      gap: 2rem;
-      align-items: start;
-      justify-items: start;
-    }
-
-    .support-placeholders > div {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
-
-    .support-placeholders .sl-badge {
-      grid-column: 2;
-    }
-  }
-}
-
-/*
-  Support is a structural feature page, so its section headings must not inherit
-  the long-form article rule and negative spacing from article-pages.css.
-*/
-body:has(.support-page) .sl-markdown-content :is(
-  .support-section > header,
-  .support-contact > div,
-  .support-note
-) {
-  display: grid;
-  gap: .5rem;
-}
-
-body:has(.support-page) .sl-markdown-content :is(
-  .support-section > header > h2,
-  .support-contact h2,
-  .support-note h2
-) {
-  display: block;
-  margin: 0;
-  padding: 0;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  line-height: 1.12;
-}
-
-body:has(.support-page) .sl-markdown-content :is(
-  .support-section > header > h2,
-  .support-contact h2,
-  .support-note h2
-)::before,
-body:has(.support-page) .sl-markdown-content :is(
-  .support-section > header > h2,
-  .support-contact h2,
-  .support-note h2
-)::after {
-  content: none;
-  display: none;
 }
 
 /* Contact is a full-width utility page with its own title and hierarchy. */
@@ -359,11 +183,7 @@ body:has(.support-page) .sl-markdown-content :is(
 }
 
 .contact-intro h2 {
-  margin: 0 0 1.1rem;
   padding-bottom: .35rem;
-  color: var(--contact-text);
-  font-size: clamp(2.5rem, 2rem + 2vw, 4.5rem);
-  line-height: .98;
 }
 
 .contact-intro > p:not(.contact-eyebrow) {
@@ -395,12 +215,6 @@ body:has(.support-page) .sl-markdown-content :is(
   text-transform: uppercase;
 }
 
-.contact-public__intro h2 {
-  margin: 0;
-  color: var(--contact-accent);
-  font-size: clamp(1.8rem, 1.5rem + 1.15vw, 2.8rem);
-}
-
 .contact-public__intro > p {
   max-width: 27rem;
   color: var(--contact-body);
@@ -425,7 +239,6 @@ body:has(.support-page) .sl-markdown-content :is(
   align-items: center;
   gap: .8rem;
   margin-bottom: 1.2rem;
-  color: var(--contact-muted);
   font-family: var(--vc-font-mono);
   font-size: .65rem;
   font-weight: 500;
@@ -443,15 +256,11 @@ body:has(.support-page) .sl-markdown-content :is(
 
 .contact-github-card h3 {
   margin: 0 0 .55rem;
-  color: var(--contact-fixed-text);
-  font-size: clamp(1.35rem, 1.18rem + .55vw, 1.8rem);
-  line-height: 1.05;
 }
 
 .contact-github-card > p {
   max-width: 54rem;
   margin: 0;
-  color: var(--contact-fixed-body);
   font-size: .92rem;
   line-height: 1.58;
 }
@@ -478,8 +287,6 @@ body:has(.support-page) .sl-markdown-content :is(
   min-height: 2.35rem;
   margin-top: 1.25rem;
   padding: .55rem .85rem;
-  background: var(--codex-surface-raised-color);
-  color: var(--contact-fixed-text) !important;
   font-size: .66rem;
   transition: gap 150ms ease, background 150ms ease;
 }
@@ -514,7 +321,6 @@ body:has(.support-page) .sl-markdown-content :is(
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  color: var(--contact-muted);
   font-family: var(--vc-font-mono);
   font-size: .64rem;
   font-weight: 500;
@@ -537,10 +343,6 @@ body:has(.support-page) .sl-markdown-content :is(
   flex: 0 0 auto;
   border-radius: 50%;
   background: currentColor;
-}
-
-.contact-form-shell__status.is-unavailable {
-  color: var(--contact-muted);
 }
 
 .contact-form {
@@ -573,7 +375,6 @@ body:has(.support-page) .sl-markdown-content :is(
 
 .contact-field label span {
   margin-left: .4rem;
-  color: var(--contact-muted);
   font-family: var(--vc-font-mono);
   font-size: .58rem;
   font-weight: 400;
@@ -626,7 +427,6 @@ body:has(.support-page) .sl-markdown-content :is(
 .contact-form__actions p {
   max-width: 33rem;
   margin: 0;
-  color: var(--contact-muted);
   font-family: var(--vc-font-ui);
   font-size: .69rem;
   font-weight: 500;
@@ -656,8 +456,6 @@ body:has(.support-page) .sl-markdown-content :is(
 
 .contact-form-unavailable h3 {
   margin: 0;
-  color: var(--contact-fixed-text);
-  font-size: clamp(1.45rem, 1.2rem + .8vw, 2rem);
 }
 
 .contact-form-unavailable p {
@@ -712,60 +510,82 @@ body:has(.support-page) .sl-markdown-content :is(
   }
 }
 
-/* The contact route owns the full editorial canvas beneath the global navigation. */
-.main-frame:has(.contact-page) {
-  padding-top: 0 !important;
-  padding-inline: 0 !important;
+/* Explicit article overrides keep this route independent of generated stylesheet order. */
+
+body:has(.contact-page) .sl-markdown-content .contact-intro h2 {
+  display: block;
+  margin: 0 0 1.35rem;
+  padding: 0;
+  color: var(--contact-text);
+  font-family: var(--vc-font-display);
+  font-size: clamp(2.5rem, 2rem + 2vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.05;
+  text-transform: none;
 }
 
-.main-frame:has(.contact-page) div.content-panel:nth-child(1) {
-  display: none !important;
+body:has(.contact-page) .sl-markdown-content .contact-intro h2::before,
+body:has(.contact-page) .sl-markdown-content .contact-intro h2::after {
+  content: none;
+  display: none;
 }
 
-.main-frame:has(.contact-page) > .codex-two-column-content,
-.main-frame:has(.contact-page) > .codex-two-column-content > .codex-main-pane,
-.main-frame:has(.contact-page) > .codex-two-column-content > .codex-main-pane > main,
-.main-frame:has(.contact-page) main > .content-panel,
-.main-frame:has(.contact-page) main > .content-panel > .sl-container,
-.main-frame:has(.contact-page) .sl-markdown-content,
-.main-frame:has(.contact-page) .contact-page {
-  inline-size: 100% !important;
-  max-inline-size: none !important;
-  margin-inline: 0 !important;
+body:has(.contact-page) .sl-markdown-content .contact-intro h2 + p {
+  margin-block-start: 0;
 }
 
-.main-frame:has(.contact-page) > .codex-two-column-content > .codex-main-pane {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) !important;
-  column-gap: 0 !important;
-  row-gap: 0 !important;
+body:has(.contact-page) .sl-markdown-content .contact-public__intro h2 {
+  margin: 0;
+  color: var(--contact-accent);
+  font-size: clamp(1.8rem, 1.5rem + 1.15vw, 2.8rem);
 }
 
-.main-frame:has(.contact-page) > .codex-two-column-content > .codex-main-pane > main {
-  grid-column: 1 / -1 !important;
-  grid-row: 1 !important;
-  min-inline-size: 0;
-  padding: 0 !important;
+body:has(.contact-page) .sl-markdown-content .contact-github-card h3,
+body:has(.contact-page) .sl-markdown-content .contact-form-unavailable h3 {
+  margin-block-start: 0;
+  color: var(--contact-fixed-text);
+  font-family: var(--vc-font-display);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
-.main-frame:has(.contact-page) main > .content-panel {
-  padding: 0 !important;
+body:has(.contact-page) .sl-markdown-content .contact-github-card h3 {
+  margin-block-end: .55rem;
+  font-size: clamp(1.35rem, 1.18rem + .55vw, 1.8rem);
+  line-height: 1.05;
 }
 
-.main-frame:has(.contact-page) main > .content-panel > .sl-container,
-.main-frame:has(.contact-page) .sl-markdown-content {
-  padding-inline: 0 !important;
+body:has(.contact-page) .sl-markdown-content .contact-form-unavailable h3 {
+  margin-block-end: 0;
+  font-size: clamp(1.45rem, 1.2rem + .8vw, 2rem);
 }
 
-.main-frame:has(.contact-page) .sl-markdown-content {
-  margin-block-start: 0 !important;
-  padding-block: 0 !important;
+body:has(.contact-page) .sl-markdown-content .contact-github-card > p,
+body:has(.contact-page) .sl-markdown-content .contact-form-unavailable > p {
+  margin-block-start: 0;
+  color: var(--contact-fixed-body);
 }
 
-.main-frame:has(.contact-page) .content-panel > .sl-container > .codex-header-fade-filter,
-.main-frame:has(.contact-page) .content-panel > .sl-container > .codex-header-figure,
-.main-frame:has(.contact-page) .content-panel > .sl-container > h1#_top,
-.main-frame:has(.contact-page) .content-panel > .sl-container > .codex-breadcrumbs,
-body:has(.contact-page) .codex-contributors {
-  display: none !important;
+body:has(.contact-page) .contact-github-card__identity,
+body:has(.contact-page) .contact-form-shell__top,
+body:has(.contact-page) .contact-form-shell__status.is-unavailable,
+body:has(.contact-page) .contact-field label span,
+body:has(.contact-page) .contact-form__actions p {
+  color: var(--home-muted-fixed);
+}
+
+body:has(.contact-page) .contact-form-shell .contact-inline-link {
+  color: var(--contact-fixed-text) !important;
+}
+
+body:has(.contact-page) .contact-secondary-action {
+  background: var(--codex-palette-deep);
+  color: var(--contact-fixed-text) !important;
+}
+
+body:has(.contact-page) .contact-secondary-action:hover,
+body:has(.contact-page) .contact-secondary-action:focus-visible {
+  background: color-mix(in oklch, var(--codex-palette-deep) 88%, var(--contact-fixed-text));
 }

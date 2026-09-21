@@ -1,0 +1,64 @@
+/* Full-width editorial routes replace the article title and own their readable widths.
+   Origin: support-redesign.css, support.css, start-here-layout.css. */
+.main-frame:has(.editorial-page) {
+  padding-top: 0 !important;
+  padding-inline: 0 !important;
+}
+
+.main-frame:has(.editorial-page) div.content-panel:nth-child(1) {
+  display: none !important;
+}
+
+.main-frame:has(.editorial-page) > .codex-two-column-content,
+.main-frame:has(.editorial-page) > .codex-two-column-content > .codex-main-pane,
+.main-frame:has(.editorial-page) > .codex-two-column-content > .codex-main-pane > main,
+.main-frame:has(.editorial-page) main > .content-panel,
+.main-frame:has(.editorial-page) main > .content-panel > .sl-container,
+.main-frame:has(.editorial-page) .sl-markdown-content,
+.main-frame:has(.editorial-page) .editorial-page {
+  inline-size: 100% !important;
+  max-inline-size: none !important;
+  margin-inline: 0 !important;
+}
+
+.main-frame:has(.editorial-page) > .codex-two-column-content > .codex-main-pane {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  column-gap: 0 !important;
+  row-gap: 0 !important;
+}
+
+.main-frame:has(.editorial-page) > .codex-two-column-content > .codex-main-pane > main {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  min-inline-size: 0;
+  padding: 0 !important;
+}
+
+.main-frame:has(.support-page, .contact-page) main > .content-panel {
+  padding: 0 !important;
+}
+
+.main-frame:has(.editorial-page) main > .content-panel > .sl-container,
+.main-frame:has(.editorial-page) .sl-markdown-content {
+  padding-inline: 0 !important;
+}
+
+.main-frame:has(.editorial-page) .sl-markdown-content {
+  margin-block-start: 0 !important;
+}
+
+.main-frame:has(.editorial-page) .content-panel > .sl-container > .codex-header-figure,
+.main-frame:has(.editorial-page) .content-panel > .sl-container > h1#_top,
+.main-frame:has(.editorial-page) .content-panel > .sl-container > .codex-breadcrumbs {
+  display: none !important;
+}
+
+.main-frame:has(.support-page, .contact-page) .sl-markdown-content {
+  padding-block: 0 !important;
+}
+
+.main-frame:has(.support-page, .contact-page) .codex-header-fade-filter,
+body:has(.support-page, .contact-page) .codex-contributors {
+  display: none !important;
+}
