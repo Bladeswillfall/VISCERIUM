@@ -1,0 +1,9 @@
+{
+  "id": "viscerium-layout-tools",
+  "name": "VISCERIUM Layout Tools",
+  "version": "0.2.0",
+  "minAppVersion": "1.8.7",
+  "description": "VISCERIUM authoring helpers for presentation-only Markdown layout, including visual indents and responsive column previews.",
+  "author": "VISCERIUM",
+  "isDesktopOnly": false
+}

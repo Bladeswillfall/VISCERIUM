@@ -12,10 +12,13 @@ interface Props {
 
 const { sublist, depth = 0 } = Astro.props;
 const { t } = Astro.locals;
+const isOverviewLink = (entry: any) => entry?.type === 'link'
+  && parseIconLabel(entry.label ?? '').label.trim() === 'Overview';
+const visibleSublist = sublist.filter((entry) => !isOverviewLink(entry));
 ---
 
 <ul class:list={['sidebar-list', { 'top-level': depth === 0 }]} data-sidebar-depth={depth}>
-  {sublist.map((entry) => {
+  {visibleSublist.map((entry) => {
     const parsed = parseIconLabel(entry.label);
     const {
       'data-sidebar-icon': attributeIcon,
@@ -31,7 +34,10 @@ const { t } = Astro.locals;
       ? HISTORICAL_ERAS.find((era) => era === label.toUpperCase())
       : undefined;
     const branchEra = entry.sidebarEra ?? labelledEra;
-    const emptyGroup = entry.type === 'group' && (entry.entries?.length ?? 0) === 0;
+    const visibleEntries = entry.type === 'group'
+      ? (entry.entries ?? []).filter((item: any) => !isOverviewLink(item))
+      : [];
+    const emptyGroup = entry.type === 'group' && visibleEntries.length === 0;
 
     return (
       <li
@@ -77,7 +83,7 @@ const { t } = Astro.locals;
                 <span class="caret" aria-hidden="true">›</span>
               </span>
             </summary>
-            <Astro.self sublist={entry.entries} depth={depth + 1} />
+            <Astro.self sublist={visibleEntries} depth={depth + 1} />
           </details>
         )}
       </li>

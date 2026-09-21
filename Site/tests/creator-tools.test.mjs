@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-const creatorPlugin = readFileSync(new URL('../../Vault/.obsidian/plugins/viscerium-creator-tools/main.js', import.meta.url), 'utf8');
-const creatorStyles = readFileSync(new URL('../../Vault/.obsidian/plugins/viscerium-creator-tools/styles.css', import.meta.url), 'utf8');
+const creatorPlugin = readFileSync(new URL('../../Tools/obsidian-viscerium-creator-tools/src/main.js', import.meta.url), 'utf8');
+const creatorStyles = readFileSync(new URL('../../Tools/obsidian-viscerium-creator-tools/styles.css', import.meta.url), 'utf8');
 const loreTemplate = readFileSync(new URL('../../Vault/Templates/Lore/New Lore Entity.md', import.meta.url), 'utf8');
 const storyTemplate = readFileSync(new URL('../../Vault/Templates/Databases/New Story Entity.md', import.meta.url), 'utf8');
 

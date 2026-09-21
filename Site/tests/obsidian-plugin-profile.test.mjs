@@ -87,6 +87,6 @@ test('gitignore protects plugin payload boundaries', () => {
   assert.match(gitignore, /Vault\/\.obsidian\/plugins\/\*\/\*/);
   assert.match(gitignore, /!Vault\/\.obsidian\/plugins\/templater-obsidian\/data\.json/);
   assert.doesNotMatch(gitignore, /!Vault\/\.obsidian\/plugins\/storyline\/data\.json/);
-  assert.match(gitignore, /!Vault\/\.obsidian\/plugins\/mysnippets-plugin\/\*\*/);
+  assert.match(gitignore, /!Vault\/\.obsidian\/plugins\/mysnippets-plugin\/data\.json/);
   assert.match(gitignore, /!Vault\/\.obsidian\/plugins\/viscerium-timelines\/\*\*/);
 });

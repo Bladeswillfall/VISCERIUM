@@ -8,8 +8,6 @@ export const REQUIRED_REPOSITORY_PATHS = Object.freeze([
   "LICENSE.md",
   "LICENSE-CODE.md",
   "THIRD_PARTY_NOTICES.md",
-  "LICENSES/MPL-2.0.txt",
-  "LICENSES/MySnippets-NOTICE.md",
 ]);
 
 export const REPOSITORY_ROOT = fileURLToPath(new URL("../../", import.meta.url));

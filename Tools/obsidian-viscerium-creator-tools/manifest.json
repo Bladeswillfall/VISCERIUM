@@ -1,0 +1,9 @@
+{
+  "id": "viscerium-creator-tools",
+  "name": "VISCERIUM Creator Tools",
+  "version": "0.2.0",
+  "minAppVersion": "1.8.7",
+  "description": "Controlled era/continuity authoring plus temporary World Anvil migration review context for the VISCERIUM vault.",
+  "author": "VISCERIUM",
+  "isDesktopOnly": false
+}

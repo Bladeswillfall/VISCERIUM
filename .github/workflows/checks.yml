@@ -40,6 +40,10 @@ jobs:
       - run: npm run doctor:vault
       - run: npm run notices:check
 
+      - name: Verify first-party Obsidian runtime payloads
+        working-directory: .
+        run: node Tools/scripts/sync-obsidian-plugins.mjs --check
+
   unit:
     name: Unit tests and benchmarks
     runs-on: ubuntu-latest
