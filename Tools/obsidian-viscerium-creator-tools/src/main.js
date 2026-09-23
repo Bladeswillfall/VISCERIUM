@@ -512,6 +512,17 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       },
     });
     this.addCommand({
+      id: 'review-active-event-chronology',
+      name: 'Review active event chronology...',
+      checkCallback: (checking) => {
+        const file = this.app.workspace.getActiveFile();
+        if (!(file instanceof TFile) || file.extension !== 'md') return false;
+        if (String(this.frontmatter(file).type ?? '').toLowerCase() !== 'event') return false;
+        if (!checking) void this.reviewActiveEventChronology(file);
+        return true;
+      },
+    });
+    this.addCommand({
       id: 'set-controlled-era',
       name: 'Set controlled era / Universal scope',
       checkCallback: (checking) => {
@@ -660,6 +671,45 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     }
 
     new Notice(`Map opened beside ${this.titleFor(locationFile)}. Shift-click the position or use Add marker here, then link the marker to ${locationFile.path} and save it.`, 12000);
+  }
+
+  async reviewActiveEventChronology(eventFile) {
+    const frontmatter = this.frontmatter(eventFile);
+    const era = normaliseEra(frontmatter.era);
+    if (!era) {
+      new Notice('Set the event\'s controlled historical era first, then review its chronology.', 8000);
+      return;
+    }
+    if (era === 'Universal') {
+      new Notice('Universal is not a chronological era for dated events. Set a historical era before timeline placement.', 9000);
+      return;
+    }
+
+    const eraFile = this.app.vault.getAbstractFileByPath(normalizePath(`Lore/Eras/${era}.md`));
+    if (!(eraFile instanceof TFile)) {
+      new Notice(`Could not find the canonical ${era} era timeline note.`, 8000);
+      return;
+    }
+
+    const eventLeaf = this.markdownLeafFor(eventFile) ?? this.app.workspace.getLeaf(false);
+    this.app.workspace.setActiveLeaf(eventLeaf, { focus: false });
+    const timelineLeaf = this.app.workspace.getLeaf('split', 'vertical');
+    await timelineLeaf.openFile(eraFile);
+    this.app.workspace.setActiveLeaf(eventLeaf, { focus: true });
+
+    const date = frontmatter.calendarDate;
+    const hasStartDate = date && typeof date === 'object' && date.year != null;
+    if (!hasStartDate) {
+      new Notice(`${era} timeline opened beside the event. Set calendarDate on the event; it is the sole canonical start date. Use calendarEndDate only for a genuine period.`, 12000);
+      return;
+    }
+
+    if (!eventFile.path.startsWith('Lore/')) {
+      new Notice(`${era} timeline opened. This event has calendarDate, but Drafts are not canonical timeline input. Promote it to Lore when the event is ready.`, 11000);
+      return;
+    }
+
+    new Notice(`${era} timeline opened beside the event. Its calendarDate controls canonical placement. Use VISCERIUM Timelines: Refresh compiled timelines if you need to force a refresh.`, 11000);
   }
 
   titleFor(file) {
