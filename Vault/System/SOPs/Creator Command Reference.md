@@ -33,6 +33,7 @@ This page is the authoritative index for creator and repository operations. Open
 | Create a location | [[Home]] → **Create new** → **Worldbuilding** → **Location** |
 | Place a canonical location on a map | **VISCERIUM Creator Tools: Place active location on Atlas...** |
 | Create an event | [[Home]] → **Create new** → **Worldbuilding** → **Event** |
+| Review an event against canonical chronology | **VISCERIUM Creator Tools: Review active event chronology...** |
 | Create technology | [[Home]] → **Create new** → **Worldbuilding** → **Technology** |
 | Create another Lore type | [[Home]] → **Create new** → **Worldbuilding** → **Other lore** |
 | Create a Myrkild unit | [[Home]] → **Create new** → **Myrkild unit** |
@@ -137,6 +138,18 @@ Creates a character, faction, location, event, species, item, culture, belief, n
 The direct Location, Event, and Technology commands call this same creator with the relevant type already selected. Technology remains a Lore item with `item_type: technology`.
 
 The workflow can create task-bearing reference stubs when you select **Create new…**.
+
+### Review active event chronology
+
+Command: **VISCERIUM Creator Tools: Review active event chronology...**
+
+Changes files: **No.**
+
+Run this from an event note. The command uses the event's controlled historical `era` to open that era's canonical generated timeline beside the event.
+
+If `calendarDate` is empty, the command points you back to the event because `calendarDate` is the sole canonical start date. Use `calendarEndDate` only for a genuine period.
+
+A dated event under `Drafts/` can be reviewed, but it does not enter canonical timeline compilation until it is promoted to `Lore/`.
 
 ### Place active location on Atlas
 
