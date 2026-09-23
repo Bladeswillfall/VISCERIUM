@@ -12,7 +12,7 @@ const vaultRoot = path.join(repoRoot, 'Vault');
 const require = createRequire(import.meta.url);
 const creatorPath = path.join(vaultRoot, 'Templates/_Scripts/create_lore_entity.js');
 
-function mockTemplater({ title, description, era, locationKind = '', year = '', certainty = 'exact' }) {
+function mockTemplater({ title, description, era, locationKind = '', mapId = '', year = '', certainty = 'exact' }) {
   const moves = [];
   const renames = [];
 
@@ -37,6 +37,7 @@ function mockTemplater({ title, description, era, locationKind = '', year = '', 
       suggester: async (_labels, _values, _required, label) => {
         if (label === 'Era / scope') return era;
         if (label === 'Broad location kind — choose only if useful') return locationKind;
+        if (label === 'Atlas target — marker placement waits until this location has a canonical Lore path') return mapId;
         if (label === 'Add this event to the canonical timeline now?') return Boolean(year);
         if (label === 'How certain is this year?') return certainty;
         throw new Error(`Unexpected suggester: ${label}`);
@@ -47,10 +48,14 @@ function mockTemplater({ title, description, era, locationKind = '', year = '', 
     },
     app: {
       metadataCache: {
-        getFileCache: () => ({ frontmatter: {} }),
+        getFileCache: (file) => ({
+          frontmatter: file?.path === 'Lore/Maps/Errack CITADEL Map.md'
+            ? { title: 'Errack CITADEL Map', type: 'map', era: 'CITADEL', mapId: 'errack-citadel' }
+            : {},
+        }),
       },
       vault: {
-        getMarkdownFiles: () => [],
+        getMarkdownFiles: () => mapId ? [{ path: 'Lore/Maps/Errack CITADEL Map.md', basename: 'Errack CITADEL Map' }] : [],
         getAbstractFileByPath: (relativePath) => {
           if (relativePath.startsWith('Templates/')) return { path: relativePath };
           return { path: relativePath };
@@ -76,6 +81,7 @@ test('direct Location creation writes the shared Lore baseline', async () => {
     description: 'A fortified harbour built around a volcanic inlet.',
     era: 'CITADEL',
     locationKind: 'settlement',
+    mapId: 'errack-citadel',
   });
 
   const rendered = await creator(tp, { type: 'location' });
@@ -86,6 +92,7 @@ test('direct Location creation writes the shared Lore baseline', async () => {
   assert.equal(parsed.data.development_level, 'stub');
   assert.equal(parsed.data.era, 'CITADEL');
   assert.equal(parsed.data.location_kind, 'settlement');
+  assert.equal(parsed.data.map.id, 'errack-citadel');
   assert.equal(parsed.data.entity_id, 'glass-harbour');
   assert.equal(parsed.data.description, 'A fortified harbour built around a volcanic inlet.');
   assert.deepEqual(renames, ['Glass Harbour']);
