@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 const creatorPlugin = readFileSync(new URL('../../Tools/obsidian-viscerium-creator-tools/src/main.js', import.meta.url), 'utf8');
 const creatorStyles = readFileSync(new URL('../../Tools/obsidian-viscerium-creator-tools/styles.css', import.meta.url), 'utf8');
 const loreTemplate = readFileSync(new URL('../../Vault/Templates/Lore/New Lore Entity.md', import.meta.url), 'utf8');
+const loreCreator = readFileSync(new URL('../../Vault/Templates/_Scripts/create_lore_entity.js', import.meta.url), 'utf8');
 const storyTemplate = readFileSync(new URL('../../Vault/Templates/Databases/New Story Entity.md', import.meta.url), 'utf8');
 const homeHero = readFileSync(new URL('../../Vault/System/Views/Home/Hero/view.js', import.meta.url), 'utf8');
 const templaterConfig = JSON.parse(readFileSync(new URL('../../Vault/.obsidian/plugins/templater-obsidian/data.json', import.meta.url), 'utf8'));
@@ -13,10 +14,17 @@ test('creator tools own the shared creation entry point used by Home', () => {
   assert.match(creatorPlugin, /id: 'create'/);
   assert.match(creatorPlugin, /name: 'Create\.\.\.'/);
   assert.match(creatorPlugin, /What are you creating\?/);
+  assert.match(creatorPlugin, /What kind of worldbuilding\?/);
+  assert.match(creatorPlugin, /Templates\/Lore\/New Location\.md/);
+  assert.match(creatorPlugin, /Templates\/Lore\/New Event\.md/);
+  assert.match(creatorPlugin, /Templates\/Lore\/New Technology\.md/);
   assert.match(creatorPlugin, /Templates\/Publishing\/New Map\.md/);
   assert.match(creatorPlugin, /Templates\/Timelines\/New Timeline\.md/);
   assert.match(homeHero, /viscerium-creator-tools:create/);
   assert.doesNotMatch(homeHero, /templaterCreateCommand|vc-home-create-panel/);
+  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Lore/New Location.md'));
+  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Lore/New Event.md'));
+  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Lore/New Technology.md'));
   assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Publishing/New Map.md'));
   assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Timelines/New Timeline.md'));
 });
@@ -84,9 +92,12 @@ test('import review pane follows creator visual grammar', () => {
 });
 
 test('creator templates use the controlled era vocabulary and continuity IDs', () => {
-  assert.match(loreTemplate, /const ERA_OPTIONS = \[\.\.\.HISTORICAL_ERAS, "Universal"\]/);
-  assert.match(loreTemplate, /entity_id/);
-  assert.doesNotMatch(loreTemplate, /publish:\s*false/);
+  assert.match(loreTemplate, /tp\.user\.create_lore_entity\(tp\)/);
+  assert.match(loreCreator, /const ERA_OPTIONS = \[\.\.\.HISTORICAL_ERAS, "Universal"\]/);
+  assert.match(loreCreator, /entity_id/);
+  assert.match(loreCreator, /itemType/);
+  assert.match(loreCreator, /technology: "Technology"/);
+  assert.doesNotMatch(loreCreator, /publish:\s*false/);
 
   assert.match(storyTemplate, /const ERA_OPTIONS = \["CITADEL", "SMOG", "NEARSIGHT", "ENTROPY", "Universal"\]/);
   assert.match(storyTemplate, /Continuity entity ID/);
