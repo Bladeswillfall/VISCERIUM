@@ -384,11 +384,13 @@ class NoteContextView extends ItemView {
 
   stateItems(frontmatter) {
     return [
-      String(frontmatter.type ?? '').trim(),
-      String(frontmatter.era ?? '').trim(),
-      String(frontmatter.status ?? '').trim(),
-      String(frontmatter.development_level ?? '').trim(),
-    ].filter(Boolean);
+      ['Type', frontmatter.type],
+      ['Era', frontmatter.era],
+      ['Status', frontmatter.status],
+      ['State', frontmatter.development_level],
+    ]
+      .map(([label, value]) => [label, String(value ?? '').trim()])
+      .filter(([, value]) => Boolean(value));
   }
 
   async refresh() {
@@ -412,7 +414,7 @@ class NoteContextView extends ItemView {
     const states = this.stateItems(frontmatter);
     if (states.length) {
       const state = header.createDiv({ cls: 'vc-note-context-state' });
-      for (const value of states) state.createSpan({ text: value });
+      for (const [label, value] of states) state.createSpan({ text: `${label}: ${value}` });
     }
 
     const next = this.plugin.noteNextAction(this.file);
