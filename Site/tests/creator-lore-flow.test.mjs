@@ -37,7 +37,7 @@ function mockTemplater({ title, description, era, locationKind = '', mapId = '',
       suggester: async (_labels, _values, _required, label) => {
         if (label === 'Era / scope') return era;
         if (label === 'Broad location kind — choose only if useful') return locationKind;
-        if (label === 'Atlas target — marker placement waits until this location has a canonical Lore path') return mapId;
+        if (label === 'Atlas target. Marker placement waits until this location has a canonical Lore path') return mapId;
         if (label === 'Add this event to the canonical timeline now?') return Boolean(year);
         if (label === 'How certain is this year?') return certainty;
         throw new Error(`Unexpected suggester: ${label}`);
