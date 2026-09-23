@@ -8,7 +8,7 @@ const creatorSource = await readFile(
   'utf8',
 );
 
-function loadPluginHarness() {
+function loadPluginHarness(selectionOrder) {
   let activeModal = null;
   const opened = [];
   const blocked = [];
@@ -38,9 +38,13 @@ function loadPluginHarness() {
         if (!wanted) throw new Error(`Unexpected modal: ${this.placeholder}`);
         const option = this.getSuggestions('').find((entry) => entry.label === wanted);
         if (!option) throw new Error(`Missing option: ${wanted}`);
-        // Obsidian closes the SuggestModal before delivering the selected item.
-        this.close();
-        this.onChooseSuggestion(option);
+        if (selectionOrder === 'close-before-choice') {
+          this.close();
+          this.onChooseSuggestion(option);
+        } else {
+          this.onChooseSuggestion(option);
+          this.close();
+        }
       });
     }
     close() {
@@ -101,21 +105,23 @@ function loadPluginHarness() {
   return { PluginClass: module.exports, app, opened, blocked, executed };
 }
 
-test('Worldbuilding survives Obsidian close-before-choice ordering', async () => {
-  const harness = loadPluginHarness();
-  const plugin = new harness.PluginClass(harness.app);
+test('Worldbuilding survives both SuggestModal callback orders', async () => {
+  for (const selectionOrder of ['close-before-choice', 'choice-before-close']) {
+    const harness = loadPluginHarness(selectionOrder);
+    const plugin = new harness.PluginClass(harness.app);
 
-  await Promise.race([
-    plugin.openCreate(),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('creator flow did not complete')), 250)),
-  ]);
+    await Promise.race([
+      plugin.openCreate(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error(`creator flow did not complete: ${selectionOrder}`)), 250)),
+    ]);
 
-  assert.deepEqual(harness.opened, [
-    'What are you creating?',
-    'What kind of worldbuilding?',
-  ]);
-  assert.deepEqual(harness.blocked, []);
-  assert.deepEqual(harness.executed, [
-    'templater-obsidian:create-Templates/Lore/New Location.md',
-  ]);
+    assert.deepEqual(harness.opened, [
+      'What are you creating?',
+      'What kind of worldbuilding?',
+    ], selectionOrder);
+    assert.deepEqual(harness.blocked, [], selectionOrder);
+    assert.deepEqual(harness.executed, [
+      'templater-obsidian:create-Templates/Lore/New Location.md',
+    ], selectionOrder);
+  }
 });
