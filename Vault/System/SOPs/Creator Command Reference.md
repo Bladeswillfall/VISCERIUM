@@ -78,8 +78,8 @@ It does not assign keyboard shortcuts to those commands.
 | Create a Story Entity | **Templater: Create Databases/New Story Entity** | None stored |
 | Create a Lore Entity | **Templater: Create Lore/New Lore Entity** | None stored |
 | Create a Myrkild unit | **Templater: Create Databases/New Myrkild Unit** | None stored |
-| Create a map | **Templater: Create Publishing/Map Template** | None stored |
-| Create a canonical timeline | **Templater: Create Timelines/Timeline Template** | None stored |
+| Create a map | **Templater: Create Publishing/New Map** | None stored |
+| Create a canonical timeline | **Templater: Create Timelines/New Timeline** | None stored |
 | Insert an optional section into an existing note | **Templater: Insert template** | None stored |
 | Use the general creation fallback | **Templater: Create new note from template** | None stored |
 
