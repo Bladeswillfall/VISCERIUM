@@ -193,8 +193,8 @@ For each test note:
 
 1. Confirm that the expected template and `type` were applied.
 2. Confirm that ordinary Lore drafts contain `development_level: stub`.
-4. Confirm that a recognised item or species subfolder filled `item_type` or `species_kind`.
-3. Confirm that a historical era in the path filled `era`.
+3. Confirm that a recognised item or species subfolder filled `item_type` or `species_kind`.
+4. Confirm that a historical era in the path filled `era`.
 5. Confirm that the note remained in the folder where you created it.
 6. Confirm that the template contains blank `created:`, `published:`, and `updated:` properties.
 7. Type a short sentence.
