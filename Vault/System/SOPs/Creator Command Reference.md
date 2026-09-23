@@ -31,6 +31,7 @@ This page is the authoritative index for creator and repository operations. Open
 | Reopen import context for the active World Anvil note | **VISCERIUM Creator Tools: Open World Anvil import review context** |
 | Create fauna, flora, fungi, or a Story Entity item | [[Home]] → **Create new** → **Story entity** |
 | Create a location | [[Home]] → **Create new** → **Worldbuilding** → **Location** |
+| Place a canonical location on a map | **VISCERIUM Creator Tools: Place active location on Atlas...** |
 | Create an event | [[Home]] → **Create new** → **Worldbuilding** → **Event** |
 | Create technology | [[Home]] → **Create new** → **Worldbuilding** → **Technology** |
 | Create another Lore type | [[Home]] → **Create new** → **Worldbuilding** → **Other lore** |
@@ -136,6 +137,18 @@ Creates a character, faction, location, event, species, item, culture, belief, n
 The direct Location, Event, and Technology commands call this same creator with the relevant type already selected. Technology remains a Lore item with `item_type: technology`.
 
 The workflow can create task-bearing reference stubs when you select **Create new…**.
+
+### Place active location on Atlas
+
+Command: **VISCERIUM Creator Tools: Place active location on Atlas...**
+
+Changes files: **No.** TTRPG Tools - Maps writes marker data only after you place and save the marker.
+
+Run this from a location with a stable path under `Lore/`. The command lists canonical map notes that have a `mapId`, with same-era maps first. It opens the selected map beside the location.
+
+On the map, Shift-click the position or use **Add marker here**. Link the marker to the location note, choose the primary layer and save it.
+
+The command does not write coordinates or marker sidecar JSON. Draft locations stay in the writing workflow until they have a stable Lore path.
 
 ### Create a Myrkild unit
 
