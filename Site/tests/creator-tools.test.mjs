@@ -36,6 +36,8 @@ test('Creator Tools hands canonical locations to native Atlas marker placement',
   assert.match(creatorPlugin, /frontmatter\.type.*=== 'map'/);
   assert.match(creatorPlugin, /frontmatter\.mapId/);
   assert.match(creatorPlugin, /getLeaf\('split', 'vertical'\)/);
+  assert.match(creatorPlugin, /processFrontMatter\(locationFile/);
+  assert.match(creatorPlugin, /data\.map = \{ \.\.\.existingMap, id: mapId \}/);
   assert.match(creatorPlugin, /Shift-click the position or use Add marker here/);
   assert.match(creatorPlugin, /Insert new map\.\.\./);
 });
@@ -73,6 +75,7 @@ test('creator tools provide one opt-in next action for ordinary notes', () => {
   assert.match(creatorPlugin, /Write the one-line identity/);
   assert.match(creatorPlugin, /Develop one useful section/);
   assert.match(creatorPlugin, /Decide whether this belongs on an Atlas/);
+  assert.match(creatorPlugin, /frontmatter\.map\?\.id/);
   assert.match(creatorPlugin, /Set the historical era/);
   assert.match(creatorPlugin, /Add canonical chronology/);
   assert.match(creatorPlugin, /hasCalendarYear/);
