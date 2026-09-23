@@ -22,6 +22,7 @@ This page is the authoritative index for creator and repository operations. Open
 | Task | Use |
 | --- | --- |
 | Return to the creator dashboard | Open [[Home]] |
+| Create something new | **VISCERIUM Creator Tools: Create...** |
 | See deliberate work tasks | [[Home]] → **All creator tasks**, or [[System/Creator Tasks|Creator Tasks]] |
 | Continue the World Anvil transfer | [[Home]] → **Open Review First**, or [[Drafts/Inbox/World Anvil Migration Review|Migration Guide]] |
 | Apply the safe mechanical World Anvil pass | `cd Site` then `npm run migration:worldanvil:integrate:write` |
@@ -54,7 +55,7 @@ This page is the authoritative index for creator and repository operations. Open
 | **Bases** | Shows filtered card and table views of notes. | The notes, not the `.base` view |
 | **Templater** | Runs guided creation and edit workflows. | Templates under `Vault/Templates/` |
 | **Dataview** | Builds dynamic dashboard lists and creator views. | The notes Dataview reads |
-| **VISCERIUM Creator Tools** | Controls era/continuity authoring and, during migration, keeps World Anvil review context beside the active import. | Current note frontmatter and note-local import checklist |
+| **VISCERIUM Creator Tools** | Owns the shared creation entry point, controls era/continuity authoring, and keeps World Anvil review context beside active imports. | Current notes, existing creator templates, and note-local import checklists |
 | **VISCERIUM Timelines** | Shows canonical timelines and read-only StoryLine timelines in Obsidian. | Canonical Lore or StoryLine scene metadata |
 | **StoryLine** | Organises private writing projects and scenes. | `Vault/Stories/` and StoryLine project data |
 | **Chronos** | Renders note-local timeline blocks. | The Chronos block in the note |
@@ -68,7 +69,7 @@ The repository does not currently store custom hotkeys in `Vault/.obsidian/hotke
 
 Use **Ctrl/Cmd + P** unless Obsidian shows a local binding.
 
-The checked-in Templater configuration exposes the three direct creation commands.
+The checked-in Templater configuration exposes direct commands for the guided entity workflows, maps, and canonical timelines.
 
 It does not assign keyboard shortcuts to those commands.
 
@@ -77,6 +78,8 @@ It does not assign keyboard shortcuts to those commands.
 | Create a Story Entity | **Templater: Create Databases/New Story Entity** | None stored |
 | Create a Lore Entity | **Templater: Create Lore/New Lore Entity** | None stored |
 | Create a Myrkild unit | **Templater: Create Databases/New Myrkild Unit** | None stored |
+| Create a map | **Templater: Create Publishing/Map Template** | None stored |
+| Create a canonical timeline | **Templater: Create Timelines/Timeline Template** | None stored |
 | Insert an optional section into an existing note | **Templater: Insert template** | None stored |
 | Use the general creation fallback | **Templater: Create new note from template** | None stored |
 
@@ -100,7 +103,11 @@ It does not assign keyboard shortcuts to those commands.
 
 ## Creation commands
 
-Run these commands with **Ctrl/Cmd + P** when the Home control is not available.
+Use **VISCERIUM Creator Tools: Create...** as the normal creation entry point. The Home **Create new** control runs the same command.
+
+The chooser delegates to the existing creator commands. It does not introduce another note format or source of truth.
+
+Run the direct commands below with **Ctrl/Cmd + P** when you need a specific fallback.
 
 ### Create a Story Entity
 
