@@ -283,6 +283,7 @@ class ChoiceModal extends SuggestModal {
   constructor(app, options, placeholder) {
     super(app);
     this.options = options;
+    this.selectedValue = null;
     this.setPlaceholder(placeholder);
   }
   getSuggestions(query) {
@@ -294,10 +295,10 @@ class ChoiceModal extends SuggestModal {
     if (option.hint) el.createEl('small', { text: option.hint });
   }
   onChooseSuggestion(option) {
-    this.resolve?.(option.value);
-    this.resolve = null;
+    this.selectedValue = option.value;
   }
   choose() {
+    this.selectedValue = null;
     return new Promise((resolve) => {
       this.resolve = resolve;
       this.open();
@@ -305,8 +306,11 @@ class ChoiceModal extends SuggestModal {
   }
   onClose() {
     super.onClose();
-    this.resolve?.(null);
+    const resolve = this.resolve;
+    const value = this.selectedValue;
     this.resolve = null;
+    this.selectedValue = null;
+    resolve?.(value);
   }
 }
 
