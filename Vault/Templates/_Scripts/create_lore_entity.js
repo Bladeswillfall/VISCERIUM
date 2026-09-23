@@ -239,7 +239,7 @@ if (config.schemaType === "item") {
     ["", ...Object.keys(ITEM_TYPES)],
     false,
     "Broad item type",
-  ) ?? "";
+  ) || "";
   data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
   data.location = await pick({ types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
 }
