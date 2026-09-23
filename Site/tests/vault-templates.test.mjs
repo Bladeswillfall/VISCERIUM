@@ -76,6 +76,7 @@ const creatorTemplates = [
   'Templates/Timelines/New Timeline.md',
   'Templates/_Scripts/create_from_skeleton.js',
   'Templates/_Scripts/create_lore_entity.js',
+  'Templates/_Scripts/create_map.js',
   'Templates/Databases/New Myrkild Unit.md',
   'Templates/_Scripts/reference_picker.js',
   'Templates/_Scripts/folder_entity_router.js',
