@@ -29,9 +29,12 @@ This page is the authoritative index for creator and repository operations. Open
 | Audit unresolved World Anvil descriptions and missing update keys | `cd Site` then `npm run migration:worldanvil:prepare` |
 | Update an existing World Anvil article | [[#Update an existing World Anvil import]] |
 | Reopen import context for the active World Anvil note | **VISCERIUM Creator Tools: Open World Anvil import review context** |
-| Create fauna, flora, fungi, or an item | [[Home]] → **+ Story Entity** |
-| Create a character, faction, location, event, or species | [[Home]] → **+ Lore Entity** |
-| Create a Myrkild unit | [[Home]] → **+ Myrkild Unit** |
+| Create fauna, flora, fungi, or a Story Entity item | [[Home]] → **Create new** → **Story entity** |
+| Create a location | [[Home]] → **Create new** → **Worldbuilding** → **Location** |
+| Create an event | [[Home]] → **Create new** → **Worldbuilding** → **Event** |
+| Create technology | [[Home]] → **Create new** → **Worldbuilding** → **Technology** |
+| Create another Lore type | [[Home]] → **Create new** → **Worldbuilding** → **Other lore** |
+| Create a Myrkild unit | [[Home]] → **Create new** → **Myrkild unit** |
 | Open creator context | [[Home]] → **Creator Context** |
 | Find or assign a hotkey | **Settings → Hotkeys** |
 | Set a controlled era or Universal scope | **VISCERIUM Creator Tools: Set controlled era / Universal scope** |
@@ -77,6 +80,9 @@ It does not assign keyboard shortcuts to those commands.
 | --- | --- | --- |
 | Create a Story Entity | **Templater: Create Databases/New Story Entity** | None stored |
 | Create a Lore Entity | **Templater: Create Lore/New Lore Entity** | None stored |
+| Create a location | **Templater: Create Lore/New Location** | None stored |
+| Create an event | **Templater: Create Lore/New Event** | None stored |
+| Create technology | **Templater: Create Lore/New Technology** | None stored |
 | Create a Myrkild unit | **Templater: Create Databases/New Myrkild Unit** | None stored |
 | Create a map | **Templater: Create Publishing/New Map** | None stored |
 | Create a canonical timeline | **Templater: Create Timelines/New Timeline** | None stored |
@@ -105,6 +111,8 @@ It does not assign keyboard shortcuts to those commands.
 
 Use **VISCERIUM Creator Tools: Create...** as the normal creation entry point. The Home **Create new** control runs the same command.
 
+The first chooser groups common work. Select **Worldbuilding** for direct Location, Event, and Technology routes, or select **Other lore** for the full Lore type list.
+
 The chooser delegates to the existing creator commands. It does not introduce another note format or source of truth.
 
 Run the direct commands below with **Ctrl/Cmd + P** when you need a specific fallback.
@@ -123,7 +131,9 @@ Command: **Templater: Create Lore/New Lore Entity**
 
 Changes files: **Yes.**
 
-Creates a character, faction, location, event, or species draft.
+Creates a character, faction, location, event, species, item, culture, belief, naming language, Resonance practice, or general article draft.
+
+The direct Location, Event, and Technology commands call this same creator with the relevant type already selected. Technology remains a Lore item with `item_type: technology`.
 
 The workflow can create task-bearing reference stubs when you select **Create new…**.
 
