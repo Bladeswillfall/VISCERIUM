@@ -501,6 +501,17 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       callback: () => void this.openCreate(),
     });
     this.addCommand({
+      id: 'place-active-location-on-atlas',
+      name: 'Place active location on Atlas...',
+      checkCallback: (checking) => {
+        const file = this.app.workspace.getActiveFile();
+        if (!(file instanceof TFile) || file.extension !== 'md') return false;
+        if (String(this.frontmatter(file).type ?? '').toLowerCase() !== 'location') return false;
+        if (!checking) void this.placeActiveLocationOnAtlas(file);
+        return true;
+      },
+    });
+    this.addCommand({
       id: 'set-controlled-era',
       name: 'Set controlled era / Universal scope',
       checkCallback: (checking) => {
@@ -590,6 +601,65 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
 
   frontmatter(file) {
     return this.app.metadataCache.getFileCache(file)?.frontmatter ?? {};
+  }
+
+  atlasMapsFor(locationFile) {
+    const locationEra = normaliseEra(this.frontmatter(locationFile).era);
+    return this.app.vault.getMarkdownFiles()
+      .filter((file) => file.path.startsWith('Lore/'))
+      .map((file) => ({ file, frontmatter: this.frontmatter(file) }))
+      .filter(({ frontmatter }) => String(frontmatter.type ?? '').toLowerCase() === 'map' && String(frontmatter.mapId ?? '').trim())
+      .sort((a, b) => {
+        const aEra = normaliseEra(a.frontmatter.era);
+        const bEra = normaliseEra(b.frontmatter.era);
+        const aMatch = locationEra && aEra === locationEra ? 0 : 1;
+        const bMatch = locationEra && bEra === locationEra ? 0 : 1;
+        return aMatch - bMatch || this.titleFor(a.file).localeCompare(this.titleFor(b.file));
+      });
+  }
+
+  async placeActiveLocationOnAtlas(locationFile) {
+    if (!locationFile.path.startsWith('Lore/')) {
+      new Notice('Atlas placement waits until this location has a stable Lore path. Keep developing the draft, then place it after promotion to Lore.', 9000);
+      return;
+    }
+
+    const maps = this.atlasMapsFor(locationFile);
+    if (!maps.length) {
+      new Notice('No canonical Atlas map with a mapId is available. Create or finish a map first.', 8000);
+      return;
+    }
+
+    const chosenPath = await new ChoiceModal(
+      this.app,
+      maps.map(({ file, frontmatter }) => ({
+        label: this.titleFor(file),
+        hint: [String(frontmatter.era ?? '').trim(), String(frontmatter.mapId ?? '').trim()].filter(Boolean).join(' · '),
+        value: file.path,
+      })),
+      'Place this location on which map?',
+    ).choose();
+    if (!chosenPath) return;
+
+    const mapFile = this.app.vault.getAbstractFileByPath(normalizePath(chosenPath));
+    if (!(mapFile instanceof TFile)) {
+      new Notice('The selected Atlas map could not be opened.', 7000);
+      return;
+    }
+
+    const locationLeaf = this.markdownLeafFor(locationFile) ?? this.app.workspace.getLeaf(false);
+    this.app.workspace.setActiveLeaf(locationLeaf, { focus: false });
+    const mapLeaf = this.app.workspace.getLeaf('split', 'vertical');
+    await mapLeaf.openFile(mapFile);
+    this.app.workspace.setActiveLeaf(mapLeaf, { focus: true });
+
+    const mapSource = await this.app.vault.cachedRead(mapFile);
+    if (!/^```zoommap\s*$/m.test(mapSource)) {
+      new Notice('Map opened beside the location. Add its authoring map first with TTRPG Tools - Maps: Insert new map..., then place the linked marker.', 10000);
+      return;
+    }
+
+    new Notice(`Map opened beside ${this.titleFor(locationFile)}. Shift-click the position or use Add marker here, then link the marker to ${locationFile.path} and save it.`, 12000);
   }
 
   titleFor(file) {
