@@ -73,7 +73,9 @@ test('creator tools provide one opt-in next action for ordinary notes', () => {
   assert.match(creatorPlugin, /Write the one-line identity/);
   assert.match(creatorPlugin, /Develop one useful section/);
   assert.match(creatorPlugin, /Decide whether this belongs on an Atlas/);
-  assert.match(creatorPlugin, /Check canonical chronology/);
+  assert.match(creatorPlugin, /Set the historical era/);
+  assert.match(creatorPlugin, /Add canonical chronology/);
+  assert.match(creatorPlugin, /hasCalendarYear/);
   assert.match(creatorPlugin, /Continue only when something changed/);
   assert.match(creatorPlugin, /getLeavesOfType\(NOTE_CONTEXT_VIEW\)/);
   assert.doesNotMatch(creatorPlugin, /note context.*progress|completion percentage/i);
