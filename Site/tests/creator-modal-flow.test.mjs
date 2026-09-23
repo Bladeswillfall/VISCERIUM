@@ -38,14 +38,17 @@ function loadPluginHarness(selectionOrder) {
         if (!wanted) throw new Error(`Unexpected modal: ${this.placeholder}`);
         const option = this.getSuggestions('').find((entry) => entry.label === wanted);
         if (!option) throw new Error(`Missing option: ${wanted}`);
-        if (selectionOrder === 'close-before-choice') {
-          this.close();
-          this.onChooseSuggestion(option);
-        } else {
-          this.onChooseSuggestion(option);
-          this.close();
-        }
+        this.selectSuggestion(option);
       });
+    }
+    selectSuggestion(option) {
+      if (selectionOrder === 'close-before-choice') {
+        this.close();
+        this.onChooseSuggestion(option);
+      } else {
+        this.onChooseSuggestion(option);
+        this.close();
+      }
     }
     close() {
       if (activeModal === this) activeModal = null;
