@@ -106,7 +106,9 @@ Use `/maps/` temporarily when an era does not yet have a dedicated Atlas map. On
 
 ### Prepare the lore note
 
-The marker must link to a canonical note. For public Atlas output, that note must be published.
+Location creation can record the intended Atlas as `map.id` while the note is still a draft. This links the authoring decision without creating public marker state.
+
+The marker itself must link to a canonical note with a stable `Lore/` path. For public Atlas output, that note must be published.
 
 Keep a `map:` block on the linked note for semantic public behaviour:
 
