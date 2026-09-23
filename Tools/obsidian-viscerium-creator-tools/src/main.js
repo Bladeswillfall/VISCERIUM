@@ -31,12 +31,12 @@ const CREATE_ACTIONS = Object.freeze([
   {
     label: 'Map',
     hint: 'Atlas source map and authoring note',
-    commandId: 'templater-obsidian:create-Templates/Publishing/Map Template.md',
+    commandId: 'templater-obsidian:create-Templates/Publishing/New Map.md',
   },
   {
     label: 'Timeline',
     hint: 'Canonical Lore timeline view',
-    commandId: 'templater-obsidian:create-Templates/Timelines/Timeline Template.md',
+    commandId: 'templater-obsidian:create-Templates/Timelines/New Timeline.md',
   },
   {
     label: 'Story timeline',
