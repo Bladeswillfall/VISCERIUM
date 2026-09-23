@@ -47,12 +47,17 @@ The plugin bundle itself is installed per device. Repository configuration, note
 
 ### Create the map note
 
-1. Create the note from [[Map Template]].
-2. Set a unique `mapId`.
-3. Set `image` to the public path, for example `/assets/maps/Errack-CITADEL.webp`.
-4. Set `mapMarkers` to the vault-relative sidecar path, for example `Assets/Maps/Errack-CITADEL.webp.markers.json`.
-5. Record the source image `width` and `height` when known.
-6. Write a reader-safe `description`.
+1. Open [[Home]].
+2. Select **Create new**.
+3. Select **Map**.
+4. Enter the map name and one-line purpose.
+5. Select the era or scope when it is established.
+6. Accept or edit the suggested unique `mapId`.
+7. Select an image from `Assets/Maps/` when one is ready.
+8. Confirm the derived public `image` path and `mapMarkers` sidecar path in frontmatter.
+9. Record the source image `width` and `height` when known.
+
+If you leave the image unassigned, add `image` and `mapMarkers` later. Do not invent them to complete the form.
 
 ### Insert the authoring map
 
