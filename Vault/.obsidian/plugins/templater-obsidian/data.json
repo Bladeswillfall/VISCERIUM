@@ -48,7 +48,10 @@
     "Templates/StoryLine/Add Story Change.md",
     "Templates/StoryLine/Open Story State.md",
     "Templates/Publishing/New Map.md",
-    "Templates/Timelines/New Timeline.md"
+    "Templates/Timelines/New Timeline.md",
+    "Templates/Lore/New Location.md",
+    "Templates/Lore/New Event.md",
+    "Templates/Lore/New Technology.md"
   ],
   "startup_templates": [
     "Templates/_Startup/Open VISCERIUM Home.md",
