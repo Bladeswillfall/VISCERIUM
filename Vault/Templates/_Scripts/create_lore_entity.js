@@ -278,7 +278,7 @@ async function chooseLocationMapId(tp, era) {
     })],
     ["", ...maps.map(({ frontmatter }) => String(frontmatter.mapId).trim())],
     false,
-    "Atlas target — marker placement waits until this location has a canonical Lore path",
+    "Atlas target. Marker placement waits until this location has a canonical Lore path",
   ) ?? "";
 }
 
