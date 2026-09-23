@@ -12,6 +12,54 @@ const IMPORT_REVIEW_END = '<!-- worldanvil-migration-review:end -->';
 const WORLDANVIL_BASE_PATH = 'System/Bases/World Anvil Import.base';
 const WORLDANVIL_GUIDE_PATH = 'Drafts/Inbox/World Anvil Migration Review.md';
 
+const CREATE_ACTIONS = Object.freeze([
+  {
+    label: 'Lore entity',
+    hint: 'Character, faction, location, event, species, culture, belief, or naming language',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Lore Entity.md',
+  },
+  {
+    label: 'Story entity',
+    hint: 'Fauna, flora, fungi, or item',
+    commandId: 'templater-obsidian:create-Templates/Databases/New Story Entity.md',
+  },
+  {
+    label: 'Myrkild unit',
+    hint: 'Structured Myrkild unit',
+    commandId: 'templater-obsidian:create-Templates/Databases/New Myrkild Unit.md',
+  },
+  {
+    label: 'Map',
+    hint: 'Atlas source map and authoring note',
+    commandId: 'templater-obsidian:create-Templates/Publishing/Map Template.md',
+  },
+  {
+    label: 'Timeline',
+    hint: 'Canonical Lore timeline view',
+    commandId: 'templater-obsidian:create-Templates/Timelines/Timeline Template.md',
+  },
+  {
+    label: 'Story timeline',
+    hint: 'Open the active StoryLine project timeline',
+    commandId: 'viscerium-timelines:open-storyline-project-timeline',
+  },
+  {
+    label: 'Today',
+    hint: "Open or create today's Chronicle note",
+    commandId: 'journal-bases:open-current-daily',
+  },
+  {
+    label: 'Week',
+    hint: "Open or create this week's Chronicle review",
+    commandId: 'journal-bases:open-current-weekly',
+  },
+  {
+    label: 'Month',
+    hint: "Open or create this month's Chronicle review",
+    commandId: 'journal-bases:open-current-monthly',
+  },
+]);
+
 const TIER1_TITLES = new Set([
   'About VISCERIUM', 'Introduction to VISCERIUM', 'ERAS', 'CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY',
   'Degel', 'Errack', 'Resonance', 'Myrkild', 'Naranor',
@@ -425,6 +473,11 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     this.syncingImportIssues = new Set();
 
     this.addCommand({
+      id: 'create',
+      name: 'Create...',
+      callback: () => void this.openCreate(),
+    });
+    this.addCommand({
       id: 'set-controlled-era',
       name: 'Set controlled era / Universal scope',
       checkCallback: (checking) => {
@@ -470,6 +523,22 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       this.registerEvent(this.app.vault.on('modify', (file) => void this.handleModifiedFile(file)));
       void this.handleActiveFile(this.app.workspace.getActiveFile());
     });
+  }
+
+  async openCreate() {
+    const available = CREATE_ACTIONS.filter((action) => Boolean(this.app.commands?.commands?.[action.commandId]));
+    if (!available.length) {
+      new Notice('No VISCERIUM creation commands are available. Check the required plugins.', 8000);
+      return;
+    }
+
+    const commandId = await new ChoiceModal(
+      this.app,
+      available.map((action) => ({ label: action.label, hint: action.hint, value: action.commandId })),
+      'What are you creating?',
+    ).choose();
+    if (!commandId) return;
+    this.app.commands.executeCommandById(commandId);
   }
 
   frontmatter(file) {
