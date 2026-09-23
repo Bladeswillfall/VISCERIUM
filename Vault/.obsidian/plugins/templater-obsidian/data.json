@@ -46,7 +46,9 @@
     "Templates/Lore/New Lore Entity.md",
     "Templates/Databases/New Myrkild Unit.md",
     "Templates/StoryLine/Add Story Change.md",
-    "Templates/StoryLine/Open Story State.md"
+    "Templates/StoryLine/Open Story State.md",
+    "Templates/Publishing/Map Template.md",
+    "Templates/Timelines/Timeline Template.md"
   ],
   "startup_templates": [
     "Templates/_Startup/Open VISCERIUM Home.md",
