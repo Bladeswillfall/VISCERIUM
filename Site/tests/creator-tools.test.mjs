@@ -6,6 +6,20 @@ const creatorPlugin = readFileSync(new URL('../../Tools/obsidian-viscerium-creat
 const creatorStyles = readFileSync(new URL('../../Tools/obsidian-viscerium-creator-tools/styles.css', import.meta.url), 'utf8');
 const loreTemplate = readFileSync(new URL('../../Vault/Templates/Lore/New Lore Entity.md', import.meta.url), 'utf8');
 const storyTemplate = readFileSync(new URL('../../Vault/Templates/Databases/New Story Entity.md', import.meta.url), 'utf8');
+const homeHero = readFileSync(new URL('../../Vault/System/Views/Home/Hero/view.js', import.meta.url), 'utf8');
+const templaterConfig = JSON.parse(readFileSync(new URL('../../Vault/.obsidian/plugins/templater-obsidian/data.json', import.meta.url), 'utf8'));
+
+test('creator tools own the shared creation entry point used by Home', () => {
+  assert.match(creatorPlugin, /id: 'create'/);
+  assert.match(creatorPlugin, /name: 'Create\\.\\.\\.'/);
+  assert.match(creatorPlugin, /What are you creating\\?/);
+  assert.match(creatorPlugin, /Templates\\/Publishing\\/Map Template\\.md/);
+  assert.match(creatorPlugin, /Templates\\/Timelines\\/Timeline Template\\.md/);
+  assert.match(homeHero, /viscerium-creator-tools:create/);
+  assert.doesNotMatch(homeHero, /templaterCreateCommand|vc-home-create-panel/);
+  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Publishing/Map Template.md'));
+  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Timelines/Timeline Template.md'));
+});
 
 test('first-party creator plugin is syntactically valid and exposes era/continuity commands', () => {
   assert.doesNotThrow(() => new Function(creatorPlugin));
