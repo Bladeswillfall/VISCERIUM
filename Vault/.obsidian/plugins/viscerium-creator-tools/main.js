@@ -295,6 +295,7 @@ class ChoiceModal extends SuggestModal {
     if (option.hint) el.createEl('small', { text: option.hint });
   }
   onChooseSuggestion(option) {
+    // Obsidian closes SuggestModal after this callback. Resolve in onClose so chained pickers do not overlap.
     this.selectedValue = option.value;
   }
   choose() {
