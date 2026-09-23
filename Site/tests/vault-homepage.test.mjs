@@ -59,11 +59,9 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
   assert.doesNotMatch(hero, /heroSource\.replace\(/);
   assert.match(hero, /CURRENT FOCUS · MANUAL/);
   assert.match(hero, /Create new/);
-  assert.match(hero, /vc-home-create-panel/);
-  assert.match(hero, /templaterCreateCommand\("Templates\/Lore\/New Lore Entity\.md"\)/);
-  assert.match(hero, /templaterCreateCommand\("Templates\/Databases\/New Story Entity\.md"\)/);
-  assert.match(hero, /templaterCreateCommand\("Templates\/Databases\/New Myrkild Unit\.md"\)/);
-  assert.match(hero, /viscerium-timelines:open-storyline-project-timeline/);
+  assert.match(hero, /viscerium-creator-tools:create/);
+  assert.doesNotMatch(hero, /vc-home-create-panel/);
+  assert.doesNotMatch(hero, /templaterCreateCommand/);
   assert.doesNotMatch(hero, /diagnose-storyline-integration/);
 
   assert.match(continuing, /Loading recent work…/);
@@ -105,7 +103,7 @@ test('creator UI grammar keeps page chrome flat and creator controls deliberatel
   assert.match(homeCss, /button\.vc-home-button/);
   assert.match(homeCss, /border-radius:\s*var\(--vc-home-control-radius\)/);
   assert.match(homeCss, /inset 0 -3px 0/);
-  assert.match(homeCss, /vc-home-create-panel/);
+  assert.doesNotMatch(homeCss, /vc-home-create-panel/);
   assert.match(callouts, /border-radius:\s*0/);
   assert.match(bases, /bases-view\[data-view-type="table"\][\s\S]*?border-radius:\s*0/);
 });
@@ -141,22 +139,19 @@ test('Home dashboard uses pane width, a fixed hero artwork layer and responsive 
   assert.match(homeCss, /vc-home-nav-grid/);
 });
 
-test('Home keeps one primary focus action and one-level creation disclosure', async () => {
+test('Home keeps one primary focus action and delegates creation to Creator Tools', async () => {
   const hero = await readText('System/Views/Home/Hero/view.js');
   const homeCss = await readText('.obsidian/snippets/Home dashboard.css');
 
   assert.match(hero, /addLaunchButton\(page\.focusPrimaryLabel, page\.focusPrimary, true, "play"\)/);
   assert.match(hero, /addLaunchButton\("Create new", null, false, "plus"\)/);
-  assert.match(hero, /createToggle\.setAttribute\("aria-expanded", "false"\)/);
-  assert.match(hero, /panel\.hidden = true/);
-  assert.match(hero, /Create something new/);
-  assert.match(hero, /Worldbuilding/);
-  assert.match(hero, /Story/);
-  assert.match(hero, /Myrkild/);
-  assert.match(hero, /Chronicle/);
+  assert.match(hero, /const createCommandId = "viscerium-creator-tools:create"/);
+  assert.match(hero, /executeCommandById\(createCommandId\)/);
+  assert.match(hero, /createButton\.disabled = true/);
+  assert.doesNotMatch(hero, /createToggle|create-panel|templaterCreateCommand/);
   assert.match(homeCss, /vc-home-button-primary/);
   assert.match(homeCss, /vc-home-button-secondary/);
-  assert.match(homeCss, /vc-home-button-action/);
+  assert.doesNotMatch(homeCss, /vc-home-button-action/);
 });
 
 test('Home uses restrained semantic colour cues for lore, story, progress and intervention states', async () => {
