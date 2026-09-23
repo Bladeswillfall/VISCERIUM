@@ -35,6 +35,7 @@ This page is the authoritative index for creator and repository operations. Open
 | Create an event | [[Home]] → **Create new** → **Worldbuilding** → **Event** |
 | Review an event against canonical chronology | **VISCERIUM Creator Tools: Review active event chronology...** |
 | Create technology | [[Home]] → **Create new** → **Worldbuilding** → **Technology** |
+| Create an Atlas map | [[Home]] → **Create new** → **Map** |
 | Create another Lore type | [[Home]] → **Create new** → **Worldbuilding** → **Other lore** |
 | Create a Myrkild unit | [[Home]] → **Create new** → **Myrkild unit** |
 | Open creator context | [[Home]] → **Creator Context** |
@@ -165,6 +166,18 @@ Run this from a location with a stable path under `Lore/`. The command lists can
 On the map, Shift-click the position or use **Add marker here**. Link the marker to the location note, choose the primary layer and save it.
 
 The command does not write coordinates or marker sidecar JSON. Draft locations stay in the writing workflow until they have a stable Lore path.
+
+### Create an Atlas map
+
+Command: **Templater: Create Publishing/New Map**
+
+Changes files: **Yes.**
+
+Creates a map draft under `Drafts/Inbox/Maps/`.
+
+The workflow asks for the map name, one-line purpose, era or scope, and a unique `mapId`. If `Assets/Maps/` contains map images, you can select one. The creator then derives the public `image` path and default `mapMarkers` sidecar path.
+
+Leave width, height, zoom limits, nested-map settings, and marker positions blank until the real map requires them.
 
 ### Create a Myrkild unit
 
