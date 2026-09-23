@@ -150,6 +150,25 @@ function setTopLevelField(source, key, value) {
   return lines.join("\n");
 }
 
+function setNestedScalar(source, parentKey, key, value) {
+  if (value == null || value === "") return source;
+
+  const lines = source.split("\n");
+  const parentIndex = lines.findIndex((line) => line === `${parentKey}:`);
+  if (parentIndex < 0) throw new Error(`Selected VISCERIUM template is missing ${parentKey}.`);
+
+  let end = parentIndex + 1;
+  while (end < lines.length && (lines[end].startsWith("  ") || lines[end].trim() === "")) end += 1;
+
+  const fieldIndex = lines.findIndex(
+    (line, index) => index > parentIndex && index < end && line.startsWith(`  ${key}:`),
+  );
+  if (fieldIndex < 0) throw new Error(`Selected VISCERIUM template is missing ${parentKey}.${key}.`);
+
+  lines[fieldIndex] = `  ${key}: ${JSON.stringify(value)}`;
+  return lines.join("\n");
+}
+
 function setTemplateTitle(source, title) {
   return source.replace(
     /^title:\s*["']?\{\{title\}\}["']?\s*$/m,
@@ -238,6 +257,34 @@ async function collectEventData(tp) {
   };
 }
 
+async function collectEventDate(tp) {
+  const addToTimeline = await tp.system.suggester(
+    ["Skip for now", "Add year to canonical timeline"],
+    [false, true],
+    false,
+    "Add this event to the canonical timeline now?",
+  ) ?? false;
+  if (!addToTimeline) return null;
+
+  const yearInput = String(await tp.system.prompt("Okse year", "", true) ?? "").trim();
+  if (!/^-?\d+$/.test(yearInput)) throw new Error("Okse year must be an integer.");
+
+  const certainty = await tp.system.suggester(
+    ["Exact", "Approximate", "Disputed", "Legendary"],
+    ["exact", "approximate", "disputed", "legendary"],
+    true,
+    "How certain is this year?",
+  );
+
+  return {
+    year: Number(yearInput),
+    month: "niewmonath",
+    day: 1,
+    precision: "year",
+    certainty,
+  };
+}
+
 async function collectItemData(tp, options) {
   const requestedItemType = String(options.itemType ?? "").trim();
   if (requestedItemType && !ITEM_TYPES[requestedItemType]) {
@@ -283,6 +330,7 @@ module.exports = async function createLoreEntity(tp, options = {}) {
   const era = await tp.system.suggester(["Leave undefined", ...allowedEras], ["", ...allowedEras], false, "Era / scope") ?? "";
   const entityId = await chooseEntityId(tp, config, title);
   const data = await collectData(tp, config.schemaType, options);
+  const eventDate = config.schemaType === "event" ? await collectEventDate(tp) : null;
 
   const templateFile = tp.app.vault.getAbstractFileByPath(config.template);
   if (!templateFile) throw new Error(`Missing VISCERIUM template: ${config.template}`);
@@ -294,6 +342,11 @@ module.exports = async function createLoreEntity(tp, options = {}) {
   rendered = setTopLevelField(rendered, "development_level", "stub");
   if (entityId) rendered = setTopLevelField(rendered, "entity_id", entityId);
   for (const [key, value] of Object.entries(data)) rendered = setTopLevelField(rendered, key, value);
+  if (eventDate) {
+    for (const [key, value] of Object.entries(eventDate)) {
+      rendered = setNestedScalar(rendered, "calendarDate", key, value);
+    }
+  }
 
   await ensureFolder(tp, config.folder);
   if (tp.file.folder(true) !== config.folder) await tp.file.move(`${config.folder}/${title}`);
@@ -304,3 +357,4 @@ module.exports = async function createLoreEntity(tp, options = {}) {
 
 module.exports.TYPES = TYPES;
 module.exports.ITEM_TYPES = ITEM_TYPES;
+module.exports.setNestedScalar = setNestedScalar;
