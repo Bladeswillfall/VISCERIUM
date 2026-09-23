@@ -38,6 +38,7 @@ This page is the authoritative index for creator and repository operations. Open
 | Create another Lore type | [[Home]] → **Create new** → **Worldbuilding** → **Other lore** |
 | Create a Myrkild unit | [[Home]] → **Create new** → **Myrkild unit** |
 | Open creator context | [[Home]] → **Creator Context** |
+| Open the active note's next-action pane | **VISCERIUM Creator Tools: Open active note context** |
 | Find or assign a hotkey | **Settings → Hotkeys** |
 | Set a controlled era or Universal scope | **VISCERIUM Creator Tools: Set controlled era / Universal scope** |
 | Set a continuity identity | **VISCERIUM Creator Tools: Set continuity entity ID** |
@@ -178,6 +179,18 @@ Action: [[Home]] → **Creator Context**
 Changes files: **No.**
 
 Opens Outline, Backlinks and Local Graph in the right sidebar.
+
+### Open active note context
+
+Command: **VISCERIUM Creator Tools: Open active note context**
+
+Changes files: **No.**
+
+Opens an opt-in right-sidebar pane for ordinary Lore and Draft notes. While open, it follows the active creator note and shows one next useful action.
+
+The pane prioritises a missing one-line identity, event chronology, canonical location placement, or one useful section for an unfinished draft. It does not create a second task store or score note completeness.
+
+World Anvil imports continue to use their migration-specific review pane.
 
 ### Add location fields
 
