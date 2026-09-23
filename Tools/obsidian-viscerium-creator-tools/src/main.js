@@ -295,7 +295,6 @@ class ChoiceModal extends SuggestModal {
     if (option.hint) el.createEl('small', { text: option.hint });
   }
   onChooseSuggestion(option) {
-    // Obsidian closes SuggestModal after this callback. Resolve in onClose so chained pickers do not overlap.
     this.selectedValue = option.value;
   }
   choose() {
@@ -307,11 +306,13 @@ class ChoiceModal extends SuggestModal {
   }
   onClose() {
     super.onClose();
-    const resolve = this.resolve;
-    const value = this.selectedValue;
-    this.resolve = null;
-    this.selectedValue = null;
-    resolve?.(value);
+    setTimeout(() => {
+      const resolve = this.resolve;
+      const value = this.selectedValue;
+      this.resolve = null;
+      this.selectedValue = null;
+      resolve?.(value);
+    }, 0);
   }
 }
 
