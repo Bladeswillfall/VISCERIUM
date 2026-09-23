@@ -11,10 +11,10 @@ const templaterConfig = JSON.parse(readFileSync(new URL('../../Vault/.obsidian/p
 
 test('creator tools own the shared creation entry point used by Home', () => {
   assert.match(creatorPlugin, /id: 'create'/);
-  assert.match(creatorPlugin, /name: 'Create\\.\\.\\.'/);
-  assert.match(creatorPlugin, /What are you creating\\?/);
-  assert.match(creatorPlugin, /Templates\\/Publishing\\/New Map\\.md/);
-  assert.match(creatorPlugin, /Templates\\/Timelines\\/New Timeline\\.md/);
+  assert.match(creatorPlugin, /name: 'Create\.\.\.'/);
+  assert.match(creatorPlugin, /What are you creating\?/);
+  assert.match(creatorPlugin, /Templates\/Publishing\/New Map\.md/);
+  assert.match(creatorPlugin, /Templates\/Timelines\/New Timeline\.md/);
   assert.match(homeHero, /viscerium-creator-tools:create/);
   assert.doesNotMatch(homeHero, /templaterCreateCommand|vc-home-create-panel/);
   assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Publishing/New Map.md'));
