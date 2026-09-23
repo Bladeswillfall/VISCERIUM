@@ -205,6 +205,30 @@ test('folder-first Lore creation receives the same safe stub baseline as guided 
   assert.doesNotMatch(map, /^development_level:/m);
 });
 
+test('shared Lore creator writes canonical event chronology inside calendarDate', async () => {
+  const creatorPath = path.join(vaultRoot, 'Templates/_Scripts/create_lore_entity.js');
+  delete require.cache[require.resolve(creatorPath)];
+  const creator = require(creatorPath);
+
+  let source = await readText('Templates/Lore/Event Template.md');
+  source = creator.setNestedScalar(source, 'calendarDate', 'year', 10703);
+  source = creator.setNestedScalar(source, 'calendarDate', 'month', 'niewmonath');
+  source = creator.setNestedScalar(source, 'calendarDate', 'day', 1);
+  source = creator.setNestedScalar(source, 'calendarDate', 'precision', 'year');
+  source = creator.setNestedScalar(source, 'calendarDate', 'certainty', 'disputed');
+
+  const parsed = matter(source);
+  assert.deepEqual(parsed.data.calendarDate, {
+    calendar: 'okse',
+    year: 10703,
+    month: 'niewmonath',
+    day: 1,
+    precision: 'year',
+    certainty: 'disputed',
+  });
+  assert.equal(parsed.data.calendarEndDate, null);
+});
+
 test('creator-facing workflows author Storyteller material as Markdown rather than properties', async () => {
   for (const relativePath of creatorTemplates) {
     const content = await readText(relativePath);
@@ -243,6 +267,8 @@ test('creator-facing workflows author Storyteller material as Markdown rather th
   assert.match(loreCreator, /Add Location Fields/);
   assert.match(loreCreator, /viscerium:storyteller:start/);
   assert.match(loreCreator, /technology: "Technology"/);
+  assert.match(loreCreator, /Add this event to the canonical timeline now\?/);
+  assert.match(loreCreator, /month: "niewmonath"/);
   assert.match(technology, /type: "item", itemType: "technology"/);
   assert.doesNotMatch(loreCreator, /Add Storyteller Fields/);
   assert.match(unit, /tp\.user\.reference_picker/);
