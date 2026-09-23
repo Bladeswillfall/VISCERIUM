@@ -64,6 +64,21 @@ test('first-party creator plugin is syntactically valid and exposes era/continui
   assert.match(creatorPlugin, /delete data\.publish/);
 });
 
+test('creator tools provide one opt-in next action for ordinary notes', () => {
+  assert.match(creatorPlugin, /const NOTE_CONTEXT_VIEW = 'viscerium-note-context'/);
+  assert.match(creatorPlugin, /class NoteContextView extends ItemView/);
+  assert.match(creatorPlugin, /id: 'open-active-note-context'/);
+  assert.match(creatorPlugin, /name: 'Open active note context'/);
+  assert.match(creatorPlugin, /registerView\(NOTE_CONTEXT_VIEW/);
+  assert.match(creatorPlugin, /Write the one-line identity/);
+  assert.match(creatorPlugin, /Develop one useful section/);
+  assert.match(creatorPlugin, /Decide whether this belongs on an Atlas/);
+  assert.match(creatorPlugin, /Check canonical chronology/);
+  assert.match(creatorPlugin, /Continue only when something changed/);
+  assert.match(creatorPlugin, /getLeavesOfType\(NOTE_CONTEXT_VIEW\)/);
+  assert.doesNotMatch(creatorPlugin, /note context.*progress|completion percentage/i);
+});
+
 test('creator tools provide disposable World Anvil review context in the right sidebar', () => {
   assert.match(creatorPlugin, /const IMPORT_REVIEW_VIEW = 'viscerium-import-review'/);
   assert.match(creatorPlugin, /worldanvil-migration-review:start/);
@@ -106,6 +121,7 @@ test('multi-era imports remain in contextual review until their structural split
 
 test('import review pane follows creator visual grammar', () => {
   assert.match(creatorStyles, /\.vc-import-review/);
+  assert.match(creatorStyles, /\.vc-note-context/);
   assert.match(creatorStyles, /border-radius: var\(--vc-radius-control, 4px\)/);
   assert.match(creatorStyles, /vc-review-danger/);
   assert.match(creatorStyles, /vc-review-warning/);
