@@ -1,4 +1,3 @@
-module.exports = async function createLoreEntity(tp, options = {}) {
 const HISTORICAL_ERAS = ["CITADEL", "SMOG", "NEARSIGHT", "ENTROPY"];
 const ERA_OPTIONS = [...HISTORICAL_ERAS, "Universal"];
 const ENTITY_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -9,7 +8,7 @@ const STORYTELLER_END = "<!-- viscerium:storyteller:end -->";
 const STORYTELLER_HEADING = "## Storyteller View";
 const LOCATION_DETAIL_TEMPLATE = "Templates/Lore/Add Location Fields.md";
 
-const ITEM_TYPES = {
+const ITEM_TYPES = Object.freeze({
   weapon: "Weapon",
   armour: "Armour",
   equipment: "Equipment",
@@ -17,9 +16,9 @@ const ITEM_TYPES = {
   artefact: "Artefact",
   vehicle: "Vehicle",
   technology: "Technology",
-};
+});
 
-const TYPES = {
+const TYPES = Object.freeze({
   article: {
     label: "General article",
     folder: "Drafts/Inbox/Articles",
@@ -86,15 +85,15 @@ const TYPES = {
     template: "Templates/Lore/Resonance Practice Template.md",
     schemaType: "article",
   },
-};
+});
 
-const LOCATION_KINDS = {
+const LOCATION_KINDS = Object.freeze({
   region: "Region",
   settlement: "Settlement",
   wilderness: "Wilderness",
   route: "Route",
   site: "Site / ruin / landmark",
-};
+});
 
 function slugify(value) {
   return String(value ?? "")
@@ -105,15 +104,15 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "") || "entity";
 }
 
-function usedEntityIds() {
+function usedEntityIds(tp) {
   return new Set(tp.app.vault.getMarkdownFiles().map((file) => {
     const cache = tp.app.metadataCache.getFileCache(file);
     return String(cache?.frontmatter?.entity_id ?? "").trim();
   }).filter(Boolean));
 }
 
-function suggestedEntityId(title) {
-  const used = usedEntityIds();
+function suggestedEntityId(tp, title) {
+  const used = usedEntityIds(tp);
   const base = slugify(title);
   if (!used.has(base)) return base;
   for (let code = 97; code <= 122; code += 1) {
@@ -167,7 +166,7 @@ function validateTemplate(source, path) {
   }
 }
 
-async function ensureFolder(folderPath) {
+async function ensureFolder(tp, folderPath) {
   let current = "";
   for (const segment of folderPath.split("/").filter(Boolean)) {
     current = current ? `${current}/${segment}` : segment;
@@ -175,90 +174,133 @@ async function ensureFolder(folderPath) {
   }
 }
 
-const requestedType = String(options.type ?? "").trim();
-if (requestedType && !TYPES[requestedType]) throw new Error(`Unknown VISCERIUM Lore type: ${requestedType}`);
-const selection = requestedType || await tp.system.suggester(
-  Object.values(TYPES).map((entry) => entry.label),
-  Object.keys(TYPES),
-  true,
-  "What are you creating?",
-);
-const config = TYPES[selection];
-const currentTitle = tp.file.title === "Untitled" ? "" : tp.file.title;
-const title = String(await tp.system.prompt("Name", currentTitle, true) ?? "").trim();
-if (!title) throw new Error("A title is required to create a VISCERIUM note.");
-if (title !== tp.file.title) await tp.file.rename(title);
-
-const description = String(await tp.system.prompt("One-line identity (optional)", "", false) ?? "").trim();
-const allowedEras = config.schemaType === "event" ? HISTORICAL_ERAS : ERA_OPTIONS;
-const era = await tp.system.suggester(["Leave undefined", ...allowedEras], ["", ...allowedEras], false, "Era / scope") ?? "";
-const entityId = config.schemaType === "event"
-  ? ""
-  : String(await tp.system.prompt(
-      "Continuity entity ID (stable; change the suggested suffix when this is a different thing with a similar name)",
-      suggestedEntityId(title),
-      false,
-    ) ?? "").trim();
-if (entityId && !ENTITY_ID_PATTERN.test(entityId)) {
-  throw new Error(`Invalid entity_id: ${entityId}. Use lowercase kebab-case, e.g. okse-dominion-a.`);
+async function chooseType(tp, requested) {
+  const requestedType = String(requested ?? "").trim();
+  if (requestedType && !TYPES[requestedType]) throw new Error(`Unknown VISCERIUM Lore type: ${requestedType}`);
+  if (requestedType) return requestedType;
+  return await tp.system.suggester(
+    Object.values(TYPES).map((entry) => entry.label),
+    Object.keys(TYPES),
+    true,
+    "What are you creating?",
+  );
 }
 
-const pick = (options) => tp.user.reference_picker(tp, options);
-const data = {};
-
-if (config.schemaType === "character") {
-  data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
-  data.location = await pick({ types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
-  data.species = await pick({ types: ["species"], multiple: false, label: "species", stubType: "species", stubFolder: "Drafts/Inbox/Species" });
-}
-if (config.schemaType === "faction") {
-  data.capital = await pick({ types: ["location"], multiple: false, label: "capital", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
-  data.territory = await pick({ types: ["location"], multiple: true, label: "territory", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
-  data.leader = await pick({ types: ["character"], multiple: false, label: "leader", stubType: "character", stubFolder: "Drafts/Inbox/Characters" });
-}
-if (config.schemaType === "location") {
-  data.location_kind = await tp.system.suggester(
-    ["Leave undefined", ...Object.values(LOCATION_KINDS)],
-    ["", ...Object.keys(LOCATION_KINDS)],
+async function chooseEntityId(tp, config, title) {
+  if (config.schemaType === "event") return "";
+  const entityId = String(await tp.system.prompt(
+    "Continuity entity ID (stable; change the suggested suffix when this is a different thing with a similar name)",
+    suggestedEntityId(tp, title),
     false,
-    "Broad location kind — choose only if useful",
-  ) ?? "";
-  data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
-  data.region = await pick({ types: ["location"], multiple: false, label: "parent region", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
+  ) ?? "").trim();
+  if (entityId && !ENTITY_ID_PATTERN.test(entityId)) {
+    throw new Error(`Invalid entity_id: ${entityId}. Use lowercase kebab-case, e.g. okse-dominion-a.`);
+  }
+  return entityId;
 }
-if (config.schemaType === "event") {
-  data.location = await pick({ types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
-  data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
-  data.participants = await pick({ types: ["character"], multiple: true, label: "participant", stubType: "character", stubFolder: "Drafts/Inbox/Characters" });
+
+const pick = (tp, options) => tp.user.reference_picker(tp, options);
+
+async function collectCharacterData(tp) {
+  return {
+    faction: await pick(tp, { types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" }),
+    location: await pick(tp, { types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
+    species: await pick(tp, { types: ["species"], multiple: false, label: "species", stubType: "species", stubFolder: "Drafts/Inbox/Species" }),
+  };
 }
-if (config.schemaType === "item") {
+
+async function collectFactionData(tp) {
+  return {
+    capital: await pick(tp, { types: ["location"], multiple: false, label: "capital", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
+    territory: await pick(tp, { types: ["location"], multiple: true, label: "territory", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
+    leader: await pick(tp, { types: ["character"], multiple: false, label: "leader", stubType: "character", stubFolder: "Drafts/Inbox/Characters" }),
+  };
+}
+
+async function collectLocationData(tp) {
+  return {
+    location_kind: await tp.system.suggester(
+      ["Leave undefined", ...Object.values(LOCATION_KINDS)],
+      ["", ...Object.keys(LOCATION_KINDS)],
+      false,
+      "Broad location kind — choose only if useful",
+    ) ?? "",
+    faction: await pick(tp, { types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" }),
+    region: await pick(tp, { types: ["location"], multiple: false, label: "parent region", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
+  };
+}
+
+async function collectEventData(tp) {
+  return {
+    location: await pick(tp, { types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
+    faction: await pick(tp, { types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" }),
+    participants: await pick(tp, { types: ["character"], multiple: true, label: "participant", stubType: "character", stubFolder: "Drafts/Inbox/Characters" }),
+  };
+}
+
+async function collectItemData(tp, options) {
   const requestedItemType = String(options.itemType ?? "").trim();
-  if (requestedItemType && !ITEM_TYPES[requestedItemType]) throw new Error(`Unknown VISCERIUM item type: ${requestedItemType}`);
-  data.item_type = requestedItemType || await tp.system.suggester(
+  if (requestedItemType && !ITEM_TYPES[requestedItemType]) {
+    throw new Error(`Unknown VISCERIUM item type: ${requestedItemType}`);
+  }
+  const itemType = requestedItemType || await tp.system.suggester(
     ["Leave undefined", ...Object.values(ITEM_TYPES)],
     ["", ...Object.keys(ITEM_TYPES)],
     false,
     "Broad item type",
   ) || "";
-  data.faction = await pick({ types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" });
-  data.location = await pick({ types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" });
+
+  return {
+    item_type: itemType,
+    faction: await pick(tp, { types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" }),
+    location: await pick(tp, { types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
+  };
 }
 
-const templateFile = tp.app.vault.getAbstractFileByPath(config.template);
-if (!templateFile) throw new Error(`Missing VISCERIUM template: ${config.template}`);
-let rendered = await tp.app.vault.read(templateFile);
-validateTemplate(rendered, config.template);
-rendered = setTemplateTitle(rendered, title);
-rendered = setTopLevelField(rendered, "description", description);
-rendered = setTopLevelField(rendered, "era", era);
-rendered = setTopLevelField(rendered, "development_level", "stub");
-if (entityId) rendered = setTopLevelField(rendered, "entity_id", entityId);
-for (const [key, value] of Object.entries(data)) rendered = setTopLevelField(rendered, key, value);
+const DATA_COLLECTORS = Object.freeze({
+  character: collectCharacterData,
+  faction: collectFactionData,
+  location: collectLocationData,
+  event: collectEventData,
+  item: collectItemData,
+});
 
-await ensureFolder(config.folder);
-if (tp.file.folder(true) !== config.folder) await tp.file.move(`${config.folder}/${title}`);
+async function collectData(tp, schemaType, options) {
+  const collector = DATA_COLLECTORS[schemaType];
+  return collector ? await collector(tp, options) : {};
+}
 
-// Location notes can later be enriched progressively via Add Location Fields.
-void LOCATION_DETAIL_TEMPLATE;
-return rendered;
+module.exports = async function createLoreEntity(tp, options = {}) {
+  const selection = await chooseType(tp, options.type);
+  const config = TYPES[selection];
+  const currentTitle = tp.file.title === "Untitled" ? "" : tp.file.title;
+  const title = String(await tp.system.prompt("Name", currentTitle, true) ?? "").trim();
+  if (!title) throw new Error("A title is required to create a VISCERIUM note.");
+  if (title !== tp.file.title) await tp.file.rename(title);
+
+  const description = String(await tp.system.prompt("One-line identity (optional)", "", false) ?? "").trim();
+  const allowedEras = config.schemaType === "event" ? HISTORICAL_ERAS : ERA_OPTIONS;
+  const era = await tp.system.suggester(["Leave undefined", ...allowedEras], ["", ...allowedEras], false, "Era / scope") ?? "";
+  const entityId = await chooseEntityId(tp, config, title);
+  const data = await collectData(tp, config.schemaType, options);
+
+  const templateFile = tp.app.vault.getAbstractFileByPath(config.template);
+  if (!templateFile) throw new Error(`Missing VISCERIUM template: ${config.template}`);
+  let rendered = await tp.app.vault.read(templateFile);
+  validateTemplate(rendered, config.template);
+  rendered = setTemplateTitle(rendered, title);
+  rendered = setTopLevelField(rendered, "description", description);
+  rendered = setTopLevelField(rendered, "era", era);
+  rendered = setTopLevelField(rendered, "development_level", "stub");
+  if (entityId) rendered = setTopLevelField(rendered, "entity_id", entityId);
+  for (const [key, value] of Object.entries(data)) rendered = setTopLevelField(rendered, key, value);
+
+  await ensureFolder(tp, config.folder);
+  if (tp.file.folder(true) !== config.folder) await tp.file.move(`${config.folder}/${title}`);
+
+  void LOCATION_DETAIL_TEMPLATE;
+  return rendered;
 };
+
+module.exports.TYPES = TYPES;
+module.exports.ITEM_TYPES = ITEM_TYPES;
