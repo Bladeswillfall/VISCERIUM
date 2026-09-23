@@ -427,6 +427,13 @@ class NoteContextView extends ItemView {
       const button = nextBox.createEl('button', { text: 'Open Atlas placement' });
       this.registerDomEvent(button, 'click', () => void this.plugin.placeActiveLocationOnAtlas(this.file));
     }
+    if (next.action === 'era') {
+      const button = nextBox.createEl('button', { text: 'Set historical era' });
+      this.registerDomEvent(button, 'click', async () => {
+        await this.plugin.setControlledEra(this.file);
+        await this.refresh();
+      });
+    }
     if (next.action === 'chronology') {
       const button = nextBox.createEl('button', { text: 'Review chronology' });
       this.registerDomEvent(button, 'click', () => void this.plugin.reviewActiveEventChronology(this.file));
@@ -725,11 +732,25 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     }
 
     if (type === 'event') {
-      return {
-        label: 'Check canonical chronology',
-        detail: 'Open the event beside its era timeline and verify calendarDate. Use calendarEndDate only when the event is a genuine period.',
-        action: 'chronology',
-      };
+      const eventEra = normaliseEra(frontmatter.era);
+      const calendarDate = frontmatter.calendarDate;
+      const hasCalendarYear = calendarDate && typeof calendarDate === 'object' && calendarDate.year != null;
+
+      if (!eventEra || eventEra === 'Universal') {
+        return {
+          label: 'Set the historical era',
+          detail: 'Events use one controlled historical era before timeline placement.',
+          action: 'era',
+        };
+      }
+
+      if (!hasCalendarYear) {
+        return {
+          label: 'Add canonical chronology',
+          detail: 'Set calendarDate when the event belongs on the canonical timeline. Use calendarEndDate only for a genuine period.',
+          action: 'chronology',
+        };
+      }
     }
 
     if (type === 'location' && file.path.startsWith('Lore/')) {
