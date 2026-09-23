@@ -249,6 +249,39 @@ async function collectLocationData(tp) {
   };
 }
 
+async function chooseLocationMapId(tp, era) {
+  const maps = tp.app.vault.getMarkdownFiles()
+    .filter((file) => file.path.startsWith("Lore/"))
+    .map((file) => ({ file, frontmatter: tp.app.metadataCache.getFileCache(file)?.frontmatter ?? {} }))
+    .filter(({ frontmatter }) => (
+      String(frontmatter.type ?? "").toLowerCase() === "map"
+      && String(frontmatter.mapId ?? "").trim()
+    ))
+    .sort((a, b) => {
+      const aEra = String(a.frontmatter.era ?? "").trim();
+      const bEra = String(b.frontmatter.era ?? "").trim();
+      const aMatch = era && aEra === era ? 0 : 1;
+      const bMatch = era && bEra === era ? 0 : 1;
+      const aTitle = String(a.frontmatter.title ?? a.file.basename ?? a.file.path);
+      const bTitle = String(b.frontmatter.title ?? b.file.basename ?? b.file.path);
+      return aMatch - bMatch || aTitle.localeCompare(bTitle);
+    });
+
+  if (!maps.length) return "";
+
+  return await tp.system.suggester(
+    ["Skip for now", ...maps.map(({ file, frontmatter }) => {
+      const title = String(frontmatter.title ?? file.basename ?? file.path);
+      const mapId = String(frontmatter.mapId).trim();
+      const mapEra = String(frontmatter.era ?? "").trim();
+      return [title, mapEra, mapId].filter(Boolean).join(" · ");
+    })],
+    ["", ...maps.map(({ frontmatter }) => String(frontmatter.mapId).trim())],
+    false,
+    "Atlas target — marker placement waits until this location has a canonical Lore path",
+  ) ?? "";
+}
+
 async function collectEventData(tp) {
   return {
     location: await pick(tp, { types: ["location"], multiple: true, label: "location", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
@@ -330,6 +363,7 @@ module.exports = async function createLoreEntity(tp, options = {}) {
   const era = await tp.system.suggester(["Leave undefined", ...allowedEras], ["", ...allowedEras], false, "Era / scope") ?? "";
   const entityId = await chooseEntityId(tp, config, title);
   const data = await collectData(tp, config.schemaType, options);
+  const locationMapId = config.schemaType === "location" ? await chooseLocationMapId(tp, era) : "";
   const eventDate = config.schemaType === "event" ? await collectEventDate(tp) : null;
 
   const templateFile = tp.app.vault.getAbstractFileByPath(config.template);
@@ -342,6 +376,7 @@ module.exports = async function createLoreEntity(tp, options = {}) {
   rendered = setTopLevelField(rendered, "development_level", "stub");
   if (entityId) rendered = setTopLevelField(rendered, "entity_id", entityId);
   for (const [key, value] of Object.entries(data)) rendered = setTopLevelField(rendered, key, value);
+  if (locationMapId) rendered = setNestedScalar(rendered, "map", "id", locationMapId);
   if (eventDate) {
     for (const [key, value] of Object.entries(eventDate)) {
       rendered = setNestedScalar(rendered, "calendarDate", key, value);
