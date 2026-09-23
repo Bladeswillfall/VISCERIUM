@@ -69,9 +69,13 @@ const creatorTemplates = [
   'Templates/_Internals/Folder Entity Router.md',
   'Templates/_Startup/Open VISCERIUM Home.md',
   'Templates/Lore/New Lore Entity.md',
+  'Templates/Lore/New Location.md',
+  'Templates/Lore/New Event.md',
+  'Templates/Lore/New Technology.md',
   'Templates/Publishing/New Map.md',
   'Templates/Timelines/New Timeline.md',
   'Templates/_Scripts/create_from_skeleton.js',
+  'Templates/_Scripts/create_lore_entity.js',
   'Templates/Databases/New Myrkild Unit.md',
   'Templates/_Scripts/reference_picker.js',
   'Templates/_Scripts/folder_entity_router.js',
@@ -110,7 +114,7 @@ test('literal template frontmatter contains no duplicate top-level fields', asyn
   }
 });
 
-test('interactive Templater script blocks parse as async JavaScript', async () => {
+test('interactive Templater script blocks and creator user scripts parse as JavaScript', async () => {
   for (const relativePath of creatorTemplates) {
     const source = await readText(relativePath);
     const script = templaterScript(source);
@@ -121,6 +125,9 @@ test('interactive Templater script blocks parse as async JavaScript', async () =
       `${relativePath} contains invalid Templater JavaScript`,
     );
   }
+
+  const loreCreator = await readText('Templates/_Scripts/create_lore_entity.js');
+  assert.doesNotThrow(() => new Function(loreCreator), 'shared Lore creator contains invalid JavaScript');
 });
 
 test('folder-triggered Templater rules cover Lore, Inbox, specialist databases and nested folders', async () => {
@@ -178,6 +185,8 @@ test('creator-facing workflows author Storyteller material as Markdown rather th
   const locationInjector = await readText('Templates/Lore/Add Location Fields.md');
   const core = await readText('Templates/_Internals/Story Entity Core.md');
   const lore = await readText('Templates/Lore/New Lore Entity.md');
+  const loreCreator = await readText('Templates/_Scripts/create_lore_entity.js');
+  const technology = await readText('Templates/Lore/New Technology.md');
   const unit = await readText('Templates/Databases/New Myrkild Unit.md');
   const unitProfile = await readText('Templates/Databases/Myrkild Unit Profile.md');
   const folderRouter = await readText('Templates/_Internals/Folder Entity Router.md');
@@ -197,11 +206,14 @@ test('creator-facing workflows author Storyteller material as Markdown rather th
   assert.match(core, /storytellerSections/);
   assert.match(core, /viscerium:storyteller:start/);
   assert.doesNotMatch(core, /propertyOrder/);
-  assert.match(lore, /tp\.user\.reference_picker/);
-  assert.match(lore, /LOCATION_KINDS/);
-  assert.match(lore, /Add Location Fields/);
-  assert.match(lore, /viscerium:storyteller:start/);
-  assert.doesNotMatch(lore, /Add Storyteller Fields/);
+  assert.match(lore, /tp\.user\.create_lore_entity\(tp\)/);
+  assert.match(loreCreator, /tp\.user\.reference_picker/);
+  assert.match(loreCreator, /LOCATION_KINDS/);
+  assert.match(loreCreator, /Add Location Fields/);
+  assert.match(loreCreator, /viscerium:storyteller:start/);
+  assert.match(loreCreator, /technology: "Technology"/);
+  assert.match(technology, /type: "item", itemType: "technology"/);
+  assert.doesNotMatch(loreCreator, /Add Storyteller Fields/);
   assert.match(unit, /tp\.user\.reference_picker/);
   assert.match(unitProfile, /viscerium:storyteller:start/);
   assert.doesNotMatch(unitProfile, /\[\[Add Storyteller Fields\]\]/);
