@@ -158,9 +158,9 @@ A dated event under `Drafts/` can be reviewed, but it does not enter canonical t
 
 Command: **VISCERIUM Creator Tools: Place active location on Atlas...**
 
-Changes files: **No.** TTRPG Tools - Maps writes marker data only after you place and save the marker.
+Changes files: **Yes.** The command records the selected map as the location's `map.id`. TTRPG Tools - Maps writes marker position only after you place and save the marker.
 
-Run this from a location with a stable path under `Lore/`. The command lists canonical map notes that have a `mapId`, with same-era maps first. It opens the selected map beside the location.
+Run this from a location with a stable path under `Lore/`. The command lists canonical map notes that have a `mapId`, with same-era maps first. It records the selected `mapId`, preserves existing `map` settings, and opens the selected map beside the location.
 
 On the map, Shift-click the position or use **Add marker here**. Link the marker to the location note, choose the primary layer and save it.
 
