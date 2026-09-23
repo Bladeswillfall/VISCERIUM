@@ -388,6 +388,7 @@ class NoteContextView extends ItemView {
       ['Era', frontmatter.era],
       ['Status', frontmatter.status],
       ['State', frontmatter.development_level],
+      ['Map', frontmatter.map?.id],
     ]
       .map(([label, value]) => [label, String(value ?? '').trim()])
       .filter(([, value]) => Boolean(value));
@@ -754,11 +755,14 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     }
 
     if (type === 'location' && file.path.startsWith('Lore/')) {
-      return {
-        label: 'Decide whether this belongs on an Atlas',
-        detail: 'If spatial placement matters, open a canonical map and place the linked marker with TTRPG Tools - Maps.',
-        action: 'atlas',
-      };
+      const mapId = String(frontmatter.map?.id ?? '').trim();
+      if (!mapId) {
+        return {
+          label: 'Decide whether this belongs on an Atlas',
+          detail: 'If spatial placement matters, choose a canonical map and place the linked marker with TTRPG Tools - Maps.',
+          action: 'atlas',
+        };
+      }
     }
 
     if (development === 'stub' || status === 'draft') {
@@ -837,6 +841,12 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       return;
     }
 
+    const mapId = String(this.frontmatter(mapFile).mapId ?? '').trim();
+    await this.app.fileManager.processFrontMatter(locationFile, (data) => {
+      const existingMap = data.map && typeof data.map === 'object' && !Array.isArray(data.map) ? data.map : {};
+      data.map = { ...existingMap, id: mapId };
+    });
+
     const locationLeaf = this.markdownLeafFor(locationFile) ?? this.app.workspace.getLeaf(false);
     this.app.workspace.setActiveLeaf(locationLeaf, { focus: false });
     const mapLeaf = this.app.workspace.getLeaf('split', 'vertical');
@@ -849,7 +859,7 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       return;
     }
 
-    new Notice(`Map opened beside ${this.titleFor(locationFile)}. Shift-click the position or use Add marker here, then link the marker to ${locationFile.path} and save it.`, 12000);
+    new Notice(`Map target set to ${mapId}. Shift-click the position or use Add marker here, then link the marker to ${locationFile.path} and save it.`, 12000);
   }
 
   async reviewActiveEventChronology(eventFile) {
