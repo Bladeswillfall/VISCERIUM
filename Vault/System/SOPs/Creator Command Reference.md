@@ -30,8 +30,8 @@ This page is the authoritative index for creator and repository operations. Open
 | Update an existing World Anvil article | [[#Update an existing World Anvil import]] |
 | Reopen import context for the active World Anvil note | **VISCERIUM Creator Tools: Open World Anvil import review context** |
 | Create fauna, flora, fungi, or a Story Entity item | [[Home]] → **Create new** → **Story entity** |
-| Create a location | [[Home]] → **Create new** → **Worldbuilding** → **Location** |
-| Place a canonical location on a map | **VISCERIUM Creator Tools: Place active location on Atlas...** |
+| Create a location | [[Home]] → **Create new** → **Worldbuilding** → **Location**. Choose an Atlas target during creation when known. |
+| Place a canonical location on a map | **VISCERIUM Creator Tools: Place active location on Atlas...**. Marker placement waits until the note has a stable `Lore/` path. |
 | Create an event | [[Home]] → **Create new** → **Worldbuilding** → **Event** |
 | Review an event against canonical chronology | **VISCERIUM Creator Tools: Review active event chronology...** |
 | Create technology | [[Home]] → **Create new** → **Worldbuilding** → **Technology** |
