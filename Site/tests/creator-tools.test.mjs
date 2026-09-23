@@ -40,6 +40,17 @@ test('Creator Tools hands canonical locations to native Atlas marker placement',
   assert.match(creatorPlugin, /Insert new map\.\.\./);
 });
 
+test('Creator Tools opens canonical era chronology beside active events', () => {
+  assert.match(creatorPlugin, /id: 'review-active-event-chronology'/);
+  assert.match(creatorPlugin, /Review active event chronology\.\.\./);
+  assert.match(creatorPlugin, /Lore\/Eras\/\$\{era\}\.md/);
+  assert.match(creatorPlugin, /calendarDate/);
+  assert.match(creatorPlugin, /sole canonical start date/);
+  assert.match(creatorPlugin, /calendarEndDate only for a genuine period/);
+  assert.match(creatorPlugin, /Drafts are not canonical timeline input/);
+  assert.match(creatorPlugin, /Refresh compiled timelines/);
+});
+
 test('first-party creator plugin is syntactically valid and exposes era/continuity commands', () => {
   assert.doesNotThrow(() => new Function(creatorPlugin));
   assert.match(creatorPlugin, /\['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY'\]/);
