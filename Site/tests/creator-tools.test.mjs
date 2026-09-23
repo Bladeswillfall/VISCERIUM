@@ -13,12 +13,12 @@ test('creator tools own the shared creation entry point used by Home', () => {
   assert.match(creatorPlugin, /id: 'create'/);
   assert.match(creatorPlugin, /name: 'Create\\.\\.\\.'/);
   assert.match(creatorPlugin, /What are you creating\\?/);
-  assert.match(creatorPlugin, /Templates\\/Publishing\\/Map Template\\.md/);
-  assert.match(creatorPlugin, /Templates\\/Timelines\\/Timeline Template\\.md/);
+  assert.match(creatorPlugin, /Templates\\/Publishing\\/New Map\\.md/);
+  assert.match(creatorPlugin, /Templates\\/Timelines\\/New Timeline\\.md/);
   assert.match(homeHero, /viscerium-creator-tools:create/);
   assert.doesNotMatch(homeHero, /templaterCreateCommand|vc-home-create-panel/);
-  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Publishing/Map Template.md'));
-  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Timelines/Timeline Template.md'));
+  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Publishing/New Map.md'));
+  assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Timelines/New Timeline.md'));
 });
 
 test('first-party creator plugin is syntactically valid and exposes era/continuity commands', () => {
