@@ -88,7 +88,9 @@ The router examines the folder path from the nearest folder outward. The nearest
 | Directly beneath `Lore/Eras` | Era; `type: era` |
 | `Degel System` | General article; `type: article` |
 
-Historical era folders also seed the controlled scalar `era` value. For example, a note created in `Lore/Eras/CITADEL/Weapons & Armour/Weaponry` receives the Item template, `type: item`, `item_type: weapon`, and `era: CITADEL`.
+Folder-first Lore creation also seeds `development_level: stub`. This matches the guided Lore creator without inventing descriptive or continuity metadata.
+
+Historical era folders also seed the controlled scalar `era` value. For example, a note created in `Lore/Eras/CITADEL/Weapons & Armour/Weaponry` receives the Item template, `type: item`, `development_level: stub`, `item_type: weapon`, and `era: CITADEL`.
 
 Biological subfolders seed `species_kind`. For example, a note created in a `Reptile` folder receives the Species template and `species_kind: reptile`.
 
@@ -175,9 +177,11 @@ The initial `status` list contains only `draft` and `published` because those ar
 
 Create one test note with each Home action that you use:
 
-- **+ Lore Entity**
-- **+ Story Entity**
-- **+ Myrkild Unit**
+- **Create new → Worldbuilding → Location**
+- **Create new → Worldbuilding → Event**
+- **Create new → Worldbuilding → Technology**
+- **Create new → Story entity**
+- **Create new → Myrkild unit**
 
 Also create disposable notes directly inside representative semantic folders:
 
@@ -188,18 +192,19 @@ Also create disposable notes directly inside representative semantic folders:
 For each test note:
 
 1. Confirm that the expected template and `type` were applied.
-2. Confirm that a recognised item or species subfolder filled `item_type` or `species_kind`.
+2. Confirm that ordinary Lore drafts contain `development_level: stub`.
+4. Confirm that a recognised item or species subfolder filled `item_type` or `species_kind`.
 3. Confirm that a historical era in the path filled `era`.
-4. Confirm that the note remained in the folder where you created it.
-5. Confirm that the template contains blank `created:`, `published:`, and `updated:` properties.
-6. Type a short sentence.
-7. Confirm that `created`, `updated`, and `word_count` populate while `published` remains blank.
-8. Add one unchecked task and confirm that `open_task_count` appears.
-9. Change `status` and `type` with Metadata Menu.
-10. Choose one `headerImage` where the template supports it.
-11. Set or change the era with VISCERIUM Creator Tools, not Metadata Menu.
-12. For a disposable publication test, set `published` manually and confirm later edits change `updated` without changing `published`.
-13. Close and reopen Obsidian. Confirm that the settings remain.
+5. Confirm that the note remained in the folder where you created it.
+6. Confirm that the template contains blank `created:`, `published:`, and `updated:` properties.
+7. Type a short sentence.
+8. Confirm that `created`, `updated`, and `word_count` populate while `published` remains blank.
+9. Add one unchecked task and confirm that `open_task_count` appears.
+10. Change `status` and `type` with Metadata Menu.
+11. Choose one `headerImage` where the template supports it.
+12. Set or change the era with VISCERIUM Creator Tools, not Metadata Menu.
+13. For a disposable publication test, set `published` manually and confirm later edits change `updated` without changing `published`.
+14. Close and reopen Obsidian. Confirm that the settings remain.
 
 Then run:
 
