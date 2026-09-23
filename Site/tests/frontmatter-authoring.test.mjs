@@ -91,14 +91,14 @@ test('all static note-creation templates seed authoring and publication dates', 
   }
 });
 
-test('New Lore Entity delegates date seeding to configured static templates', async () => {
-  const generatorPath = 'Templates/Lore/New Lore Entity.md';
+test('shared Lore creator delegates date seeding to configured static templates', async () => {
+  const generatorPath = 'Templates/_Scripts/create_lore_entity.js';
   const source = await readText(generatorPath);
   const configuredTemplates = [...source.matchAll(/template:\s*"([^"]+\.md)"/g)].map((match) => match[1]);
 
   assert.ok(configuredTemplates.length > 0, `${generatorPath} should configure delegated templates`);
   assert.match(source, /let rendered = await tp\.app\.vault\.read\(templateFile\)/);
-  assert.match(source, /tR \+= rendered/);
+  assert.match(source, /return rendered/);
 
   for (const template of configuredTemplates) {
     assert.ok(staticCreationTemplates.includes(template), `${template} must be covered by the static frontmatter contract`);
