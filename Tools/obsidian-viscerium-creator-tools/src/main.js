@@ -7,6 +7,7 @@ const REVIEW_START = '<!-- era-edition-review:start -->';
 const REVIEW_END = '<!-- era-edition-review:end -->';
 
 const IMPORT_REVIEW_VIEW = 'viscerium-import-review';
+const NOTE_CONTEXT_VIEW = 'viscerium-note-context';
 const IMPORT_REVIEW_START = '<!-- worldanvil-migration-review:start -->';
 const IMPORT_REVIEW_END = '<!-- worldanvil-migration-review:end -->';
 const WORLDANVIL_BASE_PATH = 'System/Bases/World Anvil Import.base';
@@ -363,6 +364,80 @@ class TextPromptModal extends Modal {
   }
 }
 
+class NoteContextView extends ItemView {
+  constructor(leaf, plugin) {
+    super(leaf);
+    this.plugin = plugin;
+    this.file = null;
+  }
+
+  getViewType() { return NOTE_CONTEXT_VIEW; }
+  getDisplayText() { return this.file ? `Note context · ${this.plugin.titleFor(this.file)}` : 'Note context'; }
+  getIcon() { return 'focus'; }
+
+  async onOpen() { await this.refresh(); }
+
+  async setFile(file) {
+    this.file = file;
+    await this.refresh();
+  }
+
+  stateItems(frontmatter) {
+    return [
+      String(frontmatter.type ?? '').trim(),
+      String(frontmatter.era ?? '').trim(),
+      String(frontmatter.status ?? '').trim(),
+      String(frontmatter.development_level ?? '').trim(),
+    ].filter(Boolean);
+  }
+
+  async refresh() {
+    const root = this.contentEl;
+    root.empty();
+    root.addClass('vc-note-context');
+
+    if (!(this.file instanceof TFile)) {
+      root.createEl('p', {
+        text: 'Open a Lore or Draft note to see its next useful authoring action.',
+        cls: 'vc-note-context-empty',
+      });
+      return;
+    }
+
+    const frontmatter = this.plugin.frontmatter(this.file);
+    const header = root.createDiv({ cls: 'vc-note-context-header' });
+    header.createEl('div', { text: 'NOTE CONTEXT', cls: 'vc-note-context-kicker' });
+    header.createEl('h4', { text: this.plugin.titleFor(this.file) });
+
+    const states = this.stateItems(frontmatter);
+    if (states.length) {
+      const state = header.createDiv({ cls: 'vc-note-context-state' });
+      for (const value of states) state.createSpan({ text: value });
+    }
+
+    const next = this.plugin.noteNextAction(this.file);
+    const nextBox = root.createDiv({ cls: 'vc-note-context-next' });
+    nextBox.createEl('div', { text: 'NEXT', cls: 'vc-note-context-section-label' });
+    nextBox.createEl('strong', { text: next.label });
+    nextBox.createEl('p', { text: next.detail });
+
+    if (next.action === 'atlas') {
+      const button = nextBox.createEl('button', { text: 'Open Atlas placement' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.placeActiveLocationOnAtlas(this.file));
+    }
+    if (next.action === 'chronology') {
+      const button = nextBox.createEl('button', { text: 'Review chronology' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.reviewActiveEventChronology(this.file));
+    }
+
+    const source = root.createDiv({ cls: 'vc-note-context-source' });
+    source.createSpan({
+      text: this.file.path.startsWith('Lore/') ? 'Canonical Lore' : 'Working draft',
+    });
+    source.createEl('code', { text: this.file.path });
+  }
+}
+
 class ImportReviewView extends ItemView {
   constructor(leaf, plugin) {
     super(leaf);
@@ -492,6 +567,7 @@ class ImportReviewView extends ItemView {
 module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
   async onload() {
     this.registerView(IMPORT_REVIEW_VIEW, (leaf) => new ImportReviewView(leaf, this));
+    this.registerView(NOTE_CONTEXT_VIEW, (leaf) => new NoteContextView(leaf, this));
     this.suspendImportContext = false;
     this.syncingImportIssues = new Set();
 
@@ -499,6 +575,16 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       id: 'create',
       name: 'Create...',
       callback: () => void this.openCreate(),
+    });
+    this.addCommand({
+      id: 'open-active-note-context',
+      name: 'Open active note context',
+      checkCallback: (checking) => {
+        const file = this.app.workspace.getActiveFile();
+        if (!this.isCreatorNote(file)) return false;
+        if (!checking) void this.showNoteContext(file, true);
+        return true;
+      },
     });
     this.addCommand({
       id: 'place-active-location-on-atlas',
@@ -566,6 +652,7 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     this.app.workspace.onLayoutReady(() => {
       this.registerEvent(this.app.workspace.on('file-open', (file) => void this.handleActiveFile(file)));
       this.registerEvent(this.app.vault.on('modify', (file) => void this.handleModifiedFile(file)));
+      this.registerEvent(this.app.metadataCache.on('changed', (file) => void this.refreshNoteContext(file)));
       void this.handleActiveFile(this.app.workspace.getActiveFile());
     });
   }
@@ -612,6 +699,75 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
 
   frontmatter(file) {
     return this.app.metadataCache.getFileCache(file)?.frontmatter ?? {};
+  }
+
+  isCreatorNote(file) {
+    if (!(file instanceof TFile) || file.extension !== 'md' || this.isWorldAnvilImport(file)) return false;
+    if (!/^(Lore|Drafts)\//.test(file.path)) return false;
+    if (/^(Drafts\/WorldAnvil Import|Drafts\/Inbox\/World Anvil Migration Review)/.test(file.path)) return false;
+    return Boolean(String(this.frontmatter(file).type ?? '').trim());
+  }
+
+  noteNextAction(file) {
+    const frontmatter = this.frontmatter(file);
+    const description = String(frontmatter.description ?? '').trim();
+    const type = String(frontmatter.type ?? '').trim().toLowerCase();
+    const status = String(frontmatter.status ?? '').trim().toLowerCase();
+    const development = String(frontmatter.development_level ?? '').trim().toLowerCase();
+
+    if (!description) {
+      return {
+        label: 'Write the one-line identity',
+        detail: 'State what this is and why it is worth remembering. Keep the description short enough to remain useful in lists and search.',
+      };
+    }
+
+    if (type === 'event') {
+      return {
+        label: 'Check canonical chronology',
+        detail: 'Open the event beside its era timeline and verify calendarDate. Use calendarEndDate only when the event is a genuine period.',
+        action: 'chronology',
+      };
+    }
+
+    if (type === 'location' && file.path.startsWith('Lore/')) {
+      return {
+        label: 'Decide whether this belongs on an Atlas',
+        detail: 'If spatial placement matters, open a canonical map and place the linked marker with TTRPG Tools - Maps.',
+        action: 'atlas',
+      };
+    }
+
+    if (development === 'stub' || status === 'draft') {
+      return {
+        label: 'Develop one useful section',
+        detail: 'Add the next fact that changes a creator decision. Stop when the note is usable instead of filling every possible field.',
+      };
+    }
+
+    return {
+      label: 'Continue only when something changed',
+      detail: 'This note has no mechanical next step. Revise it when canon, context, or presentation needs to change.',
+    };
+  }
+
+  async showNoteContext(file, reveal = true) {
+    if (!this.isCreatorNote(file)) return;
+    let leaf = this.app.workspace.getLeavesOfType(NOTE_CONTEXT_VIEW)[0];
+    if (!leaf) {
+      leaf = this.app.workspace.getRightLeaf(false);
+      if (!leaf) return;
+      await leaf.setViewState({ type: NOTE_CONTEXT_VIEW, active: true });
+    }
+    if (reveal) await this.app.workspace.revealLeaf(leaf);
+    if (leaf.view instanceof NoteContextView) await leaf.view.setFile(file);
+  }
+
+  async refreshNoteContext(file) {
+    const leaf = this.app.workspace.getLeavesOfType(NOTE_CONTEXT_VIEW)[0];
+    if (!leaf || !(leaf.view instanceof NoteContextView)) return;
+    if (leaf.view.file?.path !== file?.path) return;
+    await leaf.view.refresh();
   }
 
   atlasMapsFor(locationFile) {
@@ -730,6 +886,12 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
 
   async handleActiveFile(file) {
     if (this.suspendImportContext) return;
+
+    const noteContextLeaf = this.app.workspace.getLeavesOfType(NOTE_CONTEXT_VIEW)[0];
+    if (noteContextLeaf?.view instanceof NoteContextView) {
+      await noteContextLeaf.view.setFile(this.isCreatorNote(file) ? file : null);
+    }
+
     if (await this.hasOpenImportReview(file)) {
       await this.showImportReview(file, true);
       return;
