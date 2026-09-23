@@ -119,6 +119,10 @@ map:
 
 ### Place the marker visually
 
+From a canonical location note under `Lore/`, run **VISCERIUM Creator Tools: Place active location on Atlas...** to choose the target map and open it beside the location. The command does not edit marker storage.
+
+Alternatively:
+
 1. Open the map note in Reading view.
 2. Shift-click the desired position or right-click and choose **Add marker here**.
 3. Link the marker to the canonical note using its vault path, for example `Lore/CITADEL/Locations/Kemsvall.md`.
