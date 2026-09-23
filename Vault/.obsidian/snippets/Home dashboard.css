@@ -347,75 +347,6 @@
 
 .viscerium-home button.vc-home-button-primary .vc-home-button-icon { color: #171613; }
 
-/* Create expansion lives inside the hero card: no second navigation level. */
-.viscerium-home .vc-home-create-panel {
-  grid-column: 1 / -1;
-  margin-top: 1px;
-  padding-top: 16px;
-  border-top: 1px solid rgb(196 182 157 / 14%);
-}
-
-.viscerium-home .vc-home-create-panel[hidden] { display: none !important; }
-
-.viscerium-home .vc-home-create-panel-title {
-  color: #e7e1d7;
-  font-family: var(--vc-font-body, "Viscerium Reading Serif", Georgia, serif);
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.viscerium-home .vc-home-create-panel-copy {
-  margin: 2px 0 14px;
-  color: #817c75;
-  font-size: 10px;
-}
-
-.viscerium-home .vc-home-create-sections {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-}
-
-.viscerium-home .vc-home-create-group {
-  min-width: 0;
-  padding: 0 16px;
-  border-right: 1px solid #35322e;
-}
-
-.viscerium-home .vc-home-create-group:first-child { padding-left: 0; }
-.viscerium-home .vc-home-create-group:last-child { padding-right: 0; border-right: 0; }
-
-.viscerium-home .vc-home-create-heading {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 9px;
-  color: #b9aa91;
-  font-family: var(--font-interface);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .05em;
-}
-
-.viscerium-home .vc-home-create-heading-icon,
-.viscerium-home .vc-home-create-heading-icon svg {
-  width: 15px;
-  height: 15px;
-  color: #b9aa91;
-}
-
-.viscerium-home .vc-home-create-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-
-.viscerium-home .vc-home-create-actions .vc-home-button {
-  min-height: 38px;
-  padding-inline: 11px;
-  font-size: 10px;
-}
-
 /* -------------------------------------------------------------------------- */
 /* Editorial section headings                                                 */
 /* -------------------------------------------------------------------------- */
@@ -1049,9 +980,6 @@
 @container viscerium-home (max-width: 760px) {
   .viscerium-home .vc-home-launch { grid-template-columns: 1fr; align-items: start; }
   .viscerium-home .vc-home-launch-actions { justify-content: flex-start; }
-  .viscerium-home .vc-home-create-sections { grid-template-columns: 1fr 1fr; row-gap: 18px; }
-  .viscerium-home .vc-home-create-group:nth-child(2) { border-right: 0; padding-right: 0; }
-  .viscerium-home .vc-home-create-group:nth-child(3) { padding-left: 0; }
   .viscerium-home .vc-home-continue-grid,
   .viscerium-home .callout[data-callout="home-secondary"] > .callout-content { grid-template-columns: 1fr; }
   .viscerium-home .vc-home-attention-row { grid-template-columns: 62px minmax(0, 1fr) auto; }
@@ -1067,15 +995,6 @@
   .viscerium-home .vc-home-launch { padding: 14px; }
   .viscerium-home .vc-home-launch-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
   .viscerium-home button.vc-home-button { width: 100%; }
-  .viscerium-home .vc-home-create-sections { grid-template-columns: 1fr; }
-  .viscerium-home .vc-home-create-group,
-  .viscerium-home .vc-home-create-group:first-child,
-  .viscerium-home .vc-home-create-group:nth-child(3) {
-    padding: 0 0 14px;
-    border-right: 0;
-    border-bottom: 1px solid #35322e;
-  }
-  .viscerium-home .vc-home-create-group:last-child { padding-bottom: 0; border-bottom: 0; }
   .viscerium-home .callout:is([data-callout="home-continue"], [data-callout="home-attention"], [data-callout="home-navigate"]) > .callout-title .callout-title-inner { font-size: 21px; }
   .viscerium-home .vc-home-attention-summary { grid-template-columns: 1fr; }
   .viscerium-home .vc-home-attention-stats { justify-content: flex-start; }
