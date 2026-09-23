@@ -29,6 +29,17 @@ test('creator tools own the shared creation entry point used by Home', () => {
   assert.ok(templaterConfig.enabled_templates_hotkeys.includes('Templates/Timelines/New Timeline.md'));
 });
 
+test('Creator Tools hands canonical locations to native Atlas marker placement', () => {
+  assert.match(creatorPlugin, /id: 'place-active-location-on-atlas'/);
+  assert.match(creatorPlugin, /Place active location on Atlas\.\.\./);
+  assert.match(creatorPlugin, /locationFile\.path\.startsWith\('Lore\/'\)/);
+  assert.match(creatorPlugin, /frontmatter\.type.*=== 'map'/);
+  assert.match(creatorPlugin, /frontmatter\.mapId/);
+  assert.match(creatorPlugin, /getLeaf\('split', 'vertical'\)/);
+  assert.match(creatorPlugin, /Shift-click the position or use Add marker here/);
+  assert.match(creatorPlugin, /Insert new map\.\.\./);
+});
+
 test('first-party creator plugin is syntactically valid and exposes era/continuity commands', () => {
   assert.doesNotThrow(() => new Function(creatorPlugin));
   assert.match(creatorPlugin, /\['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY'\]/);
