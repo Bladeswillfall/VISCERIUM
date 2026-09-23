@@ -138,6 +138,8 @@ Creates a character, faction, location, event, species, item, culture, belief, n
 
 The direct Location, Event, and Technology commands call this same creator with the relevant type already selected. Technology remains a Lore item with `item_type: technology`.
 
+Event creation can add a canonical Okse year immediately. If you add it, the workflow writes `calendarDate` with year precision and asks for certainty. Skip the prompt when chronology is not established.
+
 The workflow can create task-bearing reference stubs when you select **Create new…**.
 
 ### Review active event chronology
