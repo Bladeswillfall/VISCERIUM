@@ -12,11 +12,34 @@ const IMPORT_REVIEW_END = '<!-- worldanvil-migration-review:end -->';
 const WORLDANVIL_BASE_PATH = 'System/Bases/World Anvil Import.base';
 const WORLDANVIL_GUIDE_PATH = 'Drafts/Inbox/World Anvil Migration Review.md';
 
+const WORLD_BUILDING_ACTIONS = Object.freeze([
+  {
+    label: 'Location',
+    hint: 'Place, settlement, region, route, wilderness, or site',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Location.md',
+  },
+  {
+    label: 'Event',
+    hint: 'Canonical historical event or period',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Event.md',
+  },
+  {
+    label: 'Technology',
+    hint: 'Lore item with the technology subtype already selected',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Technology.md',
+  },
+  {
+    label: 'Other lore',
+    hint: 'Character, faction, species, culture, belief, language, item, or general article',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Lore Entity.md',
+  },
+]);
+
 const CREATE_ACTIONS = Object.freeze([
   {
-    label: 'Lore entity',
-    hint: 'Character, faction, location, event, species, culture, belief, or naming language',
-    commandId: 'templater-obsidian:create-Templates/Lore/New Lore Entity.md',
+    label: 'Worldbuilding',
+    hint: 'Location, event, technology, or other Lore',
+    value: 'worldbuilding',
   },
   {
     label: 'Story entity',
@@ -526,16 +549,40 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
   }
 
   async openCreate() {
-    const available = CREATE_ACTIONS.filter((action) => Boolean(this.app.commands?.commands?.[action.commandId]));
+    const hasCommand = (action) => Boolean(this.app.commands?.commands?.[action.commandId]);
+    const worldbuildingAvailable = WORLD_BUILDING_ACTIONS.some(hasCommand);
+    const available = CREATE_ACTIONS.filter((action) => (
+      action.value === 'worldbuilding' ? worldbuildingAvailable : hasCommand(action)
+    ));
     if (!available.length) {
       new Notice('No VISCERIUM creation commands are available. Check the required plugins.', 8000);
+      return;
+    }
+
+    const selection = await new ChoiceModal(
+      this.app,
+      available.map((action) => ({ label: action.label, hint: action.hint, value: action.value ?? action.commandId })),
+      'What are you creating?',
+    ).choose();
+    if (!selection) return;
+    if (selection === 'worldbuilding') {
+      await this.openWorldbuildingCreate();
+      return;
+    }
+    this.app.commands.executeCommandById(selection);
+  }
+
+  async openWorldbuildingCreate() {
+    const available = WORLD_BUILDING_ACTIONS.filter((action) => Boolean(this.app.commands?.commands?.[action.commandId]));
+    if (!available.length) {
+      new Notice('No VISCERIUM worldbuilding commands are available. Check Templater.', 8000);
       return;
     }
 
     const commandId = await new ChoiceModal(
       this.app,
       available.map((action) => ({ label: action.label, hint: action.hint, value: action.commandId })),
-      'What are you creating?',
+      'What kind of worldbuilding?',
     ).choose();
     if (!commandId) return;
     this.app.commands.executeCommandById(commandId);
