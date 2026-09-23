@@ -174,6 +174,37 @@ test('folder entity router selects the nearest semantic template and path-derive
   assert.equal(router.ROUTES.article.template, 'Templates/Lore/Article Template.md');
 });
 
+test('folder-first Lore creation receives the same safe stub baseline as guided Lore', async () => {
+  const routerPath = path.join(vaultRoot, 'Templates/_Scripts/folder_entity_router.js');
+  delete require.cache[require.resolve(routerPath)];
+  const router = require(routerPath);
+
+  const item = router.applyAuthoringBaseline(
+    await readText('Templates/Lore/Item Template.md'),
+    'item',
+    'Lore/Eras/SMOG/Technology',
+  );
+  assert.match(item, /^development_level: "stub"$/m);
+  assert.match(item, /^era: "SMOG"$/m);
+  assert.match(item, /^item_type: "technology"$/m);
+
+  const event = router.applyAuthoringBaseline(
+    await readText('Templates/Lore/Event Template.md'),
+    'event',
+    'Drafts/Inbox/Events',
+  );
+  assert.match(event, /^development_level: "stub"$/m);
+  assert.doesNotMatch(event, /^era: ".+"$/m);
+
+  const map = router.applyAuthoringBaseline(
+    await readText('Templates/Publishing/Map Template.md'),
+    'map',
+    'Lore/Eras/CITADEL/Maps',
+  );
+  assert.match(map, /^era: "CITADEL"$/m);
+  assert.doesNotMatch(map, /^development_level:/m);
+});
+
 test('creator-facing workflows author Storyteller material as Markdown rather than properties', async () => {
   for (const relativePath of creatorTemplates) {
     const content = await readText(relativePath);
