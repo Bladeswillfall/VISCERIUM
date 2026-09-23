@@ -284,8 +284,6 @@ class ChoiceModal extends SuggestModal {
     super(app);
     this.options = options;
     this.selectedValue = null;
-    this.closed = false;
-    this.cancelTimer = null;
     this.setPlaceholder(placeholder);
   }
   getSuggestions(query) {
@@ -296,36 +294,27 @@ class ChoiceModal extends SuggestModal {
     el.createEl('div', { text: option.label });
     if (option.hint) el.createEl('small', { text: option.hint });
   }
+  selectSuggestion(option, event) {
+    this.selectedValue = option.value;
+    super.selectSuggestion(option, event);
+  }
   onChooseSuggestion(option) {
     this.selectedValue = option.value;
-    if (this.closed) this.finishChoice();
   }
   choose() {
     this.selectedValue = null;
-    this.closed = false;
     return new Promise((resolve) => {
       this.resolve = resolve;
       this.open();
     });
   }
-  finishChoice() {
-    if (!this.resolve) return;
-    if (this.cancelTimer) clearTimeout(this.cancelTimer);
+  onClose() {
+    super.onClose();
     const resolve = this.resolve;
     const value = this.selectedValue;
     this.resolve = null;
     this.selectedValue = null;
-    this.cancelTimer = null;
-    resolve(value);
-  }
-  onClose() {
-    super.onClose();
-    this.closed = true;
-    if (this.selectedValue !== null) {
-      this.finishChoice();
-      return;
-    }
-    this.cancelTimer = setTimeout(() => this.finishChoice(), 50);
+    resolve?.(value);
   }
 }
 
