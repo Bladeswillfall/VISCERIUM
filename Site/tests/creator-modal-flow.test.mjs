@@ -38,8 +38,9 @@ function loadPluginHarness() {
         if (!wanted) throw new Error(`Unexpected modal: ${this.placeholder}`);
         const option = this.getSuggestions('').find((entry) => entry.label === wanted);
         if (!option) throw new Error(`Missing option: ${wanted}`);
+        // Obsidian closes the SuggestModal before delivering the selected item.
+        this.close();
         this.onChooseSuggestion(option);
-        queueMicrotask(() => this.close());
       });
     }
     close() {
@@ -100,7 +101,7 @@ function loadPluginHarness() {
   return { PluginClass: module.exports, app, opened, blocked, executed };
 }
 
-test('Worldbuilding opens its second picker after the first picker closes', async () => {
+test('Worldbuilding survives Obsidian close-before-choice ordering', async () => {
   const harness = loadPluginHarness();
   const plugin = new harness.PluginClass(harness.app);
 
