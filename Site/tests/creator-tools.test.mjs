@@ -133,20 +133,26 @@ test('connected context derives relationships and backlinks from canonical note 
   );
 });
 
-test('editing toolbar keeps the permanent bar small and moves formatting to selection context', () => {
+test('editing toolbar preserves its full command set and adds VISCERIUM actions', () => {
   const top = JSON.stringify(editingToolbarConfig.topCommands);
   const following = JSON.stringify(editingToolbarConfig.followingCommands);
 
   assert.equal(editingToolbarConfig.enableMultipleConfig, true);
   assert.equal(editingToolbarConfig.enableTopToolbar, true);
   assert.equal(editingToolbarConfig.enableFollowingToolbar, true);
-  assert.match(top, /SubmenuCommands-viscerium-insert/);
+
+  assert.match(top, /toggle-format-brush/);
+  assert.match(top, /format-eraser/);
+  assert.match(top, /change-font-color/);
+  assert.match(top, /change-background-color/);
+  assert.match(top, /fullscreen-focus/);
+  assert.match(top, /justify/);
   assert.match(top, /SubmenuCommands-viscerium-connect/);
   assert.match(top, /viscerium-creator-tools:open-active-note-context/);
   assert.match(top, /viscerium-creator-tools:connect-related-note/);
   assert.match(top, /viscerium-creator-tools:place-active-location-on-atlas/);
   assert.match(top, /viscerium-creator-tools:review-active-event-chronology/);
-  assert.doesNotMatch(top, /change-font-color|change-background-color|fullscreen-focus|justify/);
+
   assert.match(following, /toggle-bold/);
   assert.match(following, /toggle-italics/);
   assert.match(following, /toggle-highlight/);
