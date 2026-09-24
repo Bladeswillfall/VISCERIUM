@@ -165,10 +165,145 @@
       "icon": "lucide-quote"
     }
   ],
-  "topCommands": [],
+  "topCommands": [
+    {
+      "id": "editing-toolbar:editor-undo",
+      "name": "Undo",
+      "icon": "undo-glyph"
+    },
+    {
+      "id": "editing-toolbar:editor-redo",
+      "name": "Redo",
+      "icon": "redo-glyph"
+    },
+    {
+      "id": "editing-toolbar:header2-text",
+      "name": "Heading 2",
+      "icon": "header-2"
+    },
+    {
+      "id": "editing-toolbar:header3-text",
+      "name": "Heading 3",
+      "icon": "header-3"
+    },
+    {
+      "id": "editing-toolbar:toggle-bold",
+      "name": "Bold",
+      "icon": "bold-glyph"
+    },
+    {
+      "id": "editing-toolbar:toggle-italics",
+      "name": "Italic",
+      "icon": "italic-glyph"
+    },
+    {
+      "id": "SubmenuCommands-viscerium-insert",
+      "name": "Insert",
+      "icon": "lucide-plus",
+      "menuType": "dropdown",
+      "SubmenuCommands": [
+        {
+          "id": "editing-toolbar:editor:attach-file",
+          "name": "Image or attachment",
+          "icon": "lucide-paperclip"
+        },
+        {
+          "id": "editing-toolbar:editor:insert-wikilink",
+          "name": "Article link",
+          "icon": "link-glyph"
+        },
+        {
+          "id": "editing-toolbar:insert-callout",
+          "name": "Callout",
+          "icon": "lucide-quote"
+        },
+        {
+          "id": "editing-toolbar:editor:insert-table",
+          "name": "Table",
+          "icon": "lucide-table"
+        },
+        {
+          "id": "editing-toolbar:editor:insert-embed",
+          "name": "Embed",
+          "icon": "note-glyph"
+        },
+        {
+          "id": "editing-toolbar:hrline",
+          "name": "Horizontal divider",
+          "icon": "lucide-minus"
+        }
+      ]
+    },
+    {
+      "id": "SubmenuCommands-viscerium-connect",
+      "name": "Connect",
+      "icon": "lucide-network",
+      "menuType": "dropdown",
+      "SubmenuCommands": [
+        {
+          "id": "viscerium-creator-tools:open-active-note-context",
+          "name": "Open connected context",
+          "icon": "lucide-panel-right-open"
+        },
+        {
+          "id": "viscerium-creator-tools:connect-related-note",
+          "name": "Related article",
+          "icon": "lucide-link-2"
+        },
+        {
+          "id": "viscerium-creator-tools:place-active-location-on-atlas",
+          "name": "Atlas placement",
+          "icon": "lucide-map-pin"
+        },
+        {
+          "id": "viscerium-creator-tools:review-active-event-chronology",
+          "name": "Chronology",
+          "icon": "lucide-calendar-clock"
+        }
+      ]
+    },
+    {
+      "id": "SubmenuCommands-viscerium-more",
+      "name": "More",
+      "icon": "lucide-ellipsis",
+      "menuType": "dropdown",
+      "SubmenuCommands": [
+        {
+          "id": "editing-toolbar:editor:cycle-list-checklist",
+          "name": "List or checklist",
+          "icon": "check-circle"
+        },
+        {
+          "id": "editing-toolbar:editor:toggle-blockquote",
+          "name": "Blockquote",
+          "icon": "lucide-text-quote"
+        },
+        {
+          "id": "editing-toolbar:editor:toggle-code",
+          "name": "Inline code",
+          "icon": "code-glyph"
+        },
+        {
+          "id": "editing-toolbar:codeblock",
+          "name": "Code block",
+          "icon": "codeblock-glyph"
+        },
+        {
+          "id": "editing-toolbar:toggle-highlight",
+          "name": "Highlight",
+          "icon": "highlight-glyph"
+        },
+        {
+          "id": "editing-toolbar:toggle-strikethrough",
+          "name": "Strikethrough",
+          "icon": "strikethrough-glyph"
+        }
+      ]
+    }
+  ],
   "fixedCommands": [],
   "mobileCommands": [],
-  "enableMultipleConfig": false,
+  "enableMultipleConfig": true,
   "enableTopToolbar": true,
   "enableFollowingToolbar": true,
   "enableFixedToolbar": false,
