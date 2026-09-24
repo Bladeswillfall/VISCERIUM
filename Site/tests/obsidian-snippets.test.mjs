@@ -63,6 +63,15 @@ test("Live Preview uses the same editorial chrome as Reading View", () => {
   assert.match(spacing, /line-height:\s*1\.68/);
 });
 
+test("H2 hierarchy avoids virtualized counters and decorative hairlines", () => {
+  const css = fs.readFileSync(path.join(snippetsDir, "Heading hierarchy.css"), "utf8");
+
+  assert.match(css, /markdown-rendered:not\(\.viscerium-home\) h2::before/);
+  assert.doesNotMatch(css, /HyperMD-header-2::before/);
+  assert.doesNotMatch(css, /HyperMD-header-2[^}]*counter-increment/s);
+  assert.doesNotMatch(css, /h2::after/);
+});
+
 test("article width documentation names the snippet owner and Home exception", () => {
   const setup = fs.readFileSync(setupPath, "utf8");
   const snippetsGuide = fs.readFileSync(snippetsGuidePath, "utf8");
