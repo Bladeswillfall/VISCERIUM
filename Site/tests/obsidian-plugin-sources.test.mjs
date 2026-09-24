@@ -61,6 +61,17 @@ test('layout-tools quote parsing avoids nested repeated regexes', async () => {
   assert.equal(context.isIndentHeaderLine(`${deepPrefix}not-an-indent`), false);
 });
 
+test('layout-tools keep legacy indent repair explicit', async () => {
+  const source = await readFile(
+    path.join(repoRoot, sourcePaths['viscerium-layout-tools'], 'src/main.js'),
+    'utf8',
+  );
+
+  assert.match(source, /id: 'repair-legacy-visual-indents'/);
+  assert.doesNotMatch(source, /onLayoutReady\(repairActiveView\)/);
+  assert.doesNotMatch(source, /workspace\.on\('file-open'.*repairActiveView/);
+});
+
 test('plugin profile records maintained source and Vault runtime paths', async () => {
   const profile = JSON.parse(await readFile(path.join(repoRoot, 'Vault/System/Obsidian Plugin Profile.json'), 'utf8'));
 
