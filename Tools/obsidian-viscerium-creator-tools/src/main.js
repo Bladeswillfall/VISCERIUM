@@ -1011,7 +1011,7 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     const target = this.app.vault.getAbstractFileByPath(normalizePath(path));
     if (!(target instanceof TFile)) return;
     const title = this.titleFor(target);
-    const link = `[[${target.path.replace(/\\.md$/i, '')}|${title}]]`;
+    const link = `[[${target.path}|${title}]]`;
     await this.app.fileManager.processFrontMatter(file, (data) => {
       const current = Array.isArray(data.related) ? data.related : data.related ? [data.related] : [];
       if (current.some((entry) => normaliseLinkTarget(entry) === normaliseLinkTarget(target.path))) return;
