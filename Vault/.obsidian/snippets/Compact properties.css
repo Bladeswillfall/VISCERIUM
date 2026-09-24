@@ -9,26 +9,41 @@
 }
 
 .metadata-properties-heading {
-  width: fit-content;
-  min-height: 2rem;
-  margin-bottom: 0.35rem;
-  padding: 0.38rem 0.65rem;
-  border: 1px solid color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 18%, var(--background-modifier-border));
-  border-radius: var(--vc-radius-control, 4px);
-  background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 5%, var(--background-secondary));
-  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 34%, var(--text-muted));
-  cursor: pointer;
+  margin-bottom: 0.25rem;
+  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 30%, var(--text-muted));
   font-size: 0.75em;
   font-weight: 700;
   letter-spacing: 0.055em;
   text-transform: uppercase;
-  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
 }
 
-.metadata-properties-heading:hover {
-  border-color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 38%, var(--background-modifier-border));
-  background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 9%, var(--background-secondary));
+.markdown-reading-view .metadata-container {
+  overflow: hidden;
+  margin-block: 0.55rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 16%, var(--background-modifier-border));
+  border-radius: var(--vc-radius-control, 4px);
+  background: color-mix(in srgb, var(--background-secondary) 74%, transparent);
+}
+
+.markdown-reading-view .metadata-properties-heading {
+  width: 100%;
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0.62rem 0.75rem;
+  border: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 34%, var(--text-muted));
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.markdown-reading-view .metadata-properties-heading:hover {
+  background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 7%, transparent);
   color: var(--text-normal);
+}
+
+.markdown-reading-view .metadata-properties {
+  padding: 0 0.7rem 0.65rem;
 }
 
 .metadata-property {
