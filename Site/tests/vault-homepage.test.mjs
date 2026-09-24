@@ -108,6 +108,9 @@ test('creator UI grammar keeps page chrome flat and creator controls deliberatel
   assert.match(homeCss, /inset 0 -3px 0/);
   assert.doesNotMatch(homeCss, /vc-home-create-panel/);
   assert.match(callouts, /border-radius:\s*0/);
+  assert.match(callouts, /callout\[data-callout="authoring"\][\s\S]*?cursor:\s*pointer/);
+  assert.match(callouts, /vc-article-context/);
+  assert.match(callouts, /vc-article-map-marker/);
   assert.match(bases, /bases-view\[data-view-type="table"\][\s\S]*?border-radius:\s*0/);
 });
 
@@ -170,6 +173,8 @@ test('Home uses restrained semantic colour cues for lore, story, progress and in
   assert.match(homeCss, /vc-home-attention-severity[\s\S]*?var\(--vc-home-red\)/);
   assert.match(homeCss, /vc-home-ready-count[\s\S]*?var\(--vc-home-green\)/);
   assert.match(propertiesCss, /metadata-properties-heading[\s\S]*?color-mix/);
+  assert.match(propertiesCss, /metadata-properties-heading[\s\S]*?cursor:\s*pointer/);
+  assert.match(propertiesCss, /metadata-properties-heading:hover/);
 });
 
 test('creator activity is local, rolling, responsive and non-gamified', async () => {
