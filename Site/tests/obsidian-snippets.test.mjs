@@ -49,6 +49,20 @@ test("ordinary Obsidian articles use a responsive wide lane in both Markdown mod
   assert.doesNotMatch(css, /100vw/);
 });
 
+test("Live Preview uses the same editorial chrome as Reading View", () => {
+  const compactProperties = fs.readFileSync(path.join(snippetsDir, "Compact properties.css"), "utf8");
+  const autohideProperties = fs.readFileSync(path.join(snippetsDir, "Autohide properties.css"), "utf8");
+  const callouts = fs.readFileSync(path.join(snippetsDir, "Callout styling.css"), "utf8");
+  const spacing = fs.readFileSync(path.join(snippetsDir, "Paragraph spacing.css"), "utf8");
+
+  assert.match(compactProperties, /markdown-source-view\.mod-cm6[^\n]*metadata-container/);
+  assert.doesNotMatch(autohideProperties, /Properties · hover to expand/);
+  assert.match(autohideProperties, /max-height:\s*2\.45rem/);
+  assert.match(callouts, /markdown-source-view\.mod-cm6[^\n]*callout\[data-callout="authoring"\]/);
+  assert.match(spacing, /markdown-source-view\.mod-cm6:not\(\.viscerium-home\) \.cm-content/);
+  assert.match(spacing, /line-height:\s*1\.68/);
+});
+
 test("article width documentation names the snippet owner and Home exception", () => {
   const setup = fs.readFileSync(setupPath, "utf8");
   const snippetsGuide = fs.readFileSync(snippetsGuidePath, "utf8");
