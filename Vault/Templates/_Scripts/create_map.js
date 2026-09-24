@@ -42,7 +42,7 @@ function mapImages(tp) {
 }
 
 function insertAuthoringMap(source, imagePath, markerPath, mapId) {
-  const placeholder = `Use **TTRPG Tools - Maps: Insert new map...** in Edit mode when an image is assigned later. Use DOM rendering for desktop authoring. Switch to Canvas only if the map needs it for performance.`;
+  const placeholder = `Use **TTRPG Tools - Maps: Insert new map...** in Edit mode when an image is assigned later. Use Canvas rendering for large raster maps.`;
   if (!source.includes(placeholder)) throw new Error("Selected VISCERIUM map template is missing the authoring-map placeholder.");
 
   const block = [
