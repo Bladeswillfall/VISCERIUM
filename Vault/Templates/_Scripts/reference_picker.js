@@ -13,14 +13,24 @@ async function ensureFolder(app, folderPath) {
   }
 }
 
-function candidates(tp, types) {
+function frontmatterEras(frontmatter) {
+  const values = [];
+  if (Array.isArray(frontmatter.era)) values.push(...frontmatter.era);
+  else if (frontmatter.era != null) values.push(frontmatter.era);
+  if (Array.isArray(frontmatter.eras)) values.push(...frontmatter.eras);
+  return new Set(values.map(normalise).filter(Boolean));
+}
+
+function candidates(tp, types, era) {
   const allowed = new Set(types.map(normalise));
+  const wantedEra = normalise(era);
   const byName = new Map();
   for (const file of tp.app.vault.getMarkdownFiles()) {
     const path = file.path;
     if (!(path.startsWith("Lore/") || path.startsWith("Drafts/"))) continue;
     const fm = tp.app.metadataCache.getFileCache(file)?.frontmatter ?? {};
     if (!allowed.has(normalise(fm.type))) continue;
+    if (wantedEra && !frontmatterEras(fm).has(wantedEra)) continue;
     const title = String(fm.title ?? file.basename).trim();
     if (!title) continue;
     const aliases = Array.isArray(fm.aliases) ? fm.aliases.map(String) : [];
@@ -54,6 +64,7 @@ async function createStub(tp, options, existing) {
     'description: ""',
     "status: draft",
     `type: ${type}`,
+    ...(options.era ? [`era: ${JSON.stringify(options.era)}`] : []),
     "development_level: stub",
     `tags: [${JSON.stringify("stub")}, ${JSON.stringify("inbox")}]`,
     "---",
@@ -71,7 +82,7 @@ async function createStub(tp, options, existing) {
 
 module.exports = async function referencePicker(tp, options = {}) {
   const types = Array.isArray(options.types) && options.types.length ? options.types : [options.type].filter(Boolean);
-  const existing = candidates(tp, types);
+  const existing = candidates(tp, types, options.era);
   const createToken = "__viscerium_create__";
   const labels = existing.map((entry) => entry.title);
   const values = existing.map((entry) => entry.title);
