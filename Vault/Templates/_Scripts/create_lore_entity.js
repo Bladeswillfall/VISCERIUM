@@ -193,6 +193,15 @@ async function ensureFolder(tp, folderPath) {
   }
 }
 
+function assertDestinationAvailable(tp, folder, title) {
+  const destination = `${folder}/${title}.md`;
+  const existing = tp.app.vault.getAbstractFileByPath(destination);
+  const currentPath = tp.config?.target_file?.path;
+  if (existing && existing.path !== currentPath) {
+    throw new Error(`A note named "${title}" already exists at ${destination}. Open that note or choose a different name.`);
+  }
+}
+
 async function chooseType(tp, requested) {
   const requestedType = String(requested ?? "").trim();
   if (requestedType && !TYPES[requestedType]) throw new Error(`Unknown VISCERIUM Lore type: ${requestedType}`);
@@ -236,7 +245,7 @@ async function collectFactionData(tp) {
   };
 }
 
-async function collectLocationData(tp) {
+async function collectLocationData(tp, options = {}) {
   return {
     location_kind: await tp.system.suggester(
       ["Leave undefined", ...Object.values(LOCATION_KINDS)],
@@ -244,8 +253,8 @@ async function collectLocationData(tp) {
       false,
       "Broad location kind — choose only if useful",
     ) ?? "",
-    faction: await pick(tp, { types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions" }),
-    region: await pick(tp, { types: ["location"], multiple: false, label: "parent region", stubType: "location", stubFolder: "Drafts/Inbox/Locations" }),
+    faction: await pick(tp, { types: ["faction"], multiple: true, label: "faction", stubType: "faction", stubFolder: "Drafts/Inbox/Factions", era: options.era }),
+    region: await pick(tp, { types: ["location"], multiple: false, label: "parent region", stubType: "location", stubFolder: "Drafts/Inbox/Locations", era: options.era }),
   };
 }
 
@@ -356,13 +365,14 @@ module.exports = async function createLoreEntity(tp, options = {}) {
   const currentTitle = tp.file.title === "Untitled" ? "" : tp.file.title;
   const title = String(await tp.system.prompt("Name", currentTitle, true) ?? "").trim();
   if (!title) throw new Error("A title is required to create a VISCERIUM note.");
+  assertDestinationAvailable(tp, config.folder, title);
   if (title !== tp.file.title) await tp.file.rename(title);
 
   const description = String(await tp.system.prompt("One-line identity (optional)", "", false) ?? "").trim();
   const allowedEras = config.schemaType === "event" ? HISTORICAL_ERAS : ERA_OPTIONS;
   const era = await tp.system.suggester(["Leave undefined", ...allowedEras], ["", ...allowedEras], false, "Era / scope") ?? "";
   const entityId = await chooseEntityId(tp, config, title);
-  const data = await collectData(tp, config.schemaType, options);
+  const data = await collectData(tp, config.schemaType, { ...options, era });
   const locationMapId = config.schemaType === "location" ? await chooseLocationMapId(tp, era) : "";
   const eventDate = config.schemaType === "event" ? await collectEventDate(tp) : null;
 
