@@ -372,7 +372,6 @@ module.exports = async function createLoreEntity(tp, options = {}) {
   const selection = await chooseType(tp, options.type);
   const config = TYPES[selection];
   const title = await chooseAvailableTitle(tp, config.folder);
-  if (title !== tp.file.title) await tp.file.rename(title);
 
   const description = String(await tp.system.prompt("One-line identity (optional)", "", false) ?? "").trim();
   const allowedEras = config.schemaType === "event" ? HISTORICAL_ERAS : ERA_OPTIONS;
@@ -400,7 +399,9 @@ module.exports = async function createLoreEntity(tp, options = {}) {
   }
 
   await ensureFolder(tp, config.folder);
-  if (tp.file.folder(true) !== config.folder) await tp.file.move(`${config.folder}/${title}`);
+  if (tp.file.folder(true) !== config.folder || tp.file.title !== title) {
+    await tp.file.move(`${config.folder}/${title}`);
+  }
 
   void LOCATION_DETAIL_TEMPLATE;
   return rendered;
