@@ -39,7 +39,7 @@ test("ordinary Obsidian articles use a responsive wide lane in both Markdown mod
   const css = fs.readFileSync(path.join(snippetsDir, "Article widths.css"), "utf8");
 
   assert.ok(appearance.enabledCssSnippets.includes("Article widths"));
-  assert.match(css, /--vc-article-max-width:\s*92rem/);
+  assert.match(css, /--vc-article-max-width:\s*82rem/);
   assert.match(css, /--vc-article-gutter:\s*clamp\(1rem,\s*3%,\s*2\.75rem\)/);
   assert.match(css, /markdown-preview-view:not\(\.viscerium-home\) \.markdown-preview-sizer/);
   assert.match(css, /markdown-source-view\.mod-cm6:not\(\.viscerium-home\) \.cm-sizer/);
@@ -47,6 +47,29 @@ test("ordinary Obsidian articles use a responsive wide lane in both Markdown mod
   assert.match(css, /\.cm-contentContainer/);
   assert.match(css, /\.cm-line/);
   assert.doesNotMatch(css, /100vw/);
+});
+
+test("Live Preview uses the same editorial chrome as Reading View", () => {
+  const compactProperties = fs.readFileSync(path.join(snippetsDir, "Compact properties.css"), "utf8");
+  const autohideProperties = fs.readFileSync(path.join(snippetsDir, "Autohide properties.css"), "utf8");
+  const callouts = fs.readFileSync(path.join(snippetsDir, "Callout styling.css"), "utf8");
+  const spacing = fs.readFileSync(path.join(snippetsDir, "Paragraph spacing.css"), "utf8");
+
+  assert.match(compactProperties, /markdown-source-view\.mod-cm6[^\n]*metadata-container/);
+  assert.doesNotMatch(autohideProperties, /Properties · hover to expand/);
+  assert.match(autohideProperties, /max-height:\s*2\.45rem/);
+  assert.match(callouts, /markdown-source-view\.mod-cm6[^\n]*callout\[data-callout="authoring"\]/);
+  assert.match(spacing, /markdown-source-view\.mod-cm6:not\(\.viscerium-home\) \.cm-content/);
+  assert.match(spacing, /line-height:\s*1\.68/);
+});
+
+test("H2 hierarchy avoids virtualized counters and decorative hairlines", () => {
+  const css = fs.readFileSync(path.join(snippetsDir, "Heading hierarchy.css"), "utf8");
+
+  assert.match(css, /markdown-rendered:not\(\.viscerium-home\) h2::before/);
+  assert.doesNotMatch(css, /HyperMD-header-2::before/);
+  assert.doesNotMatch(css, /HyperMD-header-2[^}]*counter-increment/s);
+  assert.doesNotMatch(css, /h2::after/);
 });
 
 test("article width documentation names the snippet owner and Home exception", () => {

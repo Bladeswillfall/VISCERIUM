@@ -98,7 +98,7 @@ Do not add a new `data.json` exception to `.gitignore` without reviewing the com
 
 ## Article width
 
-`Vault/.obsidian/snippets/Article widths.css` owns the responsive width of ordinary Markdown notes in both Reading View and Live Preview. It keeps articles centred, expands the article lane to a `92rem` maximum, and preserves responsive side gutters rather than making prose edge-to-edge.
+`Vault/.obsidian/snippets/Article widths.css` owns the responsive width of ordinary Markdown notes in both Reading View and Live Preview. It keeps articles centred, expands the article lane to a `82rem` maximum, and preserves responsive side gutters rather than making prose edge-to-edge.
 
 Change ordinary article sizing in that snippet instead of adding a competing global `markdown-preview-sizer`, `.cm-sizer` or theme override elsewhere. The active theme still owns typography, colours and the rest of the document chrome.
 

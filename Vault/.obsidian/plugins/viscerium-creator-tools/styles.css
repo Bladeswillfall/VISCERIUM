@@ -117,41 +117,164 @@
 .vc-import-review-nav button { font-size: 0.76rem; }
 
 
-/* Opt-in continuation context for ordinary creator notes. */
+/* Connected context for ordinary creator notes. */
+.vc-note-context {
+  --vc-context-card: color-mix(in srgb, var(--background-secondary) 78%, var(--background-primary));
+  --vc-context-card-hover: color-mix(in srgb, var(--text-accent) 7%, var(--vc-context-card));
+  gap: 16px;
+  padding: 0 14px 22px;
+}
+
+.vc-note-context-header {
+  margin: 0 -14px;
+  padding: 16px 14px 14px;
+  border-bottom: 1px solid var(--vc-panel-border);
+  background: color-mix(in srgb, var(--background-secondary) 58%, transparent);
+}
+
+.vc-note-context h4 {
+  margin: 5px 0 10px;
+  font-size: 1.12rem;
+  letter-spacing: -0.015em;
+}
+
+.vc-note-context-kicker,
+.vc-note-context-section-label {
+  color: color-mix(in srgb, var(--text-accent) 44%, var(--text-faint));
+}
+
 .vc-note-context-state {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 6px;
 }
 
 .vc-note-context-state span {
-  border: 1px solid var(--vc-panel-border);
-  padding: 2px 5px;
+  padding: 4px 7px;
+  border: 1px solid color-mix(in srgb, var(--text-accent) 18%, var(--vc-panel-border));
+  border-radius: var(--vc-radius-control, 4px);
+  background: color-mix(in srgb, var(--text-accent) 5%, transparent);
   color: var(--text-muted);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
+}
+
+.vc-note-context-module {
+  display: grid;
+  gap: 10px;
+  padding: 12px 10px;
+  background: var(--vc-context-card);
+}
+
+.vc-note-context-module-title {
+  color: var(--text-normal);
+  font-size: 0.86rem;
+  line-height: 1.25;
+}
+
+.vc-note-context-module p,
+.vc-note-context-muted {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.vc-note-context-module > button,
+.vc-note-context-connect > button,
+.vc-note-context-next > button {
+  width: 100%;
+  min-height: 2rem;
+  border: 1px solid color-mix(in srgb, var(--text-accent) 18%, var(--vc-panel-border));
+  background: color-mix(in srgb, var(--background-primary) 74%, transparent);
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+.vc-note-context-module > button:hover,
+.vc-note-context-connect > button:hover,
+.vc-note-context-next > button:hover {
+  border-color: color-mix(in srgb, var(--text-accent) 42%, var(--vc-panel-border));
+  background: var(--vc-context-card-hover);
+  color: var(--text-normal);
+}
+
+.vc-note-context-links {
+  display: grid;
+  gap: 4px;
+}
+
+button.vc-note-context-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+  padding: 8px 9px;
+  border: 1px solid color-mix(in srgb, var(--vc-panel-border) 78%, transparent);
+  border-radius: var(--vc-radius-control, 4px);
+  background: color-mix(in srgb, var(--background-primary) 58%, transparent);
+  box-shadow: none;
+  color: var(--text-normal);
+  font-size: 0.74rem;
+  text-align: left;
+}
+
+button.vc-note-context-link:hover,
+button.vc-note-context-link:focus-visible {
+  border-color: color-mix(in srgb, var(--text-accent) 40%, var(--vc-panel-border));
+  background: var(--vc-context-card-hover);
+}
+
+.vc-note-context-link-kind {
+  color: var(--text-faint);
+  font-size: 0.59rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.vc-note-context-connect {
+  padding-top: 0;
 }
 
 .vc-note-context-next {
-  border-left: 2px solid var(--text-accent);
-  background: color-mix(in srgb, var(--vc-panel-surface) 72%, transparent);
-  padding: 9px 10px;
+  display: grid;
+  gap: 8px;
+  padding: 12px 10px;
+  background: var(--vc-context-card);
 }
 
-.vc-note-context-next strong { display: block; margin-top: 3px; }
-.vc-note-context-next p { color: var(--text-muted); font-size: 0.76rem; }
-.vc-note-context-next button { margin-top: 9px; width: 100%; }
+.vc-note-context-next strong {
+  display: block;
+  color: var(--text-normal);
+  font-size: 0.82rem;
+}
+
+.vc-note-context-next p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.vc-note-context-next button {
+  margin-top: 2px;
+}
 
 .vc-note-context-source {
   display: grid;
   gap: 5px;
+  padding: 11px 2px 0;
   border-top: 1px solid var(--vc-panel-border);
-  padding-top: 10px;
   color: var(--text-muted);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
 }
 
 .vc-note-context-source code {
   overflow-wrap: anywhere;
   color: var(--text-faint);
-  font-size: 0.68rem;
+  font-size: 0.64rem;
+  line-height: 1.35;
 }

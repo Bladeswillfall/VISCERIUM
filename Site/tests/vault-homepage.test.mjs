@@ -125,7 +125,6 @@ test('creator foundation overrides Baseline display-serif headings with the conf
     );
   }
   assert.doesNotMatch(foundation, /Instrument Serif/);
-  assert.match(headings, /--vc-accent-line/);
   assert.match(headings, /color-mix\(in srgb, var\(--vc-accent/);
 });
 

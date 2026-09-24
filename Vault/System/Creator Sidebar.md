@@ -12,16 +12,18 @@ Recommended tabs:
 Use [[Home]] → **Creator Context** to close an open global Graph, ensure Outline, Backlinks and Local Graph are available in the right sidebar, and reveal that context. Git remains untouched as a utility tab.
 
 
-## Optional note context
+## Connected note context
 
-Run **VISCERIUM Creator Tools: Open active note context** when you want a small continuation pane for the note you are editing.
+Run **VISCERIUM Creator Tools: Open connected context** when you want the connected-context pane for the note you are editing.
 
 The pane is opt-in. It does not open for every note by default. While it is open, it follows ordinary Lore and Draft notes and shows:
 
 - the current type, era, status and development state when present;
-- one next useful authoring action;
-- a direct Atlas action for canonical locations;
-- a chronology action for events.
+- Atlas state and placement actions for locations;
+- canonical chronology actions for events;
+- structured region, faction, location, participant, related-article and relationship links;
+- backlinks from other notes;
+- one next useful authoring action.
 
 It does not score progress or turn optional metadata into a completion checklist. When the next useful action is prose, it names the decision instead of generating the prose.
 
