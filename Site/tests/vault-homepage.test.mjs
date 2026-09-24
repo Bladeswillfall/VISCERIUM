@@ -66,13 +66,14 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
 
   assert.match(continuing, /Loading recent work…/);
   assert.match(continuing, /dv\.index\?\.initialized/);
+  assert.doesNotMatch(continuing, /requestAnimationFrame/);
   assert.match(continuing, /activeProjectFile/);
   assert.match(continuing, /System\/Bases\/Lore Registry\.base/);
   assert.match(continuing, /Show all recent work/);
 
   assert.match(attention, /Checking project state…/);
   assert.match(attention, /dv\.index\?\.initialized/);
-  assert.match(attention, /requestIdleCallback/);
+  assert.doesNotMatch(attention, /requestIdleCallback/);
   assert.match(attention, /System\/Bases\/Needs Attention\.base/);
   assert.match(attention, /System\/Bases\/Publishing\.base/);
 
@@ -180,6 +181,9 @@ test('creator activity is local, rolling, responsive and non-gamified', async ()
   assert.match(startup, /getMarkdownFiles\(\)/);
   assert.match(startup, /localStorage\.setItem/);
   assert.match(startup, /pruneDays/);
+  assert.match(startup, /if \(existing\) \{/);
+  assert.match(startup, /setActiveLeaf\(existing/);
+  assert.doesNotMatch(startup, /existing \?\? tp\.app\.workspace\.getLeaf/);
   assert.doesNotMatch(startup, /Creator Activity\.json/);
   assert.doesNotMatch(startup, /adapter\.write/);
 
