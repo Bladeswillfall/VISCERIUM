@@ -161,9 +161,7 @@
 .vc-note-context-module {
   display: grid;
   gap: 10px;
-  padding: 12px;
-  border: 1px solid var(--vc-panel-border);
-  border-left: 2px solid color-mix(in srgb, var(--text-accent) 40%, var(--vc-panel-border));
+  padding: 12px 10px;
   background: var(--vc-context-card);
 }
 
@@ -244,10 +242,8 @@ button.vc-note-context-link:focus-visible {
 .vc-note-context-next {
   display: grid;
   gap: 8px;
-  padding: 12px;
-  border: 1px solid var(--vc-panel-border);
-  border-left: 2px solid var(--text-accent);
-  background: color-mix(in srgb, var(--text-accent) 6%, var(--background-secondary));
+  padding: 12px 10px;
+  background: var(--vc-context-card);
 }
 
 .vc-note-context-next strong {
