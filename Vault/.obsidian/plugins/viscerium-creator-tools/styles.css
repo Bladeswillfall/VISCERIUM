@@ -117,7 +117,7 @@
 .vc-import-review-nav button { font-size: 0.76rem; }
 
 
-/* Opt-in continuation context for ordinary creator notes. */
+/* Connected context for ordinary creator notes. */
 .vc-note-context-state {
   display: flex;
   flex-wrap: wrap;
@@ -129,6 +129,70 @@
   padding: 2px 5px;
   color: var(--text-muted);
   font-size: 0.7rem;
+}
+
+.vc-note-context-module {
+  display: grid;
+  gap: 7px;
+  border-top: 1px solid var(--vc-panel-border);
+  padding-top: 10px;
+}
+
+.vc-note-context-module-title {
+  color: var(--text-normal);
+  font-size: 0.82rem;
+}
+
+.vc-note-context-module p,
+.vc-note-context-muted {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.vc-note-context-module > button,
+.vc-note-context-connect > button {
+  width: 100%;
+}
+
+.vc-note-context-links {
+  display: grid;
+  gap: 4px;
+}
+
+button.vc-note-context-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+  padding: 6px 7px;
+  border: 1px solid color-mix(in srgb, var(--vc-panel-border) 78%, transparent);
+  background: color-mix(in srgb, var(--vc-panel-surface) 58%, transparent);
+  box-shadow: none;
+  color: var(--text-normal);
+  font-size: 0.74rem;
+  text-align: left;
+}
+
+button.vc-note-context-link:hover,
+button.vc-note-context-link:focus-visible {
+  border-color: color-mix(in srgb, var(--text-accent) 42%, var(--vc-panel-border));
+  background: color-mix(in srgb, var(--text-accent) 7%, var(--vc-panel-surface));
+}
+
+.vc-note-context-link-kind {
+  color: var(--text-faint);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vc-note-context-connect {
+  border-top: 1px solid var(--vc-panel-border);
+  padding-top: 10px;
 }
 
 .vc-note-context-next {
@@ -155,3 +219,4 @@
   color: var(--text-faint);
   font-size: 0.68rem;
 }
+
