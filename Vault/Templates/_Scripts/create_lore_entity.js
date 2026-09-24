@@ -193,12 +193,21 @@ async function ensureFolder(tp, folderPath) {
   }
 }
 
-function assertDestinationAvailable(tp, folder, title) {
-  const destination = `${folder}/${title}.md`;
-  const existing = tp.app.vault.getAbstractFileByPath(destination);
-  const currentPath = tp.config?.target_file?.path;
-  if (existing && existing.path !== currentPath) {
-    throw new Error(`A note named "${title}" already exists at ${destination}. Open that note or choose a different name.`);
+async function chooseAvailableTitle(tp, folder) {
+  while (true) {
+    const currentTitle = tp.file.title === "Untitled" ? "" : tp.file.title;
+    const title = String(await tp.system.prompt("Name", currentTitle, true) ?? "").trim();
+    if (!title) throw new Error("A title is required to create a VISCERIUM note.");
+
+    const destination = `${folder}/${title}.md`;
+    const existing = tp.app.vault.getAbstractFileByPath(destination);
+    const currentPath = tp.config?.target_file?.path;
+    if (!existing || existing.path === currentPath) return title;
+
+    new tp.obsidian.Notice(
+      `"${title}" already exists at ${destination}. Choose a different name.`,
+      8000,
+    );
   }
 }
 
@@ -362,10 +371,7 @@ async function collectData(tp, schemaType, options) {
 module.exports = async function createLoreEntity(tp, options = {}) {
   const selection = await chooseType(tp, options.type);
   const config = TYPES[selection];
-  const currentTitle = tp.file.title === "Untitled" ? "" : tp.file.title;
-  const title = String(await tp.system.prompt("Name", currentTitle, true) ?? "").trim();
-  if (!title) throw new Error("A title is required to create a VISCERIUM note.");
-  assertDestinationAvailable(tp, config.folder, title);
+  const title = await chooseAvailableTitle(tp, config.folder);
   if (title !== tp.file.title) await tp.file.rename(title);
 
   const description = String(await tp.system.prompt("One-line identity (optional)", "", false) ?? "").trim();
