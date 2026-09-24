@@ -3,8 +3,7 @@
  * Editorial article hierarchy for Reading View and Live Preview.
  */
 
-.markdown-rendered:not(.viscerium-home),
-.markdown-source-view.mod-cm6:not(.viscerium-home) .cm-content {
+.markdown-rendered:not(.viscerium-home) {
   counter-reset: vc-article-h2;
 }
 
@@ -31,7 +30,6 @@
 
 .markdown-rendered:not(.viscerium-home) h2,
 .markdown-source-view.mod-cm6:not(.viscerium-home) .HyperMD-header-2 {
-  counter-increment: vc-article-h2;
   margin-top: 2.15em;
   padding-bottom: 0;
   border-bottom: 0;
@@ -39,8 +37,11 @@
   line-height: 1.18;
 }
 
-.markdown-rendered:not(.viscerium-home) h2::before,
-.markdown-source-view.mod-cm6:not(.viscerium-home) .HyperMD-header-2::before {
+.markdown-rendered:not(.viscerium-home) h2 {
+  counter-increment: vc-article-h2;
+}
+
+.markdown-rendered:not(.viscerium-home) h2::before {
   content: counter(vc-article-h2, decimal-leading-zero);
   display: inline-block;
   min-width: 2.6rem;
@@ -51,16 +52,6 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   vertical-align: 0.2em;
-}
-
-.markdown-rendered:not(.viscerium-home) h2::after,
-.markdown-source-view.mod-cm6:not(.viscerium-home) .HyperMD-header-2::after {
-  content: "";
-  display: block;
-  width: 2.8rem;
-  height: 1px;
-  margin-top: 0.42em;
-  background: var(--vc-accent-line, var(--background-modifier-border));
 }
 
 .markdown-rendered h3,
