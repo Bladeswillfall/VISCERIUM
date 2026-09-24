@@ -71,25 +71,41 @@ body.viscerium-callouts-bar-only .callout {
  */
 .callout[data-callout="authoring"] {
   --callout-color: 120, 120, 120;
-  --vc-callout-border-mix: 16%;
-  --vc-callout-bg-mix: 2%;
-  --vc-callout-edge-width: 2px;
   margin-block: 0.7rem 1rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
   color: var(--text-muted);
 }
 
 .callout[data-callout="authoring"] > .callout-title {
+  width: fit-content;
   min-height: 2rem;
+  padding: 0.38rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 18%, var(--background-modifier-border));
+  border-radius: var(--vc-radius-control, 4px);
+  background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 5%, var(--background-secondary));
   color: var(--text-muted);
+  cursor: pointer;
   font-size: 0.78em;
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: 0.035em;
+  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+.callout[data-callout="authoring"] > .callout-title:hover {
+  border-color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 38%, var(--background-modifier-border));
+  background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 9%, var(--background-secondary));
+  color: var(--text-normal);
 }
 
 .callout[data-callout="authoring"] > .callout-content {
   columns: 2 22rem;
   column-gap: 2rem;
-  padding-top: 0.35rem;
+  margin-top: 0.45rem;
+  padding: 0.7rem 0.85rem;
+  border-left: 2px solid color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 24%, var(--background-modifier-border));
+  background: color-mix(in srgb, var(--background-secondary) 72%, transparent);
   color: var(--text-muted);
   font-size: 0.88em;
   line-height: 1.5;
@@ -110,5 +126,154 @@ body.viscerium-callouts-bar-only .callout {
 @media (max-width: 760px) {
   .callout[data-callout="authoring"] > .callout-content {
     columns: 1;
+  }
+}
+
+
+/* Creator-only article context. Source Markdown and frontmatter remain authoritative. */
+.vc-article-context {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(260px, 1.35fr);
+  gap: 14px;
+  margin: 0.9rem 0 1.4rem;
+  padding: 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--vc-radius-static, 0);
+  background: color-mix(in srgb, var(--background-secondary) 72%, transparent);
+}
+
+.vc-article-context-copy {
+  min-width: 0;
+  padding: 4px 2px;
+}
+
+.vc-article-context-copy h3 {
+  margin: 4px 0 10px;
+  font-family: var(--vc-font-heading, var(--font-interface));
+  font-size: 1.05rem;
+}
+
+.vc-article-context-kicker {
+  color: var(--text-faint);
+  font-family: var(--font-interface);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.vc-article-context-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vc-article-context-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  min-height: 28px;
+  padding: 5px 7px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--vc-radius-control, 4px);
+  background: var(--background-primary);
+  color: var(--text-muted);
+  font-family: var(--font-interface);
+  font-size: 0.74rem;
+  text-align: left;
+}
+
+button.vc-article-context-chip.is-link {
+  cursor: pointer;
+}
+
+button.vc-article-context-chip.is-link:hover {
+  border-color: var(--interactive-accent);
+  color: var(--text-normal);
+}
+
+.vc-article-context-chip-label {
+  color: var(--text-faint);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vc-article-map-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+}
+
+.vc-article-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.vc-article-map-open {
+  border-radius: var(--vc-radius-control, 4px);
+  font-size: 0.72rem;
+}
+
+.vc-article-map-preview {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  min-height: 160px;
+  overflow: hidden;
+  background-color: var(--background-secondary);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.vc-article-map-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgb(0 0 0 / 42%), transparent 38%);
+}
+
+.vc-article-map-marker {
+  position: absolute;
+  z-index: 2;
+  width: 15px;
+  height: 15px;
+  transform: translate(-50%, -50%);
+  border: 3px solid white;
+  border-radius: 50%;
+  background: var(--interactive-accent);
+  box-shadow: 0 0 0 3px rgb(0 0 0 / 30%), 0 2px 8px rgb(0 0 0 / 60%);
+}
+
+.vc-article-map-marker.is-region {
+  width: 36px;
+  height: 36px;
+  border-width: 2px;
+  background: color-mix(in srgb, var(--interactive-accent) 24%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 64%, white), 0 2px 8px rgb(0 0 0 / 45%);
+}
+
+.vc-article-map-status {
+  position: absolute;
+  z-index: 3;
+  right: 8px;
+  bottom: 7px;
+  left: 8px;
+  color: #f2eee7;
+  font-family: var(--font-interface);
+  font-size: 0.68rem;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 75%);
+}
+
+@media (max-width: 760px) {
+  .vc-article-context {
+    grid-template-columns: 1fr;
   }
 }
