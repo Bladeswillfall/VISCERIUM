@@ -110,15 +110,14 @@ test('CITADEL authoring map opens in an interactive working view', async () => {
 
 
 test('checked-in Atlas sidecars retain a non-empty active base', async () => {
-  const sidecars = [
-    'Assets/Maps/Errack-CITADEL.canonical.markers.json',
-    'Demo/Assets/Maps/Errack-CITADEL.webp.markers.json',
-  ];
+  const sidecars = await Array.fromAsync(fs.glob('**/*.markers.json', { cwd: vaultRoot }));
+  assert.ok(sidecars.length > 0, 'expected at least one checked-in Atlas marker sidecar');
 
   for (const relativePath of sidecars) {
     const data = JSON.parse(await fs.readFile(path.join(vaultRoot, relativePath), 'utf8'));
     assert.ok(Array.isArray(data.bases) && data.bases.length > 0, `${relativePath} needs at least one base image`);
-    assert.equal(data.activeBase, 'Assets/Maps/Errack-CITADEL.webp');
+    assert.equal(typeof data.activeBase, 'string', `${relativePath} needs an activeBase`);
+    assert.ok(data.activeBase.trim(), `${relativePath} activeBase must not be blank`);
     assert.ok(
       data.bases.some((base) => (typeof base === 'string' ? base : base?.path) === data.activeBase),
       `${relativePath} activeBase must exist in bases`,
