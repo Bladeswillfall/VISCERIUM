@@ -6,14 +6,13 @@ const loading = root.createDiv({ text: "Loading recent work…", cls: "vc-home-e
 const indexReady = () => Boolean(dv.index?.initialized);
 const startedAt = Date.now();
 while (!indexReady() && Date.now() - startedAt < 30000) {
-  await new Promise((resolve) => window.setTimeout(resolve, 120));
+  await new Promise((resolve) => window.setTimeout(resolve, 100));
 }
 if (!indexReady()) {
   loading.setText("Recent work is still indexing. It will appear after Dataview finishes starting.");
   return;
 }
 loading.remove();
-await new Promise((resolve) => window.requestAnimationFrame(() => resolve()));
 
 const grid = root.createDiv({ cls: "vc-home-continue-grid" });
 const internalLink = (parent, label, target, className = "vc-home-row-link") => {
