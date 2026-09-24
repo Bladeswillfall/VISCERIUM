@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 
 const creatorPlugin = readFileSync(new URL('../../Tools/obsidian-viscerium-creator-tools/src/main.js', import.meta.url), 'utf8');
 const creatorStyles = readFileSync(new URL('../../Tools/obsidian-viscerium-creator-tools/styles.css', import.meta.url), 'utf8');
+const editingToolbarConfig = JSON.parse(readFileSync(new URL('../../Vault/.obsidian/plugins/editing-toolbar/data.json', import.meta.url), 'utf8'));
 const loreTemplate = readFileSync(new URL('../../Vault/Templates/Lore/New Lore Entity.md', import.meta.url), 'utf8');
 const loreCreator = readFileSync(new URL('../../Vault/Templates/_Scripts/create_lore_entity.js', import.meta.url), 'utf8');
 const storyTemplate = readFileSync(new URL('../../Vault/Templates/Databases/New Story Entity.md', import.meta.url), 'utf8');
@@ -73,7 +74,7 @@ test('creator tools provide one opt-in next action for ordinary notes', () => {
   assert.match(creatorPlugin, /const NOTE_CONTEXT_VIEW = 'viscerium-note-context'/);
   assert.match(creatorPlugin, /class NoteContextView extends ItemView/);
   assert.match(creatorPlugin, /id: 'open-active-note-context'/);
-  assert.match(creatorPlugin, /name: 'Open active note context'/);
+  assert.match(creatorPlugin, /name: 'Open connected context'/);
   assert.match(creatorPlugin, /registerView\(NOTE_CONTEXT_VIEW/);
   assert.match(creatorPlugin, /Write the one-line identity/);
   assert.match(creatorPlugin, /Develop one useful section/);
@@ -84,7 +85,71 @@ test('creator tools provide one opt-in next action for ordinary notes', () => {
   assert.match(creatorPlugin, /hasCalendarYear/);
   assert.match(creatorPlugin, /Continue only when something changed/);
   assert.match(creatorPlugin, /getLeavesOfType\(NOTE_CONTEXT_VIEW\)/);
+  assert.match(creatorPlugin, /id: 'connect-related-note'/);
+  assert.match(creatorPlugin, /CONNECTED CONTEXT/);
+  assert.match(creatorPlugin, /contextLinks\(this\.file\)/);
+  assert.match(creatorPlugin, /backlinksFor\(this\.file\)/);
+  assert.match(creatorPlugin, /calendarDateLabel\(frontmatter\.calendarDate\)/);
   assert.doesNotMatch(creatorPlugin, /note context.*progress|completion percentage/i);
+});
+
+test('connected context derives relationships and backlinks from canonical note data', () => {
+  const CreatorPlugin = loadCreatorPluginClass();
+  const target = { path: 'Lore/Target.md', basename: 'Target', extension: 'md' };
+  const source = { path: 'Lore/Source.md', basename: 'Source', extension: 'md' };
+  const plugin = Object.create(CreatorPlugin.prototype);
+  plugin.frontmatter = (file) => file === target ? {
+    region: 'Northreach',
+    faction: ['Citadel Council'],
+    related: ['[[Lore/Other.md|Other]]'],
+    relationships: {
+      allies: [{ target: 'Citadel Council', description: 'Duplicate target should not duplicate the UI link.' }],
+      rivals: [{ target: 'Rival League' }],
+    },
+  } : { title: 'Source article' };
+  plugin.app = {
+    metadataCache: {
+      resolvedLinks: {
+        'Lore/Source.md': { 'Lore/Target.md': 2 },
+      },
+    },
+    vault: {
+      getAbstractFileByPath: (value) => value === source.path ? source : null,
+    },
+  };
+
+  assert.deepEqual(
+    plugin.contextLinks(target).map(({ kind, label }) => [kind, label]),
+    [
+      ['Region', 'Northreach'],
+      ['Faction', 'Citadel Council'],
+      ['Related', 'Other'],
+      ['rivals', 'Rival League'],
+    ],
+  );
+  assert.deepEqual(
+    plugin.backlinksFor(target).map(({ label, count }) => [label, count]),
+    [['Source article', 2]],
+  );
+});
+
+test('editing toolbar keeps the permanent bar small and moves formatting to selection context', () => {
+  const top = JSON.stringify(editingToolbarConfig.menuCommands);
+  const following = JSON.stringify(editingToolbarConfig.followingCommands);
+
+  assert.equal(editingToolbarConfig.enableTopToolbar, true);
+  assert.equal(editingToolbarConfig.enableFollowingToolbar, true);
+  assert.match(top, /SubmenuCommands-viscerium-insert/);
+  assert.match(top, /SubmenuCommands-viscerium-connect/);
+  assert.match(top, /viscerium-creator-tools:open-active-note-context/);
+  assert.match(top, /viscerium-creator-tools:connect-related-note/);
+  assert.match(top, /viscerium-creator-tools:place-active-location-on-atlas/);
+  assert.match(top, /viscerium-creator-tools:review-active-event-chronology/);
+  assert.doesNotMatch(top, /change-font-color|change-background-color|fullscreen-focus|justify/);
+  assert.match(following, /toggle-bold/);
+  assert.match(following, /toggle-italics/);
+  assert.match(following, /toggle-highlight/);
+  assert.match(following, /insert-wikilink/);
 });
 
 test('creator tools provide disposable World Anvil review context in the right sidebar', () => {
