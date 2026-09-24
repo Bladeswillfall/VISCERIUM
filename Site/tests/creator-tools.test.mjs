@@ -90,6 +90,7 @@ test('creator tools provide one opt-in next action for ordinary notes', () => {
   assert.match(creatorPlugin, /contextLinks\(this\.file\)/);
   assert.match(creatorPlugin, /backlinksFor\(this\.file\)/);
   assert.match(creatorPlugin, /calendarDateLabel\(frontmatter\.calendarDate\)/);
+  assert.match(creatorPlugin, /const link = `\[\[\$\{target\.path\}\|\$\{title\}\]\]`/);
   assert.match(creatorPlugin, /normaliseLinkTarget\(target\.path\)/);
   assert.match(creatorPlugin, /data\.related = \[\.\.\.current, link\]/);
   assert.doesNotMatch(creatorPlugin, /note context.*progress|completion percentage/i);
