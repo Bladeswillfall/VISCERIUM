@@ -393,8 +393,8 @@ class NoteContextView extends ItemView {
   }
 
   getViewType() { return NOTE_CONTEXT_VIEW; }
-  getDisplayText() { return this.file ? `Note context · ${this.plugin.titleFor(this.file)}` : 'Note context'; }
-  getIcon() { return 'focus'; }
+  getDisplayText() { return this.file ? `Connected context · ${this.plugin.titleFor(this.file)}` : 'Connected context'; }
+  getIcon() { return 'network'; }
 
   async onOpen() { await this.refresh(); }
 
@@ -409,10 +409,25 @@ class NoteContextView extends ItemView {
       ['Era', frontmatter.era],
       ['Status', frontmatter.status],
       ['State', frontmatter.development_level],
-      ['Map', frontmatter.map?.id],
     ]
       .map(([label, value]) => [label, String(value ?? '').trim()])
       .filter(([, value]) => Boolean(value));
+  }
+
+  section(root, label, title) {
+    const section = root.createDiv({ cls: 'vc-note-context-module' });
+    section.createEl('div', { text: label, cls: 'vc-note-context-section-label' });
+    if (title) section.createEl('strong', { text: title, cls: 'vc-note-context-module-title' });
+    return section;
+  }
+
+  addLink(section, item) {
+    const button = section.createEl('button', { cls: 'vc-note-context-link' });
+    button.createSpan({ text: item.label });
+    button.createSpan({ text: item.kind, cls: 'vc-note-context-link-kind' });
+    this.registerDomEvent(button, 'click', () => {
+      void this.app.workspace.openLinkText(item.target, this.file.path);
+    });
   }
 
   async refresh() {
@@ -422,15 +437,16 @@ class NoteContextView extends ItemView {
 
     if (!(this.file instanceof TFile)) {
       root.createEl('p', {
-        text: 'Open a Lore or Draft note to see its next useful authoring action.',
+        text: 'Open a Lore or Draft note to see its connected context.',
         cls: 'vc-note-context-empty',
       });
       return;
     }
 
     const frontmatter = this.plugin.frontmatter(this.file);
+    const type = String(frontmatter.type ?? '').trim().toLowerCase();
     const header = root.createDiv({ cls: 'vc-note-context-header' });
-    header.createEl('div', { text: 'NOTE CONTEXT', cls: 'vc-note-context-kicker' });
+    header.createEl('div', { text: 'CONNECTED CONTEXT', cls: 'vc-note-context-kicker' });
     header.createEl('h4', { text: this.plugin.titleFor(this.file) });
 
     const states = this.stateItems(frontmatter);
@@ -438,6 +454,54 @@ class NoteContextView extends ItemView {
       const state = header.createDiv({ cls: 'vc-note-context-state' });
       for (const [label, value] of states) state.createSpan({ text: `${label}: ${value}` });
     }
+
+    if (type === 'location') {
+      const mapId = String(frontmatter.map?.id ?? '').trim();
+      const atlas = this.section(root, 'ATLAS', mapId || 'No Atlas linked');
+      if (mapId) {
+        const placed = await this.plugin.hasAtlasMarker(this.file, mapId);
+        atlas.createEl('p', {
+          text: placed
+            ? 'This location is placed on the linked Atlas. The article keeps the map preview beside the prose.'
+            : 'The Atlas is linked, but this location still needs a marker.',
+        });
+      } else {
+        atlas.createEl('p', { text: 'Link an Atlas only when spatial placement helps navigation or continuity.' });
+      }
+      const button = atlas.createEl('button', { text: mapId ? 'Open Atlas placement' : 'Choose Atlas' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.placeActiveLocationOnAtlas(this.file));
+    }
+
+    if (type === 'event') {
+      const chronology = this.section(root, 'CHRONOLOGY', this.plugin.calendarDateLabel(frontmatter.calendarDate) || 'No canonical date');
+      chronology.createEl('p', {
+        text: frontmatter.calendarDate
+          ? 'calendarDate remains the single source for calendar and timeline placement.'
+          : 'Set calendarDate when this event belongs on the canonical chronology.',
+      });
+      const button = chronology.createEl('button', { text: 'Open chronology' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.reviewActiveEventChronology(this.file));
+    }
+
+    const connections = this.plugin.contextLinks(this.file);
+    if (connections.length) {
+      const related = this.section(root, 'RELATIONSHIPS', `${connections.length} connected`);
+      const list = related.createDiv({ cls: 'vc-note-context-links' });
+      for (const item of connections.slice(0, 12)) this.addLink(list, item);
+      if (connections.length > 12) related.createEl('p', { text: `+${connections.length - 12} more structured links`, cls: 'vc-note-context-muted' });
+    }
+
+    const backlinks = this.plugin.backlinksFor(this.file);
+    if (backlinks.length) {
+      const references = this.section(root, 'REFERENCES', `${backlinks.length} backlink${backlinks.length === 1 ? '' : 's'}`);
+      const list = references.createDiv({ cls: 'vc-note-context-links' });
+      for (const item of backlinks.slice(0, 8)) this.addLink(list, { ...item, kind: 'Backlink' });
+      if (backlinks.length > 8) references.createEl('p', { text: `+${backlinks.length - 8} more backlinks`, cls: 'vc-note-context-muted' });
+    }
+
+    const connect = root.createDiv({ cls: 'vc-note-context-connect' });
+    const connectButton = connect.createEl('button', { text: '+ Connect related article' });
+    this.registerDomEvent(connectButton, 'click', () => void this.plugin.connectRelatedNote(this.file));
 
     const next = await this.plugin.noteNextAction(this.file);
     const nextBox = root.createDiv({ cls: 'vc-note-context-next' });
@@ -462,9 +526,7 @@ class NoteContextView extends ItemView {
     }
 
     const source = root.createDiv({ cls: 'vc-note-context-source' });
-    source.createSpan({
-      text: this.file.path.startsWith('Lore/') ? 'Canonical Lore' : 'Working draft',
-    });
+    source.createSpan({ text: this.file.path.startsWith('Lore/') ? 'Canonical Lore' : 'Working draft' });
     source.createEl('code', { text: this.file.path });
   }
 }
@@ -609,11 +671,21 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     });
     this.addCommand({
       id: 'open-active-note-context',
-      name: 'Open active note context',
+      name: 'Open connected context',
       checkCallback: (checking) => {
         const file = this.app.workspace.getActiveFile();
         if (!this.isCreatorNote(file)) return false;
         if (!checking) void this.showNoteContext(file, true);
+        return true;
+      },
+    });
+    this.addCommand({
+      id: 'connect-related-note',
+      name: 'Connect related article...',
+      checkCallback: (checking) => {
+        const file = this.app.workspace.getActiveFile();
+        if (!this.isCreatorNote(file)) return false;
+        if (!checking) void this.connectRelatedNote(file);
         return true;
       },
     });
@@ -841,6 +913,106 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     }
     if (reveal) await this.app.workspace.revealLeaf(leaf);
     if (leaf.view instanceof NoteContextView) await leaf.view.setFile(file);
+  }
+
+  calendarDateLabel(value) {
+    if (!value || typeof value !== 'object') return '';
+    const year = value.year == null ? '' : String(value.year);
+    const month = String(value.month ?? '').trim();
+    const day = value.day == null ? '' : String(value.day);
+    const date = [day, month, year].filter(Boolean).join(' ');
+    const calendar = String(value.calendar ?? '').trim();
+    return [date, calendar].filter(Boolean).join(' · ');
+  }
+
+  contextLinks(file) {
+    const frontmatter = this.frontmatter(file);
+    const items = [];
+    const seen = new Set();
+    const add = (kind, value) => {
+      for (const entry of Array.isArray(value) ? value : [value]) {
+        if (entry === null || entry === undefined || entry === '') continue;
+        const raw = typeof entry === 'object' ? entry.target : entry;
+        if (!raw) continue;
+        const text = String(raw).trim();
+        const inner = text.replace(/^\[\[/, '').replace(/\]\]$/, '');
+        const [target, alias] = inner.split('|', 2);
+        const normalized = normaliseLinkTarget(target);
+        if (!normalized || normalized === normaliseLinkTarget(file.path) || seen.has(normalized)) continue;
+        seen.add(normalized);
+        items.push({
+          kind,
+          target,
+          label: String(alias ?? target).split('/').pop(),
+        });
+      }
+    };
+
+    add('Region', frontmatter.region);
+    add('Faction', frontmatter.faction);
+    add('Location', frontmatter.location);
+    add('Participant', frontmatter.participants);
+    add('Leader', frontmatter.leader);
+    add('Capital', frontmatter.capital);
+    add('Territory', frontmatter.territory);
+    add('Species', frontmatter.species);
+    add('Related', frontmatter.related);
+
+    const relationships = frontmatter.relationships;
+    if (relationships && typeof relationships === 'object' && !Array.isArray(relationships)) {
+      for (const [kind, value] of Object.entries(relationships)) add(kind, value);
+    }
+    return items;
+  }
+
+  backlinksFor(file) {
+    const resolved = this.app.metadataCache.resolvedLinks ?? {};
+    const result = [];
+    for (const [sourcePath, targets] of Object.entries(resolved)) {
+      if (!targets?.[file.path]) continue;
+      const source = this.app.vault.getAbstractFileByPath(sourcePath);
+      if (!source || source.extension !== 'md') continue;
+      result.push({
+        target: source.path,
+        label: this.titleFor(source),
+        count: targets[file.path],
+      });
+    }
+    return result.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  }
+
+  async connectRelatedNote(file) {
+    const candidates = this.app.vault.getMarkdownFiles()
+      .filter((candidate) => candidate.path !== file.path && /^(Lore|Drafts)\//.test(candidate.path))
+      .filter((candidate) => !this.isWorldAnvilImport(candidate))
+      .map((candidate) => ({
+        file: candidate,
+        title: this.titleFor(candidate),
+      }))
+      .filter(({ title }) => title)
+      .sort((a, b) => a.title.localeCompare(b.title));
+
+    const path = await new ChoiceModal(
+      this.app,
+      candidates.map(({ file: candidate, title }) => ({
+        label: title,
+        hint: candidate.path,
+        value: candidate.path,
+      })),
+      'Connect which article?',
+    ).choose();
+    if (!path) return;
+
+    const target = this.app.vault.getAbstractFileByPath(normalizePath(path));
+    if (!(target instanceof TFile)) return;
+    const title = this.titleFor(target);
+    await this.app.fileManager.processFrontMatter(file, (data) => {
+      const current = Array.isArray(data.related) ? data.related : data.related ? [data.related] : [];
+      if (current.some((entry) => normaliseLinkTarget(entry) === normaliseLinkTarget(title))) return;
+      data.related = [...current, title];
+    });
+    new Notice(`Connected ${title}.`);
+    await this.refreshNoteContext(file);
   }
 
   async refreshNoteContext(file) {
