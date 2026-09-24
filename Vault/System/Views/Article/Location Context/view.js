@@ -1,4 +1,4 @@
-const sourcePath = dv.currentFilePath || "";
+const sourcePath = String(dv.current()?.file?.path ?? "");
 const sourceFile = app.vault.getAbstractFileByPath(sourcePath);
 const frontmatter = sourceFile ? (app.metadataCache.getFileCache(sourceFile)?.frontmatter ?? {}) : {};
 const mapId = String(frontmatter.map?.id ?? "").trim();
