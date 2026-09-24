@@ -134,9 +134,10 @@ test('connected context derives relationships and backlinks from canonical note 
 });
 
 test('editing toolbar keeps the permanent bar small and moves formatting to selection context', () => {
-  const top = JSON.stringify(editingToolbarConfig.menuCommands);
+  const top = JSON.stringify(editingToolbarConfig.topCommands);
   const following = JSON.stringify(editingToolbarConfig.followingCommands);
 
+  assert.equal(editingToolbarConfig.enableMultipleConfig, true);
   assert.equal(editingToolbarConfig.enableTopToolbar, true);
   assert.equal(editingToolbarConfig.enableFollowingToolbar, true);
   assert.match(top, /SubmenuCommands-viscerium-insert/);
