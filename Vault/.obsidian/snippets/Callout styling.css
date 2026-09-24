@@ -142,6 +142,10 @@ body.viscerium-callouts-bar-only .callout {
   background: color-mix(in srgb, var(--background-secondary) 72%, transparent);
 }
 
+.vc-article-context.has-no-map {
+  grid-template-columns: 1fr;
+}
+
 .vc-article-context-copy {
   min-width: 0;
   padding: 4px 2px;
@@ -229,7 +233,7 @@ button.vc-article-context-chip.is-link:hover {
   background-color: var(--background-secondary);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
 
 .vc-article-map-preview::after {
