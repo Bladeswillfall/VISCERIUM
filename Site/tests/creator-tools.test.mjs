@@ -192,6 +192,13 @@ test('multi-era imports remain in contextual review until their structural split
   assert.match(creatorPlugin, /Open era-edition workflow guide/);
 });
 
+test('connected context sidebar uses editorial module cards', () => {
+  assert.match(creatorStyles, /\.vc-note-context-module\s*\{/);
+  assert.match(creatorStyles, /border-left:\s*2px solid color-mix/);
+  assert.match(creatorStyles, /\.vc-note-context-next\s*\{/);
+  assert.match(creatorStyles, /--vc-context-card/);
+});
+
 test('import review pane follows creator visual grammar', () => {
   assert.match(creatorStyles, /\.vc-import-review/);
   assert.match(creatorStyles, /\.vc-note-context/);
