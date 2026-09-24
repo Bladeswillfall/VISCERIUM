@@ -858,7 +858,15 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     const locationLeaf = this.markdownLeafFor(locationFile) ?? this.app.workspace.getLeaf(false);
     this.app.workspace.setActiveLeaf(locationLeaf, { focus: false });
     const mapLeaf = this.app.workspace.getLeaf('split', 'vertical');
-    await mapLeaf.openFile(mapFile);
+    await mapLeaf.setViewState({
+      type: 'markdown',
+      state: {
+        file: mapFile.path,
+        mode: 'preview',
+        source: false,
+      },
+      active: true,
+    });
     this.app.workspace.setActiveLeaf(mapLeaf, { focus: true });
 
     const mapSource = await this.app.vault.cachedRead(mapFile);
