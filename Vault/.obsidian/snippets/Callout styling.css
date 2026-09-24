@@ -129,8 +129,8 @@ body.viscerium-callouts-bar-only .callout {
   }
 }
 
-/* Reading view uses full disclosure rows. Live Preview keeps the compact editor controls. */
-.markdown-reading-view .callout[data-callout="authoring"] {
+/* Reading View and Live Preview use the same quiet disclosure-card treatment. */
+:is(.markdown-reading-view, .markdown-source-view.mod-cm6) .callout[data-callout="authoring"] {
   overflow: hidden;
   margin-block: 0.55rem 0.8rem;
   border: 1px solid color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 16%, var(--background-modifier-border));
@@ -138,7 +138,7 @@ body.viscerium-callouts-bar-only .callout {
   background: color-mix(in srgb, var(--background-secondary) 74%, transparent);
 }
 
-.markdown-reading-view .callout[data-callout="authoring"] > .callout-title {
+:is(.markdown-reading-view, .markdown-source-view.mod-cm6) .callout[data-callout="authoring"] > .callout-title {
   width: 100%;
   min-height: 2.4rem;
   padding: 0.62rem 0.75rem;
@@ -148,12 +148,12 @@ body.viscerium-callouts-bar-only .callout {
   color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 34%, var(--text-muted));
 }
 
-.markdown-reading-view .callout[data-callout="authoring"] > .callout-title:hover {
+:is(.markdown-reading-view, .markdown-source-view.mod-cm6) .callout[data-callout="authoring"] > .callout-title:hover {
   background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 7%, transparent);
   color: var(--text-normal);
 }
 
-.markdown-reading-view .callout[data-callout="authoring"] > .callout-content {
+:is(.markdown-reading-view, .markdown-source-view.mod-cm6) .callout[data-callout="authoring"] > .callout-content {
   margin: 0;
   padding: 0.25rem 0.85rem 0.8rem;
   border-left: 0;
