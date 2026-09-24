@@ -113,7 +113,7 @@ test('direct Location creation writes the shared Lore baseline', async () => {
     ['faction', 'CITADEL'],
     ['parent region', 'CITADEL'],
   ]);
-  assert.deepEqual(renames, ['Glass Harbour']);
+  assert.deepEqual(renames, []);
   assert.deepEqual(moves, ['Drafts/Inbox/Locations/Glass Harbour']);
 });
 
@@ -180,6 +180,6 @@ test('guided Lore creation reprompts before secondary fields when the destinatio
 
   assert.equal(parsed.data.title, 'Glass Harbour Annex');
   assert.match(notices[0], /Glass Harbour.*already exists/);
-  assert.deepEqual(renames, ['Glass Harbour Annex']);
+  assert.deepEqual(renames, []);
   assert.deepEqual(moves, ['Drafts/Inbox/Locations/Glass Harbour Annex']);
 });
