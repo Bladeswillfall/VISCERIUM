@@ -1,9 +1,9 @@
 {
   "id": "viscerium-creator-tools",
   "name": "VISCERIUM Creator Tools",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "minAppVersion": "1.8.7",
-  "description": "Guided creation, contextual authoring, controlled era/continuity, and World Anvil migration review for the VISCERIUM vault.",
+  "description": "Guided creation, connected article context, Atlas and chronology hand-offs, controlled era/continuity, and World Anvil migration review for the VISCERIUM vault.",
   "author": "VISCERIUM",
   "isDesktopOnly": false
 }
