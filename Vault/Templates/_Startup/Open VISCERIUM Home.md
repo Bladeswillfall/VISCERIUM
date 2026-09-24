@@ -87,8 +87,12 @@ const openHome = async () => {
 
   const leaves = tp.app.workspace.getLeavesOfType("markdown");
   const existing = leaves.find((leaf) => leaf.view?.file?.path === home.path);
-  const leaf = existing ?? tp.app.workspace.getLeaf(false);
+  if (existing) {
+    tp.app.workspace.setActiveLeaf(existing, { focus: true });
+    return;
+  }
 
+  const leaf = tp.app.workspace.getLeaf(false);
   await leaf.setViewState({
     type: "markdown",
     state: {
