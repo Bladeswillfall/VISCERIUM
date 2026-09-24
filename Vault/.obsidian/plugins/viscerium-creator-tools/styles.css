@@ -121,19 +121,19 @@
 .vc-note-context {
   --vc-context-card: color-mix(in srgb, var(--background-secondary) 78%, var(--background-primary));
   --vc-context-card-hover: color-mix(in srgb, var(--text-accent) 7%, var(--vc-context-card));
-  gap: 12px;
-  padding: 0 12px 18px;
+  gap: 16px;
+  padding: 0 14px 22px;
 }
 
 .vc-note-context-header {
-  margin: 0 -12px;
-  padding: 14px 12px 12px;
+  margin: 0 -14px;
+  padding: 16px 14px 14px;
   border-bottom: 1px solid var(--vc-panel-border);
   background: color-mix(in srgb, var(--background-secondary) 58%, transparent);
 }
 
 .vc-note-context h4 {
-  margin: 4px 0 8px;
+  margin: 5px 0 10px;
   font-size: 1.12rem;
   letter-spacing: -0.015em;
 }
@@ -146,11 +146,11 @@
 .vc-note-context-state {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 6px;
 }
 
 .vc-note-context-state span {
-  padding: 3px 6px;
+  padding: 4px 7px;
   border: 1px solid color-mix(in srgb, var(--text-accent) 18%, var(--vc-panel-border));
   border-radius: var(--vc-radius-control, 4px);
   background: color-mix(in srgb, var(--text-accent) 5%, transparent);
@@ -160,8 +160,8 @@
 
 .vc-note-context-module {
   display: grid;
-  gap: 8px;
-  padding: 10px;
+  gap: 10px;
+  padding: 12px;
   border: 1px solid var(--vc-panel-border);
   border-left: 2px solid color-mix(in srgb, var(--text-accent) 40%, var(--vc-panel-border));
   background: var(--vc-context-card);
@@ -213,7 +213,7 @@ button.vc-note-context-link {
   align-items: center;
   gap: 8px;
   min-height: 0;
-  padding: 7px 8px;
+  padding: 8px 9px;
   border: 1px solid color-mix(in srgb, var(--vc-panel-border) 78%, transparent);
   border-radius: var(--vc-radius-control, 4px);
   background: color-mix(in srgb, var(--background-primary) 58%, transparent);
@@ -238,13 +238,13 @@ button.vc-note-context-link:focus-visible {
 }
 
 .vc-note-context-connect {
-  padding-top: 2px;
+  padding-top: 0;
 }
 
 .vc-note-context-next {
   display: grid;
-  gap: 6px;
-  padding: 10px;
+  gap: 8px;
+  padding: 12px;
   border: 1px solid var(--vc-panel-border);
   border-left: 2px solid var(--text-accent);
   background: color-mix(in srgb, var(--text-accent) 6%, var(--background-secondary));
@@ -270,7 +270,7 @@ button.vc-note-context-link:focus-visible {
 .vc-note-context-source {
   display: grid;
   gap: 5px;
-  padding: 9px 2px 0;
+  padding: 11px 2px 0;
   border-top: 1px solid var(--vc-panel-border);
   color: var(--text-muted);
   font-size: 0.68rem;
