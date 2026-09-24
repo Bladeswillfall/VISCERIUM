@@ -430,6 +430,57 @@ class NoteContextView extends ItemView {
     });
   }
 
+  async renderTypeContext(root, frontmatter, type) {
+    if (type === 'location') {
+      const mapId = String(frontmatter.map?.id ?? '').trim();
+      const atlas = this.section(root, 'ATLAS', mapId || 'No Atlas linked');
+      if (mapId) {
+        const placed = await this.plugin.hasAtlasMarker(this.file, mapId);
+        atlas.createEl('p', {
+          text: placed
+            ? 'This location is placed on the linked Atlas. The article keeps the map preview beside the prose.'
+            : 'The Atlas is linked, but this location still needs a marker.',
+        });
+      } else {
+        atlas.createEl('p', { text: 'Link an Atlas only when spatial placement helps navigation or continuity.' });
+      }
+      const button = atlas.createEl('button', { text: mapId ? 'Open Atlas placement' : 'Choose Atlas' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.placeActiveLocationOnAtlas(this.file));
+      return;
+    }
+
+    if (type === 'event') {
+      const chronology = this.section(root, 'CHRONOLOGY', this.plugin.calendarDateLabel(frontmatter.calendarDate) || 'No canonical date');
+      chronology.createEl('p', {
+        text: frontmatter.calendarDate
+          ? 'calendarDate remains the single source for calendar and timeline placement.'
+          : 'Set calendarDate when this event belongs on the canonical chronology.',
+      });
+      const button = chronology.createEl('button', { text: 'Open chronology' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.reviewActiveEventChronology(this.file));
+    }
+  }
+
+  renderNextAction(root, next) {
+    const nextBox = root.createDiv({ cls: 'vc-note-context-next' });
+    nextBox.createEl('div', { text: 'NEXT', cls: 'vc-note-context-section-label' });
+    nextBox.createEl('strong', { text: next.label });
+    nextBox.createEl('p', { text: next.detail });
+
+    const actions = {
+      atlas: ['Open Atlas placement', () => this.plugin.placeActiveLocationOnAtlas(this.file)],
+      era: ['Set historical era', async () => {
+        await this.plugin.setControlledEra(this.file);
+        await this.refresh();
+      }],
+      chronology: ['Review chronology', () => this.plugin.reviewActiveEventChronology(this.file)],
+    };
+    const action = actions[next.action];
+    if (!action) return;
+    const button = nextBox.createEl('button', { text: action[0] });
+    this.registerDomEvent(button, 'click', () => void action[1]());
+  }
+
   async refresh() {
     const root = this.contentEl;
     root.empty();
@@ -455,33 +506,7 @@ class NoteContextView extends ItemView {
       for (const [label, value] of states) state.createSpan({ text: `${label}: ${value}` });
     }
 
-    if (type === 'location') {
-      const mapId = String(frontmatter.map?.id ?? '').trim();
-      const atlas = this.section(root, 'ATLAS', mapId || 'No Atlas linked');
-      if (mapId) {
-        const placed = await this.plugin.hasAtlasMarker(this.file, mapId);
-        atlas.createEl('p', {
-          text: placed
-            ? 'This location is placed on the linked Atlas. The article keeps the map preview beside the prose.'
-            : 'The Atlas is linked, but this location still needs a marker.',
-        });
-      } else {
-        atlas.createEl('p', { text: 'Link an Atlas only when spatial placement helps navigation or continuity.' });
-      }
-      const button = atlas.createEl('button', { text: mapId ? 'Open Atlas placement' : 'Choose Atlas' });
-      this.registerDomEvent(button, 'click', () => void this.plugin.placeActiveLocationOnAtlas(this.file));
-    }
-
-    if (type === 'event') {
-      const chronology = this.section(root, 'CHRONOLOGY', this.plugin.calendarDateLabel(frontmatter.calendarDate) || 'No canonical date');
-      chronology.createEl('p', {
-        text: frontmatter.calendarDate
-          ? 'calendarDate remains the single source for calendar and timeline placement.'
-          : 'Set calendarDate when this event belongs on the canonical chronology.',
-      });
-      const button = chronology.createEl('button', { text: 'Open chronology' });
-      this.registerDomEvent(button, 'click', () => void this.plugin.reviewActiveEventChronology(this.file));
-    }
+    await this.renderTypeContext(root, frontmatter, type);
 
     const connections = this.plugin.contextLinks(this.file);
     if (connections.length) {
@@ -503,27 +528,7 @@ class NoteContextView extends ItemView {
     const connectButton = connect.createEl('button', { text: '+ Connect related article' });
     this.registerDomEvent(connectButton, 'click', () => void this.plugin.connectRelatedNote(this.file));
 
-    const next = await this.plugin.noteNextAction(this.file);
-    const nextBox = root.createDiv({ cls: 'vc-note-context-next' });
-    nextBox.createEl('div', { text: 'NEXT', cls: 'vc-note-context-section-label' });
-    nextBox.createEl('strong', { text: next.label });
-    nextBox.createEl('p', { text: next.detail });
-
-    if (next.action === 'atlas') {
-      const button = nextBox.createEl('button', { text: 'Open Atlas placement' });
-      this.registerDomEvent(button, 'click', () => void this.plugin.placeActiveLocationOnAtlas(this.file));
-    }
-    if (next.action === 'era') {
-      const button = nextBox.createEl('button', { text: 'Set historical era' });
-      this.registerDomEvent(button, 'click', async () => {
-        await this.plugin.setControlledEra(this.file);
-        await this.refresh();
-      });
-    }
-    if (next.action === 'chronology') {
-      const button = nextBox.createEl('button', { text: 'Review chronology' });
-      this.registerDomEvent(button, 'click', () => void this.plugin.reviewActiveEventChronology(this.file));
-    }
+    this.renderNextAction(root, await this.plugin.noteNextAction(this.file));
 
     const source = root.createDiv({ cls: 'vc-note-context-source' });
     source.createSpan({ text: this.file.path.startsWith('Lore/') ? 'Canonical Lore' : 'Working draft' });
