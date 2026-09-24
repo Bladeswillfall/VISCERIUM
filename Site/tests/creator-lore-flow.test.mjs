@@ -12,10 +12,12 @@ const vaultRoot = path.join(repoRoot, 'Vault');
 const require = createRequire(import.meta.url);
 const creatorPath = path.join(vaultRoot, 'Templates/_Scripts/create_lore_entity.js');
 
-function mockTemplater({ title, description, era, locationKind = '', mapId = '', year = '', certainty = 'exact', existingDestination = '' }) {
+function mockTemplater({ title, titleRetries = [], description, era, locationKind = '', mapId = '', year = '', certainty = 'exact', existingDestination = '' }) {
   const moves = [];
   const renames = [];
   const referenceOptions = [];
+  const notices = [];
+  const names = [title, ...titleRetries];
 
   const tp = {
     file: {
@@ -29,7 +31,7 @@ function mockTemplater({ title, description, era, locationKind = '', mapId = '',
     },
     system: {
       prompt: async (label, defaultValue = '') => {
-        if (label === 'Name') return title;
+        if (label === 'Name') return names.shift();
         if (label === 'One-line identity (optional)') return description;
         if (label.startsWith('Continuity entity ID')) return defaultValue;
         if (label === 'Okse year') return year;
@@ -42,6 +44,13 @@ function mockTemplater({ title, description, era, locationKind = '', mapId = '',
         if (label === 'Add this event to the canonical timeline now?') return Boolean(year);
         if (label === 'How certain is this year?') return certainty;
         throw new Error(`Unexpected suggester: ${label}`);
+      },
+    },
+    obsidian: {
+      Notice: class {
+        constructor(message) {
+          notices.push(message);
+        }
       },
     },
     user: {
@@ -71,7 +80,7 @@ function mockTemplater({ title, description, era, locationKind = '', mapId = '',
     },
   };
 
-  return { tp, moves, renames, referenceOptions };
+  return { tp, moves, renames, referenceOptions, notices };
 }
 
 function loadCreator() {
@@ -156,21 +165,21 @@ test('direct Event creation can seed canonical year chronology without inventing
   assert.deepEqual(moves, ['Drafts/Inbox/Events/The Ash Accord']);
 });
 
-test('guided Lore creation rejects an occupied destination before secondary prompts', async () => {
+test('guided Lore creation reprompts before secondary fields when the destination exists', async () => {
   const creator = loadCreator();
-  const { tp, moves, renames, referenceOptions } = mockTemplater({
+  const { tp, moves, renames, notices } = mockTemplater({
     title: 'Glass Harbour',
-    description: 'This prompt must not be reached.',
+    titleRetries: ['Glass Harbour Annex'],
+    description: 'A nearby settlement used for retry testing.',
     era: 'CITADEL',
     existingDestination: 'Drafts/Inbox/Locations/Glass Harbour.md',
   });
 
-  await assert.rejects(
-    creator(tp, { type: 'location' }),
-    /already exists at Drafts\/Inbox\/Locations\/Glass Harbour\.md/,
-  );
+  const rendered = await creator(tp, { type: 'location' });
+  const parsed = matter(rendered);
 
-  assert.deepEqual(renames, []);
-  assert.deepEqual(moves, []);
-  assert.deepEqual(referenceOptions, []);
+  assert.equal(parsed.data.title, 'Glass Harbour Annex');
+  assert.match(notices[0], /Glass Harbour.*already exists/);
+  assert.deepEqual(renames, ['Glass Harbour Annex']);
+  assert.deepEqual(moves, ['Drafts/Inbox/Locations/Glass Harbour Annex']);
 });
