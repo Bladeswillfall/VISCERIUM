@@ -88,7 +88,7 @@
     {
       "id": "viscerium-creator-tools",
       "name": "VISCERIUM Creator Tools",
-      "testedVersion": "0.3.0",
+      "testedVersion": "0.4.0",
       "source": "first-party",
       "sourcePath": "Tools/obsidian-viscerium-creator-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-creator-tools"
