@@ -73,7 +73,7 @@ test('guided Map creation writes Atlas identity and derives image paths', async 
   assert.match(parsed.content, /markers: Assets\/Maps\/Northern-Shelf\.webp\.markers\.json/);
   assert.match(parsed.content, /id: northern-shelf-authoring/);
   assert.match(parsed.content, /responsive: false/);
-  assert.match(parsed.content, /render: dom/);
+  assert.match(parsed.content, /render: canvas/);
   assert.match(parsed.content, /Shift-click/);
 });
 
@@ -102,7 +102,7 @@ test('CITADEL authoring map opens in an interactive working view', async () => {
   );
 
   assert.match(source, /responsive: false/);
-  assert.match(source, /render: dom/);
+  assert.match(source, /render: canvas/);
   assert.match(source, /view:\n\s+zoom: 0\.2\n\s+centerX: 0\.5\n\s+centerY: 0\.5/);
   assert.match(source, /Shift-click/);
   assert.match(source, /Right-click/);
