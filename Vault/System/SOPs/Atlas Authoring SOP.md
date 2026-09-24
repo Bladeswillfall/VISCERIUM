@@ -39,7 +39,7 @@ Do not hand-edit `Site/src/data/maps.json`.
 2. Keep marker storage set to **JSON**.
 3. Use the checked-in defaults that open the marker editor after placement, prefer the active layer and enable drawing and measurement tools.
 4. Keep map images under `Assets/Maps/`.
-5. Use DOM render mode for normal desktop authoring. Switch to Canvas only when a specific map needs it for performance.
+5. Use Canvas render mode for large raster maps such as the 7680 × 3840 CITADEL map.
 
 The plugin bundle itself is installed per device. Repository configuration, notes and sidecar data are shared through Git.
 
@@ -71,7 +71,7 @@ If you assign the image later:
 4. Use the same sidecar path recorded in `mapMarkers`.
 5. Give the code block a stable `id`.
 6. Keep `responsive: false` so pan and zoom gestures stay enabled.
-7. Use DOM render mode first. Switch to Canvas only if that map needs it for performance.
+7. Use Canvas render mode for large raster maps.
 8. Enable pan clamping from the map context menu when the image should remain within the viewport.
 
 For authoring, drag to pan, use the mouse wheel or zoom buttons to zoom, Shift-click to add a marker, and right-click for marker, layer, drawing, measurement, and map options.
