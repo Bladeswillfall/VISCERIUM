@@ -4,17 +4,13 @@ const loading = root.createDiv({ text: "Checking project state…", cls: "vc-hom
 const indexReady = () => Boolean(dv.index?.initialized);
 const startedAt = Date.now();
 while (!indexReady() && Date.now() - startedAt < 30000) {
-  await new Promise((resolve) => window.setTimeout(resolve, 150));
+  await new Promise((resolve) => window.setTimeout(resolve, 100));
 }
 if (!indexReady()) {
   loading.setText("Project state is still indexing. It will appear after Dataview finishes starting.");
   return;
 }
 loading.remove();
-await new Promise((resolve) => {
-  if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(() => resolve(), { timeout: 500 });
-  else window.setTimeout(resolve, 0);
-});
 
 const ERA_SENSITIVE_TYPES = new Set(["character", "faction", "location", "event", "species", "fauna", "flora", "fungi", "item", "myrkild-unit"]);
 const isEmpty = (value) => value == null || (typeof value === "string" && value.trim() === "") || (Array.isArray(value) && value.length === 0) || (typeof value?.length === "number" && value.length === 0);
