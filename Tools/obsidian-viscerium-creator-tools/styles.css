@@ -1,11 +1,7 @@
 /* Temporary World Anvil migration context for VISCERIUM Creator Tools. */
-.vc-import-review {
-  --vc-review-border: var(--background-modifier-border);
-  --vc-review-surface: var(--background-secondary);
-  --vc-review-danger: var(--vc-state-danger, var(--color-red));
-  --vc-review-warning: var(--vc-state-warning, var(--color-yellow));
-  --vc-review-reference: var(--vc-state-reference, var(--color-blue));
-  --vc-review-success: var(--vc-state-success, var(--color-green));
+:is(.vc-import-review, .vc-note-context) {
+  --vc-panel-border: var(--background-modifier-border);
+  --vc-panel-surface: var(--background-secondary);
   display: grid;
   align-content: start;
   gap: 14px;
@@ -14,7 +10,14 @@
   font-size: 0.86rem;
 }
 
-.vc-import-review h4 {
+.vc-import-review {
+  --vc-review-danger: var(--vc-state-danger, var(--color-red));
+  --vc-review-warning: var(--vc-state-warning, var(--color-yellow));
+  --vc-review-reference: var(--vc-state-reference, var(--color-blue));
+  --vc-review-success: var(--vc-state-success, var(--color-green));
+}
+
+:is(.vc-import-review, .vc-note-context) h4 {
   margin: 3px 0 5px;
   color: var(--text-normal);
   font-family: var(--font-interface);
@@ -22,12 +25,11 @@
   line-height: 1.2;
 }
 
-.vc-import-review p { margin: 5px 0 0; line-height: 1.45; }
-.vc-import-review button { border-radius: var(--vc-radius-control, 4px); }
-.vc-import-review-empty { color: var(--text-muted); }
+:is(.vc-import-review, .vc-note-context) p { margin: 5px 0 0; line-height: 1.45; }
+:is(.vc-import-review, .vc-note-context) button { border-radius: var(--vc-radius-control, 4px); }
+:is(.vc-import-review-empty, .vc-note-context-empty) { color: var(--text-muted); }
 
-.vc-import-review-kicker,
-.vc-import-review-section-label {
+:is(.vc-import-review-kicker, .vc-import-review-section-label, .vc-note-context-kicker, .vc-note-context-section-label) {
   color: var(--text-faint);
   font-size: 0.64rem;
   font-weight: 800;
@@ -35,8 +37,8 @@
   text-transform: uppercase;
 }
 
-.vc-import-review-header {
-  border-bottom: 1px solid var(--vc-review-border);
+:is(.vc-import-review-header, .vc-note-context-header) {
+  border-bottom: 1px solid var(--vc-panel-border);
   padding-bottom: 10px;
 }
 
@@ -58,7 +60,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  border-bottom: 1px solid var(--vc-review-border);
+  border-bottom: 1px solid var(--vc-panel-border);
   padding-bottom: 8px;
   color: var(--text-muted);
   font-size: 0.72rem;
@@ -68,7 +70,7 @@
 
 .vc-import-review-next {
   border-left: 2px solid var(--text-faint);
-  background: color-mix(in srgb, var(--vc-review-surface) 72%, transparent);
+  background: color-mix(in srgb, var(--vc-panel-surface) 72%, transparent);
   padding: 9px 10px;
 }
 .vc-import-review-next.is-danger { border-left-color: var(--vc-review-danger); }
@@ -87,7 +89,7 @@
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
   gap: 8px;
-  border-bottom: 1px solid color-mix(in srgb, var(--vc-review-border) 68%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--vc-panel-border) 68%, transparent);
   padding: 7px 1px;
   color: var(--text-normal);
   cursor: pointer;
@@ -111,5 +113,45 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
 }
-.vc-import-review-utility { border-top: 1px solid var(--vc-review-border); padding-top: 10px; }
+.vc-import-review-utility { border-top: 1px solid var(--vc-panel-border); padding-top: 10px; }
 .vc-import-review-nav button { font-size: 0.76rem; }
+
+
+/* Opt-in continuation context for ordinary creator notes. */
+.vc-note-context-state {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.vc-note-context-state span {
+  border: 1px solid var(--vc-panel-border);
+  padding: 2px 5px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.vc-note-context-next {
+  border-left: 2px solid var(--text-accent);
+  background: color-mix(in srgb, var(--vc-panel-surface) 72%, transparent);
+  padding: 9px 10px;
+}
+
+.vc-note-context-next strong { display: block; margin-top: 3px; }
+.vc-note-context-next p { color: var(--text-muted); font-size: 0.76rem; }
+.vc-note-context-next button { margin-top: 9px; width: 100%; }
+
+.vc-note-context-source {
+  display: grid;
+  gap: 5px;
+  border-top: 1px solid var(--vc-panel-border);
+  padding-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.vc-note-context-source code {
+  overflow-wrap: anywhere;
+  color: var(--text-faint);
+  font-size: 0.68rem;
+}

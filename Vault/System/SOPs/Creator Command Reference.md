@@ -22,16 +22,24 @@ This page is the authoritative index for creator and repository operations. Open
 | Task | Use |
 | --- | --- |
 | Return to the creator dashboard | Open [[Home]] |
+| Create something new | **VISCERIUM Creator Tools: Create...** |
 | See deliberate work tasks | [[Home]] → **All creator tasks**, or [[System/Creator Tasks|Creator Tasks]] |
 | Continue the World Anvil transfer | [[Home]] → **Open Review First**, or [[Drafts/Inbox/World Anvil Migration Review|Migration Guide]] |
 | Apply the safe mechanical World Anvil pass | `cd Site` then `npm run migration:worldanvil:integrate:write` |
 | Audit unresolved World Anvil descriptions and missing update keys | `cd Site` then `npm run migration:worldanvil:prepare` |
 | Update an existing World Anvil article | [[#Update an existing World Anvil import]] |
 | Reopen import context for the active World Anvil note | **VISCERIUM Creator Tools: Open World Anvil import review context** |
-| Create fauna, flora, fungi, or an item | [[Home]] → **+ Story Entity** |
-| Create a character, faction, location, event, or species | [[Home]] → **+ Lore Entity** |
-| Create a Myrkild unit | [[Home]] → **+ Myrkild Unit** |
+| Create fauna, flora, fungi, or a Story Entity item | [[Home]] → **Create new** → **Story entity** |
+| Create a location | [[Home]] → **Create new** → **Worldbuilding** → **Location**. Choose an Atlas target during creation when known. |
+| Place a canonical location on a map | **VISCERIUM Creator Tools: Place active location on Atlas...**. Marker placement waits until the note has a stable `Lore/` path. |
+| Create an event | [[Home]] → **Create new** → **Worldbuilding** → **Event** |
+| Review an event against canonical chronology | **VISCERIUM Creator Tools: Review active event chronology...** |
+| Create technology | [[Home]] → **Create new** → **Worldbuilding** → **Technology** |
+| Create an Atlas map | [[Home]] → **Create new** → **Map** |
+| Create another Lore type | [[Home]] → **Create new** → **Worldbuilding** → **Other lore** |
+| Create a Myrkild unit | [[Home]] → **Create new** → **Myrkild unit** |
 | Open creator context | [[Home]] → **Creator Context** |
+| Open the active note's next-action pane | **VISCERIUM Creator Tools: Open active note context** |
 | Find or assign a hotkey | **Settings → Hotkeys** |
 | Set a controlled era or Universal scope | **VISCERIUM Creator Tools: Set controlled era / Universal scope** |
 | Set a continuity identity | **VISCERIUM Creator Tools: Set continuity entity ID** |
@@ -54,7 +62,7 @@ This page is the authoritative index for creator and repository operations. Open
 | **Bases** | Shows filtered card and table views of notes. | The notes, not the `.base` view |
 | **Templater** | Runs guided creation and edit workflows. | Templates under `Vault/Templates/` |
 | **Dataview** | Builds dynamic dashboard lists and creator views. | The notes Dataview reads |
-| **VISCERIUM Creator Tools** | Controls era/continuity authoring and, during migration, keeps World Anvil review context beside the active import. | Current note frontmatter and note-local import checklist |
+| **VISCERIUM Creator Tools** | Owns the shared creation entry point, controls era/continuity authoring, and keeps World Anvil review context beside active imports. | Current notes, existing creator templates, and note-local import checklists |
 | **VISCERIUM Timelines** | Shows canonical timelines and read-only StoryLine timelines in Obsidian. | Canonical Lore or StoryLine scene metadata |
 | **StoryLine** | Organises private writing projects and scenes. | `Vault/Stories/` and StoryLine project data |
 | **Chronos** | Renders note-local timeline blocks. | The Chronos block in the note |
@@ -68,7 +76,7 @@ The repository does not currently store custom hotkeys in `Vault/.obsidian/hotke
 
 Use **Ctrl/Cmd + P** unless Obsidian shows a local binding.
 
-The checked-in Templater configuration exposes the three direct creation commands.
+The checked-in Templater configuration exposes direct commands for the guided entity workflows, maps, and canonical timelines.
 
 It does not assign keyboard shortcuts to those commands.
 
@@ -76,7 +84,12 @@ It does not assign keyboard shortcuts to those commands.
 | --- | --- | --- |
 | Create a Story Entity | **Templater: Create Databases/New Story Entity** | None stored |
 | Create a Lore Entity | **Templater: Create Lore/New Lore Entity** | None stored |
+| Create a location | **Templater: Create Lore/New Location** | None stored |
+| Create an event | **Templater: Create Lore/New Event** | None stored |
+| Create technology | **Templater: Create Lore/New Technology** | None stored |
 | Create a Myrkild unit | **Templater: Create Databases/New Myrkild Unit** | None stored |
+| Create a map | **Templater: Create Publishing/New Map** | None stored |
+| Create a canonical timeline | **Templater: Create Timelines/New Timeline** | None stored |
 | Insert an optional section into an existing note | **Templater: Insert template** | None stored |
 | Use the general creation fallback | **Templater: Create new note from template** | None stored |
 
@@ -100,7 +113,13 @@ It does not assign keyboard shortcuts to those commands.
 
 ## Creation commands
 
-Run these commands with **Ctrl/Cmd + P** when the Home control is not available.
+Use **VISCERIUM Creator Tools: Create...** as the normal creation entry point. The Home **Create new** control runs the same command.
+
+The first chooser groups common work. Select **Worldbuilding** for direct Location, Event, and Technology routes, or select **Other lore** for the full Lore type list.
+
+The chooser delegates to the existing creator commands. It does not introduce another note format or source of truth.
+
+Run the direct commands below with **Ctrl/Cmd + P** when you need a specific fallback.
 
 ### Create a Story Entity
 
@@ -116,9 +135,49 @@ Command: **Templater: Create Lore/New Lore Entity**
 
 Changes files: **Yes.**
 
-Creates a character, faction, location, event, or species draft.
+Creates a character, faction, location, event, species, item, culture, belief, naming language, Resonance practice, or general article draft.
+
+The direct Location, Event, and Technology commands call this same creator with the relevant type already selected. Technology remains a Lore item with `item_type: technology`.
+
+Event creation can add a canonical Okse year immediately. If you add it, the workflow writes `calendarDate` with year precision and asks for certainty. Skip the prompt when chronology is not established.
 
 The workflow can create task-bearing reference stubs when you select **Create new…**.
+
+### Review active event chronology
+
+Command: **VISCERIUM Creator Tools: Review active event chronology...**
+
+Changes files: **No.**
+
+Run this from an event note. The command uses the event's controlled historical `era` to open that era's canonical generated timeline beside the event.
+
+If `calendarDate` is empty, the command points you back to the event because `calendarDate` is the sole canonical start date. Use `calendarEndDate` only for a genuine period.
+
+A dated event under `Drafts/` can be reviewed, but it does not enter canonical timeline compilation until it is promoted to `Lore/`.
+
+### Place active location on Atlas
+
+Command: **VISCERIUM Creator Tools: Place active location on Atlas...**
+
+Changes files: **Yes.** The command records the selected map as the location's `map.id`. TTRPG Tools - Maps writes marker position only after you place and save the marker.
+
+Run this from a location with a stable path under `Lore/`. The command lists canonical map notes that have a `mapId`, with same-era maps first. It records the selected `mapId`, preserves existing `map` settings, and opens the selected map beside the location.
+
+On the map, Shift-click the position or use **Add marker here**. Link the marker to the location note, choose the primary layer and save it.
+
+The command does not write coordinates or marker sidecar JSON. Draft locations stay in the writing workflow until they have a stable Lore path.
+
+### Create an Atlas map
+
+Command: **Templater: Create Publishing/New Map**
+
+Changes files: **Yes.**
+
+Creates a map draft under `Drafts/Inbox/Maps/`.
+
+The workflow asks for the map name, one-line purpose, era or scope, and a unique `mapId`. If `Assets/Maps/` contains map images, you can select one. The creator then derives the public `image` path and default `mapMarkers` sidecar path.
+
+Leave width, height, zoom limits, nested-map settings, and marker positions blank until the real map requires them.
 
 ### Create a Myrkild unit
 
@@ -135,6 +194,18 @@ Action: [[Home]] → **Creator Context**
 Changes files: **No.**
 
 Opens Outline, Backlinks and Local Graph in the right sidebar.
+
+### Open active note context
+
+Command: **VISCERIUM Creator Tools: Open active note context**
+
+Changes files: **No.**
+
+Opens an opt-in right-sidebar pane for ordinary Lore and Draft notes. While open, it follows the active creator note and shows one next useful action.
+
+The pane prioritises a missing one-line identity, event chronology, canonical location placement, or one useful section for an unfinished draft. It does not create a second task store or score note completeness.
+
+World Anvil imports continue to use their migration-specific review pane.
 
 ### Add location fields
 

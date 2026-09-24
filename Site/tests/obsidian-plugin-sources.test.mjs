@@ -61,6 +61,59 @@ test('layout-tools quote parsing avoids nested repeated regexes', async () => {
   assert.equal(context.isIndentHeaderLine(`${deepPrefix}not-an-indent`), false);
 });
 
+test('layout-tools keep legacy indent repair explicit', async () => {
+  const source = await readFile(
+    path.join(repoRoot, sourcePaths['viscerium-layout-tools'], 'src/main.js'),
+    'utf8',
+  );
+
+  assert.match(source, /id: 'repair-legacy-visual-indents'/);
+  assert.doesNotMatch(source, /onLayoutReady\(repairActiveView\)/);
+  assert.doesNotMatch(source, /workspace\.on\('file-open'.*repairActiveView/);
+});
+
+test('journal-tools parse Vault Activity boundaries once', async () => {
+  const source = await readFile(
+    path.join(repoRoot, sourcePaths['viscerium-journal-tools'], 'src/main.js'),
+    'utf8',
+  );
+  const context = vm.createContext({
+    module: { exports: {} },
+    exports: {},
+    require: (id) => {
+      assert.equal(id, 'obsidian');
+      return {
+        MarkdownView: class {},
+        Notice: class {},
+        Plugin: class {},
+        TFile: class {},
+        normalizePath: (value) => value,
+      };
+    },
+  });
+  new vm.Script(source, { filename: 'viscerium-journal-tools/main.js' }).runInContext(context);
+  const PluginClass = context.module.exports;
+  const plugin = new PluginClass();
+  const markdown = [
+    '# Daily',
+    '',
+    '## Vault Activity',
+    '<!-- activity goes below -->',
+    '',
+    'working',
+    '',
+    '## Notes',
+    'later',
+  ].join('\n');
+  const section = plugin.activitySection(markdown);
+
+  assert.ok(section);
+  assert.equal(markdown.slice(section.start, section.end), section.content);
+  assert.equal(section.insertionOffset, markdown.indexOf('<!-- activity goes below -->') + '<!-- activity goes below -->'.length);
+  assert.match(section.content, /working/);
+  assert.doesNotMatch(section.content, /## Notes/);
+});
+
 test('plugin profile records maintained source and Vault runtime paths', async () => {
   const profile = JSON.parse(await readFile(path.join(repoRoot, 'Vault/System/Obsidian Plugin Profile.json'), 'utf8'));
 

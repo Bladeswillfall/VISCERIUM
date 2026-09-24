@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
+import { stripObsidianOnlyContent } from '../scripts/strip-obsidian-plugin-blocks.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '../..');
@@ -69,6 +70,14 @@ const creatorTemplates = [
   'Templates/_Internals/Folder Entity Router.md',
   'Templates/_Startup/Open VISCERIUM Home.md',
   'Templates/Lore/New Lore Entity.md',
+  'Templates/Lore/New Location.md',
+  'Templates/Lore/New Event.md',
+  'Templates/Lore/New Technology.md',
+  'Templates/Publishing/New Map.md',
+  'Templates/Timelines/New Timeline.md',
+  'Templates/_Scripts/create_from_skeleton.js',
+  'Templates/_Scripts/create_lore_entity.js',
+  'Templates/_Scripts/create_map.js',
   'Templates/Databases/New Myrkild Unit.md',
   'Templates/_Scripts/reference_picker.js',
   'Templates/_Scripts/folder_entity_router.js',
@@ -85,7 +94,8 @@ test('publishable Lore skeletons start safe and include one reusable Storyteller
     assert.equal(parsed.data.type, expectedType, `${relativePath} should declare its semantic type`);
     assert.doesNotMatch(parsed.content, /^#\s+\{\{title\}\}/m, `${relativePath} should not duplicate the note/page title as a body H1`);
     assert.doesNotMatch(parsed.content, /^##\s+Comments\s*$/m, `${relativePath} should not create an empty duplicate comments section`);
-    assert.doesNotMatch(parsed.content, /viscerium-sidebar|```dataviewjs/i, `${relativePath} should stay portable and not render the retired Obsidian infobox`);
+    const publishedContent = stripObsidianOnlyContent(parsed.content, relativePath);
+    assert.doesNotMatch(publishedContent, /viscerium-sidebar|```dataviewjs/i, `${relativePath} should keep creator-only views out of published content`);
     assert.equal(source.split(STORYTELLER_START).length - 1, 1, `${relativePath} should contain one Storyteller start marker`);
     assert.equal(source.split(STORYTELLER_END).length - 1, 1, `${relativePath} should contain one Storyteller end marker`);
     assert.match(parsed.content, /^## Storyteller View$/m, `${relativePath} should expose a foldable Storyteller heading in Obsidian`);
@@ -107,7 +117,7 @@ test('literal template frontmatter contains no duplicate top-level fields', asyn
   }
 });
 
-test('interactive Templater script blocks parse as async JavaScript', async () => {
+test('interactive Templater script blocks and creator user scripts parse as JavaScript', async () => {
   for (const relativePath of creatorTemplates) {
     const source = await readText(relativePath);
     const script = templaterScript(source);
@@ -118,6 +128,33 @@ test('interactive Templater script blocks parse as async JavaScript', async () =
       `${relativePath} contains invalid Templater JavaScript`,
     );
   }
+
+  const loreCreator = await readText('Templates/_Scripts/create_lore_entity.js');
+  assert.doesNotThrow(() => new Function(loreCreator), 'shared Lore creator contains invalid JavaScript');
+
+  const locationContext = await readText('System/Views/Article/Location Context/view.js');
+  assert.doesNotThrow(
+    () => new Function(`return async function __visceriumArticleView__() {\n${locationContext}\n}`),
+    'Location context view contains invalid JavaScript',
+  );
+  assert.match(locationContext, /dv\.current\(\)\?\.file\?\.path/);
+  assert.match(locationContext, /Open interactive map/);
+  assert.match(locationContext, /Place on map/);
+  assert.match(locationContext, /mode: "preview"/);
+  assert.match(locationContext, /Promote this draft to Lore before saving a marker/);
+});
+
+
+test('Location template keeps visual context creator-only while preserving source metadata', async () => {
+  const source = await readText('Templates/Lore/Location Template.md');
+  const stripped = stripObsidianOnlyContent(source, 'Templates/Lore/Location Template.md');
+
+  assert.match(source, /obsidian-only:start/);
+  assert.match(source, /dv\.view\("System\/Views\/Article\/Location Context"\)/);
+  assert.doesNotMatch(stripped, /Location Context|\`\`\`dataviewjs/);
+  assert.match(stripped, /^map:\s*$/m);
+  assert.match(stripped, /^\s+id:\s*$/m);
+  assert.match(stripped, /^## Summary$/m);
 });
 
 test('folder-triggered Templater rules cover Lore, Inbox, specialist databases and nested folders', async () => {
@@ -164,6 +201,61 @@ test('folder entity router selects the nearest semantic template and path-derive
   assert.equal(router.ROUTES.article.template, 'Templates/Lore/Article Template.md');
 });
 
+test('folder-first Lore creation receives the same safe stub baseline as guided Lore', async () => {
+  const routerPath = path.join(vaultRoot, 'Templates/_Scripts/folder_entity_router.js');
+  delete require.cache[require.resolve(routerPath)];
+  const router = require(routerPath);
+
+  const item = router.applyAuthoringBaseline(
+    await readText('Templates/Lore/Item Template.md'),
+    'item',
+    'Lore/Eras/SMOG/Technology',
+  );
+  assert.match(item, /^development_level: "stub"$/m);
+  assert.match(item, /^era: "SMOG"$/m);
+  assert.match(item, /^item_type: "technology"$/m);
+
+  const event = router.applyAuthoringBaseline(
+    await readText('Templates/Lore/Event Template.md'),
+    'event',
+    'Drafts/Inbox/Events',
+  );
+  assert.match(event, /^development_level: "stub"$/m);
+  assert.doesNotMatch(event, /^era: ".+"$/m);
+
+  const map = router.applyAuthoringBaseline(
+    await readText('Templates/Publishing/Map Template.md'),
+    'map',
+    'Lore/Eras/CITADEL/Maps',
+  );
+  assert.match(map, /^era: "CITADEL"$/m);
+  assert.doesNotMatch(map, /^development_level:/m);
+});
+
+test('shared Lore creator writes canonical event chronology inside calendarDate', async () => {
+  const creatorPath = path.join(vaultRoot, 'Templates/_Scripts/create_lore_entity.js');
+  delete require.cache[require.resolve(creatorPath)];
+  const creator = require(creatorPath);
+
+  let source = await readText('Templates/Lore/Event Template.md');
+  source = creator.setNestedScalar(source, 'calendarDate', 'year', 10703);
+  source = creator.setNestedScalar(source, 'calendarDate', 'month', 'niewmonath');
+  source = creator.setNestedScalar(source, 'calendarDate', 'day', 1);
+  source = creator.setNestedScalar(source, 'calendarDate', 'precision', 'year');
+  source = creator.setNestedScalar(source, 'calendarDate', 'certainty', 'disputed');
+
+  const parsed = matter(source);
+  assert.deepEqual(parsed.data.calendarDate, {
+    calendar: 'okse',
+    year: 10703,
+    month: 'niewmonath',
+    day: 1,
+    precision: 'year',
+    certainty: 'disputed',
+  });
+  assert.equal(parsed.data.calendarEndDate, null);
+});
+
 test('creator-facing workflows author Storyteller material as Markdown rather than properties', async () => {
   for (const relativePath of creatorTemplates) {
     const content = await readText(relativePath);
@@ -175,6 +267,8 @@ test('creator-facing workflows author Storyteller material as Markdown rather th
   const locationInjector = await readText('Templates/Lore/Add Location Fields.md');
   const core = await readText('Templates/_Internals/Story Entity Core.md');
   const lore = await readText('Templates/Lore/New Lore Entity.md');
+  const loreCreator = await readText('Templates/_Scripts/create_lore_entity.js');
+  const technology = await readText('Templates/Lore/New Technology.md');
   const unit = await readText('Templates/Databases/New Myrkild Unit.md');
   const unitProfile = await readText('Templates/Databases/Myrkild Unit Profile.md');
   const folderRouter = await readText('Templates/_Internals/Folder Entity Router.md');
@@ -194,11 +288,16 @@ test('creator-facing workflows author Storyteller material as Markdown rather th
   assert.match(core, /storytellerSections/);
   assert.match(core, /viscerium:storyteller:start/);
   assert.doesNotMatch(core, /propertyOrder/);
-  assert.match(lore, /tp\.user\.reference_picker/);
-  assert.match(lore, /LOCATION_KINDS/);
-  assert.match(lore, /Add Location Fields/);
-  assert.match(lore, /viscerium:storyteller:start/);
-  assert.doesNotMatch(lore, /Add Storyteller Fields/);
+  assert.match(lore, /tp\.user\.create_lore_entity\(tp\)/);
+  assert.match(loreCreator, /tp\.user\.reference_picker/);
+  assert.match(loreCreator, /LOCATION_KINDS/);
+  assert.match(loreCreator, /Add Location Fields/);
+  assert.match(loreCreator, /viscerium:storyteller:start/);
+  assert.match(loreCreator, /technology: "Technology"/);
+  assert.match(loreCreator, /Add this event to the canonical timeline now\?/);
+  assert.match(loreCreator, /month: "niewmonath"/);
+  assert.match(technology, /type: "item", itemType: "technology"/);
+  assert.doesNotMatch(loreCreator, /Add Storyteller Fields/);
   assert.match(unit, /tp\.user\.reference_picker/);
   assert.match(unitProfile, /viscerium:storyteller:start/);
   assert.doesNotMatch(unitProfile, /\[\[Add Storyteller Fields\]\]/);

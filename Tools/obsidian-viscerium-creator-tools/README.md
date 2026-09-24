@@ -1,6 +1,6 @@
 # VISCERIUM Creator Tools
 
-First-party Obsidian commands for controlled era and continuity authoring, era editions, and World Anvil migration review.
+First-party Obsidian commands for guided creation, active-note continuation, Atlas and chronology hand-offs, controlled era and continuity authoring, era editions, and World Anvil migration review.
 
 ## Source and runtime
 

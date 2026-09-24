@@ -13,6 +13,7 @@ async function read(relativePath) {
 
 const routedCreators = [
   'Vault/Templates/Lore/New Lore Entity.md',
+  'Vault/Templates/_Scripts/create_lore_entity.js',
   'Vault/Templates/Databases/New Story Entity.md',
   'Vault/Templates/Databases/New Myrkild Unit.md',
 ];
@@ -29,7 +30,7 @@ test('routed Templater creators never move using stale tp.file.title', async () 
 });
 
 test('Lore and Myrkild creators route with their prompted title', async () => {
-  const lore = await read('Vault/Templates/Lore/New Lore Entity.md');
+  const lore = await read('Vault/Templates/_Scripts/create_lore_entity.js');
   const myrkild = await read('Vault/Templates/Databases/New Myrkild Unit.md');
 
   assert.match(lore, /tp\.file\.move\(`\$\{config\.folder\}\/\$\{title\}`\)/);

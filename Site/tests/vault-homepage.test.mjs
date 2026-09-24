@@ -59,22 +59,23 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
   assert.doesNotMatch(hero, /heroSource\.replace\(/);
   assert.match(hero, /CURRENT FOCUS · MANUAL/);
   assert.match(hero, /Create new/);
-  assert.match(hero, /vc-home-create-panel/);
-  assert.match(hero, /templaterCreateCommand\("Templates\/Lore\/New Lore Entity\.md"\)/);
-  assert.match(hero, /templaterCreateCommand\("Templates\/Databases\/New Story Entity\.md"\)/);
-  assert.match(hero, /templaterCreateCommand\("Templates\/Databases\/New Myrkild Unit\.md"\)/);
-  assert.match(hero, /viscerium-timelines:open-storyline-project-timeline/);
+  assert.match(hero, /viscerium-creator-tools:create/);
+  assert.doesNotMatch(hero, /vc-home-create-panel/);
+  assert.doesNotMatch(hero, /templaterCreateCommand/);
   assert.doesNotMatch(hero, /diagnose-storyline-integration/);
 
   assert.match(continuing, /Loading recent work…/);
   assert.match(continuing, /dv\.index\?\.initialized/);
+  assert.doesNotMatch(continuing, /requestAnimationFrame/);
+  assert.doesNotMatch(continuing, /while \(!indexReady/);
   assert.match(continuing, /activeProjectFile/);
   assert.match(continuing, /System\/Bases\/Lore Registry\.base/);
   assert.match(continuing, /Show all recent work/);
 
   assert.match(attention, /Checking project state…/);
   assert.match(attention, /dv\.index\?\.initialized/);
-  assert.match(attention, /requestIdleCallback/);
+  assert.doesNotMatch(attention, /requestIdleCallback/);
+  assert.doesNotMatch(attention, /while \(!indexReady/);
   assert.match(attention, /System\/Bases\/Needs Attention\.base/);
   assert.match(attention, /System\/Bases\/Publishing\.base/);
 
@@ -105,8 +106,11 @@ test('creator UI grammar keeps page chrome flat and creator controls deliberatel
   assert.match(homeCss, /button\.vc-home-button/);
   assert.match(homeCss, /border-radius:\s*var\(--vc-home-control-radius\)/);
   assert.match(homeCss, /inset 0 -3px 0/);
-  assert.match(homeCss, /vc-home-create-panel/);
+  assert.doesNotMatch(homeCss, /vc-home-create-panel/);
   assert.match(callouts, /border-radius:\s*0/);
+  assert.match(callouts, /callout\[data-callout="authoring"\][\s\S]*?cursor:\s*pointer/);
+  assert.match(callouts, /vc-article-context/);
+  assert.match(callouts, /vc-article-map-marker/);
   assert.match(bases, /bases-view\[data-view-type="table"\][\s\S]*?border-radius:\s*0/);
 });
 
@@ -141,22 +145,19 @@ test('Home dashboard uses pane width, a fixed hero artwork layer and responsive 
   assert.match(homeCss, /vc-home-nav-grid/);
 });
 
-test('Home keeps one primary focus action and one-level creation disclosure', async () => {
+test('Home keeps one primary focus action and delegates creation to Creator Tools', async () => {
   const hero = await readText('System/Views/Home/Hero/view.js');
   const homeCss = await readText('.obsidian/snippets/Home dashboard.css');
 
   assert.match(hero, /addLaunchButton\(page\.focusPrimaryLabel, page\.focusPrimary, true, "play"\)/);
   assert.match(hero, /addLaunchButton\("Create new", null, false, "plus"\)/);
-  assert.match(hero, /createToggle\.setAttribute\("aria-expanded", "false"\)/);
-  assert.match(hero, /panel\.hidden = true/);
-  assert.match(hero, /Create something new/);
-  assert.match(hero, /Worldbuilding/);
-  assert.match(hero, /Story/);
-  assert.match(hero, /Myrkild/);
-  assert.match(hero, /Chronicle/);
+  assert.match(hero, /const createCommandId = "viscerium-creator-tools:create"/);
+  assert.match(hero, /executeCommandById\(createCommandId\)/);
+  assert.match(hero, /createButton\.disabled = true/);
+  assert.doesNotMatch(hero, /createToggle|create-panel|templaterCreateCommand/);
   assert.match(homeCss, /vc-home-button-primary/);
   assert.match(homeCss, /vc-home-button-secondary/);
-  assert.match(homeCss, /vc-home-button-action/);
+  assert.doesNotMatch(homeCss, /vc-home-button-action/);
 });
 
 test('Home uses restrained semantic colour cues for lore, story, progress and intervention states', async () => {
@@ -172,6 +173,8 @@ test('Home uses restrained semantic colour cues for lore, story, progress and in
   assert.match(homeCss, /vc-home-attention-severity[\s\S]*?var\(--vc-home-red\)/);
   assert.match(homeCss, /vc-home-ready-count[\s\S]*?var\(--vc-home-green\)/);
   assert.match(propertiesCss, /metadata-properties-heading[\s\S]*?color-mix/);
+  assert.match(propertiesCss, /metadata-properties-heading[\s\S]*?cursor:\s*pointer/);
+  assert.match(propertiesCss, /metadata-properties-heading:hover/);
 });
 
 test('creator activity is local, rolling, responsive and non-gamified', async () => {
@@ -185,6 +188,9 @@ test('creator activity is local, rolling, responsive and non-gamified', async ()
   assert.match(startup, /getMarkdownFiles\(\)/);
   assert.match(startup, /localStorage\.setItem/);
   assert.match(startup, /pruneDays/);
+  assert.match(startup, /if \(existing\) \{/);
+  assert.match(startup, /setActiveLeaf\(existing/);
+  assert.doesNotMatch(startup, /existing \?\? tp\.app\.workspace\.getLeaf/);
   assert.doesNotMatch(startup, /Creator Activity\.json/);
   assert.doesNotMatch(startup, /adapter\.write/);
 

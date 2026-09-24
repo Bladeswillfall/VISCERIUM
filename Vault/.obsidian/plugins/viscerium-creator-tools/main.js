@@ -7,10 +7,82 @@ const REVIEW_START = '<!-- era-edition-review:start -->';
 const REVIEW_END = '<!-- era-edition-review:end -->';
 
 const IMPORT_REVIEW_VIEW = 'viscerium-import-review';
+const NOTE_CONTEXT_VIEW = 'viscerium-note-context';
 const IMPORT_REVIEW_START = '<!-- worldanvil-migration-review:start -->';
 const IMPORT_REVIEW_END = '<!-- worldanvil-migration-review:end -->';
 const WORLDANVIL_BASE_PATH = 'System/Bases/World Anvil Import.base';
 const WORLDANVIL_GUIDE_PATH = 'Drafts/Inbox/World Anvil Migration Review.md';
+
+const WORLD_BUILDING_ACTIONS = Object.freeze([
+  {
+    label: 'Location',
+    hint: 'Place, settlement, region, route, wilderness, or site',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Location.md',
+  },
+  {
+    label: 'Event',
+    hint: 'Canonical historical event or period',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Event.md',
+  },
+  {
+    label: 'Technology',
+    hint: 'Lore item with the technology subtype already selected',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Technology.md',
+  },
+  {
+    label: 'Other lore',
+    hint: 'Character, faction, species, culture, belief, language, item, or general article',
+    commandId: 'templater-obsidian:create-Templates/Lore/New Lore Entity.md',
+  },
+]);
+
+const CREATE_ACTIONS = Object.freeze([
+  {
+    label: 'Worldbuilding',
+    hint: 'Location, event, technology, or other Lore',
+    value: 'worldbuilding',
+  },
+  {
+    label: 'Story entity',
+    hint: 'Fauna, flora, fungi, or item',
+    commandId: 'templater-obsidian:create-Templates/Databases/New Story Entity.md',
+  },
+  {
+    label: 'Myrkild unit',
+    hint: 'Structured Myrkild unit',
+    commandId: 'templater-obsidian:create-Templates/Databases/New Myrkild Unit.md',
+  },
+  {
+    label: 'Map',
+    hint: 'Atlas source map and authoring note',
+    commandId: 'templater-obsidian:create-Templates/Publishing/New Map.md',
+  },
+  {
+    label: 'Timeline',
+    hint: 'Canonical Lore timeline view',
+    commandId: 'templater-obsidian:create-Templates/Timelines/New Timeline.md',
+  },
+  {
+    label: 'Story timeline',
+    hint: 'Open the active StoryLine project timeline',
+    commandId: 'viscerium-timelines:open-storyline-project-timeline',
+  },
+  {
+    label: 'Today',
+    hint: "Open or create today's Chronicle note",
+    commandId: 'journal-bases:open-current-daily',
+  },
+  {
+    label: 'Week',
+    hint: "Open or create this week's Chronicle review",
+    commandId: 'journal-bases:open-current-weekly',
+  },
+  {
+    label: 'Month',
+    hint: "Open or create this month's Chronicle review",
+    commandId: 'journal-bases:open-current-monthly',
+  },
+]);
 
 const TIER1_TITLES = new Set([
   'About VISCERIUM', 'Introduction to VISCERIUM', 'ERAS', 'CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY',
@@ -109,6 +181,19 @@ function normaliseEra(value) {
   if (typeof value !== 'string') return undefined;
   const key = value.trim().toLowerCase();
   return ERA_VALUES.find((era) => era.toLowerCase() === key);
+}
+
+function normaliseLinkTarget(value) {
+  return String(value ?? '')
+    .trim()
+    .replace(/^\[\[/, '')
+    .replace(/\]\]$/, '')
+    .split('|', 1)[0]
+    .split('#', 1)[0]
+    .replace(/^Vault\//i, '')
+    .replace(/\.md$/i, '')
+    .replace(/^\/+/, '')
+    .toLowerCase();
 }
 
 function reviewBlock(sourceEra, targetEra) {
@@ -211,6 +296,7 @@ class ChoiceModal extends SuggestModal {
   constructor(app, options, placeholder) {
     super(app);
     this.options = options;
+    this.selectedValue = null;
     this.setPlaceholder(placeholder);
   }
   getSuggestions(query) {
@@ -221,11 +307,15 @@ class ChoiceModal extends SuggestModal {
     el.createEl('div', { text: option.label });
     if (option.hint) el.createEl('small', { text: option.hint });
   }
+  selectSuggestion(option, event) {
+    this.selectedValue = option.value;
+    super.selectSuggestion(option, event);
+  }
   onChooseSuggestion(option) {
-    this.resolve?.(option.value);
-    this.resolve = null;
+    this.selectedValue = option.value;
   }
   choose() {
+    this.selectedValue = null;
     return new Promise((resolve) => {
       this.resolve = resolve;
       this.open();
@@ -233,8 +323,11 @@ class ChoiceModal extends SuggestModal {
   }
   onClose() {
     super.onClose();
-    this.resolve?.(null);
+    const resolve = this.resolve;
+    const value = this.selectedValue;
     this.resolve = null;
+    this.selectedValue = null;
+    resolve?.(value);
   }
 }
 
@@ -289,6 +382,90 @@ class TextPromptModal extends Modal {
     this.contentEl.empty();
     this.resolve?.(null);
     this.resolve = null;
+  }
+}
+
+class NoteContextView extends ItemView {
+  constructor(leaf, plugin) {
+    super(leaf);
+    this.plugin = plugin;
+    this.file = null;
+  }
+
+  getViewType() { return NOTE_CONTEXT_VIEW; }
+  getDisplayText() { return this.file ? `Note context · ${this.plugin.titleFor(this.file)}` : 'Note context'; }
+  getIcon() { return 'focus'; }
+
+  async onOpen() { await this.refresh(); }
+
+  async setFile(file) {
+    this.file = file;
+    await this.refresh();
+  }
+
+  stateItems(frontmatter) {
+    return [
+      ['Type', frontmatter.type],
+      ['Era', frontmatter.era],
+      ['Status', frontmatter.status],
+      ['State', frontmatter.development_level],
+      ['Map', frontmatter.map?.id],
+    ]
+      .map(([label, value]) => [label, String(value ?? '').trim()])
+      .filter(([, value]) => Boolean(value));
+  }
+
+  async refresh() {
+    const root = this.contentEl;
+    root.empty();
+    root.addClass('vc-note-context');
+
+    if (!(this.file instanceof TFile)) {
+      root.createEl('p', {
+        text: 'Open a Lore or Draft note to see its next useful authoring action.',
+        cls: 'vc-note-context-empty',
+      });
+      return;
+    }
+
+    const frontmatter = this.plugin.frontmatter(this.file);
+    const header = root.createDiv({ cls: 'vc-note-context-header' });
+    header.createEl('div', { text: 'NOTE CONTEXT', cls: 'vc-note-context-kicker' });
+    header.createEl('h4', { text: this.plugin.titleFor(this.file) });
+
+    const states = this.stateItems(frontmatter);
+    if (states.length) {
+      const state = header.createDiv({ cls: 'vc-note-context-state' });
+      for (const [label, value] of states) state.createSpan({ text: `${label}: ${value}` });
+    }
+
+    const next = await this.plugin.noteNextAction(this.file);
+    const nextBox = root.createDiv({ cls: 'vc-note-context-next' });
+    nextBox.createEl('div', { text: 'NEXT', cls: 'vc-note-context-section-label' });
+    nextBox.createEl('strong', { text: next.label });
+    nextBox.createEl('p', { text: next.detail });
+
+    if (next.action === 'atlas') {
+      const button = nextBox.createEl('button', { text: 'Open Atlas placement' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.placeActiveLocationOnAtlas(this.file));
+    }
+    if (next.action === 'era') {
+      const button = nextBox.createEl('button', { text: 'Set historical era' });
+      this.registerDomEvent(button, 'click', async () => {
+        await this.plugin.setControlledEra(this.file);
+        await this.refresh();
+      });
+    }
+    if (next.action === 'chronology') {
+      const button = nextBox.createEl('button', { text: 'Review chronology' });
+      this.registerDomEvent(button, 'click', () => void this.plugin.reviewActiveEventChronology(this.file));
+    }
+
+    const source = root.createDiv({ cls: 'vc-note-context-source' });
+    source.createSpan({
+      text: this.file.path.startsWith('Lore/') ? 'Canonical Lore' : 'Working draft',
+    });
+    source.createEl('code', { text: this.file.path });
   }
 }
 
@@ -421,9 +598,47 @@ class ImportReviewView extends ItemView {
 module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
   async onload() {
     this.registerView(IMPORT_REVIEW_VIEW, (leaf) => new ImportReviewView(leaf, this));
+    this.registerView(NOTE_CONTEXT_VIEW, (leaf) => new NoteContextView(leaf, this));
     this.suspendImportContext = false;
     this.syncingImportIssues = new Set();
 
+    this.addCommand({
+      id: 'create',
+      name: 'Create...',
+      callback: () => void this.openCreate(),
+    });
+    this.addCommand({
+      id: 'open-active-note-context',
+      name: 'Open active note context',
+      checkCallback: (checking) => {
+        const file = this.app.workspace.getActiveFile();
+        if (!this.isCreatorNote(file)) return false;
+        if (!checking) void this.showNoteContext(file, true);
+        return true;
+      },
+    });
+    this.addCommand({
+      id: 'place-active-location-on-atlas',
+      name: 'Place active location on Atlas...',
+      checkCallback: (checking) => {
+        const file = this.app.workspace.getActiveFile();
+        if (!(file instanceof TFile) || file.extension !== 'md') return false;
+        if (String(this.frontmatter(file).type ?? '').toLowerCase() !== 'location') return false;
+        if (!checking) void this.placeActiveLocationOnAtlas(file);
+        return true;
+      },
+    });
+    this.addCommand({
+      id: 'review-active-event-chronology',
+      name: 'Review active event chronology...',
+      checkCallback: (checking) => {
+        const file = this.app.workspace.getActiveFile();
+        if (!(file instanceof TFile) || file.extension !== 'md') return false;
+        if (String(this.frontmatter(file).type ?? '').toLowerCase() !== 'event') return false;
+        if (!checking) void this.reviewActiveEventChronology(file);
+        return true;
+      },
+    });
     this.addCommand({
       id: 'set-controlled-era',
       name: 'Set controlled era / Universal scope',
@@ -468,12 +683,283 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     this.app.workspace.onLayoutReady(() => {
       this.registerEvent(this.app.workspace.on('file-open', (file) => void this.handleActiveFile(file)));
       this.registerEvent(this.app.vault.on('modify', (file) => void this.handleModifiedFile(file)));
+      this.registerEvent(this.app.metadataCache.on('changed', (file) => void this.refreshNoteContext(file)));
       void this.handleActiveFile(this.app.workspace.getActiveFile());
     });
   }
 
+  async openCreate() {
+    const hasCommand = (action) => Boolean(this.app.commands?.commands?.[action.commandId]);
+    const worldbuildingAvailable = WORLD_BUILDING_ACTIONS.some(hasCommand);
+    const available = CREATE_ACTIONS.filter((action) => (
+      action.value === 'worldbuilding' ? worldbuildingAvailable : hasCommand(action)
+    ));
+    if (!available.length) {
+      new Notice('No VISCERIUM creation commands are available. Check the required plugins.', 8000);
+      return;
+    }
+
+    const selection = await new ChoiceModal(
+      this.app,
+      available.map((action) => ({ label: action.label, hint: action.hint, value: action.value ?? action.commandId })),
+      'What are you creating?',
+    ).choose();
+    if (!selection) return;
+    if (selection === 'worldbuilding') {
+      await this.openWorldbuildingCreate();
+      return;
+    }
+    this.app.commands.executeCommandById(selection);
+  }
+
+  async openWorldbuildingCreate() {
+    const available = WORLD_BUILDING_ACTIONS.filter((action) => Boolean(this.app.commands?.commands?.[action.commandId]));
+    if (!available.length) {
+      new Notice('No VISCERIUM worldbuilding commands are available. Check Templater.', 8000);
+      return;
+    }
+
+    const commandId = await new ChoiceModal(
+      this.app,
+      available.map((action) => ({ label: action.label, hint: action.hint, value: action.commandId })),
+      'What kind of worldbuilding?',
+    ).choose();
+    if (!commandId) return;
+    this.app.commands.executeCommandById(commandId);
+  }
+
   frontmatter(file) {
     return this.app.metadataCache.getFileCache(file)?.frontmatter ?? {};
+  }
+
+  isCreatorNote(file) {
+    if (!(file instanceof TFile) || file.extension !== 'md' || this.isWorldAnvilImport(file)) return false;
+    if (!/^(Lore|Drafts)\//.test(file.path)) return false;
+    if (/^(Drafts\/WorldAnvil Import|Drafts\/Inbox\/World Anvil Migration Review)/.test(file.path)) return false;
+    return Boolean(String(this.frontmatter(file).type ?? '').trim());
+  }
+
+  async hasAtlasMarker(file, mapId) {
+    const mapRecord = this.app.vault.getMarkdownFiles()
+      .map((mapFile) => ({ file: mapFile, frontmatter: this.frontmatter(mapFile) }))
+      .find(({ frontmatter }) => (
+        String(frontmatter.type ?? '').toLowerCase() === 'map'
+        && String(frontmatter.mapId ?? '').trim() === mapId
+      ));
+    const markerPath = String(mapRecord?.frontmatter?.mapMarkers ?? '').trim();
+    if (!markerPath || !await this.app.vault.adapter.exists(markerPath)) return false;
+
+    try {
+      const sidecar = JSON.parse(await this.app.vault.adapter.read(markerPath));
+      const sourceKey = normaliseLinkTarget(file.path);
+      const titleKey = normaliseLinkTarget(this.frontmatter(file).title ?? file.basename);
+      return (Array.isArray(sidecar.markers) ? sidecar.markers : []).some((marker) => {
+        const link = normaliseLinkTarget(marker?.link);
+        return link && (
+          link === sourceKey
+          || link === titleKey
+          || sourceKey.endsWith(`/${link}`)
+          || link.endsWith(`/${sourceKey}`)
+        );
+      });
+    } catch (error) {
+      console.warn('VISCERIUM Creator Tools could not read Atlas marker data.', error);
+      return false;
+    }
+  }
+
+  async noteNextAction(file) {
+    const frontmatter = this.frontmatter(file);
+    const description = String(frontmatter.description ?? '').trim();
+    const type = String(frontmatter.type ?? '').trim().toLowerCase();
+    const status = String(frontmatter.status ?? '').trim().toLowerCase();
+    const development = String(frontmatter.development_level ?? '').trim().toLowerCase();
+
+    if (!description) {
+      return {
+        label: 'Write the one-line identity',
+        detail: 'State what this is and why it is worth remembering. Keep the description short enough to remain useful in lists and search.',
+      };
+    }
+
+    if (type === 'event') {
+      const eventEra = normaliseEra(frontmatter.era);
+      const calendarDate = frontmatter.calendarDate;
+      const hasCalendarYear = calendarDate && typeof calendarDate === 'object' && calendarDate.year != null;
+
+      if (!eventEra || eventEra === 'Universal') {
+        return {
+          label: 'Set the historical era',
+          detail: 'Events use one controlled historical era before timeline placement.',
+          action: 'era',
+        };
+      }
+
+      if (!hasCalendarYear) {
+        return {
+          label: 'Add canonical chronology',
+          detail: 'Set calendarDate when the event belongs on the canonical timeline. Use calendarEndDate only for a genuine period.',
+          action: 'chronology',
+        };
+      }
+    }
+
+    if (type === 'location' && file.path.startsWith('Lore/')) {
+      const mapId = String(frontmatter.map?.id ?? '').trim();
+      const hasMarker = mapId ? await this.hasAtlasMarker(file, mapId) : false;
+      if (!mapId || !hasMarker) {
+        return {
+          label: mapId ? 'Place this location on its Atlas' : 'Decide whether this belongs on an Atlas',
+          detail: mapId
+            ? 'The Atlas target is set, but no linked marker exists yet. Open the map and place the marker with TTRPG Tools - Maps.'
+            : 'If spatial placement matters, choose a canonical map and place the linked marker with TTRPG Tools - Maps.',
+          action: 'atlas',
+        };
+      }
+    }
+
+    if (development === 'stub' || status === 'draft') {
+      return {
+        label: 'Develop one useful section',
+        detail: 'Add the next fact that changes a creator decision. Stop when the note is usable instead of filling every possible field.',
+      };
+    }
+
+    return {
+      label: 'Continue only when something changed',
+      detail: 'This note has no mechanical next step. Revise it when canon, context, or presentation needs to change.',
+    };
+  }
+
+  async showNoteContext(file, reveal = true) {
+    if (!this.isCreatorNote(file)) return;
+    let leaf = this.app.workspace.getLeavesOfType(NOTE_CONTEXT_VIEW)[0];
+    if (!leaf) {
+      leaf = this.app.workspace.getRightLeaf(false);
+      if (!leaf) return;
+      await leaf.setViewState({ type: NOTE_CONTEXT_VIEW, active: true });
+    }
+    if (reveal) await this.app.workspace.revealLeaf(leaf);
+    if (leaf.view instanceof NoteContextView) await leaf.view.setFile(file);
+  }
+
+  async refreshNoteContext(file) {
+    const leaf = this.app.workspace.getLeavesOfType(NOTE_CONTEXT_VIEW)[0];
+    if (!leaf || !(leaf.view instanceof NoteContextView)) return;
+    if (leaf.view.file?.path !== file?.path) return;
+    await leaf.view.refresh();
+  }
+
+  atlasMapsFor(locationFile) {
+    const locationEra = normaliseEra(this.frontmatter(locationFile).era);
+    return this.app.vault.getMarkdownFiles()
+      .filter((file) => file.path.startsWith('Lore/'))
+      .map((file) => ({ file, frontmatter: this.frontmatter(file) }))
+      .filter(({ frontmatter }) => String(frontmatter.type ?? '').toLowerCase() === 'map' && String(frontmatter.mapId ?? '').trim())
+      .sort((a, b) => {
+        const aEra = normaliseEra(a.frontmatter.era);
+        const bEra = normaliseEra(b.frontmatter.era);
+        const aMatch = locationEra && aEra === locationEra ? 0 : 1;
+        const bMatch = locationEra && bEra === locationEra ? 0 : 1;
+        return aMatch - bMatch || this.titleFor(a.file).localeCompare(this.titleFor(b.file));
+      });
+  }
+
+  async placeActiveLocationOnAtlas(locationFile) {
+    if (!locationFile.path.startsWith('Lore/')) {
+      new Notice('Atlas placement waits until this location has a stable Lore path. Keep developing the draft, then place it after promotion to Lore.', 9000);
+      return;
+    }
+
+    const maps = this.atlasMapsFor(locationFile);
+    if (!maps.length) {
+      new Notice('No canonical Atlas map with a mapId is available. Create or finish a map first.', 8000);
+      return;
+    }
+
+    const chosenPath = await new ChoiceModal(
+      this.app,
+      maps.map(({ file, frontmatter }) => ({
+        label: this.titleFor(file),
+        hint: [String(frontmatter.era ?? '').trim(), String(frontmatter.mapId ?? '').trim()].filter(Boolean).join(' · '),
+        value: file.path,
+      })),
+      'Place this location on which map?',
+    ).choose();
+    if (!chosenPath) return;
+
+    const mapFile = this.app.vault.getAbstractFileByPath(normalizePath(chosenPath));
+    if (!(mapFile instanceof TFile)) {
+      new Notice('The selected Atlas map could not be opened.', 7000);
+      return;
+    }
+
+    const mapId = String(this.frontmatter(mapFile).mapId ?? '').trim();
+    await this.app.fileManager.processFrontMatter(locationFile, (data) => {
+      const existingMap = data.map && typeof data.map === 'object' && !Array.isArray(data.map) ? data.map : {};
+      data.map = { ...existingMap, id: mapId };
+    });
+
+    const locationLeaf = this.markdownLeafFor(locationFile) ?? this.app.workspace.getLeaf(false);
+    this.app.workspace.setActiveLeaf(locationLeaf, { focus: false });
+    const mapLeaf = this.app.workspace.getLeaf('split', 'vertical');
+    await mapLeaf.setViewState({
+      type: 'markdown',
+      state: {
+        file: mapFile.path,
+        mode: 'preview',
+        source: false,
+      },
+      active: true,
+    });
+    this.app.workspace.setActiveLeaf(mapLeaf, { focus: true });
+
+    const mapSource = await this.app.vault.cachedRead(mapFile);
+    if (!/^```zoommap\s*$/m.test(mapSource)) {
+      new Notice('Map opened beside the location. Add its authoring map first with TTRPG Tools - Maps: Insert new map..., then place the linked marker.', 10000);
+      return;
+    }
+
+    new Notice(`Map target set to ${mapId}. Shift-click the position or use Add marker here, then link the marker to ${locationFile.path} and save it.`, 12000);
+  }
+
+  async reviewActiveEventChronology(eventFile) {
+    const frontmatter = this.frontmatter(eventFile);
+    const era = normaliseEra(frontmatter.era);
+    if (!era) {
+      new Notice('Set the event\'s controlled historical era first, then review its chronology.', 8000);
+      return;
+    }
+    if (era === 'Universal') {
+      new Notice('Universal is not a chronological era for dated events. Set a historical era before timeline placement.', 9000);
+      return;
+    }
+
+    const eraFile = this.app.vault.getAbstractFileByPath(normalizePath(`Lore/Eras/${era}.md`));
+    if (!(eraFile instanceof TFile)) {
+      new Notice(`Could not find the canonical ${era} era timeline note.`, 8000);
+      return;
+    }
+
+    const eventLeaf = this.markdownLeafFor(eventFile) ?? this.app.workspace.getLeaf(false);
+    this.app.workspace.setActiveLeaf(eventLeaf, { focus: false });
+    const timelineLeaf = this.app.workspace.getLeaf('split', 'vertical');
+    await timelineLeaf.openFile(eraFile);
+    this.app.workspace.setActiveLeaf(eventLeaf, { focus: true });
+
+    const date = frontmatter.calendarDate;
+    const hasStartDate = date && typeof date === 'object' && date.year != null;
+    if (!hasStartDate) {
+      new Notice(`${era} timeline opened beside the event. Set calendarDate on the event; it is the sole canonical start date. Use calendarEndDate only for a genuine period.`, 12000);
+      return;
+    }
+
+    if (!eventFile.path.startsWith('Lore/')) {
+      new Notice(`${era} timeline opened. This event has calendarDate, but Drafts are not canonical timeline input. Promote it to Lore when the event is ready.`, 11000);
+      return;
+    }
+
+    new Notice(`${era} timeline opened beside the event. Its calendarDate controls canonical placement. Use VISCERIUM Timelines: Refresh compiled timelines if you need to force a refresh.`, 11000);
   }
 
   titleFor(file) {
@@ -494,6 +980,12 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
 
   async handleActiveFile(file) {
     if (this.suspendImportContext) return;
+
+    const noteContextLeaf = this.app.workspace.getLeavesOfType(NOTE_CONTEXT_VIEW)[0];
+    if (noteContextLeaf?.view instanceof NoteContextView) {
+      await noteContextLeaf.view.setFile(this.isCreatorNote(file) ? file : null);
+    }
+
     if (await this.hasOpenImportReview(file)) {
       await this.showImportReview(file, true);
       return;
