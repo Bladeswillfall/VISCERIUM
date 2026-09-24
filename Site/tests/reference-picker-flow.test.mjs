@@ -71,3 +71,42 @@ test('reference picker restricts candidates to the selected era', async () => {
   assert.deepEqual(calls[1].labels, ['Leave blank', 'Citadel Region']);
   assert.deepEqual(calls[1].values, ['', 'Citadel Region']);
 });
+
+
+test('reference picker stamps the selected era onto a newly created related stub', async () => {
+  const picker = loadPicker();
+  let created = null;
+
+  const tp = {
+    app: {
+      metadataCache: {
+        getFileCache: () => ({ frontmatter: {} }),
+      },
+      vault: {
+        getMarkdownFiles: () => [],
+        getAbstractFileByPath: () => null,
+        createFolder: async () => {},
+        create: async (path, content) => {
+          created = { path, content };
+        },
+      },
+    },
+    system: {
+      multi_suggester: async (_labels, values) => [values.at(-1)],
+      prompt: async () => 'New CITADEL Faction',
+    },
+  };
+
+  const selected = await picker(tp, {
+    types: ['faction'],
+    multiple: true,
+    label: 'faction',
+    stubType: 'faction',
+    stubFolder: 'Drafts/Inbox/Factions',
+    era: 'CITADEL',
+  });
+
+  assert.deepEqual(selected, ['New CITADEL Faction']);
+  assert.equal(created.path, 'Drafts/Inbox/Factions/New CITADEL Faction.md');
+  assert.match(created.content, /^era: "CITADEL"$/m);
+});
