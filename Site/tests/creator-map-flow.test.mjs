@@ -68,6 +68,13 @@ test('guided Map creation writes Atlas identity and derives image paths', async 
   assert.equal(parsed.data.mapMarkers, 'Assets/Maps/Northern-Shelf.webp.markers.json');
   assert.equal(parsed.data.width, null);
   assert.equal(parsed.data.height, null);
+  assert.match(parsed.content, /```zoommap/);
+  assert.match(parsed.content, /image: Assets\/Maps\/Northern-Shelf\.webp/);
+  assert.match(parsed.content, /markers: Assets\/Maps\/Northern-Shelf\.webp\.markers\.json/);
+  assert.match(parsed.content, /id: northern-shelf-authoring/);
+  assert.match(parsed.content, /responsive: false/);
+  assert.match(parsed.content, /render: dom/);
+  assert.match(parsed.content, /Shift-click/);
 });
 
 test('guided Map creation suggests a unique mapId', () => {
