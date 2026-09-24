@@ -9,12 +9,26 @@
 }
 
 .metadata-properties-heading {
-  margin-bottom: 0.25rem;
-  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 30%, var(--text-muted));
+  width: fit-content;
+  min-height: 2rem;
+  margin-bottom: 0.35rem;
+  padding: 0.38rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 18%, var(--background-modifier-border));
+  border-radius: var(--vc-radius-control, 4px);
+  background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 5%, var(--background-secondary));
+  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 34%, var(--text-muted));
+  cursor: pointer;
   font-size: 0.75em;
   font-weight: 700;
   letter-spacing: 0.055em;
   text-transform: uppercase;
+  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+.metadata-properties-heading:hover {
+  border-color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 38%, var(--background-modifier-border));
+  background: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 9%, var(--background-secondary));
+  color: var(--text-normal);
 }
 
 .metadata-property {
