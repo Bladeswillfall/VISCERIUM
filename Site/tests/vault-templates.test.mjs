@@ -137,6 +137,11 @@ test('interactive Templater script blocks and creator user scripts parse as Java
     () => new Function(`return async function __visceriumArticleView__() {\n${locationContext}\n}`),
     'Location context view contains invalid JavaScript',
   );
+  assert.match(locationContext, /dv\.current\(\)\?\.file\?\.path/);
+  assert.match(locationContext, /Open interactive map/);
+  assert.match(locationContext, /Place on map/);
+  assert.match(locationContext, /mode: "preview"/);
+  assert.match(locationContext, /Promote this draft to Lore before saving a marker/);
 });
 
 
