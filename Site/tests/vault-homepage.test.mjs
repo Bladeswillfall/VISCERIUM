@@ -67,6 +67,7 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
   assert.match(continuing, /Loading recent work…/);
   assert.match(continuing, /dv\.index\?\.initialized/);
   assert.doesNotMatch(continuing, /requestAnimationFrame/);
+  assert.doesNotMatch(continuing, /while \(!indexReady/);
   assert.match(continuing, /activeProjectFile/);
   assert.match(continuing, /System\/Bases\/Lore Registry\.base/);
   assert.match(continuing, /Show all recent work/);
@@ -74,6 +75,7 @@ test('VISCERIUM Home is a modular creator dashboard rather than a manual', async
   assert.match(attention, /Checking project state…/);
   assert.match(attention, /dv\.index\?\.initialized/);
   assert.doesNotMatch(attention, /requestIdleCallback/);
+  assert.doesNotMatch(attention, /while \(!indexReady/);
   assert.match(attention, /System\/Bases\/Needs Attention\.base/);
   assert.match(attention, /System\/Bases\/Publishing\.base/);
 
