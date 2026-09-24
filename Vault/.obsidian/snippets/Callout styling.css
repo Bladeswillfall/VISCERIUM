@@ -197,42 +197,52 @@ body.viscerium-callouts-bar-only .callout {
   text-transform: uppercase;
 }
 
-.vc-article-context-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+.vc-article-context-facts {
+  display: grid;
+  gap: 5px;
 }
 
-.vc-article-context-chip {
-  display: inline-flex;
+.vc-article-context-fact {
+  display: grid;
+  grid-template-columns: minmax(52px, max-content) minmax(0, 1fr);
   align-items: baseline;
-  gap: 5px;
-  min-height: 28px;
-  padding: 5px 7px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--vc-radius-control, 4px);
-  background: var(--background-primary);
+  gap: 10px;
   color: var(--text-muted);
   font-family: var(--font-interface);
-  font-size: 0.74rem;
-  text-align: left;
+  font-size: 0.76rem;
 }
 
-button.vc-article-context-chip.is-link {
+.vc-article-context-fact-label {
+  color: var(--text-faint);
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.vc-article-context-fact-value {
+  min-width: 0;
+}
+
+button.vc-article-context-fact-link {
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-accent);
+  font: inherit;
+  text-align: left;
   cursor: pointer;
 }
 
-button.vc-article-context-chip.is-link:hover {
-  border-color: var(--interactive-accent);
-  color: var(--text-normal);
-}
-
-.vc-article-context-chip-label {
-  color: var(--text-faint);
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+button.vc-article-context-fact-link:hover,
+button.vc-article-context-fact-link:focus-visible {
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-accent-hover);
 }
 
 .vc-article-map-card {
@@ -267,14 +277,6 @@ button.vc-article-context-chip.is-link:hover {
   background-size: contain;
 }
 
-.vc-article-map-preview::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(to top, rgb(0 0 0 / 42%), transparent 38%);
-}
-
 .vc-article-map-marker {
   position: absolute;
   z-index: 2;
@@ -296,15 +298,12 @@ button.vc-article-context-chip.is-link:hover {
 }
 
 .vc-article-map-status {
-  position: absolute;
-  z-index: 3;
-  right: 8px;
-  bottom: 7px;
-  left: 8px;
-  color: #f2eee7;
+  margin: 0;
+  padding: 8px 10px 10px;
+  color: var(--text-muted);
   font-family: var(--font-interface);
-  font-size: 0.68rem;
-  text-shadow: 0 1px 4px rgb(0 0 0 / 75%);
+  font-size: 0.7rem;
+  line-height: 1.4;
 }
 
 @media (max-width: 760px) {

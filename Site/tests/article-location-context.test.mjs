@@ -6,6 +6,10 @@ const source = await readFile(
   new URL('../../Vault/System/Views/Article/Location Context/view.js', import.meta.url),
   'utf8',
 );
+const styles = await readFile(
+  new URL('../../Vault/.obsidian/snippets/Callout styling.css', import.meta.url),
+  'utf8',
+);
 
 class FakeElement {
   constructor({ text = '', cls = '' } = {}) {
@@ -28,6 +32,14 @@ class FakeElement {
     if (this.text === text) return this;
     for (const child of this.children) {
       const match = child.findByText(text);
+      if (match) return match;
+    }
+    return null;
+  }
+  findByClass(name) {
+    if (String(this.cls).split(/\s+/).includes(name)) return this;
+    for (const child of this.children) {
+      const match = child.findByClass(name);
       if (match) return match;
     }
     return null;
@@ -101,6 +113,13 @@ test('Location context opens the linked Atlas note in Reading view', async () =>
   const button = root.findByText('Place on map');
   assert.ok(button, 'expected a canonical Location to expose Place on map');
 
+  const preview = root.findByClass('vc-article-map-preview');
+  const status = root.findByClass('vc-article-map-status');
+  assert.equal(preview.attributes.role, 'img');
+  assert.ok(status, 'expected visible Atlas placement status');
+  assert.equal(status.text, 'Map linked. Open it and Shift-click to place this location.');
+  assert.ok(!preview.children.includes(status), 'Atlas status must sit outside the role=img preview');
+
   await button.handlers.click();
 
   assert.deepEqual(viewState, {
@@ -116,4 +135,12 @@ test('Location context opens the linked Atlas note in Reading view', async () =>
     leaf,
     options: { focus: true },
   });
+});
+
+
+test('Location context uses plain metadata hierarchy instead of chip badges', () => {
+  assert.match(source, /vc-article-context-facts/);
+  assert.doesNotMatch(source, /vc-article-context-chip/);
+  assert.match(styles, /\.vc-article-context-fact/);
+  assert.doesNotMatch(styles, /\.vc-article-context-chip/);
 });

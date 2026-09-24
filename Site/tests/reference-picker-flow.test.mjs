@@ -110,3 +110,58 @@ test('reference picker stamps the selected era onto a newly created related stub
   assert.equal(created.path, 'Drafts/Inbox/Factions/New CITADEL Faction.md');
   assert.match(created.content, /^era: "CITADEL"$/m);
 });
+
+
+test('reference picker refuses an era-filtered stub path collision', async () => {
+  const picker = loadPicker();
+  const collision = { path: 'Drafts/Inbox/Factions/Shared Name.md', basename: 'Shared Name' };
+  const notices = [];
+  const prompts = ['Shared Name', 'New SMOG Faction'];
+  let created = null;
+
+  const tp = {
+    app: {
+      metadataCache: {
+        getFileCache: (file) => ({
+          frontmatter: file === collision
+            ? { title: 'Shared Name', type: 'faction', era: 'CITADEL' }
+            : {},
+        }),
+      },
+      vault: {
+        getMarkdownFiles: () => [collision],
+        getAbstractFileByPath: (path) => (
+          path === collision.path || path === 'Drafts/Inbox/Factions' ? collision : null
+        ),
+        createFolder: async () => {},
+        create: async (path, content) => {
+          created = { path, content };
+        },
+      },
+    },
+    obsidian: {
+      Notice: class {
+        constructor(message) { notices.push(message); }
+      },
+    },
+    system: {
+      multi_suggester: async (_labels, values) => [values.at(-1)],
+      prompt: async () => prompts.shift(),
+    },
+  };
+
+  const selected = await picker(tp, {
+    types: ['faction'],
+    multiple: true,
+    label: 'faction',
+    stubType: 'faction',
+    stubFolder: 'Drafts/Inbox/Factions',
+    era: 'SMOG',
+  });
+
+  assert.deepEqual(selected, ['New SMOG Faction']);
+  assert.equal(notices.length, 1);
+  assert.match(notices[0], /not an eligible faction for SMOG/);
+  assert.equal(created.path, 'Drafts/Inbox/Factions/New SMOG Faction.md');
+  assert.match(created.content, /^era: "SMOG"$/m);
+});

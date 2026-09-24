@@ -149,3 +149,82 @@ test('creator templates use the controlled era vocabulary and continuity IDs', (
   assert.match(storyTemplate, /Continuity entity ID/);
   assert.match(storyTemplate, /replace\(\/\^publish:/);
 });
+
+
+function loadCreatorPluginClass() {
+  class EmptyView {}
+  class TFile {}
+  const obsidian = {
+    ItemView: EmptyView,
+    Modal: class {},
+    Notice: class {},
+    Plugin: class {},
+    Setting: class {},
+    SuggestModal: class {},
+    TFile,
+    normalizePath: (value) => value,
+  };
+  const localModule = { exports: {} };
+  const localRequire = (name) => {
+    assert.equal(name, 'obsidian');
+    return obsidian;
+  };
+  new Function('require', 'module', 'exports', creatorPlugin)(localRequire, localModule, localModule.exports);
+  return localModule.exports;
+}
+
+test('note context keeps Atlas placement pending until a linked marker exists', async () => {
+  const CreatorPlugin = loadCreatorPluginClass();
+  const location = {
+    path: 'Lore/Eras/CITADEL/Locations/Test Location.md',
+    basename: 'Test Location',
+  };
+  const mapNote = {
+    path: 'Lore/Eras/CITADEL/Errack CITADEL Map.md',
+    basename: 'Errack CITADEL Map',
+  };
+  const frontmatter = new Map([
+    [location, {
+      title: 'Test Location',
+      description: 'A canonical test location.',
+      type: 'location',
+      status: 'published',
+      development_level: 'complete',
+      map: { id: 'errack-citadel' },
+    }],
+    [mapNote, {
+      title: 'Errack CITADEL',
+      type: 'map',
+      mapId: 'errack-citadel',
+      mapMarkers: 'Assets/Maps/Errack-CITADEL.canonical.markers.json',
+    }],
+  ]);
+  let sidecar = { markers: [] };
+
+  const plugin = Object.create(CreatorPlugin.prototype);
+  plugin.app = {
+    metadataCache: {
+      getFileCache: (file) => ({ frontmatter: frontmatter.get(file) ?? {} }),
+    },
+    vault: {
+      getMarkdownFiles: () => [mapNote],
+      adapter: {
+        exists: async () => true,
+        read: async () => JSON.stringify(sidecar),
+      },
+    },
+  };
+
+  let next = await plugin.noteNextAction(location);
+  assert.equal(next.action, 'atlas');
+  assert.equal(next.label, 'Place this location on its Atlas');
+
+  sidecar = {
+    markers: [{
+      link: '[[Lore/Eras/CITADEL/Locations/Test Location]]',
+    }],
+  };
+  next = await plugin.noteNextAction(location);
+  assert.equal(next.action, undefined);
+  assert.equal(next.label, 'Continue only when something changed');
+});

@@ -42,42 +42,52 @@ function candidates(tp, types, era) {
 
 async function createStub(tp, options, existing) {
   const label = options.label ?? options.stubType ?? options.types?.[0] ?? "entity";
-  const name = String(await tp.system.prompt(`New ${label} name`, "", true) ?? "").trim();
-  if (!name) return null;
 
-  const wanted = normalise(name);
-  const duplicate = existing.find((entry) => normalise(entry.title) === wanted || entry.aliases.some((alias) => normalise(alias) === wanted));
-  if (duplicate) return duplicate.title;
+  while (true) {
+    const name = String(await tp.system.prompt(`New ${label} name`, "", true) ?? "").trim();
+    if (!name) return null;
 
-  const folder = options.stubFolder ?? `Drafts/Inbox/${String(options.stubType ?? "Entity").replace(/^./, (char) => char.toUpperCase())}s`;
-  await ensureFolder(tp.app, folder);
-  const filename = safeFilename(name);
-  if (!filename) return null;
-  const path = `${folder}/${filename}.md`;
-  const alreadyThere = tp.app.vault.getAbstractFileByPath(path);
-  if (alreadyThere) return alreadyThere.basename;
+    const wanted = normalise(name);
+    const duplicate = existing.find((entry) => normalise(entry.title) === wanted || entry.aliases.some((alias) => normalise(alias) === wanted));
+    if (duplicate) return duplicate.title;
 
-  const type = options.stubType ?? options.types?.[0] ?? "article";
-  const content = [
-    "---",
-    `title: ${JSON.stringify(name)}`,
-    'description: ""',
-    "status: draft",
-    `type: ${type}`,
-    ...(options.era ? [`era: ${JSON.stringify(options.era)}`] : []),
-    "development_level: stub",
-    `tags: [${JSON.stringify("stub")}, ${JSON.stringify("inbox")}]`,
-    "---",
-    "",
-    "## Summary",
-    "",
-    "%% Created automatically because this relationship did not yet exist. Add only the detail the world actually needs. %%",
-    "",
-    "- [ ] Develop this stub before promotion to Lore.",
-    "",
-  ].join("\n");
-  await tp.app.vault.create(path, content);
-  return name;
+    const folder = options.stubFolder ?? `Drafts/Inbox/${String(options.stubType ?? "Entity").replace(/^./, (char) => char.toUpperCase())}s`;
+    await ensureFolder(tp.app, folder);
+    const filename = safeFilename(name);
+    if (!filename) return null;
+    const path = `${folder}/${filename}.md`;
+    const alreadyThere = tp.app.vault.getAbstractFileByPath(path);
+    if (alreadyThere) {
+      const scope = options.era ? ` for ${options.era}` : "";
+      new tp.obsidian.Notice(
+        `"${name}" already exists at ${path}, but it is not an eligible ${label}${scope}. Choose a different name.`,
+        8000,
+      );
+      continue;
+    }
+
+    const type = options.stubType ?? options.types?.[0] ?? "article";
+    const content = [
+      "---",
+      `title: ${JSON.stringify(name)}`,
+      'description: ""',
+      "status: draft",
+      `type: ${type}`,
+      ...(options.era ? [`era: ${JSON.stringify(options.era)}`] : []),
+      "development_level: stub",
+      `tags: [${JSON.stringify("stub")}, ${JSON.stringify("inbox")}]`,
+      "---",
+      "",
+      "## Summary",
+      "",
+      "%% Created automatically because this relationship did not yet exist. Add only the detail the world actually needs. %%",
+      "",
+      "- [ ] Develop this stub before promotion to Lore.",
+      "",
+    ].join("\n");
+    await tp.app.vault.create(path, content);
+    return name;
+  }
 }
 
 module.exports = async function referencePicker(tp, options = {}) {

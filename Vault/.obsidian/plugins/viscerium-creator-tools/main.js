@@ -183,6 +183,19 @@ function normaliseEra(value) {
   return ERA_VALUES.find((era) => era.toLowerCase() === key);
 }
 
+function normaliseLinkTarget(value) {
+  return String(value ?? '')
+    .trim()
+    .replace(/^\[\[/, '')
+    .replace(/\]\]$/, '')
+    .split('|', 1)[0]
+    .split('#', 1)[0]
+    .replace(/^Vault\//i, '')
+    .replace(/\.md$/i, '')
+    .replace(/^\/+/, '')
+    .toLowerCase();
+}
+
 function reviewBlock(sourceEra, targetEra) {
   return `${REVIEW_START}\n## Era edition review\n\n- [ ] Review inherited ${sourceEra} content and update facts, language, relationships, population/distribution data, technology and assumptions for ${targetEra}.\n- [ ] Remove details that should not be known or relevant in ${targetEra}; add only established ${targetEra} material.\n${REVIEW_END}`;
 }
@@ -426,7 +439,7 @@ class NoteContextView extends ItemView {
       for (const [label, value] of states) state.createSpan({ text: `${label}: ${value}` });
     }
 
-    const next = this.plugin.noteNextAction(this.file);
+    const next = await this.plugin.noteNextAction(this.file);
     const nextBox = root.createDiv({ cls: 'vc-note-context-next' });
     nextBox.createEl('div', { text: 'NEXT', cls: 'vc-note-context-section-label' });
     nextBox.createEl('strong', { text: next.label });
@@ -726,7 +739,36 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     return Boolean(String(this.frontmatter(file).type ?? '').trim());
   }
 
-  noteNextAction(file) {
+  async hasAtlasMarker(file, mapId) {
+    const mapRecord = this.app.vault.getMarkdownFiles()
+      .map((mapFile) => ({ file: mapFile, frontmatter: this.frontmatter(mapFile) }))
+      .find(({ frontmatter }) => (
+        String(frontmatter.type ?? '').toLowerCase() === 'map'
+        && String(frontmatter.mapId ?? '').trim() === mapId
+      ));
+    const markerPath = String(mapRecord?.frontmatter?.mapMarkers ?? '').trim();
+    if (!markerPath || !await this.app.vault.adapter.exists(markerPath)) return false;
+
+    try {
+      const sidecar = JSON.parse(await this.app.vault.adapter.read(markerPath));
+      const sourceKey = normaliseLinkTarget(file.path);
+      const titleKey = normaliseLinkTarget(this.frontmatter(file).title ?? file.basename);
+      return (Array.isArray(sidecar.markers) ? sidecar.markers : []).some((marker) => {
+        const link = normaliseLinkTarget(marker?.link);
+        return link && (
+          link === sourceKey
+          || link === titleKey
+          || sourceKey.endsWith(`/${link}`)
+          || link.endsWith(`/${sourceKey}`)
+        );
+      });
+    } catch (error) {
+      console.warn('VISCERIUM Creator Tools could not read Atlas marker data.', error);
+      return false;
+    }
+  }
+
+  async noteNextAction(file) {
     const frontmatter = this.frontmatter(file);
     const description = String(frontmatter.description ?? '').trim();
     const type = String(frontmatter.type ?? '').trim().toLowerCase();
@@ -764,10 +806,13 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
 
     if (type === 'location' && file.path.startsWith('Lore/')) {
       const mapId = String(frontmatter.map?.id ?? '').trim();
-      if (!mapId) {
+      const hasMarker = mapId ? await this.hasAtlasMarker(file, mapId) : false;
+      if (!mapId || !hasMarker) {
         return {
-          label: 'Decide whether this belongs on an Atlas',
-          detail: 'If spatial placement matters, choose a canonical map and place the linked marker with TTRPG Tools - Maps.',
+          label: mapId ? 'Place this location on its Atlas' : 'Decide whether this belongs on an Atlas',
+          detail: mapId
+            ? 'The Atlas target is set, but no linked marker exists yet. Open the map and place the marker with TTRPG Tools - Maps.'
+            : 'If spatial placement matters, choose a canonical map and place the linked marker with TTRPG Tools - Maps.',
           action: 'atlas',
         };
       }

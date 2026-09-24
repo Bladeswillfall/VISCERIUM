@@ -38,28 +38,26 @@ const copy = root.createDiv({ cls: "vc-article-context-copy" });
 copy.createDiv({ text: "CONNECTED CONTEXT", cls: "vc-article-context-kicker" });
 copy.createEl("h3", { text: String(frontmatter.title ?? sourceFile.basename) });
 
-const chips = copy.createDiv({ cls: "vc-article-context-chips" });
-const chip = (label, value, target) => {
+const facts = copy.createDiv({ cls: "vc-article-context-facts" });
+const fact = (label, value, target) => {
   const text = Array.isArray(value) ? value.filter(Boolean).join(" · ") : String(value ?? "").trim();
   if (!text) return;
+  const item = facts.createDiv({ cls: "vc-article-context-fact" });
+  item.createSpan({ text: label, cls: "vc-article-context-fact-label" });
   if (!target) {
-    const item = chips.createSpan({ cls: "vc-article-context-chip" });
-    item.createSpan({ text: label, cls: "vc-article-context-chip-label" });
-    item.createSpan({ text });
+    item.createSpan({ text, cls: "vc-article-context-fact-value" });
     return;
   }
-  const item = chips.createEl("button", { cls: "vc-article-context-chip is-link" });
-  item.createSpan({ text: label, cls: "vc-article-context-chip-label" });
-  item.createSpan({ text });
-  item.addEventListener("click", () => app.workspace.openLinkText(target, sourcePath));
+  const link = item.createEl("button", { text, cls: "vc-article-context-fact-link" });
+  link.addEventListener("click", () => app.workspace.openLinkText(target, sourcePath));
 };
 
-chip("Kind", frontmatter.location_kind);
-chip("Era", frontmatter.era);
+fact("Kind", frontmatter.location_kind);
+fact("Era", frontmatter.era);
 for (const faction of Array.isArray(frontmatter.faction) ? frontmatter.faction : [frontmatter.faction].filter(Boolean)) {
-  chip("Faction", faction, cleanLink(faction));
+  fact("Faction", faction, cleanLink(faction));
 }
-if (frontmatter.region) chip("Parent", frontmatter.region, cleanLink(frontmatter.region));
+if (frontmatter.region) fact("Parent", frontmatter.region, cleanLink(frontmatter.region));
 
 if (!mapId) {
   root.addClass("has-no-map");
@@ -138,10 +136,10 @@ if (markerX != null && markerY != null) {
   const marker = preview.createDiv({ cls: `vc-article-map-marker ${isRegion ? "is-region" : "is-location"}` });
   marker.style.left = `${markerX}%`;
   marker.style.top = `${markerY}%`;
-  marker.setAttribute("aria-label", isRegion ? "Region centre" : "Location marker");
+  marker.setAttribute("aria-hidden", "true");
 }
 
-const status = preview.createDiv({ cls: "vc-article-map-status" });
+const status = map.createDiv({ cls: "vc-article-map-status" });
 if (!mapRecord) status.setText(`Map "${mapId}" is linked but its map note is unavailable.`);
 else if (markerX == null || markerY == null) {
   status.setText(
