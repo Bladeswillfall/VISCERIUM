@@ -12,9 +12,10 @@ const vaultRoot = path.join(repoRoot, 'Vault');
 const require = createRequire(import.meta.url);
 const creatorPath = path.join(vaultRoot, 'Templates/_Scripts/create_lore_entity.js');
 
-function mockTemplater({ title, description, era, locationKind = '', mapId = '', year = '', certainty = 'exact' }) {
+function mockTemplater({ title, description, era, locationKind = '', mapId = '', year = '', certainty = 'exact', existingDestination = '' }) {
   const moves = [];
   const renames = [];
+  const referenceOptions = [];
 
   const tp = {
     file: {
@@ -44,7 +45,10 @@ function mockTemplater({ title, description, era, locationKind = '', mapId = '',
       },
     },
     user: {
-      reference_picker: async (_tp, options) => options.multiple ? [] : '',
+      reference_picker: async (_tp, options) => {
+        referenceOptions.push(options);
+        return options.multiple ? [] : '';
+      },
     },
     app: {
       metadataCache: {
@@ -58,7 +62,8 @@ function mockTemplater({ title, description, era, locationKind = '', mapId = '',
         getMarkdownFiles: () => mapId ? [{ path: 'Lore/Maps/Errack CITADEL Map.md', basename: 'Errack CITADEL Map' }] : [],
         getAbstractFileByPath: (relativePath) => {
           if (relativePath.startsWith('Templates/')) return { path: relativePath };
-          return { path: relativePath };
+          if (relativePath === existingDestination) return { path: relativePath };
+          return null;
         },
         read: async (file) => fs.readFile(path.join(vaultRoot, file.path), 'utf8'),
         createFolder: async () => {},
@@ -66,7 +71,7 @@ function mockTemplater({ title, description, era, locationKind = '', mapId = '',
     },
   };
 
-  return { tp, moves, renames };
+  return { tp, moves, renames, referenceOptions };
 }
 
 function loadCreator() {
@@ -76,7 +81,7 @@ function loadCreator() {
 
 test('direct Location creation writes the shared Lore baseline', async () => {
   const creator = loadCreator();
-  const { tp, moves, renames } = mockTemplater({
+  const { tp, moves, renames, referenceOptions } = mockTemplater({
     title: 'Glass Harbour',
     description: 'A fortified harbour built around a volcanic inlet.',
     era: 'CITADEL',
@@ -95,6 +100,10 @@ test('direct Location creation writes the shared Lore baseline', async () => {
   assert.equal(parsed.data.map.id, 'errack-citadel');
   assert.equal(parsed.data.entity_id, 'glass-harbour');
   assert.equal(parsed.data.description, 'A fortified harbour built around a volcanic inlet.');
+  assert.deepEqual(referenceOptions.map((options) => [options.label, options.era]), [
+    ['faction', 'CITADEL'],
+    ['parent region', 'CITADEL'],
+  ]);
   assert.deepEqual(renames, ['Glass Harbour']);
   assert.deepEqual(moves, ['Drafts/Inbox/Locations/Glass Harbour']);
 });
@@ -145,4 +154,23 @@ test('direct Event creation can seed canonical year chronology without inventing
   });
   assert.equal(parsed.data.calendarEndDate, null);
   assert.deepEqual(moves, ['Drafts/Inbox/Events/The Ash Accord']);
+});
+
+test('guided Lore creation rejects an occupied destination before secondary prompts', async () => {
+  const creator = loadCreator();
+  const { tp, moves, renames, referenceOptions } = mockTemplater({
+    title: 'Glass Harbour',
+    description: 'This prompt must not be reached.',
+    era: 'CITADEL',
+    existingDestination: 'Drafts/Inbox/Locations/Glass Harbour.md',
+  });
+
+  await assert.rejects(
+    creator(tp, { type: 'location' }),
+    /already exists at Drafts\/Inbox\/Locations\/Glass Harbour\.md/,
+  );
+
+  assert.deepEqual(renames, []);
+  assert.deepEqual(moves, []);
+  assert.deepEqual(referenceOptions, []);
 });
