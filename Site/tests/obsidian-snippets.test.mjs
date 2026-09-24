@@ -39,7 +39,7 @@ test("ordinary Obsidian articles use a responsive wide lane in both Markdown mod
   const css = fs.readFileSync(path.join(snippetsDir, "Article widths.css"), "utf8");
 
   assert.ok(appearance.enabledCssSnippets.includes("Article widths"));
-  assert.match(css, /--vc-article-max-width:\s*92rem/);
+  assert.match(css, /--vc-article-max-width:\s*82rem/);
   assert.match(css, /--vc-article-gutter:\s*clamp\(1rem,\s*3%,\s*2\.75rem\)/);
   assert.match(css, /markdown-preview-view:not\(\.viscerium-home\) \.markdown-preview-sizer/);
   assert.match(css, /markdown-source-view\.mod-cm6:not\(\.viscerium-home\) \.cm-sizer/);
