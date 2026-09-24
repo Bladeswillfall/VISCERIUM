@@ -39,7 +39,7 @@ Do not hand-edit `Site/src/data/maps.json`.
 2. Keep marker storage set to **JSON**.
 3. Use the checked-in defaults that open the marker editor after placement, prefer the active layer and enable drawing and measurement tools.
 4. Keep map images under `Assets/Maps/`.
-5. Use Canvas render mode for very large raster maps such as the 7680 × 3840 CITADEL map.
+5. Use DOM render mode for normal desktop authoring. Switch to Canvas only when a specific map needs it for performance.
 
 The plugin bundle itself is installed per device. Repository configuration, notes and sidecar data are shared through Git.
 
@@ -61,13 +61,20 @@ If you leave the image unassigned, add `image` and `mapMarkers` later. Do not in
 
 ### Insert the authoring map
 
+Guided Map creation inserts the authoring block automatically when you select an image.
+
+If you assign the image later:
+
 1. Put the cursor in the map note while in Edit mode.
 2. Run **TTRPG Tools - Maps: Insert new map...**.
 3. Choose the source image from `Assets/Maps/`.
 4. Use the same sidecar path recorded in `mapMarkers`.
 5. Give the code block a stable `id`.
-6. Use `render: canvas` for large SVG or raster maps.
-7. Enable pan clamping from the map context menu when the image should remain within the viewport.
+6. Keep `responsive: false` so pan and zoom gestures stay enabled.
+7. Use DOM render mode first. Switch to Canvas only if that map needs it for performance.
+8. Enable pan clamping from the map context menu when the image should remain within the viewport.
+
+For authoring, drag to pan, use the mouse wheel or zoom buttons to zoom, Shift-click to add a marker, and right-click for marker, layer, drawing, measurement, and map options.
 
 The generated public note strips the `zoommap` code block. Readers see the Codex Atlas rather than Obsidian plugin syntax.
 
