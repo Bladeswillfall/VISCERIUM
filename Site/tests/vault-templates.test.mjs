@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
+import { stripObsidianOnlyContent } from '../scripts/strip-obsidian-plugin-blocks.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '../..');
@@ -93,7 +94,8 @@ test('publishable Lore skeletons start safe and include one reusable Storyteller
     assert.equal(parsed.data.type, expectedType, `${relativePath} should declare its semantic type`);
     assert.doesNotMatch(parsed.content, /^#\s+\{\{title\}\}/m, `${relativePath} should not duplicate the note/page title as a body H1`);
     assert.doesNotMatch(parsed.content, /^##\s+Comments\s*$/m, `${relativePath} should not create an empty duplicate comments section`);
-    assert.doesNotMatch(parsed.content, /viscerium-sidebar|```dataviewjs/i, `${relativePath} should stay portable and not render the retired Obsidian infobox`);
+    const publishedContent = stripObsidianOnlyContent(parsed.content, relativePath);
+    assert.doesNotMatch(publishedContent, /viscerium-sidebar|```dataviewjs/i, `${relativePath} should keep creator-only views out of published content`);
     assert.equal(source.split(STORYTELLER_START).length - 1, 1, `${relativePath} should contain one Storyteller start marker`);
     assert.equal(source.split(STORYTELLER_END).length - 1, 1, `${relativePath} should contain one Storyteller end marker`);
     assert.match(parsed.content, /^## Storyteller View$/m, `${relativePath} should expose a foldable Storyteller heading in Obsidian`);
@@ -129,6 +131,25 @@ test('interactive Templater script blocks and creator user scripts parse as Java
 
   const loreCreator = await readText('Templates/_Scripts/create_lore_entity.js');
   assert.doesNotThrow(() => new Function(loreCreator), 'shared Lore creator contains invalid JavaScript');
+
+  const locationContext = await readText('System/Views/Article/Location Context/view.js');
+  assert.doesNotThrow(
+    () => new Function(`return async function __visceriumArticleView__() {\n${locationContext}\n}`),
+    'Location context view contains invalid JavaScript',
+  );
+});
+
+
+test('Location template keeps visual context creator-only while preserving source metadata', async () => {
+  const source = await readText('Templates/Lore/Location Template.md');
+  const stripped = stripObsidianOnlyContent(source, 'Templates/Lore/Location Template.md');
+
+  assert.match(source, /obsidian-only:start/);
+  assert.match(source, /dv\.view\("System\/Views\/Article\/Location Context"\)/);
+  assert.doesNotMatch(stripped, /Location Context|\`\`\`dataviewjs/);
+  assert.match(stripped, /^map:\s*$/m);
+  assert.match(stripped, /^\s+id:\s*$/m);
+  assert.match(stripped, /^## Summary$/m);
 });
 
 test('folder-triggered Templater rules cover Lore, Inbox, specialist databases and nested folders', async () => {
