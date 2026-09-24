@@ -37,7 +37,7 @@ width: 100%
 minZoom: 0.1
 maxZoom: 8
 responsive: false
-render: dom
+render: canvas
 resizable: true
 resizeHandle: native
 view:
