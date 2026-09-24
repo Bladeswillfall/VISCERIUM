@@ -93,3 +93,17 @@ test('guided Map creation suggests a unique mapId', () => {
 
   assert.equal(creator.suggestedMapId(tp, 'Northern Shelf'), 'northern-shelf-2');
 });
+
+
+test('CITADEL authoring map opens in an interactive working view', async () => {
+  const source = await fs.readFile(
+    path.join(vaultRoot, 'Lore/Eras/CITADEL/Errack CITADEL Map.md'),
+    'utf8',
+  );
+
+  assert.match(source, /responsive: false/);
+  assert.match(source, /render: dom/);
+  assert.match(source, /view:\n\s+zoom: 0\.2\n\s+centerX: 0\.5\n\s+centerY: 0\.5/);
+  assert.match(source, /Shift-click/);
+  assert.match(source, /Right-click/);
+});
