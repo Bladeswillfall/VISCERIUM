@@ -25,6 +25,9 @@ This map presents Errack as it is understood during **CITADEL**. Use the Atlas v
 
 Use this view in Obsidian to place and move canonical CITADEL markers. Every public marker must link to a published lore note whose `map.id` is `errack-citadel`.
 
+> [!authoring]+ Map controls
+> Drag to pan. Use the mouse wheel or **+ / -** to zoom. **Shift-click** to add a marker. **Right-click** for marker, layer, drawing, measurement, and map options.
+
 ```zoommap
 image: Assets/Maps/Errack-CITADEL.webp
 markers: Assets/Maps/Errack-CITADEL.canonical.markers.json
@@ -33,9 +36,14 @@ height: 720px
 width: 100%
 minZoom: 0.1
 maxZoom: 8
-render: canvas
+responsive: false
+render: dom
 resizable: true
 resizeHandle: native
+view:
+  zoom: 0.2
+  centerX: 0.5
+  centerY: 0.5
 ```
 <!-- obsidian-only:end -->
 
