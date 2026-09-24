@@ -13,7 +13,8 @@ const cleanLink = (value) => String(value ?? "")
   .split("#", 1)[0]
   .replace(/^Vault\//i, "")
   .replace(/\.md$/i, "")
-  .replace(/^\/+/, "");
+  .replace(/^\/+/, "")
+  .toLowerCase();
 
 const coordinatePercent = (value) => {
   const number = Number(value);
@@ -53,13 +54,17 @@ const chip = (label, value, target) => {
   item.addEventListener("click", () => app.workspace.openLinkText(target, sourcePath));
 };
 
+chip("Kind", frontmatter.location_kind);
 chip("Era", frontmatter.era);
 for (const faction of Array.isArray(frontmatter.faction) ? frontmatter.faction : [frontmatter.faction].filter(Boolean)) {
   chip("Faction", faction, cleanLink(faction));
 }
 if (frontmatter.region) chip("Parent", frontmatter.region, cleanLink(frontmatter.region));
 
-if (!mapId) return;
+if (!mapId) {
+  root.addClass("has-no-map");
+  return;
+}
 
 const map = root.createDiv({ cls: "vc-article-map-card" });
 const mapHeader = map.createDiv({ cls: "vc-article-map-header" });
@@ -73,10 +78,18 @@ if (mapRecord) {
 }
 
 const preview = map.createDiv({ cls: "vc-article-map-preview" });
+preview.setAttribute("role", "img");
+preview.setAttribute("aria-label", `Atlas preview for ${String(mapRecord?.frontmatter?.title ?? mapId)}`);
 let markerX = coordinatePercent(frontmatter.map?.x);
 let markerY = coordinatePercent(frontmatter.map?.y);
 
 if (mapRecord) {
+  const width = Number(mapRecord.frontmatter.width);
+  const height = Number(mapRecord.frontmatter.height);
+  if (Number.isFinite(width) && width > 0 && Number.isFinite(height) && height > 0) {
+    preview.style.aspectRatio = `${width} / ${height}`;
+  }
+
   const publicImage = String(mapRecord.frontmatter.image ?? "").trim();
   const imagePath = publicImage.replace(/^\/assets\/maps\//i, "Assets/Maps/");
   const imageFile = imagePath ? app.vault.getAbstractFileByPath(imagePath) : null;
