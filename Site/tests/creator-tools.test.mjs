@@ -90,6 +90,8 @@ test('creator tools provide one opt-in next action for ordinary notes', () => {
   assert.match(creatorPlugin, /contextLinks\(this\.file\)/);
   assert.match(creatorPlugin, /backlinksFor\(this\.file\)/);
   assert.match(creatorPlugin, /calendarDateLabel\(frontmatter\.calendarDate\)/);
+  assert.match(creatorPlugin, /normaliseLinkTarget\(target\.path\)/);
+  assert.match(creatorPlugin, /data\.related = \[\.\.\.current, link\]/);
   assert.doesNotMatch(creatorPlugin, /note context.*progress|completion percentage/i);
 });
 
@@ -118,14 +120,19 @@ test('connected context derives relationships and backlinks from canonical note 
     },
   };
 
+  const links = plugin.contextLinks(target);
   assert.deepEqual(
-    plugin.contextLinks(target).map(({ kind, label }) => [kind, label]),
+    links.map(({ kind, label }) => [kind, label]),
     [
       ['Region', 'Northreach'],
       ['Faction', 'Citadel Council'],
       ['Related', 'Other'],
       ['rivals', 'Rival League'],
     ],
+  );
+  assert.deepEqual(
+    links.find(({ kind }) => kind === 'Related'),
+    { kind: 'Related', target: 'Lore/Other.md', label: 'Other' },
   );
   assert.deepEqual(
     plugin.backlinksFor(target).map(({ label, count }) => [label, count]),
@@ -199,11 +206,14 @@ test('multi-era imports remain in contextual review until their structural split
   assert.match(creatorPlugin, /Open era-edition workflow guide/);
 });
 
-test('connected context sidebar uses editorial module cards', () => {
-  assert.match(creatorStyles, /\.vc-note-context-module\s*\{/);
-  assert.match(creatorStyles, /border-left:\s*2px solid color-mix/);
-  assert.match(creatorStyles, /\.vc-note-context-next\s*\{/);
-  assert.match(creatorStyles, /--vc-context-card/);
+test('connected context sidebar uses spacing and tonal modules without accent bars', () => {
+  const moduleBlock = creatorStyles.match(/\.vc-note-context-module\s*\{([^}]*)\}/s)?.[1] ?? '';
+  const nextBlock = creatorStyles.match(/\.vc-note-context-next\s*\{([^}]*)\}/s)?.[1] ?? '';
+
+  assert.match(moduleBlock, /background:\s*var\(--vc-context-card\)/);
+  assert.match(nextBlock, /background:\s*var\(--vc-context-card\)/);
+  assert.doesNotMatch(moduleBlock, /border(?:-left)?:/);
+  assert.doesNotMatch(nextBlock, /border(?:-left)?:/);
 });
 
 test('import review pane follows creator visual grammar', () => {
