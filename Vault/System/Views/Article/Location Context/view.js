@@ -72,9 +72,25 @@ const mapHeading = mapHeader.createDiv();
 mapHeading.createDiv({ text: "ATLAS", cls: "vc-article-context-kicker" });
 mapHeading.createEl("strong", { text: mapRecord ? String(mapRecord.frontmatter.title ?? mapId) : mapId });
 
+const isCanonical = sourcePath.startsWith("Lore/");
 if (mapRecord) {
-  const open = mapHeader.createEl("button", { text: "Open map", cls: "vc-article-map-open" });
-  open.addEventListener("click", () => app.workspace.openLinkText(mapRecord.file.path, sourcePath));
+  const open = mapHeader.createEl("button", {
+    text: isCanonical ? "Place on map" : "Open interactive map",
+    cls: "vc-article-map-open",
+  });
+  open.addEventListener("click", async () => {
+    const mapLeaf = app.workspace.getLeaf("split", "vertical");
+    await mapLeaf.setViewState({
+      type: "markdown",
+      state: {
+        file: mapRecord.file.path,
+        mode: "preview",
+        source: false,
+      },
+      active: true,
+    });
+    app.workspace.setActiveLeaf(mapLeaf, { focus: true });
+  });
 }
 
 const preview = map.createDiv({ cls: "vc-article-map-preview" });
@@ -127,6 +143,11 @@ if (markerX != null && markerY != null) {
 
 const status = preview.createDiv({ cls: "vc-article-map-status" });
 if (!mapRecord) status.setText(`Map "${mapId}" is linked but its map note is unavailable.`);
-else if (markerX == null || markerY == null) status.setText("Map linked. Placement is still pending.");
-else if (isRegion) status.setText("Region centre shown. A true area highlight requires an authored Atlas boundary.");
+else if (markerX == null || markerY == null) {
+  status.setText(
+    isCanonical
+      ? "Map linked. Open it and Shift-click to place this location."
+      : "Map linked. Promote this draft to Lore before saving a marker.",
+  );
+} else if (isRegion) status.setText("Region centre shown. A true area highlight requires an authored Atlas boundary.");
 else status.setText("Placed on the linked Atlas.");
