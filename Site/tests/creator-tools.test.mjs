@@ -36,6 +36,9 @@ test('Creator Tools hands canonical locations to native Atlas marker placement',
   assert.match(creatorPlugin, /frontmatter\.type.*=== 'map'/);
   assert.match(creatorPlugin, /frontmatter\.mapId/);
   assert.match(creatorPlugin, /getLeaf\('split', 'vertical'\)/);
+  assert.match(creatorPlugin, /mapLeaf\.setViewState/);
+  assert.match(creatorPlugin, /mode: 'preview'/);
+  assert.match(creatorPlugin, /source: false/);
   assert.match(creatorPlugin, /processFrontMatter\(locationFile/);
   assert.match(creatorPlugin, /data\.map = \{ \.\.\.existingMap, id: mapId \}/);
   assert.match(creatorPlugin, /Shift-click the position or use Add marker here/);
