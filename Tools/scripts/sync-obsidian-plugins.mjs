@@ -14,6 +14,10 @@ const plugins = [
     files: [['src/main.js', 'main.js'], ['manifest.json', 'manifest.json'], ['styles.css', 'styles.css']],
   },
   {
+    id: 'viscerium-unit-cards',
+    files: [['src/main.js', 'main.js'], ['manifest.json', 'manifest.json'], ['styles.css', 'styles.css']],
+  },
+  {
     id: 'viscerium-image-tools',
     files: [['src/main.js', 'main.js'], ['manifest.json', 'manifest.json']],
   },
