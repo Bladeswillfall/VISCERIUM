@@ -118,4 +118,29 @@ test.describe('desktop sidebar editorial hierarchy', () => {
     const populatedIconOpacity = await populatedIcon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
     expect(emptyIconOpacity).toBeLessThan(populatedIconOpacity);
   });
+
+  test('retains the subdued hierarchy and touch target on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
+    await page.locator('.sidebar > starlight-menu-button button').click();
+
+    const era = page.locator('[data-era-sidebar-branch="CITADEL"]');
+    const populated = era.locator('[data-sidebar-row="Events"] > details > summary .large');
+    const quietRow = era.locator('[data-sidebar-row="Professions"] > .empty-group');
+    const quiet = quietRow.locator('.large');
+
+    await expect(populated).toBeVisible();
+    await expect(quiet).toBeVisible();
+
+    const populatedWeight = await populated.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    const quietWeight = await quiet.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    const populatedColor = await populated.evaluate((element) => getComputedStyle(element).color);
+    const quietColor = await quiet.evaluate((element) => getComputedStyle(element).color);
+    const rowHeight = await quietRow.evaluate((element) => element.getBoundingClientRect().height);
+
+    expect(quietWeight).toBe(400);
+    expect(quietWeight).toBeLessThan(populatedWeight);
+    expect(quietColor).not.toBe(populatedColor);
+    expect(rowHeight).toBeGreaterThanOrEqual(44);
+  });
 });
