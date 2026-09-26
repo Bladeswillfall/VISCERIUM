@@ -93,6 +93,7 @@ test.describe('desktop sidebar editorial hierarchy', () => {
 
   test('visually de-emphasises folders that have no published articles', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'Show sidebar' }).click();
 
     const era = page.locator('[data-era-sidebar-branch="CITADEL"]');
     const populated = era.locator('[data-sidebar-row="Events"] > details > summary .large');
