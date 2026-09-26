@@ -192,6 +192,21 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
     cursor: pointer;
   }
 
+  /* A navigable Overview is still a folder-level entry, not a leaf article. */
+  .sidebar-content .codex-sidebar-layout .top-level > li.is-overview-only > .overview-only-link {
+    font-size: var(--codex-sidebar-font-root);
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch].is-overview-only > .overview-only-link {
+    font-family: var(--vc-font-display);
+    font-size: var(--codex-sidebar-font-era);
+    font-synthesis-weight: none;
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch].is-overview-only > .overview-only-link .large {
+    font-size: inherit !important;
+  }
+
   .codex-sidebar-layout .sidebar-list a:hover,
   .codex-sidebar-layout .sidebar-list a:focus-visible,
   .codex-sidebar-layout .sidebar-list summary:hover,
