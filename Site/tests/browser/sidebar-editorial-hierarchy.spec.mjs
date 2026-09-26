@@ -90,4 +90,57 @@ test.describe('desktop sidebar editorial hierarchy', () => {
     expect(geometry.categoryIndent).toBeCloseTo(14, 1);
     expect(geometry.leafIndent).toBeCloseTo(14, 1);
   });
+
+  test('visually de-emphasises folders that have no published articles', async ({ page }) => {
+    await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'Show sidebar' }).click();
+
+    const era = page.locator('[data-era-sidebar-branch="CITADEL"]');
+    const populated = era.locator('[data-sidebar-row="Events"] > details > summary .large');
+    const empty = era.locator('[data-sidebar-row="Professions"] > .empty-group .large');
+
+    await expect(populated).toBeVisible();
+    await expect(empty).toBeVisible();
+    await expect(era.locator('[data-sidebar-row="Professions"] > .empty-group')).toHaveAttribute('aria-disabled', 'true');
+
+    const populatedWeight = await populated.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    const emptyWeight = await empty.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    expect(emptyWeight).toBe(400);
+    expect(emptyWeight).toBeLessThan(populatedWeight);
+
+    const populatedColor = await populated.evaluate((element) => getComputedStyle(element).color);
+    const emptyColor = await empty.evaluate((element) => getComputedStyle(element).color);
+    expect(emptyColor).not.toBe(populatedColor);
+
+    const emptyIcon = era.locator('[data-sidebar-row="Professions"] > .empty-group .codex-icon');
+    const populatedIcon = era.locator('[data-sidebar-row="Events"] > details > summary .codex-icon');
+    const emptyIconOpacity = await emptyIcon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
+    const populatedIconOpacity = await populatedIcon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
+    expect(emptyIconOpacity).toBeLessThan(populatedIconOpacity);
+  });
+
+  test('retains the subdued hierarchy and touch target on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
+    await page.locator('.sidebar > starlight-menu-button button').click();
+
+    const era = page.locator('[data-era-sidebar-branch="CITADEL"]');
+    const populated = era.locator('[data-sidebar-row="Events"] > details > summary .large');
+    const quietRow = era.locator('[data-sidebar-row="Professions"] > .empty-group');
+    const quiet = quietRow.locator('.large');
+
+    await expect(populated).toBeVisible();
+    await expect(quiet).toBeVisible();
+
+    const populatedWeight = await populated.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    const quietWeight = await quiet.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    const populatedColor = await populated.evaluate((element) => getComputedStyle(element).color);
+    const quietColor = await quiet.evaluate((element) => getComputedStyle(element).color);
+    const rowHeight = await quietRow.evaluate((element) => element.getBoundingClientRect().height);
+
+    expect(quietWeight).toBe(400);
+    expect(quietWeight).toBeLessThan(populatedWeight);
+    expect(quietColor).not.toBe(populatedColor);
+    expect(rowHeight).toBeGreaterThanOrEqual(44);
+  });
 });

@@ -2,6 +2,7 @@
 import { Badge } from '@astrojs/starlight/components';
 import { sidebarIconForLabel } from '../config/sidebar-taxonomy.mjs';
 import { HISTORICAL_ERAS } from '../lib/era-context.mjs';
+import { sidebarGroupContent } from '../lib/sidebar-group-content.mjs';
 import { parseIconLabel, parseIconSpec } from '../lib/icon-spec.mjs';
 import LocalIcon from './LocalIcon.astro';
 
@@ -12,9 +13,7 @@ interface Props {
 
 const { sublist, depth = 0 } = Astro.props;
 const { t } = Astro.locals;
-const isOverviewLink = (entry: any) => entry?.type === 'link'
-  && parseIconLabel(entry.label ?? '').label.trim() === 'Overview';
-const visibleSublist = sublist.filter((entry) => !isOverviewLink(entry));
+const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
 ---
 
 <ul class:list={['sidebar-list', { 'top-level': depth === 0 }]} data-sidebar-depth={depth}>
@@ -34,14 +33,21 @@ const visibleSublist = sublist.filter((entry) => !isOverviewLink(entry));
       ? HISTORICAL_ERAS.find((era) => era === label.toUpperCase())
       : undefined;
     const branchEra = entry.sidebarEra ?? labelledEra;
-    const visibleEntries = entry.type === 'group'
-      ? (entry.entries ?? []).filter((item: any) => !isOverviewLink(item))
-      : [];
-    const emptyGroup = entry.type === 'group' && visibleEntries.length === 0;
+    const { visibleEntries, overviewOnlyLink } = sidebarGroupContent(
+      entry.type === 'group' ? entry.entries ?? [] : [],
+    );
+    const emptyGroup = entry.type === 'group'
+      && visibleEntries.length === 0
+      && !overviewOnlyLink;
 
     return (
       <li
-        class:list={{ active: entry.type === 'link' && entry.isCurrent, 'has-icon': icon, 'is-empty-group': emptyGroup }}
+        class:list={{
+          active: (entry.type === 'link' && entry.isCurrent) || Boolean(overviewOnlyLink?.isCurrent),
+          'has-icon': icon,
+          'is-empty-group': emptyGroup,
+          'is-overview-only': Boolean(overviewOnlyLink),
+        }}
         data-sidebar-row={label}
         data-era-sidebar-branch={branchEra}
         hidden={entry.sidebarHidden}
@@ -56,6 +62,18 @@ const visibleSublist = sublist.filter((entry) => !isOverviewLink(entry));
             {icon && <LocalIcon name={icon} />}
             <span>{label}</span>
             {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
+          </a>
+        ) : overviewOnlyLink ? (
+          <a
+            class="empty-group overview-only-link"
+            href={overviewOnlyLink.href}
+            aria-current={overviewOnlyLink.isCurrent ? 'page' : undefined}
+          >
+            <span class="group-label">
+              {icon && <LocalIcon name={icon} />}
+              <span class="large">{label}</span>
+              {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
+            </span>
           </a>
         ) : emptyGroup ? (
           <div
@@ -170,6 +188,25 @@ const visibleSublist = sublist.filter((entry) => !isOverviewLink(entry));
     opacity: .84;
   }
 
+  .codex-sidebar-layout .sidebar-list .overview-only-link {
+    cursor: pointer;
+  }
+
+  /* A navigable Overview is still a folder-level entry, not a leaf article. */
+  .sidebar-content .codex-sidebar-layout .top-level > li.is-overview-only > .overview-only-link {
+    font-size: var(--codex-sidebar-font-root);
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch].is-overview-only > .overview-only-link {
+    font-family: var(--vc-font-display);
+    font-size: var(--codex-sidebar-font-era);
+    font-synthesis-weight: none;
+  }
+
+  .sidebar-content .codex-sidebar-layout [data-era-sidebar-branch].is-overview-only > .overview-only-link .large {
+    font-size: inherit !important;
+  }
+
   .codex-sidebar-layout .sidebar-list a:hover,
   .codex-sidebar-layout .sidebar-list a:focus-visible,
   .codex-sidebar-layout .sidebar-list summary:hover,
@@ -196,6 +233,28 @@ const visibleSublist = sublist.filter((entry) => !isOverviewLink(entry));
     font-size: var(--codex-sidebar-font-folder) !important;
     font-weight: 620;
     letter-spacing: 0;
+  }
+
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group {
+    color: var(--codex-nav-muted);
+    opacity: 1;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .large {
+    font-weight: 400 !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .codex-icon {
+    opacity: .65 !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link:is(:hover, :focus-visible) {
+    color: var(--sl-color-white);
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link[aria-current='page'] {
+    color: var(--sl-color-accent-high);
   }
 
   .codex-sidebar-layout .sidebar-list .caret {
@@ -372,6 +431,20 @@ const visibleSublist = sublist.filter((entry) => !isOverviewLink(entry));
         width: 1.18rem;
         height: 1.18rem;
       }
+    }
+
+    /* The shared label colour is important in this layer; match it here so
+       subdued folders stay muted rather than inheriting the bright nav ink. */
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .large {
+      color: var(--codex-nav-muted) !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link:is(:hover, :focus-visible) .large {
+      color: var(--sl-color-white) !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link[aria-current='page'] .large {
+      color: var(--sl-color-accent-high) !important;
     }
   }
 </style>
