@@ -106,5 +106,9 @@ test.describe('desktop sidebar editorial hierarchy', () => {
     const emptyWeight = await empty.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
     expect(emptyWeight).toBe(400);
     expect(emptyWeight).toBeLessThan(populatedWeight);
+
+    const populatedColor = await populated.evaluate((element) => getComputedStyle(element).color);
+    const emptyColor = await empty.evaluate((element) => getComputedStyle(element).color);
+    expect(emptyColor).not.toBe(populatedColor);
   });
 });
