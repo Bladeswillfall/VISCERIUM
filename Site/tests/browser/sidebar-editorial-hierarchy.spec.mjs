@@ -110,5 +110,11 @@ test.describe('desktop sidebar editorial hierarchy', () => {
     const populatedColor = await populated.evaluate((element) => getComputedStyle(element).color);
     const emptyColor = await empty.evaluate((element) => getComputedStyle(element).color);
     expect(emptyColor).not.toBe(populatedColor);
+
+    const emptyIcon = era.locator('[data-sidebar-row="Professions"] > .empty-group .codex-icon');
+    const populatedIcon = era.locator('[data-sidebar-row="Events"] > details > summary .codex-icon');
+    const emptyIconOpacity = await emptyIcon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
+    const populatedIconOpacity = await populatedIcon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity));
+    expect(emptyIconOpacity).toBeLessThan(populatedIconOpacity);
   });
 });
