@@ -90,4 +90,21 @@ test.describe('desktop sidebar editorial hierarchy', () => {
     expect(geometry.categoryIndent).toBeCloseTo(14, 1);
     expect(geometry.leafIndent).toBeCloseTo(14, 1);
   });
+
+  test('visually de-emphasises folders that have no published articles', async ({ page }) => {
+    await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
+
+    const era = page.locator('[data-era-sidebar-branch="CITADEL"]');
+    const populated = era.locator('[data-sidebar-row="Events"] > details > summary .large');
+    const empty = era.locator('[data-sidebar-row="Professions"] > .empty-group .large');
+
+    await expect(populated).toBeVisible();
+    await expect(empty).toBeVisible();
+    await expect(era.locator('[data-sidebar-row="Professions"] > .empty-group')).toHaveAttribute('aria-disabled', 'true');
+
+    const populatedWeight = await populated.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    const emptyWeight = await empty.evaluate((element) => Number.parseInt(getComputedStyle(element).fontWeight, 10));
+    expect(emptyWeight).toBe(400);
+    expect(emptyWeight).toBeLessThan(populatedWeight);
+  });
 });
