@@ -220,6 +220,28 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
     letter-spacing: 0;
   }
 
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group {
+    color: var(--codex-nav-muted);
+    opacity: 1;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .large {
+    font-weight: 400 !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .codex-icon {
+    opacity: .65 !important;
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link:is(:hover, :focus-visible) {
+    color: var(--sl-color-white);
+  }
+
+  .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link[aria-current='page'] {
+    color: var(--sl-color-accent-high);
+  }
+
   .codex-sidebar-layout .sidebar-list .caret {
     flex-shrink: 0;
     margin-inline-start: auto;
@@ -394,27 +416,6 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
         width: 1.18rem;
         height: 1.18rem;
       }
-    }
-
-    .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group {
-      color: var(--codex-nav-muted);
-      opacity: 1;
-    }
-
-    .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .large {
-      font-weight: 400 !important;
-    }
-
-    .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .codex-icon {
-      opacity: .65 !important;
-    }
-
-    .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link:is(:hover, :focus-visible) {
-      color: var(--sl-color-white);
-    }
-
-    .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link[aria-current='page'] {
-      color: var(--sl-color-accent-high);
     }
   }
 </style>
