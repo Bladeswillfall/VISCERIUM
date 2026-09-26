@@ -432,5 +432,19 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
         height: 1.18rem;
       }
     }
+
+    /* The shared label colour is important in this layer; match it here so
+       subdued folders stay muted rather than inheriting the bright nav ink. */
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li:is(.is-empty-group, .is-overview-only) > .empty-group .large {
+      color: var(--codex-nav-muted) !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link:is(:hover, :focus-visible) .large {
+      color: var(--sl-color-white) !important;
+    }
+
+    .sidebar-content .codex-sidebar-layout .sidebar-list > li.is-overview-only > .overview-only-link[aria-current='page'] .large {
+      color: var(--sl-color-accent-high) !important;
+    }
   }
 </style>
