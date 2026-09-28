@@ -26,6 +26,7 @@ sidebar:
 title: Krass Dominion
 description: The Krass Dominion is a land where the air itself conspires against life.
 image: Krass-Dominion-flag.webp
+headerImage: Krass-Dominion-flag.webp
 imageTitle: Krass Dominion flag
 alt: A tapered cream banner with black lattice, a dark red stripe and green bands at the hoist.
 updated:
