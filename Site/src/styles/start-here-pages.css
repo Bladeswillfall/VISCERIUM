@@ -519,9 +519,15 @@
     max-width: none;
     object-fit: cover;
     mask-image: linear-gradient(to bottom,
-      transparent 0%, rgb(0 0 0 / 10%) 2%, rgb(0 0 0 / 30%) 4%, rgb(0 0 0 / 65%) 6%,
-      rgb(0 0 0 / 90%) 8%, #000 11%, #000 72%, rgb(0 0 0 / 95%) 77%,
-      rgb(0 0 0 / 75%) 82%, rgb(0 0 0 / 50%) 88%, rgb(0 0 0 / 20%) 94%, transparent 100%);
+      transparent 0%, color-mix(in srgb, var(--codex-palette-oled) 10%, transparent) 2%,
+      color-mix(in srgb, var(--codex-palette-oled) 30%, transparent) 4%,
+      color-mix(in srgb, var(--codex-palette-oled) 65%, transparent) 6%,
+      color-mix(in srgb, var(--codex-palette-oled) 90%, transparent) 8%,
+      var(--codex-palette-oled) 11%, var(--codex-palette-oled) 72%,
+      color-mix(in srgb, var(--codex-palette-oled) 95%, transparent) 77%,
+      color-mix(in srgb, var(--codex-palette-oled) 75%, transparent) 82%,
+      color-mix(in srgb, var(--codex-palette-oled) 50%, transparent) 88%,
+      color-mix(in srgb, var(--codex-palette-oled) 20%, transparent) 94%, transparent 100%);
   }
   .start-era-band__copy { width: min(100%, 35rem); margin-left: auto; background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--start-void) 88%, transparent) 32%, var(--start-void)); }
   .start-place__image { inset-inline-start: 18%; opacity: .52; }
