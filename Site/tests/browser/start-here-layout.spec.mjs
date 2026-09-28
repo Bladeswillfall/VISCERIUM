@@ -125,6 +125,7 @@ test('narrow era panels display seamless raster artwork without hiding the copy'
           imageHeight: imageElement.getBoundingClientRect().height,
           bandHeight: element.getBoundingClientRect().height,
           fit: imageStyle.objectFit,
+          marginTop: imageStyle.marginTop,
           mask: imageStyle.maskImage,
           labelTopGap: labelElement.getBoundingClientRect().top - element.getBoundingClientRect().top,
           scrim: getComputedStyle(copyElement).backgroundImage,
@@ -133,6 +134,7 @@ test('narrow era panels display seamless raster artwork without hiding the copy'
       expect(almostEqual(state.imageWidth, state.width)).toBe(true);
       expect(almostEqual(state.imageHeight, state.bandHeight)).toBe(true);
       expect(state.fit).toBe('cover');
+      expect(state.marginTop).toBe('0px');
       expect(state.mask).toContain('linear-gradient');
       expect(state.labelTopGap).toBeGreaterThan(150);
       expect(state.scrim).toContain('linear-gradient');
