@@ -16,6 +16,17 @@ const imageExtensions = new Set([
 ]);
 const detectableImageExtensions = new Set(['avif', 'bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']);
 const allowedImageExtensions = new Set(['svg', 'webp']);
+const allowedBrandRasters = new Set([
+  'public/favicons/favicon-16x16.png',
+  'public/favicons/favicon-32x32.png',
+  'public/favicons/favicon-48x48.png',
+  'public/favicons/favicon-96x96.png',
+  'public/favicons/viscerium-favicon-96.png',
+  'public/favicons/apple-touch-icon.png',
+  'public/favicons/android-chrome-192x192.png',
+  'public/favicons/android-chrome-512x512.png',
+  'public/social/og-image-1200x630.png',
+]);
 const unsafeSvgPatterns = [
   { label: 'script element', pattern: /<\s*script\b/i },
   { label: 'foreignObject element', pattern: /<\s*foreignObject\b/i },
@@ -158,7 +169,7 @@ async function validateImageRoots(roots, { verifyContents = true, checkSvgSafety
 
   for (const file of files) {
     const extension = extensionOf(file);
-    if (!allowedImageExtensions.has(extension)) {
+    if (!allowedImageExtensions.has(extension) && !allowedBrandRasters.has(relative(file))) {
       console.error(`Raster assets must be WebP; SVG is allowed for vector assets: ${relative(file)}`);
       failed = true;
     }
