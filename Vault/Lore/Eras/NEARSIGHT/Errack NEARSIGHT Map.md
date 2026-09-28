@@ -8,6 +8,7 @@ mapId: errack-nearsight
 image: /assets/maps/Errack-NEARSIGHT.webp
 mapMarkers: Assets/Maps/Errack-NEARSIGHT.canonical.markers.json
 maxZoom: 3
+community_id: a98d5ad2-7f61-4c7f-a8b1-82204a96f41e
 tags:
   - NEARSIGHT
   - errack

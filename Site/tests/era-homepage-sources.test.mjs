@@ -70,6 +70,7 @@ for (const [era, id] of [['SMOG', 'smog'], ['NEARSIGHT', 'nearsight']]) {
     ));
 
     assert.equal(mapSource.data.status, 'published');
+    assert.match(mapSource.data.community_id, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
     assert.equal(mapSource.data.type, 'map');
     assert.equal(mapSource.data.era, era);
     assert.equal(mapSource.data.mapId, `errack-${id}`);
