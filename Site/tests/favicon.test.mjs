@@ -93,6 +93,14 @@ test('all favicon aliases, metadata, and manifest point at the new transparent a
   for (const asset of ['favicon.ico', 'favicon.svg', 'favicon-16x16.png', 'favicon-32x32.png', 'favicon-48x48.png', 'favicon-96x96.png', 'apple-touch-icon.png', 'safari-pinned-tab.svg', 'site.webmanifest']) {
     assert.ok(config.includes(asset), 'Head config missing ' + asset);
   }
+  const social = await readFile('public/social/og-image-1200x630.png');
+  assert.equal(social.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', 'Social preview must be PNG');
+  assert.equal(social.readUInt32BE(16), 1200);
+  assert.equal(social.readUInt32BE(20), 630);
+  assert.match(config, /property: 'og:image'/);
+  assert.match(config, /name: 'twitter:card'/);
+  assert.match(config, /summary_large_image/);
+  assert.match(config, /social\/og-image-1200x630\.png/);
   const icons = JSON.parse(manifest).icons;
   for (const size of [192, 512]) {
     const icon = icons.find((entry) => entry.sizes === size + 'x' + size);

@@ -111,6 +111,17 @@ const faviconHead = [
   { tag: 'meta', attrs: { name: 'theme-color', content: '#000000' } },
 ];
 
+const socialImageUrl = new URL('/social/og-image-1200x630.png', siteConfig.site).href;
+const socialHead = [
+  { tag: 'meta', attrs: { property: 'og:image', content: socialImageUrl } },
+  { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+  { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+  { tag: 'meta', attrs: { property: 'og:image:alt', content: 'VISCERIUM Codex: one timeline, four eras, infinite stories.' } },
+  { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+  { tag: 'meta', attrs: { name: 'twitter:image', content: socialImageUrl } },
+  { tag: 'meta', attrs: { name: 'twitter:image:alt', content: 'VISCERIUM Codex: one timeline, four eras, infinite stories.' } },
+];
+
 const cloudflareAnalyticsToken = siteConfig.analytics?.cloudflare?.token ?? '';
 const cloudflareAnalyticsHead = siteConfig.analytics?.cloudflare?.enabled
   ? [
@@ -238,7 +249,7 @@ export default defineConfig({
         starlightScrollToTop(),
       ],
       sidebar,
-      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
+      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...socialHead, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
       social: githubSocial,
     }),
     sitemap({
