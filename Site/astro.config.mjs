@@ -98,48 +98,17 @@ const webmentionHead = siteConfig.webmentions?.enabled
     ].filter(Boolean)
   : [];
 
-const faviconPath = '/favicons/viscerium-favicon.svg';
-
 const faviconHead = [
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'icon',
-      type: 'image/png',
-      sizes: '96x96',
-      href: '/favicons/viscerium-favicon-96.png',
-    },
-  },
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'icon',
-      type: 'image/svg+xml',
-      href: faviconPath,
-    },
-  },
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'mask-icon',
-      href: '/favicons/viscerium-mask.svg',
-      color: '#000000',
-    },
-  },
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'manifest',
-      href: '/site.webmanifest',
-    },
-  },
-  {
-    tag: 'meta',
-    attrs: {
-      name: 'theme-color',
-      content: '#000000',
-    },
-  },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico', sizes: '16x16 32x32 48x48' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicons/favicon-16x16.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicons/favicon-32x32.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/favicons/favicon-48x48.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '96x96', href: '/favicons/favicon-96x96.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' } },
+  { tag: 'link', attrs: { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicons/apple-touch-icon.png' } },
+  { tag: 'link', attrs: { rel: 'mask-icon', href: '/favicons/safari-pinned-tab.svg', color: '#c8bfa8' } },
+  { tag: 'link', attrs: { rel: 'manifest', href: '/site.webmanifest' } },
+  { tag: 'meta', attrs: { name: 'theme-color', content: '#000000' } },
 ];
 
 const cloudflareAnalyticsToken = siteConfig.analytics?.cloudflare?.token ?? '';
