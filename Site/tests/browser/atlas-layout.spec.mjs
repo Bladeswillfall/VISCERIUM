@@ -8,6 +8,8 @@ for (const era of ['citadel', 'smog', 'nearsight']) {
 
     const atlas = page.locator('[data-atlas]');
     await expect(atlas).toHaveAttribute('data-atlas-ready', 'true', { timeout: 10_000 });
+    const title = era === 'citadel' ? 'Errack — CITADEL' : `Errack: ${era.toUpperCase()}`;
+    await expect(atlas.getByRole('heading', { level: 1, name: title })).toBeVisible();
     await expect(atlas.locator('.atlas__empty-note')).toContainText('no positioned markers have been published yet');
     await expect(atlas.locator('.atlas__marker-index')).toContainText('No markers have been placed on this map yet.');
 
