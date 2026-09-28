@@ -10,7 +10,7 @@ const vault = fileURLToPath(new URL('../../Vault/', import.meta.url));
 const flags = [
   { article: 'Eras/NEARSIGHT/Events/Formation of ASTU.md', image: 'ASTU-flag.webp', header: true },
   { article: 'Eras/NEARSIGHT/Events/TCSC Bastion Doctrine Adopted.md', image: 'TCSC-flag.webp', header: true },
-  { article: 'Eras/CITADEL/Nations/Krass Dominion/Krass Dominion.md', image: 'Krass-Dominion-flag.webp' },
+  { article: 'Eras/CITADEL/Nations/Krass Dominion/Krass Dominion.md', image: 'Krass-Dominion-flag.webp', header: true },
 ];
 
 for (const { article, image, header } of flags) {
