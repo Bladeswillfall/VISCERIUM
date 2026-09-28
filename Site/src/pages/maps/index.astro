@@ -1,9 +1,17 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import maps from '../../data/maps.json';
+import imageVariants from '../../data/image-variants.json';
 import '../../styles/maps.css';
 
-const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeCompare(String(b.title ?? '')));
+const entries = Object.values(maps).map((map) => {
+  const previews = imageVariants.images?.[map.image]?.webp ?? [];
+  return {
+    ...map,
+    previewSrc: previews[0]?.url ?? map.image,
+    previewSet: previews.map(({ url, width }) => `${url} ${width}w`).join(', '),
+  };
+}).sort((a, b) => String(a.title ?? '').localeCompare(String(b.title ?? '')));
 ---
 
 <StarlightPage frontmatter={{ title: 'Atlas', description: 'Interactive maps of VISCERIUM and the places recorded within them.' }}>
@@ -16,7 +24,7 @@ const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeC
       <div class="codex-map-grid not-content">
         {entries.map((map) => (
           <article class="codex-map-card">
-            {map.image && <img src={map.image} alt="" loading="lazy" />}
+            {map.image && <img src={map.previewSrc} srcset={map.previewSet || undefined} sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw" alt="" loading="lazy" />}
             <div class="codex-map-card__body">
               <h2><a href={`/maps/${encodeURIComponent(map.id)}/`}>{map.title}</a></h2>
               {map.description && <p>{map.description}</p>}
