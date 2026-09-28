@@ -1,4 +1,8 @@
 {
+  "size": {
+    "w": 7680,
+    "h": 3840
+  },
   "layers": [
     {
       "id": "layer-settlements",

@@ -58,7 +58,7 @@ test('CITADEL homepage links to its canonical Atlas map rather than the WorldAnv
 });
 
 for (const [era, id] of [['SMOG', 'smog'], ['NEARSIGHT', 'nearsight']]) {
-  test(`${era} homepage links to its published canonical Atlas map and empty TTRPG sidecar`, () => {
+  test(`${era} homepage links to its published canonical Atlas map and empty TTRPG sidecar`, async () => {
     const eraSource = matter(readFileSync(
       new URL(`../../Vault/Lore/Eras/${era}.md`, import.meta.url), 'utf8',
     ));
@@ -76,11 +76,18 @@ for (const [era, id] of [['SMOG', 'smog'], ['NEARSIGHT', 'nearsight']]) {
     assert.equal(mapSource.data.mapId, `errack-${id}`);
     assert.equal(mapSource.data.image, `/assets/maps/Errack-${era}.webp`);
     assert.equal(mapSource.data.mapMarkers, `Assets/Maps/Errack-${era}.canonical.markers.json`);
+    assert.equal(mapSource.data.width, 7680);
+    assert.equal(mapSource.data.height, 3840);
+    assert.deepEqual(markerSource.size, { w: 7680, h: 3840 });
     assert.equal(eraSource.data.eraPrimer.map.href, `/maps/${mapSource.data.mapId}/`);
     assert.equal(eraSource.data.eraPrimer.map.src, `/assets/maps/variants/Errack-${era}-960.webp`);
     assert.deepEqual(markerSource.markers, []);
     assert.equal(markerSource.activeBase, `Assets/Maps/Errack-${era}.webp`);
     assert.ok(markerSource.bases.includes(markerSource.activeBase));
+    const sharp = (await import('sharp')).default;
+    const raster = await sharp(new URL(`../../Vault/Assets/Maps/Errack-${era}.webp`, import.meta.url)).metadata();
+    assert.equal(raster.width, mapSource.data.width);
+    assert.equal(raster.height, mapSource.data.height);
   });
 }
 

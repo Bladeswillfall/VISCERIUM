@@ -7,6 +7,8 @@ era: SMOG
 mapId: errack-smog
 image: /assets/maps/Errack-SMOG.webp
 mapMarkers: Assets/Maps/Errack-SMOG.canonical.markers.json
+width: 7680
+height: 3840
 maxZoom: 3
 community_id: b16f8f72-3b6d-4c07-a382-a718e31ba921
 tags:
