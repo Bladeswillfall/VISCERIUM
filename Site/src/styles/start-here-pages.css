@@ -245,7 +245,7 @@
   background: repeating-linear-gradient(0deg, transparent 0 .55rem, color-mix(in oklch, var(--era-accent) 10%, transparent) .58rem .63rem);
 }
 
-.start-era-band__image {
+.start-here-primer .start-era-band__image {
   position: relative;
   z-index: 1;
   display: block;
