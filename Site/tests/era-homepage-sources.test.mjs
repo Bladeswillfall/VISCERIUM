@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { validateEraPrimerData } from '../src/lib/era-primer-data.mjs';
 
@@ -85,7 +86,7 @@ for (const [era, id] of [['SMOG', 'smog'], ['NEARSIGHT', 'nearsight']]) {
     assert.equal(markerSource.activeBase, `Assets/Maps/Errack-${era}.webp`);
     assert.ok(markerSource.bases.includes(markerSource.activeBase));
     const sharp = (await import('sharp')).default;
-    const raster = await sharp(new URL(`../../Vault/Assets/Maps/Errack-${era}.webp`, import.meta.url)).metadata();
+    const raster = await sharp(fileURLToPath(new URL(`../../Vault/Assets/Maps/Errack-${era}.webp`, import.meta.url))).metadata();
     assert.equal(raster.width, mapSource.data.width);
     assert.equal(raster.height, mapSource.data.height);
   });
