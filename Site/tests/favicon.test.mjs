@@ -86,10 +86,10 @@ test('all favicon aliases, metadata, and manifest point at the new transparent a
   ]);
   assert.equal(alias, svg, 'Legacy favicon URL should remain equivalent');
   assert.equal(mark, svg, 'Legacy mark should use the same tight SVG geometry');
-  assert.doesNotMatch(svg, /<rect\\b|\\bstroke=/i, 'Logo must have no background or stroke');
-  assert.match(svg, /prefers-color-scheme:\\s*dark/);
-  assert.match(svg, /scale\\(1\\.139156\\)/);
-  assert.doesNotMatch(mask, /<rect\\b|prefers-color-scheme/i);
+  assert.doesNotMatch(svg, /<rect\b|\bstroke=/i, 'Logo must have no background or stroke');
+  assert.match(svg, /prefers-color-scheme:\s*dark/);
+  assert.match(svg, /scale\(1\.139156\)/);
+  assert.doesNotMatch(mask, /<rect\b|prefers-color-scheme/i);
   for (const asset of ['favicon.ico', 'favicon.svg', 'favicon-16x16.png', 'favicon-32x32.png', 'favicon-48x48.png', 'favicon-96x96.png', 'apple-touch-icon.png', 'safari-pinned-tab.svg', 'site.webmanifest']) {
     assert.ok(config.includes(asset), 'Head config missing ' + asset);
   }
