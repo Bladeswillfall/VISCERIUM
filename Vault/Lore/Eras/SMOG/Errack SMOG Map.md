@@ -1,5 +1,5 @@
 ---
-title: Errack: SMOG
+title: 'Errack: SMOG'
 description: The canonical Atlas map of Errack during the SMOG era.
 status: published
 type: map

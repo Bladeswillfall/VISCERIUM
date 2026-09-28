@@ -1,5 +1,5 @@
 ---
-title: Errack: NEARSIGHT
+title: 'Errack: NEARSIGHT'
 description: The canonical Atlas map of Errack during the NEARSIGHT era.
 status: published
 type: map
