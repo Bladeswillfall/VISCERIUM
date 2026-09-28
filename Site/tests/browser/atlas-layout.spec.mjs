@@ -2,18 +2,20 @@ import { test, expect } from '@playwright/test';
 
 test.use({ viewport: { width: 1280, height: 900 } });
 
-test('canonical Atlas reports its real empty marker state', async ({ page }) => {
-  await page.goto('http://127.0.0.1:4321/maps/errack-citadel/', { waitUntil: 'domcontentloaded' });
+for (const era of ['citadel', 'smog', 'nearsight']) {
+  test(`${era.toUpperCase()} Atlas reports its real empty marker state`, async ({ page }) => {
+    await page.goto(`http://127.0.0.1:4321/maps/errack-${era}/`, { waitUntil: 'domcontentloaded' });
 
-  const atlas = page.locator('[data-atlas]');
-  await expect(atlas).toHaveAttribute('data-atlas-ready', 'true', { timeout: 10_000 });
-  await expect(atlas.locator('.atlas__empty-note')).toContainText('no positioned markers have been published yet');
-  await expect(atlas.locator('.atlas__marker-index')).toContainText('No markers have been placed on this map yet.');
+    const atlas = page.locator('[data-atlas]');
+    await expect(atlas).toHaveAttribute('data-atlas-ready', 'true', { timeout: 10_000 });
+    await expect(atlas.locator('.atlas__empty-note')).toContainText('no positioned markers have been published yet');
+    await expect(atlas.locator('.atlas__marker-index')).toContainText('No markers have been placed on this map yet.');
 
-  const search = atlas.locator('.atlas__toolbar').getByRole('searchbox', { name: 'Find a place' });
-  await search.fill('unpublished place');
-  await expect(atlas.locator('.atlas__toolbar .atlas-search__empty')).toHaveText('No matching markers.');
-});
+    const search = atlas.locator('.atlas__toolbar').getByRole('searchbox', { name: 'Find a place' });
+    await search.fill('unpublished place');
+    await expect(atlas.locator('.atlas__toolbar .atlas-search__empty')).toHaveText('No matching markers.');
+  });
+}
 
 test('map routes remove the empty Starlight masthead wrapper', async ({ page }) => {
   await page.goto('http://127.0.0.1:4321/maps/errack-citadel/', { waitUntil: 'domcontentloaded' });
