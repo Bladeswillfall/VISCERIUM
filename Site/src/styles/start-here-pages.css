@@ -245,18 +245,29 @@
   background: repeating-linear-gradient(0deg, transparent 0 .55rem, color-mix(in oklch, var(--era-accent) 10%, transparent) .58rem .63rem);
 }
 
-.start-map-mark {
+.start-here-primer .start-era-band__image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(100%, 78rem);
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
+  opacity: .9;
+  margin-block: 0;
+  border-radius: 0;
+}
+.start-era-band--nearsight .start-era-band__image { opacity: .95; }
+.start-era-band--entropy .start-map-mark {
   position: relative;
   z-index: 1;
   width: min(100%, 78rem);
   height: auto;
-  opacity: .72;
+  opacity: .5;
+  transform: translate(.4rem, -.2rem);
   filter: drop-shadow(0 0 1.4rem color-mix(in oklch, var(--era-accent) 22%, transparent));
 }
-.start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 70%, var(--home-text-fixed)); }
-.start-era-band--citadel .start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 38%, var(--home-text-fixed)); }
-.start-era-band--nearsight .start-map-mark { opacity: .88; }
-.start-era-band--entropy .start-map-mark { opacity: .5; transform: translate(.4rem, -.2rem); }
+.start-era-band--entropy .start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 70%, var(--home-text-fixed)); }
 
 .start-era-band__copy {
   position: relative;
@@ -502,6 +513,25 @@
 @media (max-width: 62rem) {
   .start-era-band { min-height: 30rem; grid-template-columns: 1fr; }
   .start-era-band__map { position: absolute; inset: 0; }
+  /* Override the generic .sl-markdown-content img height:auto rule. */
+  .start-here-primer .start-era-band__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    mask-image: linear-gradient(to bottom,
+      transparent 0%, color-mix(in srgb, var(--codex-palette-oled) 10%, transparent) 2%,
+      color-mix(in srgb, var(--codex-palette-oled) 30%, transparent) 4%,
+      color-mix(in srgb, var(--codex-palette-oled) 65%, transparent) 6%,
+      color-mix(in srgb, var(--codex-palette-oled) 90%, transparent) 8%,
+      var(--codex-palette-oled) 11%, var(--codex-palette-oled) 72%,
+      color-mix(in srgb, var(--codex-palette-oled) 95%, transparent) 77%,
+      color-mix(in srgb, var(--codex-palette-oled) 75%, transparent) 82%,
+      color-mix(in srgb, var(--codex-palette-oled) 50%, transparent) 88%,
+      color-mix(in srgb, var(--codex-palette-oled) 20%, transparent) 94%, transparent 100%);
+  }
   .start-era-band__copy { width: min(100%, 35rem); margin-left: auto; background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--start-void) 88%, transparent) 32%, var(--start-void)); }
   .start-place__image { inset-inline-start: 18%; opacity: .52; }
   .start-place__copy > * { width: min(100%, 42rem); }
@@ -520,7 +550,7 @@
 @media (max-width: 48rem) {
   .start-choice-row,
   .start-choice-row--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .start-era-band__copy { width: 100%; background: linear-gradient(0deg, var(--start-void), color-mix(in oklch, var(--start-void) 75%, transparent)); }
+  .start-era-band__copy { width: 100%; padding-top: clamp(12rem, 30vw, 14rem); background: linear-gradient(to bottom, transparent 0 7rem, color-mix(in oklch, var(--start-void) 92%, transparent) 9rem, var(--start-void) 11rem); }
   .start-place { min-height: auto; }
   .start-place__image { position: relative; inset: auto; height: 22rem; order: 1; }
   .start-place__image::after { background: linear-gradient(0deg, var(--start-bg), transparent 42%); }
@@ -848,13 +878,14 @@ body:has(.start-here-primer) .codex-webmentions {
   background: var(--start-bg);
 }
 
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark {
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__image,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy .start-map-mark {
   opacity: 1;
+}
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy .start-map-mark {
   filter: none;
 }
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark path,
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel .start-map-mark path {
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy .start-map-mark path {
   fill: var(--era-map);
 }
 
@@ -1376,8 +1407,9 @@ body:has(.start-here-primer) .codex-webmentions {
 
 /* Era bands are links too. Give the image, label and call-to-action a coordinated
    response so the entire band feels clickable rather than only its final line. */
-.start-here-primer .start-map-mark {
-  transition: scale .35s cubic-bezier(.2, .72, .22, 1), opacity .25s ease, filter .25s ease;
+.start-here-primer .start-era-band__image,
+.start-here-primer .start-era-band--entropy .start-map-mark {
+  transition: scale .35s cubic-bezier(.2, .72, .22, 1), opacity .25s ease;
 }
 
 .start-here-primer .start-era-band__action {
@@ -1386,6 +1418,8 @@ body:has(.start-here-primer) .codex-webmentions {
   transition: transform .2s ease, letter-spacing .2s ease, color .2s ease;
 }
 
+.start-here-primer .start-era-band:hover .start-era-band__image,
+.start-here-primer .start-era-band:focus-visible .start-era-band__image,
 .start-here-primer .start-era-band:hover .start-map-mark,
 .start-here-primer .start-era-band:focus-visible .start-map-mark {
   scale: 1.025;
@@ -1511,6 +1545,7 @@ body:has(.start-here-primer) .codex-webmentions {
   .start-here-primer .start-scroll-link::after,
   .start-here-primer .start-inline-link > span,
   .start-here-primer .start-scroll-link > span,
+  .start-here-primer .start-era-band__image,
   .start-here-primer .start-map-mark,
   .start-here-primer .start-era-band__action,
   .start-here-primer .start-route-card,
@@ -1570,6 +1605,18 @@ body:has(.start-here-primer) .codex-webmentions {
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__map,
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
   background: var(--codex-bg);
+}
+
+/* Keep the raster visible alongside readable copy when the two columns overlap. */
+@media (max-width: 62rem) {
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
+    background: linear-gradient(90deg, color-mix(in oklch, var(--codex-bg) 96%, transparent), var(--codex-bg) 42%);
+  }
+}
+@media (max-width: 48rem) {
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
+    background: linear-gradient(to bottom, transparent 0 7rem, color-mix(in oklch, var(--codex-bg) 97%, transparent) 9rem, var(--codex-bg) 11rem);
+  }
 }
 
 /* Keep the action colourful on hover instead of collapsing to generic black. */
