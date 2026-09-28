@@ -32,7 +32,7 @@ test('Atlas cards use a flush, readable and consistently aligned composition', a
   await expect(grid).toHaveClass(/not-content/);
 
   const cards = grid.locator(':scope > .codex-map-card');
-  expect(await cards.count()).toBe(1);
+  expect(await cards.count()).toBe(3);
 
   const layouts = await cards.evaluateAll((elements) => elements.map((card) => {
     const image = card.querySelector(':scope > img');
@@ -68,7 +68,7 @@ test('Atlas cards use a flush, readable and consistently aligned composition', a
     };
   }).filter(Boolean));
 
-  expect(layouts).toHaveLength(1);
+  expect(layouts).toHaveLength(3);
 
   for (const layout of layouts) {
     expect(layout.cardMarginTop).toBe(0);
