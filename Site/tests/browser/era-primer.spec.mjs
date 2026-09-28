@@ -188,4 +188,11 @@ test('CITADEL power cards use canonical nation links and linked header artwork',
 
   const krassCard = primer.locator('.era-primer__power').filter({ hasText: 'Krass Dominion' });
   await expect(krassCard.locator('img')).toHaveAttribute('src', '/assets/images/Krass-Dominion-flag.webp');
+  const krassBanner = krassCard.locator('img');
+  await expect(krassBanner).toHaveCSS('object-fit', 'contain');
+  await expect(krassBanner).toHaveCSS('aspect-ratio', 'auto');
+  await expect(krassBanner).toHaveCSS('border-top-left-radius', '0px');
+  await expect(krassBanner).toHaveCSS('filter', 'none');
+  await krassBanner.scrollIntoViewIfNeeded();
+  await expect.poll(() => krassBanner.evaluate((image) => image.naturalWidth)).toBe(2047);
 });
