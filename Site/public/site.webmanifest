@@ -12,7 +12,7 @@
       "src": "/favicons/viscerium-favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/favicons/viscerium-mark.svg",

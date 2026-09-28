@@ -105,14 +105,16 @@ const faviconHead = [
     tag: 'link',
     attrs: {
       rel: 'icon',
-      type: 'image/svg+xml',
-      href: faviconPath,
+      type: 'image/png',
+      sizes: '96x96',
+      href: '/favicons/viscerium-favicon-96.png',
     },
   },
   {
     tag: 'link',
     attrs: {
-      rel: 'shortcut icon',
+      rel: 'icon',
+      type: 'image/svg+xml',
       href: faviconPath,
     },
   },
