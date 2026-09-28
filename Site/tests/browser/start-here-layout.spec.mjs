@@ -87,9 +87,10 @@ test('era sequence alternates map and copy sides on desktop', async ({ page }) =
 test('era bands load responsive maps from the published assets', async ({ page }) => {
   await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
   const images = page.locator('.start-era-band__image');
-  const expected = ['CITADEL', 'SMOG', 'NEARSIGHT', 'NEARSIGHT'];
-  await expect(images).toHaveCount(4);
-  await expect(page.locator('.start-era-band .start-map-mark')).toHaveCount(0);
+  const expected = ['CITADEL', 'SMOG', 'NEARSIGHT'];
+  await expect(images).toHaveCount(3);
+  await expect(page.locator('.start-era-band--entropy .start-map-mark')).toHaveCount(1);
+  await expect(page.locator('.start-era-band--entropy .start-era-band__image')).toHaveCount(0);
 
   for (const [index, era] of expected.entries()) {
     const image = images.nth(index);
@@ -100,6 +101,47 @@ test('era bands load responsive maps from the published assets', async ({ page }
   }
 });
 
+test('narrow era panels display seamless raster artwork without hiding the copy', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
+  for (const theme of ['dark', 'light']) {
+    await page.evaluate((value) => { document.documentElement.dataset.theme = value; }, theme);
+    const bands = page.locator('.start-era-band').filter({ has: page.locator('.start-era-band__image') });
+    await expect(bands).toHaveCount(3);
+
+    for (const index of [0, 1, 2]) {
+      const band = bands.nth(index);
+      const image = band.locator('.start-era-band__image');
+      const copy = band.locator('.start-era-band__copy');
+      await image.scrollIntoViewIfNeeded();
+      const state = await band.evaluate((element) => {
+        const imageElement = element.querySelector('.start-era-band__image');
+        const copyElement = element.querySelector('.start-era-band__copy');
+        const labelElement = element.querySelector('.start-era-band__number');
+        const imageStyle = getComputedStyle(imageElement);
+        return {
+          width: element.getBoundingClientRect().width,
+          imageWidth: imageElement.getBoundingClientRect().width,
+          imageHeight: imageElement.getBoundingClientRect().height,
+          bandHeight: element.getBoundingClientRect().height,
+          fit: imageStyle.objectFit,
+          mask: imageStyle.maskImage,
+          labelTopGap: labelElement.getBoundingClientRect().top - element.getBoundingClientRect().top,
+          scrim: getComputedStyle(copyElement).backgroundImage,
+        };
+      });
+      expect(almostEqual(state.imageWidth, state.width)).toBe(true);
+      expect(almostEqual(state.imageHeight, state.bandHeight)).toBe(true);
+      expect(state.fit).toBe('cover');
+      expect(state.mask).toContain('linear-gradient');
+      expect(state.labelTopGap).toBeGreaterThan(110);
+      expect(state.scrim).toContain('linear-gradient');
+      if (theme === 'light') expect(state.scrim).toContain('transparent');
+      await expect(copy).toBeVisible();
+    }
+  }
+});
+ 
 test('breadcrumb choices keep consistent geometry while era choices carry distinct visual language', async ({ page }) => {
   await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.start-here-primer')).toBeVisible();
