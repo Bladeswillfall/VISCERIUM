@@ -84,6 +84,22 @@ test('era sequence alternates map and copy sides on desktop', async ({ page }) =
   expect(positions[3].mapLeft).toBeGreaterThan(positions[3].copyLeft);
 });
 
+test('era bands load responsive maps from the published assets', async ({ page }) => {
+  await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
+  const images = page.locator('.start-era-band__image');
+  const expected = ['CITADEL', 'SMOG', 'NEARSIGHT', 'NEARSIGHT'];
+  await expect(images).toHaveCount(4);
+  await expect(page.locator('.start-era-band .start-map-mark')).toHaveCount(0);
+
+  for (const [index, era] of expected.entries()) {
+    const image = images.nth(index);
+    await expect(image).toHaveAttribute('src', `/assets/maps/variants/Errack-${era}-960.webp`);
+    await expect(image).toHaveAttribute('srcset', new RegExp(`Errack-${era}-480\\.webp 480w.*Errack-${era}-1600\\.webp 1600w`));
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
+  }
+});
+
 test('breadcrumb choices keep consistent geometry while era choices carry distinct visual language', async ({ page }) => {
   await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.start-here-primer')).toBeVisible();
@@ -136,7 +152,7 @@ test('Start Here suppresses article social and discussion modules', async ({ pag
   await expect(page.locator('giscus-comments')).toBeHidden();
 });
 
-test('light mode uses warm paper with accessible editorial and map contrast', async ({ page }) => {
+test('light mode keeps accessible editorial contrast with raster maps', async ({ page }) => {
   await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
@@ -216,21 +232,17 @@ test('light mode uses warm paper with accessible editorial and map contrast', as
     const choiceBg = getComputedStyle(choice).backgroundColor;
 
     const eraContrast = bands.map((band) => {
-      const path = band.querySelector('.start-map-mark path');
       const paragraph = band.querySelector('.start-era-band__copy p');
       const number = band.querySelector('.start-era-band__number');
       const action = band.querySelector('.start-era-band__action');
       if (
-        !(path instanceof SVGElement)
-        || !(paragraph instanceof HTMLElement)
+        !(paragraph instanceof HTMLElement)
         || !(number instanceof HTMLElement)
         || !(action instanceof HTMLElement)
       ) return null;
 
       const bandBg = getComputedStyle(band).backgroundColor;
       return {
-        fill: getComputedStyle(path).fill,
-        map: contrast(getComputedStyle(path).fill, bandBg),
         paragraph: contrast(getComputedStyle(paragraph).color, bandBg),
         number: contrast(getComputedStyle(number).color, bandBg),
         action: contrast(getComputedStyle(action).color, bandBg),
@@ -267,9 +279,7 @@ test('light mode uses warm paper with accessible editorial and map contrast', as
   if (state.routeEmptyContrast !== null) expect(state.routeEmptyContrast).toBeGreaterThanOrEqual(4.5);
 
   expect(state.eraContrast.every(Boolean)).toBe(true);
-  expect(new Set(state.eraContrast.map(({ fill }) => fill)).size).toBe(4);
   for (const ratios of state.eraContrast) {
-    expect(ratios.map).toBeGreaterThanOrEqual(3);
     expect(ratios.paragraph).toBeGreaterThanOrEqual(4.5);
     expect(ratios.number).toBeGreaterThanOrEqual(4.5);
     expect(ratios.action).toBeGreaterThanOrEqual(4.5);

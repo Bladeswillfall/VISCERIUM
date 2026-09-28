@@ -245,19 +245,18 @@
   background: repeating-linear-gradient(0deg, transparent 0 .55rem, color-mix(in oklch, var(--era-accent) 10%, transparent) .58rem .63rem);
 }
 
-.start-map-mark {
+.start-era-band__image {
   position: relative;
   z-index: 1;
+  display: block;
   width: min(100%, 78rem);
   height: auto;
-  opacity: .72;
-  filter: drop-shadow(0 0 1.4rem color-mix(in oklch, var(--era-accent) 22%, transparent));
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
+  opacity: .9;
 }
-.start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 70%, var(--home-text-fixed)); }
-.start-era-band--citadel .start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 38%, var(--home-text-fixed)); }
-.start-era-band--nearsight .start-map-mark { opacity: .88; }
-.start-era-band--entropy .start-map-mark { opacity: .5; transform: translate(.4rem, -.2rem); }
-
+.start-era-band--nearsight .start-era-band__image { opacity: .95; }
+.start-era-band--entropy .start-era-band__image { opacity: .55; transform: translate(.4rem, -.2rem); }
 .start-era-band__copy {
   position: relative;
   z-index: 2;
@@ -848,14 +847,8 @@ body:has(.start-here-primer) .codex-webmentions {
   background: var(--start-bg);
 }
 
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark {
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__image {
   opacity: 1;
-  filter: none;
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark path,
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel .start-map-mark path {
-  fill: var(--era-map);
 }
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy strong,
@@ -1376,8 +1369,8 @@ body:has(.start-here-primer) .codex-webmentions {
 
 /* Era bands are links too. Give the image, label and call-to-action a coordinated
    response so the entire band feels clickable rather than only its final line. */
-.start-here-primer .start-map-mark {
-  transition: scale .35s cubic-bezier(.2, .72, .22, 1), opacity .25s ease, filter .25s ease;
+.start-here-primer .start-era-band__image {
+  transition: scale .35s cubic-bezier(.2, .72, .22, 1), opacity .25s ease;
 }
 
 .start-here-primer .start-era-band__action {
@@ -1386,8 +1379,8 @@ body:has(.start-here-primer) .codex-webmentions {
   transition: transform .2s ease, letter-spacing .2s ease, color .2s ease;
 }
 
-.start-here-primer .start-era-band:hover .start-map-mark,
-.start-here-primer .start-era-band:focus-visible .start-map-mark {
+.start-here-primer .start-era-band:hover .start-era-band__image,
+.start-here-primer .start-era-band:focus-visible .start-era-band__image {
   scale: 1.025;
   opacity: .94;
 }
@@ -1511,7 +1504,7 @@ body:has(.start-here-primer) .codex-webmentions {
   .start-here-primer .start-scroll-link::after,
   .start-here-primer .start-inline-link > span,
   .start-here-primer .start-scroll-link > span,
-  .start-here-primer .start-map-mark,
+  .start-here-primer .start-era-band__image,
   .start-here-primer .start-era-band__action,
   .start-here-primer .start-route-card,
   .start-here-primer .start-route-card::before,

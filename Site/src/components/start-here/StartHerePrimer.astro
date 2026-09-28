@@ -1,7 +1,6 @@
 ---
 import '../../styles/editorial-shell.css';
 import '../../styles/start-here-pages.css';
-import ErrackMapMark from './ErrackMapMark.astro';
 
 const eraRoutes = {
   citadel: '/eras/citadel/',
@@ -46,7 +45,12 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
 
     <div class="start-era-sequence" aria-label="The four eras of VISCERIUM">
       <a class="start-era-band start-era-band--citadel" href={eraRoutes.citadel}>
-        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__map" aria-hidden="true">
+          <img class="start-era-band__image" src="/assets/maps/variants/Errack-CITADEL-960.webp"
+            srcset="/assets/maps/variants/Errack-CITADEL-480.webp 480w, /assets/maps/variants/Errack-CITADEL-960.webp 960w, /assets/maps/variants/Errack-CITADEL-1600.webp 1600w"
+            sizes="(max-width: 62rem) 100vw, 65vw" width="960" height="480"
+            alt="" loading="lazy" decoding="async" />
+        </div>
         <div class="start-era-band__copy">
           <span class="start-era-band__number">Era I</span>
           <strong>CITADEL</strong>
@@ -56,7 +60,12 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
       </a>
 
       <a class="start-era-band start-era-band--smog" href={eraRoutes.smog}>
-        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__map" aria-hidden="true">
+          <img class="start-era-band__image" src="/assets/maps/variants/Errack-SMOG-960.webp"
+            srcset="/assets/maps/variants/Errack-SMOG-480.webp 480w, /assets/maps/variants/Errack-SMOG-960.webp 960w, /assets/maps/variants/Errack-SMOG-1600.webp 1600w"
+            sizes="(max-width: 62rem) 100vw, 65vw" width="960" height="480"
+            alt="" loading="lazy" decoding="async" />
+        </div>
         <div class="start-era-band__copy">
           <span class="start-era-band__number">Era II</span>
           <strong>SMOG</strong>
@@ -66,7 +75,12 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
       </a>
 
       <a class="start-era-band start-era-band--nearsight" href={eraRoutes.nearsight}>
-        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__map" aria-hidden="true">
+          <img class="start-era-band__image" src="/assets/maps/variants/Errack-NEARSIGHT-960.webp"
+            srcset="/assets/maps/variants/Errack-NEARSIGHT-480.webp 480w, /assets/maps/variants/Errack-NEARSIGHT-960.webp 960w, /assets/maps/variants/Errack-NEARSIGHT-1600.webp 1600w"
+            sizes="(max-width: 62rem) 100vw, 65vw" width="960" height="480"
+            alt="" loading="lazy" decoding="async" />
+        </div>
         <div class="start-era-band__copy">
           <span class="start-era-band__number">Era III</span>
           <strong>NEARSIGHT</strong>
@@ -76,7 +90,13 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
       </a>
 
       <a class="start-era-band start-era-band--entropy" href={eraRoutes.entropy}>
-        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <!-- ENTROPY uses the latest canonical Errack map until ENTROPY artwork exists. -->
+        <div class="start-era-band__map" aria-hidden="true">
+          <img class="start-era-band__image" src="/assets/maps/variants/Errack-NEARSIGHT-960.webp"
+            srcset="/assets/maps/variants/Errack-NEARSIGHT-480.webp 480w, /assets/maps/variants/Errack-NEARSIGHT-960.webp 960w, /assets/maps/variants/Errack-NEARSIGHT-1600.webp 1600w"
+            sizes="(max-width: 62rem) 100vw, 65vw" width="960" height="480"
+            alt="" loading="lazy" decoding="async" />
+        </div>
         <div class="start-era-band__copy">
           <span class="start-era-band__number">Era IV</span>
           <strong>ENTROPY</strong>
