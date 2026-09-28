@@ -57,6 +57,32 @@ test('CITADEL homepage links to its canonical Atlas map rather than the WorldAnv
   assert.deepEqual(markerSource.markers, []);
 });
 
+for (const [era, id] of [['SMOG', 'smog'], ['NEARSIGHT', 'nearsight']]) {
+  test(`${era} homepage links to its published canonical Atlas map and empty TTRPG sidecar`, () => {
+    const eraSource = matter(readFileSync(
+      new URL(`../../Vault/Lore/Eras/${era}.md`, import.meta.url), 'utf8',
+    ));
+    const mapSource = matter(readFileSync(
+      new URL(`../../Vault/Lore/Eras/${era}/Errack ${era} Map.md`, import.meta.url), 'utf8',
+    ));
+    const markerSource = JSON.parse(readFileSync(
+      new URL(`../../Vault/Assets/Maps/Errack-${era}.canonical.markers.json`, import.meta.url), 'utf8',
+    ));
+
+    assert.equal(mapSource.data.status, 'published');
+    assert.equal(mapSource.data.type, 'map');
+    assert.equal(mapSource.data.era, era);
+    assert.equal(mapSource.data.mapId, `errack-${id}`);
+    assert.equal(mapSource.data.image, `/assets/maps/Errack-${era}.webp`);
+    assert.equal(mapSource.data.mapMarkers, `Assets/Maps/Errack-${era}.canonical.markers.json`);
+    assert.equal(eraSource.data.eraPrimer.map.href, `/maps/${mapSource.data.mapId}/`);
+    assert.equal(eraSource.data.eraPrimer.map.src, `/assets/maps/variants/Errack-${era}-960.webp`);
+    assert.deepEqual(markerSource.markers, []);
+    assert.equal(markerSource.activeBase, `Assets/Maps/Errack-${era}.webp`);
+    assert.ok(markerSource.bases.includes(markerSource.activeBase));
+  });
+}
+
 test('CITADEL power cards point at published canonical nation pages', () => {
   const eraSource = matter(readFileSync(
     new URL('../../Vault/Lore/Eras/CITADEL.md', import.meta.url),

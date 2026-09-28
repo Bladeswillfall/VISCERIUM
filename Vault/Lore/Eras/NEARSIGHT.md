@@ -45,12 +45,12 @@ eraPrimer:
     - label: Managed truth
       tip: States, corporations and military blocs compete not only over territory but over which footage, casualty count and explanation becomes public reality.
   map:
-    src: /assets/images/errack.webp
-    alt: Errack shown from orbit as a strategic reference for the networked NEARSIGHT era.
-    href: /maps/
+    src: /assets/maps/variants/Errack-NEARSIGHT-960.webp
+    alt: The map of Errack during the NEARSIGHT era.
+    href: /maps/errack-nearsight/
     eyebrow: 'NEARSIGHT: Errack'
     label: Errack beneath the sensor net
-    action: Explore maps
+    action: Open in Atlas
   worldNow:
     eyebrow: The world right now
     title: The world can be watched from orbit and still remain unseen.
