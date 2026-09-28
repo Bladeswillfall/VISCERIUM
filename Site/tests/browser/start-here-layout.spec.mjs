@@ -138,7 +138,7 @@ test('narrow era panels display seamless raster artwork without hiding the copy'
       expect(state.mask).toContain('linear-gradient');
       expect(state.labelTopGap).toBeGreaterThan(150);
       expect(state.scrim).toContain('linear-gradient');
-      if (theme === 'light') expect(state.scrim).toContain('transparent');
+      if (theme === 'light') expect(state.scrim).toMatch(/transparent|rgba\(0,\s*0,\s*0,\s*0\)/);
       await expect(copy).toBeVisible();
     }
   }
