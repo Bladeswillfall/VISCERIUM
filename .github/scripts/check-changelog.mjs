@@ -47,7 +47,8 @@ export function validate({ before, after, changedFiles, author, body }) {
   const newSections = sections(after);
   const oldDraft = oldSections.get('Unreleased')?.entries ?? new Set();
   const newDraft = newSections.get('Unreleased')?.entries ?? new Set();
-  const newDraftEntry = [...newDraft].some((entry) => !oldDraft.has(entry));
+  const newDraftEntry = [...oldDraft].every((entry) => newDraft.has(entry))
+    && [...newDraft].some((entry) => !oldDraft.has(entry));
   const newRelease = [...newSections].some(([name, section]) =>
     name !== 'Unreleased' && section.dated && !oldSections.has(name) && section.entries.size > 0,
   );
