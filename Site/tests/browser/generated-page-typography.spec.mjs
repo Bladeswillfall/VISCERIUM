@@ -49,7 +49,8 @@ test('release overview keeps generated headings separated and accent-coloured', 
   });
 
   expect(result).not.toBeNull();
-  expect(result.h2Text).toMatch(/\b\d+\.\d+\.\d+\b|\bUnreleased\b/i);
+  expect(result.h2Text).toMatch(/\b\d+\.\d+\.\d+\b/);
+  expect(result.h2Text).not.toMatch(/Unreleased/i);
   expect(result.h3Text.toLowerCase()).toMatch(/added|changed|notes/);
   expect(result.isReleaseContent).toBe(true);
   expect(result.dateTime).toMatch(/^\d{4}-\d{2}-\d{2}T/);
