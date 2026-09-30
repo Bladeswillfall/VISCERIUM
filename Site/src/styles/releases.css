@@ -44,7 +44,7 @@
 
 .vc-release-content > h3[id^="fixed"] + ul {
   --vc-release-label: "FIXED";
-  --vc-release-tone: var(--vc-event-scientific);
+  --vc-release-tone: color-mix(in oklch, var(--vc-event-scientific) 35%, var(--codex-text-body));
 }
 
 .vc-release-content > h3[id^="security"] + ul,
