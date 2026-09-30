@@ -323,6 +323,11 @@ jobs:
           npx --no-install playwright test tests/accessibility/axe.spec.mjs \
             --browser=chromium --reporter=line --workers=1 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
 
+      # The temporary Axe install can replace Sharp and other unlocked packages.
+      # Reset to the build job's locked encoder versions before reusing its tile cache.
+      - name: Restore locked dependencies before contact build
+        run: npm ci --silent --no-audit --no-fund
+
       - name: Stop preview before enabled contact fixture
         run: |
           PREVIEW_PID="$(cat "$RUNNER_TEMP/viscerium-preview.pid")"
