@@ -60,12 +60,10 @@
 }
 
 .vc-release-content > h3 + ul > li {
-  margin: .6rem 0;
-  padding: .8rem 1rem;
-  border: 1px solid var(--sl-color-hairline-light);
-  border-inline-start: 3px solid var(--vc-release-tone);
-  border-radius: .25rem;
-  background: color-mix(in oklch, var(--codex-surface) 55%, transparent);
+  margin: .85rem 0;
+  padding: 0;
+  border: 0;
+  background: none;
   overflow-wrap: anywhere;
 }
 
@@ -82,15 +80,34 @@
   vertical-align: .06em;
 }
 
-/* Category headings retain the accessible text behind the repeated visual labels. */
-@media (max-width: 36rem) {
-  .vc-release-content > h3 + ul > li {
-    padding: .75rem;
-  }
+/* The shared light-theme status tokens are intentionally near-black. Only
+   release labels get a brighter, filled palette; dark mode keeps its outline labels. */
+:root[data-theme='light'] .vc-release-content > h3 + ul {
+  --vc-release-tone: #855700;
+}
+
+:root[data-theme='light'] .vc-release-content > h3[id^="added"] + ul {
+  --vc-release-tone: #087248;
+}
+
+:root[data-theme='light'] .vc-release-content > h3[id^="changed"] + ul {
+  --vc-release-tone: #315c9b;
+}
+
+:root[data-theme='light'] .vc-release-content > h3[id^="fixed"] + ul {
+  --vc-release-tone: #006b89;
+}
+
+:root[data-theme='light'] .vc-release-content > h3[id^="removed"] + ul {
+  --vc-release-tone: #9f354b;
+}
+
+:root[data-theme='light'] .vc-release-content > h3 + ul > li::before {
+  background: var(--vc-release-tone);
+  color: #fff;
 }
 
 @media (forced-colors: active) {
-  .vc-release-content > h3 + ul > li,
   .vc-release-content > h3 + ul > li::before {
     border-color: CanvasText;
   }
