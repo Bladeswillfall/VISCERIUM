@@ -389,11 +389,15 @@ jobs:
           if kill -0 "$PREVIEW_PID" 2>/dev/null; then
             kill "$PREVIEW_PID"
           fi
+          # Containers can leave a stopped preview process as a zombie.
+          # Check the listening service, not the process table.
           for attempt in {1..30}; do
-            ! kill -0 "$PREVIEW_PID" 2>/dev/null && exit 0
+            if ! curl --silent --output /dev/null --max-time 2 http://127.0.0.1:4321/eras/citadel/; then
+              exit 0
+            fi
             sleep 1
           done
-          echo "Preview process $PREVIEW_PID did not stop"
+          echo "Preview server on port 4321 did not stop"
           exit 1
 
       - name: Build enabled contact browser fixture
