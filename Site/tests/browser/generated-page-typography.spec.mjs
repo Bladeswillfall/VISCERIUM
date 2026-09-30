@@ -20,7 +20,7 @@ test('release overview keeps generated headings separated and accent-coloured', 
     }
     if (!(h3 instanceof HTMLHeadingElement)) return null;
 
-    const date = h2.nextElementSibling;
+    const date = content.querySelector('time[datetime]');
     const firstItem = h3.nextElementSibling?.querySelector('li');
     const h2Style = getComputedStyle(h2);
     const h3Style = getComputedStyle(h3);
