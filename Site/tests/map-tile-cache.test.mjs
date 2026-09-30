@@ -22,6 +22,19 @@ test('Atlas cache reuses complete output', async (t) => {
       await fs.writeFile(path.join(directory, '0.webp'), 'tile');
     },
   };
-  assert.equal((await prepareCachedTiles(options)).regenerated, true);
+  const initial = await prepareCachedTiles(options);
+  assert.equal(initial.regenerated, true);
   assert.equal((await prepareCachedTiles(options)).regenerated, false);
+
+  const tile = path.join(initial.cacheDir, 'tiles', '0.webp');
+  await fs.writeFile(tile, 'modified');
+  assert.equal((await prepareCachedTiles(options)).regenerated, true);
+  assert.equal(await fs.readFile(tile, 'utf8'), 'tile');
+
+  await fs.rm(tile);
+  assert.equal((await prepareCachedTiles(options)).regenerated, true);
+  await fs.writeFile(source, 'updated source image');
+  const updated = await prepareCachedTiles(options);
+  assert.equal(updated.regenerated, true);
+  assert.notEqual(updated.cacheDir, initial.cacheDir);
 });
