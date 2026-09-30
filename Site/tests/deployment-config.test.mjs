@@ -72,4 +72,9 @@ test('browser CI image versions match the locked Playwright package', () => {
   assert.equal([...workflow.matchAll(/shell: bash/g)].length, 2, 'both container jobs must retain Bash');
   assert.equal(workflow.split('HOME: /root').length, 2, 'browser test step must use a root-owned HOME');
   for (const image of images) assert.equal(image[1], version);
+  const stopPreview = workflow.split('      - name: Stop preview before enabled contact fixture')[1]
+    ?.split('      - name: Build enabled contact browser fixture')[0];
+  assert.ok(stopPreview, 'preview shutdown step must exist');
+  assert.match(stopPreview, /curl[^\n]*127\.0\.0\.1:4321/);
+  assert.doesNotMatch(stopPreview, /! kill -0/, 'a container zombie can keep kill -0 true');
 });
