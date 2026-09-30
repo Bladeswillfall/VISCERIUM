@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { walk } from './lib/walk.mjs';
+import { prepareCachedTiles } from './lib/map-tile-cache.mjs';
 
 export const MAP_TILE_SIZE = 512;
 export const MAP_TILE_MANIFEST_VERSION = 1;
@@ -108,7 +108,13 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
     maps: {},
   };
 
-  await fs.mkdir(outputRoot, { recursive: true });
+  let generated = 0;
+  const cacheRoot = path.join(siteRoot, '.cache', 'map-tiles');
+  const usedCacheDirs = new Set();
+  await Promise.all([
+    fs.mkdir(outputRoot, { recursive: true }),
+    fs.mkdir(cacheRoot, { recursive: true }),
+  ]);
 
   for (const [mapId, map] of Object.entries(maps)) {
     const id = safeMapId(mapId);
@@ -126,34 +132,43 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
       continue;
     }
 
+    const { cacheDir, count, regenerated } = await prepareCachedTiles({
+      siteRoot,
+      mapId: id,
+      source,
+      sharp,
+      generatorFile: fileURLToPath(import.meta.url),
+      generate: async (tiles) => {
+        await sharp(source)
+          .rotate()
+          .ensureAlpha()
+          .webp({ lossless: true, effort: 4 })
+          .tile({
+            size: MAP_TILE_SIZE,
+            overlap: 0,
+            layout: 'google',
+            container: 'fs',
+            depth: 'onetile',
+            skipBlanks: -1,
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
+          })
+          .toFile(tiles);
+
+        await Promise.all([
+          fs.rm(path.join(tiles, 'blank.png'), { force: true }),
+          fs.rm(path.join(path.dirname(tiles), 'vips-properties.xml'), { force: true }),
+        ]);
+      },
+    });
     const outputDir = path.join(outputRoot, id);
-    await sharp(source)
-      .rotate()
-      .ensureAlpha()
-      .webp({ lossless: true, effort: 4 })
-      .tile({
-        size: MAP_TILE_SIZE,
-        overlap: 0,
-        layout: 'google',
-        container: 'fs',
-        depth: 'onetile',
-        skipBlanks: -1,
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-      })
-      .toFile(outputDir);
-
-    // libvips' Google layout emits helper files that Leaflet does not need.
-    await Promise.all([
-      fs.rm(path.join(outputDir, 'blank.png'), { force: true }),
-      fs.rm(path.join(outputRoot, 'vips-properties.xml'), { force: true }),
-    ]);
-
-    const tileFiles = (await walk(outputDir)).filter((file) => /\.webp$/i.test(file));
+    await fs.cp(path.join(cacheDir, 'tiles'), outputDir, { recursive: true });
+    usedCacheDirs.add(path.basename(cacheDir));
+    if (regenerated) generated += 1;
     const descriptor = mapTileDescriptor({
       mapId: id,
       width,
       height,
-      tileCount: tileFiles.length,
+      tileCount: count,
     });
 
     manifest.maps[mapId] = descriptor;
@@ -163,10 +178,17 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
   await fs.mkdir(path.dirname(manifestPath), { recursive: true });
   await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 
+  // A prefix-restored cache may contain earlier versions of these maps.
+  for (const name of await fs.readdir(cacheRoot)) {
+    if (!usedCacheDirs.has(name)) {
+      await fs.rm(path.join(cacheRoot, name), { recursive: true, force: true });
+    }
+  }
+
   const tileCount = Object.values(manifest.maps)
     .reduce((total, entry) => total + (entry?.tileCount ?? 0), 0);
   console.log(
-    `Generated Atlas tile pyramids for ${Object.keys(manifest.maps).length} map(s) (${tileCount} lossless WebP tile(s)).`,
+    `Prepared Atlas tile pyramids for ${Object.keys(manifest.maps).length} map(s) (${tileCount} lossless WebP tile(s); ${generated} regenerated).`,
   );
 
   return manifest;
