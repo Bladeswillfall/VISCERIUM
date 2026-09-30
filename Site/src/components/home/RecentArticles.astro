@@ -22,17 +22,14 @@ const articles = getRecentArticles(await getCollection('docs')).map((article, in
             <h2 class="recent__title" id="recent-title">Recent articles</h2>
             <p class="recent__intro" id="recent-intro">New entries and revised records from across the VISCERIUM Codex.</p>
           </div>
-          <div class="recent__tools">
-            <p class="recent__count">{String(articles.length).padStart(2, '0')} ARTICLES</p>
-            <div class="recent__actions">
-              <button class="recent__view" id="recent-toggle" type="button" aria-controls="recent-track" aria-expanded="false" hidden>
-                <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="7" height="7"/><rect x="11.5" y="1.5" width="7" height="7"/><rect x="1.5" y="11.5" width="7" height="7"/><rect x="11.5" y="11.5" width="7" height="7"/></svg>
-                <span id="recent-toggle-text">Expand to grid</span>
-              </button>
-              <div class="recent__controls" role="group" aria-label="Article carousel navigation">
-                <button class="recent__arrow" id="recent-prev" type="button" aria-label="Scroll to previous article" aria-controls="recent-track" hidden>←</button>
-                <button class="recent__arrow" id="recent-next" type="button" aria-label="Scroll to next article" aria-controls="recent-track" hidden>→</button>
-              </div>
+          <div class="recent__actions">
+            <button class="recent__view" id="recent-toggle" type="button" aria-controls="recent-track" aria-expanded="false" hidden>
+              <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="7" height="7"/><rect x="11.5" y="1.5" width="7" height="7"/><rect x="1.5" y="11.5" width="7" height="7"/><rect x="11.5" y="11.5" width="7" height="7"/></svg>
+              <span id="recent-toggle-text">Expand to grid</span>
+            </button>
+            <div class="recent__controls" role="group" aria-label="Article carousel navigation">
+              <button class="recent__arrow" id="recent-prev" type="button" aria-label="Scroll to previous article" aria-controls="recent-track" hidden>←</button>
+              <button class="recent__arrow" id="recent-next" type="button" aria-label="Scroll to next article" aria-controls="recent-track" hidden>→</button>
             </div>
           </div>
         </header>
