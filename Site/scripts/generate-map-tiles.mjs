@@ -109,7 +109,12 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
   };
 
   let generated = 0;
-  await fs.mkdir(outputRoot, { recursive: true });
+  const cacheRoot = path.join(siteRoot, '.cache', 'map-tiles');
+  const usedCacheDirs = new Set();
+  await Promise.all([
+    fs.mkdir(outputRoot, { recursive: true }),
+    fs.mkdir(cacheRoot, { recursive: true }),
+  ]);
 
   for (const [mapId, map] of Object.entries(maps)) {
     const id = safeMapId(mapId);
@@ -157,6 +162,7 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
     });
     const outputDir = path.join(outputRoot, id);
     await fs.cp(path.join(cacheDir, 'tiles'), outputDir, { recursive: true });
+    usedCacheDirs.add(path.basename(cacheDir));
     if (regenerated) generated += 1;
     const descriptor = mapTileDescriptor({
       mapId: id,
@@ -171,6 +177,13 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
 
   await fs.mkdir(path.dirname(manifestPath), { recursive: true });
   await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
+
+  // A prefix-restored cache may contain earlier versions of these maps.
+  for (const name of await fs.readdir(cacheRoot)) {
+    if (!usedCacheDirs.has(name)) {
+      await fs.rm(path.join(cacheRoot, name), { recursive: true, force: true });
+    }
+  }
 
   const tileCount = Object.values(manifest.maps)
     .reduce((total, entry) => total + (entry?.tileCount ?? 0), 0);
