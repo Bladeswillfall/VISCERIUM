@@ -14,7 +14,8 @@ test('release overview keeps generated headings separated and accent-coloured', 
     if (!(h2 instanceof HTMLHeadingElement)) return null;
 
     let h3 = h2.nextElementSibling;
-    while (h3 && !(h3 instanceof HTMLHeadingElement && h3.tagName === 'H3')) {
+    // Do not mistake a category in the next release for this release's heading.
+    while (h3 && h3.tagName !== 'H2' && h3.tagName !== 'H3') {
       h3 = h3.nextElementSibling;
     }
     if (!(h3 instanceof HTMLHeadingElement)) return null;
@@ -42,7 +43,7 @@ test('release overview keeps generated headings separated and accent-coloured', 
   });
 
   expect(result).not.toBeNull();
-  expect(result.h2Text).toMatch(/0\.2\.0|0\.1\.0/);
+  expect(result.h2Text).toMatch(/\b\d+\.\d+\.\d+\b|\bUnreleased\b/i);
   expect(result.h3Text.toLowerCase()).toMatch(/added|changed|notes/);
   expect(Number.parseFloat(result.h2MarginBottom)).toBeGreaterThanOrEqual(0);
   expect(Number.parseFloat(result.h3MarginTop)).toBeGreaterThan(0);
