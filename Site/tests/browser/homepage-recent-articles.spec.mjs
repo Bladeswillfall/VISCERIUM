@@ -103,7 +103,11 @@ test('light-mode mobile articles retain readable text on the light background', 
     document.documentElement.dataset.theme = 'light';
     const article = document.querySelector('#recent-articles .record');
     const headline = getComputedStyle(article.querySelector('h3'));
-    const siteText = getComputedStyle(document.documentElement).getPropertyValue('--codex-text-body').trim();
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--codex-text-body)';
+    document.body.append(probe);
+    const siteText = getComputedStyle(probe).color;
+    probe.remove();
     return {
       headingColor: headline.color,
       siteText,
@@ -112,7 +116,7 @@ test('light-mode mobile articles retain readable text on the light background', 
       viewportWidth: document.documentElement.clientWidth,
     };
   });
-  expect(layout.headingColor).toBe('rgb(21, 21, 21)');
+  expect(layout.headingColor).toBe(layout.siteText);
   expect(layout.siteText).not.toBe('');
   expect(layout.countVisible).toBe(false);
   expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
