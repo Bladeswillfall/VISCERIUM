@@ -34,6 +34,7 @@ test('mouse drag scrolls the rail and releases without an article click', async 
   await page.goto(homepage, { waitUntil: 'domcontentloaded' });
   const track = page.locator('#recent-track');
   await expect(page.locator('#recent-next')).toBeVisible();
+  await track.scrollIntoViewIfNeeded();
   const bounds = await track.boundingBox();
   expect(bounds).not.toBeNull();
   const startX = bounds.x + Math.min(bounds.width - 35, 660);
