@@ -47,6 +47,14 @@ test('public site code cannot read Worker-only contact secrets', () => {
   assert.doesNotMatch(publicContactCode, /RESEND_API_KEY|TURNSTILE_SECRET_KEY/);
 });
 
+test('custom 404 route replaces Starlight default route', () => {
+  const config = read('../astro.config.mjs');
+  const notFoundPage = read('../src/pages/404.astro');
+
+  assert.match(config, /disable404Route:\s*true/);
+  assert.match(notFoundPage, /This page is not in the codex/);
+});
+
 test('dependency review includes comment gateway dependency files', () => {
   const workflow = read('../../.github/workflows/dependency-review.yml');
 
