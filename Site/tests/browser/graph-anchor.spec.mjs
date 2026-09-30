@@ -35,7 +35,7 @@ async function renderedNodePoint(canvas, id) {
 
 test('World Graph wheel zoom keeps the graph point under the cursor', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvas = graph.locator('[data-world-graph-canvas]');

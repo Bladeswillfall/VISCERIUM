@@ -102,7 +102,7 @@ async function inspectGraph(page, viewport, theme) {
     if (request.url().startsWith(`${preview}/`)) firstPartyFailures.push(request.url());
   });
 
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvasHost = graph.locator('[data-world-graph-canvas]');
@@ -301,7 +301,7 @@ test('World Graph works in the light mobile layout', async ({ page }) => {
 
 test('World Graph restores Obsidian-like hover and keyboard exploration', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvasHost = graph.locator('[data-world-graph-canvas]');
@@ -376,7 +376,7 @@ test('World Graph restores Obsidian-like hover and keyboard exploration', async 
 
 test('World Graph expanded touch target selects a node without becoming background pan', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvasHost = graph.locator('[data-world-graph-canvas]');
@@ -429,7 +429,7 @@ test('World Graph expanded touch target selects a node without becoming backgrou
 
 test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvasHost = graph.locator('[data-world-graph-canvas]');
@@ -475,7 +475,7 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
 test('World Graph releases DOM listeners on a page swap and remounts once', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
   const graph = page.locator('[data-world-graph]');
   const canvas = graph.locator('[data-world-graph-canvas]');
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
