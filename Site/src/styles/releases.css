@@ -83,28 +83,28 @@
 /* The shared light-theme status tokens are intentionally near-black. Only
    release labels get a brighter, filled palette; dark mode keeps its outline labels. */
 :root[data-theme='light'] .vc-release-content > h3 + ul {
-  --vc-release-tone: #855700;
+  --vc-release-tone: var(--vc-release-notice);
 }
 
 :root[data-theme='light'] .vc-release-content > h3[id^="added"] + ul {
-  --vc-release-tone: #087248;
+  --vc-release-tone: var(--vc-release-added);
 }
 
 :root[data-theme='light'] .vc-release-content > h3[id^="changed"] + ul {
-  --vc-release-tone: #315c9b;
+  --vc-release-tone: var(--vc-release-updated);
 }
 
 :root[data-theme='light'] .vc-release-content > h3[id^="fixed"] + ul {
-  --vc-release-tone: #006b89;
+  --vc-release-tone: var(--vc-release-fixed);
 }
 
 :root[data-theme='light'] .vc-release-content > h3[id^="removed"] + ul {
-  --vc-release-tone: #9f354b;
+  --vc-release-tone: var(--vc-release-removed);
 }
 
 :root[data-theme='light'] .vc-release-content > h3 + ul > li::before {
   background: var(--vc-release-tone);
-  color: #fff;
+  color: white;
 }
 
 @media (forced-colors: active) {
