@@ -373,11 +373,13 @@ jobs:
           exit 1
 
       - name: Run browser checks
+        env:
+          HOME: /root
         run: |
           set -o pipefail
           {
             npx --no-install playwright test tests/browser --browser=chromium --reporter=line --workers=2
-            HOME=/root npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
+            npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
           } 2>&1 | tee "$RUNNER_TEMP/playwright.log"
 
