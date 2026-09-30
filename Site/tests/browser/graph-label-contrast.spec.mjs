@@ -64,7 +64,7 @@ async function chooseTheme(page, value, resolvedTheme) {
 
 test('World Graph canvas labels keep readable dark-mode contrast', async ({ page }) => {
   await installDarkTheme(page);
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvas = graph.locator('[data-world-graph-canvas]');
@@ -81,7 +81,7 @@ test('World Graph canvas labels keep readable dark-mode contrast', async ({ page
 
 test('World Graph theme colours replace rather than stack across view modes', async ({ page }) => {
   await installDarkTheme(page);
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvas = graph.locator('[data-world-graph-canvas]');
