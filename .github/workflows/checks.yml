@@ -2,6 +2,7 @@ name: Checks
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
   push:
     branches: [main]
 
@@ -34,6 +35,26 @@ jobs:
         run: |
           npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
           test "$(npm --version)" = "11.18.0"
+
+      - name: Test changelog policy
+        working-directory: .
+        run: node --test .github/scripts/check-changelog.test.mjs
+
+      - name: Require a PR changelog entry or reason
+        if: github.event_name == 'pull_request'
+        working-directory: .
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # Run the policy from the trusted base commit. Use this branch's copy only
+          # when the policy is first introduced and no base copy exists.
+          if git cat-file -e HEAD^1:.github/scripts/check-changelog.mjs 2>/dev/null; then
+            git show HEAD^1:.github/scripts/check-changelog.mjs > "$RUNNER_TEMP/check-changelog.mjs"
+            node "$RUNNER_TEMP/check-changelog.mjs"
+          else
+            node .github/scripts/check-changelog.mjs
+          fi
 
       - run: npm ci --silent --no-audit --no-fund
       - run: npm run baseline:check
