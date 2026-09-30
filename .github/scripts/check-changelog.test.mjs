@@ -10,6 +10,16 @@ test('accepts a new Unreleased entry', () => {
   assert.equal(validate({ ...base, after: before.replace('## [0.2.0]', '### Added in Unreleased\n\n- New homepage feature.\n\n## [0.2.0]') }), null);
 });
 
+test('requires an additive Unreleased entry without rewriting existing ones', () => {
+  const draft = before.replace('## [0.2.0]', '### Added in Unreleased\n\n- Existing draft item.\n\n## [0.2.0]');
+  const rewritten = draft.replace('Existing draft item.', 'Reworded existing draft item.');
+  const replaced = draft.replace('Existing draft item.', 'Different new item.');
+  const extended = draft.replace('Existing draft item.', 'Existing draft item.\n- A genuinely new item.');
+  assert.match(validate({ ...base, before: draft, after: rewritten }), /Add a new entry/);
+  assert.match(validate({ ...base, before: draft, after: replaced }), /Add a new entry/);
+  assert.equal(validate({ ...base, before: draft, after: extended }), null);
+});
+
 test('rejects changes to previous releases without an Unreleased entry', () => {
   assert.match(validate({ ...base, after: before.replace('Earlier feature.', 'Renamed old feature.') }), /Add a new entry/);
 });
