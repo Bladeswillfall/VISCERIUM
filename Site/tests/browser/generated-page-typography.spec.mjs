@@ -64,6 +64,43 @@ test('release overview keeps generated headings separated and accent-coloured', 
   expect(result.h3Color).toBe(result.expectedAccent);
 });
 
+test('release notes are unboxed and have distinct light-theme labels', async ({ page }) => {
+  await page.goto(`${preview}/releases/`, { waitUntil: 'networkidle' });
+
+  const result = await page.evaluate(() => {
+    const labels = {};
+    const kinds = ['added', 'changed', 'fixed'];
+    for (const kind of kinds) {
+      const item = document.querySelector(`.vc-release-content > h3[id^="${kind}"] + ul > li`);
+      if (!(item instanceof HTMLLIElement)) return null;
+      const rowStyle = getComputedStyle(item);
+      labels[kind] = {
+        border: rowStyle.borderLeftWidth,
+        background: rowStyle.backgroundColor,
+      };
+    }
+
+    document.documentElement.dataset.theme = 'light';
+    for (const kind of kinds) {
+      const item = document.querySelector(`.vc-release-content > h3[id^="${kind}"] + ul > li`);
+      const badge = getComputedStyle(item, '::before');
+      labels[kind].lightBadge = badge.backgroundColor;
+      labels[kind].lightText = badge.color;
+    }
+    return labels;
+  });
+
+  expect(result).not.toBeNull();
+  for (const kind of ['added', 'changed', 'fixed']) {
+    expect(result[kind].border).toBe('0px');
+    expect(result[kind].background).toBe('rgba(0, 0, 0, 0)');
+    expect(result[kind].lightText).toBe('rgb(255, 255, 255)');
+  }
+  expect(result.added.lightBadge).toBe('rgb(8, 114, 72)');
+  expect(result.changed.lightBadge).toBe('rgb(49, 92, 155)');
+  expect(result.fixed.lightBadge).toBe('rgb(0, 107, 137)');
+});
+
 test('utility/generated pages do not inherit the hero-only mobile pull-up', async ({ page }) => {
   await page.setViewportSize({ width: 402, height: 874 });
   await page.goto(`${preview}/releases/`, { waitUntil: 'networkidle' });
