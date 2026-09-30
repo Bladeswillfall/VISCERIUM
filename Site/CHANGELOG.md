@@ -4,8 +4,6 @@ All notable changes to the VISCERIUM Codex are documented here.
 
 This file uses the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format so Starlight Changelogs can generate the `/changelog/` pages.
 
-## [Unreleased]
-
 ## [0.2.0] - 2026-07-10
 
 ### Added in 0.2.0

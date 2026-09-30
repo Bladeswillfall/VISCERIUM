@@ -205,7 +205,7 @@ npm run build
 
 ## Changelog
 
-Add a new bullet under `## [Unreleased]` in `Site/CHANGELOG.md` for public features, visible fixes, and behavior changes. Keep third-level headings unique across versions. When you publish a release, move the draft entries to a new dated version.
+For public features, visible fixes, and behavior changes, create `## [Unreleased]` in `Site/CHANGELOG.md` if needed and add a bullet under it. Do not commit an empty Unreleased section: Starlight will display it as the latest release. Keep third-level headings unique across versions. When you publish a release, move the draft entries to a new dated version.
 
 If a PR does not need a public release note, check "No entry needed" in the PR's Changelog section and give a specific reason. For example, lore-only publication already appears in "What's New". Routine dependency-only Dependabot PRs are exempt. The existing required `verify` check enforces this rule for other PRs.
 
