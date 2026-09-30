@@ -61,3 +61,13 @@ test('aggregated changelog headings have unique IDs', () => {
 
   assert.equal(new Set(headings).size, headings.length);
 });
+
+test('browser CI image versions match the locked Playwright package', () => {
+  const lock = JSON.parse(read('../package-lock.json'));
+  const version = lock.packages['node_modules/@playwright/test'].version;
+  const workflow = read('../../.github/workflows/checks.yml');
+  const images = [...workflow.matchAll(/image: mcr\\.microsoft\\.com\\/playwright:v(\\d+\\.\\d+\\.\\d+)-noble@sha256:([a-f0-9]{64})/g)];
+
+  assert.equal(images.length, 2, 'both browser and Axe jobs must use pinned images');
+  for (const image of images) assert.equal(image[1], version);
+});
