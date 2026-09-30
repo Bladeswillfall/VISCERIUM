@@ -33,6 +33,11 @@ test('Atlas cache reuses complete output', async (t) => {
 
   await fs.rm(tile);
   assert.equal((await prepareCachedTiles(options)).regenerated, true);
+
+  await fs.writeFile(path.join(initial.cacheDir, 'tiles', '.unexpected'), 'private data');
+  assert.equal((await prepareCachedTiles(options)).regenerated, true, 'unexpected files invalidate cache');
+  await assert.rejects(fs.access(path.join(initial.cacheDir, 'tiles', '.unexpected')));
+
   await fs.writeFile(source, 'updated source image');
   const updated = await prepareCachedTiles(options);
   assert.equal(updated.regenerated, true);
