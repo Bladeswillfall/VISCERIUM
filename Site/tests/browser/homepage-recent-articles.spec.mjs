@@ -84,6 +84,8 @@ test('recent article controls align in both themes, without an article count', a
       return {
         background: getComputedStyle(element).backgroundImage,
         headingColor: getComputedStyle(header).color,
+        cardBackground: getComputedStyle(element.querySelector('.record')).backgroundColor,
+        cardTitleColor: getComputedStyle(element.querySelector('.record h3')).color,
         topDifference: Math.abs(grid.top - next.top),
         heightDifference: Math.abs(grid.height - next.height),
       };
@@ -94,6 +96,8 @@ test('recent article controls align in both themes, without an article count', a
   }
   expect(themes[1].background).not.toBe(themes[0].background);
   expect(themes[1].headingColor).not.toBe(themes[0].headingColor);
+  expect(themes[1].cardBackground).not.toBe(themes[0].cardBackground);
+  expect(themes[1].cardTitleColor).not.toBe(themes[0].cardTitleColor);
 });
 
 test('light-mode mobile articles retain readable text on the light background', async ({ page }) => {
