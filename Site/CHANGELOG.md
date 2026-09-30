@@ -6,8 +6,6 @@ This file uses [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) so Starl
 
 The entries from 31 July to 28 September 2026 were reconstructed from merged GitHub pull requests. Their dates are **UTC merge dates**, not independently verified production deployment dates. These retrospective version labels group completed work; they do not claim that matching GitHub Releases or deployments occurred on those dates. The original 8 and 10 July entries are retained as authored.
 
-## [Unreleased]
-
 ## [0.14.0] - 2026-09-28
 
 ### Added in 0.14.0

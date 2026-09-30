@@ -42,7 +42,7 @@ test('release overview keeps generated headings separated and accent-coloured', 
   });
 
   expect(result).not.toBeNull();
-  expect(result.h2Text).toMatch(/0\.2\.0|0\.1\.0/);
+  expect(result.h2Text).toMatch(/\b\d+\.\d+\.\d+\b/);
   expect(result.h3Text.toLowerCase()).toMatch(/added|changed|notes/);
   expect(Number.parseFloat(result.h2MarginBottom)).toBeGreaterThanOrEqual(0);
   expect(Number.parseFloat(result.h3MarginTop)).toBeGreaterThan(0);
