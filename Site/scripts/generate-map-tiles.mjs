@@ -6,6 +6,7 @@ import { walk } from './lib/walk.mjs';
 
 export const MAP_TILE_SIZE = 512;
 export const MAP_TILE_MANIFEST_VERSION = 1;
+const MAP_TILE_CACHE_VERSION = 1;
 export const MAP_TILE_FORMAT = 'webp';
 
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
