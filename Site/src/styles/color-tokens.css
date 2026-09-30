@@ -201,6 +201,13 @@
     --codex-info: #001b1f;
     --codex-important: #240b35;
 
+    /* Colourful release badges on the light article background. */
+    --vc-release-added: #087248;
+    --vc-release-updated: #315c9b;
+    --vc-release-fixed: #8734a6;
+    --vc-release-notice: #855700;
+    --vc-release-removed: #9f354b;
+
     --world-graph-canvas: #b9b4a9;
     --world-graph-surface: #c8bfa8;
     --world-graph-border: #888070;

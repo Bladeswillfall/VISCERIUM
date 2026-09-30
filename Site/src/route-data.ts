@@ -5,6 +5,7 @@ import { getPublicationDates, toIsoDate } from './lib/publication-dates.mjs';
 import articlePagesStylesheet from './styles/article-pages.css?url';
 import categoryIndexStylesheet from './styles/category-index.css?url';
 import statementPagesStylesheet from './styles/statement-pages.css?url';
+import releasePagesStylesheet from './styles/releases.css?url';
 
 const standaloneStatementPagePaths = new Set([
   '/statements/human-authorship-and-ai/',
@@ -29,6 +30,13 @@ export const onRequest = defineRouteMiddleware((context) => {
     route.head.push({
       tag: 'link',
       attrs: { rel: 'stylesheet', href: categoryIndexStylesheet },
+    });
+  }
+
+  if (routePath.startsWith('/releases/')) {
+    route.head.push({
+      tag: 'link',
+      attrs: { rel: 'stylesheet', href: releasePagesStylesheet },
     });
   }
 
