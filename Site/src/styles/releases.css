@@ -104,7 +104,7 @@
 
 :root[data-theme='light'] .vc-release-content > h3 + ul > li::before {
   background: var(--vc-release-tone);
-  color: white;
+  color: var(--codex-fixed-light);
 }
 
 @media (forced-colors: active) {
