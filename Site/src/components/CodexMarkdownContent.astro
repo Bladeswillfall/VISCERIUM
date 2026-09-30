@@ -6,6 +6,7 @@ const { starlightRoute } = Astro.locals;
 const entry = starlightRoute.entry.data;
 const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
 const isIndieWebEntry = entry.status === 'published' && pageKind.isStandardArticle;
+const isReleasesPage = /^\/releases(?:\/|$)/.test(Astro.url.pathname);
 ---
 
-<div class:list={['sl-markdown-content', isIndieWebEntry && 'e-content']}><slot /></div>
+<div class:list={['sl-markdown-content', isIndieWebEntry && 'e-content', isReleasesPage && 'vc-release-content']}><slot /></div>

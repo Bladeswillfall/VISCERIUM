@@ -20,6 +20,8 @@ test('release overview keeps generated headings separated and accent-coloured', 
     }
     if (!(h3 instanceof HTMLHeadingElement)) return null;
 
+    const date = h2.nextElementSibling;
+    const firstItem = h3.nextElementSibling?.querySelector('li');
     const h2Style = getComputedStyle(h2);
     const h3Style = getComputedStyle(h3);
     const h2Rect = h2.getBoundingClientRect();
@@ -39,12 +41,21 @@ test('release overview keeps generated headings separated and accent-coloured', 
       gap: h3Rect.top - h2Rect.bottom,
       h2Text: h2.textContent?.trim() ?? '',
       h3Text: h3.textContent?.trim() ?? '',
+      isReleaseContent: content.classList.contains('vc-release-content'),
+      dateText: date?.textContent?.trim() ?? '',
+      dateTime: date?.getAttribute('datetime') ?? '',
+      badgeText: firstItem ? getComputedStyle(firstItem, '::before').content : '',
     };
   });
 
   expect(result).not.toBeNull();
   expect(result.h2Text).toMatch(/\b\d+\.\d+\.\d+\b|\bUnreleased\b/i);
   expect(result.h3Text.toLowerCase()).toMatch(/added|changed|notes/);
+  expect(result.isReleaseContent).toBe(true);
+  expect(result.dateTime).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+  expect(result.dateText).toMatch(/2026/);
+  expect(result.dateText).not.toContain('starlightChangelogs.');
+  expect(result.badgeText).toContain('ADDED');
   expect(Number.parseFloat(result.h2MarginBottom)).toBeGreaterThanOrEqual(0);
   expect(Number.parseFloat(result.h3MarginTop)).toBeGreaterThan(0);
   expect(result.gap).toBeGreaterThanOrEqual(8);

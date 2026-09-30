@@ -1,0 +1,96 @@
+/* Keep Starlight's native release markup, navigation and heading anchors. */
+.vc-release-content > h2 {
+  margin-block: 3.2rem .25rem;
+  padding-block-start: 1.25rem;
+  border-block-start: 1px solid var(--sl-color-hairline-light);
+}
+
+.vc-release-content > h2:first-of-type {
+  border-block-start: 0;
+  padding-block-start: 0;
+}
+
+.vc-release-content > h2 + time {
+  display: block;
+  margin: .45rem 0 1.4rem 1rem;
+  color: var(--sl-color-gray-3);
+  font: 600 .84rem/1.5 var(--vc-font-ui);
+  letter-spacing: .025em;
+}
+
+.vc-release-content > h3 {
+  margin-block: 1.5rem .75rem;
+  color: var(--sl-color-gray-2);
+  font: 600 .83rem/1.5 var(--vc-font-ui);
+  letter-spacing: .075em;
+}
+
+.vc-release-content > h3 + ul {
+  margin-block: 0 1.3rem;
+  padding: 0;
+  list-style: none;
+  --vc-release-label: "NOTICE";
+  --vc-release-tone: var(--codex-accent);
+}
+
+.vc-release-content > h3[id^="added"] + ul {
+  --vc-release-label: "ADDED";
+  --vc-release-tone: var(--codex-success);
+}
+
+.vc-release-content > h3[id^="changed"] + ul {
+  --vc-release-label: "UPDATED";
+}
+
+.vc-release-content > h3[id^="fixed"] + ul {
+  --vc-release-label: "FIXED";
+  --vc-release-tone: var(--vc-event-scientific);
+}
+
+.vc-release-content > h3[id^="security"] + ul,
+.vc-release-content > h3[id^="deprecated"] + ul {
+  --vc-release-label: "NOTICE";
+  --vc-release-tone: var(--codex-warning);
+}
+
+.vc-release-content > h3[id^="removed"] + ul {
+  --vc-release-label: "REMOVED";
+  --vc-release-tone: var(--codex-danger);
+}
+
+.vc-release-content > h3 + ul > li {
+  margin: .6rem 0;
+  padding: .8rem 1rem;
+  border: 1px solid var(--sl-color-hairline-light);
+  border-inline-start: 3px solid var(--vc-release-tone);
+  border-radius: .25rem;
+  background: color-mix(in oklch, var(--codex-surface) 55%, transparent);
+  overflow-wrap: anywhere;
+}
+
+.vc-release-content > h3 + ul > li::before {
+  content: var(--vc-release-label);
+  display: inline-block;
+  margin-inline-end: .6rem;
+  padding: .08rem .4rem;
+  border: 1px solid var(--vc-release-tone);
+  border-radius: .2rem;
+  color: var(--vc-release-tone);
+  font: 700 .7rem/1.6 var(--vc-font-ui);
+  letter-spacing: .045em;
+  vertical-align: .06em;
+}
+
+/* Category headings retain the accessible text behind the repeated visual labels. */
+@media (max-width: 36rem) {
+  .vc-release-content > h3 + ul > li {
+    padding: .75rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .vc-release-content > h3 + ul > li,
+  .vc-release-content > h3 + ul > li::before {
+    border-color: CanvasText;
+  }
+}
