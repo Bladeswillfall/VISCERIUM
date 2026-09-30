@@ -63,3 +63,57 @@ test('narrow screens use a vertical list with no horizontal page overflow', asyn
   expect(layout.overflowX).toBe('visible');
   expect(layout.horizontalOverflow).toBe(false);
 });
+
+
+test('recent article controls align in both themes, without an article count', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 920 });
+  await page.goto(homepage, { waitUntil: 'domcontentloaded' });
+
+  const section = page.locator('#recent-articles');
+  await expect(section.locator('.recent__count')).toHaveCount(0);
+  await expect(page.locator('#recent-toggle')).toBeVisible();
+  await expect(page.locator('#recent-next')).toBeVisible();
+
+  const themes = [];
+  for (const theme of ['dark', 'light']) {
+    await page.evaluate((value) => { document.documentElement.dataset.theme = value; }, theme);
+    const layout = await section.evaluate((element) => {
+      const grid = element.querySelector('#recent-toggle').getBoundingClientRect();
+      const next = element.querySelector('#recent-next').getBoundingClientRect();
+      const header = element.querySelector('#recent-title');
+      return {
+        background: getComputedStyle(element).backgroundImage,
+        headingColor: getComputedStyle(header).color,
+        topDifference: Math.abs(grid.top - next.top),
+        heightDifference: Math.abs(grid.height - next.height),
+      };
+    });
+    expect(layout.topDifference).toBeLessThan(1);
+    expect(layout.heightDifference).toBeLessThan(1);
+    themes.push(layout);
+  }
+  expect(themes[1].background).not.toBe(themes[0].background);
+  expect(themes[1].headingColor).not.toBe(themes[0].headingColor);
+});
+
+test('light-mode mobile articles retain readable text on the light background', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(homepage, { waitUntil: 'domcontentloaded' });
+  const layout = await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'light';
+    const article = document.querySelector('#recent-articles .record');
+    const headline = getComputedStyle(article.querySelector('h3'));
+    const siteText = getComputedStyle(document.documentElement).getPropertyValue('--codex-text-body').trim();
+    return {
+      headingColor: headline.color,
+      siteText,
+      countVisible: Boolean(document.querySelector('.recent__count')),
+      scrollWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    };
+  });
+  expect(layout.headingColor).toBe('rgb(21, 21, 21)');
+  expect(layout.siteText).not.toBe('');
+  expect(layout.countVisible).toBe(false);
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
+});
