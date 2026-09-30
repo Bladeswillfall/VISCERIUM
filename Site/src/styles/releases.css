@@ -40,6 +40,7 @@
 
 .vc-release-content > h3[id^="changed"] + ul {
   --vc-release-label: "UPDATED";
+  --vc-release-tone: var(--sl-color-gray-2);
 }
 
 .vc-release-content > h3[id^="fixed"] + ul {
