@@ -103,7 +103,7 @@ test('release notes are unboxed and have distinct light-theme labels', async ({ 
   }
   expect(result.added.lightBadge).toBe('rgb(8, 114, 72)');
   expect(result.changed.lightBadge).toBe('rgb(49, 92, 155)');
-  expect(result.fixed.lightBadge).toBe('rgb(0, 107, 137)');
+  expect(result.fixed.lightBadge).toBe('rgb(135, 52, 166)');
 });
 
 test('utility/generated pages do not inherit the hero-only mobile pull-up', async ({ page }) => {
