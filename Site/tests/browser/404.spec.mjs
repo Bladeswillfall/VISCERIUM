@@ -10,6 +10,7 @@ test('custom 404 page keeps navigation and site search working', async ({ page }
   await expect(page.getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/');
   await expect(page.locator('a.not-found-route[href="/graph/"]')).toBeVisible();
 
+  await expect(page.locator('html')).toHaveAttribute('data-telescope-scope-ready', '');
   const search = page.locator('.not-found-route[data-codex-search-open]');
   await expect(search).toBeEnabled();
   await search.click();
