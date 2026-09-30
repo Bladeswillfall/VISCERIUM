@@ -1040,13 +1040,12 @@ main:has(.home-gateway) .sl-container > .home-gateway + * {
     .recent__top { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1.7rem; align-items: end; margin-bottom: clamp(1.5rem,2.6vw,2.6rem); }
     .recent__title { font: 400 clamp(2.35rem,5.6vw,5rem)/1.12 var(--display); letter-spacing: -.02em; margin: 0; color: var(--text); text-wrap: balance; }
     .recent__intro { margin: .72rem 0 0; max-width: 39rem; color: var(--body); font: 400 clamp(1rem,1.48vw,1.25rem)/1.58 var(--reading); }
-    .recent__tools { display: grid; justify-items: end; align-items: center; row-gap: .8rem; padding-bottom: .12rem; }
-    .recent__count { color: var(--muted); margin: 0; font: 500 .8rem/1.3 var(--ui); font-variant-numeric: tabular-nums; }
-    .recent__actions { display: flex; gap: .75rem; align-items: center; }
-    .recent__view { min-height: 2.8rem; display: inline-flex; align-items: center; gap: .6rem; background: transparent; border: 1px solid var(--codex-palette-mid); padding: .5rem .8rem; color: var(--recent-text-bright); font: 600 .79rem/1.3 var(--ui); cursor: pointer; white-space: nowrap; transition: background-color .16s ease, border-color .16s ease; }
+    .recent__actions { display: flex; gap: .75rem; align-items: center; justify-content: flex-end; align-self: end; margin: 0; }
+    .recent__actions > *, .recent__controls > * { margin-block: 0 !important; }
+    .recent__view { height: 2.8rem; min-height: 2.8rem; display: inline-flex; align-items: center; gap: .6rem; background: transparent; border: 1px solid var(--codex-palette-mid); padding: .5rem .8rem; color: var(--recent-text-bright); font: 600 .79rem/1.3 var(--ui); cursor: pointer; white-space: nowrap; transition: background-color .16s ease, border-color .16s ease; }
     .recent__view:hover, .recent__view:focus-visible { background: color-mix(in srgb,var(--codex-palette-ink) 60%,var(--codex-palette-deep)); border-color: var(--codex-palette-light); }
     .recent__view svg { width: 1.05rem; height: 1.05rem; stroke: currentColor; stroke-width: 1.45; fill: none; flex: 0 0 auto; }
-    .recent__controls { display: flex; align-items: center; gap: .3rem; }
+    .recent__controls { display: flex; align-items: center; gap: .3rem; margin: 0; }
     .recent__arrow { display: inline-flex; align-items: center; justify-content: center; width: 2.8rem; height: 2.8rem; padding: 0; font: 400 1.6rem/1 var(--reading); border: 1px solid var(--codex-palette-mid); background: var(--codex-surface-raised-color); color: var(--recent-text-bright); cursor: pointer; transition: border-color .14s ease, background-color .14s ease; }
     .recent__arrow:hover:not(:disabled), .recent__arrow:focus-visible:not(:disabled) { background: color-mix(in srgb,var(--codex-palette-deep) 65%,var(--codex-palette-ink)); border-color: var(--codex-palette-light); }
     .recent__arrow:disabled { opacity: .35; cursor: default; }
@@ -1116,9 +1115,7 @@ main:has(.home-gateway) .sl-container > .home-gateway + * {
       .recent__top { display: block; margin-bottom: 1.4rem; }
       .recent__title { font-size: clamp(2.15rem,8vw,3.25rem); }
       .recent__intro { font-size: 1.05rem; }
-      .recent__tools { display: block; margin-top: 1rem; }
       .recent__view, .recent__controls { display: none !important; }
-      .recent__count { font-size: .76rem; }
       .recent__track, .recent[data-view='grid'] .recent__track { display: grid; grid-auto-flow: row; grid-template-columns: minmax(0,1fr); grid-auto-columns: auto; gap: 0; overflow: visible; scroll-snap-type: none; padding: 0; }
       .recent__track > li { display: block; scroll-snap-align: none; }
       .record { min-height: 0; display: grid; grid-template-columns: clamp(5.5rem,26vw,8.4rem) minmax(0,1fr); grid-template-areas: 'media content' 'media bottom'; column-gap: clamp(.85rem,3vw,1.3rem); padding: 1.1rem 0; background: transparent; border-top: 1px solid var(--codex-palette-deep); border-bottom: none; }
@@ -1162,3 +1159,54 @@ main:has(.home-gateway) .sl-container > .home-gateway + * {
       .recent__arrow:disabled { color: GrayText; }
       .record__media { border: 1px solid CanvasText; }
     }
+
+/* Preserve the dark archival cards on a warm, readable light-mode section. */
+:root[data-theme='light'] .recent {
+  background: linear-gradient(
+    153deg,
+    var(--codex-palette-page-light),
+    color-mix(in srgb, var(--codex-palette-page-light) 82%, var(--codex-palette-light)) 65%,
+    var(--codex-palette-page-light)
+  );
+  border-top-color: var(--codex-palette-deep);
+}
+:root[data-theme='light'] .recent__title,
+:root[data-theme='light'] .recent__intro,
+:root[data-theme='light'] .recent__hint,
+:root[data-theme='light'] .recent__all {
+  color: var(--codex-text-body);
+}
+:root[data-theme='light'] .recent__all:hover {
+  color: var(--codex-palette-oled);
+}
+:root[data-theme='light'] .recent__view,
+:root[data-theme='light'] .recent__arrow {
+  background: var(--codex-palette-light);
+  border-color: var(--codex-palette-deep);
+  color: var(--codex-palette-ink);
+}
+:root[data-theme='light'] .recent__view:hover,
+:root[data-theme='light'] .recent__view:focus-visible,
+:root[data-theme='light'] .recent__arrow:hover:not(:disabled),
+:root[data-theme='light'] .recent__arrow:focus-visible:not(:disabled) {
+  background: var(--codex-palette-page-light);
+  border-color: var(--codex-palette-ink);
+}
+@media (max-width: 720px) {
+  :root[data-theme='light'] .recent .record h3,
+  :root[data-theme='light'] .recent .record__date,
+  :root[data-theme='light'] .recent .record__date time,
+  :root[data-theme='light'] .recent .record__description,
+  :root[data-theme='light'] .recent .record__action {
+    color: var(--codex-text-body);
+  }
+  :root[data-theme='light'] .recent .record--citadel { --recent-mobile-accent: var(--era-e1-accent); }
+  :root[data-theme='light'] .recent .record--smog { --recent-mobile-accent: var(--era-e2-accent); }
+  :root[data-theme='light'] .recent .record--nearsight { --recent-mobile-accent: var(--era-e3-accent); }
+  :root[data-theme='light'] .recent .record--entropy { --recent-mobile-accent: var(--era-e4-accent); }
+  :root[data-theme='light'] .recent .record--universal { --recent-mobile-accent: var(--codex-palette-ink); }
+  :root[data-theme='light'] .recent .record__era,
+  :root[data-theme='light'] .recent .record__type {
+    color: var(--recent-mobile-accent);
+  }
+}
