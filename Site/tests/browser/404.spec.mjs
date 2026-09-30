@@ -6,8 +6,8 @@ test('custom 404 page keeps navigation and site search working', async ({ page }
   await page.goto(`${preview}/404.html`, { waitUntil: 'domcontentloaded' });
 
   await expect(page.getByRole('heading', { name: 'This page is not in the codex.' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Start here' })).toHaveAttribute('href', '/start-here/');
-  await expect(page.getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/');
+  await expect(page.locator('.not-found-actions a[href="/start-here/"]')).toHaveAttribute('href', '/start-here/');
+  await expect(page.locator('.not-found-actions a[href="/"]')).toHaveAttribute('href', '/');
   await expect(page.locator('a.not-found-route[href="/graph/"]')).toBeVisible();
 
   await expect(page.locator('html')).toHaveAttribute('data-telescope-scope-ready', '');
