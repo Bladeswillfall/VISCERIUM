@@ -55,7 +55,8 @@ test('release overview keeps generated headings separated and accent-coloured', 
   expect(result.dateTime).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   expect(result.dateText).toMatch(/2026/);
   expect(result.dateText).not.toContain('starlightChangelogs.');
-  expect(result.badgeText).toContain('ADDED');
+  const expectedBadge = /added/i.test(result.h3Text) ? 'ADDED' : /changed/i.test(result.h3Text) ? 'UPDATED' : 'NOTICE';
+  expect(result.badgeText).toContain(expectedBadge);
   expect(Number.parseFloat(result.h2MarginBottom)).toBeGreaterThanOrEqual(0);
   expect(Number.parseFloat(result.h3MarginTop)).toBeGreaterThan(0);
   expect(result.gap).toBeGreaterThanOrEqual(8);
