@@ -210,6 +210,7 @@ export default defineConfig({
     starlight({
       title: siteConfig.title,
       description: siteConfig.description,
+      disable404Route: true,
       locales: {
         root: {
           label: 'English',
