@@ -248,6 +248,8 @@ jobs:
     name: Axe accessibility checks
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
     timeout-minutes: 20
     defaults:
       run:
@@ -282,9 +284,6 @@ jobs:
           name: site-dist
           path: Site/dist/
 
-      - name: Install Chromium for accessibility checks
-        run: npx --no-install playwright install --with-deps chromium
-
       - name: Start preview
         run: |
           ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
@@ -315,6 +314,8 @@ jobs:
     name: Browser checks
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
     timeout-minutes: 20
     defaults:
       run:
@@ -357,9 +358,6 @@ jobs:
         with:
           name: site-dist
           path: Site/dist/
-
-      - name: Install browser runtime
-        run: npx --no-install playwright install --with-deps chromium firefox webkit
 
       - name: Start preview
         run: |
