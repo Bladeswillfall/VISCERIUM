@@ -248,9 +248,12 @@ jobs:
     name: Axe accessibility checks
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
     timeout-minutes: 20
     defaults:
       run:
+        shell: bash
         working-directory: Site
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -282,9 +285,6 @@ jobs:
           name: site-dist
           path: Site/dist/
 
-      - name: Install Chromium for accessibility checks
-        run: npx --no-install playwright install --with-deps chromium
-
       - name: Start preview
         run: |
           ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
@@ -315,9 +315,12 @@ jobs:
     name: Browser checks
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
     timeout-minutes: 20
     defaults:
       run:
+        shell: bash
         working-directory: Site
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -358,9 +361,6 @@ jobs:
           name: site-dist
           path: Site/dist/
 
-      - name: Install browser runtime
-        run: npx --no-install playwright install --with-deps chromium firefox webkit
-
       - name: Start preview
         run: |
           ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
@@ -373,6 +373,8 @@ jobs:
           exit 1
 
       - name: Run browser checks
+        env:
+          HOME: /root
         run: |
           set -o pipefail
           {
@@ -387,11 +389,15 @@ jobs:
           if kill -0 "$PREVIEW_PID" 2>/dev/null; then
             kill "$PREVIEW_PID"
           fi
+          # Containers can leave a stopped preview process as a zombie.
+          # Check the listening service, not the process table.
           for attempt in {1..30}; do
-            ! kill -0 "$PREVIEW_PID" 2>/dev/null && exit 0
+            if ! curl --silent --output /dev/null --max-time 2 http://127.0.0.1:4321/eras/citadel/; then
+              exit 0
+            fi
             sleep 1
           done
-          echo "Preview process $PREVIEW_PID did not stop"
+          echo "Preview server on port 4321 did not stop"
           exit 1
 
       - name: Build enabled contact browser fixture
