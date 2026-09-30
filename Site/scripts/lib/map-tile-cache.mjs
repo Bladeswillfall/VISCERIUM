@@ -2,17 +2,20 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { walk } from './walk.mjs';
 
 const CACHE_VERSION = 1;
 
 async function tileEntries(directory) {
-  const files = (await walk(directory)).sort();
-  if (!files.length || files.some((file) => path.extname(file).toLowerCase() !== '.webp')) {
+  const entries = await fs.readdir(directory, { recursive: true, withFileTypes: true });
+  if (!entries.length || entries.some((entry) =>
+    entry.name.startsWith('.')
+    || (!entry.isDirectory() && (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.webp')))) {
     throw new Error('Atlas tile cache is empty or has unexpected files.');
   }
+  const files = entries.filter((entry) => entry.isFile())
+    .map((entry) => path.join(entry.parentPath, entry.name)).sort();
+  if (!files.length) throw new Error('Atlas tile cache has no tiles.');
   return Promise.all(files.map(async (file) => {
-    if (!(await fs.lstat(file)).isFile()) throw new Error('Atlas tile cache contains a non-file.');
     const bytes = await fs.readFile(file);
     return {
       path: path.relative(directory, file).split(path.sep).join('/'),
