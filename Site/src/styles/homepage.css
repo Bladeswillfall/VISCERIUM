@@ -1160,7 +1160,7 @@ main:has(.home-gateway) .sl-container > .home-gateway + * {
       .record__media { border: 1px solid CanvasText; }
     }
 
-/* Preserve the dark archival cards on a warm, readable light-mode section. */
+/* Light mode uses the Codex paper palette. The era artwork stays dark. */
 :root[data-theme='light'] .recent {
   background: linear-gradient(
     153deg,
@@ -1192,21 +1192,43 @@ main:has(.home-gateway) .sl-container > .home-gateway + * {
   background: var(--codex-palette-page-light);
   border-color: var(--codex-palette-ink);
 }
+:root[data-theme='light'] .recent__arrow:disabled {
+  opacity: .5;
+}
+:root[data-theme='light'] .recent .record {
+  --recent-label-accent: var(--codex-palette-ink);
+  background: color-mix(in srgb, var(--codex-palette-light) 76%, var(--codex-fixed-light));
+  color: var(--codex-text-body);
+}
+:root[data-theme='light'] .recent .record:hover,
+:root[data-theme='light'] .recent .record:focus-visible {
+  background: var(--codex-palette-light);
+}
+:root[data-theme='light'] .recent .record--citadel { --recent-label-accent: var(--era-e1-accent); }
+:root[data-theme='light'] .recent .record--smog { --recent-label-accent: var(--era-e2-accent); }
+:root[data-theme='light'] .recent .record--nearsight { --recent-label-accent: var(--era-e3-accent); }
+:root[data-theme='light'] .recent .record--entropy { --recent-label-accent: var(--era-e4-accent); }
+:root[data-theme='light'] .recent .record__ordinal,
+:root[data-theme='light'] .recent .record__type,
+:root[data-theme='light'] .recent .record__era {
+  color: var(--recent-label-accent);
+}
+:root[data-theme='light'] .recent .record h3,
+:root[data-theme='light'] .recent .record__date,
+:root[data-theme='light'] .recent .record__date time,
+:root[data-theme='light'] .recent .record__description,
+:root[data-theme='light'] .recent .record__action {
+  color: var(--codex-text-body);
+}
+:root[data-theme='light'] .recent .record__bottom {
+  border-top-color: var(--codex-palette-mid);
+}
 @media (max-width: 720px) {
-  :root[data-theme='light'] .recent .record h3,
-  :root[data-theme='light'] .recent .record__date,
-  :root[data-theme='light'] .recent .record__date time,
-  :root[data-theme='light'] .recent .record__description,
-  :root[data-theme='light'] .recent .record__action {
-    color: var(--codex-text-body);
+  :root[data-theme='light'] .recent .record {
+    background: transparent;
   }
-  :root[data-theme='light'] .recent .record--citadel { --recent-mobile-accent: var(--era-e1-accent); }
-  :root[data-theme='light'] .recent .record--smog { --recent-mobile-accent: var(--era-e2-accent); }
-  :root[data-theme='light'] .recent .record--nearsight { --recent-mobile-accent: var(--era-e3-accent); }
-  :root[data-theme='light'] .recent .record--entropy { --recent-mobile-accent: var(--era-e4-accent); }
-  :root[data-theme='light'] .recent .record--universal { --recent-mobile-accent: var(--codex-palette-ink); }
-  :root[data-theme='light'] .recent .record__era,
-  :root[data-theme='light'] .recent .record__type {
-    color: var(--recent-mobile-accent);
+  :root[data-theme='light'] .recent .record:hover,
+  :root[data-theme='light'] .recent .record:focus-visible {
+    background: var(--codex-surface);
   }
 }
