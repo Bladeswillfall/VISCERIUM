@@ -47,6 +47,17 @@ test('public site code cannot read Worker-only contact secrets', () => {
   assert.doesNotMatch(publicContactCode, /RESEND_API_KEY|TURNSTILE_SECRET_KEY/);
 });
 
+test('dependency review includes comment gateway dependency files', () => {
+  const workflow = read('../../.github/workflows/dependency-review.yml');
+
+  for (const file of ['package.json', 'package-lock.json', '.npmrc']) {
+    assert.ok(
+      workflow.includes(`      - 'Services/comment-gateway/${file}'`),
+      `dependency review must run for comment gateway ${file}`,
+    );
+  }
+});
+
 test('the checks workflow cannot create a follow-up repository commit', () => {
   const workflow = read('../../.github/workflows/checks.yml');
 
