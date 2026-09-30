@@ -70,5 +70,6 @@ test('browser CI image versions match the locked Playwright package', () => {
 
   assert.equal(images.length, 2, 'both browser and Axe jobs must use pinned images');
   assert.equal([...workflow.matchAll(/shell: bash/g)].length, 2, 'both container jobs must retain Bash');
+  assert.ok(workflow.includes('HOME=/root npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox'));
   for (const image of images) assert.equal(image[1], version);
 });
