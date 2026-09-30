@@ -34,6 +34,7 @@ The order is deliberate: layers and tokens, theme, typography, layout, shared co
 | `a11y.css`, `era-styles.css` | Final global accessibility and era overrides |
 | `article-pages.css` | Non-homepage Codex routes through `route-data.ts` |
 | `category-index.css` | Category routes through `route-data.ts` |
+| `releases.css` | Generated Starlight Changelogs routes through `route-data.ts` |
 | `maps.css` | `WorldMap.astro` and the Atlas index route |
 | `relationships.css` | `RelationshipGraph.astro` |
 | `exploration-pages.css` | `WorldMap.astro` and `RelationshipGraph.astro` |
