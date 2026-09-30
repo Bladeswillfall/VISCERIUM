@@ -47,6 +47,25 @@ test('public site code cannot read Worker-only contact secrets', () => {
   assert.doesNotMatch(publicContactCode, /RESEND_API_KEY|TURNSTILE_SECRET_KEY/);
 });
 
+test('custom 404 route replaces Starlight default route', () => {
+  const config = read('../astro.config.mjs');
+  const notFoundPage = read('../src/pages/404.astro');
+
+  assert.match(config, /disable404Route:\s*true/);
+  assert.match(notFoundPage, /This page is not in the codex/);
+});
+
+test('dependency review includes comment gateway dependency files', () => {
+  const workflow = read('../../.github/workflows/dependency-review.yml');
+
+  for (const file of ['package.json', 'package-lock.json', '.npmrc']) {
+    assert.ok(
+      workflow.includes(`      - 'Services/comment-gateway/${file}'`),
+      `dependency review must run for comment gateway ${file}`,
+    );
+  }
+});
+
 test('the checks workflow cannot create a follow-up repository commit', () => {
   const workflow = read('../../.github/workflows/checks.yml');
 
@@ -60,4 +79,21 @@ test('aggregated changelog headings have unique IDs', () => {
   const headings = [...changelog.matchAll(/^###\s+(.+)$/gm)].map((match) => match[1].toLowerCase());
 
   assert.equal(new Set(headings).size, headings.length);
+});
+
+test('browser CI image versions match the locked Playwright package', () => {
+  const lock = JSON.parse(read('../package-lock.json'));
+  const version = lock.packages['node_modules/@playwright/test'].version;
+  const workflow = read('../../.github/workflows/checks.yml');
+  const images = [...workflow.matchAll(/playwright:v([0-9.]+)-noble@sha256:([a-f0-9]{64})/g)];
+
+  assert.equal(images.length, 2, 'both browser and Axe jobs must use pinned images');
+  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 2, 'both container jobs must retain Bash');
+  assert.equal(workflow.split('HOME: /root').length, 2, 'browser test step must use a root-owned HOME');
+  for (const image of images) assert.equal(image[1], version);
+  const stopPreview = workflow.split('      - name: Stop preview before enabled contact fixture')[1]
+    ?.split('      - name: Build enabled contact browser fixture')[0];
+  assert.ok(stopPreview, 'preview shutdown step must exist');
+  assert.match(stopPreview, /curl[^\n]*127\.0\.0\.1:4321/);
+  assert.doesNotMatch(stopPreview, /! kill -0/, 'a container zombie can keep kill -0 true');
 });

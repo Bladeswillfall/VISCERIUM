@@ -5,7 +5,7 @@ const preview = 'http://127.0.0.1:4321';
 test('World Graph hover labels keep readable contrast in dark mode', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.addInitScript(() => localStorage.setItem('starlight-theme', 'dark'));
-  await page.goto(`${preview}/graph/`, { waitUntil: 'networkidle' });
+  await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
 
   const graph = page.locator('[data-world-graph]');
   const canvas = graph.locator('[data-world-graph-canvas]');
