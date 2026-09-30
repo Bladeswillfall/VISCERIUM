@@ -1,16 +1,20 @@
 /* Keep Starlight's native release markup, navigation and heading anchors. */
-.vc-release-content > h2 {
+body:not(:has(.home-gateway)) .sl-markdown-content.vc-release-content > h2 {
   margin-block: 3.2rem .25rem;
   padding-block-start: 1.25rem;
   border-block-start: 1px solid var(--sl-color-hairline-light);
 }
 
-.vc-release-content > h2:first-of-type {
+body:not(:has(.home-gateway)) .sl-markdown-content.vc-release-content > h2:first-of-type {
   border-block-start: 0;
   padding-block-start: 0;
 }
 
-.vc-release-content > h2 + time {
+body:not(:has(.home-gateway)) .sl-markdown-content.vc-release-content > h2::after {
+  content: none;
+}
+
+.vc-release-content time[datetime] {
   display: block;
   margin: .45rem 0 1.4rem 1rem;
   color: var(--sl-color-gray-3);
@@ -18,7 +22,7 @@
   letter-spacing: .025em;
 }
 
-.vc-release-content > h3 {
+body:not(:has(.home-gateway)) .sl-markdown-content.vc-release-content > h3 {
   margin-block: 1.5rem .75rem;
   color: var(--sl-color-gray-2);
   font: 600 .83rem/1.5 var(--vc-font-ui);

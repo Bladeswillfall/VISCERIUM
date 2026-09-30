@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const preview = 'http://127.0.0.1:4321';
 
-test('release overview keeps generated headings separated and accent-coloured', async ({ page }) => {
+test('release overview uses release-specific heading and date styles', async ({ page }) => {
   await page.setViewportSize({ width: 1200, height: 900 });
   await page.goto(`${preview}/releases/`, { waitUntil: 'networkidle' });
 
@@ -24,11 +24,12 @@ test('release overview keeps generated headings separated and accent-coloured', 
     const firstItem = h3.nextElementSibling?.querySelector('li');
     const h2Style = getComputedStyle(h2);
     const h3Style = getComputedStyle(h3);
+    const dateStyle = date ? getComputedStyle(date) : null;
     const h2Rect = h2.getBoundingClientRect();
     const h3Rect = h3.getBoundingClientRect();
 
     const probe = document.createElement('span');
-    probe.style.color = 'var(--era-heading-accent, var(--sl-color-accent-high))';
+    probe.style.color = 'var(--sl-color-gray-2)';
     content.append(probe);
     const expectedAccent = getComputedStyle(probe).color;
     probe.remove();
@@ -44,6 +45,11 @@ test('release overview keeps generated headings separated and accent-coloured', 
       isReleaseContent: content.classList.contains('vc-release-content'),
       dateText: date?.textContent?.trim() ?? '',
       dateTime: date?.getAttribute('datetime') ?? '',
+      dateDisplay: dateStyle?.display ?? '',
+      dateMarginTop: dateStyle?.marginTop ?? '',
+      dateFontWeight: dateStyle?.fontWeight ?? '',
+      h3FontSize: h3Style.fontSize,
+      h2AfterContent: getComputedStyle(h2, '::after').content,
       badgeText: firstItem ? getComputedStyle(firstItem, '::before').content : '',
     };
   });
@@ -56,6 +62,11 @@ test('release overview keeps generated headings separated and accent-coloured', 
   expect(result.dateTime).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   expect(result.dateText).toMatch(/2026/);
   expect(result.dateText).not.toContain('starlightChangelogs.');
+  expect(result.dateDisplay).toBe('block');
+  expect(Number.parseFloat(result.dateMarginTop)).toBeGreaterThan(0);
+  expect(result.dateFontWeight).toBe('600');
+  expect(Number.parseFloat(result.h3FontSize)).toBeLessThan(16);
+  expect(result.h2AfterContent).toBe('none');
   const expectedBadge = /added/i.test(result.h3Text) ? 'ADDED' : /changed/i.test(result.h3Text) ? 'UPDATED' : 'NOTICE';
   expect(result.badgeText).toContain(expectedBadge);
   expect(Number.parseFloat(result.h2MarginBottom)).toBeGreaterThanOrEqual(0);
