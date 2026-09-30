@@ -81,6 +81,11 @@ test('release notes are unboxed and have distinct light-theme labels', async ({ 
     }
 
     document.documentElement.dataset.theme = 'light';
+    const whiteProbe = document.createElement('span');
+    whiteProbe.style.color = 'var(--codex-fixed-light)';
+    document.body.append(whiteProbe);
+    labels.expectedWhite = getComputedStyle(whiteProbe).color;
+    whiteProbe.remove();
     for (const kind of kinds) {
       const item = document.querySelector(`.vc-release-content > h3[id^="${kind}"] + ul > li`);
       const badge = getComputedStyle(item, '::before');
@@ -94,7 +99,7 @@ test('release notes are unboxed and have distinct light-theme labels', async ({ 
   for (const kind of ['added', 'changed', 'fixed']) {
     expect(result[kind].border).toBe('0px');
     expect(result[kind].background).toBe('rgba(0, 0, 0, 0)');
-    expect(result[kind].lightText).toBe('rgb(255, 255, 255)');
+    expect(result[kind].lightText).toBe(result.expectedWhite);
   }
   expect(result.added.lightBadge).toBe('rgb(8, 114, 72)');
   expect(result.changed.lightBadge).toBe('rgb(49, 92, 155)');
