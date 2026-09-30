@@ -244,6 +244,73 @@ jobs:
             exit 1
           }
 
+  axe:
+    name: Axe accessibility checks
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: Site
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 500
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Site/package-lock.json
+
+      - name: Use npm with lifecycle-script policy support
+        working-directory: .
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - run: npm ci --silent --no-audit --no-fund
+
+      - name: Install Axe accessibility runtime
+        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund @axe-core/playwright@4.13.0
+
+      - name: Download production build
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: site-dist
+          path: Site/dist/
+
+      - name: Install Chromium for accessibility checks
+        run: npx --no-install playwright install --with-deps chromium
+
+      - name: Start preview
+        run: |
+          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/viscerium-preview.pid"
+          for attempt in {1..30}; do
+            curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/viscerium-preview.log"
+          exit 1
+
+      - name: Run Axe accessibility checks
+        run: |
+          set -o pipefail
+          npx --no-install playwright test tests/accessibility/axe.spec.mjs \
+            --browser=chromium --reporter=line --workers=1 2>&1 | tee "$RUNNER_TEMP/axe.log"
+
+      - name: Upload accessibility log
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: axe-check-log
+          path: ${{ runner.temp }}/axe.log
+          if-no-files-found: warn
+          retention-days: 1
+
   browser:
     name: Browser checks
     needs: build
@@ -285,9 +352,6 @@ jobs:
           restore-keys: |
             atlas-tiles-v1-${{ runner.os }}-
 
-      - name: Install Axe accessibility runtime
-        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund @axe-core/playwright@4.13.0
-
       - name: Download production build
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -316,17 +380,6 @@ jobs:
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
           } 2>&1 | tee "$RUNNER_TEMP/playwright.log"
-
-      - name: Run Axe accessibility checks
-        run: |
-          set -o pipefail
-          npx --no-install playwright test tests/accessibility/axe.spec.mjs \
-            --browser=chromium --reporter=line --workers=1 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
-
-      # The temporary Axe install can replace Sharp and other unlocked packages.
-      # Reset to the build job's locked encoder versions before reusing its tile cache.
-      - name: Restore locked dependencies before contact build
-        run: npm ci --silent --no-audit --no-fund
 
       - name: Stop preview before enabled contact fixture
         run: |
@@ -385,6 +438,7 @@ jobs:
       - build
       - obsidian_plugin
       - browser
+      - axe
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 2
@@ -397,6 +451,7 @@ jobs:
           BUILD_RESULT: ${{ needs.build.result }}
           OBSIDIAN_PLUGIN_RESULT: ${{ needs.obsidian_plugin.result }}
           BROWSER_RESULT: ${{ needs.browser.result }}
+          AXE_RESULT: ${{ needs.axe.result }}
         run: |
           test "$REPOSITORY_RESULT" = "success"
           test "$UNIT_RESULT" = "success"
@@ -404,3 +459,4 @@ jobs:
           test "$BUILD_RESULT" = "success"
           test "$OBSIDIAN_PLUGIN_RESULT" = "success"
           test "$BROWSER_RESULT" = "success"
+          test "$AXE_RESULT" = "success"
