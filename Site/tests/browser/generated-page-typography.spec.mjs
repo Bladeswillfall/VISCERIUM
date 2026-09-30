@@ -21,10 +21,11 @@ test('release overview uses release-specific heading and date styles', async ({ 
     if (!(h3 instanceof HTMLHeadingElement)) return null;
 
     const date = content.querySelector('time[datetime]');
+    if (!(date instanceof HTMLTimeElement)) return null;
     const firstItem = h3.nextElementSibling?.querySelector('li');
     const h2Style = getComputedStyle(h2);
     const h3Style = getComputedStyle(h3);
-    const dateStyle = date ? getComputedStyle(date) : null;
+    const dateStyle = getComputedStyle(date);
     const h2Rect = h2.getBoundingClientRect();
     const h3Rect = h3.getBoundingClientRect();
 
@@ -43,11 +44,11 @@ test('release overview uses release-specific heading and date styles', async ({ 
       h2Text: h2.textContent?.trim() ?? '',
       h3Text: h3.textContent?.trim() ?? '',
       isReleaseContent: content.classList.contains('vc-release-content'),
-      dateText: date?.textContent?.trim() ?? '',
-      dateTime: date?.getAttribute('datetime') ?? '',
-      dateDisplay: dateStyle?.display ?? '',
-      dateMarginTop: dateStyle?.marginTop ?? '',
-      dateFontWeight: dateStyle?.fontWeight ?? '',
+      dateText: date.textContent.trim(),
+      dateTime: date.getAttribute('datetime'),
+      dateDisplay: dateStyle.display,
+      dateMarginTop: dateStyle.marginTop,
+      dateFontWeight: dateStyle.fontWeight,
       h3FontSize: h3Style.fontSize,
       h2AfterContent: getComputedStyle(h2, '::after').content,
       badgeText: firstItem ? getComputedStyle(firstItem, '::before').content : '',
