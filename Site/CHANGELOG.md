@@ -371,3 +371,5 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 - Future codex feature updates should add a new version section above this entry.
 - The `Unreleased` section can be used while drafting, but Starlight Changelogs ignores it until it becomes a dated version entry.
+
+[Unreleased]: https://github.com/Bladeswillfall/VISCERIUM/blob/main/Site/CHANGELOG.md
