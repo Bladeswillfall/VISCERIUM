@@ -133,6 +133,125 @@ function appendCitadelGrit(paper) {
   paper.append(grit);
 }
 
+
+/**
+ * Turn a cloned CITADEL folio instead of moving the source document.
+ * Only the real pages carry selectable text, note controls and live-region state.
+ * CSS scopes the 3D sheet to CITADEL; other artifact presets still switch instantly.
+ */
+function makeCitadelTurnSheet(page, stage) {
+  const paper = page.cloneNode(true);
+  paper.removeAttribute('aria-label');
+  paper.removeAttribute('id');
+  paper.querySelectorAll('[id], button, [aria-controls], [aria-expanded]').forEach(node => {
+    if (node.matches('button')) node.remove();
+    else {
+      node.removeAttribute('id');
+      node.removeAttribute('aria-controls');
+      node.removeAttribute('aria-expanded');
+    }
+  });
+  paper.style.margin = '0';
+  paper.style.width = '100%';
+  paper.style.height = '100%';
+  paper.style.minHeight = '0';
+  const sheet = document.createElement('div');
+  sheet.className = 'cx-citadel-turn-sheet';
+  sheet.setAttribute('aria-hidden', 'true');
+  sheet.inert = true;
+  const bounds = page.getBoundingClientRect();
+  const host = stage.getBoundingClientRect();
+  sheet.style.top = (bounds.top - host.top) + 'px';
+  sheet.style.left = (bounds.left - host.left) + 'px';
+  sheet.style.width = bounds.width + 'px';
+  sheet.style.height = bounds.height + 'px';
+  const front = document.createElement('div');
+  front.className = 'cx-citadel-turn-front';
+  front.append(paper);
+  const back = document.createElement('div');
+  back.className = 'cx-citadel-turn-back';
+  back.setAttribute('aria-hidden', 'true');
+  sheet.append(front, back);
+  return sheet;
+}
+
+function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,commit,positionNotes}) {
+  let active = null;
+  function cancel() {
+    if (!active) return;
+    const {sheet,outgoing,incoming,oldMinHeight,animation,timer} = active;
+    active = null;
+    clearTimeout(timer);
+    animation?.cancel();
+    sheet.remove();
+    outgoing.style.visibility = '';
+    incoming.style.visibility = '';
+    incoming.classList.remove('cx-citadel-turn-target');
+    incoming.hidden = true;
+    stage.style.minHeight = oldMinHeight;
+    stage.classList.remove('cx-citadel-turning');
+    delete root.dataset.pageTurning;
+  }
+
+  function turn(direction) {
+    if (active) return false;
+    const pages = getPages();
+    const from = getCurrent();
+    const target = from + direction;
+    if (target < 0 || target >= pages.length) return false;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      || typeof Element.prototype.animate !== 'function') {
+      commit(target);
+      return true;
+    }
+
+    const outgoing = pages[from].paper;
+    const incoming = pages[target].paper;
+    incoming.classList.add('cx-citadel-turn-target');
+    incoming.hidden = false;
+    positionNotes(incoming);
+    const sheet = makeCitadelTurnSheet(direction > 0 ? outgoing : incoming, stage);
+    const oldMinHeight = stage.style.minHeight;
+    const taller = Math.max(outgoing.getBoundingClientRect().height,incoming.getBoundingClientRect().height);
+    stage.style.minHeight = taller + 'px';
+    stage.classList.add('cx-citadel-turning');
+    root.dataset.pageTurning = direction > 0 ? 'forward' : 'backward';
+    // The outgoing page stays in document flow, keeping the reader's scroll position.
+    // The incoming page waits beneath it and is never exposed to keyboard focus mid-turn.
+    incoming.inert = true;
+    incoming.style.visibility = direction > 0 ? 'visible' : 'hidden';
+    outgoing.style.visibility = direction > 0 ? 'hidden' : 'visible';
+    previous.disabled = next.disabled = true;
+    stage.append(sheet);
+
+    const narrow = stage.getBoundingClientRect().width < 560;
+    const forward = narrow
+      ? [{transform:'rotateY(0deg)',opacity:1},{transform:'rotateY(-82deg)',opacity:1,offset:.68},
+          {transform:'rotateY(-108deg)',opacity:0}]
+      : [{transform:'rotateY(0deg)'},{transform:'rotateY(-180deg)'}];
+    const backward = narrow
+      ? [{transform:'rotateY(-108deg)',opacity:0},{transform:'rotateY(-82deg)',opacity:1,offset:.32},
+          {transform:'rotateY(0deg)',opacity:1}]
+      : [{transform:'rotateY(-180deg)'},{transform:'rotateY(0deg)'}];
+    const animation = sheet.animate(direction > 0 ? forward : backward,{
+      duration:narrow ? 610 : 880,
+      easing:'cubic-bezier(.645,.045,.355,1)',
+      fill:'both',
+    });
+    function finish() {
+      if (!active || active.sheet !== sheet) return;
+      cancel();
+      incoming.inert = false;
+      commit(target);
+    }
+    const timer = setTimeout(finish,narrow ? 760 : 1030);
+    active = {sheet,outgoing,incoming,oldMinHeight,animation,timer};
+    animation.finished.then(finish).catch(() => {});
+    return true;
+  }
+  return {turn,cancel};
+}
+
 let artifactInstanceSequence = 0;
 
 export function installArtifactDocuments(scope = document) {
@@ -198,6 +317,7 @@ export function installArtifactDocuments(scope = document) {
     const units = tokenizeArtifactSource(source);
 
     let pages = [], current = 0, view = 'rendered', width = 0, scheduled = null, noteCount = 0, disposed = false;
+    let pageTurn = null;
     function makePaper(number, folioWidth) {
       const {paper,inner}=createArtifactPaper(root,preset,label,number,folioWidth);
       appendArtifactHeading(inner,root,preset,number,roman);
@@ -301,6 +421,7 @@ export function installArtifactDocuments(scope = document) {
 
     function paginate() {
       if (disposed) return;
+      pageTurn?.cancel();
       const selectedUnit = pages[current]?.first ?? 0;
       const measuredWidth = Math.round(stage.getBoundingClientRect().width) || Math.min(620,Math.round(root.getBoundingClientRect().width));
       if (!measuredWidth) return;
@@ -340,6 +461,7 @@ export function installArtifactDocuments(scope = document) {
 
     function schedule() {
       if (disposed) return;
+      pageTurn?.cancel();
       clearTimeout(scheduled);
       scheduled = setTimeout(paginate,110);
     }
@@ -372,13 +494,32 @@ export function installArtifactDocuments(scope = document) {
       if (button) {button.click();button.focus();}
     }
 
-    function goBack() {if (current>0) {current--;render();}}
-    function goForward() {if (current<pages.length-1) {current++;render();}}
+    // CITADEL turns a physical-looking folio. The other eras retain instant changes.
+    if (preset === 'citadel-note') {
+      pageTurn = createCitadelPageTurn({
+        root,stage,previous,next,
+        getPages:() => pages,
+        getCurrent:() => current,
+        commit:index => {current = index;render();},
+        positionNotes:drawMarginNotes,
+      });
+    }
+    function goBack() {
+      if (current < 1) return;
+      if (!pageTurn) {current--;render();return;}
+      pageTurn.turn(-1);
+    }
+    function goForward() {
+      if (current >= pages.length-1) return;
+      if (!pageTurn) {current++;render();return;}
+      pageTurn.turn(1);
+    }
     function showRendered() {
+      pageTurn?.cancel();
       view='rendered'; render();
       if (Math.round(stage.getBoundingClientRect().width) !== width) paginate();
     }
-    function showOriginal() {view='original';render();}
+    function showOriginal() {pageTurn?.cancel();view='original';render();}
     renderedButton.addEventListener('click',showRendered);
     plainButton.addEventListener('click',showOriginal);
     previous.addEventListener('click',goBack);
@@ -395,6 +536,7 @@ export function installArtifactDocuments(scope = document) {
     widgets.push(() => {
       stage.removeEventListener('artifact:repaginate',onRepaginate);
       disposed=true;
+      pageTurn?.cancel();
       observer?.disconnect();
       clearTimeout(scheduled);
       renderedButton.removeEventListener('click',showRendered);
