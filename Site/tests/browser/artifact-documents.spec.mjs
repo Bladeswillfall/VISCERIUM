@@ -265,8 +265,9 @@ test('CITADEL turn cancels cleanly on Original text and responsive repagination'
   await expect(artifact.locator('.cx-artifact-source')).toBeVisible();
   await expect(stage).not.toHaveAttribute('aria-busy','true');
 
+  const selectedLeaf = await artifact.locator('.cx-artifact-count').innerText();
   await artifact.getByRole('button',{name:'Manuscript'}).click();
-  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
+  await expect(artifact.locator('.cx-artifact-count')).toHaveText(selectedLeaf);
   await artifact.getByRole('button',{name:'Next leaf'}).click();
   await page.setViewportSize({width:390,height:850});
   await expect(stage.locator('.cx-citadel-turn-sheet')).toHaveCount(0);
@@ -285,4 +286,36 @@ test('reduced-motion CITADEL uses instant navigation without a turn overlay', as
   await expect(artifact).not.toHaveAttribute('data-page-turning','forward');
   await artifact.getByRole('button',{name:'Previous leaf'}).click();
   await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
+});
+
+
+test('font-triggered repagination waits for an active CITADEL turn and preserves open notes', async ({page}) => {
+  const artifact = await openArtifact(page,1365);
+  const stage = artifact.locator('.cx-artifact-stage');
+  const pending = await artifact.evaluate(root => {
+    // Trigger the click and simulated late-font event within one browser task.
+    root.querySelector('.cx-artifact-pager button[aria-label="Next leaf"]').click();
+    const stage = root.querySelector('.cx-artifact-stage');
+    const before = root.dataset.pageTurning;
+    stage.dispatchEvent(new Event('artifact:repaginate'));
+    return {before,after:root.dataset.pageTurning,overlay:!!stage.querySelector('.cx-citadel-turn-sheet')};
+  });
+  expect(pending).toEqual({before:'forward',after:'forward',overlay:true});
+  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 2 /');
+  await expect(stage.locator('.cx-citadel-turn-sheet')).toHaveCount(0);
+  // An annotation remains expanded when the browser rebuilds pages after font arrival.
+  await page.setViewportSize({width:390,height:850});
+  await expect(artifact.locator('.cx-artifact-paper:not([hidden])')).toHaveCount(1);
+  // Mobile repagination is content-based: the current leaf number may change.
+  const previous = artifact.getByRole('button',{name:'Previous leaf'});
+  for (let tries=0; tries<12 && await previous.isEnabled(); tries++) {
+    await previous.click();
+    await expect(artifact).not.toHaveAttribute('data-page-turning');
+  }
+  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
+  const trigger = artifact.getByRole('button',{name:/Read annotation:/}).first();
+  await trigger.click();
+  await expect(trigger).toHaveAttribute('aria-expanded','true');
+  await stage.evaluate(element => element.dispatchEvent(new Event('artifact:repaginate')));
+  await expect(artifact.getByRole('button',{name:/Read annotation:/}).first()).toHaveAttribute('aria-expanded','true');
 });
