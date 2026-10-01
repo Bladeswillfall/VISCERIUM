@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import siteConfig from '../site.config.mjs';
 import { walk } from './lib/walk.mjs';
+import { materializeCachedResponsiveVariants } from './lib/responsive-image-cache.mjs';
 
 export const RESPONSIVE_IMAGE_WIDTHS = Object.freeze([480, 960, 1600]);
 export const RESPONSIVE_WEBP_QUALITY = 75;
@@ -111,6 +112,7 @@ async function encodeVariant(sharp, source, width, format) {
 }
 
 async function generateAssetVariants({
+  siteRoot,
   sharp,
   source,
   publicOriginal,
@@ -131,33 +133,46 @@ async function generateAssetVariants({
   const webp = [];
   const jpeg = [];
 
-  await fs.mkdir(variantsDir, { recursive: true });
+  const variants = widths.flatMap((candidateWidth) => [
+    ...(candidateWidth === width ? [] : [{ width: candidateWidth, format: 'webp' }]),
+    { width: candidateWidth, format: 'jpeg' },
+  ]);
+  const { sizes } = await materializeCachedResponsiveVariants({
+    siteRoot,
+    category: publicCategory,
+    filename,
+    source,
+    publicOriginal,
+    sharp,
+    generatorFile: fileURLToPath(import.meta.url),
+    files: variants.map(({ width: candidateWidth, format }) =>
+      responsiveVariantFilename(filename, candidateWidth, format)),
+    destination: variantsDir,
+    generate: async (directory) => {
+      for (const { width: candidateWidth, format } of variants) {
+        const name = responsiveVariantFilename(filename, candidateWidth, format);
+        await fs.writeFile(path.join(directory, name),
+          await encodeVariant(sharp, source, candidateWidth, format));
+      }
+    },
+  });
 
   for (const candidateWidth of widths) {
-    // Reuse the canonical source WebP at native size instead of applying an
-    // unnecessary second lossy encode when the native width is itself a tier.
     if (candidateWidth === width) {
       webp.push({ width: candidateWidth, url: originalUrl, bytes: originalStat.size });
     } else {
-      const webpFilename = responsiveVariantFilename(filename, candidateWidth, 'webp');
-      const webpTarget = path.join(variantsDir, webpFilename);
-      const webpBuffer = await encodeVariant(sharp, source, candidateWidth, 'webp');
-      await fs.writeFile(webpTarget, webpBuffer);
+      const name = responsiveVariantFilename(filename, candidateWidth, 'webp');
       webp.push({
         width: candidateWidth,
         url: responsiveVariantUrl(publicCategory, filename, candidateWidth, 'webp'),
-        bytes: webpBuffer.length,
+        bytes: sizes.get(name),
       });
     }
-
-    const jpegFilename = responsiveVariantFilename(filename, candidateWidth, 'jpeg');
-    const jpegTarget = path.join(variantsDir, jpegFilename);
-    const jpegBuffer = await encodeVariant(sharp, source, candidateWidth, 'jpeg');
-    await fs.writeFile(jpegTarget, jpegBuffer);
+    const name = responsiveVariantFilename(filename, candidateWidth, 'jpeg');
     jpeg.push({
       width: candidateWidth,
       url: responsiveVariantUrl(publicCategory, filename, candidateWidth, 'jpeg'),
-      bytes: jpegBuffer.length,
+      bytes: sizes.get(name),
     });
   }
 
@@ -174,10 +189,10 @@ async function generateAssetVariants({
   };
 }
 
-export async function generateResponsiveImageVariants({ siteRoot = defaultSiteRoot } = {}) {
+export async function generateResponsiveImageVariants({ siteRoot = defaultSiteRoot, sharp: suppliedSharp } = {}) {
   await cleanResponsiveImageVariants({ siteRoot });
 
-  const sharp = await loadSharp();
+  const sharp = suppliedSharp ?? await loadSharp();
   const assetRoot = path.resolve(siteRoot, siteConfig.vaultAssetDir);
   const publicAssetRoot = path.join(siteRoot, 'public', 'assets');
   const sourceManifestPath = path.join(siteRoot, 'src', 'data', 'image-variants.json');
@@ -207,6 +222,7 @@ export async function generateResponsiveImageVariants({ siteRoot = defaultSiteRo
       if (!(await pathExists(publicOriginal))) continue;
 
       const entry = await generateAssetVariants({
+        siteRoot,
         sharp,
         source,
         publicOriginal,
