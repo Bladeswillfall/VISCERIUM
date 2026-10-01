@@ -24,8 +24,12 @@ export function selectChecks(paths, { fullRun = false } = {}) {
     if (typeof name !== 'string' || !name || name.startsWith('/')
       || name.includes('..') || /^\.github\/(?:workflows|scripts)\//.test(name)) return full();
 
-    if (/^(?:README|CONTRIBUTING|CODE_OF_CONDUCT)\.md$/.test(name)
-      || name.startsWith('docs/') || name === 'Site/tests/README.md') continue;
+    if (name === 'README.md') {
+      checks.unit = true; // Site unit tests validate README rights notices and badges.
+      continue;
+    }
+    if (/^(?:CONTRIBUTING|CODE_OF_CONDUCT)\.md$/.test(name)
+      || /^docs\/.+\.md$/.test(name) || name === 'Site/tests/README.md') continue;
 
     if (name.startsWith('Services/comment-gateway/')) {
       checks.gateway = true;
