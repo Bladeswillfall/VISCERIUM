@@ -12,6 +12,8 @@ The local plugin deliberately does not register a second `chronos` code-block pr
 
 ## Build
 
+The shared renderer uses `vis-timeline/peer` and `vis-data/peer` rather than the standalone timeline bundle. Keep the installed Moment version patched. The production build checks that the compiled plugin embeds the same Moment version as the installed package.
+
 From this directory:
 
 ```bash
