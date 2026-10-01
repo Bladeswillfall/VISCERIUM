@@ -16,6 +16,10 @@
     --codex-palette-page-light: #b9b4a9;
     --codex-palette-light: #c8bfa8;
     --codex-text-base: #a0a0a0;
+    /* Homepage recent-article text hierarchy, shared by all era treatments. */
+    --recent-text-bright: #ece7dc;
+    --recent-text-body: #c7c0b3;
+    --recent-text-muted: #a8a295;
     --codex-text-body: var(--codex-text-base);
     --codex-text-minor: var(--codex-text-base);
 

@@ -8,9 +8,17 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ## [Unreleased]
 
+### Added in Unreleased
+
+- Added a responsive homepage Recent Articles carousel with era-themed header placeholders, an expandable grid and smooth drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
+
 ### Changed in Unreleased
 
 - Updated release notes with colour-coded change labels and clearer date and version layouts; fixed British English release-date formatting.
+
+### Removed in Unreleased
+
+- Removed the standalone What's New page and its link from the homepage Recent Articles section; the carousel and public feeds remain available.
 
 ## [0.14.0] - 2026-09-28
 
