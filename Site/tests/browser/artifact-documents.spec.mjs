@@ -306,7 +306,12 @@ test('font-triggered repagination waits for an active CITADEL turn and preserves
   // An annotation remains expanded when the browser rebuilds pages after font arrival.
   await page.setViewportSize({width:390,height:850});
   await expect(artifact.locator('.cx-artifact-paper:not([hidden])')).toHaveCount(1);
-  await artifact.getByRole('button',{name:'Previous leaf'}).click();
+  // Mobile repagination is content-based: the current leaf number may change.
+  const previous = artifact.getByRole('button',{name:'Previous leaf'});
+  for (let tries=0; tries<12 && await previous.isEnabled(); tries++) {
+    await previous.click();
+    await expect(artifact).not.toHaveAttribute('data-page-turning');
+  }
   await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
   const trigger = artifact.getByRole('button',{name:/Read annotation:/}).first();
   await trigger.click();
