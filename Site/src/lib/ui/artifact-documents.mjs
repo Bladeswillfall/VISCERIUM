@@ -74,7 +74,7 @@ export function installArtifactDocuments(scope = document) {
     toolbar.append(modes, meta);
 
     const stage = document.createElement('div');
-    stage.className = 'cx-artifact-stage';
+    stage.className = 'cx-artifact-stage' + (preset === 'citadel-note' ? ' leaves' : '');
     stage.setAttribute('aria-label', label + ' leaves');
     const pager = document.createElement('div');
     pager.className = 'cx-artifact-pager';
@@ -100,40 +100,86 @@ export function installArtifactDocuments(scope = document) {
     let pages = [], current = 0, view = 'rendered', width = 0, scheduled = null, noteCount = 0, disposed = false;
     function makePaper(number, folioWidth) {
       const paper = document.createElement('article');
-      paper.className = 'cx-artifact-paper';
+      paper.className = 'cx-artifact-paper' + (preset === 'citadel-note' ? ' manuscript leaf' : '');
+      if (preset === 'citadel-note') {
+        paper.dataset.script = root.dataset.hand || 'field';
+        paper.dataset.wear = root.dataset.condition || 'field';
+        paper.dataset.notes = 'on';
+        if (number === 1) paper.dataset.firstLeaf = 'true';
+        for (const name of ['paper-shade','paper-fold','paper-fold vertical','page-ghost']) {
+          const layer = document.createElement('div');
+          layer.className = name;
+          layer.setAttribute('aria-hidden','true');
+          paper.append(layer);
+        }
+        const artwork = document.createElementNS('http://www.w3.org/2000/svg','svg');
+        artwork.setAttribute('class','ms-page-art');
+        artwork.setAttribute('viewBox','0 0 900 1290');
+        artwork.setAttribute('preserveAspectRatio','none');
+        artwork.setAttribute('aria-hidden','true');
+        artwork.innerHTML = '<path d="M86 25 Q80 310 87 646 Q90 986 79 1250" fill="none" stroke="#745334" opacity=".12" stroke-width="11"/><path d="M90 24 Q82 311 93 646 Q95 983 85 1250" fill="none" stroke="#fff4cf" opacity=".28" stroke-width="2"/>';
+        paper.append(artwork);
+      }
       paper.dataset.condition = root.dataset.condition || 'field';
       paper.dataset.hand = root.dataset.hand || 'field';
       paper.dataset.ink = root.dataset.ink || 'worn';
       paper.setAttribute('aria-label',label + ', leaf ' + number);
-      const height = Math.round(Math.max(folioWidth * (folioWidth < 420 ? 1.55 : 1.43), folioWidth < 420 ? 440 : 630));
+      const height = preset === 'citadel-note'
+        ? (folioWidth <= 560 ? Math.max(530,Math.round(folioWidth * 1.47)) : Math.round(folioWidth * 1.43))
+        : Math.round(Math.max(folioWidth * (folioWidth < 420 ? 1.55 : 1.43), folioWidth < 420 ? 440 : 630));
       paper.style.setProperty('--artifact-folio-height',height + 'px');
+      paper.style.setProperty('--folio-height',height + 'px');
       paper.dataset.baseHeight = String(height);
       const inner = document.createElement('div');
-      inner.className = 'cx-artifact-inner';
+      inner.className = 'cx-artifact-inner' + (preset === 'citadel-note' ? ' ms-body' : '');
+      if (preset === 'citadel-note') {
+        for (const name of ['gutter','pricking','guidelines']) {
+          const mark = document.createElement('div');
+          mark.className = name;
+          mark.setAttribute('aria-hidden','true');
+          inner.append(mark);
+        }
+      }
       const header = document.createElement('div');
-      header.className = 'cx-artifact-folio-head';
+      header.className = 'cx-artifact-folio-head' + (preset === 'citadel-note' ? ' ms-header' : '');
       const date = document.createElement('span');
-      date.textContent = root.dataset.date || '';
+      date.textContent = (preset === 'citadel-note' && number === 1 ? 'Date: ' : '') + (root.dataset.date || '');
       const folio = document.createElement('span');
+      if (preset === 'citadel-note') folio.className = 'folio';
       folio.textContent = preset === 'citadel-note' ? 'fol. ' + roman(number) : String(number).padStart(2,'0');
       header.append(date,folio);
       inner.append(header);
       if (number === 1 && root.dataset.title) {
-        const title = document.createElement('h3');
-        title.className = 'cx-artifact-title';
+        // Decorative artifact rubric is not a heading in the surrounding article.
+        const title = document.createElement(preset === 'citadel-note' ? 'div' : 'h3');
+        title.className = 'cx-artifact-title' + (preset === 'citadel-note' ? ' rubric' : '');
         title.textContent = root.dataset.title;
         inner.append(title);
+        if (preset === 'citadel-note') {
+          const scratch = document.createElementNS('http://www.w3.org/2000/svg','svg');
+          scratch.setAttribute('class','scratch-rubric');
+          scratch.setAttribute('viewBox','0 0 90 12');
+          scratch.setAttribute('aria-hidden','true');
+          scratch.innerHTML = '<path d="M1 6 Q28 5 45 4 T88 5" fill="none" stroke="#974a3b" stroke-width="1"/>';
+          inner.append(scratch);
+        }
       } else if (number > 1 && preset === 'citadel-note') {
         const continuation = document.createElement('div');
-        continuation.className = 'cx-artifact-continuation';
+        continuation.className = 'cx-artifact-continuation' + (preset === 'citadel-note' ? ' folio-continuation' : '');
         continuation.setAttribute('aria-hidden','true');
         continuation.textContent = '·  ·  ·';
         inner.append(continuation);
       }
       const prose = document.createElement('div');
-      prose.className = 'cx-artifact-prose';
+      prose.className = 'cx-artifact-prose' + (preset === 'citadel-note' ? ' ms-prose' : '');
       inner.append(prose);
       paper.append(inner);
+      if (preset === 'citadel-note') {
+        const grit = document.createElement('div');
+        grit.className = 'paper-grit';
+        grit.setAttribute('aria-hidden','true');
+        paper.append(grit);
+      }
       stage.append(paper);
       return {paper,prose};
     }
@@ -169,7 +215,7 @@ export function installArtifactDocuments(scope = document) {
         const note = anchor.dataset.note;
         const id = noteIdPrefix + (++noteCount);
         const button = document.createElement('button');
-        button.className = 'cx-artifact-note-trigger';
+        button.className = 'cx-artifact-note-trigger' + (preset === 'citadel-note' ? ' ms-note-trigger' : '');
         button.type = 'button';
         button.textContent = '✣';
         button.setAttribute('aria-label','Read annotation: ' + note);
@@ -177,17 +223,18 @@ export function installArtifactDocuments(scope = document) {
         button.setAttribute('aria-controls',id);
         const detail = document.createElement('span');
         detail.id = id;
-        detail.className = 'cx-artifact-inline-note';
+        detail.className = 'cx-artifact-inline-note' + (preset === 'citadel-note' ? ' ms-inline-note' : '');
         detail.setAttribute('role','note');
         detail.hidden = true;
         detail.textContent = note;
+        if (preset === 'citadel-note') anchor.classList.add('ms-note-anchor');
         anchor.after(button,detail);
       }
     }
 
     function drawMarginNotes(paper) {
       paper.querySelectorAll('.cx-artifact-margin-note').forEach(note => note.remove());
-      if (paper.clientWidth < 460) return;
+      if (paper.clientWidth < (preset === 'citadel-note' ? 560 : 460)) return;
       const body = paper.querySelector('.cx-artifact-inner');
       const anchors = [...paper.querySelectorAll('.cx-artifact-anchor[data-note]')];
       const target = anchors.map(anchor => ({
@@ -197,7 +244,7 @@ export function installArtifactDocuments(scope = document) {
       let nextAvailable = 45;
       for (const item of target) {
         const aside = document.createElement('aside');
-        aside.className = 'cx-artifact-margin-note';
+        aside.className = 'cx-artifact-margin-note' + (preset === 'citadel-note' ? ' ms-aside' : '');
         aside.setAttribute('aria-hidden','true');
         aside.textContent = item.anchor.dataset.note;
         body.append(aside);
@@ -252,6 +299,7 @@ export function installArtifactDocuments(scope = document) {
           const contentBottom = leaf.prose.getBoundingClientRect().bottom - leaf.paper.getBoundingClientRect().top;
           const height = Math.ceil(contentBottom + Math.max(35, width * .07));
           leaf.paper.style.setProperty('--artifact-folio-height',height + 'px');
+          leaf.paper.style.setProperty('--folio-height',height + 'px');
           leaf.paper.dataset.baseHeight = String(height);
         }
         onPage++;
@@ -284,8 +332,10 @@ export function installArtifactDocuments(scope = document) {
       if (isOpening) {
         const contentBottom = paper.querySelector('.cx-artifact-prose').getBoundingClientRect().bottom - paper.getBoundingClientRect().top;
         paper.style.setProperty('--artifact-folio-height',Math.max(Number(paper.dataset.baseHeight),Math.ceil(contentBottom+38))+'px');
+        paper.style.setProperty('--folio-height',Math.max(Number(paper.dataset.baseHeight),Math.ceil(contentBottom+38))+'px');
       } else {
         paper.style.setProperty('--artifact-folio-height',paper.dataset.baseHeight+'px');
+        paper.style.setProperty('--folio-height',paper.dataset.baseHeight+'px');
       }
       requestAnimationFrame(() => drawMarginNotes(paper));
     }
