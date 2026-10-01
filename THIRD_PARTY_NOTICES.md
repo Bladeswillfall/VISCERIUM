@@ -25,10 +25,10 @@ The block below is maintained from the existing npm package manifests. It record
 <!-- DEPENDENCIES:DIRECT:START -->
 | Project | Package | Scope | Declared version |
 | --- | --- | --- | --- |
-| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^7.0.3` |
-| Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
-| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
-| Codex (`Site/`) | `astro` | runtime | `^7.2.8` |
+| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^8.0.2` |
+| Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.4` |
+| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.42.4` |
+| Codex (`Site/`) | `astro` | runtime | `^7.3.5` |
 | Codex (`Site/`) | `cytoscape` | runtime | `3.34.3` |
 | Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.0` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
