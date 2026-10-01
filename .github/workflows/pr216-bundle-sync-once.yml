@@ -31,7 +31,6 @@ jobs:
           grep -Fq '2.31.0' "$GENERATED/main.js"
           if grep -Fq '2.30.1' "$GENERATED/main.js"; then exit 1; fi
           cp "$GENERATED/main.js" Vault/.obsidian/plugins/viscerium-timelines/main.js
-          git diff --check
           git add -- Vault/.obsidian/plugins/viscerium-timelines/main.js
           git rm -- .github/workflows/pr216-bundle-sync-once.yml
           git config user.name 'github-actions[bot]'
