@@ -58,10 +58,12 @@
     "gray-matter": "^4.0.3",
     "leaflet": "1.9.4",
     "leaflet.control.layers.tree": "1.2.0",
+    "moment": "2.31.0",
     "starlight-changelogs": "^0.7.0",
     "starlight-scroll-to-top": "^2.0.0",
     "starlight-tags": "^2.0.0",
     "starlight-telescope": "^2.0.0",
+    "vis-data": "8.0.4",
     "vis-timeline": "8.5.4"
   },
   "engines": {

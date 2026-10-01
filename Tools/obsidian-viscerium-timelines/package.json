@@ -12,6 +12,8 @@
     "build:sync": "npm run build && npm run sync:vault"
   },
   "dependencies": {
+    "moment": "2.31.0",
+    "vis-data": "8.0.4",
     "vis-timeline": "8.5.4"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
-import { DataSet, Timeline } from 'vis-timeline/standalone';
+import { DataSet } from 'vis-data/peer';
+import { Timeline } from 'vis-timeline/peer';
 import { escapeHtml } from '../codex-paths.mjs';
 import { calendars, defaultCalendarId, formatAbsoluteDay } from '../calendar/runtime.mjs';
 import {

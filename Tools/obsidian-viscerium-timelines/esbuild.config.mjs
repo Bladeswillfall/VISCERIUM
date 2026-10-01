@@ -27,6 +27,15 @@ await esbuild.build({
   logLevel: 'info',
 });
 
+if (production) {
+  const bundled = await fs.readFile(path.join(outDir, 'main.js'), 'utf8');
+  const installedMoment = JSON.parse(await fs.readFile(path.join(root, 'node_modules/moment/package.json'), 'utf8')).version;
+  const bundledMoment = bundled.match(/\\.version\\s*=\\s*["'](2\\.\\d+\\.\\d+)["']/)?.[1];
+  if (bundledMoment !== installedMoment) {
+    throw new Error(`Timeline bundle contains Moment ${bundledMoment ?? 'none'}, expected ${installedMoment}.`);
+  }
+}
+
 const generatedCss = path.join(outDir, 'main.css');
 try {
   await fs.rename(generatedCss, path.join(outDir, 'styles.css'));

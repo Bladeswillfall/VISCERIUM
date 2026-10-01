@@ -1,4 +1,5 @@
-import { DataSet, Timeline } from 'vis-timeline/standalone';
+import { DataSet } from 'vis-data/peer';
+import { Timeline } from 'vis-timeline/peer';
 import { timelineMessage } from './i18n.mjs';
 
 function stage(dataSet, values) {
