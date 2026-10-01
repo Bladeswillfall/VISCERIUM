@@ -163,7 +163,10 @@ function transformTag(line, stack, options) {
   }
 
   stack.push(parsed.tag);
-  if (parsed.tag === 'artifact') return '<section class="cx-artifact" ' + artifactOptions(parsed.spec) + '>\n<div class="cx-artifact-source">\n';
+  if (parsed.tag === 'artifact') {
+    const classAttr = options.jsx ? 'className' : 'class';
+    return '<section ' + classAttr + '="cx-artifact" ' + artifactOptions(parsed.spec) + '>\n<div ' + classAttr + '="cx-artifact-source">\n';
+  }
   const aside = ASIDES[parsed.tag];
   if (aside) {
     const title = titleFrom(parsed.spec)?.replace(/[\[\]]/g, '');
