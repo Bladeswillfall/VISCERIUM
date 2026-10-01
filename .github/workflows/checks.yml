@@ -429,7 +429,7 @@ jobs:
         env:
           HOME: /root
         run: |
-          set -o pipefail
+          set -e -o pipefail
           {
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
             npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
