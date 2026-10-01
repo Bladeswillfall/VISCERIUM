@@ -449,6 +449,8 @@
 }
 
 /* Exact material colours recovered from the approved V3 manuscript. */
+@layer ion {:root{--artifact-citadel-shadow-base:#3f261b;}}
+
 @layer ion {:root{
  --artifact-citadel-v3-detail-01: rgba(12,7,3,.3);
  --artifact-citadel-v3-detail-02: rgba(93,55,25,.21);
