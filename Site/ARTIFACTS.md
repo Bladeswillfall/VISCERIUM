@@ -16,6 +16,8 @@ The account continues using **ordinary Markdown** and [article links](/).
 
 Short artifacts render as one leaf. Long artifacts paginate by rendered size; leaf counts can differ by device and font. Readers can always choose **Original text**, which keeps marginal notes in reading order. In print, the original text is used.
 
+**CITADEL page turning:** Forward/back controls animate a detached, non-interactive copy of the parchment leaf. The real text and annotations are never transformed or duplicated for readers. Mobile uses a shorter clipped turn; browsers requesting reduced motion switch pages immediately. Switching to Original text, resizing or leaving the article cancels any turn. Other eras retain instant pagination.
+
 ## Presets
 
 | Shortcode | Initial treatment |
