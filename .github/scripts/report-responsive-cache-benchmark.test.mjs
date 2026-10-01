@@ -59,6 +59,7 @@ test('benchmark runs only when requested or its files change', () => {
   assert.match(workflow, /actions\/cache\/save@/);
   assert.match(workflow, /actions\/cache\/restore@/);
   assert.match(workflow, /fail-on-cache-miss: true/);
+  assert.match(workflow, /test "\$before_state" = "\$after_state"/);
   assert.match(workflow, /report-responsive-cache-benchmark\.mjs/);
   assert.match(workflow, /upload-artifact@/);
   assert.match(workflow, /node --test \.github\/scripts\/report-responsive-cache-benchmark\.test\.mjs/);
