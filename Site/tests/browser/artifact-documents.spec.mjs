@@ -126,6 +126,8 @@ test('approved V3 manuscript materials remain fixed across light and dark websit
 
 test('artifact buttons use site era fills and background hover in both website themes', async ({page}) => {
   const artifact=await openArtifact(page,1365);
+  // Check colour endpoints without sampling the deliberate 140ms UI transition.
+  await page.addStyleTag({content: '.cx-artifact .cx-artifact-view button, .cx-artifact .cx-artifact-pager button {transition: none !important;}'});
   for (const theme of ['dark','light']) {
     await page.evaluate(theme => document.documentElement.setAttribute('data-theme',theme),theme);
     const mode=artifact.locator('.cx-artifact-view button[aria-pressed="true"]');
