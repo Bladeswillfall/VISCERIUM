@@ -125,3 +125,10 @@ test('light-mode mobile articles retain readable text on the light background', 
   expect(layout.countVisible).toBe(false);
   expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
 });
+
+test('homepage has no link to the retired What\'s New route', async ({ page, request }) => {
+  await page.goto(homepage, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('a[href="/changelog/"]')).toHaveCount(0);
+  const response = await request.get(new URL('/changelog/', homepage).href);
+  expect(response.status()).toBe(404);
+});
