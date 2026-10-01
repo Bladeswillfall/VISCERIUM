@@ -257,7 +257,7 @@ test('CITADEL turn cancels cleanly on Original text and responsive repagination'
   expect(docWidth).toBeLessThanOrEqual(390);
 });
 
-test('reduced-motion CITADEL and all other document themes use instant navigation', async ({page}) => {
+test('reduced-motion CITADEL uses instant navigation without a turn overlay', async ({page}) => {
   await page.emulateMedia({reducedMotion:'reduce'});
   const artifact = await openArtifact(page,390);
   await artifact.getByRole('button',{name:'Next leaf'}).click();
