@@ -1,3 +1,38 @@
+/* Clone authored blocks without flattening their Markdown formatting. */
+function tokenizeArtifactSource(source) {
+// Keep one canonical Markdown-rendered source. Each visible leaf is a clone.
+// Splitting text into small units preserves text, emphasis, links and note anchors.
+const units = [];
+let blockId = 0;
+for (const block of source.children) {
+  if (!block.matches('p')) {
+    units.push({blockId,kind:'block',node:block.cloneNode(true)});
+    blockId++;
+    continue;
+  }
+  for (const node of block.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const words = node.textContent.match(/\S+\s*|\s+/gu) ?? [];
+      let part = '', count = 0;
+      for (const word of words) {
+        part += word;
+        if (word.trim()) count++;
+        if (count >= 7) {
+          units.push({blockId,kind:'p',node:document.createTextNode(part)});
+          part = ''; count = 0;
+        }
+      }
+      if (part) units.push({blockId,kind:'p',node:document.createTextNode(part)});
+    } else if (node.nodeType === Node.ELEMENT_NODE && !node.matches('.cx-artifact-source-note')) {
+      units.push({blockId,kind:'p',node:node.cloneNode(true)});
+    }
+  }
+  blockId++;
+}
+
+  return units;
+}
+
 export function installArtifactDocuments(scope = document) {
   const widgets = [];
   const roman = (n) => {
@@ -57,35 +92,7 @@ export function installArtifactDocuments(scope = document) {
     pager.append(caption,actions);
     source.before(toolbar,stage,pager);
 
-    // Keep one canonical Markdown-rendered source. Each visible leaf is a clone.
-    // Splitting text into small units preserves text, emphasis, links and note anchors.
-    const units = [];
-    let blockId = 0;
-    for (const block of source.children) {
-      if (!block.matches('p')) {
-        units.push({blockId,kind:'block',node:block.cloneNode(true)});
-        blockId++;
-        continue;
-      }
-      for (const node of block.childNodes) {
-        if (node.nodeType === Node.TEXT_NODE) {
-          const words = node.textContent.match(/\S+\s*|\s+/gu) ?? [];
-          let part = '', count = 0;
-          for (const word of words) {
-            part += word;
-            if (word.trim()) count++;
-            if (count >= 7) {
-              units.push({blockId,kind:'p',node:document.createTextNode(part)});
-              part = ''; count = 0;
-            }
-          }
-          if (part) units.push({blockId,kind:'p',node:document.createTextNode(part)});
-        } else if (node.nodeType === Node.ELEMENT_NODE && !node.matches('.cx-artifact-source-note')) {
-          units.push({blockId,kind:'p',node:node.cloneNode(true)});
-        }
-      }
-      blockId++;
-    }
+    const units = tokenizeArtifactSource(source);
 
     let pages = [], current = 0, view = 'rendered', width = 0, scheduled = null, noteCount = 0, disposed = false;
     function makePaper(number, folioWidth) {
