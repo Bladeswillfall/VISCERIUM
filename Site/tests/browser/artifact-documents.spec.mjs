@@ -162,12 +162,14 @@ test('artifact buttons use site era fills and background hover in both website t
     expect(state.nextRadius).toBe('999px');
     expect(state.border).toBe('0px');
     await idle.hover();
-    expect(await idle.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.eraHover);
+    await expect.poll(() => idle.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.eraHover);
     await next.hover();
-    expect(await next.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.eraHover);
+    await expect.poll(() => next.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.eraHover);
     expect(await previous.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.disabled);
     await mode.focus();
-    expect(await mode.evaluate(node=>getComputedStyle(node).outlineStyle)).not.toBe('none');
+    await page.keyboard.press('Tab');
+    await expect(idle).toBeFocused();
+    expect(await idle.evaluate(node=>getComputedStyle(node).outlineStyle)).not.toBe('none');
   }
 });
 
