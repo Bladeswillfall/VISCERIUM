@@ -33,6 +33,8 @@ for (const block of source.children) {
   return units;
 }
 
+let artifactInstanceSequence = 0;
+
 export function installArtifactDocuments(scope = document) {
   const widgets = [];
   const roman = (n) => {
@@ -43,6 +45,7 @@ export function installArtifactDocuments(scope = document) {
   for (const root of scope.querySelectorAll('.cx-artifact:not([data-artifact-installed])')) {
     const source = root.querySelector(':scope > .cx-artifact-source');
     if (!source) continue;
+    const noteIdPrefix = 'cx-artifact-' + (++artifactInstanceSequence) + '-note-';
     root.dataset.artifactInstalled = 'true';
 
     const preset = root.dataset.preset || 'citadel-note';
@@ -164,7 +167,7 @@ export function installArtifactDocuments(scope = document) {
     function prepareAnchors(paper) {
       for (const anchor of paper.querySelectorAll('.cx-artifact-anchor[data-note]')) {
         const note = anchor.dataset.note;
-        const id = 'cx-artifact-note-' + (++noteCount);
+        const id = noteIdPrefix + (++noteCount);
         const button = document.createElement('button');
         button.className = 'cx-artifact-note-trigger';
         button.type = 'button';
