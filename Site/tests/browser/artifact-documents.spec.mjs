@@ -203,3 +203,67 @@ test('artifact button identities match each document era regardless of parent ar
   });
   for (const {actual,expected} of mapped) expect(actual).toBe(expected);
 });
+
+
+test('CITADEL leaves turn as inert 3D paper, then reveal the correct page in both directions', async ({page}) => {
+  const artifact = await openArtifact(page,1365);
+  const stage = artifact.locator('.cx-artifact-stage');
+  const next = artifact.getByRole('button',{name:'Next leaf'});
+  const previous = artifact.getByRole('button',{name:'Previous leaf'});
+
+  await next.click();
+  await expect(artifact).toHaveAttribute('data-page-turning','forward');
+  await expect(stage).toHaveAttribute('aria-busy','true');
+  const sheet = stage.locator(':scope > .cx-citadel-turn-sheet');
+  await expect(sheet).toHaveCount(1);
+  await expect(sheet.locator('.cx-citadel-turn-front > .manuscript')).toHaveCount(1);
+  await expect(sheet.locator('.cx-citadel-turn-back')).toHaveCount(1);
+  expect(await sheet.evaluate(node=>node.inert)).toBe(true);
+  await expect(sheet.locator('[id],button,[aria-controls]')).toHaveCount(0);
+  await expect(next).toBeDisabled();
+  await expect(previous).toBeDisabled();
+
+  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 2 /');
+  await expect(stage).not.toHaveAttribute('aria-busy','true');
+  await expect(sheet).toHaveCount(0);
+  await expect(stage.locator(':scope > .cx-artifact-paper:not([hidden])')).toHaveCount(1);
+
+  await previous.click();
+  await expect(artifact).toHaveAttribute('data-page-turning','backward');
+  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
+  await expect(sheet).toHaveCount(0);
+  await expect(previous).toBeDisabled();
+  await expect(next).toBeEnabled();
+});
+
+test('CITADEL turn cancels cleanly on Original text and responsive repagination', async ({page}) => {
+  const artifact = await openArtifact(page,1365);
+  const stage = artifact.locator('.cx-artifact-stage');
+  await artifact.getByRole('button',{name:'Next leaf'}).click();
+  await expect(stage.locator('.cx-citadel-turn-sheet')).toHaveCount(1);
+  await artifact.getByRole('button',{name:'Original text'}).click();
+  await expect(stage.locator('.cx-citadel-turn-sheet')).toHaveCount(0);
+  await expect(artifact.locator('.cx-artifact-source')).toBeVisible();
+  await expect(stage).not.toHaveAttribute('aria-busy','true');
+
+  await artifact.getByRole('button',{name:'Manuscript'}).click();
+  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
+  await artifact.getByRole('button',{name:'Next leaf'}).click();
+  await page.setViewportSize({width:390,height:850});
+  await expect(stage.locator('.cx-citadel-turn-sheet')).toHaveCount(0);
+  await expect(stage).not.toHaveAttribute('aria-busy','true');
+  await expect(artifact.locator('.cx-artifact-paper:not([hidden])')).toHaveCount(1);
+  const docWidth=await page.evaluate(()=>document.documentElement.scrollWidth);
+  expect(docWidth).toBeLessThanOrEqual(390);
+});
+
+test('reduced-motion CITADEL and all other document themes use instant navigation', async ({page}) => {
+  await page.emulateMedia({reducedMotion:'reduce'});
+  const artifact = await openArtifact(page,390);
+  await artifact.getByRole('button',{name:'Next leaf'}).click();
+  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 2 /');
+  await expect(artifact.locator('.cx-citadel-turn-sheet')).toHaveCount(0);
+  await expect(artifact).not.toHaveAttribute('data-page-turning','forward');
+  await artifact.getByRole('button',{name:'Previous leaf'}).click();
+  await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
+});
