@@ -7,6 +7,7 @@ async function openArtifact(page, width) {
   await page.goto(articleUrl,{waitUntil:'domcontentloaded'});
   const artifact = page.locator('.cx-artifact[data-preset="citadel-note"]');
   await expect(artifact).toHaveAttribute('data-artifact-installed','true');
+  await page.evaluate(async () => { await document.fonts.ready; });
   await expect(artifact.locator('.cx-artifact-paper:not([hidden])')).toHaveCount(1);
   return artifact;
 }
@@ -213,15 +214,25 @@ test('CITADEL leaves turn as inert 3D paper, then reveal the correct page in bot
 
   await next.click();
   await expect(artifact).toHaveAttribute('data-page-turning','forward');
-  await expect(stage).toHaveAttribute('aria-busy','true');
   const sheet = stage.locator(':scope > .cx-citadel-turn-sheet');
-  await expect(sheet).toHaveCount(1);
-  await expect(sheet.locator('.cx-citadel-turn-front > .manuscript')).toHaveCount(1);
-  await expect(sheet.locator('.cx-citadel-turn-back')).toHaveCount(1);
-  expect(await sheet.evaluate(node=>node.inert)).toBe(true);
-  await expect(sheet.locator('[id],button,[aria-controls]')).toHaveCount(0);
-  await expect(next).toBeDisabled();
-  await expect(previous).toBeDisabled();
+  // Sample one animation frame atomically; the overlay must disappear on completion.
+  const animation = await stage.evaluate(element => {
+    const sheet = element.querySelector(':scope > .cx-citadel-turn-sheet');
+    const artifact = element.closest('.cx-artifact');
+    return {
+      active: !!sheet,
+      busy: element.getAttribute('aria-busy'),
+      front: sheet?.querySelectorAll('.cx-citadel-turn-front > .manuscript').length ?? 0,
+      back: sheet?.querySelectorAll('.cx-citadel-turn-back').length ?? 0,
+      inert: sheet?.inert ?? false,
+      interactiveCopies: sheet?.querySelectorAll('[id],button,[aria-controls]').length ?? -1,
+      buttonsDisabled: [...artifact.querySelectorAll('.cx-artifact-pager button')].every(button => button.disabled),
+    };
+  });
+  expect(animation).toMatchObject({
+    active:true,busy:'true',front:1,back:1,inert:true,
+    interactiveCopies:0,buttonsDisabled:true,
+  });
 
   await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 2 /');
   await expect(stage).not.toHaveAttribute('aria-busy','true');
