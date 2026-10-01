@@ -134,10 +134,13 @@ jobs:
           set -euo pipefail
           before=$(find .cache/image-variants -name manifest.json -type f | wc -l)
           test "$before" -eq "${{ needs.cold.outputs.entries }}"
+          before_state=$(find .cache/image-variants -name manifest.json -type f -printf "%P %T@ %s\\n" | LC_ALL=C sort)
           start=$(date +%s%3N)
           npm run build
           elapsed=$(($(date +%s%3N) - start))
           entries=$(find .cache/image-variants -name manifest.json -type f | wc -l)
+          after_state=$(find .cache/image-variants -name manifest.json -type f -printf "%P %T@ %s\\n" | LC_ALL=C sort)
+          test "$before_state" = "$after_state" || { echo "::error::Warm build rewrote the restored responsive cache"; exit 1; }
           test "$elapsed" -gt 0
           echo "ms=$elapsed" >> "$GITHUB_OUTPUT"
           echo "entries=$entries" >> "$GITHUB_OUTPUT"
