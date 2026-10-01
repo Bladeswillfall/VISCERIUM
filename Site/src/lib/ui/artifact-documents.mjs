@@ -175,7 +175,7 @@ function makeCitadelTurnSheet(page, stage) {
   return sheet;
 }
 
-function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,commit,positionNotes}) {
+function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,commit,positionNotes,onSettled}) {
   let active = null;
   function cancel(complete = false) {
     if (!active) return;
@@ -201,6 +201,7 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
         const destination = focusedControl.disabled ? (direction > 0 ? previous : next) : focusedControl;
         if (!destination.disabled) destination.focus({preventScroll:true});
       }
+      onSettled?.();
     }
   }
 
@@ -264,7 +265,7 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     animation.finished.then(finish).catch(() => {});
     return true;
   }
-  return {turn,cancel};
+  return {turn,cancel,isActive:() => Boolean(active)};
 }
 
 let artifactInstanceSequence = 0;
@@ -333,6 +334,7 @@ export function installArtifactDocuments(scope = document) {
 
     let pages = [], current = 0, view = 'rendered', width = 0, scheduled = null, noteCount = 0, disposed = false;
     let pageTurn = null;
+    let pendingFontRepagination = false;
     function makePaper(number, folioWidth) {
       const {paper,inner}=createArtifactPaper(root,preset,label,number,folioWidth);
       appendArtifactHeading(inner,root,preset,number,roman);
@@ -436,8 +438,12 @@ export function installArtifactDocuments(scope = document) {
 
     function paginate() {
       if (disposed) return;
-      // Font arrival or resize must not discard the reader's requested page turn.
+      if (view !== 'rendered') {pendingFontRepagination = true;return;}
       pageTurn?.cancel(true);
+      const expandedAnchor = pages[current]?.paper
+        .querySelector('.cx-artifact-note-trigger[aria-expanded="true"]')?.previousElementSibling;
+      const expandedNote = expandedAnchor?.dataset.note
+        ? {note:expandedAnchor.dataset.note,text:expandedAnchor.textContent} : null;
       const selectedUnit = pages[current]?.first ?? 0;
       const measuredWidth = Math.round(stage.getBoundingClientRect().width) || Math.min(620,Math.round(root.getBoundingClientRect().width));
       if (!measuredWidth) return;
@@ -471,15 +477,33 @@ export function installArtifactDocuments(scope = document) {
       for (const page of pages) prepareAnchors(page.paper);
       const preservedPage = pages.findIndex(page => page.first <= selectedUnit && page.last >= selectedUnit);
       current = Math.max(0,preservedPage);
+      if (expandedNote) {
+        const containing = pages.findIndex(page => [...page.paper.querySelectorAll('.cx-artifact-anchor')]
+          .some(anchor => anchor.dataset.note === expandedNote.note && anchor.textContent === expandedNote.text));
+        if (containing >= 0) current = containing;
+      }
       pages.forEach((page,index) => page.paper.setAttribute('aria-label',label + ', leaf ' + (index+1) + ' of ' + pages.length));
       render();
+      if (expandedNote) {
+        const anchor = [...pages[current].paper.querySelectorAll('.cx-artifact-anchor')]
+          .find(item => item.dataset.note === expandedNote.note && item.textContent === expandedNote.text);
+        anchor?.nextElementSibling?.click();
+      }
     }
 
-    function schedule() {
+    function schedule(reason = 'fonts') {
       if (disposed) return;
-      pageTurn?.cancel(true);
+      if (view !== 'rendered') {pendingFontRepagination = true;return;}
+      if (reason === 'resize') {
+        pendingFontRepagination = false;
+        pageTurn?.cancel(true);
+      } else if (pageTurn?.isActive()) {
+        // Font metrics can settle mid-flip. Finish the physical turn first.
+        pendingFontRepagination = true;
+        return;
+      }
       clearTimeout(scheduled);
-      scheduled = setTimeout(paginate,110);
+      scheduled = setTimeout(() => {scheduled = null;paginate();},110);
     }
 
     function showNote(event) {
@@ -518,6 +542,12 @@ export function installArtifactDocuments(scope = document) {
         getCurrent:() => current,
         commit:index => {current = index;render();},
         positionNotes:drawMarginNotes,
+        onSettled:() => {
+          if (pendingFontRepagination) {
+            pendingFontRepagination = false;
+            schedule();
+          }
+        },
       });
     }
     function goBack() {
@@ -532,10 +562,21 @@ export function installArtifactDocuments(scope = document) {
     }
     function showRendered() {
       pageTurn?.cancel();
-      view='rendered'; render();
-      if (Math.round(stage.getBoundingClientRect().width) !== width) paginate();
+      view = 'rendered';render();
+      if (pendingFontRepagination || Math.round(stage.getBoundingClientRect().width) !== width) {
+        pendingFontRepagination = false;
+        clearTimeout(scheduled);
+        scheduled = null;
+        paginate();
+      }
     }
-    function showOriginal() {pageTurn?.cancel();view='original';render();}
+    function showOriginal() {
+      pageTurn?.cancel();
+      pendingFontRepagination ||= scheduled !== null;
+      clearTimeout(scheduled);
+      scheduled = null;
+      view = 'original';render();
+    }
     renderedButton.addEventListener('click',showRendered);
     plainButton.addEventListener('click',showOriginal);
     previous.addEventListener('click',goBack);
@@ -544,10 +585,10 @@ export function installArtifactDocuments(scope = document) {
     stage.addEventListener('keydown',escapeNote);
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => {
       const nextWidth = Math.round(stage.getBoundingClientRect().width);
-      if (nextWidth && nextWidth !== width) schedule();
+      if (nextWidth && nextWidth !== width) schedule('resize');
     }) : null;
     observer?.observe(root);
-    const onRepaginate = () => schedule();
+    const onRepaginate = () => schedule('fonts');
     stage.addEventListener('artifact:repaginate',onRepaginate);
     widgets.push(() => {
       stage.removeEventListener('artifact:repaginate',onRepaginate);
