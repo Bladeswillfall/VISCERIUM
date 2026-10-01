@@ -21,6 +21,7 @@ jobs:
       entries: ${{ steps.cold_build.outputs.entries }}
       bytes: ${{ steps.cold_build.outputs.bytes }}
       atlas_hit: ${{ steps.atlas.outputs.cache-hit }}
+      atlas_key: ${{ steps.atlas.outputs.cache-matched-key }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -154,6 +155,8 @@ jobs:
           CACHE_BYTES: ${{ needs.cold.outputs.bytes }}
           ATLAS_COLD_HIT: ${{ needs.cold.outputs.atlas_hit }}
           ATLAS_WARM_HIT: ${{ steps.atlas.outputs.cache-hit }}
+          ATLAS_COLD_KEY: ${{ needs.cold.outputs.atlas_key }}
+          ATLAS_WARM_KEY: ${{ steps.atlas.outputs.cache-matched-key }}
           RESPONSIVE_HIT: ${{ steps.responsive.outputs.cache-hit }}
           BENCHMARK_JSON: ${{ runner.temp }}/responsive-cache-benchmark.json
         run: node .github/scripts/report-responsive-cache-benchmark.mjs
