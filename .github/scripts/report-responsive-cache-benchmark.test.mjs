@@ -12,6 +12,8 @@ const sample = {
   CACHE_BYTES: '2621440',
   ATLAS_COLD_HIT: 'true',
   ATLAS_WARM_HIT: 'true',
+  ATLAS_COLD_KEY: 'atlas-tiles-v1-exact',
+  ATLAS_WARM_KEY: 'atlas-tiles-v1-exact',
   RESPONSIVE_HIT: 'true',
 };
 
@@ -46,6 +48,21 @@ test('rejects missing restores or invalid measurements', () => {
   assert.throws(() => benchmarkReport({ ...sample, CACHE_BYTES: '-5' }), /Invalid benchmark measurement/);
 });
 
+test('distinguishes matched fallback restores from misses', () => {
+  const fallback = { ...sample, ATLAS_COLD_HIT: 'false', ATLAS_WARM_HIT: 'false',
+    ATLAS_COLD_KEY: 'atlas-tiles-v1-old', ATLAS_WARM_KEY: 'atlas-tiles-v1-old' };
+  assert.equal(benchmarkData(fallback).comparable, true);
+  assert.match(benchmarkReport(fallback), /fallback restore cold \/ fallback restore warm/);
+  assert.equal(benchmarkData({ ...fallback, ATLAS_WARM_KEY: 'atlas-tiles-v1-different' }).comparable, false);
+  const missed = { ...fallback, ATLAS_COLD_HIT: '', ATLAS_WARM_HIT: '',
+    ATLAS_COLD_KEY: '', ATLAS_WARM_KEY: '' };
+  assert.equal(benchmarkData(missed).comparable, true);
+  assert.match(benchmarkReport(missed), /miss cold \/ miss warm/);
+  assert.equal(benchmarkData({ ...missed, ATLAS_WARM_HIT: 'false',
+    ATLAS_WARM_KEY: 'atlas-tiles-v1-old' }).comparable, false);
+  assert.equal(benchmarkData({ ...sample, ATLAS_WARM_KEY: '' }).comparable, false);
+});
+
 test('marks different Atlas cache status or responsive entry counts as confounded', () => {
   const summary = benchmarkReport({ ...sample, ATLAS_WARM_HIT: 'false', WARM_VARIANTS: '11' });
   assert.match(summary, /Do not attribute the time difference solely/);
@@ -59,6 +76,7 @@ test('benchmark runs only when requested or its files change', () => {
   assert.match(workflow, /actions\/cache\/save@/);
   assert.match(workflow, /actions\/cache\/restore@/);
   assert.match(workflow, /fail-on-cache-miss: true/);
+  assert.match(workflow, /cache-matched-key/);
   assert.match(workflow, /test "\$before_state" = "\$after_state"/);
   assert.match(workflow, /report-responsive-cache-benchmark\.mjs/);
   assert.match(workflow, /upload-artifact@/);
