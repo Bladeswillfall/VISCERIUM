@@ -230,6 +230,14 @@ test('CITADEL leaves turn as inert 3D paper, then reveal the correct page in bot
 
   await previous.click();
   await expect(artifact).toHaveAttribute('data-page-turning','backward');
+  const reversePlacement = await stage.evaluate(element => {
+    const turning = element.querySelector(':scope > .cx-citadel-turn-sheet');
+    const currentLeaf = [...element.querySelectorAll(':scope > .cx-artifact-paper')]
+      .find(paper => !paper.hidden && !paper.classList.contains('cx-citadel-turn-target'));
+    return {turnTop:Number.parseFloat(turning.style.top),
+      currentTop:currentLeaf.getBoundingClientRect().top-element.getBoundingClientRect().top};
+  });
+  expect(Math.abs(reversePlacement.turnTop-reversePlacement.currentTop)).toBeLessThan(3);
   await expect(artifact.locator('.cx-artifact-count')).toContainText('Leaf 1 /');
   await expect(sheet).toHaveCount(0);
   await expect(previous).toBeDisabled();
