@@ -370,3 +370,80 @@
     }
   }
 }
+
+/* Fixed artifact materials: appearance follows the document preset, not the hosting article era. */
+@layer ion {
+  :root {
+    /* Core CITADEL material */
+    --artifact-citadel-accent: #a34c4d;
+    --artifact-citadel-ink: #37291f;
+    --artifact-citadel-paper: #e4d2b0;
+    --artifact-citadel-edge: #bea37d;
+    /* Shared artifact controls */
+    --artifact-controls-active: #201c1c;
+    --artifact-controls-text: #f3eae1;
+    --artifact-controls-muted: #aaa;
+    /* Wear, ink and parchment detail */
+    --artifact-paper-tone-1: #986e4559;
+    --artifact-paper-tone-2: #875c3942;
+    --artifact-paper-tone-3: #fff0ce99;
+    --artifact-paper-tone-4: #815e2709;
+    --artifact-paper-tone-5: #c5b08c;
+    --artifact-paper-tone-6: #ebdbb7;
+    --artifact-paper-tone-7: #e8d5b1;
+    --artifact-paper-tone-8: #d2b991;
+    --artifact-paper-tone-9: #6b4a2745;
+    --artifact-paper-tone-10: #fff9dc33;
+    --artifact-paper-tone-11: #745b3740;
+    --artifact-paper-tone-12: #fff9d644;
+    --artifact-paper-tone-13: #80562a18;
+    --artifact-paper-tone-14: #9d72402d;
+    --artifact-paper-tone-15: #8f694e47;
+    --artifact-paper-tone-16: #fff7d72b;
+    --artifact-ink-tone-1: #70533d;
+    --artifact-ink-tone-2: #934539;
+    --artifact-ink-tone-3: #a865538c;
+    --artifact-ink-tone-4: #ad7b68;
+    --artifact-ink-tone-5: #334957;
+    --artifact-ink-tone-6: #53352483;
+    --artifact-ink-tone-7: #923d35;
+    --artifact-ink-tone-8: #a5605385;
+    --artifact-ink-tone-9: #934d4190;
+    --artifact-ink-tone-10: #953d38;
+    --artifact-ink-tone-11: #903f34;
+    --artifact-ink-tone-12: #26221e;
+    --artifact-ink-soft-shadow: rgba(64,37,24,.18);
+    /* SMOG field paper */
+    --artifact-smog-accent: #676b4f;
+    --artifact-smog-ink: #292b26;
+    --artifact-smog-paper: #c9c2a7;
+    --artifact-smog-tone-1: #343d2d3d;
+    --artifact-smog-tone-2: #5e625321;
+    --artifact-smog-tone-3: #b4ae98;
+    --artifact-smog-tone-4: #d6ceb3;
+    --artifact-smog-tone-5: #c1b99f;
+    --artifact-smog-tone-6: #5b352c;
+    /* NEARSIGHT display */
+    --artifact-nearsight-accent: #8ea6a0;
+    --artifact-nearsight-ink: #97b9a0;
+    --artifact-nearsight-paper: #111c19;
+    --artifact-nearsight-tone-1: #92b7a009;
+    --artifact-nearsight-tone-2: #203c2a;
+    --artifact-nearsight-tone-3: #0b1412;
+    --artifact-nearsight-tone-4: #343d35;
+    --artifact-nearsight-tone-5: #000c;
+    --artifact-nearsight-tone-6: #79dd9b50;
+    /* ENTROPY diagnostic */
+    --artifact-entropy-accent: #5ca9a4;
+    --artifact-entropy-ink: #c7d8d5;
+    --artifact-entropy-paper: #111c23;
+    --artifact-entropy-tone-1: #47818075;
+    --artifact-entropy-tone-2: #55afb718;
+    --artifact-entropy-tone-3: #55afb714;
+    --artifact-entropy-tone-4: #1b2c31;
+    --artifact-entropy-tone-5: #101519;
+    --artifact-entropy-tone-6: #86e3db;
+    --artifact-entropy-tone-7: #66b4b25a;
+    --artifact-entropy-tone-8: #89c7c4;
+  }
+}
