@@ -1,4 +1,4 @@
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 function measuredNumber(source, name, { allowZero = false } = {}) {
@@ -9,7 +9,7 @@ function measuredNumber(source, name, { allowZero = false } = {}) {
   return value;
 }
 
-export function benchmarkReport(source) {
+export function benchmarkData(source) {
   if (source.RESPONSIVE_HIT !== 'true') throw new Error('Warm job did not restore the exact benchmark cache.');
 
   const cold = measuredNumber(source, 'COLD_MS');
@@ -21,6 +21,13 @@ export function benchmarkReport(source) {
   const totalWarm = warm + restore;
   const difference = cold - totalWarm;
   const comparable = source.ATLAS_COLD_HIT === source.ATLAS_WARM_HIT && coldVariants === warmVariants;
+  return { cold, warm, restore, totalWarm, difference, coldVariants, warmVariants, bytes, comparable,
+    atlasColdHit: source.ATLAS_COLD_HIT, atlasWarmHit: source.ATLAS_WARM_HIT };
+}
+
+export function benchmarkReport(source) {
+  const { cold, warm, restore, totalWarm, difference, coldVariants, warmVariants, bytes,
+    comparable } = benchmarkData(source);
   const seconds = value => (value / 1000).toFixed(2);
   const atlas = hit => hit === 'true' ? 'exact hit' : hit === 'false' ? 'miss' : 'unspecified';
 
@@ -52,4 +59,6 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const summary = benchmarkReport(process.env);
   console.log(summary);
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+  if (process.env.BENCHMARK_JSON) writeFileSync(process.env.BENCHMARK_JSON,
+    JSON.stringify(benchmarkData(process.env), null, 2) + '\n');
 }
