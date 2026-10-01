@@ -187,6 +187,7 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     outgoing.style.visibility = '';
     incoming.style.visibility = '';
     incoming.classList.remove('cx-citadel-turn-target');
+    incoming.inert = false;
     incoming.hidden = true;
     stage.style.minHeight = oldMinHeight;
     stage.classList.remove('cx-citadel-turning');
