@@ -10,52 +10,62 @@ export const CHECKS = Object.freeze([
 const full = () => Object.fromEntries(CHECKS.map(name => [name, true]));
 const empty = () => Object.fromEntries(CHECKS.map(name => [name, false]));
 
+function markSite(checks) {
+  for (const name of ['unit', 'build', 'browser', 'graph_engines', 'contact', 'axe']) {
+    checks[name] = true;
+  }
+}
+
+function markTestFile(checks, name) {
+  if (/^Site\/tests\/[^/]+\.test\.mjs$/.test(name)) {
+    checks.unit = true;
+  } else if (/^Site\/tests\/accessibility\/[^/]+\.spec\.mjs$/.test(name)) {
+    checks.build = true;
+    checks.axe = true;
+  } else if (/^Site\/tests\/browser\/[^/]+\.spec\.mjs$/.test(name)) {
+    checks.build = true;
+    checks.browser = true;
+    if (/^Site\/tests\/browser\/graph[^/]*\.spec\.mjs$/.test(name)) checks.graph_engines = true;
+    if (name === 'Site/tests/browser/contact.spec.mjs') checks.contact = true;
+  } else if (/^Site\/tests\/[^/]+\.postbuild\.mjs$/.test(name)) {
+    checks.build = true;
+  } else {
+    return false;
+  }
+  return true;
+}
+
+function markPath(checks, name) {
+  // Unknown or CI-related changes run everything. Never guess their dependencies.
+  if (typeof name !== 'string' || !name || name.startsWith('/')
+    || name.includes('..') || /^\.github\/(?:workflows|scripts)\//.test(name)) return false;
+
+  if (name === 'README.md') {
+    checks.unit = true; // Site tests validate README rights notices and badges.
+  } else if (/^(?:CONTRIBUTING|CODE_OF_CONDUCT)\.md$/.test(name)
+    || /^docs\/.+\.md$/.test(name) || name === 'Site/tests/README.md') {
+    return true;
+  } else if (name.startsWith('Services/comment-gateway/')) {
+    checks.gateway = true;
+  } else if (/^Tools\/obsidian-viscerium-timelines\//.test(name)
+    || /^Vault\/\.obsidian\/plugins\/viscerium-timelines\//.test(name)
+    || name === 'Tools/scripts/sync-obsidian-plugins.mjs') {
+    checks.obsidian_plugin = true;
+    checks.unit = true;
+  } else if (name.startsWith('Site/tests/') && markTestFile(checks, name)) {
+    return true;
+  } else if (name.startsWith('Site/') || name.startsWith('Vault/')) {
+    markSite(checks);
+  } else {
+    return false;
+  }
+  return true;
+}
+
 export function selectChecks(paths, { fullRun = false } = {}) {
   if (fullRun || !Array.isArray(paths)) return full();
   const checks = empty();
-  const site = () => {
-    for (const name of ['unit', 'build', 'browser', 'graph_engines', 'contact', 'axe']) {
-      checks[name] = true;
-    }
-  };
-
-  for (const name of paths) {
-    // Unknown or CI-related changes run everything. Never guess their dependencies.
-    if (typeof name !== 'string' || !name || name.startsWith('/')
-      || name.includes('..') || /^\.github\/(?:workflows|scripts)\//.test(name)) return full();
-
-    if (name === 'README.md') {
-      checks.unit = true; // Site unit tests validate README rights notices and badges.
-      continue;
-    }
-    if (/^(?:CONTRIBUTING|CODE_OF_CONDUCT)\.md$/.test(name)
-      || /^docs\/.+\.md$/.test(name) || name === 'Site/tests/README.md') continue;
-
-    if (name.startsWith('Services/comment-gateway/')) {
-      checks.gateway = true;
-    } else if (/^Tools\/obsidian-viscerium-timelines\//.test(name)
-      || /^Vault\/\.obsidian\/plugins\/viscerium-timelines\//.test(name)
-      || name === 'Tools/scripts/sync-obsidian-plugins.mjs') {
-      checks.obsidian_plugin = true;
-      checks.unit = true; // Site contracts also check the checked-in plugin.
-    } else if (/^Site\/tests\/[^/]+\.test\.mjs$/.test(name)) {
-      checks.unit = true;
-    } else if (/^Site\/tests\/accessibility\/[^/]+\.spec\.mjs$/.test(name)) {
-      checks.build = true;
-      checks.axe = true;
-    } else if (/^Site\/tests\/browser\/[^/]+\.spec\.mjs$/.test(name)) {
-      checks.build = true;
-      checks.browser = true;
-      if (/^Site\/tests\/browser\/graph[^/]*\.spec\.mjs$/.test(name)) checks.graph_engines = true;
-      if (name === 'Site/tests/browser/contact.spec.mjs') checks.contact = true;
-    } else if (/^Site\/tests\/[^/]+\.postbuild\.mjs$/.test(name)) {
-      checks.build = true;
-    } else if (name.startsWith('Site/') || name.startsWith('Vault/')) {
-      site();
-    } else {
-      return full(); // New directories and shared tooling remain fail-closed.
-    }
-  }
+  for (const name of paths) if (!markPath(checks, name)) return full();
   return checks;
 }
 
