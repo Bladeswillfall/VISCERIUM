@@ -81,19 +81,29 @@ test('aggregated changelog headings have unique IDs', () => {
   assert.equal(new Set(headings).size, headings.length);
 });
 
-test('browser CI image versions match the locked Playwright package', () => {
+test('browser CI containers match locked Playwright and isolate contact tests', () => {
   const lock = JSON.parse(read('../package-lock.json'));
   const version = lock.packages['node_modules/@playwright/test'].version;
   const workflow = read('../../.github/workflows/checks.yml');
   const images = [...workflow.matchAll(/playwright:v([0-9.]+)-noble@sha256:([a-f0-9]{64})/g)];
 
-  assert.equal(images.length, 2, 'both browser and Axe jobs must use pinned images');
-  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 2, 'both container jobs must retain Bash');
-  assert.equal(workflow.split('HOME: /root').length, 2, 'browser test step must use a root-owned HOME');
+  assert.equal(images.length, 3, 'browser, contact and Axe jobs must use pinned images');
+  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 3, 'all container jobs must retain Bash');
   for (const image of images) assert.equal(image[1], version);
-  const stopPreview = workflow.split('      - name: Stop preview before enabled contact fixture')[1]
-    ?.split('      - name: Build enabled contact browser fixture')[0];
-  assert.ok(stopPreview, 'preview shutdown step must exist');
-  assert.match(stopPreview, /curl[^\n]*127\.0\.0\.1:4321/);
-  assert.doesNotMatch(stopPreview, /! kill -0/, 'a container zombie can keep kill -0 true');
+
+  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  contact:\n/m)[0];
+  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
+  const verify = workflow.split(/^  verify:\n/m)[1];
+  assert.ok(browser && contact && verify, 'browser, contact and verify jobs must exist');
+  assert.match(browser, /name: Run browser checks/);
+  assert.doesNotMatch(browser, /Build enabled contact browser fixture|Restore Atlas tile cache/);
+  assert.match(contact, /Restore Atlas tile cache/);
+  assert.match(contact, /name: Build enabled contact browser fixture/);
+  assert.match(contact, /name: Run enabled contact browser check/);
+  assert.match(contact, /PUBLIC_CONTACT_FORM_ENABLED: '1'/);
+  assert.match(contact, /CONTACT_FORM_TEST_ENABLED: '1'/);
+  assert.match(contact, /HOME: \/root/);
+  assert.match(verify, /^      - contact$/m);
+  assert.match(verify, /CONTACT_RESULT: \$\{\{ needs\.contact\.result \}\}/);
+  assert.match(verify, /test "\$CONTACT_RESULT" = "success"/);
 });
