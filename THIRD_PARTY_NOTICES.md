@@ -35,14 +35,18 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `gray-matter` | runtime | `^4.0.3` |
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
+| Codex (`Site/`) | `moment` | runtime | `2.31.0` |
 | Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
+| Codex (`Site/`) | `vis-data` | runtime | `8.0.4` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
 | Codex (`Site/`) | `eslint` | development | `10.11.0` |
+| Obsidian timelines plugin | `moment` | runtime | `2.31.0` |
+| Obsidian timelines plugin | `vis-data` | runtime | `8.0.4` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.4` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.2` |
 | Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |
@@ -76,6 +80,8 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [Leaflet](https://github.com/Leaflet/Leaflet) (`leaflet`) | Public interactive maps | BSD-2-Clause |
 | [Leaflet.Control.Layers.Tree](https://github.com/jjimenezshaw/Leaflet.Control.Layers.Tree) (`leaflet.control.layers.tree`) | Hierarchical map-layer controls | BSD-3-Clause |
 | [vis-timeline](https://github.com/visjs/vis-timeline) | Interactive timeline rendering | Apache-2.0 OR MIT |
+| [vis-data](https://github.com/visjs/vis-data) | Shared timeline data sets for the Codex and Obsidian plugin | Apache-2.0 OR MIT |
+| [Moment.js](https://github.com/moment/moment) (`moment`) | Timeline date handling using the separately installed patched dependency | MIT |
 | [Fuse.js](https://github.com/krisk/Fuse.js) (`fuse.js`) | Fuzzy search | Apache-2.0 |
 | [gray-matter](https://github.com/jonschlinkert/gray-matter) | Markdown frontmatter parsing | MIT |
 | [Playwright](https://github.com/microsoft/playwright) (`@playwright/test`) | Browser and interface testing | Apache-2.0 |
