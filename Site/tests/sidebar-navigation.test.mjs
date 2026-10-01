@@ -166,11 +166,11 @@ test('mobile sidebar controls follow the auto-hiding header without being covere
 
   assert.match(
     headerControls,
-    /html\[data-codex-mobile-header\] \.sidebar > starlight-menu-button button\s*\{[\s\S]*?translateY\(var\(--sl-nav-height, 3\.5rem\)\)/,
+    /html\[data-codex-mobile-header\] \.sidebar > \.sl-menu-button\s*\{[\s\S]*?translateY\(var\(--sl-nav-height, 3\.5rem\)\)/,
   );
   assert.match(
     headerControls,
-    /html\[data-codex-mobile-header\]\[data-codex-mobile-header-hidden\] \.sidebar > starlight-menu-button button\s*\{[\s\S]*?translateY\(0\)/,
+    /html\[data-codex-mobile-header\]\[data-codex-mobile-header-hidden\] \.sidebar > \.sl-menu-button\s*\{[\s\S]*?translateY\(0\)/,
   );
   assert.match(
     headerControls,

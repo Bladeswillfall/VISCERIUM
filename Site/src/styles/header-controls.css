@@ -173,13 +173,13 @@ html[data-codex-mobile-header][data-codex-mobile-header-hidden] mobile-starlight
   navigation height, keeping the control fully visible. All three surfaces use
   the same easing and travel together.
 */
-html[data-codex-mobile-header] .sidebar > starlight-menu-button button {
+html[data-codex-mobile-header] .sidebar > .sl-menu-button {
   transform: translateY(var(--sl-nav-height, 3.5rem));
   transition: transform .28s cubic-bezier(.22, .61, .36, 1);
   will-change: transform;
 }
 
-html[data-codex-mobile-header][data-codex-mobile-header-hidden] .sidebar > starlight-menu-button button {
+html[data-codex-mobile-header][data-codex-mobile-header-hidden] .sidebar > .sl-menu-button {
   transform: translateY(0);
 }
 
@@ -310,7 +310,7 @@ html[data-codex-wide-header] .codex-header-search button[data-open-modal] > kbd 
 @media (prefers-reduced-motion: reduce) {
   html[data-codex-mobile-header] header.header,
   html[data-codex-mobile-header] mobile-starlight-toc > nav,
-  html[data-codex-mobile-header] .sidebar > starlight-menu-button button,
+  html[data-codex-mobile-header] .sidebar > .sl-menu-button,
   html[data-codex-mobile-header] .sidebar-pane {
     transition: none;
   }

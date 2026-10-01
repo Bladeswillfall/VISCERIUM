@@ -271,7 +271,7 @@ html[data-codex-desktop-sidebar] {
   --sl-sidebar-width: 0rem;
 }
 
-html[data-codex-desktop-sidebar] .sidebar > starlight-menu-button {
+html[data-codex-desktop-sidebar] .sidebar > .sl-menu-button {
   display: none;
 }
 

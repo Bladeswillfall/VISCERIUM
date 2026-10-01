@@ -71,9 +71,10 @@ test.describe('mobile era collision guards', () => {
   test('sidebar era exit does not sit underneath the mobile drawer close button', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
 
-    const menuButton = page.locator('.sidebar > starlight-menu-button button');
+    const menuButton = page.locator('.sidebar > .sl-menu-button');
     await expect(menuButton).toBeVisible();
     await menuButton.click();
+    await expect(page.locator('#starlight__sidebar:popover-open')).toBeVisible();
 
     const sidebarExit = page.locator('[data-era-sidebar-toolbar] [data-era-exit]');
     await expect(sidebarExit).toBeVisible();
@@ -81,7 +82,7 @@ test.describe('mobile era collision guards', () => {
 
     const geometry = await page.evaluate(() => {
       const exitNode = document.querySelector('[data-era-sidebar-toolbar] [data-era-exit]');
-      const closeNode = document.querySelector('.sidebar > starlight-menu-button button');
+      const closeNode = document.querySelector('.sidebar > .sl-menu-button');
       if (!(exitNode instanceof HTMLElement) || !(closeNode instanceof HTMLElement)) {
         throw new Error('Missing mobile sidebar controls');
       }
@@ -102,5 +103,9 @@ test.describe('mobile era collision guards', () => {
 
     expect(overlapArea(geometry.exitRect, geometry.closeRect)).toBe(0);
     expect(geometry.exitOwnsCentre).toBe(true);
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#starlight__sidebar:popover-open')).toHaveCount(0);
+    await expect(menuButton).toBeVisible();
   });
 });

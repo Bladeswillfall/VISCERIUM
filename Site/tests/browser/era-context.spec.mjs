@@ -133,9 +133,10 @@ test.describe('mobile era context', () => {
   test('sidebar keeps Universal content in place and hides only inactive eras', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
 
-    const menuButton = page.locator('.sidebar > starlight-menu-button button');
+    const menuButton = page.locator('.sidebar > .sl-menu-button');
     await expect(menuButton).toBeVisible();
     await menuButton.click();
+    await expect(page.locator('#starlight__sidebar:popover-open')).toBeVisible();
 
     const tree = page.locator('.codex-sidebar-tree');
     await expect(tree).toBeVisible();
@@ -172,9 +173,10 @@ test.describe('mobile era context', () => {
   test('sidebar uses the golden-ratio hierarchy without sacrificing touch rhythm', async ({ page }) => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
 
-    const menuButton = page.locator('.sidebar > starlight-menu-button button');
+    const menuButton = page.locator('.sidebar > .sl-menu-button');
     await expect(menuButton).toBeVisible();
     await menuButton.click();
+    await expect(page.locator('#starlight__sidebar:popover-open')).toBeVisible();
 
     const geometry = await page.evaluate(() => {
       const toolbar = document.querySelector('[data-era-sidebar-toolbar]');
