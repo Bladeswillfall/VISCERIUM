@@ -343,6 +343,6 @@
 .cx-artifact[data-preset="citadel-note"] .rubric {color:var(--paper-red)}
 /* Article UI inherits its own light/dark theme; the scanned manuscript never changes colour. */
 .cx-artifact .cx-artifact-view button,.cx-artifact .cx-artifact-pager button {color:var(--codex-text-body)}
-.cx-artifact .cx-artifact-view button[aria-pressed="true"] {background:var(--codex-palette-deep);color:var(--codex-palette-light)}
+/* Preserve the existing era-accented selected tab; only text contrast is corrected above. */
 .cx-artifact .cx-artifact-view-meta,.cx-artifact .cx-artifact-count,.cx-artifact .cx-artifact-pager {color:var(--codex-text-body)}
 .cx-artifact .cx-artifact-pager button:disabled {opacity:.45}
