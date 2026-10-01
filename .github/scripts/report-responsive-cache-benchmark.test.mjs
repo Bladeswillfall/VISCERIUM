@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { benchmarkReport } from './report-responsive-cache-benchmark.mjs';
+import { benchmarkData, benchmarkReport } from './report-responsive-cache-benchmark.mjs';
 
 const sample = {
   COLD_MS: '30000',
@@ -23,6 +23,16 @@ test('compares full builds and includes the real cache restore time', () => {
   assert.match(summary, /Warm build \+ restore \| 20.50 s/);
   assert.match(summary, /Cold minus warm \+ restore \| \+9.50 s/);
   assert.match(summary, /separate GitHub-hosted runners/);
+});
+
+test('exports numeric measurements and comparability for later comparisons', () => {
+  const result = benchmarkData(sample);
+  assert.deepEqual({
+    cold: result.cold, warm: result.warm, restore: result.restore,
+    totalWarm: result.totalWarm, difference: result.difference,
+    comparable: result.comparable,
+  }, { cold: 30000, warm: 19000, restore: 1500, totalWarm: 20500,
+    difference: 9500, comparable: true });
 });
 
 test('reports a regression rather than hiding slower warm builds', () => {
@@ -50,5 +60,6 @@ test('benchmark runs only when requested or its files change', () => {
   assert.match(workflow, /actions\/cache\/restore@/);
   assert.match(workflow, /fail-on-cache-miss: true/);
   assert.match(workflow, /report-responsive-cache-benchmark\.mjs/);
+  assert.match(workflow, /upload-artifact@/);
   assert.match(workflow, /node --test \.github\/scripts\/report-responsive-cache-benchmark\.test\.mjs/);
 });
