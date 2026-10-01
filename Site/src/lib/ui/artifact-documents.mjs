@@ -33,6 +33,106 @@ for (const block of source.children) {
   return units;
 }
 
+
+function appendCitadelLayers(paper) {
+  for (const name of ['paper-shade','paper-fold','paper-fold vertical','page-ghost']) {
+    const layer=document.createElement('div');
+    layer.className=name;
+    layer.setAttribute('aria-hidden','true');
+    paper.append(layer);
+  }
+  const art=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  art.setAttribute('class','ms-page-art');
+  art.setAttribute('viewBox','0 0 900 1290');
+  art.setAttribute('preserveAspectRatio','none');
+  art.setAttribute('aria-hidden','true');
+  art.innerHTML='<path d="M86 25 Q80 310 87 646 Q90 986 79 1250" fill="none" stroke="#745334" opacity=".12" stroke-width="11"/><path d="M90 24 Q82 311 93 646 Q95 983 85 1250" fill="none" stroke="#fff4cf" opacity=".28" stroke-width="2"/>';
+  paper.append(art);
+}
+
+function appendCitadelGuides(inner) {
+  for (const name of ['gutter','pricking','guidelines']) {
+    const guide=document.createElement('div');
+    guide.className=name;
+    guide.setAttribute('aria-hidden','true');
+    inner.append(guide);
+  }
+}
+
+function appendCitadelScratch(inner) {
+  const line=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  line.setAttribute('class','scratch-rubric');
+  line.setAttribute('viewBox','0 0 90 12');
+  line.setAttribute('aria-hidden','true');
+  line.innerHTML='<path d="M1 6 Q28 5 45 4 T88 5" fill="none" stroke="#974a3b" stroke-width="1"/>';
+  inner.append(line);
+}
+
+function artifactFolioHeight(preset,width) {
+  if (preset === 'citadel-note') {
+    return width <= 560 ? Math.max(530,Math.round(width*1.47)) : Math.round(width*1.43);
+  }
+  return Math.round(Math.max(width*(width<420?1.55:1.43),width<420?440:630));
+}
+
+function createArtifactPaper(root,preset,label,number,width) {
+  const paper=document.createElement('article');
+  paper.className='cx-artifact-paper'+(preset==='citadel-note'?' manuscript leaf':'');
+  paper.dataset.condition=root.dataset.condition||'field';
+  paper.dataset.hand=root.dataset.hand||'field';
+  paper.dataset.ink=root.dataset.ink||'worn';
+  paper.setAttribute('aria-label',label+', leaf '+number);
+  if (preset === 'citadel-note') {
+    paper.dataset.script=paper.dataset.hand;
+    paper.dataset.wear=paper.dataset.condition;
+    paper.dataset.notes='on';
+    if(number===1) paper.dataset.firstLeaf='true';
+    appendCitadelLayers(paper);
+  }
+  const height=artifactFolioHeight(preset,width);
+  paper.style.setProperty('--artifact-folio-height',height+'px');
+  paper.style.setProperty('--folio-height',height+'px');
+  paper.dataset.baseHeight=String(height);
+  const inner=document.createElement('div');
+  inner.className='cx-artifact-inner'+(preset==='citadel-note'?' ms-body':'');
+  if(preset==='citadel-note') appendCitadelGuides(inner);
+  return {paper,inner};
+}
+
+function appendArtifactHeading(inner,root,preset,number,roman) {
+  const isCitadel=preset==='citadel-note';
+  const header=document.createElement('div');
+  header.className='cx-artifact-folio-head'+(isCitadel?' ms-header':'');
+  const date=document.createElement('span');
+  date.textContent=(isCitadel&&number===1?'Date: ':'')+(root.dataset.date||'');
+  const folio=document.createElement('span');
+  if(isCitadel) folio.className='folio';
+  folio.textContent=isCitadel?'fol. '+roman(number):String(number).padStart(2,'0');
+  header.append(date,folio);
+  inner.append(header);
+  if(number===1&&root.dataset.title) {
+    // The rubric belongs to the artifact, not the parent article heading hierarchy.
+    const title=document.createElement(isCitadel?'div':'h3');
+    title.className='cx-artifact-title'+(isCitadel?' rubric':'');
+    title.textContent=root.dataset.title;
+    inner.append(title);
+    if(isCitadel) appendCitadelScratch(inner);
+  } else if(number>1&&isCitadel) {
+    const continuation=document.createElement('div');
+    continuation.className='cx-artifact-continuation folio-continuation';
+    continuation.setAttribute('aria-hidden','true');
+    continuation.textContent='·  ·  ·';
+    inner.append(continuation);
+  }
+}
+
+function appendCitadelGrit(paper) {
+  const grit=document.createElement('div');
+  grit.className='paper-grit';
+  grit.setAttribute('aria-hidden','true');
+  paper.append(grit);
+}
+
 let artifactInstanceSequence = 0;
 
 export function installArtifactDocuments(scope = document) {
@@ -99,87 +199,13 @@ export function installArtifactDocuments(scope = document) {
 
     let pages = [], current = 0, view = 'rendered', width = 0, scheduled = null, noteCount = 0, disposed = false;
     function makePaper(number, folioWidth) {
-      const paper = document.createElement('article');
-      paper.className = 'cx-artifact-paper' + (preset === 'citadel-note' ? ' manuscript leaf' : '');
-      if (preset === 'citadel-note') {
-        paper.dataset.script = root.dataset.hand || 'field';
-        paper.dataset.wear = root.dataset.condition || 'field';
-        paper.dataset.notes = 'on';
-        if (number === 1) paper.dataset.firstLeaf = 'true';
-        for (const name of ['paper-shade','paper-fold','paper-fold vertical','page-ghost']) {
-          const layer = document.createElement('div');
-          layer.className = name;
-          layer.setAttribute('aria-hidden','true');
-          paper.append(layer);
-        }
-        const artwork = document.createElementNS('http://www.w3.org/2000/svg','svg');
-        artwork.setAttribute('class','ms-page-art');
-        artwork.setAttribute('viewBox','0 0 900 1290');
-        artwork.setAttribute('preserveAspectRatio','none');
-        artwork.setAttribute('aria-hidden','true');
-        artwork.innerHTML = '<path d="M86 25 Q80 310 87 646 Q90 986 79 1250" fill="none" stroke="#745334" opacity=".12" stroke-width="11"/><path d="M90 24 Q82 311 93 646 Q95 983 85 1250" fill="none" stroke="#fff4cf" opacity=".28" stroke-width="2"/>';
-        paper.append(artwork);
-      }
-      paper.dataset.condition = root.dataset.condition || 'field';
-      paper.dataset.hand = root.dataset.hand || 'field';
-      paper.dataset.ink = root.dataset.ink || 'worn';
-      paper.setAttribute('aria-label',label + ', leaf ' + number);
-      const height = preset === 'citadel-note'
-        ? (folioWidth <= 560 ? Math.max(530,Math.round(folioWidth * 1.47)) : Math.round(folioWidth * 1.43))
-        : Math.round(Math.max(folioWidth * (folioWidth < 420 ? 1.55 : 1.43), folioWidth < 420 ? 440 : 630));
-      paper.style.setProperty('--artifact-folio-height',height + 'px');
-      paper.style.setProperty('--folio-height',height + 'px');
-      paper.dataset.baseHeight = String(height);
-      const inner = document.createElement('div');
-      inner.className = 'cx-artifact-inner' + (preset === 'citadel-note' ? ' ms-body' : '');
-      if (preset === 'citadel-note') {
-        for (const name of ['gutter','pricking','guidelines']) {
-          const mark = document.createElement('div');
-          mark.className = name;
-          mark.setAttribute('aria-hidden','true');
-          inner.append(mark);
-        }
-      }
-      const header = document.createElement('div');
-      header.className = 'cx-artifact-folio-head' + (preset === 'citadel-note' ? ' ms-header' : '');
-      const date = document.createElement('span');
-      date.textContent = (preset === 'citadel-note' && number === 1 ? 'Date: ' : '') + (root.dataset.date || '');
-      const folio = document.createElement('span');
-      if (preset === 'citadel-note') folio.className = 'folio';
-      folio.textContent = preset === 'citadel-note' ? 'fol. ' + roman(number) : String(number).padStart(2,'0');
-      header.append(date,folio);
-      inner.append(header);
-      if (number === 1 && root.dataset.title) {
-        // Decorative artifact rubric is not a heading in the surrounding article.
-        const title = document.createElement(preset === 'citadel-note' ? 'div' : 'h3');
-        title.className = 'cx-artifact-title' + (preset === 'citadel-note' ? ' rubric' : '');
-        title.textContent = root.dataset.title;
-        inner.append(title);
-        if (preset === 'citadel-note') {
-          const scratch = document.createElementNS('http://www.w3.org/2000/svg','svg');
-          scratch.setAttribute('class','scratch-rubric');
-          scratch.setAttribute('viewBox','0 0 90 12');
-          scratch.setAttribute('aria-hidden','true');
-          scratch.innerHTML = '<path d="M1 6 Q28 5 45 4 T88 5" fill="none" stroke="#974a3b" stroke-width="1"/>';
-          inner.append(scratch);
-        }
-      } else if (number > 1 && preset === 'citadel-note') {
-        const continuation = document.createElement('div');
-        continuation.className = 'cx-artifact-continuation' + (preset === 'citadel-note' ? ' folio-continuation' : '');
-        continuation.setAttribute('aria-hidden','true');
-        continuation.textContent = '·  ·  ·';
-        inner.append(continuation);
-      }
-      const prose = document.createElement('div');
-      prose.className = 'cx-artifact-prose' + (preset === 'citadel-note' ? ' ms-prose' : '');
+      const {paper,inner}=createArtifactPaper(root,preset,label,number,folioWidth);
+      appendArtifactHeading(inner,root,preset,number,roman);
+      const prose=document.createElement('div');
+      prose.className='cx-artifact-prose'+(preset==='citadel-note'?' ms-prose':'');
       inner.append(prose);
       paper.append(inner);
-      if (preset === 'citadel-note') {
-        const grit = document.createElement('div');
-        grit.className = 'paper-grit';
-        grit.setAttribute('aria-hidden','true');
-        paper.append(grit);
-      }
+      if(preset==='citadel-note') appendCitadelGrit(paper);
       stage.append(paper);
       return {paper,prose};
     }
