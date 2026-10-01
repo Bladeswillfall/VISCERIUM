@@ -60,10 +60,10 @@ test('era artifact compiles to MDX with a canonical source and text-anchored mar
   ].join('\n');
   assert.equal(requiresCodexMdx(input), true);
   const html = transformCodexFormatting(input, {jsx:true});
-  assert.match(html, /<section class="cx-artifact" data-preset="citadel-note"/);
+  assert.match(html, /<section className="cx-artifact" data-preset="citadel-note"/);
   assert.match(html, /data-date="27\/08\/24ce"/);
   assert.match(html, /data-condition="battered"/);
-  assert.match(html, /<div class="cx-artifact-source">/);
+  assert.match(html, /<div className="cx-artifact-source">/);
   assert.match(html, /<span className="cx-artifact-anchor" data-note="thought I was dead">could not move<\/span>/);
   assert.match(html, /\[Marginal note: thought I was dead\]/);
   assert.match(html, /This \*\*Markdown\*\* and \[link\]\(\/a\) stays intact/);
