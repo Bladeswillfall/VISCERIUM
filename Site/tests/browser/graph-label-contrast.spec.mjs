@@ -77,6 +77,21 @@ test('World Graph canvas labels keep readable dark-mode contrast', async ({ page
   expect(label.contrast).toBeGreaterThanOrEqual(4.5);
   expect(label.textLuminance).toBeGreaterThan(label.backgroundLuminance);
   expect(label.text).not.toEqual(label.background);
+
+  // Check pointer-hover labels too; keyboard focus uses a separate interaction path.
+  const point = await canvas.evaluate((element) => {
+    const node = element._cyreg?.cy?.nodes().first();
+    if (!node?.length) return null;
+    const position = node.renderedPosition();
+    const bounds = element.getBoundingClientRect();
+    return { x: bounds.left + position.x, y: bounds.top + position.y };
+  });
+  expect(point).not.toBeNull();
+  await page.mouse.move(point.x, point.y);
+  await expect(graph).toHaveAttribute('data-world-graph-context', 'pointer');
+  const hoveredLabel = await readActiveLabel(canvas);
+  expect(hoveredLabel).not.toBeNull();
+  expect(hoveredLabel.contrast).toBeGreaterThanOrEqual(4.5);
 });
 
 test('World Graph theme colours replace rather than stack across view modes', async ({ page }) => {

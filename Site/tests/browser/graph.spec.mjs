@@ -449,6 +449,18 @@ test('World Graph wheel zoom is responsive, pointer-centred, and bounded', async
   expect(zoomedIn / initialZoom).toBeLessThanOrEqual(1.22);
   await expect(graph).toHaveAttribute('data-world-graph-active-id', hovered.id);
 
+  // Preserve the node's screen position when wheel-zooming over it.
+  const anchored = await canvasHost.evaluate((element, id) => {
+    const node = element._cyreg?.cy?.getElementById(id);
+    if (!node?.length) return null;
+    const position = node.renderedPosition();
+    const bounds = element.getBoundingClientRect();
+    return { x: bounds.left + position.x, y: bounds.top + position.y };
+  }, hovered.id);
+  expect(anchored).not.toBeNull();
+  expect(Math.abs(anchored.x - hovered.x)).toBeLessThanOrEqual(8);
+  expect(Math.abs(anchored.y - hovered.y)).toBeLessThanOrEqual(8);
+
   await page.mouse.wheel(0, -5_000);
   await expect.poll(async () => Number(await graph.getAttribute('data-world-graph-zoom'))).toBeGreaterThan(zoomedIn);
   const boundedZoomIn = Number(await graph.getAttribute('data-world-graph-zoom'));

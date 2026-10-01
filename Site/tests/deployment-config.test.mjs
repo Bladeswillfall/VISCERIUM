@@ -74,6 +74,21 @@ test('the checks workflow cannot create a follow-up repository commit', () => {
   assert.match(workflow, /cmp --silent dist\/main\.js/);
 });
 
+test('Axe accessibility runtime uses the lockfile instead of a second npm install', () => {
+  const pkg = JSON.parse(read('../package.json'));
+  const lock = JSON.parse(read('../package-lock.json'));
+  const workflow = read('../../.github/workflows/checks.yml');
+  const axe = workflow.split(/^  axe:\n/m)[1]?.split(/^  browser:\n/m)[0];
+
+  assert.equal(pkg.devDependencies['@axe-core/playwright'], '4.13.0');
+  assert.equal(lock.packages[''].devDependencies['@axe-core/playwright'], '4.13.0');
+  assert.equal(lock.packages['node_modules/@axe-core/playwright'].version, '4.13.0');
+  assert.equal(lock.packages['node_modules/axe-core'].version, '4.13.0');
+  assert.ok(axe, 'Axe CI job must exist');
+  assert.match(axe, /npm ci --silent --no-audit --no-fund/);
+  assert.doesNotMatch(axe, /npm install --no-save|Install Axe accessibility runtime/);
+});
+
 test('aggregated changelog headings have unique IDs', () => {
   const changelog = read('../CHANGELOG.md');
   const headings = [...changelog.matchAll(/^###\s+(.+)$/gm)].map((match) => match[1].toLowerCase());
@@ -81,19 +96,43 @@ test('aggregated changelog headings have unique IDs', () => {
   assert.equal(new Set(headings).size, headings.length);
 });
 
-test('browser CI image versions match the locked Playwright package', () => {
+test('browser CI containers match locked Playwright and isolate contact tests', () => {
   const lock = JSON.parse(read('../package-lock.json'));
   const version = lock.packages['node_modules/@playwright/test'].version;
   const workflow = read('../../.github/workflows/checks.yml');
+  const jobs = workflow.split(/^jobs:\n/m)[1];
+  assert.ok(jobs, 'Checks workflow must define jobs');
+  const jobIds = [...jobs.matchAll(/^  ([a-z][a-z0-9_-]*):$/gm)].map((match) => match[1]);
+  assert.equal(new Set(jobIds).size, jobIds.length, 'workflow job IDs must be unique');
   const images = [...workflow.matchAll(/playwright:v([0-9.]+)-noble@sha256:([a-f0-9]{64})/g)];
 
-  assert.equal(images.length, 2, 'both browser and Axe jobs must use pinned images');
-  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 2, 'both container jobs must retain Bash');
-  assert.equal(workflow.split('HOME: /root').length, 2, 'browser test step must use a root-owned HOME');
+  assert.equal(images.length, 4, 'browser, graph, contact and Axe jobs must use pinned images');
+  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 4, 'all container jobs must retain Bash');
   for (const image of images) assert.equal(image[1], version);
-  const stopPreview = workflow.split('      - name: Stop preview before enabled contact fixture')[1]
-    ?.split('      - name: Build enabled contact browser fixture')[0];
-  assert.ok(stopPreview, 'preview shutdown step must exist');
-  assert.match(stopPreview, /curl[^\n]*127\.0\.0\.1:4321/);
-  assert.doesNotMatch(stopPreview, /! kill -0/, 'a container zombie can keep kill -0 true');
+
+  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  graph_engines:\n/m)[0];
+  const graph = workflow.split(/^  graph_engines:\n/m)[1]?.split(/^  contact:\n/m)[0];
+  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
+  const verify = workflow.split(/^  verify:\n/m)[1];
+  assert.ok(browser && graph && contact && verify, 'browser, graph, contact and verify jobs must exist');
+  assert.match(browser, /name: Run browser checks/);
+  assert.match(browser, /playwright test tests\/browser --browser=chromium/);
+  assert.doesNotMatch(browser, /--browser=firefox|--browser=webkit/);
+  assert.match(graph, /needs: build/);
+  assert.match(graph, /name: Download production build/);
+  assert.match(graph, /playwright test tests\/browser\/graph\*\.spec\.mjs --browser=firefox/);
+  assert.match(graph, /playwright test tests\/browser\/graph\*\.spec\.mjs --browser=webkit/);
+  assert.doesNotMatch(browser, /Build enabled contact browser fixture|Restore Atlas tile cache/);
+  assert.match(contact, /Restore Atlas tile cache/);
+  assert.match(contact, /name: Build enabled contact browser fixture/);
+  assert.match(contact, /name: Run enabled contact browser check/);
+  assert.match(contact, /PUBLIC_CONTACT_FORM_ENABLED: '1'/);
+  assert.match(contact, /CONTACT_FORM_TEST_ENABLED: '1'/);
+  assert.match(contact, /HOME: \/root/);
+  assert.match(verify, /^      - graph_engines$/m);
+  assert.match(verify, /GRAPH_ENGINES_RESULT: \$\{\{ needs\.graph_engines\.result \}\}/);
+  assert.match(verify, /test "\$GRAPH_ENGINES_RESULT" = "success"/);
+  assert.match(verify, /^      - contact$/m);
+  assert.match(verify, /CONTACT_RESULT: \$\{\{ needs\.contact\.result \}\}/);
+  assert.match(verify, /test "\$CONTACT_RESULT" = "success"/);
 });
