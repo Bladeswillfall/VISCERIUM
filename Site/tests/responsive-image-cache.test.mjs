@@ -124,8 +124,12 @@ test('CI restores responsive derivatives for both full-build jobs', async () => 
     assert.match(job, /name: Restore responsive variant cache/);
     assert.match(job, /path: Site\/\.cache\/image-variants/);
     assert.match(job, /key: responsive-variants-v1-/);
+    assert.match(job, /id: responsive_cache/);
+    assert.match(job, /Build time: \$\(\(SECONDS - start\)\) seconds/);
+    assert.match(job, /Local responsive cache size:/);
+    assert.match(job, /steps\.responsive_cache\.outputs\.cache-hit/);
     assert.match(job, /Vault\/Lore\/\*\*\/\*\.md/);
-    assert.ok(job.indexOf('name: Restore responsive variant cache') < job.indexOf('run: npm run build'),
+    assert.ok(job.indexOf('name: Restore responsive variant cache') < job.indexOf('npm run build'),
       'cache must restore before the site build');
   }
 });
