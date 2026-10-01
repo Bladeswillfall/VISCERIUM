@@ -53,7 +53,8 @@
 }
 .cx-artifact-paper::before {
   content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.46;
-  background-image:var(--paper-noise);
+  background-image:var(--paper-noise), url('/assets/artifacts/citadel-parchment.webp');
+  background-size:280px 280px, cover;
   mix-blend-mode:multiply;
 }
 .cx-artifact-paper::after {
@@ -192,3 +193,5 @@
   .cx-artifact-prose,.cx-artifact-title,.cx-artifact-folio-head,.cx-artifact-margin-note {color:CanvasText!important;text-shadow:none!important}
 }
 @media (prefers-reduced-motion:reduce) {.cx-artifact * {scroll-behavior:auto!important;transition:none!important}}
+
+.cx-artifact:is([data-preset="nearsight-terminal"],[data-preset="entropy-diagnostic"]) .cx-artifact-paper::before {display:none}
