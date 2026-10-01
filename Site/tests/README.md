@@ -27,3 +27,7 @@ Create a subdirectory when a test family has a separate runner or has enough fil
 Pull requests use `.github/scripts/select-checks.mjs` to choose affected CI jobs. Changes to a single unit-test file run the unit suite; browser or accessibility test changes run the relevant suite and its required build. Site or Vault content and source changes run all site checks. Comment gateway and timeline plugin edits use their dedicated jobs. Changes to the CI configuration, unfamiliar paths, or an unreadable diff trigger the full suite. Pushes to `main` always run everything. The repository policy job always runs, and the final verification job requires selected jobs to succeed and skipped jobs to be intentionally excluded.
 
 This selects test **jobs**, not individual unit assertions. The full site test set remains the default when a change could affect more than one area.
+
+## Measuring responsive cache performance
+
+The separate **Responsive cache benchmark** workflow runs when its own files change, or on demand through GitHub Actions after merging. Its cold job generates responsive derivatives without the image cache. Its warm job restores that run's cache through the real GitHub cache service, then builds the same commit on a fresh runner. The workflow reports both build times, restore time, cached entry counts and Atlas cache status. The warm result includes restore overhead, but excludes dependency installation and cache-save time. One pair is an initial measurement, not enough to claim a lasting performance improvement.
