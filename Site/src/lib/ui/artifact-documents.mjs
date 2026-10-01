@@ -209,6 +209,9 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
 
     const outgoing = pages[from].paper;
     const incoming = pages[target].paper;
+    // Make the second leaf an absolute underlay BEFORE measuring either face.
+    // Otherwise reverse turns would pivot from one full page below the viewport.
+    stage.classList.add('cx-citadel-turning');
     incoming.classList.add('cx-citadel-turn-target');
     incoming.hidden = false;
     positionNotes(outgoing);
@@ -217,7 +220,6 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     const oldMinHeight = stage.style.minHeight;
     const taller = Math.max(outgoing.getBoundingClientRect().height,incoming.getBoundingClientRect().height);
     stage.style.minHeight = taller + 'px';
-    stage.classList.add('cx-citadel-turning');
     stage.setAttribute('aria-busy', 'true');
     root.dataset.pageTurning = direction > 0 ? 'forward' : 'backward';
     // The outgoing page stays in document flow, keeping the reader's scroll position.
