@@ -191,6 +191,7 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     incoming.hidden = true;
     stage.style.minHeight = oldMinHeight;
     stage.classList.remove('cx-citadel-turning');
+    stage.removeAttribute('aria-busy');
     delete root.dataset.pageTurning;
   }
 
@@ -210,12 +211,14 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     const incoming = pages[target].paper;
     incoming.classList.add('cx-citadel-turn-target');
     incoming.hidden = false;
+    positionNotes(outgoing);
     positionNotes(incoming);
     const sheet = makeCitadelTurnSheet(direction > 0 ? outgoing : incoming, stage);
     const oldMinHeight = stage.style.minHeight;
     const taller = Math.max(outgoing.getBoundingClientRect().height,incoming.getBoundingClientRect().height);
     stage.style.minHeight = taller + 'px';
     stage.classList.add('cx-citadel-turning');
+    stage.setAttribute('aria-busy', 'true');
     root.dataset.pageTurning = direction > 0 ? 'forward' : 'backward';
     // The outgoing page stays in document flow, keeping the reader's scroll position.
     // The incoming page waits beneath it and is never exposed to keyboard focus mid-turn.
