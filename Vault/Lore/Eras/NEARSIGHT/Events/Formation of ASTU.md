@@ -1,6 +1,10 @@
 ---
 title: "Formation of ASTU"
 description: "Several threatened states combined specialist forces into the fast-moving Allied Special Tactics Union."
+image: ASTU-flag.webp
+headerImage: ASTU-flag.webp
+imageTitle: ASTU flag
+alt: White eight-pointed star on a dark navy field.
 status: published
 type: event
 era: NEARSIGHT

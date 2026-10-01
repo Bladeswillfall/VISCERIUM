@@ -15,16 +15,16 @@ const eraPages = [
     title: 'SMOG',
     source: 'SMOG.md',
     marker: 'Progress has learned to march in formation.',
-    map: '/assets/images/errack.webp',
-    mapHref: '/maps/',
+    map: '/assets/maps/variants/Errack-SMOG-960.webp',
+    mapHref: '/maps/errack-smog/',
   },
   {
     id: 'nearsight',
     title: 'NEARSIGHT',
     source: 'NEARSIGHT.md',
     marker: 'The world can be watched from orbit and still remain unseen.',
-    map: '/assets/images/errack.webp',
-    mapHref: '/maps/',
+    map: '/assets/maps/variants/Errack-NEARSIGHT-960.webp',
+    mapHref: '/maps/errack-nearsight/',
   },
   {
     id: 'entropy',
@@ -185,4 +185,14 @@ test('CITADEL power cards use canonical nation links and linked header artwork',
     'src',
     '/assets/images/1d6a04547df953b36f4d6f8ce73e91f2.webp',
   );
+
+  const krassCard = primer.locator('.era-primer__power').filter({ hasText: 'Krass Dominion' });
+  await expect(krassCard.locator('img')).toHaveAttribute('src', '/assets/images/Krass-Dominion-flag.webp');
+  const krassBanner = krassCard.locator('img');
+  await expect(krassBanner).toHaveCSS('object-fit', 'contain');
+  await expect(krassBanner).toHaveCSS('aspect-ratio', 'auto');
+  await expect(krassBanner).toHaveCSS('border-top-left-radius', '0px');
+  await expect(krassBanner).toHaveCSS('filter', 'none');
+  await krassBanner.scrollIntoViewIfNeeded();
+  await expect.poll(() => krassBanner.evaluate((image) => image.naturalWidth)).toBe(2047);
 });

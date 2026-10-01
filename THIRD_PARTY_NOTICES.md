@@ -40,6 +40,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
+| Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
 | Codex (`Site/`) | `eslint` | development | `10.10.0` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
@@ -78,6 +79,7 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [Fuse.js](https://github.com/krisk/Fuse.js) (`fuse.js`) | Fuzzy search | Apache-2.0 |
 | [gray-matter](https://github.com/jonschlinkert/gray-matter) | Markdown frontmatter parsing | MIT |
 | [Playwright](https://github.com/microsoft/playwright) (`@playwright/test`) | Browser and interface testing | Apache-2.0 |
+| [axe-core Playwright](https://github.com/dequelabs/axe-core-npm) (`@axe-core/playwright`) | Automated accessibility testing of the public Codex | MPL-2.0 |
 | [ESLint](https://github.com/eslint/eslint) (`eslint`) | Cyclomatic-complexity checks for repository JavaScript | MIT |
 | [esbuild](https://github.com/evanw/esbuild) | First-party Obsidian plugin bundling | MIT |
 | [Obsidian API](https://github.com/obsidianmd/obsidian-api) | Type definitions and API surface for first-party plugins | MIT |

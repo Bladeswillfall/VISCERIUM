@@ -15,7 +15,7 @@ const nadirMark = `${assetRoot}/598b4c8d3d6aaae231daefd475d4888a.png`;
 const zenithMark = `${assetRoot}/0e0f4f66d44a0c03ce3ec042978a6a2f.png`;
 const resonanceTrail = `${assetRoot}/70c9317a764228e870cb7d68d604a64b.png`;
 const okseFlag = `${assetRoot}/1d6a04547df953b36f4d6f8ce73e91f2.png`;
-const krassFlag = `${assetRoot}/8959261124e62edee28ea6301fa6e1f2.png`;
+const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
 ---
 
 <div class="start-here-primer editorial-page" data-start-here-primer>
@@ -46,7 +46,12 @@ const krassFlag = `${assetRoot}/8959261124e62edee28ea6301fa6e1f2.png`;
 
     <div class="start-era-sequence" aria-label="The four eras of VISCERIUM">
       <a class="start-era-band start-era-band--citadel" href={eraRoutes.citadel}>
-        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__map" aria-hidden="true">
+          <img class="start-era-band__image" src="/assets/maps/variants/Errack-CITADEL-960.webp"
+            srcset="/assets/maps/variants/Errack-CITADEL-480.webp 480w, /assets/maps/variants/Errack-CITADEL-960.webp 960w, /assets/maps/variants/Errack-CITADEL-1600.webp 1600w"
+            sizes="(max-width: 62rem) 100vw, 65vw" width="960" height="480"
+            alt="" loading="lazy" decoding="async" />
+        </div>
         <div class="start-era-band__copy">
           <span class="start-era-band__number">Era I</span>
           <strong>CITADEL</strong>
@@ -56,7 +61,12 @@ const krassFlag = `${assetRoot}/8959261124e62edee28ea6301fa6e1f2.png`;
       </a>
 
       <a class="start-era-band start-era-band--smog" href={eraRoutes.smog}>
-        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__map" aria-hidden="true">
+          <img class="start-era-band__image" src="/assets/maps/variants/Errack-SMOG-960.webp"
+            srcset="/assets/maps/variants/Errack-SMOG-480.webp 480w, /assets/maps/variants/Errack-SMOG-960.webp 960w, /assets/maps/variants/Errack-SMOG-1600.webp 1600w"
+            sizes="(max-width: 62rem) 100vw, 65vw" width="960" height="480"
+            alt="" loading="lazy" decoding="async" />
+        </div>
         <div class="start-era-band__copy">
           <span class="start-era-band__number">Era II</span>
           <strong>SMOG</strong>
@@ -66,7 +76,12 @@ const krassFlag = `${assetRoot}/8959261124e62edee28ea6301fa6e1f2.png`;
       </a>
 
       <a class="start-era-band start-era-band--nearsight" href={eraRoutes.nearsight}>
-        <div class="start-era-band__map" aria-hidden="true"><ErrackMapMark /></div>
+        <div class="start-era-band__map" aria-hidden="true">
+          <img class="start-era-band__image" src="/assets/maps/variants/Errack-NEARSIGHT-960.webp"
+            srcset="/assets/maps/variants/Errack-NEARSIGHT-480.webp 480w, /assets/maps/variants/Errack-NEARSIGHT-960.webp 960w, /assets/maps/variants/Errack-NEARSIGHT-1600.webp 1600w"
+            sizes="(max-width: 62rem) 100vw, 65vw" width="960" height="480"
+            alt="" loading="lazy" decoding="async" />
+        </div>
         <div class="start-era-band__copy">
           <span class="start-era-band__number">Era III</span>
           <strong>NEARSIGHT</strong>

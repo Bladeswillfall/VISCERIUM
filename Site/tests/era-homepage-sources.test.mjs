@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { validateEraPrimerData } from '../src/lib/era-primer-data.mjs';
 
@@ -56,6 +57,41 @@ test('CITADEL homepage links to its canonical Atlas map rather than the WorldAnv
   assert.equal(eraSource.data.eraPrimer.map.href, `/maps/${mapSource.data.mapId}/`);
   assert.deepEqual(markerSource.markers, []);
 });
+
+for (const [era, id] of [['SMOG', 'smog'], ['NEARSIGHT', 'nearsight']]) {
+  test(`${era} homepage links to its published canonical Atlas map and empty TTRPG sidecar`, async () => {
+    const eraSource = matter(readFileSync(
+      new URL(`../../Vault/Lore/Eras/${era}.md`, import.meta.url), 'utf8',
+    ));
+    const mapSource = matter(readFileSync(
+      new URL(`../../Vault/Lore/Eras/${era}/Errack ${era} Map.md`, import.meta.url), 'utf8',
+    ));
+    const markerSource = JSON.parse(readFileSync(
+      new URL(`../../Vault/Assets/Maps/Errack-${era}.canonical.markers.json`, import.meta.url), 'utf8',
+    ));
+
+    assert.equal(mapSource.data.status, 'published');
+    assert.equal(mapSource.data.title, `Errack: ${era}`);
+    assert.match(mapSource.data.community_id, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+    assert.equal(mapSource.data.type, 'map');
+    assert.equal(mapSource.data.era, era);
+    assert.equal(mapSource.data.mapId, `errack-${id}`);
+    assert.equal(mapSource.data.image, `/assets/maps/Errack-${era}.webp`);
+    assert.equal(mapSource.data.mapMarkers, `Assets/Maps/Errack-${era}.canonical.markers.json`);
+    assert.equal(mapSource.data.width, 7680);
+    assert.equal(mapSource.data.height, 3840);
+    assert.deepEqual(markerSource.size, { w: 7680, h: 3840 });
+    assert.equal(eraSource.data.eraPrimer.map.href, `/maps/${mapSource.data.mapId}/`);
+    assert.equal(eraSource.data.eraPrimer.map.src, `/assets/maps/variants/Errack-${era}-960.webp`);
+    assert.deepEqual(markerSource.markers, []);
+    assert.equal(markerSource.activeBase, `Assets/Maps/Errack-${era}.webp`);
+    assert.ok(markerSource.bases.includes(markerSource.activeBase));
+    const sharp = (await import('sharp')).default;
+    const raster = await sharp(fileURLToPath(new URL(`../../Vault/Assets/Maps/Errack-${era}.webp`, import.meta.url))).metadata();
+    assert.equal(raster.width, mapSource.data.width);
+    assert.equal(raster.height, mapSource.data.height);
+  });
+}
 
 test('CITADEL power cards point at published canonical nation pages', () => {
   const eraSource = matter(readFileSync(

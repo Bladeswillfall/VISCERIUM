@@ -148,7 +148,7 @@ const powers = primer.powers.map((power) => {
     <div class="era-primer__powers">
       {powers.map((power) => (
         <article class="era-primer__power">
-          <img src={power.sigil} alt="" loading="lazy" aria-hidden="true" />
+          <img class={power.sigilLayout === "banner" ? "era-primer__power-sigil--banner" : undefined} src={power.sigil} alt="" loading="lazy" aria-hidden="true" />
           <div>
             <h4>
               {power.href

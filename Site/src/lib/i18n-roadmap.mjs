@@ -15,6 +15,7 @@ export const I18N_ROADMAP = Object.freeze({
     { locale: 'es', label: 'Spanish', status: 'planned' },
     { locale: 'zh', label: 'Chinese', status: 'planned' },
     { locale: 'ru', label: 'Russian', status: 'planned' },
+    { locale: 'ja', label: 'Japanese', status: 'planned' },
   ]),
 });
 
