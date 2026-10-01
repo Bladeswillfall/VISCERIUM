@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { setTimeout as sleep } from 'node:timers/promises';
 
 const CACHE_VERSION = 1;
 
@@ -64,20 +65,46 @@ export async function materializeCachedResponsiveVariants({
   const reused = sizes !== null;
 
   if (!sizes) {
-    const staging = await fs.mkdtemp(path.join(root, 'staging-'));
+    // A directory lock also serializes builds running in separate Node processes.
+    const lock = `${cacheDir}.lock`;
+    let acquired = false;
+    for (let attempt = 0; attempt < 600; attempt++) {
+      try {
+        await fs.mkdir(lock);
+        acquired = true;
+        break;
+      } catch (error) {
+        if (error.code !== 'EEXIST') throw error;
+        await sleep(50);
+      }
+    }
+    if (!acquired) throw new Error(`Timed out waiting for responsive cache lock: ${lock}`);
     try {
-      const output = path.join(staging, 'files');
-      await fs.mkdir(output);
-      await generate(output);
-      const generated = await inventory(output, names);
-      await fs.writeFile(path.join(staging, 'manifest.json'),
-        `${JSON.stringify({ version: CACHE_VERSION, files: generated })}\n`, 'utf8');
-      // ponytail: concurrent writers for the same asset need a lock; CI jobs have separate workspaces.
-      await fs.rm(cacheDir, { recursive: true, force: true });
-      await fs.rename(staging, cacheDir);
-      sizes = new Map(generated.map(({ name, size }) => [name, size]));
+      // A second builder may have filled the entry while we waited.
+      sizes = await cachedSizes(cacheDir, names);
+      if (sizes) {
+        await fs.mkdir(destination, { recursive: true });
+        await Promise.all(names.map((name) => fs.copyFile(
+          path.join(cacheDir, 'files', name), path.join(destination, name),
+        )));
+        return { sizes, reused: true };
+      }
+      const staging = await fs.mkdtemp(path.join(root, 'staging-'));
+      try {
+        const output = path.join(staging, 'files');
+        await fs.mkdir(output);
+        await generate(output);
+        const generated = await inventory(output, names);
+        await fs.writeFile(path.join(staging, 'manifest.json'),
+          `${JSON.stringify({ version: CACHE_VERSION, files: generated })}\n`, 'utf8');
+        await fs.rm(cacheDir, { recursive: true, force: true });
+        await fs.rename(staging, cacheDir);
+        sizes = new Map(generated.map(({ name, size }) => [name, size]));
+      } finally {
+        await fs.rm(staging, { recursive: true, force: true });
+      }
     } finally {
-      await fs.rm(staging, { recursive: true, force: true });
+      await fs.rmdir(lock);
     }
   }
 
