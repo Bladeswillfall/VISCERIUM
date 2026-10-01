@@ -10,6 +10,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added reusable era-themed artifacts and anchored marginalia to Codex articles, beginning with the CITADEL Myrkild witness manuscript ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
 - Added a responsive homepage Recent Articles carousel with era-themed header placeholders, an expandable grid and smooth drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
 
 ### Changed in Unreleased
