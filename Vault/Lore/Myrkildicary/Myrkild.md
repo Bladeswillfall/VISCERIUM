@@ -109,7 +109,6 @@ Once the Myrkild's shadow has cast itself upon a host, an eerie equilibrium may 
 > Constructs are best defined as the being that is formed by an amalgamation of Myrkild. These often horrific creatures bear individuality derived from their species, yet their minds interlace within a tight-knit network. They share thoughts and dark whispers across their Myrkild kin. Calling such unnatural, inhuman beings _"Demons"_ is an easy stretch for the mind.
 > 
 > The 7 Nadirs of Sin are simply constructs from an extremely potent strain of their Myrkild species. These entities possess a unique twist upon their telepathic communion, bridging much greater distances to converse with their kin. Beyond mere words, they may also seize control of their brethren, seeing through the eyes of others and forcibly executing their malevolent will.
-> 
 
 ## The Drowning of Resonance
 
@@ -199,7 +198,6 @@ Once infested by true Myrkild, the clock of an inescapable fate begins to tick. 
 > 
 > Greed Myrkild, in their most basic form - singular microorganisms, spread via contact with fomites, lying in wait for its next victim.
 
-> 
 The methods of infection all providing unique ways for each strain to start their cycle of: infest, consume, and create. A cycle they will repeat until their victims finally succumb to the growing consciousness within whilst spreading more Myrkild to more unsuspecting victims. The growing consciousness, a being within a being, is a construct awakening inside them that will soon sunder their host, overtaking every aspect of its form and forging something new from its flesh. Something more effective at finding new hosts to infest and combatting the various means to prevent it from doing so.
 
 
