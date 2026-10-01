@@ -74,3 +74,51 @@ test('pages without artifacts do not eagerly load artifact presentation',async (
   await page.goto('http://127.0.0.1:4321/',{waitUntil:'domcontentloaded'});
   await expect(page.locator('#viscerium-artifact-styles')).toHaveCount(0);
 });
+
+
+test('approved V3 manuscript materials remain fixed across light and dark website themes', async ({page}) => {
+  const artifact = await openArtifact(page,1365);
+  const result=await artifact.evaluate(root => {
+    const pageEl=root.querySelector('.cx-artifact-paper:not([hidden])');
+    const heading=pageEl.querySelector('.rubric');
+    const writing=pageEl.querySelector('.ms-prose');
+    const ui=root.querySelector('.cx-artifact-view button[aria-pressed="false"]');
+    const selected=root.querySelector('.cx-artifact-view button[aria-pressed="true"]');
+    const snapshot=()=>{
+      const paper=getComputedStyle(pageEl);
+      return {
+        ink:getComputedStyle(writing).color,
+        rubricColor:getComputedStyle(heading).color,
+        rubricFont:getComputedStyle(heading).fontFamily,
+        paperBackground:paper.backgroundImage,
+        paperMask:paper.maskImage||paper.webkitMaskImage,
+        idleControl:getComputedStyle(ui).color,
+        selectedText:getComputedStyle(selected).color,
+        selectedBackground:getComputedStyle(selected).backgroundColor,
+        textureCount:pageEl.querySelectorAll('.paper-shade,.paper-fold,.paper-grit,.guidelines').length,
+      };
+    };
+    const first=snapshot();
+    const initialTheme=document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme','light');
+    const light=snapshot();
+    document.documentElement.setAttribute('data-theme','dark');
+    const dark=snapshot();
+    if(initialTheme===null)document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme',initialTheme);
+    return {first,light,dark};
+  });
+  for (const theme of [result.light,result.dark]) {
+    expect(theme.ink).toBe('rgb(55, 39, 30)');
+    expect(theme.rubricColor).toBe('rgb(146, 67, 59)');
+    expect(theme.rubricFont).toContain('Eagle Lake');
+    expect(theme.paperBackground).toContain('citadel-parchment.webp');
+    expect(theme.paperMask).toContain('citadel-edge-mask.svg');
+    expect(theme.textureCount).toBeGreaterThanOrEqual(5);
+  }
+  expect(result.light.ink).toBe(result.dark.ink);
+  expect(result.light.rubricColor).toBe(result.dark.rubricColor);
+  expect(result.light.paperBackground).toBe(result.dark.paperBackground);
+  expect(result.light.idleControl).not.toBe(result.dark.idleControl);
+  expect(result.light.selectedText).toBe(result.dark.selectedText);
+});
