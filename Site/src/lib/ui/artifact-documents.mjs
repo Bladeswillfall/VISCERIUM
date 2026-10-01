@@ -177,9 +177,9 @@ function makeCitadelTurnSheet(page, stage) {
 
 function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,commit,positionNotes}) {
   let active = null;
-  function cancel() {
+  function cancel(complete = false) {
     if (!active) return;
-    const {sheet,outgoing,incoming,oldMinHeight,animation,timer} = active;
+    const {sheet,outgoing,incoming,oldMinHeight,animation,timer,target,direction,focusedControl} = active;
     active = null;
     clearTimeout(timer);
     animation?.cancel();
@@ -193,6 +193,15 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     stage.classList.remove('cx-citadel-turning');
     stage.removeAttribute('aria-busy');
     delete root.dataset.pageTurning;
+    if (complete) {
+      commit(target);
+      // If disabling the pressed button blurred focus, restore it when available.
+      if (focusedControl && (document.activeElement === document.body
+        || document.activeElement === focusedControl)) {
+        const destination = focusedControl.disabled ? (direction > 0 ? previous : next) : focusedControl;
+        if (!destination.disabled) destination.focus({preventScroll:true});
+      }
+    }
   }
 
   function turn(direction) {
@@ -248,18 +257,10 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     });
     function finish() {
       if (!active || active.sheet !== sheet) return;
-      cancel();
-      incoming.inert = false;
-      commit(target);
-      // Disabling the pressed control during the animation can blur keyboard focus.
-      if (focusedControl && (document.activeElement === document.body
-        || document.activeElement === focusedControl)) {
-        const destination = focusedControl.disabled ? (direction > 0 ? previous : next) : focusedControl;
-        if (!destination.disabled) destination.focus({preventScroll:true});
-      }
+      cancel(true);
     }
     const timer = setTimeout(finish,narrow ? 760 : 1030);
-    active = {sheet,outgoing,incoming,oldMinHeight,animation,timer};
+    active = {sheet,outgoing,incoming,oldMinHeight,animation,timer,target,direction,focusedControl};
     animation.finished.then(finish).catch(() => {});
     return true;
   }
@@ -435,7 +436,8 @@ export function installArtifactDocuments(scope = document) {
 
     function paginate() {
       if (disposed) return;
-      pageTurn?.cancel();
+      // Font arrival or resize must not discard the reader's requested page turn.
+      pageTurn?.cancel(true);
       const selectedUnit = pages[current]?.first ?? 0;
       const measuredWidth = Math.round(stage.getBoundingClientRect().width) || Math.min(620,Math.round(root.getBoundingClientRect().width));
       if (!measuredWidth) return;
@@ -475,7 +477,7 @@ export function installArtifactDocuments(scope = document) {
 
     function schedule() {
       if (disposed) return;
-      pageTurn?.cancel();
+      pageTurn?.cancel(true);
       clearTimeout(scheduled);
       scheduled = setTimeout(paginate,110);
     }
