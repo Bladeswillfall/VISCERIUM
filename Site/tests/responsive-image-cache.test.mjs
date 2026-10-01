@@ -21,19 +21,24 @@ async function setup(t) {
   let encodes = 0;
   let payload = 'valid';
   let delay = 0;
+  let failGeneration = false;
   const run = async (sharp = { versions: { sharp: '1.0.0' } }) => materializeCachedResponsiveVariants({
     siteRoot: root, category: 'images', filename: 'example.webp', source, publicOriginal: original,
     sharp, generatorFile, files: ['example-480.jpg', 'example-480.webp'], destination,
     generate: async (directory) => {
       encodes++;
       if (delay) await new Promise(resolve => setTimeout(resolve, delay));
+      if (failGeneration) {
+        await fs.writeFile(path.join(directory, 'example-480.jpg'), payload);
+        throw new Error('Simulated derivative failure');
+      }
       await Promise.all([
         fs.writeFile(path.join(directory, 'example-480.jpg'), payload),
         fs.writeFile(path.join(directory, 'example-480.webp'), payload),
       ]);
     },
   });
-  return { root, source, original, generatorFile, destination, run, encodes: () => encodes, setPayload: s => { payload = s; }, setDelay: ms => { delay = ms; } };
+  return { root, source, original, generatorFile, destination, run, encodes: () => encodes, setPayload: s => { payload = s; }, setDelay: ms => { delay = ms; }, setFailGeneration: value => { failGeneration = value; } };
 }
 
 test('responsive cache reuses intact derivatives, regenerates on invalidation and rejects corruption', async t => {
@@ -78,6 +83,40 @@ test('concurrent builders serialize cache writes and adopt the completed entry',
   assert.equal(v.encodes(), 2);
   assert.equal(await fs.readFile(path.join(v.destination, 'example-480.webp'), 'utf8'), 'repaired');
   assert.ok(!(await fs.readdir(cacheRoot)).some(name => name.endsWith('.lock')));
+});
+
+
+test('failed generation removes partial outputs and the lock, then a later build succeeds', async t => {
+  const v = await setup(t);
+  v.setFailGeneration(true);
+  await assert.rejects(v.run(), /Simulated derivative failure/);
+
+  const cacheRoot = path.join(v.root, '.cache/image-variants');
+  assert.deepEqual(await fs.readdir(cacheRoot), [], 'partial entries and locks must be removed');
+
+  v.setFailGeneration(false);
+  assert.equal((await v.run()).reused, false);
+  assert.equal((await v.run()).reused, true);
+  assert.equal(v.encodes(), 2);
+  assert.equal(await fs.readFile(path.join(v.destination, 'example-480.webp'), 'utf8'), 'valid');
+});
+
+test('invalid cache metadata and unexpected derivatives trigger regeneration', async t => {
+  const v = await setup(t);
+  await v.run();
+  const cacheRoot = path.join(v.root, '.cache/image-variants');
+  const entry = (await fs.readdir(cacheRoot)).find(name => /^[a-f0-9]+-/.test(name));
+  assert.ok(entry);
+  const cacheDir = path.join(cacheRoot, entry);
+
+  await fs.writeFile(path.join(cacheDir, 'manifest.json'), '{"version":0,"files":[]}');
+  assert.equal((await v.run()).reused, false, 'an outdated manifest cannot authorize reuse');
+
+  const unexpected = path.join(cacheDir, 'files/foreign.jpg');
+  await fs.writeFile(unexpected, 'not a requested derivative');
+  assert.equal((await v.run()).reused, false, 'the cache must reject extra files');
+  await assert.rejects(fs.access(unexpected), { code: 'ENOENT' });
+  assert.equal(v.encodes(), 3);
 });
 
 test('generator only reuses derivatives when their originals remain public', async t => {
