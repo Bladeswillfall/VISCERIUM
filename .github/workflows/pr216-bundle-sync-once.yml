@@ -1,0 +1,40 @@
+name: One-time PR 216 bundle sync
+on:
+  push:
+    branches: [security/obsidian-moment-2310-20261001]
+    paths: [.github/workflows/pr216-bundle-sync-once.yml]
+permissions:
+  actions: read
+  contents: write
+jobs:
+  sync:
+    if: github.repository == 'Bladeswillfall/VISCERIUM'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: viscerium-timelines-plugin
+          run-id: 36892225112
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/pr216-patched-bundle
+      - name: Commit previously verified patched bundle and remove this workflow
+        shell: bash
+        env:
+          GENERATED: ${{ runner.temp }}/pr216-patched-bundle
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' '92bc231cad03f05f9c7747c16607bac8918278376bf41f8415dfd26f76a8512a' "$GENERATED/main.js" | sha256sum -c -
+          cmp "$GENERATED/styles.css" Vault/.obsidian/plugins/viscerium-timelines/styles.css
+          cmp "$GENERATED/manifest.json" Vault/.obsidian/plugins/viscerium-timelines/manifest.json
+          grep -q '2.31.0' "$GENERATED/main.js"
+          if grep -q '2.30.1' "$GENERATED/main.js"; then exit 1; fi
+          cp "$GENERATED/main.js" Vault/.obsidian/plugins/viscerium-timelines/main.js
+          git diff --check
+          git add -- Vault/.obsidian/plugins/viscerium-timelines/main.js
+          git rm -- .github/workflows/pr216-bundle-sync-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'build: sync patched Moment timeline plugin payload'
+          git push origin HEAD:refs/heads/security/obsidian-moment-2310-20261001
