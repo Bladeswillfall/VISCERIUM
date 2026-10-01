@@ -177,6 +177,7 @@ test('artifact buttons use site era fills and background hover in both website t
 
 test('artifact button identities match each document era regardless of parent article', async ({page}) => {
   const artifact=await openArtifact(page,1365);
+  await page.addStyleTag({content: '.cx-artifact .cx-artifact-view button {transition: none !important;}'});
   const mapped=await artifact.evaluate(root => {
     const original=root.dataset.preset;
     const active=root.querySelector('.cx-artifact-view button[aria-pressed="true"]');
