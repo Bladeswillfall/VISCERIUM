@@ -214,6 +214,7 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
       || typeof Element.prototype.animate !== 'function') {
       commit(target);
+      onSettled?.();
       return true;
     }
 
@@ -550,15 +551,24 @@ export function installArtifactDocuments(scope = document) {
         },
       });
     }
+    function requestTurn(direction) {
+      if (scheduled !== null) {
+        // An earlier font event may have queued a reflow before the click.
+        clearTimeout(scheduled);
+        scheduled = null;
+        pendingFontRepagination = true;
+      }
+      pageTurn.turn(direction);
+    }
     function goBack() {
       if (current < 1) return;
       if (!pageTurn) {current--;render();return;}
-      pageTurn.turn(-1);
+      requestTurn(-1);
     }
     function goForward() {
       if (current >= pages.length-1) return;
       if (!pageTurn) {current++;render();return;}
-      pageTurn.turn(1);
+      requestTurn(1);
     }
     function showRendered() {
       pageTurn?.cancel();
