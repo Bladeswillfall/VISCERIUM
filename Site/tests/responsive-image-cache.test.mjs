@@ -20,18 +20,20 @@ async function setup(t) {
   ]);
   let encodes = 0;
   let payload = 'valid';
+  let delay = 0;
   const run = async (sharp = { versions: { sharp: '1.0.0' } }) => materializeCachedResponsiveVariants({
     siteRoot: root, category: 'images', filename: 'example.webp', source, publicOriginal: original,
     sharp, generatorFile, files: ['example-480.jpg', 'example-480.webp'], destination,
     generate: async (directory) => {
       encodes++;
+      if (delay) await new Promise(resolve => setTimeout(resolve, delay));
       await Promise.all([
         fs.writeFile(path.join(directory, 'example-480.jpg'), payload),
         fs.writeFile(path.join(directory, 'example-480.webp'), payload),
       ]);
     },
   });
-  return { root, source, original, generatorFile, destination, run, encodes: () => encodes, setPayload: s => { payload = s; } };
+  return { root, source, original, generatorFile, destination, run, encodes: () => encodes, setPayload: s => { payload = s; }, setDelay: ms => { delay = ms; } };
 }
 
 test('responsive cache reuses intact derivatives, regenerates on invalidation and rejects corruption', async t => {
@@ -57,6 +59,25 @@ test('responsive cache reuses intact derivatives, regenerates on invalidation an
   assert.equal((await v.run({ versions: { sharp: '2.0.0' } })).reused, false);
   assert.equal(await fs.readFile(path.join(v.destination, 'example-480.webp'), 'utf8'), 'new-valid');
   assert.equal(v.encodes(), 6);
+});
+
+test('concurrent builders serialize cache writes and adopt the completed entry', async t => {
+  const v = await setup(t);
+  v.setDelay(80);
+  const first = await Promise.all([v.run(), v.run()]);
+  assert.deepEqual(first.map(result => result.reused).sort(), [false, true]);
+  assert.equal(v.encodes(), 1);
+  assert.equal(await fs.readFile(path.join(v.destination, 'example-480.webp'), 'utf8'), 'valid');
+
+  const cacheRoot = path.join(v.root, '.cache/image-variants');
+  const entry = (await fs.readdir(cacheRoot)).find(name => /^[a-f0-9]+-/.test(name));
+  await fs.writeFile(path.join(cacheRoot, entry, 'files/example-480.webp'), 'corrupted');
+  v.setPayload('repaired');
+  const repaired = await Promise.all([v.run(), v.run()]);
+  assert.deepEqual(repaired.map(result => result.reused).sort(), [false, true]);
+  assert.equal(v.encodes(), 2);
+  assert.equal(await fs.readFile(path.join(v.destination, 'example-480.webp'), 'utf8'), 'repaired');
+  assert.ok(!(await fs.readdir(cacheRoot)).some(name => name.endsWith('.lock')));
 });
 
 test('generator only reuses derivatives when their originals remain public', async t => {
