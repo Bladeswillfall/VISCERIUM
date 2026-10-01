@@ -476,6 +476,11 @@
     transparent 25%,
     color-mix(in srgb, var(--paper-ink) 8%, transparent));
 }
+@container artifact (max-width: 560px) {
+  .cx-artifact[data-preset="citadel-note"] .cx-artifact-stage.cx-citadel-turning {
+    overflow: clip;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-sheet { display: none; }
 }
