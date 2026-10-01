@@ -1094,11 +1094,9 @@ main:has(.home-gateway) .sl-container > .home-gateway + * {
     .record__action { flex: 0 0 auto; white-space: nowrap; color: var(--recent-text-bright); font: 600 .78rem/1.35 var(--ui); }
     .record__action span { display: inline-block; margin-left: .25rem; transition: transform .18s ease; }
     .record:hover .record__action span, .record:focus-visible .record__action span { transform: translate(2px,-2px); }
-    .recent__foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 1.15rem; }
+    .recent__foot { display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 1.15rem; }
     .recent__hint { margin: 0; color: var(--recent-text-muted); font: 400 .8rem/1.5 var(--ui); }
     .recent__hint--mobile { display: none; }
-    .recent__all { color: var(--recent-text-bright); font: 600 .8rem/1.5 var(--ui); text-underline-offset: .27em; }
-    .recent__all:hover { color: var(--codex-fixed-light); }
 
     /* Expanded mode on wider screens. The list stays in document flow. */
     .recent[data-view='grid'] .recent__track { grid-auto-flow: row; grid-template-columns: repeat(3,minmax(0,min(var(--card-width),calc((100% - 2 * var(--card-gap))/3)))); grid-auto-columns: auto; overflow: visible; scroll-snap-type: none; padding-bottom: .3rem; }
@@ -1172,12 +1170,8 @@ main:has(.home-gateway) .sl-container > .home-gateway + * {
 }
 :root[data-theme='light'] .recent__title,
 :root[data-theme='light'] .recent__intro,
-:root[data-theme='light'] .recent__hint,
-:root[data-theme='light'] .recent__all {
+:root[data-theme='light'] .recent__hint {
   color: var(--codex-text-body);
-}
-:root[data-theme='light'] .recent__all:hover {
-  color: var(--codex-palette-oled);
 }
 :root[data-theme='light'] .recent__view,
 :root[data-theme='light'] .recent__arrow {
