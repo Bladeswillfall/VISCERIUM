@@ -74,6 +74,21 @@ test('the checks workflow cannot create a follow-up repository commit', () => {
   assert.match(workflow, /cmp --silent dist\/main\.js/);
 });
 
+test('Axe accessibility runtime uses the lockfile instead of a second npm install', () => {
+  const pkg = JSON.parse(read('../package.json'));
+  const lock = JSON.parse(read('../package-lock.json'));
+  const workflow = read('../../.github/workflows/checks.yml');
+  const axe = workflow.split(/^  axe:\n/m)[1]?.split(/^  browser:\n/m)[0];
+
+  assert.equal(pkg.devDependencies['@axe-core/playwright'], '4.13.0');
+  assert.equal(lock.packages[''].devDependencies['@axe-core/playwright'], '4.13.0');
+  assert.equal(lock.packages['node_modules/@axe-core/playwright'].version, '4.13.0');
+  assert.equal(lock.packages['node_modules/axe-core'].version, '4.13.0');
+  assert.ok(axe, 'Axe CI job must exist');
+  assert.match(axe, /npm ci --silent --no-audit --no-fund/);
+  assert.doesNotMatch(axe, /npm install --no-save|Install Axe accessibility runtime/);
+});
+
 test('aggregated changelog headings have unique IDs', () => {
   const changelog = read('../CHANGELOG.md');
   const headings = [...changelog.matchAll(/^###\s+(.+)$/gm)].map((match) => match[1].toLowerCase());
