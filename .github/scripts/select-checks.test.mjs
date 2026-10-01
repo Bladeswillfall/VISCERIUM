@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { CHECKS, changedPaths, selectChecks } from './select-checks.mjs';
 
 const all = Object.fromEntries(CHECKS.map(name => [name, true]));
@@ -77,4 +78,23 @@ test('workflow gates each job and verifies both selected and intentionally skipp
   assert.match(workflow, /CHANGES_RESULT:/);
   assert.match(workflow, /test "\$CHANGES_RESULT" = "success"/);
   assert.match(workflow, /"skipped"/);
+});
+
+test('aggregate verification accepts only the skips selected by change detection', () => {
+  const workflow = readFileSync(new URL('../workflows/checks.yml', import.meta.url), 'utf8');
+  const script = workflow.split(/^  verify:\n/m)[1]?.split('        run: |\n')[1]?.replace(/^          /gm, '');
+  assert.ok(script, 'aggregate verification must have a runnable shell script');
+  const environment = { CHANGES_RESULT: 'success', REPOSITORY_RESULT: 'success' };
+  for (const name of CHECKS) {
+    environment['RUN_' + name.toUpperCase()] = 'false';
+    environment[name.toUpperCase() + '_RESULT'] = 'skipped';
+  }
+  const run = (overrides = {}) => spawnSync('bash', ['-e', '-c', script], {
+    encoding: 'utf8', env: { ...process.env, ...environment, ...overrides },
+  });
+  assert.equal(run().status, 0, 'unselected suites must be allowed to skip');
+  assert.notEqual(run({ RUN_UNIT: 'true' }).status, 0, 'a required skipped job cannot pass');
+  assert.notEqual(run({ UNIT_RESULT: 'failure' }).status, 0, 'an unselected failed job is not an intentional skip');
+  assert.notEqual(run({ CHANGES_RESULT: 'failure' }).status, 0, 'broken change detection cannot pass');
+  assert.equal(run({ RUN_UNIT: 'true', UNIT_RESULT: 'success' }).status, 0);
 });
