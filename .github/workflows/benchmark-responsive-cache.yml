@@ -152,4 +152,12 @@ jobs:
           ATLAS_COLD_HIT: ${{ needs.cold.outputs.atlas_hit }}
           ATLAS_WARM_HIT: ${{ steps.atlas.outputs.cache-hit }}
           RESPONSIVE_HIT: ${{ steps.responsive.outputs.cache-hit }}
+          BENCHMARK_JSON: ${{ runner.temp }}/responsive-cache-benchmark.json
         run: node .github/scripts/report-responsive-cache-benchmark.mjs
+      - name: Upload benchmark measurements
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: responsive-cache-benchmark
+          path: ${{ runner.temp }}/responsive-cache-benchmark.json
+          if-no-files-found: error
+          retention-days: 7
