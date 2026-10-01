@@ -52,11 +52,11 @@ The block below is maintained from the existing npm package manifests. It record
 These exact package/version entries are permitted to run install lifecycle scripts under the repository strict allowlist policy.
 
 | Project | Package/version | Lifecycle script |
-| --- | --- | --- |
+| --- | --- |
 | Codex (`Site/`) | `esbuild@0.28.1` | approved |
 | Codex (`Site/`) | `fsevents@2.3.2` | approved |
 | Codex (`Site/`) | `fsevents@2.3.3` | approved |
-| Obsidian timelines plugin | `esbuild@0.28.1` | approved |
+| Obsidian timelines plugin | `esbuild@0.28.2` | approved |
 <!-- DEPENDENCIES:DIRECT:END -->
 
 The lockfiles remain authoritative for exact resolved and transitive versions. The human-authored sections below remain authoritative for why a component is used and for licence, attribution, modification, and redistribution obligations.
