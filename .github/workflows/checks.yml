@@ -10,6 +10,34 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    name: Select affected checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      unit: ${{ steps.select.outputs.unit }}
+      gateway: ${{ steps.select.outputs.gateway }}
+      build: ${{ steps.select.outputs.build }}
+      obsidian_plugin: ${{ steps.select.outputs.obsidian_plugin }}
+      browser: ${{ steps.select.outputs.browser }}
+      graph_engines: ${{ steps.select.outputs.graph_engines }}
+      contact: ${{ steps.select.outputs.contact }}
+      axe: ${{ steps.select.outputs.axe }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+          show-progress: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Select affected checks
+        id: select
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node .github/scripts/select-checks.mjs
+
   repository:
     name: Repository checks
     runs-on: ubuntu-latest
@@ -38,7 +66,7 @@ jobs:
 
       - name: Test changelog policy
         working-directory: .
-        run: node --test .github/scripts/check-changelog.test.mjs
+        run: node --test .github/scripts/check-changelog.test.mjs .github/scripts/select-checks.test.mjs
 
       - name: Require a PR changelog entry or reason
         if: github.event_name == 'pull_request'
@@ -66,6 +94,8 @@ jobs:
         run: node Tools/scripts/sync-obsidian-plugins.mjs --check
 
   unit:
+    needs: changes
+    if: needs.changes.outputs.unit == 'true'
     name: Unit tests and benchmarks
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -110,6 +140,8 @@ jobs:
       - run: npm run benchmark:timelines
 
   gateway:
+    needs: changes
+    if: needs.changes.outputs.gateway == 'true'
     name: Comment gateway tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -139,6 +171,8 @@ jobs:
       - run: npm test
 
   build:
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
     name: Production build
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -208,6 +242,8 @@ jobs:
           retention-days: 1
 
   obsidian_plugin:
+    needs: changes
+    if: needs.changes.outputs.obsidian_plugin == 'true'
     name: Obsidian timeline plugin
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -263,8 +299,9 @@ jobs:
           }
 
   axe:
+    needs: [changes, build]
+    if: needs.changes.outputs.axe == 'true'
     name: Axe accessibility checks
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
@@ -327,8 +364,9 @@ jobs:
           retention-days: 1
 
   browser:
+    needs: [changes, build]
+    if: needs.changes.outputs.browser == 'true'
     name: Browser checks
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
@@ -392,8 +430,9 @@ jobs:
           retention-days: 1
 
   graph_engines:
+    needs: [changes, build]
+    if: needs.changes.outputs.graph_engines == 'true'
     name: Graph Firefox and WebKit checks
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
@@ -460,8 +499,9 @@ jobs:
           retention-days: 1
 
   contact:
+    needs: [changes, build]
+    if: needs.changes.outputs.contact == 'true'
     name: Enabled contact form browser check
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
@@ -559,6 +599,7 @@ jobs:
 
   verify:
     needs:
+      - changes
       - repository
       - unit
       - gateway
@@ -572,24 +613,66 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Require all checks to pass
+      - name: Require selected checks to pass
         env:
+          CHANGES_RESULT: ${{ needs.changes.result }}
           REPOSITORY_RESULT: ${{ needs.repository.result }}
+          RUN_UNIT: ${{ needs.changes.outputs.unit }}
           UNIT_RESULT: ${{ needs.unit.result }}
+          RUN_GATEWAY: ${{ needs.changes.outputs.gateway }}
           GATEWAY_RESULT: ${{ needs.gateway.result }}
+          RUN_BUILD: ${{ needs.changes.outputs.build }}
           BUILD_RESULT: ${{ needs.build.result }}
+          RUN_OBSIDIAN_PLUGIN: ${{ needs.changes.outputs.obsidian_plugin }}
           OBSIDIAN_PLUGIN_RESULT: ${{ needs.obsidian_plugin.result }}
+          RUN_BROWSER: ${{ needs.changes.outputs.browser }}
           BROWSER_RESULT: ${{ needs.browser.result }}
+          RUN_GRAPH_ENGINES: ${{ needs.changes.outputs.graph_engines }}
           GRAPH_ENGINES_RESULT: ${{ needs.graph_engines.result }}
+          RUN_CONTACT: ${{ needs.changes.outputs.contact }}
           CONTACT_RESULT: ${{ needs.contact.result }}
+          RUN_AXE: ${{ needs.changes.outputs.axe }}
           AXE_RESULT: ${{ needs.axe.result }}
         run: |
+          test "$CHANGES_RESULT" = "success"
           test "$REPOSITORY_RESULT" = "success"
-          test "$UNIT_RESULT" = "success"
-          test "$GATEWAY_RESULT" = "success"
-          test "$BUILD_RESULT" = "success"
-          test "$OBSIDIAN_PLUGIN_RESULT" = "success"
-          test "$BROWSER_RESULT" = "success"
-          test "$GRAPH_ENGINES_RESULT" = "success"
-          test "$CONTACT_RESULT" = "success"
-          test "$AXE_RESULT" = "success"
+          if [ "$RUN_UNIT" = "true" ]; then
+            test "$UNIT_RESULT" = "success"
+          else
+            test "$UNIT_RESULT" = "skipped"
+          fi
+          if [ "$RUN_GATEWAY" = "true" ]; then
+            test "$GATEWAY_RESULT" = "success"
+          else
+            test "$GATEWAY_RESULT" = "skipped"
+          fi
+          if [ "$RUN_BUILD" = "true" ]; then
+            test "$BUILD_RESULT" = "success"
+          else
+            test "$BUILD_RESULT" = "skipped"
+          fi
+          if [ "$RUN_OBSIDIAN_PLUGIN" = "true" ]; then
+            test "$OBSIDIAN_PLUGIN_RESULT" = "success"
+          else
+            test "$OBSIDIAN_PLUGIN_RESULT" = "skipped"
+          fi
+          if [ "$RUN_BROWSER" = "true" ]; then
+            test "$BROWSER_RESULT" = "success"
+          else
+            test "$BROWSER_RESULT" = "skipped"
+          fi
+          if [ "$RUN_GRAPH_ENGINES" = "true" ]; then
+            test "$GRAPH_ENGINES_RESULT" = "success"
+          else
+            test "$GRAPH_ENGINES_RESULT" = "skipped"
+          fi
+          if [ "$RUN_CONTACT" = "true" ]; then
+            test "$CONTACT_RESULT" = "success"
+          else
+            test "$CONTACT_RESULT" = "skipped"
+          fi
+          if [ "$RUN_AXE" = "true" ]; then
+            test "$AXE_RESULT" = "success"
+          else
+            test "$AXE_RESULT" = "skipped"
+          fi

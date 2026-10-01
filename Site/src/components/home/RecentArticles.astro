@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+import { getRecentArticles } from '../../lib/recent-articles.mjs';
+
+const formatter = new Intl.DateTimeFormat(Astro.currentLocale ?? 'en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+const marks = { CITADEL: 'I', SMOG: 'II', NEARSIGHT: 'III', ENTROPY: 'IV', Universal: '✦' };
+const articles = getRecentArticles(await getCollection('docs')).map((article, index) => ({
+  ...article,
+  ordinal: String(index + 1).padStart(2, '0'),
+  eraMark: marks[article.era],
+  eraClass: `record--${article.era.toLowerCase()}`,
+}));
+---
+
+{articles.length > 0 && (
+<section class="recent" id="recent-articles" data-view="rail" aria-labelledby="recent-title" aria-describedby="recent-intro">
+      <div class="recent__inner">
+        <header class="recent__top">
+          <div>
+            <h2 class="recent__title" id="recent-title">Recent articles</h2>
+            <p class="recent__intro" id="recent-intro">New entries and revised records from across the VISCERIUM Codex.</p>
+          </div>
+          <div class="recent__actions">
+            <button class="recent__view" id="recent-toggle" type="button" aria-controls="recent-track" aria-expanded="false" hidden>
+              <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="7" height="7"/><rect x="11.5" y="1.5" width="7" height="7"/><rect x="1.5" y="11.5" width="7" height="7"/><rect x="11.5" y="11.5" width="7" height="7"/></svg>
+              <span id="recent-toggle-text">Expand to grid</span>
+            </button>
+            <div class="recent__controls" role="group" aria-label="Article carousel navigation">
+              <button class="recent__arrow" id="recent-prev" type="button" aria-label="Scroll to previous article" aria-controls="recent-track" hidden>←</button>
+              <button class="recent__arrow" id="recent-next" type="button" aria-label="Scroll to next article" aria-controls="recent-track" hidden>→</button>
+            </div>
+          </div>
+        </header>
+        <ol class="recent__track" id="recent-track" tabindex="-1" aria-label="Latest Codex articles">
+  {articles.map((article) => (
+    <li>
+      <a class:list={['record', article.eraClass]} href={article.href}
+        data-rybbit-event="home_recent_article_click" data-rybbit-prop-era={article.era}>
+        <span class:list={['record__media', `record__media--${article.era.toLowerCase()}`, article.headerImage && 'record__media--image']} data-plate={article.eraMark} aria-hidden="true">
+          {article.headerImage && <img src={article.headerImage} alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.parentElement.classList.remove('record__media--image')" draggable="false" />}
+          <span class="record__era-mark">{article.eraMark}</span>
+        </span>
+        <span class="record__content">
+          <span class="record__line">
+            <span class="record__ordinal">{article.ordinal}</span>
+            <span class="record__date">{article.kind}<time datetime={article.date.toISOString()}>{formatter.format(article.date)}</time></span>
+          </span>
+          <span class="record__type">{article.type}</span>
+          <h3>{article.title}</h3>
+          {article.description && <span class="record__description">{article.description}</span>}
+        </span>
+        <span class="record__bottom">
+          <span class="record__era">{article.era === 'Universal' ? 'UNIVERSAL' : `${article.era} / ERA ${article.eraMark}`}</span>
+          <span class="record__action">Read article <span aria-hidden="true">↗</span></span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ol>
+        <div class="recent__foot">
+          <p class="recent__hint"><span class="recent__hint--rail">Drag cards, swipe, scroll or use the arrows to browse.</span><span class="recent__hint--grid">All recent cards are visible.</span><span class="recent__hint--mobile">Era treatments in the compact article list.</span></p>
+        </div>
+      </div>
+    </section>
+)}
+
+
+<script>
+
+    (() => {
+      const section = document.getElementById('recent-articles');
+      if (!section) return;
+      const track = document.getElementById('recent-track');
+      const toggle = document.getElementById('recent-toggle');
+      const toggleText = document.getElementById('recent-toggle-text');
+      const previous = document.getElementById('recent-prev');
+      const next = document.getElementById('recent-next');
+      const mobile = window.matchMedia('(max-width: 720px)');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const slides = [...track.children];
+      let scrollFrame = 0;
+      let settleFrame = 0;
+      let drag = null;
+      let suppressClick = false;
+      const isRail = () => section.dataset.view === 'rail' && !mobile.matches;
+      const stepSize = () => slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : slides[0]?.offsetWidth || 0;
+      const updateControls = () => {
+        const active = isRail();
+        const maximum = Math.max(0, track.scrollWidth - track.clientWidth);
+        const scrollable = active && maximum > 3;
+        track.classList.toggle('is-draggable', scrollable);
+        previous.hidden = !scrollable;
+        next.hidden = !scrollable;
+        previous.disabled = !scrollable || track.scrollLeft <= 3;
+        next.disabled = !scrollable || track.scrollLeft >= maximum - 3;
+        toggle.hidden = mobile.matches;
+        track.tabIndex = active && scrollable ? 0 : -1;
+      };
+      const cancelSettle = () => {
+        cancelAnimationFrame(settleFrame);
+        settleFrame = 0;
+        track.classList.remove('is-settling');
+      };
+      const scrollOne = direction => {
+        if (!isRail()) return;
+        cancelSettle();
+        const step = stepSize();
+        if (!step) return;
+        const maximum = Math.max(0, track.scrollWidth - track.clientWidth);
+        const index = Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / step) + direction));
+        track.scrollTo({left: Math.min(index * step, maximum), behavior: reducedMotion.matches ? 'instant' : 'smooth'});
+      };
+      const stopDrag = () => {
+        if (!drag) return;
+        const {id, moved} = drag;
+        drag = null;
+        if (moved && isRail()) track.classList.add('is-settling');
+        track.classList.remove('is-dragging');
+        if (moved) suppressClick = true;
+        if (track.hasPointerCapture(id)) track.releasePointerCapture(id);
+        if (!moved || !isRail()) return;
+        const step = stepSize();
+        const maximum = Math.max(0, track.scrollWidth - track.clientWidth);
+        const target = Math.min(Math.round(track.scrollLeft / step) * step, maximum);
+        const from = track.scrollLeft;
+        if (reducedMotion.matches || Math.abs(target - from) < 1) {
+          track.scrollLeft = target;
+          track.classList.remove('is-settling');
+          return;
+        }
+        const duration = 380;
+        let started;
+        const animate = now => {
+          if (started === undefined) started = now;
+          const progress = Math.min((now - started) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          track.scrollLeft = from + (target - from) * eased;
+          if (progress < 1) settleFrame = requestAnimationFrame(animate);
+          else {
+            settleFrame = 0;
+            track.scrollLeft = target;
+            track.classList.remove('is-settling');
+          }
+        };
+        settleFrame = requestAnimationFrame(animate);
+      };
+      track.addEventListener('pointerdown', event => {
+        suppressClick = false;
+        if (event.pointerType !== 'mouse' || event.button !== 0 || !isRail() || track.scrollWidth <= track.clientWidth) return;
+        cancelSettle();
+        drag = {id: event.pointerId, x: event.clientX, left: track.scrollLeft, moved: false};
+      });
+      track.addEventListener('pointermove', event => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const distance = event.clientX - drag.x;
+        if (!drag.moved && Math.abs(distance) < 7) return;
+        if (!drag.moved) {
+          drag.moved = true;
+          track.classList.add('is-dragging');
+          track.setPointerCapture(event.pointerId);
+        }
+        event.preventDefault();
+        track.scrollLeft = drag.left - distance;
+      });
+      window.addEventListener('pointerup', event => { if (drag?.id === event.pointerId) stopDrag(); });
+      track.addEventListener('pointercancel', stopDrag);
+      track.addEventListener('lostpointercapture', stopDrag);
+      window.addEventListener('blur', stopDrag);
+      track.addEventListener('dragstart', event => { if (isRail()) event.preventDefault(); });
+      track.addEventListener('click', event => {
+        if (!suppressClick) return;
+        event.preventDefault();
+        event.stopPropagation();
+        suppressClick = false;
+      }, true);
+      toggle.addEventListener('click', () => {
+        stopDrag();
+        cancelSettle();
+        const expanded = section.dataset.view !== 'grid';
+        section.dataset.view = expanded ? 'grid' : 'rail';
+        toggle.setAttribute('aria-expanded', String(expanded));
+        toggleText.textContent = expanded ? 'Return to carousel' : 'Expand to grid';
+        updateControls();
+      });
+      previous.addEventListener('click', () => scrollOne(-1));
+      next.addEventListener('click', () => scrollOne(1));
+      track.addEventListener('scroll', () => {
+        if (scrollFrame) cancelAnimationFrame(scrollFrame);
+        scrollFrame = requestAnimationFrame(updateControls);
+      }, {passive:true});
+      track.addEventListener('keydown', event => {
+        if (event.target !== track || !isRail()) return;
+        if (event.key === 'ArrowRight') { event.preventDefault(); scrollOne(1); }
+        if (event.key === 'ArrowLeft') { event.preventDefault(); scrollOne(-1); }
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(updateControls).observe(track);
+      else window.addEventListener('resize', updateControls);
+      if (mobile.addEventListener) mobile.addEventListener('change', () => { stopDrag(); cancelSettle(); updateControls(); });
+      else mobile.addListener(() => { stopDrag(); cancelSettle(); updateControls(); });
+      updateControls();
+    })();
+  
+</script>
