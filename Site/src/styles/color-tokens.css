@@ -377,6 +377,10 @@
     /* Core CITADEL material */
     --artifact-citadel-accent: #a34c4d;
     --artifact-citadel-ink: #37271e;
+    --artifact-citadel-red: #92433b;
+    --artifact-citadel-blue: #334956;
+    --artifact-citadel-mobile-mark: #985145;
+    --artifact-citadel-mobile-wash: #9e654006;
     --artifact-citadel-paper: #e4d2b0;
     --artifact-citadel-edge: #bea37d;
     /* Shared artifact controls */
