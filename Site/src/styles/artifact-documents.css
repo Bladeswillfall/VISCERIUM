@@ -186,7 +186,8 @@
 }
 @media print {
   .cx-artifact-toolbar,.cx-artifact-pager,.cx-artifact-stage {display:none!important}
-  .cx-artifact-source {display:block!important;border:0; padding:0}
+  .cx-artifact .cx-artifact-source[hidden],
+  .cx-artifact .cx-artifact-source {display:block!important;border:0; padding:0}
 }
 @media (forced-colors: active) {
   .cx-artifact-paper {clip-path:none;border:1px solid CanvasText;background:Canvas;color:CanvasText}
