@@ -225,6 +225,8 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
     incoming.inert = true;
     incoming.style.visibility = direction > 0 ? 'visible' : 'hidden';
     outgoing.style.visibility = direction > 0 ? 'hidden' : 'visible';
+    const focusedControl = document.activeElement === previous ? previous
+      : document.activeElement === next ? next : null;
     previous.disabled = next.disabled = true;
     stage.append(sheet);
 
@@ -247,6 +249,12 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
       cancel();
       incoming.inert = false;
       commit(target);
+      // Disabling the pressed control during the animation can blur keyboard focus.
+      if (focusedControl && (document.activeElement === document.body
+        || document.activeElement === focusedControl)) {
+        const destination = focusedControl.disabled ? (direction > 0 ? previous : next) : focusedControl;
+        if (!destination.disabled) destination.focus({preventScroll:true});
+      }
     }
     const timer = setTimeout(finish,narrow ? 760 : 1030);
     active = {sheet,outgoing,incoming,oldMinHeight,animation,timer};
