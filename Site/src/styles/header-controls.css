@@ -168,28 +168,25 @@ html[data-codex-mobile-header][data-codex-mobile-header-hidden] mobile-starlight
 }
 
 /*
-  Starlight's mobile menu button is independently fixed near the top edge. The
-  visible Codex header moves the menu bubble and sidebar pane down by the same
-  navigation height, keeping the control fully visible. All three surfaces use
-  the same easing and travel together.
+  Keep Starlight's toggle in the header's reserved lane.
+  The native drawer paints in the browser's top layer, beyond any z-index.
+  Its open area must start below the toggle in both header states.
 */
-html[data-codex-mobile-header] .sidebar > starlight-menu-button button {
-  transform: translateY(var(--sl-nav-height, 3.5rem));
-  transition: transform .28s cubic-bezier(.22, .61, .36, 1);
-  will-change: transform;
-}
-
-html[data-codex-mobile-header][data-codex-mobile-header-hidden] .sidebar > starlight-menu-button button {
-  transform: translateY(0);
+html[data-codex-mobile-header] .sidebar > .sl-menu-button {
+  z-index: var(--codex-z-control);
 }
 
 html[data-codex-mobile-header] .sidebar-pane {
   inset-block-start: var(--sl-nav-height, 3.5rem);
-  transition: inset-block-start .28s cubic-bezier(.22, .61, .36, 1);
 }
 
-html[data-codex-mobile-header][data-codex-mobile-header-hidden] .sidebar-pane {
-  inset-block-start: 0;
+/* Show the ribbon when the menu opens after the reader has scrolled. */
+html[data-codex-mobile-header][data-codex-mobile-header-hidden]:has(#starlight__sidebar:popover-open) header.header {
+  transform: translateY(0);
+}
+
+html[data-codex-mobile-header][data-codex-mobile-header-hidden]:has(#starlight__sidebar:popover-open) mobile-starlight-toc > nav {
+  top: calc(var(--sl-nav-height, 3.5rem) - 1px) !important;
 }
 
 .codex-header-search {
@@ -309,9 +306,7 @@ html[data-codex-wide-header] .codex-header-search button[data-open-modal] > kbd 
 
 @media (prefers-reduced-motion: reduce) {
   html[data-codex-mobile-header] header.header,
-  html[data-codex-mobile-header] mobile-starlight-toc > nav,
-  html[data-codex-mobile-header] .sidebar > starlight-menu-button button,
-  html[data-codex-mobile-header] .sidebar-pane {
+  html[data-codex-mobile-header] mobile-starlight-toc > nav {
     transition: none;
   }
 }

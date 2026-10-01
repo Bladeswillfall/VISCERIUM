@@ -161,25 +161,14 @@ test('mobile table of contents follows the auto-hiding header without changing i
   );
 });
 
-test('mobile sidebar controls follow the auto-hiding header without being covered', () => {
+test('mobile menu stays above the ribbon and outside the native popover', () => {
   const headerControls = read('../src/styles/header-controls.css');
 
-  assert.match(
-    headerControls,
-    /html\[data-codex-mobile-header\] \.sidebar > starlight-menu-button button\s*\{[\s\S]*?translateY\(var\(--sl-nav-height, 3\.5rem\)\)/,
-  );
-  assert.match(
-    headerControls,
-    /html\[data-codex-mobile-header\]\[data-codex-mobile-header-hidden\] \.sidebar > starlight-menu-button button\s*\{[\s\S]*?translateY\(0\)/,
-  );
-  assert.match(
-    headerControls,
-    /html\[data-codex-mobile-header\] \.sidebar-pane\s*\{[\s\S]*?inset-block-start:\s*var\(--sl-nav-height, 3\.5rem\)/,
-  );
-  assert.match(
-    headerControls,
-    /html\[data-codex-mobile-header\]\[data-codex-mobile-header-hidden\] \.sidebar-pane\s*\{[\s\S]*?inset-block-start:\s*0/,
-  );
+  assert.match(headerControls, /html\[data-codex-mobile-header\] \.sidebar > \.sl-menu-button\s*\{[^}]*z-index:\s*var\(--codex-z-control\)/);
+  assert.doesNotMatch(headerControls, /\.sidebar > \.sl-menu-button\s*\{[^}]*transform:/);
+  assert.match(headerControls, /html\[data-codex-mobile-header\] \.sidebar-pane\s*\{[^}]*inset-block-start:\s*var\(--sl-nav-height, 3\.5rem\)/);
+  assert.doesNotMatch(headerControls, /data-codex-mobile-header-hidden\] \.sidebar-pane\s*\{[^}]*inset-block-start:\s*0/);
+  assert.match(headerControls, /data-codex-mobile-header-hidden\]:has\(#starlight__sidebar:popover-open\) header\.header\s*\{[^}]*translateY\(0\)/);
 });
 
 test('homepage has no first-load reveal and still supports the sidebar rail', () => {

@@ -25,12 +25,12 @@ The block below is maintained from the existing npm package manifests. It record
 <!-- DEPENDENCIES:DIRECT:START -->
 | Project | Package | Scope | Declared version |
 | --- | --- | --- | --- |
-| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^7.0.3` |
-| Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
-| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
-| Codex (`Site/`) | `astro` | runtime | `^7.2.8` |
+| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^8.0.2` |
+| Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.4` |
+| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.42.4` |
+| Codex (`Site/`) | `astro` | runtime | `^7.3.5` |
 | Codex (`Site/`) | `cytoscape` | runtime | `3.34.3` |
-| Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.0` |
+| Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.1` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
 | Codex (`Site/`) | `gray-matter` | runtime | `^4.0.3` |
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
@@ -41,10 +41,10 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
-| Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
-| Codex (`Site/`) | `eslint` | development | `10.10.0` |
+| Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
+| Codex (`Site/`) | `eslint` | development | `10.11.0` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
-| Obsidian timelines plugin | `esbuild` | development | `^0.28.1` |
+| Obsidian timelines plugin | `esbuild` | development | `^0.28.2` |
 | Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |
 
 #### Approved npm lifecycle scripts
@@ -56,7 +56,7 @@ These exact package/version entries are permitted to run install lifecycle scrip
 | Codex (`Site/`) | `esbuild@0.28.1` | approved |
 | Codex (`Site/`) | `fsevents@2.3.2` | approved |
 | Codex (`Site/`) | `fsevents@2.3.3` | approved |
-| Obsidian timelines plugin | `esbuild@0.28.1` | approved |
+| Obsidian timelines plugin | `esbuild@0.28.2` | approved |
 <!-- DEPENDENCIES:DIRECT:END -->
 
 The lockfiles remain authoritative for exact resolved and transitive versions. The human-authored sections below remain authoritative for why a component is used and for licence, attribution, modification, and redistribution obligations.
