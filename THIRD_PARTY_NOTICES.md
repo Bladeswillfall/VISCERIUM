@@ -41,7 +41,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
-| Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
+| Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
 | Codex (`Site/`) | `eslint` | development | `10.10.0` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.1` |
