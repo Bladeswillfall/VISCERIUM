@@ -122,3 +122,79 @@ test('approved V3 manuscript materials remain fixed across light and dark websit
   expect(result.light.idleControl).not.toBe(result.dark.idleControl);
   expect(result.light.selectedText).toBe(result.dark.selectedText);
 });
+
+
+test('artifact buttons use site era fills and background hover in both website themes', async ({page}) => {
+  const artifact=await openArtifact(page,1365);
+  for (const theme of ['dark','light']) {
+    await page.evaluate(theme => document.documentElement.setAttribute('data-theme',theme),theme);
+    const mode=artifact.locator('.cx-artifact-view button[aria-pressed="true"]');
+    const idle=artifact.locator('.cx-artifact-view button[aria-pressed="false"]');
+    const next=artifact.getByRole('button',{name:'Next leaf'});
+    const previous=artifact.getByRole('button',{name:'Previous leaf'});
+    const state=await artifact.evaluate(root => {
+      const active=root.querySelector('.cx-artifact-view button[aria-pressed="true"]');
+      const inactive=root.querySelector('.cx-artifact-view button[aria-pressed="false"]');
+      const next=root.querySelector('.cx-artifact-pager button:not(:disabled)');
+      const disabled=root.querySelector('.cx-artifact-pager button:disabled');
+      const style=node=>getComputedStyle(node);
+      const expected=document.createElement('span');
+      expected.style.backgroundColor='var(--era-e1-button)';
+      root.append(expected);
+      const eraFill=style(expected).backgroundColor;
+      expected.style.backgroundColor='var(--era-e1-button-hover)';
+      const eraHover=style(expected).backgroundColor;
+      expected.remove();
+      return {
+        eraFill,eraHover,
+        active:style(active).backgroundColor,
+        idle:style(inactive).backgroundColor,
+        next:style(next).backgroundColor,
+        disabled:style(disabled).backgroundColor,
+        radius:style(active).borderRadius,
+        nextRadius:style(next).borderRadius,
+        border:style(active).borderTopWidth,
+      };
+    });
+    expect(state.active).toBe(state.eraFill);
+    expect(state.active).not.toBe(state.idle);
+    expect(state.radius).toBe('999px');
+    expect(state.nextRadius).toBe('999px');
+    expect(state.border).toBe('0px');
+    await idle.hover();
+    expect(await idle.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.eraHover);
+    await next.hover();
+    expect(await next.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.eraHover);
+    expect(await previous.evaluate(node=>getComputedStyle(node).backgroundColor)).toBe(state.disabled);
+    await mode.focus();
+    expect(await mode.evaluate(node=>getComputedStyle(node).outlineStyle)).not.toBe('none');
+  }
+});
+
+test('artifact button identities match each document era regardless of parent article', async ({page}) => {
+  const artifact=await openArtifact(page,1365);
+  const mapped=await artifact.evaluate(root => {
+    const original=root.dataset.preset;
+    const active=root.querySelector('.cx-artifact-view button[aria-pressed="true"]');
+    const probe=document.createElement('span');
+    root.append(probe);
+    const results=[];
+    for (const [preset,token] of [
+      ['citadel-note','--era-e1-button'],
+      ['smog-dispatch','--era-e2-button'],
+      ['nearsight-terminal','--era-e3-button'],
+      ['entropy-diagnostic','--era-e4-button'],
+    ]) {
+      root.dataset.preset=preset;
+      probe.style.backgroundColor='var('+token+')';
+      results.push({
+        preset,actual:getComputedStyle(active).backgroundColor,
+        expected:getComputedStyle(probe).backgroundColor,
+      });
+    }
+    root.dataset.preset=original;
+    probe.remove();
+    return results;
+  });
+  for (const {actual,expected} of mapped) expect(actual).toBe(expected);
+});
