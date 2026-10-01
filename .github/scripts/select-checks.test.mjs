@@ -8,7 +8,8 @@ const only = (...names) => Object.fromEntries(CHECKS.map(name => [name, names.in
 const fullSite = only('unit', 'build', 'browser', 'graph_engines', 'contact', 'axe');
 
 test('docs-only changes run only mandatory repository policy', () => {
-  assert.deepEqual(selectChecks(['README.md', 'CONTRIBUTING.md', 'docs/guide.md']), only());
+  assert.deepEqual(selectChecks(['CONTRIBUTING.md', 'docs/guide.md']), only());
+  assert.deepEqual(selectChecks(['README.md']), only('unit'), 'README rights and badges have unit contracts');
   assert.deepEqual(selectChecks([]), only());
 });
 
