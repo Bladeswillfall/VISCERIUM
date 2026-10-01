@@ -269,6 +269,30 @@ function createCitadelPageTurn({root,stage,previous,next,getPages,getCurrent,com
   return {turn,cancel,isActive:() => Boolean(active)};
 }
 
+
+function rememberOpenArtifactNote(paper) {
+  if (!paper) return null;
+  const button = paper.querySelector('.cx-artifact-note-trigger[aria-expanded="true"]');
+  const anchor = button?.previousElementSibling;
+  if (!anchor?.dataset.note) return null;
+  return {note:anchor.dataset.note, text:anchor.textContent, focused:button === document.activeElement};
+}
+
+function findArtifactNotePage(pages,note) {
+  if (!note) return -1;
+  return pages.findIndex(page => [...page.paper.querySelectorAll('.cx-artifact-anchor')]
+    .some(anchor => anchor.dataset.note === note.note && anchor.textContent === note.text));
+}
+
+function restoreOpenArtifactNote(paper,note) {
+  if (!paper || !note) return;
+  const anchor = [...paper.querySelectorAll('.cx-artifact-anchor')]
+    .find(item => item.dataset.note === note.note && item.textContent === note.text);
+  const button = anchor?.nextElementSibling;
+  button?.click();
+  if (note.focused) button?.focus({preventScroll:true});
+}
+
 let artifactInstanceSequence = 0;
 
 export function installArtifactDocuments(scope = document) {
@@ -441,12 +465,7 @@ export function installArtifactDocuments(scope = document) {
       if (disposed) return;
       if (view !== 'rendered') {pendingFontRepagination = true;return;}
       pageTurn?.cancel(true);
-      const expandedButton = pages[current]?.paper
-        .querySelector('.cx-artifact-note-trigger[aria-expanded="true"]');
-      const restoreNoteFocus = expandedButton === document.activeElement;
-      const expandedAnchor = expandedButton?.previousElementSibling;
-      const expandedNote = expandedAnchor?.dataset.note
-        ? {note:expandedAnchor.dataset.note,text:expandedAnchor.textContent} : null;
+      const expandedNote = rememberOpenArtifactNote(pages[current]?.paper);
       const selectedUnit = pages[current]?.first ?? 0;
       const measuredWidth = Math.round(stage.getBoundingClientRect().width) || Math.min(620,Math.round(root.getBoundingClientRect().width));
       if (!measuredWidth) return;
@@ -480,20 +499,11 @@ export function installArtifactDocuments(scope = document) {
       for (const page of pages) prepareAnchors(page.paper);
       const preservedPage = pages.findIndex(page => page.first <= selectedUnit && page.last >= selectedUnit);
       current = Math.max(0,preservedPage);
-      if (expandedNote) {
-        const containing = pages.findIndex(page => [...page.paper.querySelectorAll('.cx-artifact-anchor')]
-          .some(anchor => anchor.dataset.note === expandedNote.note && anchor.textContent === expandedNote.text));
-        if (containing >= 0) current = containing;
-      }
+      const notePage = findArtifactNotePage(pages,expandedNote);
+      if (notePage >= 0) current = notePage;
       pages.forEach((page,index) => page.paper.setAttribute('aria-label',label + ', leaf ' + (index+1) + ' of ' + pages.length));
       render();
-      if (expandedNote) {
-        const anchor = [...pages[current].paper.querySelectorAll('.cx-artifact-anchor')]
-          .find(item => item.dataset.note === expandedNote.note && item.textContent === expandedNote.text);
-        const button = anchor?.nextElementSibling;
-        button?.click();
-        if (restoreNoteFocus) button?.focus({preventScroll:true});
-      }
+      restoreOpenArtifactNote(pages[current].paper,expandedNote);
     }
 
     function schedule(reason = 'fonts') {
