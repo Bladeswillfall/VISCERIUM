@@ -21,3 +21,9 @@ Do not create a Markdown sidecar for every test file. Separate sidecars duplicat
 ## Adding subdirectories
 
 Create a subdirectory when a test family has a separate runner or has enough files to improve navigation. Update the runner at the same time. The current `test:unit` command intentionally runs root `tests/*.test.mjs`, so moving an existing unit test into a subdirectory without changing that command will silently stop running it.
+
+## CI selection
+
+Pull requests use `.github/scripts/select-checks.mjs` to choose affected CI jobs. Changes to a single unit-test file run the unit suite; browser or accessibility test changes run the relevant suite and its required build. Site or Vault content and source changes run all site checks. Comment gateway and timeline plugin edits use their dedicated jobs. Changes to the CI configuration, unfamiliar paths, or an unreadable diff trigger the full suite. Pushes to `main` always run everything. The repository policy job always runs, and the final verification job requires selected jobs to succeed and skipped jobs to be intentionally excluded.
+
+This selects test **jobs**, not individual unit assertions. The full site test set remains the default when a change could affect more than one area.

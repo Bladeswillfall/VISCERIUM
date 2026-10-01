@@ -118,7 +118,8 @@ test('browser CI containers match locked Playwright and isolate contact tests', 
   assert.match(browser, /name: Run browser checks/);
   assert.match(browser, /playwright test tests\/browser --browser=chromium/);
   assert.doesNotMatch(browser, /--browser=firefox|--browser=webkit/);
-  assert.match(graph, /needs: build/);
+  assert.match(graph, /needs: \[changes, build\]/);
+  assert.match(graph, /if: needs\.changes\.outputs\.graph_engines == 'true'/);
   assert.match(graph, /name: Download production build/);
   assert.match(graph, /playwright test tests\/browser\/graph\*\.spec\.mjs --browser=firefox/);
   assert.match(graph, /playwright test tests\/browser\/graph\*\.spec\.mjs --browser=webkit/);
