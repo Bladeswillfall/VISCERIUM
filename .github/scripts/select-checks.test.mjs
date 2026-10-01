@@ -69,7 +69,9 @@ test('workflow gates each job and verifies both selected and intentionally skipp
   for (const name of CHECKS) {
     const section = workflow.split(new RegExp('^  ' + name + ':\\n', 'm'))[1];
     assert.ok(section, 'missing CI job: ' + name);
-    assert.match(section.split(/^  [a-z_]+:\n/m)[0], /needs:.*changes/, name + ' needs change detection');
+    const job = section.split(/^  [a-z_]+:\n/m)[0];
+    assert.equal([...job.matchAll(/^    needs:/gm)].length, 1, name + ' cannot declare needs twice');
+    assert.match(job, /needs:.*changes/, name + ' needs change detection');
     assert.match(workflow, new RegExp('needs\\.changes\\.outputs\\.' + name));
   }
   assert.match(workflow, /CHANGES_RESULT:/);
