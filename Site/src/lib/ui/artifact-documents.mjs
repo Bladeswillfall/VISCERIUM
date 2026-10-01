@@ -219,7 +219,7 @@ export function installArtifactDocuments(scope = document) {
     function paginate() {
       if (disposed) return;
       const selectedUnit = pages[current]?.first ?? 0;
-      const measuredWidth = Math.round(stage.getBoundingClientRect().width) || Math.round(root.getBoundingClientRect().width);
+      const measuredWidth = Math.round(stage.getBoundingClientRect().width) || Math.min(620,Math.round(root.getBoundingClientRect().width));
       if (!measuredWidth) return;
       width = measuredWidth;
       pages = [];
@@ -288,7 +288,10 @@ export function installArtifactDocuments(scope = document) {
 
     function goBack() {if (current>0) {current--;render();}}
     function goForward() {if (current<pages.length-1) {current++;render();}}
-    function showRendered() {view='rendered';render();}
+    function showRendered() {
+      view='rendered'; render();
+      if (Math.round(stage.getBoundingClientRect().width) !== width) paginate();
+    }
     function showOriginal() {view='original';render();}
     renderedButton.addEventListener('click',showRendered);
     plainButton.addEventListener('click',showOriginal);
