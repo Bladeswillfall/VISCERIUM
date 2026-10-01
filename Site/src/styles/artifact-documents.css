@@ -21,17 +21,74 @@
 .cx-artifact-source > :first-child { margin-top: 0; }
 .cx-artifact-source > :last-child { margin-bottom: 0; }
 .cx-artifact-source-note { margin-inline: .2em; color: var(--era-e1-accent, var(--artifact-citadel-accent)); font-size: .89em; font-style: italic; }
-.cx-artifact-toolbar { display:flex; gap: .8rem; flex-wrap:wrap; align-items:center; justify-content:space-between; margin: 1.2rem 0 1.35rem; }
-.cx-artifact-view { display:flex; padding: 3px; border: 1px solid var(--codex-border,var(--codex-palette-deep)); gap: 2px; }
-.cx-artifact button { cursor: pointer; border-radius: 0; }
-.cx-artifact-view button, .cx-artifact-pager button {
-  min-height: 2.65rem; border: 1px solid transparent; background: transparent;
-  color: var(--codex-text-body,var(--codex-palette-light)); padding: .45rem .85rem;
-  font: 500 .83rem/1.3 var(--vc-font-ui, sans-serif);
+
+/* Follow the Codex action-button rules: era colour, filled hover, pill silhouette.
+   Artifact identity determines accent even when the hosting article belongs to another era. */
+.cx-artifact {
+  --artifact-button: var(--era-button, var(--codex-surface-raised-color));
+  --artifact-button-hover: var(--era-button-hover, var(--codex-palette-deep));
+  --artifact-button-label: var(--era-button-label, var(--era-button-text, var(--codex-fixed-light)));
 }
-.cx-artifact-view button[aria-pressed="true"] { background: color-mix(in srgb, var(--artifact-accent) 36%, var(--artifact-controls-active)); color: var(--artifact-controls-text); }
-.cx-artifact button:is(:hover,:focus-visible) { border-color: var(--artifact-accent); }
-.cx-artifact button:focus-visible { outline: 2px solid var(--artifact-accent); outline-offset: 3px; }
+.cx-artifact[data-preset="citadel-note"] {
+  --artifact-button: var(--era-e1-button);
+  --artifact-button-hover: var(--era-e1-button-hover);
+}
+.cx-artifact[data-preset="smog-dispatch"] {
+  --artifact-button: var(--era-e2-button);
+  --artifact-button-hover: var(--era-e2-button-hover);
+}
+.cx-artifact[data-preset="nearsight-terminal"] {
+  --artifact-button: var(--era-e3-button);
+  --artifact-button-hover: var(--era-e3-button-hover);
+}
+.cx-artifact[data-preset="entropy-diagnostic"] {
+  --artifact-button: var(--era-e4-button);
+  --artifact-button-hover: var(--era-e4-button-hover);
+}
+.cx-artifact-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin: 1.2rem 0 1.35rem;
+}
+.cx-artifact-view {
+  display: inline-flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: .25rem;
+}
+.cx-artifact :is(.cx-artifact-view, .cx-artifact-pager) button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  padding: .45rem .8rem;
+  background: var(--codex-surface);
+  color: var(--codex-text-body);
+  font: 600 var(--sl-text-sm) / 1.25 var(--vc-font-ui, sans-serif);
+  letter-spacing: normal;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+.cx-artifact .cx-artifact-view button[aria-pressed="true"] {
+  background: var(--artifact-button);
+  color: var(--artifact-button-label);
+}
+.cx-artifact :is(.cx-artifact-view, .cx-artifact-pager) button:is(:hover, :focus-visible):not(:disabled) {
+  background: var(--artifact-button-hover);
+  color: var(--artifact-button-label);
+}
+.cx-artifact :is(.cx-artifact-view, .cx-artifact-pager) button:focus-visible {
+  outline: 2px solid var(--sl-color-accent-high);
+  outline-offset: 3px;
+}
 .cx-artifact-view-meta, .cx-artifact-pager {
   color: var(--codex-text-minor,var(--artifact-controls-muted)); font: .74rem/1.5 var(--vc-font-ui,sans-serif);
   letter-spacing: .06em;
@@ -127,8 +184,8 @@
   color:var(--artifact-ink-tone-11); border-inline-start:1px solid currentColor; padding:.25em .6em; margin:.2em 0 .5em;
 }
 .cx-artifact-pager {display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:space-between; margin:1rem 0 1.8rem;}
-.cx-artifact-pager button {min-width:2.65rem;background:var(--codex-surface,var(--artifact-ink-tone-12));border-color:var(--codex-border,var(--codex-palette-deep));}
-.cx-artifact-pager button:disabled {opacity:.3;cursor:default}
+.cx-artifact .cx-artifact-pager button {min-width:2.65rem;min-height:2.65rem;padding:.45rem;}
+.cx-artifact .cx-artifact-pager button:disabled {opacity:.45;cursor:default;}
 .cx-artifact-pager .cx-artifact-count {font-variant-numeric:tabular-nums}
 .cx-artifact-pager .cx-artifact-actions {display:flex;align-items:center;gap:1rem}
 .cx-artifact-note-trigger:not(:focus-visible) {opacity:.6}
@@ -190,6 +247,9 @@
   .cx-artifact .cx-artifact-source {display:block!important;border:0; padding:0}
 }
 @media (forced-colors: active) {
+  .cx-artifact :is(.cx-artifact-view,.cx-artifact-pager) button { background: ButtonFace; color: ButtonText; border: 1px solid ButtonText; }
+  .cx-artifact :is(.cx-artifact-view,.cx-artifact-pager) button[aria-pressed="true"],
+  .cx-artifact :is(.cx-artifact-view,.cx-artifact-pager) button:is(:hover,:focus-visible):not(:disabled) {background: Highlight;color: HighlightText;}
   .cx-artifact-paper {clip-path:none;border:1px solid CanvasText;background:Canvas;color:CanvasText}
   .cx-artifact-prose,.cx-artifact-title,.cx-artifact-folio-head,.cx-artifact-margin-note {color:CanvasText!important;text-shadow:none!important}
 }
@@ -341,8 +401,5 @@
 }
 .cx-artifact[data-preset="citadel-note"] .ms-prose p {color:var(--paper-ink);font-family:inherit;font-size:inherit;font-style:inherit;line-height:inherit}
 .cx-artifact[data-preset="citadel-note"] .rubric {color:var(--paper-red)}
-/* Article UI inherits its own light/dark theme; the scanned manuscript never changes colour. */
-.cx-artifact .cx-artifact-view button,.cx-artifact .cx-artifact-pager button {color:var(--codex-text-body)}
-/* Preserve the existing era-accented selected tab; only text contrast is corrected above. */
+/* Website theme controls the shell; artifact CSS alone controls the document. */
 .cx-artifact .cx-artifact-view-meta,.cx-artifact .cx-artifact-count,.cx-artifact .cx-artifact-pager {color:var(--codex-text-body)}
-.cx-artifact .cx-artifact-pager button:disabled {opacity:.45}
