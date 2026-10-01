@@ -16,6 +16,10 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 - Updated release notes with colour-coded change labels and clearer date and version layouts; fixed British English release-date formatting.
 
+### Removed in Unreleased
+
+- Removed the standalone What's New page and its link from the homepage Recent Articles section; the carousel and public feeds remain available.
+
 ## [0.14.0] - 2026-09-28
 
 ### Added in 0.14.0
