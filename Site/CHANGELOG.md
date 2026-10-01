@@ -14,6 +14,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Made Overview-only sidebar folders link directly to their article and subdued folders without other published articles ([#180](https://github.com/Bladeswillfall/VISCERIUM/pull/180)).
 - Updated release notes with colour-coded change labels and clearer date and version layouts; fixed British English release-date formatting.
 
 ### Removed in Unreleased
