@@ -292,8 +292,9 @@ test('reduced-motion CITADEL uses instant navigation without a turn overlay', as
 test('font-triggered repagination waits for an active CITADEL turn and preserves open notes', async ({page}) => {
   const artifact = await openArtifact(page,1365);
   const stage = artifact.locator('.cx-artifact-stage');
-  await artifact.getByRole('button',{name:'Next leaf'}).click();
   const pending = await artifact.evaluate(root => {
+    // Trigger the click and simulated late-font event within one browser task.
+    root.querySelector('.cx-artifact-pager button[aria-label="Next leaf"]').click();
     const stage = root.querySelector('.cx-artifact-stage');
     const before = root.dataset.pageTurning;
     stage.dispatchEvent(new Event('artifact:repaginate'));
