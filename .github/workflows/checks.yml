@@ -302,7 +302,6 @@ jobs:
     needs: [changes, build]
     if: needs.changes.outputs.axe == 'true'
     name: Axe accessibility checks
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
@@ -368,7 +367,6 @@ jobs:
     needs: [changes, build]
     if: needs.changes.outputs.browser == 'true'
     name: Browser checks
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
@@ -435,7 +433,6 @@ jobs:
     needs: [changes, build]
     if: needs.changes.outputs.graph_engines == 'true'
     name: Graph Firefox and WebKit checks
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
@@ -505,7 +502,6 @@ jobs:
     needs: [changes, build]
     if: needs.changes.outputs.contact == 'true'
     name: Enabled contact form browser check
-    needs: build
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e # Verified MCR v1.62.1-noble OCI index
