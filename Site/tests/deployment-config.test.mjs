@@ -100,17 +100,28 @@ test('browser CI containers match locked Playwright and isolate contact tests', 
   const lock = JSON.parse(read('../package-lock.json'));
   const version = lock.packages['node_modules/@playwright/test'].version;
   const workflow = read('../../.github/workflows/checks.yml');
+  const jobs = workflow.split(/^jobs:\n/m)[1];
+  assert.ok(jobs, 'Checks workflow must define jobs');
+  const jobIds = [...jobs.matchAll(/^  ([a-z][a-z0-9_-]*):$/gm)].map((match) => match[1]);
+  assert.equal(new Set(jobIds).size, jobIds.length, 'workflow job IDs must be unique');
   const images = [...workflow.matchAll(/playwright:v([0-9.]+)-noble@sha256:([a-f0-9]{64})/g)];
 
-  assert.equal(images.length, 3, 'browser, contact and Axe jobs must use pinned images');
-  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 3, 'all container jobs must retain Bash');
+  assert.equal(images.length, 4, 'browser, graph, contact and Axe jobs must use pinned images');
+  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 4, 'all container jobs must retain Bash');
   for (const image of images) assert.equal(image[1], version);
 
-  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  contact:\n/m)[0];
+  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  graph_engines:\n/m)[0];
+  const graph = workflow.split(/^  graph_engines:\n/m)[1]?.split(/^  contact:\n/m)[0];
   const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
   const verify = workflow.split(/^  verify:\n/m)[1];
-  assert.ok(browser && contact && verify, 'browser, contact and verify jobs must exist');
+  assert.ok(browser && graph && contact && verify, 'browser, graph, contact and verify jobs must exist');
   assert.match(browser, /name: Run browser checks/);
+  assert.match(browser, /playwright test tests\/browser --browser=chromium/);
+  assert.doesNotMatch(browser, /--browser=firefox|--browser=webkit/);
+  assert.match(graph, /needs: build/);
+  assert.match(graph, /name: Download production build/);
+  assert.match(graph, /playwright test tests\/browser\/graph\*\.spec\.mjs --browser=firefox/);
+  assert.match(graph, /playwright test tests\/browser\/graph\*\.spec\.mjs --browser=webkit/);
   assert.doesNotMatch(browser, /Build enabled contact browser fixture|Restore Atlas tile cache/);
   assert.match(contact, /Restore Atlas tile cache/);
   assert.match(contact, /name: Build enabled contact browser fixture/);
@@ -118,6 +129,9 @@ test('browser CI containers match locked Playwright and isolate contact tests', 
   assert.match(contact, /PUBLIC_CONTACT_FORM_ENABLED: '1'/);
   assert.match(contact, /CONTACT_FORM_TEST_ENABLED: '1'/);
   assert.match(contact, /HOME: \/root/);
+  assert.match(verify, /^      - graph_engines$/m);
+  assert.match(verify, /GRAPH_ENGINES_RESULT: \$\{\{ needs\.graph_engines\.result \}\}/);
+  assert.match(verify, /test "\$GRAPH_ENGINES_RESULT" = "success"/);
   assert.match(verify, /^      - contact$/m);
   assert.match(verify, /CONTACT_RESULT: \$\{\{ needs\.contact\.result \}\}/);
   assert.match(verify, /test "\$CONTACT_RESULT" = "success"/);
