@@ -441,8 +441,10 @@ export function installArtifactDocuments(scope = document) {
       if (disposed) return;
       if (view !== 'rendered') {pendingFontRepagination = true;return;}
       pageTurn?.cancel(true);
-      const expandedAnchor = pages[current]?.paper
-        .querySelector('.cx-artifact-note-trigger[aria-expanded="true"]')?.previousElementSibling;
+      const expandedButton = pages[current]?.paper
+        .querySelector('.cx-artifact-note-trigger[aria-expanded="true"]');
+      const restoreNoteFocus = expandedButton === document.activeElement;
+      const expandedAnchor = expandedButton?.previousElementSibling;
       const expandedNote = expandedAnchor?.dataset.note
         ? {note:expandedAnchor.dataset.note,text:expandedAnchor.textContent} : null;
       const selectedUnit = pages[current]?.first ?? 0;
@@ -488,7 +490,9 @@ export function installArtifactDocuments(scope = document) {
       if (expandedNote) {
         const anchor = [...pages[current].paper.querySelectorAll('.cx-artifact-anchor')]
           .find(item => item.dataset.note === expandedNote.note && item.textContent === expandedNote.text);
-        anchor?.nextElementSibling?.click();
+        const button = anchor?.nextElementSibling;
+        button?.click();
+        if (restoreNoteFocus) button?.focus({preventScroll:true});
       }
     }
 
