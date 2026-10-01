@@ -72,9 +72,16 @@ test.describe('mobile era collision guards', () => {
     await page.goto(`${preview}/eras/citadel/`, { waitUntil: 'networkidle' });
 
     const menuButton = page.locator('.sidebar > .sl-menu-button');
+    const toggleOwnsCentre = () => menuButton.evaluate((button) => {
+      const rect = button.getBoundingClientRect();
+      const target = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return button === target || button.contains(target);
+    });
     await expect(menuButton).toBeVisible();
+    expect(await toggleOwnsCentre()).toBe(true);
     await menuButton.click();
     await expect(page.locator('#starlight__sidebar:popover-open')).toBeVisible();
+    expect(await toggleOwnsCentre()).toBe(true);
 
     const sidebarExit = page.locator('[data-era-sidebar-toolbar] [data-era-exit]');
     await expect(sidebarExit).toBeVisible();
@@ -104,8 +111,50 @@ test.describe('mobile era collision guards', () => {
     expect(overlapArea(geometry.exitRect, geometry.closeRect)).toBe(0);
     expect(geometry.exitOwnsCentre).toBe(true);
 
+    // A second pointer click must close the drawer, not only Escape.
+    await menuButton.click();
+    await expect(page.locator('#starlight__sidebar:popover-open')).toHaveCount(0);
+    await menuButton.click();
+    await expect(page.locator('#starlight__sidebar:popover-open')).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(page.locator('#starlight__sidebar:popover-open')).toHaveCount(0);
     await expect(menuButton).toBeVisible();
+  });
+
+  test('mobile menu can open and close after scrolling hides the ribbon', async ({ page }) => {
+    await page.goto(`${preview}/eras/citadel/events/the-ash-winter-pilgrimage/`, { waitUntil: 'networkidle' });
+
+    const scrollRoom = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+    expect(scrollRoom).toBeGreaterThan(100);
+    await page.evaluate(() => window.scrollTo(0, Math.min(700, document.documentElement.scrollHeight - innerHeight)));
+    await expect(page.locator('html')).toHaveAttribute('data-codex-mobile-header-hidden', '');
+
+    const menuButton = page.locator('.sidebar > .sl-menu-button');
+    await expect(menuButton).toBeVisible();
+    await menuButton.click();
+    await expect(page.locator('#starlight__sidebar:popover-open')).toBeVisible();
+
+    await expect.poll(() => page.locator('header.header').evaluate(
+      (header) => Math.round(header.getBoundingClientRect().top),
+    )).toBe(0);
+    const geometry = await page.evaluate(() => {
+      const button = document.querySelector('.sidebar > .sl-menu-button');
+      const drawer = document.querySelector('#starlight__sidebar');
+      if (!(button instanceof HTMLElement) || !(drawer instanceof HTMLElement)) {
+        throw new Error('Missing mobile menu controls');
+      }
+      const rect = button.getBoundingClientRect();
+      const target = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return {
+        buttonIsHitTarget: target === button || button.contains(target),
+        buttonBottom: rect.bottom,
+        drawerTop: drawer.getBoundingClientRect().top,
+      };
+    });
+    expect(geometry.buttonIsHitTarget).toBe(true);
+    expect(geometry.buttonBottom).toBeLessThanOrEqual(geometry.drawerTop);
+
+    await menuButton.click();
+    await expect(page.locator('#starlight__sidebar:popover-open')).toHaveCount(0);
   });
 });
