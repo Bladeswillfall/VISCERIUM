@@ -71,6 +71,17 @@
   transform: translateX(-50%);
 }
 
+/* Myrkild cell art: no box margins; the alpha-aware shape margin keeps text
+   clear of the circular artwork even with a flush image box. */
+.sl-markdown-content .vc-image-embed.vc-image-shape:has(img[src*="/myrkild-"][src$="-cell.webp"]) {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  padding: 0;
+  /* All seven originals are square; reserve their space before lazy loading. */
+  aspect-ratio: 1;
+}
+
 /* Alpha-aware wrapping. The generated custom property contains the resolved asset URL. */
 .sl-markdown-content .vc-image-shape {
   shape-outside: var(--vc-image-shape);
@@ -119,5 +130,12 @@
     max-width: 100%;
     margin-inline: 0;
     transform: none;
+  }
+
+  /* Keep the site's standard centred mobile layout for the seven cell images.
+     Desktop stays flush so text follows their transparent contours. */
+  .sl-markdown-content .vc-image-embed.vc-image-shape:has(img[src*="/myrkild-"][src$="-cell.webp"]) {
+    margin-inline: auto;
+    margin-block: 0;
   }
 }

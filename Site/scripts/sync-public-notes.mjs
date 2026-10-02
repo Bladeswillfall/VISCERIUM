@@ -7,6 +7,7 @@ import { slugToRoute, toPosixPath, vaultSourceSlug } from '../src/lib/codex-path
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
+import { attributionSlugForAsset } from '../src/lib/image-attribution.mjs';
 import { parseObsidianImageEmbed, renderArticleImage } from './image-layout.mjs';
 import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';
@@ -15,6 +16,7 @@ import { stringifyGeneratedFrontmatter } from './sync-frontmatter.mjs';
 import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
+const repoRoot = path.resolve(siteRoot, '..');
 const sourceDir = path.resolve(siteRoot, siteConfig.loreSourceDir);
 const assetRoot = path.resolve(siteRoot, siteConfig.vaultAssetDir);
 const outDir = path.resolve(siteRoot, 'src/content/docs');
@@ -177,6 +179,29 @@ for (const note of publicNotes) {
   const asset = note.parsed.data.asset;
   if (note.parsed.data.type === 'image' && typeof asset === 'string' && asset.trim()) {
     imageSlugByAsset.set(assetKey(asset), note.slug);
+  }
+}
+
+// Publish canonical Bailey attribution sidecars as real routes. This is the
+// existing Bailey pipeline (PR #161), not a second Lore page per image.
+const attributionImages = path.join(assetRoot, 'Attribution', 'Images');
+if (await pathExists(attributionImages)) {
+  const sidecars = (await walk(attributionImages)).filter((file) => /\.md$/i.test(file)).sort();
+  for (const file of sidecars) {
+    const parsed = parseFrontmatter(await fs.readFile(file, 'utf8'), file);
+    if (parsed.data.status !== 'published') continue;
+    const asset = parsed.data.asset ?? parsed.data.image;
+    const slug = attributionSlugForAsset(asset);
+    if (!slug) throw new Error(`Attribution note needs a supported image asset reference: ${path.relative(siteRoot, file)}`);
+    if (publicNotes.some((note) => note.slug === slug)) throw new Error(`Duplicate published route "${slug}" in ${path.relative(siteRoot, file)}`);
+    parsed.data.slug = slug;
+    parsed.data.type = 'image';
+    for (const field of requiredFields) {
+      if (!parsed.data[field]) throw new Error(`Public attribution note is missing required frontmatter "${field}": ${path.relative(siteRoot, file)}`);
+    }
+    const sourcePath = toPosixPath(path.relative(sourceDir, file));
+    publicNotes.push({file,parsed,slug,sourcePath,candidate:null});
+    imageSlugByAsset.set(assetKey(asset), slug);
   }
 }
 
@@ -457,6 +482,7 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
   const sourceIsMdx = path.extname(file).toLowerCase() === '.mdx';
   const shortcodeRequiresMdx = hasCalendarShortcodes(parsed.content);
   const extension = sourceIsMdx || shortcodeRequiresMdx || requiresCodexMdx(parsed.content) ? '.mdx' : '.md';
+  const sourceRepoPath = toPosixPath(path.relative(repoRoot, file));
   const outFile = path.join(outDir, `${slug}${extension}`);
   const frontmatterAssets = {};
   await fs.mkdir(path.dirname(outFile), { recursive: true });
@@ -474,6 +500,7 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
     giscus: resolveGiscusForPage(parsed.data, slug),
     links: graphLinks(parsed.data, slug, file, parsed),
     sourcePath,
+    sourceRepoPath,
     assets: frontmatterAssets,
   })}${result.content}`);
   console.log(`Published ${path.relative(sourceDir, file)} -> ${path.relative(outDir, outFile)}`);
