@@ -7,6 +7,7 @@ import { slugToRoute, toPosixPath, vaultSourceSlug } from '../src/lib/codex-path
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
+import { attributionSlugForAsset } from '../src/lib/image-attribution.mjs';
 import { parseObsidianImageEmbed, renderArticleImage } from './image-layout.mjs';
 import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';
@@ -177,6 +178,20 @@ for (const note of publicNotes) {
   const asset = note.parsed.data.asset;
   if (note.parsed.data.type === 'image' && typeof asset === 'string' && asset.trim()) {
     imageSlugByAsset.set(assetKey(asset), note.slug);
+  }
+}
+
+// The Bailey attribution renderer (PR #161) publishes these sidecars as pages.
+// Resolve links from the canonical metadata now; no duplicate Lore articles.
+const attributionImages = path.join(assetRoot, 'Attribution', 'Images');
+if (await pathExists(attributionImages)) {
+  const sidecars = (await walk(attributionImages)).filter((file) => /\.md$/i.test(file));
+  for (const file of sidecars) {
+    const metadata = parseFrontmatter(await fs.readFile(file, 'utf8'), file).data;
+    if (metadata.status !== 'published') continue;
+    const asset = metadata.asset ?? metadata.image;
+    const slug = attributionSlugForAsset(asset);
+    if (slug) imageSlugByAsset.set(assetKey(asset), slug);
   }
 }
 
