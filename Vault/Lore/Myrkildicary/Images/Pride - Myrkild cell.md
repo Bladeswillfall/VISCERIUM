@@ -2,6 +2,7 @@
 title: Pride - Myrkild cell
 description: Illustration of the Pride strain of Myrkild
 status: published
+community_id: 8fd2ce10-a801-4ea9-bc12-5d48a02f0106
 type: image
 era: Universal
 asset: myrkild-pride-cell.webp
