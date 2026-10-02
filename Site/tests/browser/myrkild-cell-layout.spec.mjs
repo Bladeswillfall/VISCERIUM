@@ -56,9 +56,15 @@ test('mobile Myrkild strain illustrations stop floating and stay within the arti
     imageWidth: node.getBoundingClientRect().width,
     aspectRatio: getComputedStyle(node).aspectRatio,
     articleWidth: node.closest('.sl-markdown-content').getBoundingClientRect().width,
+    centreDifference: Math.abs(
+      node.getBoundingClientRect().left + node.getBoundingClientRect().width / 2
+      - (node.closest('.sl-markdown-content').getBoundingClientRect().left
+         + node.closest('.sl-markdown-content').getBoundingClientRect().width / 2)
+    ),
   }));
   expect(layout.float).toBe('none');
   expect(layout.aspectRatio).toBe('1 / 1');
+  expect(layout.centreDifference).toBeLessThan(2);
   expect(layout.imageWidth).toBeLessThanOrEqual(layout.articleWidth);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
