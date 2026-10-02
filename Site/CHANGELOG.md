@@ -10,6 +10,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added wrapped WebP cell illustrations for all seven Myrkild strains, with companion and canonical image-attribution records pending rights confirmation ([#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
 - Added reusable era-themed artifacts and anchored marginalia to Codex articles, including accessible animated page turning for the CITADEL Myrkild witness manuscript ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
 - Added a responsive homepage Recent Articles carousel with era-themed header placeholders, an expandable grid and smooth drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
 
