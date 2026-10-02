@@ -37,6 +37,7 @@ tags:
   - "abberath-programme"
   - "provisional-chronology"
   - "Events"
+community_id: e58adba4-ea42-4030-aa53-0c2c71c06384
 related:
   - "The Hollowed"
   - "Abberath"

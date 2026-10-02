@@ -37,6 +37,7 @@ tags:
   - "abberath-programme"
   - "provisional-chronology"
   - "Events"
+community_id: 8dab18ad-ebb8-414b-b8ae-ae6484a40e88
 related:
   - "Abberath"
 ---
