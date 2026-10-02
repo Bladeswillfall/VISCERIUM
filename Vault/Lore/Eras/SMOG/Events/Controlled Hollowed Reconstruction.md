@@ -11,6 +11,8 @@ headerImage:
 calendarDate:
   calendar: okse
   year: 10730
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
@@ -37,6 +39,7 @@ tags:
   - "abberath-programme"
   - "provisional-chronology"
   - "Events"
+community_id: e58adba4-ea42-4030-aa53-0c2c71c06384
 related:
   - "The Hollowed"
   - "Abberath"

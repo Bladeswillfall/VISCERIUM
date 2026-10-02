@@ -274,3 +274,16 @@ test('global chronology survives the interaction sequence from the supplied reco
   expect(messages.filter((entry) => entry.startsWith('pageerror:'))).toEqual([]);
   expect(messages.filter((entry) => entry.includes('failed to mount'))).toEqual([]);
 });
+
+
+test('wide super timeline shows explicitly included records between eras', async ({ page }) => {
+  await page.goto(
+    'http://127.0.0.1:4321/timelines/super/?calendar=okse&start=3360118&end=4237082&lane=category',
+    { waitUntil: 'networkidle' },
+  );
+  await expect(page.locator('[data-vc-island-mounted="true"]')).toHaveCount(1, { timeout: 5_000 });
+  const interyearEvent = page.locator('[data-vc-canvas] .vis-item.vc-timeline-item', {
+    hasText: 'The Glass Doctrine',
+  }).first();
+  await expect(interyearEvent).toBeVisible();
+});

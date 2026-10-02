@@ -11,6 +11,8 @@ headerImage:
 calendarDate:
   calendar: okse
   year: 10755
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
@@ -37,6 +39,7 @@ tags:
   - "wrath-enhancement"
   - "provisional-chronology"
   - "Events"
+community_id: a7a4289a-3bea-486c-b4c5-27404bd65926
 related:
   - "Myrkild"
 ---

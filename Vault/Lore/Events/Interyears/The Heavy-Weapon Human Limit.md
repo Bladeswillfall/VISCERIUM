@@ -6,11 +6,13 @@ published: 2026-10-02
 updated: 2026-10-02
 status: published
 type: event
-era:
+
 headerImage:
 calendarDate:
   calendar: okse
   year: 10650
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
@@ -37,6 +39,7 @@ tags:
   - "abberath-programme"
   - "provisional-chronology"
   - "Events"
+community_id: 8dab18ad-ebb8-414b-b8ae-ae6484a40e88
 related:
   - "Abberath"
 ---

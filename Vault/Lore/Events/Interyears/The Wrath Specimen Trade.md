@@ -6,11 +6,13 @@ published: 2026-10-02
 updated: 2026-10-02
 status: published
 type: event
-era:
+
 headerImage:
 calendarDate:
   calendar: okse
   year: 9900
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
@@ -37,6 +39,7 @@ tags:
   - "wrath-enhancement"
   - "provisional-chronology"
   - "Events"
+community_id: 2b09e018-a1c7-4fe0-8f48-356e3a2d9a1f
 related:
   - "Myrkild"
 ---

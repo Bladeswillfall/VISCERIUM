@@ -6,11 +6,13 @@ published: 2026-10-02
 updated: 2026-10-02
 status: published
 type: event
-era:
+
 headerImage:
 calendarDate:
   calendar: okse
   year: 10675
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
@@ -37,6 +39,7 @@ tags:
   - "artificial-symbiosis"
   - "provisional-chronology"
   - "Events"
+community_id: 58766896-7a6f-4de2-9638-d1aa35b49996
 related:
   - "Myrkild"
 ---

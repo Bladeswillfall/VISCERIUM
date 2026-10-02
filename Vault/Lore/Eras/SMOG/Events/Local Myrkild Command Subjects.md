@@ -11,6 +11,8 @@ headerImage:
 calendarDate:
   calendar: okse
   year: 10800
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
@@ -37,6 +39,7 @@ tags:
   - "artificial-symbiosis"
   - "provisional-chronology"
   - "Events"
+community_id: a0410d25-be95-49bd-bad6-b8edd53205b7
 related:
   - "Myrkild"
 ---

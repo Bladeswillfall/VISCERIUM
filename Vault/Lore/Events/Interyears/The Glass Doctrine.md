@@ -6,16 +6,19 @@ published: 2026-10-02
 updated: 2026-10-02
 status: published
 type: event
-era:
+
 headerImage:
 calendarDate:
   calendar: okse
   year: 10200
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
   calendar: okse
   year: 10400
+  intercalaryDay: engimanutur-02
   precision: year
   certainty: approximate
 timeline:
@@ -41,6 +44,7 @@ tags:
   - "biological-containment"
   - "provisional-chronology"
   - "Events"
+community_id: c5d013b0-d4b9-476d-9246-57bd656bbafb
 related:
   - "Myrkild"
 ---

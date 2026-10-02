@@ -6,11 +6,13 @@ published: 2026-10-02
 updated: 2026-10-02
 status: published
 type: event
-era:
+
 headerImage:
 calendarDate:
   calendar: okse
   year: 10600
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
@@ -37,6 +39,7 @@ tags:
   - "hereditary-mutagenesis"
   - "provisional-chronology"
   - "Events"
+community_id: ad5d4b1e-41b5-4841-93de-3b9d70b32456
 related:
   - "Myrkild"
 ---
