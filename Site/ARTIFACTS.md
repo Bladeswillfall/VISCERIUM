@@ -16,7 +16,7 @@ The account continues using **ordinary Markdown** and [article links](/).
 
 Short artifacts render as one leaf. Long artifacts paginate by rendered size; leaf counts can differ by device and font. Readers can always choose **Original text**, which keeps marginal notes in reading order. In print, the original text is used.
 
-**CITADEL page turning:** Forward/back controls animate a detached, non-interactive copy of the parchment leaf. The real text and annotations are never transformed or duplicated for readers. Mobile uses a shorter clipped turn; browsers requesting reduced motion switch pages immediately. Switching to Original text, resizing or leaving the article cancels any turn. Other eras retain instant pagination.
+**CITADEL stack navigation:** A stationary parchment stack uses two offset decorative sheets (based on the referenced stacked-paper treatment). Forward/back slides the front leaf sideways with a slight tilt and returns it into the pile while the next real leaf is revealed beneath it. The stage reserves its tallest page's height, so controls and surrounding article content do not move during navigation. Mobile uses shorter, clipped motion; reduced-motion preferences switch instantly. The moving leaf is an inert visual copy. Real text, annotations, and pagination remain unchanged.
 
 ## Presets
 
