@@ -181,17 +181,26 @@ for (const note of publicNotes) {
   }
 }
 
-// The Bailey attribution renderer (PR #161) publishes these sidecars as pages.
-// Resolve links from the canonical metadata now; no duplicate Lore articles.
+// Publish canonical Bailey attribution sidecars as real routes. This is the
+// existing Bailey pipeline (PR #161), not a second Lore page per image.
 const attributionImages = path.join(assetRoot, 'Attribution', 'Images');
 if (await pathExists(attributionImages)) {
-  const sidecars = (await walk(attributionImages)).filter((file) => /\.md$/i.test(file));
+  const sidecars = (await walk(attributionImages)).filter((file) => /\.md$/i.test(file)).sort();
   for (const file of sidecars) {
-    const metadata = parseFrontmatter(await fs.readFile(file, 'utf8'), file).data;
-    if (metadata.status !== 'published') continue;
-    const asset = metadata.asset ?? metadata.image;
+    const parsed = parseFrontmatter(await fs.readFile(file, 'utf8'), file);
+    if (parsed.data.status !== 'published') continue;
+    const asset = parsed.data.asset ?? parsed.data.image;
     const slug = attributionSlugForAsset(asset);
-    if (slug) imageSlugByAsset.set(assetKey(asset), slug);
+    if (!slug) throw new Error(`Attribution note needs a supported image asset reference: ${path.relative(siteRoot, file)}`);
+    if (publicNotes.some((note) => note.slug === slug)) throw new Error(`Duplicate published route "${slug}" in ${path.relative(siteRoot, file)}`);
+    parsed.data.slug = slug;
+    parsed.data.type = 'image';
+    for (const field of requiredFields) {
+      if (!parsed.data[field]) throw new Error(`Public attribution note is missing required frontmatter "${field}": ${path.relative(siteRoot, file)}`);
+    }
+    const sourcePath = toPosixPath(path.relative(sourceDir, file));
+    publicNotes.push({file,parsed,slug,sourcePath,candidate:null});
+    imageSlugByAsset.set(assetKey(asset), slug);
   }
 }
 
