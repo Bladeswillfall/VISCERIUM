@@ -370,3 +370,130 @@
     }
   }
 }
+
+/* Fixed artifact materials: appearance follows the document preset, not the hosting article era. */
+@layer ion {
+  :root {
+    /* Core CITADEL material */
+    --artifact-citadel-accent: #a34c4d;
+    --artifact-citadel-ink: #37271e;
+    --artifact-citadel-red: #92433b;
+    --artifact-citadel-blue: #334956;
+    --artifact-citadel-mobile-mark: #985145;
+    --artifact-citadel-mobile-wash: #9e654006;
+    --artifact-citadel-paper: #e4d2b0;
+    --artifact-citadel-edge: #bea37d;
+    /* Shared artifact controls */
+    --artifact-controls-active: #201c1c;
+    --artifact-controls-text: #f3eae1;
+    --artifact-controls-muted: #aaa;
+    /* Wear, ink and parchment detail */
+    --artifact-paper-tone-1: #986e4559;
+    --artifact-paper-tone-2: #875c3942;
+    --artifact-paper-tone-3: #fff0ce99;
+    --artifact-paper-tone-4: #815e2709;
+    --artifact-paper-tone-5: #c5b08c;
+    --artifact-paper-tone-6: #ebdbb7;
+    --artifact-paper-tone-7: #e8d5b1;
+    --artifact-paper-tone-8: #d2b991;
+    --artifact-paper-tone-9: #6b4a2745;
+    --artifact-paper-tone-10: #fff9dc33;
+    --artifact-paper-tone-11: #745b3740;
+    --artifact-paper-tone-12: #fff9d644;
+    --artifact-paper-tone-13: #80562a18;
+    --artifact-paper-tone-14: #9d72402d;
+    --artifact-paper-tone-15: #8f694e47;
+    --artifact-paper-tone-16: #fff7d72b;
+    --artifact-ink-tone-1: #70533d;
+    --artifact-ink-tone-2: #934539;
+    --artifact-ink-tone-3: #a865538c;
+    --artifact-ink-tone-4: #ad7b68;
+    --artifact-ink-tone-5: #334957;
+    --artifact-ink-tone-6: #53352483;
+    --artifact-ink-tone-7: #923d35;
+    --artifact-ink-tone-8: #a5605385;
+    --artifact-ink-tone-9: #934d4190;
+    --artifact-ink-tone-10: #953d38;
+    --artifact-ink-tone-11: #903f34;
+    --artifact-ink-tone-12: #26221e;
+    --artifact-ink-soft-shadow: rgba(64,37,24,.18);
+    /* SMOG field paper */
+    --artifact-smog-accent: #676b4f;
+    --artifact-smog-ink: #292b26;
+    --artifact-smog-paper: #c9c2a7;
+    --artifact-smog-tone-1: #343d2d3d;
+    --artifact-smog-tone-2: #5e625321;
+    --artifact-smog-tone-3: #b4ae98;
+    --artifact-smog-tone-4: #d6ceb3;
+    --artifact-smog-tone-5: #c1b99f;
+    --artifact-smog-tone-6: #5b352c;
+    /* NEARSIGHT display */
+    --artifact-nearsight-accent: #8ea6a0;
+    --artifact-nearsight-ink: #97b9a0;
+    --artifact-nearsight-paper: #111c19;
+    --artifact-nearsight-tone-1: #92b7a009;
+    --artifact-nearsight-tone-2: #203c2a;
+    --artifact-nearsight-tone-3: #0b1412;
+    --artifact-nearsight-tone-4: #343d35;
+    --artifact-nearsight-tone-5: #000c;
+    --artifact-nearsight-tone-6: #79dd9b50;
+    /* ENTROPY diagnostic */
+    --artifact-entropy-accent: #5ca9a4;
+    --artifact-entropy-ink: #c7d8d5;
+    --artifact-entropy-paper: #111c23;
+    --artifact-entropy-tone-1: #47818075;
+    --artifact-entropy-tone-2: #55afb718;
+    --artifact-entropy-tone-3: #55afb714;
+    --artifact-entropy-tone-4: #1b2c31;
+    --artifact-entropy-tone-5: #101519;
+    --artifact-entropy-tone-6: #86e3db;
+    --artifact-entropy-tone-7: #66b4b25a;
+    --artifact-entropy-tone-8: #89c7c4;
+  }
+}
+
+/* Exact material colours recovered from the approved V3 manuscript. */
+@layer ion {:root{--artifact-citadel-shadow-base:#3f261b;}}
+
+@layer ion {:root{
+ --artifact-citadel-v3-detail-01: rgba(12,7,3,.3);
+ --artifact-citadel-v3-detail-02: rgba(93,55,25,.21);
+ --artifact-citadel-v3-detail-03: rgba(255,248,225,.25);
+ --artifact-citadel-v3-detail-04: rgba(79,39,17,.13);
+ --artifact-citadel-v3-detail-05: rgba(100,53,25,.16);
+ --artifact-citadel-v3-detail-06: rgba(107,67,33,.11);
+ --artifact-citadel-v3-detail-07: rgba(109,70,43,.13);
+ --artifact-citadel-v3-detail-08: rgba(252,241,211,.44);
+ --artifact-citadel-v3-detail-09: rgba(112,76,42,.19);
+ --artifact-citadel-v3-detail-10: rgba(255,244,220,.4);
+ --artifact-citadel-v3-detail-11: rgba(92,58,44,.06);
+ --artifact-citadel-v3-detail-12: rgba(111,57,31,.38);
+ --artifact-citadel-v3-detail-13: rgba(87,49,28,.15);
+ --artifact-citadel-v3-detail-14: rgba(100,71,44,.29);
+ --artifact-citadel-v3-detail-15: rgba(255,245,220,.53);
+ --artifact-citadel-v3-detail-16: rgba(91,58,40,.64);
+ --artifact-citadel-v3-detail-17: rgba(126,86,56,.33);
+ --artifact-citadel-v3-detail-18: #73533e;
+ --artifact-citadel-v3-detail-19: rgba(86,34,27,.28);
+ --artifact-citadel-v3-detail-20: rgba(45,26,20,.10);
+ --artifact-citadel-v3-detail-21: rgba(69,40,23,.30);
+ --artifact-citadel-initial-shadow: #67452d80;
+ --artifact-citadel-initial-ink: #0f2f46a8;
+ --artifact-citadel-v3-detail-22: #873c35;
+ --artifact-citadel-v3-detail-23: #5e2b2540;
+ --artifact-citadel-v3-detail-24: #70513d;
+ --artifact-citadel-v3-detail-25: #a9604f80;
+ --artifact-citadel-v3-detail-26: #5e35292d;
+ --artifact-citadel-v3-detail-27: #9a4f4561;
+ --artifact-citadel-v3-detail-28: #67432d;
+ --artifact-citadel-v3-detail-29: rgba(68,39,20,.35);
+ --artifact-citadel-v3-detail-30: rgba(255,250,226,.06);
+ --artifact-citadel-v3-detail-31: rgba(94,54,26,.24);
+ --artifact-citadel-v3-detail-32: rgba(90,53,24,.29);
+ --artifact-citadel-v3-detail-33: rgba(54,28,16,.32);
+ --artifact-citadel-v3-detail-34: #873f36;
+ --artifact-citadel-v3-detail-35: #9d4c4677;
+ --artifact-citadel-v3-detail-36: #96584a75;
+ --artifact-citadel-v3-detail-37: #9d463b;
+ --artifact-citadel-v3-detail-38: #9b413b;
+}}

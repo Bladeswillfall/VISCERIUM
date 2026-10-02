@@ -44,38 +44,85 @@ sidebar:
 community_id: d7e0e59d-eced-4800-8c0d-68afd3cdc184
 ---
 > Watch for unusual growths on your meat, fruit and vegetables, these can be indications of Myrkild in the vicinity. Under no circumstances should you consume produce you believe to be infected.
-> 
+>
 > — Public notice
 
-  Myrkild are symbiotic parasitic microorganisms, otherworldly scourges, consumers of organic matter. Their most basic form, a singular Myrkild cell, is capable of multiplying at an alarming rate, consuming, building and connecting new matter. New Myrkild. From a singular unintelligent cell, to an almost mycelial-like network of cells, to eventually being capable of forming multiple beings all connected via hivemind with crude personalities… The Myrkild infest, consume, create in an endless cycle.   But do not be deceived, for the Myrkild are a diverse species, each race boasting its own method of infiltration and a unique, terrifying form of transformation. As they consume more and more biomass, these microorganisms give birth to a host of grotesque constructs, each a testament to their diabolical ingenuity.   Once the Myrkild's shadow has cast itself upon a host, an eerie equilibrium may persist for a fleeting moment, concealing the impending cataclysmic transformation. But in most cases, the changes occur with breathtaking speed, obliterating any trace of the host's original form in a matter of days.    
+Myrkild are symbiotic parasitic microorganisms, otherworldly scourges, consumers of organic matter. Their most basic form, a singular Myrkild cell, is capable of multiplying at an alarming rate, consuming, building and connecting new matter. New Myrkild. From a singular unintelligent cell, to an almost mycelial-like network of cells, to eventually being capable of forming multiple beings all connected via hivemind with crude personalities… The Myrkild infest, consume, create in an endless cycle.
+
+But do not be deceived, for the Myrkild are a diverse species, each race boasting its own method of infiltration and a unique, terrifying form of transformation. As they consume more and more biomass, these microorganisms give birth to a host of grotesque constructs, each a testament to their diabolical ingenuity.
+
+Once the Myrkild's shadow has cast itself upon a host, an eerie equilibrium may persist for a fleeting moment, concealing the impending cataclysmic transformation. But in most cases, the changes occur with breathtaking speed, obliterating any trace of the host's original form in a matter of days.
+
 
 ## The manifestation of Demons
-Species, Strains and Constructs - What is a Myrkild?
 
-### Uravand cells
-The seed, the progenitor of the seven different Myrkild species. Uravand cells mutate into one of the seven species of Myrkild when they first come into contact with an intense emotion. Be that of _Gluttony, Envy, Sloth, Wrath, Lust, Pride_ or _Greed_. Once mutated, it will then infest, consume and create. This mutation defines the species of Myrkild.
+*Species, Strains and Constructs - What is a Myrkild?*
 
-#### A hidden rot
-Deep under the surface, the endless networks of Myrkild tunnels smother Errack. Centred on the north-pole and deeper still, warped cancerous roots stitch themselves into Errack's crust. Like bone marrow, these roots produce vast quantities of Uravand cells. Within the deepest Myrkild tunnels, tumours from the roots below burst forth into the cavernous chambers. These tumours form _blighted wellsprings_, pools of primordial soup. Uravand cells inject into and swirl amongst Myrkild infested fluid, mutating the Uravand cells into new Myrkild.
 
-### Myrkild species
-There are currently seven different species of Myrkild known to mankind. The species are; _Gluttony, Envy, Sloth, Wrath, Lust, Pride_ and _Greed_. Each has a unique appearance but they share some consistent similarities such as; they all contain a spiked icosahedral core, a translucent outer membrane and the surface of the Myrkild bares various masses. These masses vary dependent on the Myrkild's species. For example, Pride Myrkild have long, thin thorns protruding from their surface, whereas Gluttony Myrkild have concave pits potmarking their outer membrane.   In addition to their similarities in appearance, the Myrkild all share an aversion, and weakness, to fire and UVc light. Fire has been used for millennia to destroy the Myrkild, reducing them to ash. In the modern age, humanity furthered this discovery by utilising UVc emitting bulbs, chemicals, and other such creations. Eventually coming to utilise various degrees of laser technology as part of their arsenal against the Myrkild.  
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> 
+> ### Uravand cells
+>
+> The seed, the progenitor of the seven different Myrkild species. Uravand cells mutate into one of the seven species of Myrkild when they first come into contact with an intense emotion. Be that of _Gluttony, Envy, Sloth, Wrath, Lust, Pride_ or _Greed_. Once mutated, it will then infest, consume and create. This mutation defines the species of Myrkild.
+> 
 
-### Strains of the dark gore
-Potency and variance. The strain defines what construct(s) the Myrkild is able to form. They are in essence, the unique puzzle pieces that make one construct or another rise from the sinewy ooze.
+> > [!vc-indent]
+> > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> > 
+> > #### A hidden rot
+> >
+> > Deep under the surface, the endless networks of Myrkild tunnels smother Errack. Centred on the north-pole and deeper still, warped cancerous roots stitch themselves into Errack's crust. Like bone marrow, these roots produce vast quantities of Uravand cells. Within the deepest Myrkild tunnels, tumours from the roots below burst forth into the cavernous chambers. These tumours form _blighted wellsprings_, pools of primordial soup. Uravand cells inject into and swirl amongst Myrkild infested fluid, mutating the Uravand cells into new Myrkild.
+> > 
 
-#### Evolution
-Throughout the Eras, the Myrkild strains have evolved, and so too do the constructs these microorganisms can form. Every few years, new variants appear, some more successful than others, and with this appearance of new evolutions the Myrkild get ever stronger. They learn to combat humanity's weapons, their drugs, and medicines, reacting to these new threats by mutating and adapting evermore.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> 
+> ### Myrkild species
+>
+> There are currently seven different species of Myrkild known to mankind. The species are; _Gluttony, Envy, Sloth, Wrath, Lust, Pride_ and _Greed_. Each has a unique appearance but they share some consistent similarities such as; they all contain a spiked icosahedral core, a translucent outer membrane and the surface of the Myrkild bares various masses. These masses vary dependent on the Myrkild's species. For example, Pride Myrkild have long, thin thorns protruding from their surface, whereas Gluttony Myrkild have concave pits potmarking their outer membrane.
+> 
+> In addition to their similarities in appearance, the Myrkild all share an aversion, and weakness, to fire and UVc light. Fire has been used for millennia to destroy the Myrkild, reducing them to ash. In the modern age, humanity furthered this discovery by utilising UVc emitting bulbs, chemicals, and other such creations. Eventually coming to utilise various degrees of laser technology as part of their arsenal against the Myrkild.
+> 
 
-### Constructs - manifestation of intent
-Constructs are best defined as the being that is formed by an amalgamation of Myrkild. These often horrific creatures bear individuality derived from their species, yet their minds interlace within a tight-knit network. They share thoughts and dark whispers across their Myrkild kin. Calling such unnatural, inhuman beings _"Demons"_ is an easy stretch for the mind.  
-The 7 Nadirs of Sin are simply constructs from an extremely potent strain of their Myrkild species. These entities possess a unique twist upon their telepathic communion, bridging much greater distances to converse with their kin. Beyond mere words, they may also seize control of their brethren, seeing through the eyes of others and forcibly executing their malevolent will.
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> 
+> ### Strains of the dark gore
+>
+> Potency and variance. The strain defines what construct(s) the Myrkild is able to form. They are in essence, the unique puzzle pieces that make one construct or another rise from the sinewy ooze.
+> 
+
+> > [!vc-indent]
+> > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> > 
+> > #### Evolution
+> >
+> > Throughout the Eras, the Myrkild strains have evolved, and so too do the constructs these microorganisms can form. Every few years, new variants appear, some more successful than others, and with this appearance of new evolutions the Myrkild get ever stronger. They learn to combat humanity's weapons, their drugs, and medicines, reacting to these new threats by mutating and adapting evermore.
+> > 
+
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> 
+> ### Constructs - manifestation of intent
+>
+> Constructs are best defined as the being that is formed by an amalgamation of Myrkild. These often horrific creatures bear individuality derived from their species, yet their minds interlace within a tight-knit network. They share thoughts and dark whispers across their Myrkild kin. Calling such unnatural, inhuman beings _"Demons"_ is an easy stretch for the mind.
+> 
+> The 7 Nadirs of Sin are simply constructs from an extremely potent strain of their Myrkild species. These entities possess a unique twist upon their telepathic communion, bridging much greater distances to converse with their kin. Beyond mere words, they may also seize control of their brethren, seeing through the eyes of others and forcibly executing their malevolent will.
 
 ## The Drowning of Resonance
-Though the Naranor bend the The Wyrdweave through precise bio-mechanical harmonics, the Myrkild are a fouled and wayward inheritor of that same design principle. They do not shape Resonance with elegance, nor do they wield it as Resonants do by tearing and spending its strands. Rather, the Myrkild emit crude, broken harmonic patterns - dissonant standing interferences that smother, desynchronise and muddy nearby Resonance. These suppressive emissions are often called dead-waves by scholars and chamberwrights. The Naranor’s harmonics are a choir; the Myrkild’s are its rotted echo.   In small concentrations, these dead-waves manifest as little more than unease: muffled attunement, delayed response, false echoes and a sense that the air itself has grown heavy. In places thick with Myrkild presence - nests, feeding grounds, tunnel systems and the surrounds of major rifts - the effect deepens into a suppressive field that can make Resonance unstable, inefficient and dangerous to wield. The Nadirs of Sin, being uniquely capable of communing across great distances and seizing control of lesser constructs, are thought to generate the most potent and organised dead-waves of all.   It is this same dissonant pressure that gives rise to Harmonic Sinspar. As the Myrkild consume biomass, they reject the silicates, salts, trace metals and calcified residue they cannot assimilate. Where such waste is repeatedly expelled beneath the weight of dead-waves, the mineral burden hardens into foul biocrystalline deposits whose lattices retain that suppressive pattern. Thus Harmonic Sinspar does not arise because a rift is magical in itself, but because places of great Myrkild traffic and feeding are steeped in the drowned harmonics of their presence. In this way, the enemy’s waste becomes a crystal that swallows song.    
+
+Though the Naranor bend the The Wyrdweave through precise bio-mechanical harmonics, the Myrkild are a fouled and wayward inheritor of that same design principle. They do not shape Resonance with elegance, nor do they wield it as Resonants do by tearing and spending its strands. Rather, the Myrkild emit crude, broken harmonic patterns - dissonant standing interferences that smother, desynchronise and muddy nearby Resonance. These suppressive emissions are often called dead-waves by scholars and chamberwrights. The Naranor’s harmonics are a choir; the Myrkild’s are its rotted echo.
+
+In small concentrations, these dead-waves manifest as little more than unease: muffled attunement, delayed response, false echoes and a sense that the air itself has grown heavy. In places thick with Myrkild presence - nests, feeding grounds, tunnel systems and the surrounds of major rifts - the effect deepens into a suppressive field that can make Resonance unstable, inefficient and dangerous to wield. The Nadirs of Sin, being uniquely capable of communing across great distances and seizing control of lesser constructs, are thought to generate the most potent and organised dead-waves of all.
+
+It is this same dissonant pressure that gives rise to Harmonic Sinspar. As the Myrkild consume biomass, they reject the silicates, salts, trace metals and calcified residue they cannot assimilate. Where such waste is repeatedly expelled beneath the weight of dead-waves, the mineral burden hardens into foul biocrystalline deposits whose lattices retain that suppressive pattern. Thus Harmonic Sinspar does not arise because a rift is magical in itself, but because places of great Myrkild traffic and feeding are steeped in the drowned harmonics of their presence. In this way, the enemy’s waste becomes a crystal that swallows song.
+
 
 ## The means of infection
-Myrkild are not known to penetrate healthy, unbroken skin by contact alone, and thus the mere brushing of their biomass does not, in itself, constitute true infestation. For colonisation to occur, the organism must be introduced into the body through a puncture, wound, bite, exposed membrane, inhalation, ingestion, or other breach by which its living matter may take root within the host. As such, contaminated matter remains exceedingly dangerous to handle, yet the greatest peril lies not in touch alone, but in permitting the Myrkild to pass beyond the body’s natural barriers.    
+
+Myrkild are not known to penetrate healthy, unbroken skin by contact alone, and thus the mere brushing of their biomass does not, in itself, constitute true infestation. For colonisation to occur, the organism must be introduced into the body through a puncture, wound, bite, exposed membrane, inhalation, ingestion, or other breach by which its living matter may take root within the host. As such, contaminated matter remains exceedingly dangerous to handle, yet the greatest peril lies not in touch alone, but in permitting the Myrkild to pass beyond the body’s natural barriers.
+
 
 ## The metamorphosis of biomaterial
 
@@ -148,23 +195,44 @@ The methods of infection all providing unique ways for each strain to start thei
 
 
 ## A deal between kingdoms
-The Horndbond, a sinister rite practised in the darkest corners of [[Lore/Degel System/Errack]], introduces a terrifying transformation of the flesh. A new organ, the Kildhornd - a small Myrkild construct, is inserted into the human body, just below and to the side of the heart, beneath the lower ribs.  
-Over a short period of time, it grows to integrate itself within the host, drawing in blood from a network of small tendril-like siphons latched onto the aorta, siphoning off vital sustenance to feed its work.   The Kildhornd analyses the DNA of the host and adapts internal organic foundries to create new weakened Myrkild that are compatible with the host and deposits these into the bloodstream.  
+
+The Horndbond, a sinister rite practised in the darkest corners of [[Lore/Degel System/Errack]], introduces a terrifying transformation of the flesh. A new organ, the Kildhornd - a small Myrkild construct, is inserted into the human body, just below and to the side of the heart, beneath the lower ribs.
+
+Over a short period of time, it grows to integrate itself within the host, drawing in blood from a network of small tendril-like siphons latched onto the aorta, siphoning off vital sustenance to feed its work.
+
+The Kildhornd analyses the DNA of the host and adapts internal organic foundries to create new weakened Myrkild that are compatible with the host and deposits these into the bloodstream.
+
 The crude insertion of this new organ leaves a brand around the area sealing in the Kildhornd. The brand varies in style by species and is used instead of attempting to stitch the flesh together.
 
- 
 
-### Installation
-The Kildhornd is inserted via the large needle-like appendage of a Myrkild construct that pierces through the flesh and up under the lower ribs. The organ is then forced inside, deposited into the host and the appendage is removed, simultaneously pinching and branding the skin to seal it shut.   The specifics of this ritualistic surgery vary between the Myrkild species and the multitude of cults that weave themselves into society. Each have their own methods of selection, preparation, and aftercare (if any) for those who are to become Hornd-bound.  
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> 
+> ### Installation
+>
+> The Kildhornd is inserted via the large needle-like appendage of a Myrkild construct that pierces through the flesh and up under the lower ribs. The organ is then forced inside, deposited into the host and the appendage is removed, simultaneously pinching and branding the skin to seal it shut.
+> 
+> The specifics of this ritualistic surgery vary between the Myrkild species and the multitude of cults that weave themselves into society. Each have their own methods of selection, preparation, and aftercare (if any) for those who are to become Hornd-bound.
+> 
 
-### Results
-Once Hornd-bound, individuals experience a profound transformation as crudely modified Myrkild infiltrates their body. This mass of malformed Myrkild within serves as an extension of themselves, allowing for unique manifestations. Each Hornd-bearer gives rise to a weakened Myrkild construct, each with distinct appearances and characteristics influenced by their original strain, and uniquely capable of altering its form at will.   Once significantly developed and intwined with their Hornd-bearer, the Myrkild within are able to communicate with their host. A new sourceless voice in the host's mind, able to converse with and learn from them. Eventually, these malformed Myrkild develop personalities and are able to act with some level of autonomy. They may exert influence over the host, compelling them to move or, in some cases, partially emerging from within the host to act independently.   This symbiotic relationship between the Hornd-bearer and their Myrkild entity is a complex and evolving partnership, shaping the course of the host's existence and influencing their actions.  
+> [!vc-indent]
+> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
+> 
+> ### Results
+>
+> Once Hornd-bound, individuals experience a profound transformation as crudely modified Myrkild infiltrates their body. This mass of malformed Myrkild within serves as an extension of themselves, allowing for unique manifestations. Each Hornd-bearer gives rise to a weakened Myrkild construct, each with distinct appearances and characteristics influenced by their original strain, and uniquely capable of altering its form at will.
+> 
+> Once significantly developed and intwined with their Hornd-bearer, the Myrkild within are able to communicate with their host. A new sourceless voice in the host's mind, able to converse with and learn from them. Eventually, these malformed Myrkild develop personalities and are able to act with some level of autonomy. They may exert influence over the host, compelling them to move or, in some cases, partially emerging from within the host to act independently.
+> 
+> This symbiotic relationship between the Hornd-bearer and their Myrkild entity is a complex and evolving partnership, shaping the course of the host's existence and influencing their actions.
 
-Date: 27/08/24ce
+[artifact:citadel-note date="27/08/24ce" title="An account from the chamber" condition="field" hand="field"]
 
-  I couldn't look away... I couldn't move in that dank, dark corner. I hardly breathed, locked in silence. I laid on the backside of that slick pile of corpses they threw me upon - thinking I was already dead. Shit, I thought I was dead... I'd laid there for what felt like an hour, watching the movements of each cloaked figure as they passed in that cold, dimly lit chamber.   Nothing could've prepared me for what they would do to that poor lad.   I watched through the stone corridor, into the room adjacent, I could see some sort of congregation beginning to form. More and more cloaked figures seemed to pile into the chamber and I could just barely make out some sort of... _thing_. A large, gaunt, and writhing creature of pale flesh and bloated decay. Its skin was almost transparent with sickly hues and raw edges.  
+  I couldn't look away... I couldn't move in that dank, dark corner. I hardly breathed, locked in silence. I laid on the backside of that slick pile of corpses they threw me upon - thinking I was already dead. [marginalia note="I thought I was dead."]Shit, I thought I was dead...[/marginalia] I'd laid there for what felt like an hour, watching the movements of each cloaked figure as they passed in that cold, dimly lit chamber.   Nothing could've prepared me for what they would do to that poor lad.   I watched through the stone corridor, into the room adjacent, I could see some sort of congregation beginning to form. More and more cloaked figures seemed to pile into the chamber and I could just barely make out some sort of... _thing_. A large, gaunt, and writhing creature of pale flesh and bloated decay. Its skin was almost transparent with sickly hues and raw edges.  
 From behind this malformed mimicry of human physique and out of the shadows that enveloped most of its elongated form, a long, ribbed tendril with intricately shaped sharp and hard forms on its face, rose up to the monster’s side before snaking through the air, meandering its way towards the stone slab they’d strapped what looked like one of their fellow cultists to.   As the tendril neared, two darkly robed figures tore open the man’s shirt to reveal his chest and midriff. I watched as the light reflected off of each bead of sweat as the man breathed rapidly, shaking at the prospect of what that creature would do to him.  
 The tendril slithered closer, now dripping with some sort of clear slime from its worm-like orifice and hovered above his abdomen, mere inches from the surface of the exposed skin. The orifice began to widen and from within it came a crude, organic, needle-like appendage.  
 As the needle-like appendage exposed itself, its purpose became clearer. This was a piercing beak - organic forceps that would pierce and rend its victim to make room for what came next.   The tendril lowered closer to the man on that cold stone table and sure enough, the hand-sized beak shot into his chest with a squelching slap. He cried out an awful scream, guttural and gargled.  
 The creature looming on the edge of darkness seemed to shiver and adjust their position in a manner that could only be described as… pleasure?   The tendril began pulsating, still dripping clear ooze from around its exposed beak and with each throb something inside it moved ever closer, causing its ribbed form to bulge as it shifted within.  
 Once the bulge reached the back of the beak, the tendril’s flat face bulged in the same manner and the beak widened, causing the man to cry out once more. Whatever was concealed within the tendril, now forcibly invaded his body. Once inside, the beak closed and quickly retracted, blood began to flow out of the man like a rising puddle of wine. As swift as the beak retracted, the flat face of the tendril punched into the man’s abdomen, sealing the wound, and pinched his flesh, pulling it in towards his core. Those sharp shaped ridges arranged on the tendril’s flat face acted as both a method to grab and manipulate his skin as well as the heating element that would brand his wound and the surrounding area, searing a circular rune into him and preventing further loss of blood. The rune was complex, though its looks were crude and violent, with almost viscous-looking symbols.   I could do nothing but bear witness to this grotesque artistry...
+
+[/artifact]
