@@ -21,7 +21,7 @@ timeline:
   lanes:
     - factory-cities
     - myrkild
-  global: auto
+  global: include
   era: auto
   order: 7
 location:
