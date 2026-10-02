@@ -2,9 +2,9 @@
 
 Asset: myrkild-greed-cell.webp
 Copyright: Copyright
-Artist: Confirmation required
-Rights: Creator and publication permission have not been confirmed.
-Source: Image supplied for the Myrkild article in project review.
+Artist: VISCERIUM creator (preferred public display name pending)
+Rights: Original artwork by the VISCERIUM creator; the creator requested its use in the Myrkild article.
+Source: Original artwork supplied by the VISCERIUM creator.
 Workshop attribution draft: `VISCERIUM-Workshop/Vault/Drafts/Lore/Myrkildicary/Images/Greed - Myrkild cell.md`
 
-This attribution record is deliberately incomplete. Confirm the artist, credit URL if any, and usage rights before merging the public article change. The draft reader-facing image page lives in Workshop until approved.
+Creator ownership and the intended VISCERIUM use have been confirmed. Preferred public artist credit and optional URL remain to be set before publishing the reader-facing attribution page. Its draft lives in Workshop.
