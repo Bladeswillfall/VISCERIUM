@@ -10,11 +10,13 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added seven Elias Vail WebP cell illustrations with transparent contour text wrapping and clickable Bailey-format attribution pages in the Myrkild article ([#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219); shared Bailey implementation also in [#161](https://github.com/Bladeswillfall/VISCERIUM/pull/161)).
 - Added reusable era-themed artifacts and anchored marginalia to Codex articles, including accessible animated page turning for the CITADEL Myrkild witness manuscript ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
 - Added a responsive homepage Recent Articles carousel with era-themed header placeholders, an expandable grid and smooth drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
 
 ### Changed in Unreleased
 
+- Restored normal Myrkild strain prose, removed accidental quotation styling and eliminated unwanted cell-image margins ([#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
 - Applied the standard article heading hierarchy, nested indents and paragraph spacing to Myrkild, preserving existing prose and the witness manuscript ([#218](https://github.com/Bladeswillfall/VISCERIUM/pull/218)).
 - Made Overview-only sidebar folders link directly to their article and subdued folders without other published articles ([#180](https://github.com/Bladeswillfall/VISCERIUM/pull/180)).
 - Updated release notes with colour-coded change labels and clearer date and version layouts; fixed British English release-date formatting.

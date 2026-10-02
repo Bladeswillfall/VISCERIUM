@@ -5,6 +5,7 @@ import { resolveFrontmatterReference } from '../lib/frontmatter-reference.mjs';
 import ArticleReadingTime from './ArticleReadingTime.astro';
 import CalendarDateBadge from './calendar/CalendarDateBadge.astro';
 import CodexIcon from './CodexIcon.astro';
+import ImageAttributionTable from './ImageAttributionTable.astro';
 import ContinuitySwitcher from './ContinuitySwitcher.astro';
 import DegelSystemExplorer from './degel-system/DegelSystemExplorer.astro';
 import StorytellerSwitcher from './StorytellerSwitcher.astro';
@@ -13,6 +14,9 @@ const { starlightRoute } = Astro.locals;
 const { t } = Astro.locals;
 const entry = starlightRoute.entry.data;
 const isExplorationPage = entry.explorationPage === true;
+const isImageAttributionPage = entry.type === 'image'
+  && Array.isArray(entry.tags)
+  && entry.tags.some(tag => String(tag).trim().toLowerCase() === 'attribution');
 
 const breadcrumbGroupIcons = {
   calendar: 'event',
@@ -200,6 +204,7 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
     ))}
   </nav>
 )}
+{!isExplorationPage && isImageAttributionPage && <ImageAttributionTable />}
 {!isExplorationPage && <ContinuitySwitcher />}
 {!isExplorationPage && entry.calendarDate && <CalendarDateBadge date={entry.calendarDate} title={t('viscerium.article.eventDate')} />}
 {!isExplorationPage && <StorytellerSwitcher />}

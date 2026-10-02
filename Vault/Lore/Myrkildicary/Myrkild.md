@@ -129,74 +129,67 @@ Myrkild are not known to penetrate healthy, unbroken skin by contact alone, and 
 Once infested by true Myrkild, the clock of an inescapable fate begins to tick. No form of biomatter is immune, and though infection takes its time to unveil its malevolence, each species, and strain carries its own manner of symptom presentation within its host. If lucky, that simply means a quick death and consumption, to be reduced to nourishment for the Myrkild. For those less fortunate to feel the prolonged bane of infection, they bare manifestations such as:
 
 
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> 
-> ### Gluttony
->
-> At first the Gluttony variant of Myrkild manifest as concave, gaunt and desaturated sections of the skin and muscles. With rapidly decaying inners, this creates a breeding ground for the growth of Boleth, Nadir of Gluttony's underlings. After a short while, constructs in the form of parasitic worms among other spawn, begin to collate inside and around the infected area, hastening the consumption of biomass by the Myrkild by diversifying its methods.
-> 
-> Gluttony Myrkild, in their most basic form - singular microorganisms, rely on bacteria and parasites, hiding within them for transmission between hosts.
-> 
+### Gluttony
 
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> 
-> ### Envy
->
-> Pale, sickly looking skin bordering on a pasty appearance. Intense paranoia swiftly overtakes those infected by Envy Myrkild and resentment fills their mind. Soon after, the eyes turn pitch black and double platinum-coloured iris' form. It is not uncommon for multiple 'black eyes' to form with quick succession in random places across the body. A subtle mimicry of Evaxi, Nadir of Envy's form.
-> 
-> Envy Myrkild, in their most basic form - singular microorganisms, are vector-borne and as such are transmitted by the bite of infected arthropods, their method of transmission between hosts.
-> 
+![[myrkild-gluttony-cell.webp|right|220|shape|gap=16|alt=Illustration of a Gluttony Myrkild cell with dark masses connected by olive-gold filaments]]
 
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> 
-> ### Sloth
->
-> Bulbous black masses connected by dark sinewy webs across the skin. Slowly creeping and pulling its way through and across just below surface whilst biomass is converted inside. Initially starting off as just a feeling of extreme fatigue and melancholy, the black webs quickly reveal themselves as the site of infection and begin to spread. Just like Hennan, Nadir of Sloth, they follow no true pattern nor rhyme.
-> 
-> Sloth Myrkild, in their most basic form - singular microorganisms, rely on small respiratory droplets for transmission between hosts.
-> 
+At first the Gluttony variant of Myrkild manifest as concave, gaunt and desaturated sections of the skin and muscles. With rapidly decaying inners, this creates a breeding ground for the growth of Boleth, Nadir of Gluttony's underlings. After a short while, constructs in the form of parasitic worms among other spawn, begin to collate inside and around the infected area, hastening the consumption of biomass by the Myrkild by diversifying its methods.
 
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> 
-> ### Wrath
->
-> At first the infected develop patches of thick, coarse hairs, engorged muscles and rapid growth in canine teeth, nails and sometimes horn-like masses develop from the skull. In addition to these physical changes, emotional changes like an increased temper, stress and being unable to settle or relax will quickly take effect. A bestial transformation, crude and wild, Just like Krathan, Nadir of Wrath.
-> 
-> Wrath Myrkild rely solely upon, blood and saliva for transmission between hosts.
-> 
+Gluttony Myrkild, in their most basic form - singular microorganisms, rely on bacteria and parasites, hiding within them for transmission between hosts.
 
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> 
-> ### Lust
->
-> An increased heart rate, touch sensitivity, the relaxation of smooth muscle cells and an overwhelming sense of euphoria. These are the symptoms that can be expected of a Lust Myrkild infection. Symptoms that often draw Sletair, Nadir of Lust's followers to them. Shortly after, an increase in hormones such as testosterone, oestrogen, and progesterone cause a rapid and aggressive surge in libido.
-> 
-> Lust Myrkild, in their most basic form - singular microorganisms, rely on semen, blood, vaginal secretions, and saliva for transmission between hosts.
-> 
 
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> 
-> ### Pride
->
-> Relatively long, thin thorns protruding from within whatever they have begun to spread inside of. This is the first manifestation of a Pride Myrkild infection. Eventually these thorns form a mat of criss-crossing needles overshadowed by the larger more prominent thorns. As such, the first real signs of infection are stomach aches, constipation, and bloat. These are shortly followed by intense stomach pains and sharp sensations beneath the skin in the abdominal area. Around this time, thorns may begin to show on the surface of the body. As the thorns grow evermore, so to do the infected's likeness to Vanaer, Nadir of Pride increase.
-> 
-> Pride Myrkild, in their most basic form - singular microorganisms, spread via the faecal–oral route to spread between hosts.
-> 
+### Envy
 
-> [!vc-indent]
-> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>
-> 
-> ### Greed
->
-> At first the infected exhibit social anxiety and extreme possessiveness. After a short while, the Greed variant of Myrkild begins to warp the extremities, such as the fingers and toes - they become blackened, and a rapid loss of body fat follows. Soon after, the skin begins to shrink, becoming thinner and thinner until the bones are almost visible. This gaunt visage mimics that of Xateal, Nadir of Greed and their kin.
-> 
-> Greed Myrkild, in their most basic form - singular microorganisms, spread via contact with fomites, lying in wait for its next victim.
+![[myrkild-envy-cell.webp|right|220|shape|gap=16|alt=Illustration of an Envy Myrkild cell with dark masses connected by bright green filaments]]
+
+Pale, sickly looking skin bordering on a pasty appearance. Intense paranoia swiftly overtakes those infected by Envy Myrkild and resentment fills their mind. Soon after, the eyes turn pitch black and double platinum-coloured iris' form. It is not uncommon for multiple 'black eyes' to form with quick succession in random places across the body. A subtle mimicry of Evaxi, Nadir of Envy's form.
+
+Envy Myrkild, in their most basic form - singular microorganisms, are vector-borne and as such are transmitted by the bite of infected arthropods, their method of transmission between hosts.
+
+
+### Sloth
+
+![[myrkild-sloth-cell.webp|right|220|shape|gap=16|alt=Illustration of a Sloth Myrkild cell with dark masses connected by muted purple filaments]]
+
+Bulbous black masses connected by dark sinewy webs across the skin. Slowly creeping and pulling its way through and across just below surface whilst biomass is converted inside. Initially starting off as just a feeling of extreme fatigue and melancholy, the black webs quickly reveal themselves as the site of infection and begin to spread. Just like Hennan, Nadir of Sloth, they follow no true pattern nor rhyme.
+
+Sloth Myrkild, in their most basic form - singular microorganisms, rely on small respiratory droplets for transmission between hosts.
+
+
+### Wrath
+
+![[myrkild-wrath-cell.webp|right|220|shape|gap=16|alt=Illustration of a Wrath Myrkild cell with dark masses connected by red filaments]]
+
+At first the infected develop patches of thick, coarse hairs, engorged muscles and rapid growth in canine teeth, nails and sometimes horn-like masses develop from the skull. In addition to these physical changes, emotional changes like an increased temper, stress and being unable to settle or relax will quickly take effect. A bestial transformation, crude and wild, Just like Krathan, Nadir of Wrath.
+
+Wrath Myrkild rely solely upon, blood and saliva for transmission between hosts.
+
+
+### Lust
+
+![[myrkild-lust-cell.webp|right|220|shape|gap=16|alt=Illustration of a Lust Myrkild cell with dark masses connected by magenta filaments]]
+
+An increased heart rate, touch sensitivity, the relaxation of smooth muscle cells and an overwhelming sense of euphoria. These are the symptoms that can be expected of a Lust Myrkild infection. Symptoms that often draw Sletair, Nadir of Lust's followers to them. Shortly after, an increase in hormones such as testosterone, oestrogen, and progesterone cause a rapid and aggressive surge in libido.
+
+Lust Myrkild, in their most basic form - singular microorganisms, rely on semen, blood, vaginal secretions, and saliva for transmission between hosts.
+
+
+### Pride
+
+![[myrkild-pride-cell.webp|right|220|shape|gap=16|alt=Illustration of a Pride Myrkild cell with dark masses connected by slate-blue and ochre filaments]]
+
+Relatively long, thin thorns protruding from within whatever they have begun to spread inside of. This is the first manifestation of a Pride Myrkild infection. Eventually these thorns form a mat of criss-crossing needles overshadowed by the larger more prominent thorns. As such, the first real signs of infection are stomach aches, constipation, and bloat. These are shortly followed by intense stomach pains and sharp sensations beneath the skin in the abdominal area. Around this time, thorns may begin to show on the surface of the body. As the thorns grow evermore, so to do the infected's likeness to Vanaer, Nadir of Pride increase.
+
+Pride Myrkild, in their most basic form - singular microorganisms, spread via the faecal–oral route to spread between hosts.
+
+
+### Greed
+
+![[myrkild-greed-cell.webp|right|220|shape|gap=16|alt=Illustration of a Greed Myrkild cell with dark masses connected by amber filaments]]
+
+At first the infected exhibit social anxiety and extreme possessiveness. After a short while, the Greed variant of Myrkild begins to warp the extremities, such as the fingers and toes - they become blackened, and a rapid loss of body fat follows. Soon after, the skin begins to shrink, becoming thinner and thinner until the bones are almost visible. This gaunt visage mimics that of Xateal, Nadir of Greed and their kin.
+
+Greed Myrkild, in their most basic form - singular microorganisms, spread via contact with fomites, lying in wait for its next victim.
 
 The methods of infection all providing unique ways for each strain to start their cycle of: infest, consume, and create. A cycle they will repeat until their victims finally succumb to the growing consciousness within whilst spreading more Myrkild to more unsuspecting victims. The growing consciousness, a being within a being, is a construct awakening inside them that will soon sunder their host, overtaking every aspect of its form and forging something new from its flesh. Something more effective at finding new hosts to infest and combatting the various means to prevent it from doing so.
 
