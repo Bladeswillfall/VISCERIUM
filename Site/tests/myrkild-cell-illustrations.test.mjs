@@ -37,12 +37,10 @@ test('the seven cells are valid WebP with linked attribution records', () => {
     assert.equal(image.readUInt32LE(4) + 8, image.length);
 
     const adjacent = readFileSync(path.join(vault, 'Assets/Images', filename + '.attribution.md'), 'utf8');
-    const sidecar = readFileSync(path.join(vault, 'Lore/Myrkildicary/Images', strain + ' - Myrkild cell.md'), 'utf8');
-    assert.ok(adjacent.includes('Lore/Myrkildicary/Images/' + strain + ' - Myrkild cell'));
-    assert.match(sidecar, /^type: image$/m);
-    assert.ok(sidecar.includes('asset: ' + filename));
-    assert.match(sidecar, /^license: \S.+$/m);
-    assert.match(sidecar, /^rights: .+$/m);
-    assert.match(sidecar, /^alt: .+$/m);
+    assert.ok(adjacent.includes('Asset: ' + filename));
+    assert.ok(adjacent.includes('Copyright: Copyright'));
+    assert.ok(adjacent.includes('Artist: Confirmation required'));
+    assert.ok(adjacent.includes('Workshop attribution draft:'));
+    assert.ok(adjacent.includes('Vault/Drafts/Lore/Myrkildicary/Images/' + strain + ' - Myrkild cell.md'));
   }
 });
