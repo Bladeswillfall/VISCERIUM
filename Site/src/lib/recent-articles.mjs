@@ -5,7 +5,7 @@ const EXCLUDED_TYPES = new Set(['system', 'map', 'image', 'policy', 'statement',
 const NON_LORE_PATH = /^(?:policies|statements|releases|support|contact|about|privacy|terms)(?:\/|$)/i;
 const ERA_NAMES = { e1: 'CITADEL', e2: 'SMOG', e3: 'NEARSIGHT', e4: 'ENTROPY' };
 
-export function getRecentArticles(entries, limit = 6) {
+export function getRecentArticles(entries, limit = 36) {
   return entries.flatMap((entry) => {
     const data = entry.data;
     const { slug, isStandardArticle } = classifyCodexPage(data, entry.id);
