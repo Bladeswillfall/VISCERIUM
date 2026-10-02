@@ -1,12 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 
 const baseUrl = 'http://127.0.0.1:4321';
 const strains = ['gluttony', 'envy', 'sloth', 'wrath', 'lust', 'pride', 'greed'];
-const baileyPipelineAvailable = existsSync(
-  fileURLToPath(new URL('../../src/lib/image-attribution.mjs', import.meta.url)),
-);
 
 test('all seven Myrkild cell illustrations wrap ordinary prose rather than quotations', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -74,16 +69,28 @@ test('Myrkild images expose the canonical Bailey attribution links', async ({ pa
   }
 });
 
-test('Myrkild attribution pages render Bailey metadata once PR #161 is integrated', async ({ page }) => {
-  test.skip(!baileyPipelineAvailable, 'Requires the open Bailey attribution implementation in PR #161');
+test('Myrkild images open real Bailey-style attribution pages for all seven strains', async ({ page }) => {
   await page.goto(baseUrl + '/myrkildicary/myrkild/', { waitUntil: 'domcontentloaded' });
-  await page.goto(baseUrl + '/attribution/images/myrkild-gluttony-cell-webp/', {
-    waitUntil: 'domcontentloaded',
+  const gluttony = page.locator('.vc-image-right').filter({
+    has: page.locator('img[src$="/myrkild-gluttony-cell.webp"]'),
   });
-  await expect(page.getByRole('heading', { level: 1, name: 'Myrkild — Gluttony cell' })).toBeVisible();
-  const table = page.locator('.codex-attribution-table');
-  await expect(table).toContainText('Elias Vail');
-  await expect(table.locator('.codex-rights-badge')).toContainText('Copyright');
+  await gluttony.locator('a.vc-image-link').click();
+  await expect(page).toHaveURL(/\/attribution\/images\/myrkild-gluttony-cell-webp\/$/);
+
+  for (const strain of strains) {
+    if (strain !== 'gluttony') {
+      await page.goto(baseUrl + '/attribution/images/myrkild-' + strain + '-cell-webp/', {
+        waitUntil: 'domcontentloaded',
+      });
+    }
+    await expect(page.getByRole('heading', {
+      level: 1,
+      name: 'Myrkild — ' + strain[0].toUpperCase() + strain.slice(1) + ' cell',
+    })).toBeVisible();
+    const table = page.locator('.codex-attribution-table');
+    await expect(table).toContainText('Elias Vail');
+    await expect(table.locator('.codex-rights-badge')).toContainText('Copyright');
+  }
 });
 
 test('Myrkild WebP transparency drives non-rectangular contour wrapping', async ({ page }) => {
