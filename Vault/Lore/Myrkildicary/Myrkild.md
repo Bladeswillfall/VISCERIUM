@@ -146,7 +146,7 @@ Once infested by true Myrkild, the clock of an inescapable fate begins to tick. 
 > 
 > ### Envy
 >
-> ![[myrkild-envy-cell.webp|right|220|gap=16|alt=Illustration of a Envy Myrkild cell with dark masses connected by bright green filaments]]
+> ![[myrkild-envy-cell.webp|right|220|gap=16|alt=Illustration of an Envy Myrkild cell with dark masses connected by bright green filaments]]
 >
 > Pale, sickly looking skin bordering on a pasty appearance. Intense paranoia swiftly overtakes those infected by Envy Myrkild and resentment fills their mind. Soon after, the eyes turn pitch black and double platinum-coloured iris' form. It is not uncommon for multiple 'black eyes' to form with quick succession in random places across the body. A subtle mimicry of Evaxi, Nadir of Envy's form.
 > 
