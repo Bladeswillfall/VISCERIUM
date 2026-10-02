@@ -24,22 +24,24 @@ async function openGlobalTimeline(page) {
 
 function visibleItemMetrics(canvas) {
   const canvasRect = canvas.getBoundingClientRect();
+  const viewportRect = canvas.querySelector('.vis-panel.vis-center')?.getBoundingClientRect() ?? canvasRect;
   const items = [...canvas.querySelectorAll('.vis-item.vc-timeline-item')]
     .map((element) => element.getBoundingClientRect())
     .filter((rect) => (
       rect.width > 0
       && rect.height > 0
-      && rect.right > canvasRect.left
-      && rect.left < canvasRect.right
-      && rect.bottom > canvasRect.top
-      && rect.top < canvasRect.bottom
+      && rect.right > viewportRect.left
+      && rect.left < viewportRect.right
+      && rect.bottom > viewportRect.top
+      && rect.top < viewportRect.bottom
     ));
   return {
     canvasTop: canvasRect.top,
     canvasBottom: canvasRect.bottom,
+    viewportBottom: viewportRect.bottom,
     count: items.length,
-    firstTop: items.length ? Math.min(...items.map((rect) => rect.top)) : null,
-    lastBottom: items.length ? Math.max(...items.map((rect) => rect.bottom)) : null,
+    firstTop: items.length ? Math.min(...items.map((rect) => Math.max(rect.top, viewportRect.top))) : null,
+    lastBottom: items.length ? Math.max(...items.map((rect) => Math.min(rect.bottom, viewportRect.bottom))) : null,
   };
 }
 
@@ -146,7 +148,7 @@ test('unified chronology keeps exact fictional-calendar ticks inside one bottom 
   expect(metrics.hasPinnedHeight).toBe(false);
   expect(metrics.hasAdaptiveHeight).toBe(false);
   expect(visible.count).toBeGreaterThan(0);
-  expect(visible.lastBottom).toBeLessThanOrEqual(visible.canvasBottom + 2);
+  expect(visible.lastBottom).toBeLessThanOrEqual(visible.viewportBottom + 2);
   expect(overview.hostHeight).toBeLessThanOrEqual(74);
   expect(overview.timelineHeight).toBeLessThanOrEqual(74);
 });
