@@ -16,7 +16,7 @@ test('each Myrkild strain has exactly one accessible wrapped cell illustration',
   const embeds = content.match(/!\[\[myrkild-[a-z]+-cell\.webp\|right\|220\|gap=16\|alt=[^\]]+\]\]/g) ?? [];
   assert.equal(embeds.length, strains.length);
   assert.ok(!/^> \[!vc-indent\]/m.test(content), 'images and prose must not be nested in blockquotes');
-  assert.ok(!/^> (?:###|!\\[\\[|At first|Pale|Bulbous|An increased|Relatively)/m.test(content));
+  assert.ok(!/^> (?:###|!\[\[|At first|Pale|Bulbous|An increased|Relatively)/m.test(content));
 
   for (const strain of strains) {
     const head = '### ' + strain + '\n\n';
@@ -50,7 +50,7 @@ test('the seven cells are valid WebP with linked attribution records', () => {
     assert.ok(attribution.includes('credit: "Elias Vail"'));
     assert.ok(attribution.includes('rights: "Copyright"'));
     assert.ok(attribution.includes('tags: [attribution]'));
-    assert.ok(attribution.includes('navigation:\\n  hidden: true'.replace('\\\\n','\\n')));
+    assert.match(attribution, /navigation:\r?\n  hidden: true/);
     assert.ok(attribution.includes('giscus: false'));
   }
 });
