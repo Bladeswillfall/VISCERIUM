@@ -16,6 +16,14 @@ function markSite(checks) {
   }
 }
 
+function isTimelinePluginSource(name) {
+  return /^Tools\/obsidian-viscerium-timelines\//.test(name)
+    || /^Vault\/\.obsidian\/plugins\/viscerium-timelines\//.test(name)
+    || /^Site\/src\/lib\/(?:timeline|calendar)\//.test(name)
+    || /^Site\/src\/styles\/timeline-(?:canvas|vis)\.css$/.test(name)
+    || name === 'Tools/scripts/sync-obsidian-plugins.mjs';
+}
+
 function markTestFile(checks, name) {
   if (/^Site\/tests\/[^/]+\.test\.mjs$/.test(name)) {
     checks.unit = true;
@@ -47,11 +55,10 @@ function markPath(checks, name) {
     return true;
   } else if (name.startsWith('Services/comment-gateway/')) {
     checks.gateway = true;
-  } else if (/^Tools\/obsidian-viscerium-timelines\//.test(name)
-    || /^Vault\/\.obsidian\/plugins\/viscerium-timelines\//.test(name)
-    || name === 'Tools/scripts/sync-obsidian-plugins.mjs') {
+  } else if (isTimelinePluginSource(name)) {
     checks.obsidian_plugin = true;
     checks.unit = true;
+    if (name.startsWith('Site/')) markSite(checks);
   } else if (name.startsWith('Site/tests/') && markTestFile(checks, name)) {
     return true;
   } else if (name.startsWith('Site/') || name.startsWith('Vault/')) {
