@@ -15,13 +15,15 @@ test('each Myrkild strain has exactly one accessible wrapped cell illustration',
   const content = article.slice(start, end);
   const embeds = content.match(/!\[\[myrkild-[a-z]+-cell\.webp\|right\|220\|gap=16\|alt=[^\]]+\]\]/g) ?? [];
   assert.equal(embeds.length, strains.length);
+  assert.ok(!/^> \[!vc-indent\]/m.test(content), 'images and prose must not be nested in blockquotes');
+  assert.ok(!/^> (?:###|!\\[\\[|At first|Pale|Bulbous|An increased|Relatively)/m.test(content));
 
   for (const strain of strains) {
-    const head = '> ### ' + strain + '\n>\n';
+    const head = '### ' + strain + '\n\n';
     const fragments = content.split(head);
     assert.equal(fragments.length, 2, strain + ' subsection must be unique');
     const first = fragments[1].split('\n')[0];
-    assert.ok(first.startsWith('> ![[myrkild-' + strain.toLowerCase() +
+    assert.ok(first.startsWith('![[myrkild-' + strain.toLowerCase() +
       '-cell.webp|right|220|gap=16|alt=Illustration of ' +
       (strain === 'Envy' ? 'an ' : 'a ') + strain + ' Myrkild cell'),
       strain + ' image must precede subsection prose');
@@ -37,23 +39,18 @@ test('the seven cells are valid WebP with linked attribution records', () => {
     assert.equal(image.toString('ascii', 8, 12), 'WEBP');
     assert.equal(image.readUInt32LE(4) + 8, image.length);
 
-    const adjacent = readFileSync(path.join(vault, 'Assets/Images', filename + '.attribution.md'), 'utf8');
-    assert.ok(adjacent.includes('Asset: ' + filename));
-    assert.ok(adjacent.includes('Copyright: Copyright'));
-    assert.ok(adjacent.includes('Rights: Copyright retained by the original creator, credited as Elias Vail.'));
-    assert.ok(adjacent.includes('Artist: Elias Vail'));
-    assert.ok(adjacent.includes('Public attribution page:'));
-    assert.ok(adjacent.includes('Vault/Lore/Myrkildicary/Images/' + strain + ' - Myrkild cell.md'));
-
-    const published = readFileSync(path.join(vault, 'Lore/Myrkildicary/Images', strain + ' - Myrkild cell.md'), 'utf8');
-    assert.ok(published.includes('status: published'));
-    assert.match(published, /^community_id: [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/m);
-    assert.ok(published.includes('type: image'));
-    assert.ok(published.includes('asset: ' + filename));
-    assert.ok(published.includes('artist: "Elias Vail"'));
-    assert.ok(published.includes('credit: "Elias Vail"'));
-    assert.ok(published.includes('license: Copyright'));
-    assert.ok(published.includes('rights: "Original artwork by Elias Vail'));
-    assert.ok(published.includes('## Artwork preview'));
+    // Same canonical attribution location and schema as Bailey's image records.
+    const attribution = readFileSync(path.join(vault, 'Assets/Attribution/Images', filename + '.md'), 'utf8');
+    assert.ok(attribution.includes('title: "Myrkild — ' + strain + ' cell"'));
+    assert.ok(attribution.includes('asset: "/assets/images/' + filename + '"'));
+    assert.ok(attribution.includes('image: "/assets/images/' + filename + '"'));
+    assert.ok(attribution.includes('status: published'));
+    assert.ok(attribution.includes('type: image'));
+    assert.ok(attribution.includes('artist: "Elias Vail"'));
+    assert.ok(attribution.includes('credit: "Elias Vail"'));
+    assert.ok(attribution.includes('rights: "Copyright"'));
+    assert.ok(attribution.includes('tags: [attribution]'));
+    assert.ok(attribution.includes('navigation:\\n  hidden: true'.replace('\\\\n','\\n')));
+    assert.ok(attribution.includes('giscus: false'));
   }
 });
