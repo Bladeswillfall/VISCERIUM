@@ -54,6 +54,7 @@ function markPath(checks, name) {
     || name === 'Tools/scripts/sync-obsidian-plugins.mjs') {
     checks.obsidian_plugin = true;
     checks.unit = true;
+    if (name.startsWith('Site/')) markSite(checks);
   } else if (name.startsWith('Site/tests/') && markTestFile(checks, name)) {
     return true;
   } else if (name.startsWith('Site/') || name.startsWith('Vault/')) {
