@@ -2,6 +2,7 @@
 title: Greed - Myrkild cell
 description: Illustration of the Greed strain of Myrkild
 status: published
+community_id: 8fd2ce10-a801-4ea9-bc12-5d48a02f0107
 type: image
 era: Universal
 asset: myrkild-greed-cell.webp
