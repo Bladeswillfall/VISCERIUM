@@ -47,6 +47,7 @@ test('the seven cells are valid WebP with linked attribution records', () => {
 
     const published = readFileSync(path.join(vault, 'Lore/Myrkildicary/Images', strain + ' - Myrkild cell.md'), 'utf8');
     assert.ok(published.includes('status: published'));
+    assert.match(published, /^community_id: [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/m);
     assert.ok(published.includes('type: image'));
     assert.ok(published.includes('asset: ' + filename));
     assert.ok(published.includes('artist: "Elias Vail"'));
