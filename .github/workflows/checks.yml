@@ -38,6 +38,48 @@ jobs:
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: node .github/scripts/select-checks.mjs
 
+  sync_obsidian_bundle:
+    name: Sync timeline plugin bundle
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'fix/sync-timeline-plugin-after-222'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 2
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Tools/obsidian-viscerium-timelines/package-lock.json
+
+      - name: Use npm with lifecycle-script policy support
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - name: Build and sync timeline plugin
+        working-directory: Tools/obsidian-viscerium-timelines
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:sync
+
+      - name: Commit generated plugin payload
+        run: |
+          if git diff --quiet -- Vault/.obsidian/plugins/viscerium-timelines; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Vault/.obsidian/plugins/viscerium-timelines
+          git commit -m "build: sync timeline plugin bundle"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
   repository:
     name: Repository checks
     runs-on: ubuntu-latest
