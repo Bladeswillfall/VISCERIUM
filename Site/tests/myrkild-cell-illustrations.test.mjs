@@ -40,9 +40,19 @@ test('the seven cells are valid WebP with linked attribution records', () => {
     const adjacent = readFileSync(path.join(vault, 'Assets/Images', filename + '.attribution.md'), 'utf8');
     assert.ok(adjacent.includes('Asset: ' + filename));
     assert.ok(adjacent.includes('Copyright: Copyright'));
-    assert.ok(adjacent.includes('Rights: Original artwork by the VISCERIUM creator'));
-    assert.ok(adjacent.includes('Artist: VISCERIUM creator (preferred public display name pending)'));
-    assert.ok(adjacent.includes('Workshop attribution draft:'));
-    assert.ok(adjacent.includes('Vault/Drafts/Lore/Myrkildicary/Images/' + strain + ' - Myrkild cell.md'));
+    assert.ok(adjacent.includes('Rights: Copyright retained by the original creator, credited as Elias Vail.'));
+    assert.ok(adjacent.includes('Artist: Elias Vail'));
+    assert.ok(adjacent.includes('Public attribution page:'));
+    assert.ok(adjacent.includes('Vault/Lore/Myrkildicary/Images/' + strain + ' - Myrkild cell.md'));
+
+    const published = readFileSync(path.join(vault, 'Lore/Myrkildicary/Images', strain + ' - Myrkild cell.md'), 'utf8');
+    assert.ok(published.includes('status: published'));
+    assert.ok(published.includes('type: image'));
+    assert.ok(published.includes('asset: ' + filename));
+    assert.ok(published.includes('artist: "Elias Vail"'));
+    assert.ok(published.includes('credit: "Elias Vail"'));
+    assert.ok(published.includes('license: Copyright'));
+    assert.ok(published.includes('rights: "Original artwork by Elias Vail'));
+    assert.ok(published.includes('## Artwork preview'));
   }
 });
