@@ -15,6 +15,7 @@ import {
   chooseCalendar,
   compareTimelineEvents,
   eventOverlapsRange,
+  eventPassesZoomThreshold,
   isSuperTimelineEvent,
   parseTimelineUrlState,
   resolveEraMembership,
@@ -121,6 +122,12 @@ test('super inclusion follows importance and explicit overrides', () => {
   assert.equal(isSuperTimelineEvent('standard', 'auto'), false);
   assert.equal(isSuperTimelineEvent('incidental', 'include'), true);
   assert.equal(isSuperTimelineEvent('landmark', 'exclude'), false);
+});
+
+test('wide zoom keeps era-less super-timeline records visible', () => {
+  assert.equal(eventPassesZoomThreshold({ importance: 'standard', eras: [] }, 'major'), true);
+  assert.equal(eventPassesZoomThreshold({ importance: 'standard', eras: ['citadel'] }, 'major'), false);
+  assert.equal(eventPassesZoomThreshold({ importance: 'major', eras: ['citadel'] }, 'major'), true);
 });
 
 test('same-day sorting uses importance, editorial order, title and stable id', () => {

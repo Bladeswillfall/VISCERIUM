@@ -24,6 +24,10 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 - Removed the standalone What's New page and its link from the homepage Recent Articles section; the carousel and public feeds remain available.
 
+### Fixed in Unreleased
+
+- Kept explicitly included inter-era events visible on the super timeline at wide zoom levels, including their article links ([#222](https://github.com/Bladeswillfall/VISCERIUM/pull/222)).
+
 ## [0.14.0] - 2026-09-28
 
 ### Added in 0.14.0
