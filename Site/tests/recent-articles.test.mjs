@@ -36,12 +36,12 @@ test('structural pages and policies or statements typed as articles are excluded
   ]);
 });
 
-test('results are deterministic and capped at six for the three-by-two grid', () => {
-  const results = getRecentArticles(Array.from({ length: 9 }, (_, i) => entry(`item-${9-i}`, {
-    published: '2026-09-01',
-  })));
-  assert.equal(results.length, 6);
-  assert.deepEqual(results.map(({ title }) => title), [
-    'item-1', 'item-2', 'item-3', 'item-4', 'item-5', 'item-6',
-  ]);
+test('results are deterministic and capped at 36 for the homepage grid', () => {
+  const results = getRecentArticles(Array.from({ length: 40 }, (_, i) => entry(
+    `item-${String(40 - i).padStart(2, '0')}`,
+    { published: '2026-09-01' },
+  )));
+  assert.equal(results.length, 36);
+  assert.equal(results[0].title, 'item-01');
+  assert.equal(results.at(-1).title, 'item-36');
 });

@@ -16,6 +16,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Increased the homepage Recent Articles grid limit from 6 to 36 entries ([#224](https://github.com/Bladeswillfall/VISCERIUM/pull/224)).
 - Restored ordinary Myrkild strain prose and removed cell-image margins (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
 - Made Overview-only sidebar folders link directly to their article and subdued folders without other published articles ([#180](https://github.com/Bladeswillfall/VISCERIUM/pull/180)).
 - Updated release notes with colour-coded change labels and clearer date and version layouts; fixed British English release-date formatting.
