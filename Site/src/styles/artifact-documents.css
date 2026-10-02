@@ -405,85 +405,73 @@
 .cx-artifact .cx-artifact-view-meta,.cx-artifact .cx-artifact-count,.cx-artifact .cx-artifact-pager {color:var(--codex-text-body)}
 
 
-/* CITADEL only: a temporary turning folio, inspired by a hinged paper leaf.
-   Real pages never transform. The detached, inert overlay carries the motion. */
-.cx-artifact[data-preset="citadel-note"] .cx-artifact-stage.cx-citadel-turning {
-  perspective: 1500px;
+/* CITADEL-only stacked-paper carousel. The manuscript's approved V3
+   texture/mask remain unchanged; offset under-sheets are decorative. */
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-stage.leaves {
   isolation: isolate;
+  position: relative;
 }
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turning > .cx-artifact-paper.cx-citadel-turn-target {
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::before,
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::after {
+  content: "";
   position: absolute;
   inset: 0 0 auto;
-  margin: 0 auto;
+  height: var(--citadel-stack-height);
   pointer-events: none;
+  background: var(--paper-texture) center / 100% 100% no-repeat;
+  -webkit-mask: var(--paper-mask) center / 100% 100% no-repeat;
+  mask: var(--paper-mask) center / 100% 100% no-repeat;
+  box-shadow: 1px 3px 7px color-mix(in srgb,var(--paper-ink) 15%,transparent);
 }
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-sheet {
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::before {
+  z-index: 0;
+  transform: translate(-4px,6px) rotate(-.7deg) scale(.988);
+  filter: brightness(.96);
+}
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::after {
+  z-index: 1;
+  transform: translate(5px,10px) rotate(.75deg) scale(.985);
+  filter: brightness(.92);
+}
+.cx-artifact[data-preset="citadel-note"] .leaves > .cx-artifact-paper.manuscript {
+  position: relative;
+  z-index: 2;
+}
+.cx-artifact[data-preset="citadel-note"] .leaves.cx-citadel-stacking > .cx-artifact-paper.cx-citadel-stack-target {
   position: absolute;
-  z-index: 12;
-  transform-style: preserve-3d;
-  transform-origin: left center;
+  inset: 0 0 auto;
+  width: min(100%,620px);
+  margin: 0 auto 4px;
   pointer-events: none;
-  will-change: transform;
 }
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-front,
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-back {
+.cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet {
   position: absolute;
-  inset: 0;
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  z-index: 4;
   pointer-events: none;
+  transform-origin: center center;
+  will-change: transform,opacity;
 }
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-front {
-  transform: translateZ(1px);
-}
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-front > .manuscript {
-  box-sizing: border-box;
+.cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet > .manuscript {
   width: 100% !important;
   height: 100% !important;
   min-height: 0 !important;
   margin: 0 !important;
-}
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-front::after {
-  content: '';
-  position: absolute;
-  inset: 0;
   pointer-events: none;
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--paper-ink) 8%, transparent),
-    transparent 16%,
-    transparent 78%,
-    color-mix(in srgb, var(--paper-ink) 15%, transparent));
-  -webkit-mask-image: var(--paper-mask);
-  mask-image: var(--paper-mask);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-}
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-back {
-  transform: rotateY(180deg) translateZ(1px);
-  background: var(--paper-texture) center / 100% 100% no-repeat;
-  -webkit-mask-image: var(--paper-mask);
-  mask-image: var(--paper-mask);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-}
-.cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-back::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--paper-ink) 15%, transparent),
-    transparent 25%,
-    color-mix(in srgb, var(--paper-ink) 8%, transparent));
 }
 @container artifact (max-width: 560px) {
-  .cx-artifact[data-preset="citadel-note"] .cx-artifact-stage.cx-citadel-turning {
+  .cx-artifact[data-preset="citadel-note"] .leaves.cx-citadel-stacking {
     overflow: clip;
+  }
+  .cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::before {
+    transform: translate(-2px,4px) rotate(-.45deg) scale(.993);
+  }
+  .cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::after {
+    transform: translate(2px,7px) rotate(.5deg) scale(.993);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-sheet { display: none; }
+  .cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet {display:none}
 }
 @media print {
-  .cx-artifact[data-preset="citadel-note"] .cx-citadel-turn-sheet { display: none !important; }
+  .cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet {display:none !important}
 }
