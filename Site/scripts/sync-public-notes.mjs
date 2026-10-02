@@ -16,6 +16,7 @@ import { stringifyGeneratedFrontmatter } from './sync-frontmatter.mjs';
 import { isMainModule } from './script-entry.mjs';
 
 const siteRoot = process.cwd();
+const repoRoot = path.resolve(siteRoot, '..');
 const sourceDir = path.resolve(siteRoot, siteConfig.loreSourceDir);
 const assetRoot = path.resolve(siteRoot, siteConfig.vaultAssetDir);
 const outDir = path.resolve(siteRoot, 'src/content/docs');
@@ -481,6 +482,7 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
   const sourceIsMdx = path.extname(file).toLowerCase() === '.mdx';
   const shortcodeRequiresMdx = hasCalendarShortcodes(parsed.content);
   const extension = sourceIsMdx || shortcodeRequiresMdx || requiresCodexMdx(parsed.content) ? '.mdx' : '.md';
+  const sourceRepoPath = toPosixPath(path.relative(repoRoot, file));
   const outFile = path.join(outDir, `${slug}${extension}`);
   const frontmatterAssets = {};
   await fs.mkdir(path.dirname(outFile), { recursive: true });
@@ -498,6 +500,7 @@ for (const { file, parsed, slug, sourcePath } of publicNotes) {
     giscus: resolveGiscusForPage(parsed.data, slug),
     links: graphLinks(parsed.data, slug, file, parsed),
     sourcePath,
+    sourceRepoPath,
     assets: frontmatterAssets,
   })}${result.content}`);
   console.log(`Published ${path.relative(sourceDir, file)} -> ${path.relative(outDir, outFile)}`);
