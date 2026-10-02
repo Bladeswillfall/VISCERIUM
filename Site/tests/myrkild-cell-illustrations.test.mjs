@@ -13,7 +13,7 @@ test('each Myrkild strain has exactly one accessible wrapped cell illustration',
   const end = article.indexOf('## A deal between kingdoms', start);
   assert.ok(start >= 0 && end > start, 'strain section boundaries must exist');
   const content = article.slice(start, end);
-  const embeds = content.match(/!\[\[myrkild-[a-z]+-cell\.webp\|right\|220\|gap=16\|alt=[^\]]+\]\]/g) ?? [];
+  const embeds = content.match(/!\[\[myrkild-[a-z]+-cell\.webp\|right\|220\|shape\|gap=16\|alt=[^\]]+\]\]/g) ?? [];
   assert.equal(embeds.length, strains.length);
   assert.ok(!/^> \[!vc-indent\]/m.test(content), 'images and prose must not be nested in blockquotes');
   assert.ok(!/^> (?:###|!\[\[|At first|Pale|Bulbous|An increased|Relatively)/m.test(content));
@@ -24,7 +24,7 @@ test('each Myrkild strain has exactly one accessible wrapped cell illustration',
     assert.equal(fragments.length, 2, strain + ' subsection must be unique');
     const first = fragments[1].split('\n')[0];
     assert.ok(first.startsWith('![[myrkild-' + strain.toLowerCase() +
-      '-cell.webp|right|220|gap=16|alt=Illustration of ' +
+      '-cell.webp|right|220|shape|gap=16|alt=Illustration of ' +
       (strain === 'Envy' ? 'an ' : 'a ') + strain + ' Myrkild cell'),
       strain + ' image must precede subsection prose');
   }
