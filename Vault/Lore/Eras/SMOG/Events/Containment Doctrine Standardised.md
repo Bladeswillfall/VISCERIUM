@@ -11,6 +11,8 @@ headerImage:
 calendarDate:
   calendar: okse
   year: 10720
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:

@@ -11,11 +11,14 @@ headerImage:
 calendarDate:
   calendar: okse
   year: 10200
+  month: niewmonath
+  day: 1
   precision: year
   certainty: approximate
 calendarEndDate:
   calendar: okse
   year: 10400
+  intercalaryDay: engimanutur-02
   precision: year
   certainty: approximate
 timeline:
