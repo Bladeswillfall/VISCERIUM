@@ -21,10 +21,20 @@ test('all seven Myrkild cell illustrations wrap ordinary prose rather than quota
     const geometry = await figure.evaluate(node => ({
       inBlockquote: !!node.closest('blockquote'),
       float: getComputedStyle(node).float,
+      shape: getComputedStyle(node).shapeOutside,
+      top: getComputedStyle(node).marginTop,
+      bottom: getComputedStyle(node).marginBottom,
+      left: getComputedStyle(node).marginLeft,
+      padding: getComputedStyle(node).padding,
       width: Math.round(node.getBoundingClientRect().width),
     }));
     expect(geometry.inBlockquote, strain + ' figure should not be quoted').toBe(false);
     expect(geometry.float).toBe('right');
+    expect(geometry.shape).toContain('/myrkild-' + strain + '-cell.webp');
+    expect(geometry.top).toBe('0px');
+    expect(geometry.bottom).toBe('0px');
+    expect(geometry.left).toBe('0px');
+    expect(geometry.padding).toBe('0px');
     expect(geometry.width).toBeLessThanOrEqual(221);
   }
 
