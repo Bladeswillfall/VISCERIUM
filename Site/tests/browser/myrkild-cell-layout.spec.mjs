@@ -46,13 +46,19 @@ test('mobile Myrkild strain illustrations stop floating and stay within the arti
   const first = page.locator('.vc-image-right').filter({
     has: page.locator('img[src$="/myrkild-gluttony-cell.webp"]'),
   });
+  // The illustration is far below the fold on mobile. Bring its heading into
+  // view to trigger the intentional lazy image load before asserting visibility.
+  await page.getByRole('heading', {level:3, name:'Gluttony'}).scrollIntoViewIfNeeded();
+  await expect.poll(() => first.locator('img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   await expect(first).toBeVisible();
   const layout = await first.evaluate(node => ({
     float: getComputedStyle(node).float,
     imageWidth: node.getBoundingClientRect().width,
+    aspectRatio: getComputedStyle(node).aspectRatio,
     articleWidth: node.closest('.sl-markdown-content').getBoundingClientRect().width,
   }));
   expect(layout.float).toBe('none');
+  expect(layout.aspectRatio).toBe('1 / 1');
   expect(layout.imageWidth).toBeLessThanOrEqual(layout.articleWidth);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
