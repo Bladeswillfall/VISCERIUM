@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { attributionRouteForAsset } from '../src/lib/image-attribution.mjs';
 
 const vault = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../Vault');
 const article = readFileSync(path.join(vault, 'Lore/Myrkildicary/Myrkild.md'), 'utf8');
@@ -52,5 +53,9 @@ test('the seven cells are valid WebP with linked attribution records', () => {
     assert.ok(attribution.includes('tags: [attribution]'));
     assert.match(attribution, /navigation:\r?\n  hidden: true/);
     assert.ok(attribution.includes('giscus: false'));
+    assert.equal(
+      attributionRouteForAsset('/assets/images/' + filename),
+      '/attribution/images/myrkild-' + strain.toLowerCase() + '-cell-webp/',
+    );
   }
 });
