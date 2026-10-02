@@ -278,6 +278,7 @@ export const collections = {
         alt: optionalString,
         credit: optionalString,
         artist: optionalString,
+        artistUrl: optionalString,
         editor: optionalString,
         source: optionalString,
         sourceUrl: optionalString,
