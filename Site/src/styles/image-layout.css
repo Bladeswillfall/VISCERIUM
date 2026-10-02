@@ -78,6 +78,8 @@
   margin-bottom: 0;
   margin-left: 0;
   padding: 0;
+  /* All seven originals are square; reserve their space before lazy loading. */
+  aspect-ratio: 1;
 }
 
 /* Alpha-aware wrapping. The generated custom property contains the resolved asset URL. */
