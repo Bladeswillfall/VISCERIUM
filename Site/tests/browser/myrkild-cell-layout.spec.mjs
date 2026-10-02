@@ -62,8 +62,7 @@ test('mobile Myrkild strain illustrations stop floating and stay within the arti
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
-test('Myrkild artwork uses Bailey attribution links and metadata tables once its pipeline is integrated', async ({ page }) => {
-  test.skip(!baileyPipelineAvailable, 'Requires the open Bailey attribution implementation in PR #161');
+test('Myrkild images expose the canonical Bailey attribution links', async ({ page }) => {
   await page.goto(baseUrl + '/myrkildicary/myrkild/', { waitUntil: 'domcontentloaded' });
   for (const strain of strains) {
     const figure = page.locator('.vc-image-right').filter({
@@ -73,6 +72,11 @@ test('Myrkild artwork uses Bailey attribution links and metadata tables once its
       'href', '/attribution/images/myrkild-' + strain + '-cell-webp/',
     );
   }
+});
+
+test('Myrkild attribution pages render Bailey metadata once PR #161 is integrated', async ({ page }) => {
+  test.skip(!baileyPipelineAvailable, 'Requires the open Bailey attribution implementation in PR #161');
+  await page.goto(baseUrl + '/myrkildicary/myrkild/', { waitUntil: 'domcontentloaded' });
   await page.goto(baseUrl + '/attribution/images/myrkild-gluttony-cell-webp/', {
     waitUntil: 'domcontentloaded',
   });
@@ -80,4 +84,23 @@ test('Myrkild artwork uses Bailey attribution links and metadata tables once its
   const table = page.locator('.codex-attribution-table');
   await expect(table).toContainText('Elias Vail');
   await expect(table.locator('.codex-rights-badge')).toContainText('Copyright');
+});
+
+test('Myrkild WebP transparency drives non-rectangular contour wrapping', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(baseUrl + '/myrkildicary/myrkild/', { waitUntil: 'domcontentloaded' });
+  const figure = page.locator('.vc-image-shape').filter({
+    has: page.locator('img[src$="/myrkild-gluttony-cell.webp"]'),
+  });
+  const image = figure.locator('img');
+  await expect.poll(() => image.evaluate(node => node.complete && node.naturalWidth > 0)).toBe(true);
+  const alpha = await image.evaluate(node => {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    const context = canvas.getContext('2d', {willReadFrequently:true});
+    context.drawImage(node, 0, 0, 1, 1, 0, 0, 1, 1);
+    return context.getImageData(0, 0, 1, 1).data[3];
+  });
+  expect(alpha).toBe(0);
+  expect(await figure.evaluate(node => getComputedStyle(node).shapeOutside)).toContain('myrkild-gluttony-cell.webp');
 });
