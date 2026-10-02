@@ -282,6 +282,7 @@ test('wide super timeline shows explicitly included records between eras', async
     { waitUntil: 'networkidle' },
   );
   await expect(page.locator('[data-vc-island-mounted="true"]')).toHaveCount(1, { timeout: 5_000 });
+  await page.locator('[data-vc-search]').fill('The Glass Doctrine');
   const interyearEvent = page.locator('[data-vc-canvas] .vis-item.vc-timeline-item', {
     hasText: 'The Glass Doctrine',
   }).first();
