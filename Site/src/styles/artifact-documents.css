@@ -289,7 +289,7 @@
  linear-gradient(90deg,var(--artifact-citadel-v3-detail-02),var(--artifact-citadel-v3-detail-03) 3%,transparent 8%,transparent 89%,var(--artifact-citadel-v3-detail-04)),
  radial-gradient(ellipse 24% 9% at 86% 5%,var(--artifact-citadel-v3-detail-05),transparent 100%),
  radial-gradient(ellipse 25% 12% at 11% 97%,var(--artifact-citadel-v3-detail-06),transparent 100%)}
-.cx-artifact[data-preset="citadel-note"] .paper-grit{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:var(--damage);background-image:var(--wear-texture);background-size:100% 100%;mix-blend-mode:multiply}
+.cx-artifact[data-preset="citadel-note"] .paper-grit{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:var(--damage);background-image:var(--wear-texture);background-size:100% 100%;mix-blend-mode:multiply}
 .cx-artifact[data-preset="citadel-note"] .paper-fold{position:absolute;left:-3%;width:107%;height:14px;top:51%;z-index:1;opacity:.48;transform:rotate(-.35deg);pointer-events:none;background:linear-gradient(to bottom,transparent,var(--artifact-citadel-v3-detail-07) 30%,var(--artifact-citadel-v3-detail-08) 68%,transparent)}
 .cx-artifact[data-preset="citadel-note"] .paper-fold.vertical{width:18px;height:103%;left:12%;top:-2%;transform:rotate(.18deg);opacity:.3;background:linear-gradient(90deg,transparent,var(--artifact-citadel-v3-detail-09),var(--artifact-citadel-v3-detail-10),transparent)}
 .cx-artifact[data-preset="citadel-note"] .page-ghost{position:absolute;pointer-events:none;inset:0;z-index:1;opacity:.075;background:
@@ -361,7 +361,6 @@
 .cx-artifact[data-preset="citadel-note"] .leaves .ms-sketch{right:32px;bottom:68px;width:58px;height:78px;opacity:.22}
 .cx-artifact[data-preset="citadel-note"] .leaves .manuscript[hidden]{display:none!important}
 .cx-artifact[data-preset="citadel-note"] .ms-note-anchor{text-decoration:underline;text-decoration-color:var(--artifact-citadel-v3-detail-36);text-decoration-thickness:.6px;text-underline-offset:.13em}
-.cx-artifact[data-preset="citadel-note"] .ms-note-trigger,.cx-artifact[data-preset="citadel-note"] .ms-inline-note{display:none}
 .cx-artifact[data-preset="citadel-note"] .leaves .ms-prose .ms-note-trigger{font:normal 16px/1 Georgia,serif;color:var(--artifact-citadel-v3-detail-37);border:0;background:transparent;padding:1px 3px;margin-left:2px;vertical-align:middle}
 .cx-artifact[data-preset="citadel-note"] .leaves .ms-prose .ms-inline-note{font:italic 15px/1.24 'IM Fell English',Georgia,serif;color:var(--artifact-citadel-v3-detail-38);letter-spacing:0}
 .cx-artifact[data-preset="citadel-note"] .leaves .manuscript[data-notes='off'] .ms-note-anchor{text-decoration:none}
