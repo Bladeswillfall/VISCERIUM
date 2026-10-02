@@ -243,7 +243,7 @@ test('CITADEL stack carousel stays fixed as the outgoing leaf moves into the pil
       paper:sheet?.querySelectorAll(':scope > .manuscript').length??0,
       inert:sheet?.inert??false,
       interactiveCopies:sheet?.querySelectorAll('[id],button,[aria-controls],a[href]').length??-1,
-      finalOpacity:keys.at(-1)?.opacity,
+      finalOpacity:Number(keys.at(-1)?.opacity),
       all2D:keys.every(key=>!String(key.transform).includes('rotateY')),
       buttonsDisabled:[...artifact.querySelectorAll('.cx-artifact-pager button')]
         .every(button=>button.disabled),
