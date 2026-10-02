@@ -49,6 +49,8 @@ function markPath(checks, name) {
     checks.gateway = true;
   } else if (/^Tools\/obsidian-viscerium-timelines\//.test(name)
     || /^Vault\/\.obsidian\/plugins\/viscerium-timelines\//.test(name)
+    || /^Site\/src\/lib\/(?:timeline|calendar)\//.test(name)
+    || /^Site\/src\/styles\/timeline-(?:canvas|vis)\.css$/.test(name)
     || name === 'Tools/scripts/sync-obsidian-plugins.mjs') {
     checks.obsidian_plugin = true;
     checks.unit = true;
