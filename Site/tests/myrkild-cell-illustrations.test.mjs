@@ -22,7 +22,8 @@ test('each Myrkild strain has exactly one accessible wrapped cell illustration',
     assert.equal(fragments.length, 2, strain + ' subsection must be unique');
     const first = fragments[1].split('\n')[0];
     assert.ok(first.startsWith('> ![[myrkild-' + strain.toLowerCase() +
-      '-cell.webp|right|220|gap=16|alt=Illustration of a ' + strain + ' Myrkild cell'),
+      '-cell.webp|right|220|gap=16|alt=Illustration of ' +
+      (strain === 'Envy' ? 'an ' : 'a ') + strain + ' Myrkild cell'),
       strain + ' image must precede subsection prose');
   }
 });
@@ -39,7 +40,8 @@ test('the seven cells are valid WebP with linked attribution records', () => {
     const adjacent = readFileSync(path.join(vault, 'Assets/Images', filename + '.attribution.md'), 'utf8');
     assert.ok(adjacent.includes('Asset: ' + filename));
     assert.ok(adjacent.includes('Copyright: Copyright'));
-    assert.ok(adjacent.includes('Artist: Confirmation required'));
+    assert.ok(adjacent.includes('Rights: Original artwork by the VISCERIUM creator'));
+    assert.ok(adjacent.includes('Artist: VISCERIUM creator (preferred public display name pending)'));
     assert.ok(adjacent.includes('Workshop attribution draft:'));
     assert.ok(adjacent.includes('Vault/Drafts/Lore/Myrkildicary/Images/' + strain + ' - Myrkild cell.md'));
   }
