@@ -48,6 +48,30 @@ test('manuscript paginates without dropping source words or losing Markdown anch
   await expect(artifact.locator('.cx-artifact-source-note')).toContainText(['Marginal note: I thought I was dead.']);
 });
 
+test('desktop annotations stay accessible even when no marginal copy fits',async ({page}) => {
+  const artifact=await openArtifact(page,1365);
+  const leaf=artifact.locator('.cx-artifact-paper:not([hidden])');
+  const trigger=leaf.getByRole('button',{name:/Read annotation:/}).first();
+  await expect(trigger).toBeVisible();
+  await expect(leaf.locator('.cx-artifact-margin-note').first()).toHaveAttribute('aria-hidden','true');
+  // Force every decorative note to exceed the available margin height.
+  await page.addStyleTag({content:'.cx-artifact[data-preset="citadel-note"] .ms-aside {min-height:2000px}'});
+  const oldLeaf=await leaf.elementHandle();
+  await artifact.locator('.cx-artifact-stage').evaluate(stage => stage.dispatchEvent(new Event('artifact:repaginate')));
+  await expect.poll(() => oldLeaf.evaluate(node=>node.isConnected)).toBe(false);
+  await expect(leaf.locator('.cx-artifact-margin-note')).toHaveCount(0);
+  const fallback=leaf.getByRole('button',{name:/Read annotation:/}).first();
+  await expect(fallback).toBeVisible();
+  await fallback.focus();
+  await page.keyboard.press('Enter');
+  await expect(fallback).toHaveAttribute('aria-expanded','true');
+  const noteId=await fallback.getAttribute('aria-controls');
+  await expect(page.locator('[id="'+noteId+'"]')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(fallback).toHaveAttribute('aria-expanded','false');
+  await expect(fallback).toBeFocused();
+});
+
 test('mobile manuscript keeps notes attached and preserves plain-text fallback',async ({page}) => {
   const artifact = await openArtifact(page,390);
   const visible = artifact.locator('.cx-artifact-paper:not([hidden])');
@@ -97,6 +121,8 @@ test('approved V3 manuscript materials remain fixed across light and dark websit
         selectedText:getComputedStyle(selected).color,
         selectedBackground:getComputedStyle(selected).backgroundColor,
         textureCount:pageEl.querySelectorAll('.paper-shade,.paper-fold,.paper-grit,.guidelines').length,
+        gritZ:getComputedStyle(pageEl.querySelector('.paper-grit')).zIndex,
+        bodyZ:getComputedStyle(pageEl.querySelector('.ms-body')).zIndex,
       };
     };
     const first=snapshot();
@@ -116,6 +142,7 @@ test('approved V3 manuscript materials remain fixed across light and dark websit
     expect(theme.paperBackground).toContain('citadel-parchment.webp');
     expect(theme.paperMask).toContain('citadel-edge-mask.svg');
     expect(theme.textureCount).toBeGreaterThanOrEqual(5);
+    expect(Number(theme.gritZ)).toBeLessThan(Number(theme.bodyZ));
   }
   expect(result.light.ink).toBe(result.dark.ink);
   expect(result.light.rubricColor).toBe(result.dark.rubricColor);
