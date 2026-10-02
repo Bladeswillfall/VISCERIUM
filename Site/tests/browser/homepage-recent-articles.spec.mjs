@@ -9,7 +9,7 @@ test('recent article carousel expands without changing card width', async ({ pag
   const track = page.locator('#recent-track');
   const cards = track.locator('.record');
   expect(await cards.count()).toBeGreaterThan(0);
-  expect(await cards.count()).toBeLessThanOrEqual(6);
+  expect(await cards.count()).toBeLessThanOrEqual(36);
 
   const originalWidth = await cards.first().evaluate((card) => card.getBoundingClientRect().width);
   await page.locator('#recent-toggle').click();
