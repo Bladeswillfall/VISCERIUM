@@ -7,6 +7,7 @@ import { CHECKS, changedPaths, selectChecks } from './select-checks.mjs';
 const all = Object.fromEntries(CHECKS.map(name => [name, true]));
 const only = (...names) => Object.fromEntries(CHECKS.map(name => [name, names.includes(name)]));
 const fullSite = only('unit', 'build', 'browser', 'graph_engines', 'contact', 'axe');
+const fullSiteWithPlugin = () => only('unit', 'build', 'obsidian_plugin', 'browser', 'graph_engines', 'contact', 'axe');
 
 test('docs-only changes run only mandatory repository policy', () => {
   assert.deepEqual(selectChecks(['CONTRIBUTING.md', 'docs/guide.md']), only());
@@ -18,9 +19,12 @@ test('gateway-only changes skip unrelated site and plugin jobs', () => {
   assert.deepEqual(selectChecks(['Services/comment-gateway/src/server.mjs']), only('gateway'));
 });
 
-test('plugin-only changes run plugin and linked site contracts', () => {
+test('plugin and shared timeline changes run plugin integrity checks', () => {
   assert.deepEqual(selectChecks(['Tools/obsidian-viscerium-timelines/src/main.ts']), only('obsidian_plugin', 'unit'));
   assert.deepEqual(selectChecks(['Vault/.obsidian/plugins/viscerium-timelines/main.js']), only('obsidian_plugin', 'unit'));
+  assert.deepEqual(selectChecks(['Site/src/lib/timeline/renderer.mjs']), fullSiteWithPlugin());
+  assert.deepEqual(selectChecks(['Site/src/lib/calendar/runtime.mjs']), fullSiteWithPlugin());
+  assert.deepEqual(selectChecks(['Site/src/styles/timeline-canvas.css']), fullSiteWithPlugin());
 });
 
 test('unit-only and postbuild-only edits do not run browser jobs', () => {
