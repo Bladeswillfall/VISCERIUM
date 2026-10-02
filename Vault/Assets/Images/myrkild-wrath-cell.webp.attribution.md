@@ -2,9 +2,9 @@
 
 Asset: myrkild-wrath-cell.webp
 Copyright: Copyright
-Artist: VISCERIUM creator (preferred public display name pending)
-Rights: Original artwork by the VISCERIUM creator; the creator requested its use in the Myrkild article.
-Source: Original artwork supplied by the VISCERIUM creator.
-Workshop attribution draft: `VISCERIUM-Workshop/Vault/Drafts/Lore/Myrkildicary/Images/Wrath - Myrkild cell.md`
+Artist: Elias Vail
+Rights: Copyright retained by the original creator, credited as Elias Vail. Approved for use in VISCERIUM.
+Source: Original artwork by Elias Vail for VISCERIUM.
+Public attribution page: `Vault/Lore/Myrkildicary/Images/Wrath - Myrkild cell.md`
 
-Creator ownership and the intended VISCERIUM use have been confirmed. Preferred public artist credit and optional URL remain to be set before publishing the reader-facing attribution page. Its draft lives in Workshop.
+The creator confirmed the public alias Elias Vail and authorised use of this original illustration in VISCERIUM. No external artist URL was supplied.
