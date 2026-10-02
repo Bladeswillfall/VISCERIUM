@@ -2,6 +2,7 @@
 title: Sloth - Myrkild cell
 description: Illustration of the Sloth strain of Myrkild
 status: published
+community_id: 8fd2ce10-a801-4ea9-bc12-5d48a02f0103
 type: image
 era: Universal
 asset: myrkild-sloth-cell.webp
