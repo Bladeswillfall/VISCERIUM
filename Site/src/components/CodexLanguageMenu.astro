@@ -5,7 +5,7 @@ interface LanguageOption {
   nativeLabel: string;
   secondaryLabel?: string;
   secondaryLang?: string;
-  flag: 'gb' | 'fr' | 'de';
+  flag?: 'gb' | 'fr' | 'de';
   current?: boolean;
 }
 
@@ -41,13 +41,19 @@ const flagSrc = {
               hreflang={option.locale}
               aria-current={option.current ? 'page' : undefined}
             >
-              <img
-                class="codex-language-menu__flag"
-                src={flagSrc[option.flag]}
-                alt=""
-                width="28"
-                height="18"
-              />
+              {
+                option.flag ? (
+                  <img
+                    class="codex-language-menu__flag"
+                    src={flagSrc[option.flag]}
+                    alt=""
+                    width="28"
+                    height="18"
+                  />
+                ) : (
+                  <span aria-hidden="true"></span>
+                )
+              }
               <span class="codex-language-menu__names">
                 <span class="codex-language-menu__native" lang={option.locale}>
                   {option.nativeLabel}
