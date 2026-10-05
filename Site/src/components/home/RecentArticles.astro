@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { getRecentArticles } from '../../lib/recent-articles.mjs';
+import { getHomeRecentMetadataTranslation } from '../../lib/home-i18n.mjs';
 
 interface RecentCopy {
   title: string;
@@ -25,6 +26,7 @@ interface Props {
 }
 
 const { locale = 'en-GB', copy } = Astro.props;
+const metadataCopy = getHomeRecentMetadataTranslation(locale);
 const formatter = new Intl.DateTimeFormat(locale, {
   day: 'numeric', month: 'long', year: 'numeric',
 });
@@ -76,9 +78,9 @@ const articles = getRecentArticles(await getCollection('docs')).map((article, in
         <span class="record__content">
           <span class="record__line">
             <span class="record__ordinal">{article.ordinal}</span>
-            <span class="record__date">{article.kind}<time datetime={article.date.toISOString()}>{formatter.format(article.date)}</time></span>
+            <span class="record__date">{article.kind === 'Published' ? metadataCopy.published : metadataCopy.updated}<time datetime={article.date.toISOString()}>{formatter.format(article.date)}</time></span>
           </span>
-          <span class="record__type">{article.type}</span>
+          <span class="record__type">{metadataCopy.types[String(article.type).toLowerCase()] ?? article.type}</span>
           <h3>{article.title}</h3>
           {article.description && <span class="record__description">{article.description}</span>}
         </span>
