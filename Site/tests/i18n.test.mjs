@@ -70,7 +70,7 @@ test('French and German placeholders cover every custom UI key without publishin
   }
 });
 
-test('accessible flag language menu is staged beside reader settings without being mounted', async () => {
+test('homepage language menu mounts beside reader settings for the translation test-bed', async () => {
   const [header, menu, icon, gbFlag, frFlag, deFlag] = await Promise.all([
     fs.readFile(codexHeaderUrl, 'utf8'),
     fs.readFile(languageMenuUrl, 'utf8'),
@@ -80,11 +80,12 @@ test('accessible flag language menu is staged beside reader settings without bei
     fs.readFile(flagUrls.de, 'utf8'),
   ]);
   const settingsIndex = header.indexOf('<ReaderSettings />');
-  const dormantIndex = header.indexOf('CodexLanguageMenu');
+  const menuIndex = header.indexOf('<CodexLanguageMenu');
 
-  assert.ok(settingsIndex !== -1 && dormantIndex > settingsIndex);
+  assert.ok(settingsIndex !== -1 && menuIndex > settingsIndex);
   assert.doesNotMatch(header, /virtual:starlight\/components\/LanguageSelect/);
-  assert.doesNotMatch(header, /<CodexLanguageMenu/);
+  assert.match(header, /Astro\.url\.pathname === homepageHref\(route\)/);
+  assert.match(header, /homeLanguageMenu &&/);
   assert.match(menu, /<details[^>]+data-codex-language-menu/);
   assert.match(menu, /<summary class="codex-language-menu__trigger">/);
   assert.match(menu, /<nav class="codex-language-menu__panel" aria-label={panelLabel}>/);
