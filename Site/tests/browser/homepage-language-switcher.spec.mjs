@@ -43,6 +43,8 @@ test('Japanese homepage localizes the shared shell', async ({ page }) => {
   await expect(page.locator('[data-sidebar-row="Eras"] .large').first()).toHaveText('時代');
   await expect(page.locator('.footer-wayfinder__primary')).toHaveText('ここから始める');
   await expect(page.locator('.policy-link__title')).toHaveText('コンテンツと制作に関する声明');
+  await expect(page.locator('#recent-track .record__date').first()).toContainText(/公開|更新/);
+  await expect(page.locator('#recent-track .record__type').first()).not.toHaveText(/^(?:EVENT|Event)$/);
 
   await page.locator('[data-reader-settings-trigger]').click();
   await expect(page.locator('#reader-settings-title')).toHaveText('閲覧設定');
