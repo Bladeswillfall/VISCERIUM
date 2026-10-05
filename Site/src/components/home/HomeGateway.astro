@@ -1,6 +1,5 @@
 ---
-import CodexLanguageMenu from '../CodexLanguageMenu.astro';
-import { HOME_LANGUAGES, getHomeTranslation, homepageHref } from '../../lib/home-i18n.mjs';
+import { getHomeTranslation } from '../../lib/home-i18n.mjs';
 import RecentArticles from './RecentArticles.astro';
 
 interface Props {
@@ -9,15 +8,6 @@ interface Props {
 
 const { locale = 'en-GB' } = Astro.props;
 const copy = getHomeTranslation(locale);
-const languageOptions = HOME_LANGUAGES.map((language) => ({
-  locale: language.locale,
-  href: homepageHref(language.route),
-  nativeLabel: language.nativeLabel,
-  secondaryLabel: language.locale === 'en-GB' ? undefined : language.englishLabel,
-  secondaryLang: language.locale === 'en-GB' ? undefined : 'en-GB',
-  flag: language.flag,
-  current: language.locale === locale,
-}));
 ---
 
 <div class="home-gateway" id="home-gateway-top">
@@ -38,13 +28,6 @@ const languageOptions = HOME_LANGUAGES.map((language) => ({
           href="#home-era-gateway"
           data-rybbit-event="home_era_prompt_click"
         >{copy.hero.explore}</a>
-      </div>
-      <div class="home-language-switcher">
-        <CodexLanguageMenu
-          triggerLabel={copy.languageMenu.trigger}
-          panelLabel={copy.languageMenu.panel}
-          options={languageOptions}
-        />
       </div>
     </div>
 
@@ -190,10 +173,3 @@ const languageOptions = HOME_LANGUAGES.map((language) => ({
   <RecentArticles locale={locale} copy={copy.recent} />
 </div>
 
-<style is:inline>
-  .home-language-switcher {
-    display: flex;
-    justify-content: center;
-    margin-block-start: 1rem;
-  }
-</style>
