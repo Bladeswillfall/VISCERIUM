@@ -334,6 +334,91 @@ export const HOME_TRANSLATIONS = {
 };
 
 
+
+export const HOME_RECENT_METADATA_TRANSLATIONS = {
+  'en-GB': {
+    published: 'Published',
+    updated: 'Updated',
+    types: {
+      article: 'Article', calendar: 'Calendar', character: 'Character', event: 'Event',
+      faction: 'Faction', fauna: 'Fauna', flora: 'Flora', fungi: 'Fungi', image: 'Image',
+      item: 'Item', location: 'Location', map: 'Map', organisation: 'Organisation',
+      person: 'Person', species: 'Species', timeline: 'Timeline', nation: 'Nation',
+      profession: 'Profession', vehicle: 'Vehicle', weapon: 'Weapon', armour: 'Armour',
+    },
+  },
+  'fr-FR': {
+    published: 'Publié',
+    updated: 'Mis à jour',
+    types: {
+      article: 'Article', calendar: 'Calendrier', character: 'Personnage', event: 'Événement',
+      faction: 'Faction', fauna: 'Faune', flora: 'Flore', fungi: 'Champignons', image: 'Image',
+      item: 'Objet', location: 'Lieu', map: 'Carte', organisation: 'Organisation',
+      person: 'Personne', species: 'Espèce', timeline: 'Chronologie', nation: 'Nation',
+      profession: 'Profession', vehicle: 'Véhicule', weapon: 'Arme', armour: 'Armure',
+    },
+  },
+  'de-DE': {
+    published: 'Veröffentlicht',
+    updated: 'Aktualisiert',
+    types: {
+      article: 'Artikel', calendar: 'Kalender', character: 'Figur', event: 'Ereignis',
+      faction: 'Fraktion', fauna: 'Fauna', flora: 'Flora', fungi: 'Pilze', image: 'Bild',
+      item: 'Gegenstand', location: 'Ort', map: 'Karte', organisation: 'Organisation',
+      person: 'Person', species: 'Spezies', timeline: 'Zeitlinie', nation: 'Nation',
+      profession: 'Beruf', vehicle: 'Fahrzeug', weapon: 'Waffe', armour: 'Rüstung',
+    },
+  },
+  es: {
+    published: 'Publicado',
+    updated: 'Actualizado',
+    types: {
+      article: 'Artículo', calendar: 'Calendario', character: 'Personaje', event: 'Evento',
+      faction: 'Facción', fauna: 'Fauna', flora: 'Flora', fungi: 'Hongos', image: 'Imagen',
+      item: 'Objeto', location: 'Ubicación', map: 'Mapa', organisation: 'Organización',
+      person: 'Persona', species: 'Especie', timeline: 'Línea temporal', nation: 'Nación',
+      profession: 'Profesión', vehicle: 'Vehículo', weapon: 'Arma', armour: 'Armadura',
+    },
+  },
+  zh: {
+    published: '发布',
+    updated: '更新',
+    types: {
+      article: '文章', calendar: '日历', character: '角色', event: '事件',
+      faction: '阵营', fauna: '动物群', flora: '植物', fungi: '真菌', image: '图像',
+      item: '物品', location: '地点', map: '地图', organisation: '组织',
+      person: '人物', species: '物种', timeline: '时间线', nation: '国家',
+      profession: '职业', vehicle: '载具', weapon: '武器', armour: '护甲',
+    },
+  },
+  ru: {
+    published: 'Опубликовано',
+    updated: 'Обновлено',
+    types: {
+      article: 'Статья', calendar: 'Календарь', character: 'Персонаж', event: 'Событие',
+      faction: 'Фракция', fauna: 'Фауна', flora: 'Флора', fungi: 'Грибы', image: 'Изображение',
+      item: 'Предмет', location: 'Локация', map: 'Карта', organisation: 'Организация',
+      person: 'Персона', species: 'Вид', timeline: 'Временная линия', nation: 'Государство',
+      profession: 'Профессия', vehicle: 'Транспорт', weapon: 'Оружие', armour: 'Доспехи',
+    },
+  },
+  ja: {
+    published: '公開',
+    updated: '更新',
+    types: {
+      article: '記事', calendar: 'カレンダー', character: '登場人物', event: '出来事',
+      faction: '派閥', fauna: '動物相', flora: '植物', fungi: '菌類', image: '画像',
+      item: 'アイテム', location: '場所', map: '地図', organisation: '組織',
+      person: '人物', species: '種', timeline: '時間軸', nation: '国家',
+      profession: '職業', vehicle: '乗り物', weapon: '武器', armour: '防具',
+    },
+  },
+};
+
+export function getHomeRecentMetadataTranslation(locale = 'en-GB') {
+  return HOME_RECENT_METADATA_TRANSLATIONS[locale] ?? HOME_RECENT_METADATA_TRANSLATIONS['en-GB'];
+}
+
 export const HOME_SHELL_TRANSLATIONS = {
   'en-GB': {
     search: 'Search',
