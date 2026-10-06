@@ -209,13 +209,15 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
   </nav>
 )}
 {showStubNotice && (
-  <aside class="codex-stub-notice" aria-labelledby="codex-stub-notice-title">
-    <p id="codex-stub-notice-title" class="codex-stub-notice-title">
-      {t('viscerium.article.stubTitle')}
-    </p>
-    <p>{t('viscerium.article.stubBody')}</p>
-    <CodexEditLink label={t('viscerium.article.stubLink')} />
-  </aside>
+  <div class="codex-stub-notice-wrap">
+    <aside class="codex-stub-notice" aria-labelledby="codex-stub-notice-title">
+      <p id="codex-stub-notice-title" class="codex-stub-notice-title">
+        {t('viscerium.article.stubTitle')}
+      </p>
+      <p>{t('viscerium.article.stubBody')}</p>
+      <CodexEditLink label={t('viscerium.article.stubLink')} />
+    </aside>
+  </div>
 )}
 {!isExplorationPage && isImageAttributionPage && <ImageAttributionTable />}
 {!isExplorationPage && <ContinuitySwitcher />}
@@ -225,8 +227,12 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
 
 <style>
   @layer starlight.core {
+    .codex-stub-notice-wrap {
+      padding-block-end: .5rem;
+    }
+
     .codex-stub-notice {
-      margin-block: 1rem 1.75rem;
+      margin-block: 1rem 0;
       padding: .9rem 1rem;
       border: 1px solid var(--sl-color-hairline-light);
       border-radius: .55rem;
