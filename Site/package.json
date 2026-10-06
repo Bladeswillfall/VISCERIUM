@@ -45,7 +45,8 @@
     "postbuild": "npm run validate:icons && node --test tests/i18n-output.postbuild.mjs && npm run security:artifacts && npm run performance:check",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run baseline:check && npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build"
+    "test": "npm run baseline:check && npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build",
+    "check:astro": "astro check"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.2",
@@ -60,6 +61,7 @@
     "leaflet.control.layers.tree": "1.2.0",
     "moment": "2.31.0",
     "starlight-changelogs": "^0.7.0",
+    "starlight-links-validator": "^0.26.0",
     "starlight-scroll-to-top": "^2.0.0",
     "starlight-tags": "^2.0.0",
     "starlight-telescope": "^2.0.0",
@@ -96,8 +98,10 @@
     "fsevents@2.3.3": true
   },
   "devDependencies": {
+    "@astrojs/check": "0.9.10",
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
-    "eslint": "10.11.0"
+    "eslint": "10.11.0",
+    "typescript": "6.0.3"
   }
 }

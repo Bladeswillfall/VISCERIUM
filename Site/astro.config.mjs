@@ -5,6 +5,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
+import starlightLinksValidator from 'starlight-links-validator';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import starlightTags from 'starlight-tags';
 import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
@@ -245,6 +246,7 @@ export default defineConfig({
       },
       editLink: githubEditLink,
       plugins: [
+        starlightLinksValidator(),
         starlightTags({ onInlineTagsNotFound: 'create' }),
         starlightChangelogs(),
         starlightScrollToTop(),
