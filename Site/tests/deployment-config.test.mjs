@@ -91,7 +91,10 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /workflow_dispatch:/);
   assert.doesNotMatch(workflow, /push:\n\s+branches:\s+\[main\]/);
   assert.match(workflow, /name: Restore Astro incremental build cache/);
-  assert.match(workflow, /path: Site\/node_modules\/\.astro/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/incremental-build\.json/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/dist/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/viscerium\/map-tiles/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/viscerium\/image-variants/);
   assert.match(workflow, /astro-incremental-v1-/);
   assert.match(workflow, /steps\.astro_cache\.outputs\.cache-hit/);
 });
