@@ -15,7 +15,7 @@ export function getStaticPaths() {
     const timeline = datasets[`../../data/timelines/${id}.json`];
     return {
       params: { id },
-      cacheKey: createHash('sha256').update(JSON.stringify(timeline)).digest('hex'),
+      cacheKey: createHash('sha256').update(JSON.stringify(timeline ?? null)).digest('hex'),
     };
   });
 }
