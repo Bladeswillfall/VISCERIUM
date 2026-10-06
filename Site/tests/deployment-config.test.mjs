@@ -84,14 +84,14 @@ test('incremental Astro builds persist route output between CI runs', () => {
     read('../src/pages/eras/[era]/relationships/index.astro'),
   ];
 
-  assert.match(config, /cacheDir:\s*['"]\.\/\.cache\/astro['"]/);
   assert.match(config, /incrementalBuild:\s*true/);
+  assert.doesNotMatch(config, /cacheDir:/);
   for (const route of dynamicRoutes) assert.match(route, /cacheKey:/);
 
   assert.match(workflow, /workflow_dispatch:/);
   assert.doesNotMatch(workflow, /push:\n\s+branches:\s+\[main\]/);
   assert.match(workflow, /name: Restore Astro incremental build cache/);
-  assert.match(workflow, /path: Site\/\.cache\/astro/);
+  assert.match(workflow, /path: Site\/node_modules\/\.astro/);
   assert.match(workflow, /astro-incremental-v1-/);
   assert.match(workflow, /steps\.astro_cache\.outputs\.cache-hit/);
 });
