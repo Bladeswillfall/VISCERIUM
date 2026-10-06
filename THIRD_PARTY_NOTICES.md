@@ -75,6 +75,7 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, and sitemap integrations | MIT |
 | [Starlight](https://github.com/withastro/starlight) | Documentation-site shell and content framework | MIT |
 | `starlight-changelogs` | Changelog presentation | MIT |
+| `starlight-links-validator` | Build-time validation of internal Starlight links | MIT |
 | `starlight-scroll-to-top` | Scroll-to-top interface | MIT |
 | `starlight-tags` | Tag pages and tag navigation | MIT |
 | `starlight-telescope` | Public search integration | MIT |
@@ -89,6 +90,8 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [gray-matter](https://github.com/jonschlinkert/gray-matter) | Markdown frontmatter parsing | MIT |
 | [Playwright](https://github.com/microsoft/playwright) (`@playwright/test`) | Browser and interface testing | Apache-2.0 |
 | [axe-core Playwright](https://github.com/dequelabs/axe-core-npm) (`@axe-core/playwright`) | Automated accessibility testing of the public Codex | MPL-2.0 |
+| [Astro Check](https://github.com/withastro/astro/tree/main/packages/language-tools/astro-check) (`@astrojs/check`) | Astro and TypeScript diagnostics during site validation | MIT |
+| [TypeScript](https://github.com/microsoft/TypeScript) (`typescript`) | TypeScript compiler API used by Astro Check | Apache-2.0 |
 | [ESLint](https://github.com/eslint/eslint) (`eslint`) | Cyclomatic-complexity checks for repository JavaScript | MIT |
 | [esbuild](https://github.com/evanw/esbuild) | First-party Obsidian plugin bundling | MIT |
 | [Obsidian API](https://github.com/obsidianmd/obsidian-api) | Type definitions and API surface for first-party plugins | MIT |
