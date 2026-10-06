@@ -207,7 +207,6 @@ const sidebar = [
 
 export default defineConfig({
   site: siteConfig.site,
-  cacheDir: './.cache/astro',
   experimental: {
     incrementalBuild: true,
   },
