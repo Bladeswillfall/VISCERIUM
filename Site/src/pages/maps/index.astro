@@ -4,8 +4,12 @@ import maps from '../../data/maps.json';
 import imageVariants from '../../data/image-variants.json';
 import '../../styles/maps.css';
 
+type ImagePreview = { url: string; width: number };
+type ImageVariant = { webp?: ImagePreview[] };
+const variantsByImage = imageVariants.images as Record<string, ImageVariant>;
+
 const entries = Object.values(maps).map((map) => {
-  const previews = imageVariants.images?.[map.image]?.webp ?? [];
+  const previews = variantsByImage[map.image]?.webp ?? [];
   return {
     ...map,
     previewSrc: previews[0]?.url ?? map.image,
