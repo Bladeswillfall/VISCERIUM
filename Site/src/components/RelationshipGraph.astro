@@ -319,11 +319,11 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
 
     const elements = [
       ...(graph.nodes || []).map((node) => ({
-        group: 'nodes',
+        group: 'nodes' as const,
         data: { ...node, label: node.title },
       })),
       ...(graph.edges || []).map((edge) => ({
-        group: 'edges',
+        group: 'edges' as const,
         classes: edge.directed ? 'directed' : '',
         data: { ...edge, directed: edge.directed ? 1 : 0 },
       })),
