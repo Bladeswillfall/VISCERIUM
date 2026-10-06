@@ -116,7 +116,7 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /steps\.astro_cache\.outputs\.cache-hit/);
 
   const build = workflow.split(/^  build:\n/m)[1]?.split(/^  obsidian_plugin:\n/m)[0];
-  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
+  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  seed_build_cache:\n/m)[0];
   assert.ok(build && contact, 'build and contact jobs must exist');
   assert.match(build, /name: Restore Astro incremental build cache/);
   assert.doesNotMatch(contact, /name: Restore Astro incremental build cache/);
@@ -160,7 +160,7 @@ test('browser CI containers match locked Playwright and isolate contact tests', 
 
   const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  graph_engines:\n/m)[0];
   const graph = workflow.split(/^  graph_engines:\n/m)[1]?.split(/^  contact:\n/m)[0];
-  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
+  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  seed_build_cache:\n/m)[0];
   const verify = workflow.split(/^  verify:\n/m)[1];
   assert.ok(browser && graph && contact && verify, 'browser, graph, contact and verify jobs must exist');
   assert.match(browser, /name: Run browser checks/);
