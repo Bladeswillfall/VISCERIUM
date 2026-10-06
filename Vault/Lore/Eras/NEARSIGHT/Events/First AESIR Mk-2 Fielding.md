@@ -3,6 +3,7 @@ title: "First AESIR Mk-2 Fielding"
 description: "The AESIR Mk-2 exoskeleton entered operational service during a live border interception."
 status: published
 type: event
+stub: true
 era: NEARSIGHT
 calendarDate:
   calendar: okse

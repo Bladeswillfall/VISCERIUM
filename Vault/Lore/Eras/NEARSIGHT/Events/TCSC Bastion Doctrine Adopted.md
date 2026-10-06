@@ -7,6 +7,7 @@ imageTitle: TCSC flag
 alt: White rose motif with yellow detailing on a crimson field.
 status: published
 type: event
+stub: true
 era: NEARSIGHT
 calendarDate:
   calendar: okse

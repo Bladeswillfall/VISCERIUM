@@ -3,6 +3,7 @@ title: "The Nine-Stack Strike"
 description: "Workers across nine adjoining furnace stacks stopped production at the midday siren."
 status: published
 type: event
+stub: true
 era: SMOG
 calendarDate:
   calendar: okse
