@@ -37,14 +37,17 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
 | Codex (`Site/`) | `moment` | runtime | `2.31.0` |
 | Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
+| Codex (`Site/`) | `starlight-links-validator` | runtime | `^0.26.0` |
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `vis-data` | runtime | `8.0.4` |
 | Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
+| Codex (`Site/`) | `@astrojs/check` | development | `0.9.10` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
 | Codex (`Site/`) | `eslint` | development | `10.11.0` |
+| Codex (`Site/`) | `typescript` | development | `6.0.3` |
 | Obsidian timelines plugin | `moment` | runtime | `2.31.0` |
 | Obsidian timelines plugin | `vis-data` | runtime | `8.0.4` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.4` |
