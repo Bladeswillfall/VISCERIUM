@@ -54,24 +54,36 @@ const mainArticles = mainSidebar.filter((entry: any) => entry.type === 'link');
 </div>
 
 <script>
-  const sidebarEras = ['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY'];
-  const sidebarEraRuntime = window.__visceriumSidebarEraBranches ??= {};
+  type SidebarEra = 'CITADEL' | 'SMOG' | 'NEARSIGHT' | 'ENTROPY';
+  type SidebarEraRuntime = {
+    sync: (value: unknown) => void;
+    bound?: boolean;
+  };
 
-  const normaliseSidebarEra = (value) => sidebarEras.find(
+  declare global {
+    interface Window {
+      __visceriumSidebarEraBranches?: SidebarEraRuntime;
+    }
+  }
+
+  const sidebarEras: SidebarEra[] = ['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY'];
+  const sidebarEraRuntime = window.__visceriumSidebarEraBranches ??= { sync: () => {} };
+
+  const normaliseSidebarEra = (value: unknown): SidebarEra | null => sidebarEras.find(
     (era) => era.toLowerCase() === String(value ?? '').trim().toLowerCase(),
   ) ?? null;
 
-  const openActiveBranch = (branch) => {
+  const openActiveBranch = (branch: HTMLElement) => {
     const branchDetails = [...branch.children].find((child) => child instanceof HTMLDetailsElement);
     const erasDetails = branch.parentElement?.closest('details');
     if (branchDetails instanceof HTMLDetailsElement) branchDetails.open = true;
     if (erasDetails instanceof HTMLDetailsElement) erasDetails.open = true;
   };
 
-  sidebarEraRuntime.sync = (value) => {
+  sidebarEraRuntime.sync = (value: unknown) => {
     const active = normaliseSidebarEra(value);
 
-    document.querySelectorAll('[data-era-sidebar-branch]').forEach((node) => {
+    document.querySelectorAll<HTMLElement>('[data-era-sidebar-branch]').forEach((node) => {
       const branchEra = normaliseSidebarEra(node.getAttribute('data-era-sidebar-branch'));
       node.hidden = Boolean(active && branchEra !== active);
       if (active && branchEra === active) openActiveBranch(node);

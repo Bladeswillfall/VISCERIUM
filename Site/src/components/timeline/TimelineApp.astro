@@ -7,6 +7,17 @@ import '../../styles/timeline-controls.css';
 import { formatAbsoluteDay } from '../../lib/calendar/runtime.mjs';
 import defaultTranslations from '../../content/i18n/en-GB.json';
 import { DEFAULT_LOCALE } from '../../../site.config.mjs';
+import type { TimelineDataset } from '../../lib/timeline/component-types';
+
+type Props = {
+  dataset: TimelineDataset;
+  defaultCalendar?: string;
+  laneMode?: 'unified' | 'lane' | 'category';
+  showFilters?: boolean;
+  showMinimap?: boolean;
+  showLegend?: boolean;
+  compact?: boolean;
+};
 
 const {
   dataset,
@@ -16,7 +27,7 @@ const {
   showMinimap = true,
   showLegend = true,
   compact = false,
-} = Astro.props;
+} = Astro.props as Props;
 
 const { t } = Astro.locals;
 const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
@@ -24,7 +35,10 @@ const messagePrefix = 'viscerium.timeline.';
 const messages = Object.fromEntries(
   Object.keys(defaultTranslations)
     .filter((key) => key.startsWith(messagePrefix))
-    .map((key) => [key.slice(messagePrefix.length), t(key)]),
+    .map((key) => [
+      key.slice(messagePrefix.length),
+      t(key as keyof StarlightApp.I18n),
+    ]),
 );
 const options = {
   defaultCalendar,
@@ -105,7 +119,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
     cleanups: Array<() => void>;
   };
 
-  const timelineInstances = new WeakMap<Element, TimelineState>();
+  const timelineInstances = new WeakMap<HTMLElement, TimelineState>();
 
   function runCleanups(state: TimelineState) {
     for (const cleanup of state.cleanups.splice(0).reverse()) {
@@ -117,9 +131,9 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
     }
   }
 
-  async function mountTimelineShell(shell: Element) {
+  async function mountTimelineShell(shell: HTMLElement) {
     shell.setAttribute('data-vc-timeline-bound', 'true');
-    const state = { cancelled: false, cleanups: [] };
+    const state: TimelineState = { cancelled: false, cleanups: [] };
     timelineInstances.set(shell, state);
 
     const mount = shell.querySelector('[data-vc-timeline-mount]');
@@ -160,7 +174,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
   }
 
   function mountTimelines() {
-    for (const shell of document.querySelectorAll('[data-vc-timeline-island]:not([data-vc-timeline-bound])')) {
+    for (const shell of document.querySelectorAll<HTMLElement>('[data-vc-timeline-island]:not([data-vc-timeline-bound])')) {
       void mountTimelineShell(shell);
     }
   }
@@ -168,7 +182,7 @@ const serializedOptions = JSON.stringify(options).replace(/</g, '\\u003c');
   mountTimelines();
   document.addEventListener('astro:page-load', mountTimelines);
   document.addEventListener('astro:before-swap', () => {
-    for (const shell of document.querySelectorAll('[data-vc-timeline-island]')) {
+    for (const shell of document.querySelectorAll<HTMLElement>('[data-vc-timeline-island]')) {
       const state = timelineInstances.get(shell);
       if (!state) continue;
       state.cancelled = true;

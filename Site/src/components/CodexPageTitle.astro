@@ -22,7 +22,7 @@ const isImageAttributionPage = entry.type === 'image'
   && entry.tags.some(tag => String(tag).trim().toLowerCase() === 'attribution');
 const showStubNotice = entry.status === 'published' && entry.stub === true && pageKind.isStandardArticle;
 
-const breadcrumbGroupIcons = {
+const breadcrumbGroupIcons: Record<string, string> = {
   calendar: 'event',
   characters: 'character',
   citadel: 'faction',
@@ -38,18 +38,18 @@ const breadcrumbGroupIcons = {
   smog: 'status',
 };
 
-function imageTextAlternative(base, text) {
+function imageTextAlternative(base: string, text?: string | null) {
   return [base, text ? `Text shown in image: ${text}` : undefined].filter(Boolean).join(' — ');
 }
 
-function normaliseSlug(value) {
+function normaliseSlug(value: unknown) {
   return String(value ?? '')
     .replace(/\.(md|mdx)$/i, '')
     .replace(/^\/+|\/+$/g, '')
     .replace(/\/index$/i, '');
 }
 
-function breadcrumbIconForSegment(segment) {
+function breadcrumbIconForSegment(segment: string) {
   return breadcrumbGroupIcons[String(segment ?? '').trim().toLowerCase()];
 }
 

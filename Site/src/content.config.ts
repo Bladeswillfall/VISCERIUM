@@ -72,7 +72,7 @@ const relationshipObjectSchema = z.object({
 );
 const relationshipEntrySchema = z.union([z.string(), relationshipObjectSchema]);
 const relationshipValueSchema = z.union([relationshipEntrySchema, z.array(relationshipEntrySchema)]);
-const relationshipsSchema = z.record(relationshipValueSchema);
+const relationshipsSchema = z.record(z.string(), relationshipValueSchema);
 const mapSchema = z.object({
   id: optionalString,
   x: optionalStringOrNumber,
@@ -188,7 +188,7 @@ const calendarEventLinkSchema = z.union([
     label: z.string().optional(),
   }),
 ]);
-const calendarEventLinksSchema = z.record(calendarEventLinkSchema);
+const calendarEventLinksSchema = z.record(z.string(), calendarEventLinkSchema);
 const calendarShowcaseSchema = z.object({
   calendar: z.string(),
   year: z.number().int().optional(),
@@ -240,9 +240,9 @@ export const collections = {
         calendarDate: calendarDateSchema.optional(),
         calendarEndDate: calendarDateSchema.nullable().optional(),
         calendarShowcase: calendarShowcaseSchema.optional(),
-        calendarBlocks: z.record(calendarShowcaseSchema).optional(),
+        calendarBlocks: z.record(z.string(), calendarShowcaseSchema).optional(),
         timeline: timelineSchema.optional(),
-        timelineBlocks: z.record(timelineBlockSchema).optional(),
+        timelineBlocks: z.record(z.string(), timelineBlockSchema).optional(),
         timelinePage: z.boolean().optional(),
         explorationPage: z.boolean().optional(),
         searchable: z.boolean().optional(),

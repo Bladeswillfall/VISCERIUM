@@ -5,8 +5,19 @@ import { getRecentArticles } from '../../lib/recent-articles.mjs';
 const formatter = new Intl.DateTimeFormat(Astro.currentLocale ?? 'en-GB', {
   day: 'numeric', month: 'long', year: 'numeric',
 });
-const marks = { CITADEL: 'I', SMOG: 'II', NEARSIGHT: 'III', ENTROPY: 'IV', Universal: '✦' };
-const articles = getRecentArticles(await getCollection('docs')).map((article, index) => ({
+type RecentArticle = {
+  title: string;
+  description?: string;
+  href: string;
+  type: string;
+  date: Date;
+  kind: string;
+  era: 'CITADEL' | 'SMOG' | 'NEARSIGHT' | 'ENTROPY' | 'Universal';
+  headerImage: string | null;
+};
+
+const marks = { CITADEL: 'I', SMOG: 'II', NEARSIGHT: 'III', ENTROPY: 'IV', Universal: '✦' } as const;
+const articles = (getRecentArticles(await getCollection('docs')) as RecentArticle[]).map((article, index) => ({
   ...article,
   ordinal: String(index + 1).padStart(2, '0'),
   eraMark: marks[article.era],
@@ -71,18 +82,25 @@ const articles = getRecentArticles(await getCollection('docs')).map((article, in
 
     (() => {
       const section = document.getElementById('recent-articles');
-      if (!section) return;
       const track = document.getElementById('recent-track');
       const toggle = document.getElementById('recent-toggle');
       const toggleText = document.getElementById('recent-toggle-text');
       const previous = document.getElementById('recent-prev');
       const next = document.getElementById('recent-next');
+      if (
+        !(section instanceof HTMLElement)
+        || !(track instanceof HTMLOListElement)
+        || !(toggle instanceof HTMLButtonElement)
+        || !(toggleText instanceof HTMLElement)
+        || !(previous instanceof HTMLButtonElement)
+        || !(next instanceof HTMLButtonElement)
+      ) return;
       const mobile = window.matchMedia('(max-width: 720px)');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const slides = [...track.children];
+      const slides = [...track.children].filter((slide): slide is HTMLElement => slide instanceof HTMLElement);
       let scrollFrame = 0;
       let settleFrame = 0;
-      let drag = null;
+      let drag: { id: number; x: number; left: number; moved: boolean } | null = null;
       let suppressClick = false;
       const isRail = () => section.dataset.view === 'rail' && !mobile.matches;
       const stepSize = () => slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : slides[0]?.offsetWidth || 0;
@@ -103,7 +121,7 @@ const articles = getRecentArticles(await getCollection('docs')).map((article, in
         settleFrame = 0;
         track.classList.remove('is-settling');
       };
-      const scrollOne = direction => {
+      const scrollOne = (direction: number) => {
         if (!isRail()) return;
         cancelSettle();
         const step = stepSize();
@@ -131,8 +149,8 @@ const articles = getRecentArticles(await getCollection('docs')).map((article, in
           return;
         }
         const duration = 380;
-        let started;
-        const animate = now => {
+        let started: number | undefined;
+        const animate = (now: number) => {
           if (started === undefined) started = now;
           const progress = Math.min((now - started) / duration, 1);
           const eased = 1 - Math.pow(1 - progress, 3);
@@ -195,7 +213,7 @@ const articles = getRecentArticles(await getCollection('docs')).map((article, in
         if (event.key === 'ArrowRight') { event.preventDefault(); scrollOne(1); }
         if (event.key === 'ArrowLeft') { event.preventDefault(); scrollOne(-1); }
       });
-      if ('ResizeObserver' in window) new ResizeObserver(updateControls).observe(track);
+      if (typeof ResizeObserver === 'function') new ResizeObserver(updateControls).observe(track);
       else window.addEventListener('resize', updateControls);
       if (mobile.addEventListener) mobile.addEventListener('change', () => { stopDrag(); cancelSettle(); updateControls(); });
       else mobile.addListener(() => { stopDrag(); cancelSettle(); updateControls(); });

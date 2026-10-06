@@ -9,13 +9,23 @@ const publishedEntries = await getCollection('docs', ({ data }) => (
 ));
 
 const entriesBySlug = new Map(
-  publishedEntries
-    .filter(({ data }) => typeof data.slug === 'string')
-    .map((entry) => [entry.data.slug.replace(/^\/+|\/+$/g, ''), entry]),
+  publishedEntries.flatMap((entry) => {
+    const slug = typeof entry.data.slug === 'string'
+      ? entry.data.slug.replace(/^\/+|\/+$/g, '')
+      : '';
+    return slug ? [[slug, entry] as const] : [];
+  }),
 );
 
+type DegelPlacement = (typeof degelSystemMap.objects)[number];
+type DegelObject = DegelPlacement & {
+  title: string;
+  description: string;
+  href: string;
+};
+
 const objects = degelSystemMap.objects
-  .map((placement) => {
+  .map((placement): DegelObject | null => {
     const entry = entriesBySlug.get(placement.slug);
     if (!entry) return null;
     return {
@@ -25,9 +35,9 @@ const objects = degelSystemMap.objects
       href: `/${placement.slug}/`,
     };
   })
-  .filter(Boolean);
+  .filter((object): object is DegelObject => object !== null);
 
-function placementStyle(object) {
+function placementStyle(object: DegelObject) {
   return [
     `--object-x:${object.x}`,
     `--object-y:${object.y}`,
@@ -38,7 +48,7 @@ function placementStyle(object) {
   ].join(';');
 }
 
-function objectId(slug) {
+function objectId(slug: string) {
   return `degel-object-${slug.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`;
 }
 ---

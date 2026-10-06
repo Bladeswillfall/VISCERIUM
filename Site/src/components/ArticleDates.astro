@@ -10,14 +10,14 @@ const sameDay = published && updated
   ? published.toISOString().slice(0, 10) === updated.toISOString().slice(0, 10)
   : false;
 const showUpdated = Boolean(updated && (!published || !sameDay));
-const dateOptions = {
+const dateOptions: Intl.DateTimeFormatOptions = {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
   timeZone: 'UTC',
 };
 
-function dateTimeValue(date) {
+function dateTimeValue(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 ---

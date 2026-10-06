@@ -46,6 +46,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `@astrojs/check` | development | `0.9.10` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
+| Codex (`Site/`) | `@types/leaflet` | development | `1.9.22` |
 | Codex (`Site/`) | `eslint` | development | `10.11.0` |
 | Codex (`Site/`) | `typescript` | development | `6.0.3` |
 | Obsidian timelines plugin | `moment` | runtime | `2.31.0` |
@@ -82,6 +83,7 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) (`cytoscape`) | Relationship and graph visualisation | MIT |
 | [cytoscape-dagre](https://github.com/cytoscape/cytoscape.js-dagre) | Directed graph layout | MIT |
 | [Leaflet](https://github.com/Leaflet/Leaflet) (`leaflet`) | Public interactive maps | BSD-2-Clause |
+| [Leaflet type definitions](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/leaflet) (`@types/leaflet`) | TypeScript declarations for Leaflet used by Astro Check | MIT |
 | [Leaflet.Control.Layers.Tree](https://github.com/jjimenezshaw/Leaflet.Control.Layers.Tree) (`leaflet.control.layers.tree`) | Hierarchical map-layer controls | BSD-3-Clause |
 | [vis-timeline](https://github.com/visjs/vis-timeline) | Interactive timeline rendering | Apache-2.0 OR MIT |
 | [vis-data](https://github.com/visjs/vis-data) | Shared timeline data sets for the Codex and Obsidian plugin | Apache-2.0 OR MIT |

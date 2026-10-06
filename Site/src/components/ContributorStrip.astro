@@ -45,7 +45,7 @@ for (const item of requested) {
     roles: [],
     avatarSrc: avatarPaths[id] ?? avatarPaths.fallback,
   };
-  const roles = Array.isArray(reference.roles)
+  const roles = 'roles' in reference && Array.isArray(reference.roles)
     ? reference.roles
     : [reference.role ?? t('viscerium.contributors.defaultRole')];
   contributor.roles = normalizeRoles([...contributor.roles, ...roles]);

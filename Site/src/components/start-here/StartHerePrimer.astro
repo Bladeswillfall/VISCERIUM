@@ -274,8 +274,11 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
   if (root instanceof HTMLElement && root.dataset.initialised !== 'true') {
     root.dataset.initialised = 'true';
 
-    const selections = { world: null, era: null, thread: null };
-    const destinations = {
+    type BreadcrumbGroup = 'world' | 'era' | 'thread';
+    type Destination = { title: string; href: string; copy: string };
+
+    const selections: Record<BreadcrumbGroup, string | null> = { world: null, era: null, thread: null };
+    const destinations: Record<BreadcrumbGroup, Record<string, Destination>> = {
       era: {
         citadel: { title: 'CITADEL', href: '/eras/citadel/', copy: 'Begin while the impossible is still carried through folklore, ritual, steel and local memory.' },
         smog: { title: 'SMOG', href: '/eras/smog/', copy: 'Begin where inherited terrors are measured, institutionalised and fed into industrial war.' },
@@ -297,9 +300,9 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
 
     const routeResult = root.querySelector('[data-route-result]');
 
-    function uniqueDestinations(items) {
-      const seen = new Set();
-      return items.filter((item) => {
+    function uniqueDestinations(items: Array<Destination | null>): Destination[] {
+      const seen = new Set<string>();
+      return items.filter((item): item is Destination => {
         if (!item || seen.has(item.href)) return false;
         seen.add(item.href);
         return true;
@@ -309,9 +312,9 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
     function renderRoute() {
       if (!(routeResult instanceof HTMLElement)) return;
       const picks = uniqueDestinations([
-        selections.era ? destinations.era[selections.era] : null,
-        selections.thread ? destinations.thread[selections.thread] : null,
-        selections.world ? destinations.world[selections.world] : null,
+        selections.era ? destinations.era[selections.era] ?? null : null,
+        selections.thread ? destinations.thread[selections.thread] ?? null : null,
+        selections.world ? destinations.world[selections.world] ?? null : null,
       ]);
 
       if (picks.length === 0) {
@@ -331,16 +334,17 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
 
     root.querySelectorAll('[data-breadcrumb-group]').forEach((groupElement) => {
       if (!(groupElement instanceof HTMLElement)) return;
-      const group = groupElement.dataset.breadcrumbGroup;
-      if (!group || !(group in selections)) return;
+      const rawGroup = groupElement.dataset.breadcrumbGroup;
+      if (!rawGroup || !(rawGroup in selections)) return;
+      const group = rawGroup as BreadcrumbGroup;
 
-      groupElement.querySelectorAll('.start-choice').forEach((button) => {
+      groupElement.querySelectorAll<HTMLButtonElement>('.start-choice').forEach((button) => {
         button.addEventListener('click', () => {
           if (!(button instanceof HTMLButtonElement)) return;
           const value = button.dataset.value;
           if (!value) return;
 
-          groupElement.querySelectorAll('.start-choice').forEach((other) => {
+          groupElement.querySelectorAll<HTMLButtonElement>('.start-choice').forEach((other) => {
             const selected = other === button;
             other.classList.toggle('is-selected', selected);
             other.setAttribute('aria-pressed', selected ? 'true' : 'false');
