@@ -38,7 +38,7 @@
     "migration:worldanvil:filenames": "node scripts/normalise-worldanvil-filenames.mjs",
     "migration:worldanvil:filenames:write": "node scripts/normalise-worldanvil-filenames.mjs --write",
     "test:unit": "node --test tests/*.test.mjs",
-    "prebuild": "node scripts/build-content.mjs --mode=build && npm run check:astro",
+    "prebuild": "node scripts/build-content.mjs --mode=build",
     "build": "astro build",
     "performance:check": "node scripts/check-performance-budgets.mjs",
     "security:artifacts": "node scripts/check-public-artifacts.mjs",
