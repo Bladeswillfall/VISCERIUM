@@ -5,9 +5,8 @@ import RelationshipGraph from '../../../../components/RelationshipGraph.astro';
 import graph from '../../../../data/relationships.json';
 import { HISTORICAL_ERAS } from '../../../../lib/era-context.mjs';
 
-const graphCacheKey = createHash('sha256').update(JSON.stringify(graph)).digest('hex');
-
 export function getStaticPaths() {
+  const graphCacheKey = createHash('sha256').update(JSON.stringify(graph)).digest('hex');
   return HISTORICAL_ERAS.map((era) => ({
     params: { era: era.toLowerCase() },
     props: { era },
