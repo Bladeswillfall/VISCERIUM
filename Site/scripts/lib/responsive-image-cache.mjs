@@ -58,7 +58,7 @@ export async function materializeCachedResponsiveVariants({
     .update(JSON.stringify(sharp.versions))
     .digest('hex');
   const assetId = createHash('sha256').update(`${category}/${filename}`).digest('hex').slice(0, 16);
-  const root = path.join(siteRoot, '.cache', 'image-variants');
+  const root = path.join(siteRoot, 'node_modules', '.astro', 'viscerium', 'image-variants');
   const cacheDir = path.join(root, `${assetId}-${fingerprint}`);
   await fs.mkdir(root, { recursive: true });
   let sizes = await cachedSizes(cacheDir, names);

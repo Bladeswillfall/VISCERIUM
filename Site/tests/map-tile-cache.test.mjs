@@ -76,7 +76,7 @@ test('Atlas generation removes superseded cache entries and unpublished maps', a
   const writeImage = (colour) => sharp({
     create: { width: 600, height: 400, channels: 3, background: colour },
   }).webp({ lossless: true }).toFile(source);
-  const cacheRoot = path.join(siteRoot, '.cache', 'map-tiles');
+  const cacheRoot = path.join(siteRoot, 'node_modules', '.astro', 'viscerium', 'map-tiles');
   const build = (maps) => generateMapTilePyramids({ siteRoot, maps });
 
   await writeImage('#a1b2c3');

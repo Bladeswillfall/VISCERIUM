@@ -109,7 +109,7 @@ export async function generateMapTilePyramids({ maps = {}, siteRoot = defaultSit
   };
 
   let generated = 0;
-  const cacheRoot = path.join(siteRoot, '.cache', 'map-tiles');
+  const cacheRoot = path.join(siteRoot, 'node_modules', '.astro', 'viscerium', 'map-tiles');
   const usedCacheDirs = new Set();
   await Promise.all([
     fs.mkdir(outputRoot, { recursive: true }),
