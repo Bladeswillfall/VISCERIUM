@@ -253,6 +253,7 @@ export const collections = {
         contributors: z.array(contributorReferenceSchema).optional(),
         defaultContributors: z.boolean().optional(),
         giscus: z.boolean().optional(),
+        stub: z.boolean().optional(),
         era: eraOrEras.optional(),
         eras: z.array(eraValue).optional(),
         faction: stringOrStrings.optional(),
