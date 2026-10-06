@@ -206,7 +206,7 @@ jobs:
       - name: Restore Atlas tile cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: Site/.cache/map-tiles
+          path: Site/node_modules/.astro/viscerium/map-tiles
           key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Vault/maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
           restore-keys: |
             atlas-tiles-v1-${{ runner.os }}-
@@ -215,7 +215,7 @@ jobs:
         id: responsive_cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: Site/.cache/image-variants
+          path: Site/node_modules/.astro/viscerium/image-variants
           key: responsive-variants-v1-${{ runner.os }}-${{ hashFiles('Site/scripts/generate-image-variants.mjs', 'Site/scripts/lib/responsive-image-cache.mjs', 'Site/scripts/sync-public-notes.mjs', 'Site/package-lock.json', 'Vault/Assets/**/*.webp', 'Vault/Lore/**/*.md', 'Vault/Lore/**/*.mdx') }}
           restore-keys: |
             responsive-variants-v1-${{ runner.os }}-
@@ -224,7 +224,9 @@ jobs:
         id: astro_cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: Site/node_modules/.astro
+          path: |
+            Site/node_modules/.astro/incremental-build.json
+            Site/node_modules/.astro/dist
           key: astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-${{ github.sha }}
           restore-keys: |
             astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-
@@ -236,7 +238,7 @@ jobs:
           {
             echo "### Production build"
             echo "Build time: $((SECONDS - start)) seconds"
-            echo "Local responsive cache size: $(du -sh .cache/image-variants 2>/dev/null | cut -f1 || true)"
+            echo "Local responsive cache size: $(du -sh node_modules/.astro/viscerium/image-variants 2>/dev/null | cut -f1 || true)"
             echo "Exact responsive cache-key hit: ${{ steps.responsive_cache.outputs.cache-hit }}"
             echo "Exact Astro page-cache hit: ${{ steps.astro_cache.outputs.cache-hit }}"
           } >> "$GITHUB_STEP_SUMMARY"
@@ -547,7 +549,7 @@ jobs:
       - name: Restore Atlas tile cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: Site/.cache/map-tiles
+          path: Site/node_modules/.astro/viscerium/map-tiles
           key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Vault/maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
           restore-keys: |
             atlas-tiles-v1-${{ runner.os }}-
@@ -556,7 +558,7 @@ jobs:
         id: responsive_cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: Site/.cache/image-variants
+          path: Site/node_modules/.astro/viscerium/image-variants
           key: responsive-variants-v1-${{ runner.os }}-${{ hashFiles('Site/scripts/generate-image-variants.mjs', 'Site/scripts/lib/responsive-image-cache.mjs', 'Site/scripts/sync-public-notes.mjs', 'Site/package-lock.json', 'Vault/Assets/**/*.webp', 'Vault/Lore/**/*.md', 'Vault/Lore/**/*.mdx') }}
           restore-keys: |
             responsive-variants-v1-${{ runner.os }}-
@@ -572,7 +574,7 @@ jobs:
           {
             echo "### Enabled contact build"
             echo "Build time: $((SECONDS - start)) seconds"
-            echo "Local responsive cache size: $(du -sh .cache/image-variants 2>/dev/null | cut -f1 || true)"
+            echo "Local responsive cache size: $(du -sh node_modules/.astro/viscerium/image-variants 2>/dev/null | cut -f1 || true)"
             echo "Exact cache-key hit: ${{ steps.responsive_cache.outputs.cache-hit }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
