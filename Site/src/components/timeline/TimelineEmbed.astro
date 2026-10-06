@@ -1,13 +1,6 @@
 ---
 import TimelineApp from './TimelineApp.astro';
-
-type TimelineDataset = {
-  defaultCalendar?: string;
-  title: string;
-  description: string;
-  events: unknown[];
-  [key: string]: unknown;
-};
+import type { TimelineDataset } from '../../lib/timeline/component-types';
 
 type Props = {
   timelineId: string;
