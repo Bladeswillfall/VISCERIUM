@@ -3,7 +3,30 @@ import '../styles/relationships.css';
 import '../styles/exploration-pages.css';
 import { DEFAULT_LOCALE } from '../../site.config.mjs';
 
-const { graph } = Astro.props;
+type RelationshipNode = {
+  id: string;
+  title: string;
+  [key: string]: unknown;
+};
+
+type RelationshipEdge = {
+  source: string;
+  target: string;
+  label?: string;
+  type?: string;
+  directed?: boolean;
+  description?: string;
+  [key: string]: unknown;
+};
+
+type RelationshipGraphData = {
+  nodes: RelationshipNode[];
+  edges: RelationshipEdge[];
+  relationTypes?: { id: string; label: string; count: number }[];
+};
+
+const graph = (Astro.props as { graph?: RelationshipGraphData }).graph
+  ?? { nodes: [], edges: [], relationTypes: [] };
 const { t } = Astro.locals;
 const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
 const messages = {
@@ -182,13 +205,59 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
 
   cytoscape.use(dagre);
 
-  function pretty(value) {
+  type RelationshipNodeData = {
+    id: string;
+    title: string;
+    type?: string;
+    description?: string;
+    era?: string | string[];
+    page?: string;
+    [key: string]: unknown;
+  };
+
+  type RelationshipEdgeData = {
+    source: string;
+    target: string;
+    type?: string;
+    label?: string;
+    directed?: boolean;
+    description?: string;
+    era?: string | string[];
+    since?: string | number;
+    until?: string | number;
+    [key: string]: unknown;
+  };
+
+  type RelationshipMessages = {
+    selectHint: string;
+    entity: string;
+    openArticle: string;
+    relationship: string;
+    since: string;
+    until: string;
+    noMatches: string;
+    showList: string;
+    showGraph: string;
+    list: string;
+    graph: string;
+  };
+
+  type RelationshipPayload = {
+    nodes: RelationshipNodeData[];
+    edges: RelationshipEdgeData[];
+    _locale: string;
+    _messages: RelationshipMessages;
+  };
+
+  type RelationshipSearchItem = RelationshipNodeData & { eraText?: string };
+
+  function pretty(value: unknown) {
     return String(value ?? '')
       .replace(/[_-]+/g, ' ')
       .replace(/\b\w/g, (character) => character.toUpperCase());
   }
 
-  function resolvedCssColor(root, name, fallback) {
+  function resolvedCssColor(root: HTMLElement, name: string, fallback: string) {
     const probe = document.createElement('span');
     probe.style.position = 'absolute';
     probe.style.visibility = 'hidden';
@@ -200,7 +269,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     return resolved;
   }
 
-  function appendMetadata(container, values, listFormatter) {
+  function appendMetadata(container: HTMLElement, values: unknown[], listFormatter: Intl.ListFormat) {
     const metadata = values
       .flatMap((value) => Array.isArray(value) ? value : [value])
       .filter(Boolean)
@@ -212,33 +281,33 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     container.append(line);
   }
 
-  function initialiseRelationshipExplorer(root) {
+  function initialiseRelationshipExplorer(root: HTMLElement) {
     if (root.dataset.relationshipReady) return;
-    const canvas = root.querySelector('[data-relationship-canvas]');
-    const list = root.querySelector('[data-relationship-list]');
-    const payloadElement = root.querySelector('[data-relationship-payload]');
+    const canvas = root.querySelector<HTMLElement>('[data-relationship-canvas]');
+    const list = root.querySelector<HTMLElement>('[data-relationship-list]');
+    const payloadElement = root.querySelector<HTMLScriptElement>('[data-relationship-payload]');
     if (!canvas || !payloadElement) return;
     root.dataset.relationshipReady = 'true';
 
-    let graph;
+    let graph: RelationshipPayload;
     try {
-      graph = JSON.parse(payloadElement.textContent || '{}');
+      graph = JSON.parse(payloadElement.textContent || '{}') as RelationshipPayload;
     } catch {
       return;
     }
     const locale = graph._locale || document.documentElement.lang;
-    const messages = graph._messages || {};
+    const messages = graph._messages;
     const listFormatter = new Intl.ListFormat(locale, { style: 'short' });
-    const fillMessage = (template, values) => Object.entries(values).reduce(
+    const fillMessage = (template: string, values: Record<string, unknown>) => Object.entries(values).reduce(
       (message, [key, value]) => message.replaceAll(`{${key}}`, String(value)),
       template,
     );
 
     const mobileQuery = explorationMobileQuery();
-    const details = root.querySelector('[data-relationship-details]');
-    const inspector = root.querySelector('[data-relationship-inspector]');
-    const inspectorContent = root.querySelector('[data-relationship-inspector-content]');
-    bindExplorationDialog(inspector);
+    const details = root.querySelector<HTMLElement>('[data-relationship-details]');
+    const inspector = root.querySelector<HTMLDialogElement>('[data-relationship-inspector]');
+    const inspectorContent = root.querySelector<HTMLElement>('[data-relationship-inspector-content]');
+    if (inspector) bindExplorationDialog(inspector);
 
     const accent = resolvedCssColor(root, '--codex-accent', '#b59058');
     const surface = resolvedCssColor(root, '--relationship-node-bg', '#1d1d1d');
@@ -284,10 +353,10 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
             'text-valign': 'center',
             'text-halign': 'center',
             'text-wrap': 'wrap',
-            'text-max-width': 126,
+            'text-max-width': '126px',
             width: 112,
             height: 38,
-            padding: 9,
+            padding: '9px',
             'overlay-opacity': 0,
           },
         },
@@ -297,9 +366,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
             shape: 'ellipse',
             width: 82,
             height: 82,
-            padding: 6,
+            padding: '6px',
             'font-size': 9.5,
-            'text-max-width': 66,
+            'text-max-width': '66px',
             'text-wrap': 'wrap',
           },
         },
@@ -370,7 +439,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       },
     });
 
-    const buildNodeDetails = (node) => {
+    const buildNodeDetails = (node: cytoscape.NodeSingular) => {
       const container = document.createElement('div');
       const data = node.data();
       const title = document.createElement('h2');
@@ -391,7 +460,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       return container;
     };
 
-    const buildEdgeDetails = (edge) => {
+    const buildEdgeDetails = (edge: cytoscape.EdgeSingular) => {
       const container = document.createElement('div');
       const data = edge.data();
       const title = document.createElement('h2');
@@ -414,7 +483,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       return container;
     };
 
-    const showDetails = (content) => {
+    const showDetails = (content: HTMLElement) => {
       if (details) details.replaceChildren(content.cloneNode(true));
       if (mobileQuery.matches && inspector && inspectorContent) {
         inspectorContent.replaceChildren(content);
@@ -422,16 +491,16 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       }
     };
 
-    const renderNodeDetails = (node) => showDetails(buildNodeDetails(node));
-    const renderEdgeDetails = (edge) => showDetails(buildEdgeDetails(edge));
+    const renderNodeDetails = (node: cytoscape.NodeSingular) => showDetails(buildNodeDetails(node));
+    const renderEdgeDetails = (edge: cytoscape.EdgeSingular) => showDetails(buildEdgeDetails(edge));
 
     cy.on('tap', 'node', (event) => renderNodeDetails(event.target));
     cy.on('tap', 'edge', (event) => renderEdgeDetails(event.target));
 
-    const relationFilters = [...root.querySelectorAll('[data-relationship-filter]')];
-    const layoutSelects = [...root.querySelectorAll('[data-relationship-layout]')];
+    const relationFilters = [...root.querySelectorAll<HTMLSelectElement>('[data-relationship-filter]')];
+    const layoutSelects = [...root.querySelectorAll<HTMLSelectElement>('[data-relationship-layout]')];
 
-    const syncControls = (controls, value, source) => {
+    const syncControls = (controls: HTMLSelectElement[], value: string, source: HTMLSelectElement) => {
       controls.forEach((control) => {
         if (control !== source) control.value = value;
       });
@@ -474,11 +543,11 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       runLayout();
     }));
 
-    const searchableNodes = (graph.nodes || []).map((node) => ({
+    const searchableNodes: RelationshipSearchItem[] = graph.nodes.map((node) => ({
       ...node,
       eraText: Array.isArray(node.era) ? node.era.join(' ') : node.era,
     }));
-    const fuse = new Fuse(searchableNodes, {
+    const fuse = new Fuse<RelationshipSearchItem>(searchableNodes, {
       threshold: 0.34,
       ignoreLocation: true,
       keys: [
@@ -489,11 +558,11 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       ],
     });
 
-    const setViewMode = (mode) => {
+    const setViewMode = (mode: 'graph' | 'list') => {
       const listMode = mode === 'list';
       canvas.hidden = listMode;
       if (list) list.hidden = !listMode;
-      root.querySelectorAll('[data-relationship-view-toggle]').forEach((button) => {
+      root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
         button.setAttribute('aria-pressed', String(listMode));
         button.setAttribute('aria-label', listMode ? messages.showGraph : messages.showList);
         const label = button.querySelector('[data-relationship-view-label]');
@@ -505,7 +574,8 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       });
     };
 
-    const focusNode = (nodeId) => {
+    const focusNode = (nodeId: string | undefined) => {
+      if (!nodeId) return;
       setViewMode('graph');
       const node = cy.$id(nodeId);
       if (!node.length) return;
@@ -523,9 +593,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       renderNodeDetails(node);
     };
 
-    const bindSearch = (searchShell) => {
-      const searchInput = searchShell.querySelector('[data-relationship-search]');
-      const searchResults = searchShell.querySelector('[data-relationship-search-results]');
+    const bindSearch = (searchShell: HTMLElement) => {
+      const searchInput = searchShell.querySelector<HTMLInputElement>('[data-relationship-search]');
+      const searchResults = searchShell.querySelector<HTMLElement>('[data-relationship-search-results]');
       if (!searchInput || !searchResults || searchInput.dataset.relationshipSearchBound === 'true') return;
       searchInput.dataset.relationshipSearchBound = 'true';
 
@@ -572,19 +642,19 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       });
     };
 
-    root.querySelectorAll('[data-relationship-search-shell]').forEach(bindSearch);
-    root.querySelectorAll('[data-relationship-list-node]').forEach((button) => {
+    root.querySelectorAll<HTMLElement>('[data-relationship-search-shell]').forEach(bindSearch);
+    root.querySelectorAll<HTMLButtonElement>('[data-relationship-list-node]').forEach((button) => {
       button.addEventListener('click', () => focusNode(button.dataset.relationshipListNode));
     });
-    root.querySelectorAll('[data-relationship-view-toggle]').forEach((button) => {
+    root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
       button.addEventListener('click', () => setViewMode(canvas.hidden ? 'graph' : 'list'));
     });
 
     const resetExplorer = () => {
       relationFilters.forEach((control) => { control.value = ''; });
       layoutSelects.forEach((control) => { control.value = 'cose'; });
-      root.querySelectorAll('[data-relationship-search]').forEach((input) => { input.value = ''; });
-      root.querySelectorAll('[data-relationship-search-results]').forEach((results) => {
+      root.querySelectorAll<HTMLInputElement>('[data-relationship-search]').forEach((input) => { input.value = ''; });
+      root.querySelectorAll<HTMLElement>('[data-relationship-search-results]').forEach((results) => {
         results.hidden = true;
         results.replaceChildren();
       });
@@ -599,7 +669,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       }
       if (inspector?.open) inspector.close();
     };
-    root.querySelectorAll('[data-relationship-reset]').forEach((button) => button.addEventListener('click', resetExplorer));
+    root.querySelectorAll<HTMLButtonElement>('[data-relationship-reset]').forEach((button) => button.addEventListener('click', resetExplorer));
 
     bindExplorationFocus(root, () => requestAnimationFrame(() => {
       cy.resize();
@@ -611,7 +681,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
   }
 
   function bootRelationshipExplorers() {
-    document.querySelectorAll('[data-relationship-explorer]').forEach((root) => initialiseRelationshipExplorer(root));
+    document.querySelectorAll<HTMLElement>('[data-relationship-explorer]').forEach((root) => initialiseRelationshipExplorer(root));
   }
 
   bootRelationshipExplorers();
