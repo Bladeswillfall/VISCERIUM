@@ -2,9 +2,11 @@
 import { getCollection } from 'astro:content';
 import '../styles/storyteller-view.css';
 import { resolveFrontmatterReference } from '../lib/frontmatter-reference.mjs';
+import { classifyCodexPage } from '../lib/page-kind.mjs';
 import ArticleReadingTime from './ArticleReadingTime.astro';
 import CalendarDateBadge from './calendar/CalendarDateBadge.astro';
 import CodexIcon from './CodexIcon.astro';
+import CodexEditLink from './CodexEditLink.astro';
 import ImageAttributionTable from './ImageAttributionTable.astro';
 import ContinuitySwitcher from './ContinuitySwitcher.astro';
 import DegelSystemExplorer from './degel-system/DegelSystemExplorer.astro';
@@ -13,10 +15,12 @@ import StorytellerSwitcher from './StorytellerSwitcher.astro';
 const { starlightRoute } = Astro.locals;
 const { t } = Astro.locals;
 const entry = starlightRoute.entry.data;
+const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
 const isExplorationPage = entry.explorationPage === true;
 const isImageAttributionPage = entry.type === 'image'
   && Array.isArray(entry.tags)
   && entry.tags.some(tag => String(tag).trim().toLowerCase() === 'attribution');
+const showStubNotice = entry.status === 'published' && entry.stub === true && pageKind.isStandardArticle;
 
 const breadcrumbGroupIcons = {
   calendar: 'event',
@@ -204,6 +208,15 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
     ))}
   </nav>
 )}
+{showStubNotice && (
+  <aside class="codex-stub-notice" aria-labelledby="codex-stub-notice-title">
+    <p id="codex-stub-notice-title" class="codex-stub-notice-title">
+      {t('viscerium.article.stubTitle')}
+    </p>
+    <p>{t('viscerium.article.stubBody')}</p>
+    <CodexEditLink label={t('viscerium.article.stubLink')} />
+  </aside>
+)}
 {!isExplorationPage && isImageAttributionPage && <ImageAttributionTable />}
 {!isExplorationPage && <ContinuitySwitcher />}
 {!isExplorationPage && entry.calendarDate && <CalendarDateBadge date={entry.calendarDate} title={t('viscerium.article.eventDate')} />}
@@ -212,6 +225,31 @@ const breadcrumbs = breadcrumbParts.map((part, index) => {
 
 <style>
   @layer starlight.core {
+    .codex-stub-notice {
+      margin-block: 1rem 1.25rem;
+      padding: .9rem 1rem;
+      border-inline-start: .25rem solid var(--codex-info);
+      border-radius: .25rem;
+      background: color-mix(in srgb, var(--codex-info) 10%, transparent);
+    }
+
+    .codex-stub-notice p {
+      margin-block: .25rem;
+    }
+
+    .codex-stub-notice-title {
+      font-weight: 700;
+    }
+
+    .codex-stub-notice :global(.codex-edit-link) {
+      display: inline-block;
+      margin-block-start: .35rem;
+      color: var(--sl-color-accent-high);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: .15em;
+    }
+
     .codex-header-fade-filter {
       position: fixed;
       width: 0;
