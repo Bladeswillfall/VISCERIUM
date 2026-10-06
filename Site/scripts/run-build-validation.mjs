@@ -14,10 +14,18 @@ const COMMANDS = {
   ],
 };
 
+const CLOUDFLARE_COMMANDS = {
+  pre: [],
+  post: [
+    ['node', ['--test', 'tests/i18n-output.postbuild.mjs']],
+    ['npm', ['run', 'security:artifacts']],
+  ],
+};
+
 export function validationCommands(phase, env = process.env) {
   const commands = COMMANDS[phase];
   if (!commands) throw new Error(`Unknown build validation phase "${phase}".`);
-  return env.CF_PAGES === '1' ? [] : commands;
+  return env.CF_PAGES === '1' ? CLOUDFLARE_COMMANDS[phase] : commands;
 }
 
 function executable(command) {
