@@ -74,6 +74,16 @@ test('the checks workflow cannot create a follow-up repository commit', () => {
   assert.match(workflow, /cmp --silent dist\/main\.js/);
 });
 
+test('Cloudflare builds skip only validation already enforced by GitHub checks', () => {
+  const pkg = JSON.parse(read('../package.json'));
+
+  assert.equal(
+    pkg.scripts.prebuild,
+    'node scripts/build-content.mjs --mode=build && node scripts/run-build-validation.mjs pre',
+  );
+  assert.equal(pkg.scripts.postbuild, 'node scripts/run-build-validation.mjs post');
+});
+
 test('incremental Astro builds persist route output between CI runs', () => {
   const config = read('../astro.config.mjs');
   const workflow = read('../../.github/workflows/checks.yml');
