@@ -1,5 +1,4 @@
 ---
-import { createHash } from 'node:crypto';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import TimelineApp from '../../components/timeline/TimelineApp.astro';
 import { TIMELINE_IDS } from '../../lib/timeline/core.mjs';
@@ -11,13 +10,12 @@ const datasets = import.meta.glob('../../data/timelines/{super,citadel,smog,near
 });
 
 export function getStaticPaths() {
-  return TIMELINE_IDS.map((id) => {
-    const timeline = datasets[`../../data/timelines/${id}.json`];
-    return {
-      params: { id },
-      cacheKey: createHash('sha256').update(JSON.stringify(timeline ?? null)).digest('hex'),
-    };
-  });
+  // The eager JSON glob is part of this route's dependency graph, so Astro
+  // invalidates all five timeline pages when any generated timeline changes.
+  return TIMELINE_IDS.map((id) => ({
+    params: { id },
+    cacheKey: id,
+  }));
 }
 
 const id = Astro.params.id;
