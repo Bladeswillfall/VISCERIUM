@@ -3,8 +3,7 @@ name: Checks
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited, ready_for_review]
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -221,6 +220,15 @@ jobs:
           restore-keys: |
             responsive-variants-v1-${{ runner.os }}-
 
+      - name: Restore Astro incremental build cache
+        id: astro_cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/.cache/astro
+          key: astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-
+
       - name: Build and report responsive cache metrics
         run: |
           start=$SECONDS
@@ -229,7 +237,8 @@ jobs:
             echo "### Production build"
             echo "Build time: $((SECONDS - start)) seconds"
             echo "Local responsive cache size: $(du -sh .cache/image-variants 2>/dev/null | cut -f1 || true)"
-            echo "Exact cache-key hit: ${{ steps.responsive_cache.outputs.cache-hit }}"
+            echo "Exact responsive cache-key hit: ${{ steps.responsive_cache.outputs.cache-hit }}"
+            echo "Exact Astro page-cache hit: ${{ steps.astro_cache.outputs.cache-hit }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload production build
