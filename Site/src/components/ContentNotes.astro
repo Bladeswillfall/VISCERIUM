@@ -15,8 +15,10 @@ type Props = {
 const { docs, sourceEntry } = Astro.props as Props;
 const entry = Astro.locals.starlightRoute.entry.data;
 
-const authoredWarnings = Array.isArray(entry.contentWarnings)
-  ? entry.contentWarnings.filter((warning): warning is string => typeof warning === 'string' && Boolean(warning.trim()))
+const authoredWarnings: string[] = Array.isArray(entry.contentWarnings)
+  ? entry.contentWarnings
+      .filter((warning) => typeof warning === 'string' && Boolean(warning.trim()))
+      .map(String)
   : [];
 
 function assetFilename(value: unknown) {
@@ -40,8 +42,10 @@ const referenceCorpus = [
 
 const imageWarnings = docs.flatMap((doc) => {
   if (doc.data.type !== 'image' || typeof doc.data.asset !== 'string' || !doc.data.asset.trim()) return [];
-  const warnings = Array.isArray(doc.data.contentWarnings)
-    ? doc.data.contentWarnings.filter((warning): warning is string => typeof warning === 'string' && Boolean(warning.trim()))
+  const warnings: string[] = Array.isArray(doc.data.contentWarnings)
+    ? doc.data.contentWarnings
+        .filter((warning) => typeof warning === 'string' && Boolean(warning.trim()))
+        .map(String)
     : [];
   if (warnings.length === 0) return [];
 
