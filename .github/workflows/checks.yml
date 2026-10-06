@@ -224,7 +224,7 @@ jobs:
         id: astro_cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: Site/.cache/astro
+          path: Site/node_modules/.astro
           key: astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-${{ github.sha }}
           restore-keys: |
             astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-
