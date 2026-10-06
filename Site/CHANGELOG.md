@@ -10,6 +10,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added opt-in Stub notices for short published articles, with a direct GitHub contribution link.
 - Added reusable era-themed artifacts and anchored marginalia, including accessible CITADEL manuscript pagination ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
 - Added seven Elias Vail WebP cell illustrations with contour wrapping and clickable Bailey-format attribution pages in Myrkild (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
 - Added a responsive homepage Recent Articles carousel with era-themed header placeholders, an expandable grid and smooth drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
