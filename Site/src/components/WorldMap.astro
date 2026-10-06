@@ -318,7 +318,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       let node = root;
       for (const part of parts.length ? parts : ['locations']) {
         if (!node.children.has(part)) node.children.set(part, { children: new Map(), layer: null });
-        node = node.children.get(part);
+        node = node.children.get(part)!;
       }
       node.layer = layer;
     }
@@ -457,20 +457,18 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       maxBoundsViscosity: 0.9,
     });
 
-    const hasTiles = Boolean(
-      tiles?.urlTemplate
-      && Number.isFinite(Number(tiles.tileSize))
-      && Number.isFinite(Number(tiles.zoomOffset)),
-    );
+    const tileUrlTemplate = tiles?.urlTemplate;
+    const tileSize = Number(tiles?.tileSize);
+    const tileZoomOffset = Number(tiles?.zoomOffset);
 
-    if (hasTiles) {
-      L.tileLayer(tiles.urlTemplate, {
-        tileSize: Number(tiles.tileSize),
+    if (tileUrlTemplate && Number.isFinite(tileSize) && Number.isFinite(tileZoomOffset)) {
+      L.tileLayer(tileUrlTemplate, {
+        tileSize,
         minZoom: -16,
         maxZoom: 16,
-        minNativeZoom: Number(tiles.minNativeZoom),
-        maxNativeZoom: Number(tiles.maxNativeZoom),
-        zoomOffset: Number(tiles.zoomOffset),
+        minNativeZoom: Number(tiles?.minNativeZoom),
+        maxNativeZoom: Number(tiles?.maxNativeZoom),
+        zoomOffset: tileZoomOffset,
         bounds,
         noWrap: true,
         keepBuffer: 2,
@@ -486,12 +484,15 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     }
 
     const widthFittedZoom = widthFitZoom(canvas, width, horizontalGutter);
-    atlas.setMinZoom(Number.isFinite(data.minZoom) ? data.minZoom : widthFittedZoom - 1);
-    atlas.setMaxZoom(Number.isFinite(data.maxZoom) ? data.maxZoom : Math.max(widthFittedZoom + 5, 4));
+    const configuredMinZoom = Number(data.minZoom);
+    const configuredMaxZoom = Number(data.maxZoom);
+    atlas.setMinZoom(Number.isFinite(configuredMinZoom) ? configuredMinZoom : widthFittedZoom - 1);
+    atlas.setMaxZoom(Number.isFinite(configuredMaxZoom) ? configuredMaxZoom : Math.max(widthFittedZoom + 5, 4));
 
     const defaultViewZoom = () => {
-      const preferredZoom = Number.isFinite(data.defaultZoom)
-        ? data.defaultZoom
+      const configuredDefaultZoom = Number(data.defaultZoom);
+      const preferredZoom = Number.isFinite(configuredDefaultZoom)
+        ? configuredDefaultZoom
         : widthFitZoom(canvas, width, mobileQuery.matches ? 16 : 24);
       return Math.max(atlas.getMinZoom(), Math.min(preferredZoom, atlas.getMaxZoom()));
     };
@@ -571,8 +572,8 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
         collapsed: mobileQuery.matches,
         position: 'topright',
       };
-      if (L.control.layers?.tree) L.control.layers.tree(null, overlayTree, layerOptions).addTo(atlas);
-      else L.control.layers(null, Object.fromEntries(layerGroups), layerOptions).addTo(atlas);
+      if (L.control.layers?.tree) L.control.layers.tree(undefined, overlayTree, layerOptions).addTo(atlas);
+      else L.control.layers(undefined, Object.fromEntries(layerGroups), layerOptions).addTo(atlas);
     }
 
     const withinZoom = (record: MarkerRecord, zoom: number) => {
