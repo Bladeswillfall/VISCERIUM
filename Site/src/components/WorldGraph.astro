@@ -1,12 +1,36 @@
 ---
 import '../styles/graph.css';
 
-const { graph } = Astro.props;
+type WorldGraphNode = {
+  id: string;
+  kind: string;
+  title: string;
+  href: string;
+  [key: string]: unknown;
+};
+
+type WorldGraphEdge = {
+  kind: string;
+  source: string;
+  target: string;
+  [key: string]: unknown;
+};
+
+type WorldGraphData = {
+  nodes: WorldGraphNode[];
+  edges: WorldGraphEdge[];
+};
+
+const { graph } = Astro.props as { graph: WorldGraphData };
 const pages = graph.nodes.filter((node) => node.kind === 'page');
 const pageById = new Map(pages.map((page) => [page.id, page]));
 const relationships = graph.edges
-  .filter((edge) => edge.kind === 'link' && pageById.has(edge.source) && pageById.has(edge.target))
-  .map((edge) => ({ source: pageById.get(edge.source), target: pageById.get(edge.target) }))
+  .flatMap((edge) => {
+    if (edge.kind !== 'link') return [];
+    const source = pageById.get(edge.source);
+    const target = pageById.get(edge.target);
+    return source && target ? [{ source, target }] : [];
+  })
   .sort((left, right) => (
     left.source.title.localeCompare(right.source.title)
     || left.target.title.localeCompare(right.target.title)
@@ -54,7 +78,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 <script>
   import cytoscape from 'cytoscape';
 
-  const instances = new WeakMap<Element, () => void>();
+  const instances = new WeakMap<HTMLElement, () => void>();
   const interactionClasses = 'is-active is-neighbour is-context is-muted';
   const readyStatus = 'Interactive graph ready. Use pointer or arrow keys to explore pages.';
   const pointerHitRadius = 22;
@@ -113,7 +137,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     cy.fit(undefined, 48);
   }
 
-  function colour(root: Element, name: string) {
+  function colour(root: HTMLElement, name: string) {
     const probe = document.createElement('span');
     probe.style.color = `var(${name})`;
     root.append(probe);
@@ -122,7 +146,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     return value;
   }
 
-  function labelStyle(root: Element, size: number) {
+  function labelStyle(root: HTMLElement, size: number) {
     return {
       label: 'data(title)',
       color: colour(root, '--world-graph-text'),
@@ -137,7 +161,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     };
   }
 
-  function styles(root: Element) {
+  function styles(root: HTMLElement): cytoscape.StylesheetJson {
     return [
       {
         selector: 'node',
@@ -200,7 +224,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     ];
   }
 
-  function showPrompt(root: Element) {
+  function showPrompt(root: HTMLElement) {
     const details = root.querySelector('[data-world-graph-details]');
     if (!(details instanceof HTMLElement)) return;
     const prompt = document.createElement('p');
@@ -208,7 +232,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     details.replaceChildren(prompt);
   }
 
-  function showDetails(root: Element, node: any) {
+  function showDetails(root: HTMLElement, node: any) {
     const details = root.querySelector('[data-world-graph-details]');
     if (!(details instanceof HTMLElement)) return;
     const data = node.data();
@@ -230,14 +254,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     details.replaceChildren(content);
   }
 
-  function clearContext(cy: any, root: Element) {
+  function clearContext(cy: any, root: HTMLElement) {
     cy.elements().removeClass(interactionClasses);
     root.removeAttribute('data-world-graph-context');
     root.removeAttribute('data-world-graph-active-id');
     root.removeAttribute('data-world-graph-neighbour-count');
   }
 
-  function applyContext(cy: any, root: Element, node: any, source: string) {
+  function applyContext(cy: any, root: HTMLElement, node: any, source: string) {
     clearContext(cy, root);
     const neighbours = node.neighborhood('node');
     const connectedEdges = node.connectedEdges();
@@ -251,7 +275,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
     root.setAttribute('data-world-graph-neighbour-count', String(neighbours.length));
   }
 
-  async function mount(root: Element) {
+  async function mount(root: HTMLElement) {
     if (instances.has(root)) return;
     const canvas = root.querySelector('[data-world-graph-canvas]');
     const reset = root.querySelector<HTMLButtonElement>('[data-world-graph-reset]');
@@ -676,13 +700,13 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
   }
 
   function mountAll() {
-    document.querySelectorAll('[data-world-graph]').forEach((root) => void mount(root));
+    document.querySelectorAll<HTMLElement>('[data-world-graph]').forEach((root) => void mount(root));
   }
 
   mountAll();
   document.addEventListener('astro:page-load', mountAll);
   document.addEventListener('astro:before-swap', () => {
-    document.querySelectorAll('[data-world-graph]').forEach((root) => {
+    document.querySelectorAll<HTMLElement>('[data-world-graph]').forEach((root) => {
       instances.get(root)?.();
       instances.delete(root);
     });
