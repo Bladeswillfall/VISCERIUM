@@ -23,7 +23,8 @@ const typeLabels = new Map<string, string>([
 
 function groupLabel(type: string) {
   const key = String(type ?? 'article').trim().toLowerCase();
-  if (typeLabels.has(key)) return typeLabels.get(key);
+  const knownLabel = typeLabels.get(key);
+  if (knownLabel) return knownLabel;
   const words = key.replace(/[-_]+/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
   return words.endsWith('s') ? words : `${words}s`;
 }
