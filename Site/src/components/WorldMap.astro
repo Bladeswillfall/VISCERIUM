@@ -3,7 +3,35 @@ import '../styles/maps.css';
 import '../styles/exploration-pages.css';
 import { DEFAULT_LOCALE } from '../../site.config.mjs';
 
-const { map } = Astro.props;
+type AtlasMarker = {
+  title?: string;
+  description?: string;
+  page?: string;
+  childMapId?: string;
+  type?: string;
+  marker?: string;
+  region?: string;
+  faction?: string | string[];
+  era?: string | string[];
+  layer?: string | string[];
+  layers?: string[];
+  x?: number;
+  y?: number;
+  minZoom?: number;
+  maxZoom?: number;
+};
+
+type AtlasMap = {
+  id?: string;
+  title?: string;
+  description?: string;
+  page?: string;
+  image?: string;
+  markers?: AtlasMarker[];
+  [key: string]: unknown;
+};
+
+const map = (Astro.props as { map?: AtlasMap }).map;
 const { t } = Astro.locals;
 const locale = Astro.currentLocale ?? DEFAULT_LOCALE;
 const messages = {
@@ -154,7 +182,85 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     showExplorationDialog,
   } from '../lib/exploration-ui.mjs';
 
-  const markerGlyphs = {
+  type AtlasMarker = {
+    title?: string;
+    description?: string;
+    page?: string;
+    childMapId?: string;
+    type?: string;
+    marker?: string;
+    region?: string;
+    faction?: string | string[];
+    era?: string | string[];
+    layer?: string | string[];
+    layers?: string[];
+    x?: number;
+    y?: number;
+    minZoom?: number;
+    maxZoom?: number;
+  };
+
+  type AtlasMessages = {
+    layers: string;
+    all: string;
+    untitledLocation: string;
+    openNested: string;
+    openArticle: string;
+    imageLabel: string;
+    markerLabel: string;
+    noMatches: string;
+    untitledMarker: string;
+  };
+
+  type AtlasTiles = {
+    urlTemplate?: string;
+    tileSize?: number;
+    minNativeZoom?: number;
+    maxNativeZoom?: number;
+    zoomOffset?: number;
+    width?: number;
+    height?: number;
+  };
+
+  type AtlasPayload = {
+    image: string;
+    title?: string;
+    width?: number;
+    height?: number;
+    minZoom?: number;
+    maxZoom?: number;
+    defaultZoom?: number;
+    tiles?: AtlasTiles;
+    markers?: AtlasMarker[];
+    _locale?: string;
+    _messages: AtlasMessages;
+  };
+
+  type LayerTreeNode = {
+    children: Map<string, LayerTreeNode>;
+    layer: L.Layer | null;
+  };
+
+  type MarkerRecord = {
+    marker: AtlasMarker;
+    leafletMarker: L.Marker;
+    group: L.LayerGroup;
+    latLng: L.LatLng;
+    layers: string[];
+  };
+
+  type MarkerSearchItem = {
+    index: number;
+    title?: string;
+    description?: string;
+    type?: string;
+    era?: string;
+    faction?: string;
+    region?: string;
+    layers: string;
+  };
+
+  const markerGlyphs: Record<string, string> = {
     capital: '◆',
     city: '●',
     settlement: '●',
@@ -175,17 +281,17 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     natural: '△',
   };
 
-  function cleanClass(value) {
+  function cleanClass(value: unknown) {
     return String(value ?? 'location').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
   }
 
-  function prettify(value) {
+  function prettify(value: unknown) {
     return String(value ?? '')
       .replace(/[_-]+/g, ' ')
       .replace(/\b\w/g, (character) => character.toUpperCase());
   }
 
-  function normaliseLayers(marker) {
+  function normaliseLayers(marker: AtlasMarker): string[] {
     const layers = Array.isArray(marker.layers)
       ? marker.layers
       : Array.isArray(marker.layer)
@@ -196,12 +302,16 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     return layers.map((layer) => String(layer).trim()).filter(Boolean);
   }
 
-  function layerParts(value) {
+  function layerParts(value: string): string[] {
     return String(value).split(/[/:>]+/).map((part) => part.trim()).filter(Boolean);
   }
 
-  function buildLayerTree(layerGroups, locale, messages) {
-    const root = { children: new Map(), layer: null };
+  function buildLayerTree(
+    layerGroups: Map<string, L.LayerGroup>,
+    locale: string,
+    messages: AtlasMessages,
+  ): L.Control.Layers.TreeObject {
+    const root: LayerTreeNode = { children: new Map(), layer: null };
 
     for (const [name, layer] of layerGroups) {
       const parts = layerParts(name);
@@ -213,8 +323,13 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       node.layer = layer;
     }
 
-    const convert = (label, node, locale, messages) => {
-      const children = [...node.children.entries()]
+    const convert = (
+      label: string,
+      node: LayerTreeNode,
+      locale: string,
+      messages: AtlasMessages,
+    ): L.Control.Layers.TreeObject => {
+      const children: L.Control.Layers.TreeObject[] = [...node.children.entries()]
         .sort(([a], [b]) => a.localeCompare(b, locale))
         .map(([childLabel, child]) => convert(childLabel, child, locale, messages));
       if (node.layer && children.length === 0) return { label: prettify(label), layer: node.layer };
@@ -230,7 +345,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     };
   }
 
-  function createMarkerDetails(marker, messages) {
+  function createMarkerDetails(marker: AtlasMarker, messages: AtlasMessages) {
     const article = document.createElement('article');
     article.className = 'atlas-popup';
 
@@ -265,11 +380,15 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     return article;
   }
 
-  function readImageDimensions(src, width, height) {
+  function readImageDimensions(
+    src: string,
+    width: number,
+    height: number,
+  ): Promise<{ width: number; height: number }> {
     if (Number.isFinite(width) && Number.isFinite(height) && width > 0 && height > 0) {
       return Promise.resolve({ width, height });
     }
-    return new Promise((resolve) => {
+    return new Promise<{ width: number; height: number }>((resolve) => {
       const image = new Image();
       image.onload = () => resolve({
         width: Number.isFinite(width) && width > 0 ? width : image.naturalWidth || 1000,
@@ -280,39 +399,39 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     });
   }
 
-  function widthFitZoom(canvas, imageWidth, horizontalGutter) {
+  function widthFitZoom(canvas: HTMLElement, imageWidth: number, horizontalGutter: number) {
     const viewportWidth = canvas.getBoundingClientRect().width || canvas.clientWidth || imageWidth;
     const usableWidth = Math.max(1, viewportWidth - (horizontalGutter * 2));
     return Math.log2(usableWidth / imageWidth);
   }
 
-  async function initialiseAtlas(root) {
+  async function initialiseAtlas(root: HTMLElement) {
     if (root.dataset.atlasReady) return;
     root.dataset.atlasReady = 'loading';
 
-    const canvas = root.querySelector('[data-atlas-canvas]');
-    const payloadElement = root.querySelector('[data-atlas-payload]');
-    const inspector = root.querySelector('[data-atlas-inspector]');
-    const inspectorContent = root.querySelector('[data-atlas-inspector-content]');
+    const canvas = root.querySelector<HTMLElement>('[data-atlas-canvas]');
+    const payloadElement = root.querySelector<HTMLScriptElement>('[data-atlas-payload]');
+    const inspector = root.querySelector<HTMLDialogElement>('[data-atlas-inspector]');
+    const inspectorContent = root.querySelector<HTMLElement>('[data-atlas-inspector-content]');
     if (!canvas || !payloadElement) {
       root.dataset.atlasReady = 'error';
       return;
     }
 
-    let data;
+    let data: AtlasPayload;
     try {
-      data = JSON.parse(payloadElement.textContent || '{}');
+      data = JSON.parse(payloadElement.textContent || '{}') as AtlasPayload;
     } catch {
       root.dataset.atlasReady = 'error';
       return;
     }
     const locale = data._locale || document.documentElement.lang;
-    const messages = data._messages || {};
+    const messages = data._messages;
 
     const mobileQuery = explorationMobileQuery();
-    bindExplorationDialog(inspector);
+    if (inspector) bindExplorationDialog(inspector);
 
-    const tiles = data.tiles && typeof data.tiles === 'object' ? data.tiles : null;
+    const tiles = data.tiles ?? null;
     const dimensions = await readImageDimensions(
       data.image,
       Number(tiles?.width ?? data.width),
@@ -377,27 +496,27 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       return Math.max(atlas.getMinZoom(), Math.min(preferredZoom, atlas.getMaxZoom()));
     };
 
-    const setDefaultView = ({ animate = false } = {}) => {
+    const setDefaultView = ({ animate = false }: { animate?: boolean } = {}) => {
       atlas.setView(bounds.getCenter(), defaultViewZoom(), { animate });
     };
 
     setDefaultView();
     const fittedZoom = atlas.getZoom();
 
-    const validMarkers = (data.markers || []).filter((marker) => Number.isFinite(marker.x) && Number.isFinite(marker.y));
-    const layerGroups = new Map();
-    const markerRecords = [];
+    const validMarkers = (data.markers ?? []).filter((marker) => Number.isFinite(marker.x) && Number.isFinite(marker.y));
+    const layerGroups = new Map<string, L.LayerGroup>();
+    const markerRecords: MarkerRecord[] = [];
 
-    const getLayerGroup = (name) => {
+    const getLayerGroup = (name: string | undefined): L.LayerGroup => {
       const layerName = name || 'locations';
       if (!layerGroups.has(layerName)) {
         const group = L.layerGroup().addTo(atlas);
         layerGroups.set(layerName, group);
       }
-      return layerGroups.get(layerName);
+      return layerGroups.get(layerName)!;
     };
 
-    const openInspector = (marker) => {
+    const openInspector = (marker: AtlasMarker) => {
       if (!inspector || !inspectorContent) return;
       inspectorContent.replaceChildren(createMarkerDetails(marker, messages));
       showExplorationDialog(inspector);
@@ -456,9 +575,11 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       else L.control.layers(null, Object.fromEntries(layerGroups), layerOptions).addTo(atlas);
     }
 
-    const withinZoom = (record, zoom) => {
-      if (Number.isFinite(record.marker.minZoom) && zoom < record.marker.minZoom) return false;
-      if (Number.isFinite(record.marker.maxZoom) && zoom > record.marker.maxZoom) return false;
+    const withinZoom = (record: MarkerRecord, zoom: number) => {
+      const minZoom = Number(record.marker.minZoom);
+      const maxZoom = Number(record.marker.maxZoom);
+      if (Number.isFinite(minZoom) && zoom < minZoom) return false;
+      if (Number.isFinite(maxZoom) && zoom > maxZoom) return false;
       return true;
     };
 
@@ -475,10 +596,12 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     atlas.on('zoomend', applyZoomVisibility);
     applyZoomVisibility();
 
-    const focusRecord = (record) => {
+    const focusRecord = (record: MarkerRecord) => {
       let targetZoom = atlas.getZoom();
-      if (Number.isFinite(record.marker.minZoom)) targetZoom = Math.max(targetZoom, record.marker.minZoom);
-      if (Number.isFinite(record.marker.maxZoom)) targetZoom = Math.min(targetZoom, record.marker.maxZoom);
+      const minZoom = Number(record.marker.minZoom);
+      const maxZoom = Number(record.marker.maxZoom);
+      if (Number.isFinite(minZoom)) targetZoom = Math.max(targetZoom, minZoom);
+      if (Number.isFinite(maxZoom)) targetZoom = Math.min(targetZoom, maxZoom);
       targetZoom = Math.max(targetZoom, fittedZoom + 1);
       targetZoom = Math.min(targetZoom, atlas.getMaxZoom());
       if (!atlas.hasLayer(record.group)) record.group.addTo(atlas);
@@ -488,7 +611,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       else record.leafletMarker.openPopup();
     };
 
-    const fuse = new Fuse(markerRecords.map((record, index) => ({
+    const searchItems: MarkerSearchItem[] = markerRecords.map((record, index) => ({
       index,
       title: record.marker.title,
       description: record.marker.description,
@@ -497,7 +620,8 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       faction: Array.isArray(record.marker.faction) ? record.marker.faction.join(' ') : record.marker.faction,
       region: record.marker.region,
       layers: record.layers.join(' '),
-    })), {
+    }));
+    const fuse = new Fuse<MarkerSearchItem>(searchItems, {
       threshold: 0.35,
       ignoreLocation: true,
       keys: [
@@ -511,9 +635,9 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       ],
     });
 
-    const bindSearch = (searchShell) => {
-      const searchInput = searchShell.querySelector('[data-atlas-search]');
-      const searchResults = searchShell.querySelector('[data-atlas-search-results]');
+    const bindSearch = (searchShell: HTMLElement) => {
+      const searchInput = searchShell.querySelector<HTMLInputElement>('[data-atlas-search]');
+      const searchResults = searchShell.querySelector<HTMLElement>('[data-atlas-search-results]');
       if (!searchInput || !searchResults || searchInput.dataset.atlasSearchBound === 'true') return;
       searchInput.dataset.atlasSearchBound = 'true';
 
@@ -565,17 +689,17 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       });
     };
 
-    root.querySelectorAll('[data-atlas-search-shell]').forEach(bindSearch);
+    root.querySelectorAll<HTMLElement>('[data-atlas-search-shell]').forEach(bindSearch);
 
     const resetAtlas = () => {
       setDefaultView({ animate: true });
-      root.querySelectorAll('[data-atlas-search]').forEach((input) => { input.value = ''; });
-      root.querySelectorAll('[data-atlas-search-results]').forEach((results) => {
+      root.querySelectorAll<HTMLInputElement>('[data-atlas-search]').forEach((input) => { input.value = ''; });
+      root.querySelectorAll<HTMLElement>('[data-atlas-search-results]').forEach((results) => {
         results.hidden = true;
         results.replaceChildren();
       });
     };
-    root.querySelectorAll('[data-atlas-reset]').forEach((button) => button.addEventListener('click', resetAtlas));
+    root.querySelectorAll<HTMLButtonElement>('[data-atlas-reset]').forEach((button) => button.addEventListener('click', resetAtlas));
 
     bindExplorationFocus(root, () => requestAnimationFrame(() => atlas.invalidateSize({ pan: false })));
     const observer = new ResizeObserver(() => atlas.invalidateSize({ pan: false }));
@@ -584,7 +708,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
   }
 
   function bootAtlases() {
-    document.querySelectorAll('[data-atlas]').forEach((root) => initialiseAtlas(root));
+    document.querySelectorAll<HTMLElement>('[data-atlas]').forEach((root) => initialiseAtlas(root));
   }
 
   bootAtlases();
