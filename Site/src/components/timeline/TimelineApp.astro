@@ -7,24 +7,7 @@ import '../../styles/timeline-controls.css';
 import { formatAbsoluteDay } from '../../lib/calendar/runtime.mjs';
 import defaultTranslations from '../../content/i18n/en-GB.json';
 import { DEFAULT_LOCALE } from '../../../site.config.mjs';
-
-type TimelineEvent = {
-  id: string;
-  absoluteStartDay: number;
-  absoluteEndDay?: number;
-  precision: Parameters<typeof formatAbsoluteDay>[2];
-  endPrecision?: Parameters<typeof formatAbsoluteDay>[2];
-  title: string;
-  description?: string;
-  href: string;
-  [key: string]: unknown;
-};
-
-type TimelineDataset = {
-  defaultCalendar?: string;
-  events: TimelineEvent[];
-  [key: string]: unknown;
-};
+import type { TimelineDataset } from '../../lib/timeline/component-types';
 
 type Props = {
   dataset: TimelineDataset;
