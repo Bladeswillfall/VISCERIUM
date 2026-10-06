@@ -173,7 +173,7 @@ const imageDescriptionId = imageDescription ? 'codex-sidebar-image-description' 
 const artworkTitle = entry.imageTitle ?? (entry.type === 'image' ? entry.title : undefined);
 const artworkArtist = entry.artist ?? entry.credit;
 const resolution = entry.width && entry.height ? `${entry.width} × ${entry.height}` : undefined;
-const defaultSidebarFields = [
+const defaultSidebarFields: SidebarField[] = [
   ['Type', entry.type],
   ['Status', entry.status],
   ['Era', entry.era],
@@ -197,7 +197,7 @@ const defaultSidebarFields = [
   ['Rights', entry.rights],
   ['Usage', entry.usage],
   ['Resolution', resolution],
-].filter(([, value]) => isPresent(value)).map(([label, value]) => ({ label, value }));
+].filter(([, value]) => isPresent(value)).map(([label, value]): SidebarField => ({ label, value }));
 const sidebarConfig = entry.sidebar;
 const customSidebarFields = Array.isArray(sidebarConfig?.meta)
   ? sidebarConfig.meta.map(normaliseSidebarField).filter((field): field is SidebarField => field !== null)
