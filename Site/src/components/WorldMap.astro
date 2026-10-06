@@ -568,7 +568,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
 
     if (layerGroups.size > 0) {
       const overlayTree = buildLayerTree(layerGroups, locale, messages);
-      const layerOptions = {
+      const layerOptions: L.Control.LayersOptions = {
         collapsed: mobileQuery.matches,
         position: 'topright',
       };
