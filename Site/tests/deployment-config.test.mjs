@@ -74,6 +74,28 @@ test('the checks workflow cannot create a follow-up repository commit', () => {
   assert.match(workflow, /cmp --silent dist\/main\.js/);
 });
 
+test('incremental Astro builds persist route output between CI runs', () => {
+  const config = read('../astro.config.mjs');
+  const workflow = read('../../.github/workflows/checks.yml');
+  const dynamicRoutes = [
+    read('../src/pages/community/[id].astro'),
+    read('../src/pages/maps/[id].astro'),
+    read('../src/pages/timelines/[id].astro'),
+    read('../src/pages/eras/[era]/relationships/index.astro'),
+  ];
+
+  assert.match(config, /cacheDir:\s*['"]\.\/\.cache\/astro['"]/);
+  assert.match(config, /incrementalBuild:\s*true/);
+  for (const route of dynamicRoutes) assert.match(route, /cacheKey:/);
+
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(workflow, /push:\n\s+branches:\s+\[main\]/);
+  assert.match(workflow, /name: Restore Astro incremental build cache/);
+  assert.match(workflow, /path: Site\/\.cache\/astro/);
+  assert.match(workflow, /astro-incremental-v1-/);
+  assert.match(workflow, /steps\.astro_cache\.outputs\.cache-hit/);
+});
+
 test('Axe accessibility runtime uses the lockfile instead of a second npm install', () => {
   const pkg = JSON.parse(read('../package.json'));
   const lock = JSON.parse(read('../package-lock.json'));
