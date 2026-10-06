@@ -97,6 +97,12 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /Site\/node_modules\/\.astro\/viscerium\/image-variants/);
   assert.match(workflow, /astro-incremental-v1-/);
   assert.match(workflow, /steps\.astro_cache\.outputs\.cache-hit/);
+
+  const build = workflow.split(/^  build:\n/m)[1]?.split(/^  obsidian_plugin:\n/m)[0];
+  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
+  assert.ok(build && contact, 'build and contact jobs must exist');
+  assert.match(build, /name: Restore Astro incremental build cache/);
+  assert.doesNotMatch(contact, /name: Restore Astro incremental build cache/);
 });
 
 test('Axe accessibility runtime uses the lockfile instead of a second npm install', () => {
