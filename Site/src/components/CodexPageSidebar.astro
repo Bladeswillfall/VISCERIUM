@@ -10,15 +10,38 @@ const locale = starlightRoute.lang;
 const entry = starlightRoute.entry.data;
 const docs = await getCollection('docs');
 
-function isPresent(value) {
+type SidebarTarget = {
+  route: string;
+  era: unknown;
+};
+
+type SidebarField = {
+  label: unknown;
+  value: unknown;
+  href?: string;
+};
+
+type SidebarItem = {
+  label: unknown;
+  href?: string;
+};
+
+type SidebarSection = {
+  title: unknown;
+  fields: SidebarField[];
+  items: SidebarItem[];
+  note: unknown;
+};
+
+function isPresent(value: unknown): boolean {
   return value !== undefined && value !== null && value !== '' && (!Array.isArray(value) || value.length > 0);
 }
 
-function isPlainObject(value) {
-  return value && typeof value === 'object' && !Array.isArray(value);
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
-function sidebarLinkKey(value) {
+function sidebarLinkKey(value: unknown) {
   return String(value ?? '')
     .trim()
     .replace(/\\/g, '/')
@@ -28,18 +51,18 @@ function sidebarLinkKey(value) {
     .toLowerCase();
 }
 
-function eraKey(value) {
+function eraKey(value: unknown) {
   return String(value ?? '').trim().toLowerCase().replace(/[\s_-]+/g, '');
 }
 
-function routeFromSlug(value) {
+function routeFromSlug(value: unknown) {
   const slug = String(value ?? '').trim().replace(/^\/+|\/+$/g, '');
   return slug ? `/${slug}/` : undefined;
 }
 
-const sidebarTargetIndex = new Map();
+const sidebarTargetIndex = new Map<string, SidebarTarget[]>();
 
-function addSidebarTarget(rawKey, candidate) {
+function addSidebarTarget(rawKey: unknown, candidate: SidebarTarget) {
   const normalized = sidebarLinkKey(rawKey);
   if (!normalized) return;
   const candidates = sidebarTargetIndex.get(normalized) ?? [];
@@ -64,7 +87,7 @@ for (const doc of docs) {
   }
 }
 
-function resolveSidebarTarget(rawTarget) {
+function resolveSidebarTarget(rawTarget: unknown) {
   const target = String(rawTarget ?? '').trim();
   if (!target) return undefined;
   const candidates = sidebarTargetIndex.get(sidebarLinkKey(target)) ?? [];
@@ -77,35 +100,35 @@ function resolveSidebarTarget(rawTarget) {
   return candidates.length === 1 ? candidates[0].route : undefined;
 }
 
-function normaliseRoute(value) {
+function normaliseRoute(value: unknown) {
   return resolveFrontmatterReference(value, {
     resolveWikilink: resolveSidebarTarget,
   });
 }
 
-function navigationValue(value) {
+function navigationValue(value: unknown) {
   if (typeof value !== 'string' || !/^(?:https?|mailto):/i.test(value.trim())) return undefined;
   return normaliseRoute(value);
 }
 
-function formatValue(value) {
+function formatValue(value: unknown) {
   return Array.isArray(value)
     ? formatList(value.map(String), locale)
     : String(value).replace(/-/g, ' ');
 }
 
-function imageTextAlternative(base, text) {
+function imageTextAlternative(base: string, text?: string | null) {
   return [
     base,
     text ? t('viscerium.sidebar.imageText', { text, interpolation: { escapeValue: false } }) : undefined,
   ].filter(Boolean).join('; ');
 }
 
-function externalNotice(isExternal) {
+function externalNotice(isExternal: boolean) {
   return isExternal ? t('viscerium.common.newTab') : '';
 }
 
-function normaliseSidebarField(field) {
+function normaliseSidebarField(field: unknown): SidebarField | null {
   if (Array.isArray(field)) {
     const [label, value] = field;
     return isPresent(label) && isPresent(value) ? { label, value } : null;
@@ -116,7 +139,7 @@ function normaliseSidebarField(field) {
   return isPresent(label) && isPresent(value) ? { label, value, href: normaliseRoute(field.href) } : null;
 }
 
-function normaliseSidebarItem(item) {
+function normaliseSidebarItem(item: unknown): SidebarItem | null {
   if (typeof item === 'string') return { label: item };
   if (!isPlainObject(item)) return null;
   const label = item.label ?? item.title ?? item.name ?? item.value;
@@ -124,13 +147,13 @@ function normaliseSidebarItem(item) {
   return { label, href: normaliseRoute(item.href) };
 }
 
-function normaliseSidebarSection(section) {
+function normaliseSidebarSection(section: unknown): SidebarSection | null {
   if (!isPlainObject(section)) return null;
   const fields = Array.isArray(section.fields)
-    ? section.fields.map(normaliseSidebarField).filter(Boolean)
+    ? section.fields.map(normaliseSidebarField).filter((field): field is SidebarField => field !== null)
     : [];
   const items = Array.isArray(section.items)
-    ? section.items.map(normaliseSidebarItem).filter(Boolean)
+    ? section.items.map(normaliseSidebarItem).filter((item): item is SidebarItem => item !== null)
     : [];
   const title = section.title ?? section.label;
   const note = section.note ?? section.description;
@@ -175,15 +198,15 @@ const defaultSidebarFields = [
   ['Usage', entry.usage],
   ['Resolution', resolution],
 ].filter(([, value]) => isPresent(value)).map(([label, value]) => ({ label, value }));
-const sidebarConfig = isPlainObject(entry.sidebar) ? entry.sidebar : {};
-const customSidebarFields = Array.isArray(sidebarConfig.meta)
-  ? sidebarConfig.meta.map(normaliseSidebarField).filter(Boolean)
+const sidebarConfig = entry.sidebar;
+const customSidebarFields = Array.isArray(sidebarConfig?.meta)
+  ? sidebarConfig.meta.map(normaliseSidebarField).filter((field): field is SidebarField => field !== null)
   : [];
-const sidebarFields = sidebarConfig.replaceMeta === true && customSidebarFields.length > 0
+const sidebarFields = sidebarConfig?.replaceMeta === true && customSidebarFields.length > 0
   ? customSidebarFields
   : defaultSidebarFields;
-const customSidebarSections = Array.isArray(sidebarConfig.sections)
-  ? sidebarConfig.sections.map(normaliseSidebarSection).filter(Boolean)
+const customSidebarSections = Array.isArray(sidebarConfig?.sections)
+  ? sidebarConfig.sections.map(normaliseSidebarSection).filter((section): section is SidebarSection => section !== null)
   : [];
 ---
 
