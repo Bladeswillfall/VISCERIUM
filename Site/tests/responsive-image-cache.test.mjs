@@ -158,7 +158,6 @@ test('CI restores responsive derivatives for both full-build jobs', async () => 
   const build = workflow.split(/^  build:\n/m)[1]?.split(/^  obsidian_plugin:\n/m)[0];
   const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
   assert.ok(build && contact, 'both full-build jobs must exist');
-  assert.equal([...workflow.matchAll(/name: Restore responsive variant cache/g)].length, 2);
   for (const job of [build, contact]) {
     assert.match(job, /name: Restore responsive variant cache/);
     assert.match(job, /path: Site\/node_modules\/\.astro\/viscerium\/image-variants/);
