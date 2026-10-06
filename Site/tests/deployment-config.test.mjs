@@ -99,7 +99,14 @@ test('incremental Astro builds persist route output between CI runs', () => {
   for (const route of dynamicRoutes) assert.match(route, /cacheKey:/);
 
   assert.match(workflow, /workflow_dispatch:/);
-  assert.doesNotMatch(workflow, /push:\n\s+branches:\s+\[main\]/);
+  assert.match(workflow, /push:\n\s+branches:\s+\[main\]/);
+  assert.match(workflow, /seed_build_cache:/);
+  assert.match(workflow, /if: github\.event_name == 'push'/);
+  assert.match(workflow, /name: Seed build caches/);
+  assert.match(workflow, /CF_PAGES: '1'/);
+  assert.match(workflow, /changes:\n\s+if: github\.event_name != 'push'/);
+  assert.match(workflow, /repository:\n\s+if: github\.event_name != 'push'/);
+  assert.match(workflow, /verify:\n\s+if: \$\{\{ github\.event_name != 'push' && always\(\) \}\}/);
   assert.match(workflow, /name: Restore Astro incremental build cache/);
   assert.match(workflow, /Site\/node_modules\/\.astro\/incremental-build\.json/);
   assert.match(workflow, /Site\/node_modules\/\.astro\/dist/);
