@@ -14,9 +14,12 @@ test('build validation stays enabled outside Cloudflare Pages', () => {
   ]);
 });
 
-test('Cloudflare Pages skips validation already owned by PR checks', () => {
+test('Cloudflare Pages keeps cheap deploy-output safety checks', () => {
   assert.deepEqual(validationCommands('pre', { CF_PAGES: '1' }), []);
-  assert.deepEqual(validationCommands('post', { CF_PAGES: '1' }), []);
+  assert.deepEqual(validationCommands('post', { CF_PAGES: '1' }), [
+    ['node', ['--test', 'tests/i18n-output.postbuild.mjs']],
+    ['npm', ['run', 'security:artifacts']],
+  ]);
 });
 
 test('unknown validation phases fail instead of silently skipping checks', () => {
