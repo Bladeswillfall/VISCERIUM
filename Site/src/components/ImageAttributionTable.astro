@@ -4,11 +4,11 @@ import { presentImageRights } from '../lib/image-rights.mjs';
 const { starlightRoute, t } = Astro.locals;
 const entry = starlightRoute.entry.data;
 
-function isPresent(value) {
+function isPresent(value: unknown): boolean {
   return value !== undefined && value !== null && String(value).trim() !== '';
 }
 
-function externalHref(value) {
+function externalHref(value: unknown): string | undefined {
   const href = String(value ?? '').trim();
   return /^https?:\/\//i.test(href) ? href : undefined;
 }
