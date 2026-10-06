@@ -3,6 +3,8 @@ name: Checks
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited, ready_for_review]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,6 +12,7 @@ permissions:
 
 jobs:
   changes:
+    if: github.event_name != 'push'
     name: Select affected checks
     runs-on: ubuntu-latest
     timeout-minutes: 3
@@ -38,6 +41,7 @@ jobs:
         run: node .github/scripts/select-checks.mjs
 
   repository:
+    if: github.event_name != 'push'
     name: Repository checks
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -608,7 +612,72 @@ jobs:
           if-no-files-found: warn
           retention-days: 1
 
+  seed_build_cache:
+    if: github.event_name == 'push'
+    name: Seed build caches
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: Site
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Site/package-lock.json
+
+      - name: Use npm with lifecycle-script policy support
+        working-directory: .
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - run: npm ci --silent --no-audit --no-fund
+
+      - name: Fingerprint Atlas map definitions
+        id: atlas_maps
+        run: node scripts/map-cache-key.mjs >> "$GITHUB_OUTPUT"
+
+      - name: Restore Atlas tile cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/map-tiles
+          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Vault/maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
+          restore-keys: |
+            atlas-tiles-v1-${{ runner.os }}-
+
+      - name: Restore responsive variant cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/image-variants
+          key: responsive-variants-v1-${{ runner.os }}-${{ hashFiles('Site/scripts/generate-image-variants.mjs', 'Site/scripts/lib/responsive-image-cache.mjs', 'Site/scripts/sync-public-notes.mjs', 'Site/package-lock.json', 'Vault/Assets/**/*.webp', 'Vault/Lore/**/*.md', 'Vault/Lore/**/*.mdx') }}
+          restore-keys: |
+            responsive-variants-v1-${{ runner.os }}-
+
+      - name: Restore Astro incremental build cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            Site/node_modules/.astro/incremental-build.json
+            Site/node_modules/.astro/dist
+          key: astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-
+
+      - name: Seed build caches
+        env:
+          CF_PAGES: '1'
+        run: npm run build
+
   verify:
+    if: ${{ github.event_name != 'push' && always() }}
     needs:
       - changes
       - repository
@@ -620,7 +689,6 @@ jobs:
       - graph_engines
       - contact
       - axe
-    if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
