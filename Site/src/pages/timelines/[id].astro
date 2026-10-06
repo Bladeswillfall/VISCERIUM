@@ -3,6 +3,13 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import TimelineApp from '../../components/timeline/TimelineApp.astro';
 import { TIMELINE_IDS } from '../../lib/timeline/core.mjs';
 
+type TimelineDataset = {
+  title: string;
+  description: string;
+  events: unknown[];
+  [key: string]: unknown;
+};
+
 const datasets = import.meta.glob('../../data/timelines/{super,citadel,smog,nearsight,entropy}.json', {
   eager: true,
   import: 'default',
@@ -13,7 +20,7 @@ export function getStaticPaths() {
 }
 
 const id = Astro.params.id;
-const timeline = datasets[`../../data/timelines/${id}.json`];
+const timeline = (datasets as Record<string, TimelineDataset>)[`../../data/timelines/${id}.json`];
 if (!timeline) return Astro.redirect('/timelines/');
 ---
 
