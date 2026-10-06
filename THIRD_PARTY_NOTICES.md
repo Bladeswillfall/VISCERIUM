@@ -46,6 +46,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `@astrojs/check` | development | `0.9.10` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
+| Codex (`Site/`) | `@types/leaflet` | development | `1.9.22` |
 | Codex (`Site/`) | `eslint` | development | `10.11.0` |
 | Codex (`Site/`) | `typescript` | development | `6.0.3` |
 | Obsidian timelines plugin | `moment` | runtime | `2.31.0` |
