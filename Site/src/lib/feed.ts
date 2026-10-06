@@ -32,7 +32,7 @@ function asArray(value: unknown): string[] {
   return [String(value)].filter(Boolean);
 }
 
-function routeFromEntry(entry: { id: string; data: { slug?: string } }): string {
+function routeFromEntry(entry: { id: string; data: { slug?: string | null } }): string {
   const slug = entry.data.slug || entry.id.replace(/\.(md|mdx)$/i, '');
   return slug === 'index' ? '/' : `/${String(slug).replace(/^\/+|\/+$/g, '')}/`;
 }
@@ -49,10 +49,10 @@ export async function getFeedEntries(base: URL | string = siteConfig.site): Prom
       const { published, updated } = getAuthoredFeedDates(entry.data as Record<string, unknown>);
       return {
         title: entry.data.title,
-        description: entry.data.description,
+        description: entry.data.description ?? '',
         url: absoluteUrl(routeFromEntry(entry), base),
         id: absoluteUrl(routeFromEntry(entry), base),
-        type: entry.data.type,
+        type: entry.data.type ?? undefined,
         tags: [...asArray(entry.data.type), ...asArray(entry.data.tags), ...asArray(entry.data.era), ...asArray(entry.data.faction)],
         published,
         updated,

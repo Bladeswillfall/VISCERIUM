@@ -41,7 +41,7 @@ test('the public sidebar resolves authored Obsidian wikilinks through the docs c
   const source = await fs.readFile(sidebarComponent, 'utf8');
 
   assert.match(source, /getCollection\('docs'\)/);
-  assert.match(source, /function resolveSidebarTarget\(rawTarget\)/);
+  assert.match(source, /function resolveSidebarTarget\(rawTarget(?::[^)]*)?\)/);
   assert.match(source, /resolveFrontmatterReference\(value/);
   assert.match(source, /resolveWikilink:\s*resolveSidebarTarget/);
   assert.match(source, /sameEra\.length === 1/);

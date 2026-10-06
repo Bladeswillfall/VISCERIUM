@@ -30,7 +30,7 @@ const calendar = getCalendar(calendarId);
 const year = (Astro.props as Props).year ?? calendar.defaultYear;
 const dates = getCalendarYearDates(calendar.id, year, { locale });
 const datesByAnchor = new Map(dates.map((date) => [date.anchor, date]));
-const seasonLabels = ['winter', 'spring', 'summer', 'autumn'];
+const seasonLabels = ['winter', 'spring', 'summer', 'autumn'] as const;
 const daysPerWeek = calendar.weekdays.length;
 const intercalaryColumns = 2;
 const timelineDatasets = import.meta.glob('../../data/timelines/super.json', {
@@ -356,7 +356,7 @@ const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c')
     };
   };
 
-  const boundCalendars = new WeakSet<Element>();
+  const boundCalendars = new WeakSet<HTMLElement>();
 
   function fillTemplate(template: string, values: Record<string, string | number>) {
     let result = template;
@@ -371,17 +371,19 @@ const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c')
     return cell;
   }
 
-  function mountCalendar(root: Element) {
+  function mountCalendar(root: HTMLElement) {
     if (boundCalendars.has(root)) return;
-    const dataElement = root.querySelector('[data-vc-calendar-year-data]');
-    const controls = root.querySelector('[data-vc-calendar-year-controls]');
-    const input = root.querySelector('[data-vc-calendar-year-input]');
-    const renderedYear = root.querySelector('[data-vc-calendar-rendered-year]');
-    const leapYear = root.querySelector('[data-vc-calendar-leap-year]');
-    if (!(dataElement instanceof HTMLScriptElement) || !(input instanceof HTMLInputElement)) return;
+    const dataElement = root.querySelector<HTMLScriptElement>('[data-vc-calendar-year-data]');
+    const controls = root.querySelector<HTMLElement>('[data-vc-calendar-year-controls]');
+    const input = root.querySelector<HTMLInputElement>('[data-vc-calendar-year-input]');
+    const renderedYear = root.querySelector<HTMLElement>('[data-vc-calendar-rendered-year]');
+    const leapYear = root.querySelector<HTMLElement>('[data-vc-calendar-leap-year]');
+    if (!dataElement || !input) return;
 
-    const data = JSON.parse(dataElement.textContent || 'null') as CalendarIslandData | null;
-    if (!data) return;
+    const parsedData = JSON.parse(dataElement.textContent || 'null') as CalendarIslandData | null;
+    if (!parsedData) return;
+    const data = parsedData;
+    const yearInput = input;
     const calendar = getCalendar(data.calendarId);
     const timelineEventsByDay = buildTimelineEventsByDay(data.timelineEvents) as Map<number, CalendarIslandEvent[]>;
 
@@ -516,8 +518,8 @@ const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c')
 
     function renderYear(nextYear: number) {
       if (!Number.isSafeInteger(nextYear)) {
-        input.setCustomValidity('Year must be an integer.');
-        input.reportValidity();
+        yearInput.setCustomValidity('Year must be an integer.');
+        yearInput.reportValidity();
         return;
       }
 
@@ -526,28 +528,28 @@ const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c')
         const datesByAnchor = new Map(dates.map((date) => [date.anchor, date]));
         for (const month of calendar.months) renderMonth(month, datesByAnchor, nextYear);
         renderIntercalary(datesByAnchor);
-        input.setCustomValidity('');
-        input.value = String(nextYear);
+        yearInput.setCustomValidity('');
+        yearInput.value = String(nextYear);
         if (renderedYear) renderedYear.textContent = new Intl.NumberFormat(data.locale).format(nextYear);
         if (leapYear) leapYear.textContent = isLeapYear(calendar, nextYear) ? data.messages.yes : data.messages.no;
       } catch (error) {
-        input.setCustomValidity(error instanceof Error ? error.message : String(error));
-        input.reportValidity();
+        yearInput.setCustomValidity(error instanceof Error ? error.message : String(error));
+        yearInput.reportValidity();
       }
     }
 
     for (const button of root.querySelectorAll('[data-vc-calendar-year-step]')) {
       button.addEventListener('click', () => {
         const delta = Number((button as HTMLElement).dataset.vcCalendarYearStep);
-        const current = Number(input.value);
+        const current = Number(yearInput.value);
         if (Number.isSafeInteger(delta) && Number.isSafeInteger(current)) renderYear(current + delta);
       });
     }
-    input.addEventListener('change', () => renderYear(Number(input.value)));
-    input.addEventListener('keydown', (event) => {
+    yearInput.addEventListener('change', () => renderYear(Number(yearInput.value)));
+    yearInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-        renderYear(Number(input.value));
+        renderYear(Number(yearInput.value));
       }
     });
 
@@ -557,7 +559,7 @@ const serializedIslandData = JSON.stringify(islandData).replace(/</g, '\\u003c')
   }
 
   function mountCalendars() {
-    for (const root of document.querySelectorAll('[data-vc-calendar-year-island]')) mountCalendar(root);
+    for (const root of document.querySelectorAll<HTMLElement>('[data-vc-calendar-year-island]')) mountCalendar(root);
   }
 
   mountCalendars();
