@@ -147,11 +147,11 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
 
       const storytellerNodes = collectBetween(start, end);
       const hasStoryteller = storytellerNodes.some(isMeaningfulStorytellerNode);
-      start.remove();
-      end.remove();
+      start.parentNode?.removeChild(start);
+      end.parentNode?.removeChild(end);
 
       if (!hasStoryteller) {
-        for (const node of storytellerNodes) node.remove();
+        for (const node of storytellerNodes) node.parentNode?.removeChild(node);
         continue;
       }
 
@@ -200,7 +200,8 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
           if (event.key === 'End') nextIndex = tabs.length - 1;
           const next = tabs[nextIndex];
           if (!(next instanceof HTMLButtonElement)) return;
-          activate(next.dataset.codexViewTab ?? 'lore');
+          const view: ArticleView = next.dataset.codexViewTab === 'storyteller' ? 'storyteller' : 'lore';
+          activate(view);
           next.focus();
         });
       }
