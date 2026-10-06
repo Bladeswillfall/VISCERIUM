@@ -13,6 +13,7 @@ export async function getStaticPaths() {
     const currentUrl = new URL(slugToRoute(entry.data.slug ?? entry.id), siteConfig.site).href;
     return [{
       params: { id: communityId },
+      cacheKey: String(entry.digest),
       props: {
         communityId,
         currentUrl,

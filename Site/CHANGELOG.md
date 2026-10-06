@@ -16,6 +16,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Enabled Astro's experimental incremental static-build cache for VISCERIUM-owned dynamic routes, moved Atlas and responsive-image caches into Cloudflare's persisted Astro cache tree, skipped duplicate validation during Cloudflare builds, and replaced post-merge full CI with a cache-seeding build on main.
 - Increased the homepage Recent Articles grid limit from 6 to 36 entries ([#224](https://github.com/Bladeswillfall/VISCERIUM/pull/224)).
 - Restored ordinary Myrkild strain prose and removed cell-image margins (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
 - Made Overview-only sidebar folders link directly to their article and subdued folders without other published articles ([#180](https://github.com/Bladeswillfall/VISCERIUM/pull/180)).

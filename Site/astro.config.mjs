@@ -207,6 +207,9 @@ const sidebar = [
 
 export default defineConfig({
   site: siteConfig.site,
+  experimental: {
+    incrementalBuild: true,
+  },
   integrations: [
     starlight({
       title: siteConfig.title,

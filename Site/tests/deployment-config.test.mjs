@@ -74,6 +74,54 @@ test('the checks workflow cannot create a follow-up repository commit', () => {
   assert.match(workflow, /cmp --silent dist\/main\.js/);
 });
 
+test('Cloudflare builds skip only validation already enforced by GitHub checks', () => {
+  const pkg = JSON.parse(read('../package.json'));
+
+  assert.equal(
+    pkg.scripts.prebuild,
+    'node scripts/build-content.mjs --mode=build && node scripts/run-build-validation.mjs pre',
+  );
+  assert.equal(pkg.scripts.postbuild, 'node scripts/run-build-validation.mjs post');
+});
+
+test('incremental Astro builds persist route output between CI runs', () => {
+  const config = read('../astro.config.mjs');
+  const workflow = read('../../.github/workflows/checks.yml');
+  const dynamicRoutes = [
+    read('../src/pages/community/[id].astro'),
+    read('../src/pages/maps/[id].astro'),
+    read('../src/pages/timelines/[id].astro'),
+    read('../src/pages/eras/[era]/relationships/index.astro'),
+  ];
+
+  assert.match(config, /incrementalBuild:\s*true/);
+  assert.doesNotMatch(config, /cacheDir:/);
+  for (const route of dynamicRoutes) assert.match(route, /cacheKey:/);
+
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.match(workflow, /push:\n\s+branches:\s+\[main\]/);
+  assert.match(workflow, /seed_build_cache:/);
+  assert.match(workflow, /if: github\.event_name == 'push'/);
+  assert.match(workflow, /name: Seed build caches/);
+  assert.match(workflow, /CF_PAGES: '1'/);
+  assert.match(workflow, /changes:\n\s+if: github\.event_name != 'push'/);
+  assert.match(workflow, /repository:\n\s+if: github\.event_name != 'push'/);
+  assert.match(workflow, /verify:\n\s+if: \$\{\{ github\.event_name != 'push' && always\(\) \}\}/);
+  assert.match(workflow, /name: Restore Astro incremental build cache/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/incremental-build\.json/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/dist/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/viscerium\/map-tiles/);
+  assert.match(workflow, /Site\/node_modules\/\.astro\/viscerium\/image-variants/);
+  assert.match(workflow, /astro-incremental-v1-/);
+  assert.match(workflow, /steps\.astro_cache\.outputs\.cache-hit/);
+
+  const build = workflow.split(/^  build:\n/m)[1]?.split(/^  obsidian_plugin:\n/m)[0];
+  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  seed_build_cache:\n/m)[0];
+  assert.ok(build && contact, 'build and contact jobs must exist');
+  assert.match(build, /name: Restore Astro incremental build cache/);
+  assert.doesNotMatch(contact, /name: Restore Astro incremental build cache/);
+});
+
 test('Axe accessibility runtime uses the lockfile instead of a second npm install', () => {
   const pkg = JSON.parse(read('../package.json'));
   const lock = JSON.parse(read('../package-lock.json'));
@@ -112,7 +160,7 @@ test('browser CI containers match locked Playwright and isolate contact tests', 
 
   const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  graph_engines:\n/m)[0];
   const graph = workflow.split(/^  graph_engines:\n/m)[1]?.split(/^  contact:\n/m)[0];
-  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
+  const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  seed_build_cache:\n/m)[0];
   const verify = workflow.split(/^  verify:\n/m)[1];
   assert.ok(browser && graph && contact && verify, 'browser, graph, contact and verify jobs must exist');
   assert.match(browser, /name: Run browser checks/);

@@ -37,7 +37,7 @@ async function cachedCount(cacheDir) {
 }
 
 export async function prepareCachedTiles({ siteRoot, mapId, source, sharp, generatorFile, generate }) {
-  const root = path.join(siteRoot, '.cache', 'map-tiles');
+  const root = path.join(siteRoot, 'node_modules', '.astro', 'viscerium', 'map-tiles');
   await fs.mkdir(root, { recursive: true });
   const fingerprint = createHash('sha256')
     .update(await fs.readFile(source))

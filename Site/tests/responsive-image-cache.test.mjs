@@ -56,7 +56,7 @@ test('responsive cache reuses intact derivatives, regenerates on invalidation an
   await fs.writeFile(v.generatorFile, 'generator-2');
   assert.equal((await v.run()).reused, false);
   assert.equal((await v.run({ versions: { sharp: '2.0.0' } })).reused, false);
-  const cacheRoot = path.join(v.root, '.cache/image-variants');
+  const cacheRoot = path.join(v.root, 'node_modules/.astro/viscerium/image-variants');
   // Damage every matching cache entry to avoid depending on filesystem enumeration order.
   await Promise.all((await fs.readdir(cacheRoot)).filter(name => /^[a-f0-9]+-/.test(name)).map(name =>
     fs.writeFile(path.join(cacheRoot, name, 'files/example-480.webp'), 'corrupted')));
@@ -74,7 +74,7 @@ test('concurrent builders serialize cache writes and adopt the completed entry',
   assert.equal(v.encodes(), 1);
   assert.equal(await fs.readFile(path.join(v.destination, 'example-480.webp'), 'utf8'), 'valid');
 
-  const cacheRoot = path.join(v.root, '.cache/image-variants');
+  const cacheRoot = path.join(v.root, 'node_modules/.astro/viscerium/image-variants');
   const entry = (await fs.readdir(cacheRoot)).find(name => /^[a-f0-9]+-/.test(name));
   await fs.writeFile(path.join(cacheRoot, entry, 'files/example-480.webp'), 'corrupted');
   v.setPayload('repaired');
@@ -91,7 +91,7 @@ test('failed generation removes partial outputs and the lock, then a later build
   v.setFailGeneration(true);
   await assert.rejects(v.run(), /Simulated derivative failure/);
 
-  const cacheRoot = path.join(v.root, '.cache/image-variants');
+  const cacheRoot = path.join(v.root, 'node_modules/.astro/viscerium/image-variants');
   assert.deepEqual(await fs.readdir(cacheRoot), [], 'partial entries and locks must be removed');
 
   v.setFailGeneration(false);
@@ -104,7 +104,7 @@ test('failed generation removes partial outputs and the lock, then a later build
 test('invalid cache metadata and unexpected derivatives trigger regeneration', async t => {
   const v = await setup(t);
   await v.run();
-  const cacheRoot = path.join(v.root, '.cache/image-variants');
+  const cacheRoot = path.join(v.root, 'node_modules/.astro/viscerium/image-variants');
   const entry = (await fs.readdir(cacheRoot)).find(name => /^[a-f0-9]+-/.test(name));
   assert.ok(entry);
   const cacheDir = path.join(cacheRoot, entry);
@@ -158,10 +158,9 @@ test('CI restores responsive derivatives for both full-build jobs', async () => 
   const build = workflow.split(/^  build:\n/m)[1]?.split(/^  obsidian_plugin:\n/m)[0];
   const contact = workflow.split(/^  contact:\n/m)[1]?.split(/^  verify:\n/m)[0];
   assert.ok(build && contact, 'both full-build jobs must exist');
-  assert.equal([...workflow.matchAll(/name: Restore responsive variant cache/g)].length, 2);
   for (const job of [build, contact]) {
     assert.match(job, /name: Restore responsive variant cache/);
-    assert.match(job, /path: Site\/\.cache\/image-variants/);
+    assert.match(job, /path: Site\/node_modules\/\.astro\/viscerium\/image-variants/);
     assert.match(job, /key: responsive-variants-v1-/);
     assert.match(job, /id: responsive_cache/);
     assert.match(job, /Build time: \$\(\(SECONDS - start\)\) seconds/);
