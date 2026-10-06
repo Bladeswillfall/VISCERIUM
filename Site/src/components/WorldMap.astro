@@ -457,18 +457,18 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       maxBoundsViscosity: 0.9,
     });
 
-    const tileUrlTemplate = tiles?.urlTemplate;
-    const tileSize = Number(tiles?.tileSize);
-    const tileZoomOffset = Number(tiles?.zoomOffset);
-
-    if (tileUrlTemplate && Number.isFinite(tileSize) && Number.isFinite(tileZoomOffset)) {
-      L.tileLayer(tileUrlTemplate, {
-        tileSize,
+    if (
+      tiles?.urlTemplate
+      && Number.isFinite(Number(tiles.tileSize))
+      && Number.isFinite(Number(tiles.zoomOffset))
+    ) {
+      L.tileLayer(tiles.urlTemplate, {
+        tileSize: Number(tiles.tileSize),
         minZoom: -16,
         maxZoom: 16,
-        minNativeZoom: Number(tiles?.minNativeZoom),
-        maxNativeZoom: Number(tiles?.maxNativeZoom),
-        zoomOffset: tileZoomOffset,
+        minNativeZoom: Number(tiles.minNativeZoom),
+        maxNativeZoom: Number(tiles.maxNativeZoom),
+        zoomOffset: Number(tiles.zoomOffset),
         bounds,
         noWrap: true,
         keepBuffer: 2,
