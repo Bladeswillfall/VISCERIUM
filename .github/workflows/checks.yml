@@ -709,6 +709,9 @@ jobs:
     if: github.event_name == 'push'
     name: Deploy production to Cloudflare Pages
     runs-on: ubuntu-latest
+    concurrency:
+      group: cloudflare-pages-production
+      cancel-in-progress: true
     timeout-minutes: 10
     permissions:
       contents: read
@@ -749,7 +752,13 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npm exec --yes --package=wrangler@4.136.3 -- wrangler pages deploy dist --project-name=viscerium-site --branch=main --commit-hash="$GITHUB_SHA"
+        run: |
+          current_main="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$current_main" != "$GITHUB_SHA" ]; then
+            echo "::notice::Skipping stale production deploy for $GITHUB_SHA; main is $current_main."
+            exit 0
+          fi
+          npm exec --yes --package=wrangler@4.136.3 -- wrangler pages deploy dist --project-name=viscerium-site --branch=main --commit-hash="$GITHUB_SHA"
 
   verify:
     if: ${{ github.event_name != 'push' && always() }}
