@@ -91,6 +91,12 @@ test('workflow gates each job and verifies both selected and intentionally skipp
   assert.match(workflow, /CHANGES_RESULT:/);
   assert.match(workflow, /test "\$CHANGES_RESULT" = "success"/);
   assert.match(workflow, /"skipped"/);
+
+  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  graph_engines:\n/m)[0];
+  assert.ok(browser, 'browser CI job must exist');
+  assert.match(browser, /shard: \[1, 2\]/);
+  assert.match(browser, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
+  assert.match(browser, /browser-check-log-\$\{\{ matrix\.shard \}\}/);
 });
 
 test('aggregate verification accepts only the skips selected by change detection', () => {
