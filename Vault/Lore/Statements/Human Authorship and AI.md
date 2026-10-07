@@ -19,7 +19,7 @@ community_id: 11e8b074-d296-478b-8d90-29b11cf24e4b
 
 **7 October 2026**
 
-<p class="vc-open-letter-salutation"><em>To the artists, writers, developers, readers, and other people who make things—</em></p>
+<p class="vc-open-letter-salutation">To the artists, writers, developers, readers, and other people who make things.</p>
 
 I use AI-assisted *tools* in parts of VISCERIUM's technical development while keeping its published creative work human-made.
 
