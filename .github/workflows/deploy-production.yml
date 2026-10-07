@@ -86,4 +86,13 @@ jobs:
           PUBLIC_TURNSTILE_SITE_KEY: '0x4AAAAAADyoq-9zwp5ep4hG'
         run: npm run build
 
-      - run: echo "Production artifact ready for direct upload."
+      - name: Deploy tested production artifact
+        id: deploy
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: Site
+          packageManager: npm
+          wranglerVersion: '4.136.3'
+          command: pages deploy dist --project-name=viscerium-site --branch=main --commit-hash=${{ github.sha }}
