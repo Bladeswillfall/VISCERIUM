@@ -18,7 +18,7 @@ function markSite(checks) {
 
 function affectsEnabledContactFixture(name) {
   return name === 'Site/src/pages/contact.astro'
-    || name === 'Site/src/styles/contact.css'
+    || name.startsWith('Site/src/styles/')
     || name === 'Site/site.config.mjs'
     || name === 'Site/astro.config.mjs'
     || name === 'Site/wrangler.toml'
