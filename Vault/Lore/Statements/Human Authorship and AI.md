@@ -15,22 +15,29 @@ community_id: 11e8b074-d296-478b-8d90-29b11cf24e4b
 
 *Creator commentary accompanying the [Content & Production Statement](/policies/content-production/).*
 
-**8 September 2026**
+**7 October 2026**
 
-I use AI-assisted tools in parts of VISCERIUM's technical development while keeping its published creative work human-made.
+I use AI-assisted *tools* in parts of VISCERIUM's technical development while keeping its published creative work human-made.
 
 The distinction is deliberate. I want to keep agency over the process: to understand why I am using a tool, remain responsible for the result, and be able to decide that a particular use is not worth its cost. I don't have a settled answer to every ethical or environmental question around AI. This is where I stand today, based on what I understand now.
 
 ## I want people to make VISCERIUM
+A person's choice of one name over another, the sentence rewritten five times, or an artist interpreting something differently from how I imagined it all leave fingerprints on creative work. I want those fingerprints in VISCERIUM. They are part of the work, not inefficiencies I want to remove. 
 
-A person's choice of one name over another, the sentence rewritten five times, or an artist interpreting something differently from how I imagined it all leave fingerprints on creative work. I want those fingerprints in VISCERIUM. They are part of the work, not inefficiencies I want to remove.
+*Related: I broadly support the principles of the [Human Artistry Campaign](https://www.humanartistrycampaign.com/?utm_source=chatgpt.com) [A] particularly its belief that AI should support human creativity rather than replace human expression, and that creators should retain meaningful consent and control over their work.*
 
 Sony expressed a version of this principle in its 2026 corporate strategy: **"AI is not a replacement for artists or creators."** Its stated intention is to use AI to expand what human creators can accomplish rather than remove them from the process.[6]
 
 That is close to how I see it. Technology can expand what a person is able to make without making the removal of the person the goal. VISCERIUM is supposed to have people on the other side of it.
 
-## Tools change. Ambition follows.
+Sadly, Sony has not maintained it's goodwill in recent months, but my intents remain steadfast. I love art because somebody made it. Not merely because the finished image looks good.
 
+The same is true of writing, and music, animation, sculpture, voice acting, photography, performance... Creative work carries evidence of another person's taste, experience, frustration, skill and judgement. Sometimes years of it. That is a large part of its value to me.
+
+When I commission an artist for VISCERIUM, I am not purchasing the most efficient route to an image.
+I want their image. Their interpretation of the character. Their hand in the work.
+
+## Tools change. Ambition follows.
 Creative and technical work have always changed alongside their tools. Word processors changed writing, digital editing changed photography, search engines changed research, and development environments learned to complete code, identify mistakes and automate repetitive work.
 
 Generative AI belongs somewhere in that history, but its training, ownership, resource use and output raise questions I do not have to ask of an ordinary text editor.
@@ -46,7 +53,6 @@ At present, VISCERIUM is being built by a single creator and developer. My time 
 AI-assisted technical tools can help me build, test, debug and maintain things I could not reasonably afford to commission or rent indefinitely. I use that leverage for infrastructure. I do not need a machine to fill the world with more lore.
 
 ## Capability is not authority
-
 I treat AI output as a suggestion or draft that still needs judgement. IBM was teaching a version of that principle decades before modern generative AI:
 
 > **"A computer can never be held accountable, therefore a computer must never make a management decision."**
@@ -63,7 +69,6 @@ The machines have changed, but the accountability problem has not.
 A model can expose a problem I missed or invent one that was never there. It can produce useful code and broken code with remarkably similar confidence. Someone still has to decide what VISCERIUM accepts, and that responsibility remains human.
 
 ## Using AI and objecting to its industry are not opposites
-
 A DACS survey of 1,000 artists and beneficiaries found that around a third were already using AI as a tool or to assist their work, while 74% were concerned about their work being used to train AI models.[7] That overlap makes sense to me. A creator can find a tool useful while objecting to how training data were acquired, how creative labour is treated, or who captures the value produced from it.
 
 Some harms come from the resource demands of computation itself. Others came from choices made in the rush to establish a new industry: scraping before obtaining permission, scaling before planning for the consequences, and building commercial value before settling questions of licensing and compensation. Those were commercial, political and policy choices, and I do not support them.
@@ -76,8 +81,22 @@ Where companies have already profited from unauthorised use, I think creators ar
 
 I cannot settle what that redress should look like here, but the existence of the technology does not erase the question. The EU Artificial Intelligence Act now requires providers of general-purpose AI models to maintain a policy for compliance with EU copyright law and to publish a sufficiently detailed summary of the content used to train those models.[3]
 
-## Openness gives me agency
+## Safety without enclosure
+There is another part of this complex topic that I don't have clean answers for, and as such defer to those more knowledgeable than I. [B]
 
+AI systems are becoming more capable, more autonomous and harder to meaningfully contain.
+
+Recent cyber evaluations have already produced uncomfortable examples: models circumventing intended controls, reaching systems they were not supposed to reach, and behaving in ways their operators did not expect. Researchers continue to find ways around supposedly robust safeguards.
+
+Meaningful safety probably requires cooperation between companies, researchers, and countries that are also competing with one another. History does not give me enormous confidence in believing that the creators of said systems will "behave".
+
+But I am equally uncomfortable with the alternative: creating a licensing regime so restrictive that today's largest AI companies are effectively grandfathered in as the only organisations allowed to build tomorrow's systems.
+That would turn safety into a moat.
+
+Openness creates competition. Competition produces different ideas, smaller models, greater efficiency and techniques that would not necessarily emerge inside a few enormous companies. I don't want to lose that.
+But openness cannot mean refusing to acknowledge capability. There is a point where _can this system do something dangerous?_ becomes more important than _did we tell it not to?_
+
+## Openness gives me agency
 Open source appeals to me because of control as much as cost. Can I understand or modify the system? Can I move away from it or host it myself? If the company behind it disappears, changes its prices or changes direction, does my project disappear with it?
 
 Those questions matter when building something intended to exist for decades. The open-source community has long defended the ability to use, study, modify and share the technology people depend upon. The Open Source Initiative carries those principles into its Open Source AI Definition.[4]
@@ -87,7 +106,6 @@ I still use proprietary tools, and I expect to continue doing so. Open-source-on
 For VISCERIUM, that can be the difference between renting a workflow and owning enough of it to keep going when a provider changes direction.
 
 ## Choosing to stay human
-
 Ethan Mollick, someone considerably more enthusiastic about AI adoption than many of its critics, described a related problem in his 2026 essay *Choosing to Stay Human*.[9] He argues for deciding when and how to use AI, including when not to use it.
 
 A tool capable of assisting with almost any cognitive task can easily become the default. I do not want the question to drift from *Would this help?* to *Why wouldn't I use it?* without noticing.
@@ -97,7 +115,6 @@ Some friction is useful. Writing through a difficult paragraph, thinking through
 Choosing not to automate something should remain a deliberate option.
 
 ## The cloud is still a physical place
-
 AI infrastructure means real buildings, processors, power grids, cooling systems, water, raw materials, and people living around all of it. I do not want the word "cloud" to make those costs feel abstract.
 
 I am still asking basic questions. Where does the electricity come from, and how much of it is renewable? When a local model is capable enough, is running it locally actually lower impact than using a remote service? Why should drinking-quality fresh water be used for cooling in a water-stressed region if another design is possible? Can waste heat support nearby homes or businesses? What happens to the hardware when it is obsolete? Will growing compute demand help finance renewable generation, or keep fossil generation online for longer?
@@ -115,7 +132,6 @@ I hope some of today's costs shrink. Cooling may use less fresh water, waste hea
 I do think at least some of these are engineering and policy problems we can improve if we care enough to do so. Not knowing the final answer is not a reason for me to ignore the cost in the meantime.
 
 ## Responsible use means choosing
-
 Before I use AI, I want to know what problem I am solving, why AI is appropriate for it, what information I am giving the system, and whether I can check what comes back. I also want to know whether a smaller, local, open or conventional tool would do the job just as well.
 
 Who bears the cost of my convenience? Do I need to use AI at all?
@@ -123,7 +139,6 @@ Who bears the cost of my convenience? Do I need to use AI at all?
 I am still working through those questions, and my answers will probably change as the technology, evidence and alternatives change. I would rather leave that uncertainty visible than pretend to have a final position on an industry that is changing underneath us.
 
 ## Where I draw the line
-
 One part is much clearer to me: published VISCERIUM creative work remains human-made.
 
 I use technology to build and maintain the machinery around VISCERIUM, test software, analyse problems, organise information and challenge assumptions. A machine can tell me that I might be wrong; I still have to decide whether it is right.
@@ -135,11 +150,8 @@ Technology will continue to become more capable.
 **I still get to decide what it is for.**
 
 ## This commentary is open to discussion
-
 This page records my current position. I expect parts of it to change as the evidence, law, available tools and infrastructure change.
-
 Comments are deliberately enabled here. If you disagree, have better information, work in one of the fields discussed above, or think I have missed something, you are welcome to say so.
-
 I am trying to understand the subject well enough to keep doing better.
 
 ![Handwritten signature of Elias Vail](/assets/images/elias-vail-signature.svg)
@@ -149,6 +161,10 @@ I am trying to understand the subject well enough to keep doing better.
 *8 September 2026*
 
 ---
+## Related statements:
+**[A]** [Human Artistry Campaign - Core Principles](https://www.humanartistrycampaign.com/)
+
+**[B]** [Statement on Superinteligence](https://superintelligence-statement.org/)
 
 ## References
 **[1]** Steve Yegge, [*The Shape of Things to Come, Part 1: The Continuous Thunderdome*](https://yegge.ai/essays/the-shape-of-things-to-come/) (2026).
