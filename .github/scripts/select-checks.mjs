@@ -16,10 +16,11 @@ function markSite(checks) {
   }
 }
 
+const CONTACT_STYLE_INPUT = /^Site\/src\/styles\/(?:a11y|codex-ui|color-tokens|contact|editorial-shell|era-styles|header-controls|ion-(?:expressive-code|layers|theme)|layout|navigation|reader-settings|typography)\.css$/;
+
 function needsEnabledContactFixture(name) {
   return name === 'Site/src/pages/contact.astro'
-    || name === 'Site/src/styles/contact.css'
-    || name === 'Site/src/styles/editorial-shell.css'
+    || CONTACT_STYLE_INPUT.test(name)
     || name === 'Site/site.config.mjs'
     || name === 'Site/astro.config.mjs'
     || name === 'Site/package.json'
