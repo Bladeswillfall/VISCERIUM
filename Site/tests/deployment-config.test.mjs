@@ -135,13 +135,12 @@ test('main builds can deploy the prebuilt artifact directly to Cloudflare Pages'
   assert.match(workflow, /name: Upload production artifact/);
   assert.match(workflow, /name: production-site-dist/);
   assert.match(deploy, /needs: seed_build_cache/);
-  assert.match(deploy, /deployments: write/);
+  assert.match(deploy, /contents: read/);
   assert.match(deploy, /name: Check Cloudflare deploy credentials/);
   assert.match(deploy, /secrets\.CLOUDFLARE_API_TOKEN/);
   assert.match(deploy, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
-  assert.match(deploy, /cloudflare\/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0/);
-  assert.match(deploy, /wranglerVersion: '4\.136\.3'/);
-  assert.match(deploy, /pages deploy dist --project-name=viscerium-site --branch=main/);
+  assert.match(deploy, /npm exec --yes --package=wrangler@4\.136\.3 -- wrangler pages deploy dist/);
+  assert.match(deploy, /--project-name=viscerium-site --branch=main/);
   assert.doesNotMatch(workflow, /PUBLIC_CONTACT_FORM_ENDPOINT:\s*https:/);
 });
 
