@@ -57,8 +57,14 @@ test('site or Vault changes retain normal site coverage without rebuilding the c
 });
 
 test('contact-sensitive build inputs retain the enabled contact fixture', () => {
+  const astroConfig = readFileSync(new URL('../../Site/astro.config.mjs', import.meta.url), 'utf8');
+  const customCss = astroConfig.match(/customCss:\s*\[([\s\S]*?)\]/)?.[1];
+  assert.ok(customCss, 'Astro config must declare Starlight customCss');
+  const sharedStyles = [...customCss.matchAll(/['"]\.\/src\/styles\/([^'"]+)['"]/g)]
+    .map((match) => `Site/src/styles/${match[1]}`);
+
   for (const file of ['Site/src/pages/contact.astro', 'Site/src/styles/contact.css',
-    'Site/src/styles/editorial-shell.css', 'Site/site.config.mjs', 'Site/astro.config.mjs',
+    'Site/src/styles/editorial-shell.css', ...sharedStyles, 'Site/site.config.mjs', 'Site/astro.config.mjs',
     'Site/package.json', 'Site/package-lock.json']) {
     assert.deepEqual(selectChecks([file]), fullSiteWithContact(), file);
   }
