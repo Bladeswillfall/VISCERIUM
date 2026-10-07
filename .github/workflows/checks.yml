@@ -614,7 +614,7 @@ jobs:
           retention-days: 1
 
   seed_build_cache:
-    if: github.event_name == 'push' && vars.CLOUDFLARE_DIRECT_DEPLOY != '1'
+    if: ${{ github.event_name == 'push' && vars.CLOUDFLARE_DIRECT_DEPLOY != '1' }}
     name: Seed build caches
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -678,7 +678,7 @@ jobs:
         run: npm run build
 
   deploy_production:
-    if: github.event_name == 'push' && vars.CLOUDFLARE_DIRECT_DEPLOY == '1'
+    if: ${{ github.event_name == 'push' && vars.CLOUDFLARE_DIRECT_DEPLOY == '1' }}
     name: Build and deploy production
     runs-on: ubuntu-latest
     timeout-minutes: 10
