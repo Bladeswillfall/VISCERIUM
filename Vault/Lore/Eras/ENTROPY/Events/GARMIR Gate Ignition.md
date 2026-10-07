@@ -3,6 +3,7 @@ title: "GARMIR Gate Ignition"
 description: "The GARMIR transit structure opened a stable corridor through folded space for eleven minutes."
 status: published
 type: event
+stub: true
 era: ENTROPY
 calendarDate:
   calendar: okse

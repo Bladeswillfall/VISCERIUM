@@ -3,6 +3,7 @@ import siteConfig from '../../site.config.mjs';
 
 const { starlightRoute } = Astro.locals;
 const { t } = Astro.locals;
+const { label = t('page.editLink') } = Astro.props;
 const sourcePath = starlightRoute.entry.data.sourcePath;
 const sourceRepoPath = starlightRoute.entry.data.sourceRepoPath
   ?? (typeof sourcePath === 'string' ? `Vault/Lore/${sourcePath}` : undefined);
@@ -16,6 +17,6 @@ const editUrl = siteConfig.githubRepoUrl && encodedSourcePath
 
 {editUrl && (
   <a class="codex-edit-link" href={editUrl} target="_blank" rel="noreferrer">
-    {t('page.editLink')}<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
+    {label}<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
   </a>
 )}

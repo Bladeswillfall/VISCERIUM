@@ -3,6 +3,7 @@ title: "The Hollowed Labour Panic"
 description: "Rumours that missing workers had returned altered spread across the industrial wards and triggered violent inspections."
 status: published
 type: event
+stub: true
 era: SMOG
 calendarDate:
   calendar: okse

@@ -3,6 +3,7 @@ title: "The Gate Ignition Echo"
 description: "Minutes after the GARMIR corridor closed, an identical ignition signature appeared beyond the mapped edge of human space."
 status: published
 type: event
+stub: true
 era: ENTROPY
 calendarDate:
   calendar: okse
