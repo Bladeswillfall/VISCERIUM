@@ -17,6 +17,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Replaced the Human Made authorship mark with the CC0 Brainmade mark across the Codex footer, content-production policy and repository badge.
 - Enabled Astro's experimental incremental static-build cache for VISCERIUM-owned dynamic routes, moved Atlas and responsive-image caches into Cloudflare's persisted Astro cache tree, skipped duplicate validation during Cloudflare builds, and replaced post-merge full CI with a cache-seeding build on main.
 - Increased the homepage Recent Articles grid limit from 6 to 36 entries ([#224](https://github.com/Bladeswillfall/VISCERIUM/pull/224)).
 - Restored ordinary Myrkild strain prose and removed cell-image margins (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
