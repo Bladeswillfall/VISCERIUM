@@ -216,8 +216,16 @@ if (activeScene) {
   const research = contextOutlinks.filter((value) => clean(value?.path ?? value).startsWith(researchPrefix));
   addContextRow(section, "Research", research, activeScene.file.path);
 
-  const codexPrefix = `${projectBase}/Codex/`;
-  const projectReferences = contextOutlinks.filter((value) => clean(value?.path ?? value).startsWith(codexPrefix));
+  const projectPage = dv.page(`${projectBase}/${projectTitle}`);
+  const codexPrefixes = [`${projectBase}/Codex/`];
+  if (clean(projectPage?.seriesId)) {
+    const seriesBase = projectBase.split("/").slice(0, -1).join("/");
+    if (seriesBase) codexPrefixes.push(`${seriesBase}/Codex/`);
+  }
+  const projectReferences = contextOutlinks.filter((value) => {
+    const path = clean(value?.path ?? value);
+    return codexPrefixes.some((prefix) => path.startsWith(prefix));
+  });
   addContextRow(section, "Project references", projectReferences, activeScene.file.path);
 }
 
