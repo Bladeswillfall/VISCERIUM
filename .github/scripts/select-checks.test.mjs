@@ -55,6 +55,7 @@ test('site or Vault changes retain site coverage without unrelated contact build
     assert.deepEqual(selectChecks([file]), fullSite, file);
   }
   for (const file of ['Site/src/pages/contact.astro', 'Site/src/styles/contact.css',
+    'Site/src/styles/a11y.css', 'Site/src/styles/typography.css',
     'Site/site.config.mjs', 'Site/astro.config.mjs', 'Site/wrangler.toml',
     'Site/package.json', 'Site/package-lock.json']) {
     assert.deepEqual(selectChecks([file]), fullSiteWithContact, file);
