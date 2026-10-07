@@ -3,7 +3,7 @@ title: Human Authorship, AI & the Tools We Use
 description: Creator commentary on the thinking behind VISCERIUM's Content & Production Statement.
 status: published
 type: article
-date: 2026-09-08
+date: 2026-10-07
 tags:
   - statement
   - authorship
@@ -24,7 +24,7 @@ The distinction is deliberate. I want to keep agency over the process: to unders
 ## I want people to make VISCERIUM
 A person's choice of one name over another, the sentence rewritten five times, or an artist interpreting something differently from how I imagined it all leave fingerprints on creative work. I want those fingerprints in VISCERIUM. They are part of the work, not inefficiencies I want to remove. 
 
-*Related: I broadly support the principles of the [Human Artistry Campaign](https://www.humanartistrycampaign.com/?utm_source=chatgpt.com) [A] particularly its belief that AI should support human creativity rather than replace human expression, and that creators should retain meaningful consent and control over their work.*
+*Related: I broadly support the principles of the [Human Artistry Campaign](https://www.humanartistrycampaign.com) [A] particularly its belief that AI should support human creativity rather than replace human expression, and that creators should retain meaningful consent and control over their work.*
 
 Sony expressed a version of this principle in its 2026 corporate strategy: **"AI is not a replacement for artists or creators."** Its stated intention is to use AI to expand what human creators can accomplish rather than remove them from the process.[6]
 
@@ -158,7 +158,7 @@ I am trying to understand the subject well enough to keep doing better.
 
 **Elias Vail**  
 *Creator of VISCERIUM*  
-*8 September 2026*
+*7 October 2026*
 
 ---
 ## Related statements:
