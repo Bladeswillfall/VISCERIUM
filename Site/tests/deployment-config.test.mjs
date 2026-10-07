@@ -101,16 +101,8 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /push:\n\s+branches:\s+\[main\]/);
   assert.match(workflow, /seed_build_cache:/);
-  assert.match(workflow, /if: github\.event_name == 'push' && vars\.CLOUDFLARE_DIRECT_DEPLOY != '1'/);
+  assert.match(workflow, /if: github\.event_name == 'push'/);
   assert.match(workflow, /name: Seed build caches/);
-  assert.match(workflow, /deploy_production:/);
-  assert.match(workflow, /if: github\.event_name == 'push' && vars\.CLOUDFLARE_DIRECT_DEPLOY == '1'/);
-  assert.match(workflow, /name: Build and deploy production/);
-  assert.match(workflow, /astro-production-v1-/);
-  assert.match(workflow, /cloudflare\/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0/);
-  assert.match(workflow, /pages deploy dist --project-name=viscerium-site --branch=main/);
-  assert.match(workflow, /secrets\.CLOUDFLARE_API_TOKEN/);
-  assert.match(workflow, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
   assert.match(workflow, /CF_PAGES: '1'/);
   assert.match(workflow, /changes:\n\s+if: github\.event_name != 'push'/);
   assert.match(workflow, /repository:\n\s+if: github\.event_name != 'push'/);
@@ -128,6 +120,20 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.ok(build && contact, 'build and contact jobs must exist');
   assert.match(build, /name: Restore Astro incremental build cache/);
   assert.doesNotMatch(contact, /name: Restore Astro incremental build cache/);
+});
+
+test('direct production deploy is opt-in and uploads a prebuilt Pages artifact', () => {
+  const workflow = read('../../.github/workflows/deploy-production.yml');
+
+  assert.match(workflow, /vars\.CLOUDFLARE_DIRECT_DEPLOY == '1'/);
+  assert.match(workflow, /name: Build and deploy production/);
+  assert.match(workflow, /astro-production-v1-/);
+  assert.match(workflow, /PUBLIC_CONTACT_FORM_ENABLED: '1'/);
+  assert.match(workflow, /PUBLIC_RYBBIT_ENABLED: '1'/);
+  assert.match(workflow, /cloudflare\/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0/);
+  assert.match(workflow, /pages deploy dist --project-name=viscerium-site --branch=main/);
+  assert.match(workflow, /secrets\.CLOUDFLARE_API_TOKEN/);
+  assert.match(workflow, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
 });
 
 test('Axe accessibility runtime uses the lockfile instead of a second npm install', () => {
