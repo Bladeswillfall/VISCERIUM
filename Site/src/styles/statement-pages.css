@@ -36,10 +36,6 @@ body:has(.vc-open-letter-marker) .vc-open-letter-marker {
   display: none !important;
 }
 
-body:has(.vc-open-letter-marker) h1#_top {
-  max-width: 18ch;
-}
-
 body:has(.vc-open-letter-marker) .vc-open-letter-salutation {
   margin-block: 2.2rem 1.5rem;
   color: var(--sl-color-gray-2);
@@ -52,56 +48,7 @@ body:has(.vc-open-letter-marker) .vc-open-letter-salutation em {
   font-style: italic;
 }
 
-body:has(.vc-open-letter-marker) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
-  margin-block: 3.2rem .72rem;
-}
-
-body:has(.vc-open-letter-marker) .sl-markdown-content h2 {
-  display: block;
-  margin: 0;
-  padding: 0;
-  color: var(--sl-color-white);
-  font-family: var(--vc-font-body);
-  font-size: clamp(1.3rem, 1.12rem + .55vw, 1.65rem);
-  font-weight: 600;
-  letter-spacing: -.01em;
-  line-height: 1.28;
-}
-
-body:has(.vc-open-letter-marker) .sl-markdown-content h2::before,
-body:has(.vc-open-letter-marker) .sl-markdown-content h2::after {
-  content: none;
-  display: none;
-}
-
-body:has(.vc-open-letter-marker) .sl-markdown-content > .sl-heading-wrapper.level-h3 {
-  margin-block: 2.35rem .35rem;
-}
-
-body:has(.vc-open-letter-marker) .sl-markdown-content h3 {
-  margin: 0;
-  padding: 0;
-  color: var(--sl-color-gray-2);
-  font-family: var(--vc-font-body);
-  font-size: 1.02rem;
-  font-style: italic;
-  font-weight: 600;
-  letter-spacing: .01em;
-  line-height: 1.4;
-  text-transform: none;
-}
-
-body:has(.vc-open-letter-marker) .sl-markdown-content h3::before,
-body:has(.vc-open-letter-marker) .sl-markdown-content h3::after {
-  content: none;
-  display: none;
-}
-
 @media (max-width: 48rem) {
-  body:has(.vc-open-letter-marker) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
-    margin-block-start: 2.65rem;
-  }
-
   body:has(.vc-open-letter-marker) .vc-open-letter-salutation {
     margin-block-start: 1.8rem;
   }
