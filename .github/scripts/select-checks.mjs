@@ -11,9 +11,18 @@ const full = () => Object.fromEntries(CHECKS.map(name => [name, true]));
 const empty = () => Object.fromEntries(CHECKS.map(name => [name, false]));
 
 function markSite(checks) {
-  for (const name of ['unit', 'build', 'browser', 'graph_engines', 'contact', 'axe']) {
+  for (const name of ['unit', 'build', 'browser', 'graph_engines', 'axe']) {
     checks[name] = true;
   }
+}
+
+function affectsEnabledContactFixture(name) {
+  return name === 'Site/src/pages/contact.astro'
+    || name === 'Site/src/styles/contact.css'
+    || name === 'Site/site.config.mjs'
+    || name === 'Site/astro.config.mjs'
+    || name === 'Site/wrangler.toml'
+    || /^Site\/package(?:-lock)?\.json$/.test(name);
 }
 
 function isTimelinePluginSource(name) {
@@ -63,6 +72,7 @@ function markPath(checks, name) {
     return true;
   } else if (name.startsWith('Site/') || name.startsWith('Vault/')) {
     markSite(checks);
+    if (affectsEnabledContactFixture(name)) checks.contact = true;
   } else {
     return false;
   }
