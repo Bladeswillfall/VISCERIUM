@@ -37,12 +37,6 @@ body:has(.vc-open-letter-marker) .vc-open-letter-marker {
   display: none !important;
 }
 
-body:has(.vc-open-letter-marker) .sl-markdown-content {
-  width: min(100%, 66ch);
-  max-width: 66ch;
-  margin-inline: auto;
-}
-
 body:has(.vc-open-letter-marker) h1#_top {
   max-width: 18ch;
 }
@@ -105,11 +99,6 @@ body:has(.vc-open-letter-marker) .sl-markdown-content h3::after {
 }
 
 @media (max-width: 48rem) {
-  body:has(.vc-open-letter-marker) .sl-markdown-content {
-    width: 100%;
-    max-width: 100%;
-  }
-
   body:has(.vc-open-letter-marker) .sl-markdown-content > .sl-heading-wrapper.level-h2 {
     margin-block-start: 2.65rem;
   }
