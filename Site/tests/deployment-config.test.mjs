@@ -101,8 +101,16 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /push:\n\s+branches:\s+\[main\]/);
   assert.match(workflow, /seed_build_cache:/);
-  assert.match(workflow, /if: github\.event_name == 'push'/);
+  assert.match(workflow, /if: github\.event_name == 'push' && vars\.CLOUDFLARE_DIRECT_DEPLOY != '1'/);
   assert.match(workflow, /name: Seed build caches/);
+  assert.match(workflow, /deploy_production:/);
+  assert.match(workflow, /if: github\.event_name == 'push' && vars\.CLOUDFLARE_DIRECT_DEPLOY == '1'/);
+  assert.match(workflow, /name: Build and deploy production/);
+  assert.match(workflow, /astro-production-v1-/);
+  assert.match(workflow, /cloudflare\/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0/);
+  assert.match(workflow, /pages deploy dist --project-name=viscerium-site --branch=main/);
+  assert.match(workflow, /secrets\.CLOUDFLARE_API_TOKEN/);
+  assert.match(workflow, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
   assert.match(workflow, /CF_PAGES: '1'/);
   assert.match(workflow, /changes:\n\s+if: github\.event_name != 'push'/);
   assert.match(workflow, /repository:\n\s+if: github\.event_name != 'push'/);
@@ -165,6 +173,7 @@ test('browser CI containers match locked Playwright and isolate contact tests', 
   assert.ok(browser && graph && contact && verify, 'browser, graph, contact and verify jobs must exist');
   assert.match(browser, /name: Run browser checks/);
   assert.match(browser, /playwright test tests\/browser --browser=chromium/);
+  assert.match(browser, /--workers=4/);
   assert.doesNotMatch(browser, /--browser=firefox|--browser=webkit/);
   assert.match(graph, /needs: \[changes, build\]/);
   assert.match(graph, /if: needs\.changes\.outputs\.graph_engines == 'true'/);
