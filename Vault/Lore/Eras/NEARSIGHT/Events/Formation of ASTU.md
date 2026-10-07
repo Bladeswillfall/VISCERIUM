@@ -7,6 +7,7 @@ imageTitle: ASTU flag
 alt: White eight-pointed star on a dark navy field.
 status: published
 type: event
+stub: true
 era: NEARSIGHT
 calendarDate:
   calendar: okse

@@ -3,6 +3,7 @@ title: "The Grey Armistice"
 description: "The last continental trench fronts fell silent beneath an ash-coloured sky, ending the wars that consumed the late industrial age."
 status: published
 type: event
+stub: true
 era: SMOG
 calendarDate:
   calendar: okse

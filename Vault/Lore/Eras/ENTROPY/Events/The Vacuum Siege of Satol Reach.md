@@ -3,6 +3,7 @@ title: "The Vacuum Siege of Satol Reach"
 description: "Naranor vessels isolated Satol Reach and fought a siege in which distance, momentum and memory became contested terrain."
 status: published
 type: event
+stub: true
 era: ENTROPY
 calendarDate:
   calendar: okse
