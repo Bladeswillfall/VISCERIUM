@@ -88,6 +88,8 @@ test('Story State derives the four working views from scene events', () => {
   assert.match(stateView, /notesPage\?\.file\?\.outlinks/);
   assert.match(stateView, /Research\//);
   assert.match(stateView, /Codex\//);
+  assert.match(stateView, /projectPage\?\.seriesId/);
+  assert.match(stateView, /codexPrefixes/);
   assert.match(stateView, /consequence-update/);
   assert.match(stateView, /Dependence is rising while trust is falling/);
   assert.match(stateView, /latestByActorType\.set\(`\$\{event\.actor\}\\u0000\$\{event\.type\}`/);
