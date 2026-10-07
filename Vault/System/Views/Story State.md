@@ -206,14 +206,18 @@ if (activeScene) {
   addContextRow(section, "POV", activeScene.pov, activeScene.file.path);
   addContextRow(section, "Characters", activeScene.characters, activeScene.file.path);
   addContextRow(section, "Location", activeScene.location, activeScene.file.path);
-  addContextRow(section, "Scene notes", activeScene.notesFile, activeScene.file.path);
+
+  const notesPath = clean(activeScene.notesFile);
+  addContextRow(section, "Scene notes", notesPath, activeScene.file.path);
+  const notesPage = notesPath ? (dv.page(notesPath) ?? dv.page(notesPath.replace(/\.md$/i, ""))) : null;
+  const contextOutlinks = [...list(activeScene.file.outlinks), ...list(notesPage?.file?.outlinks)];
 
   const researchPrefix = `${projectBase}/Research/`;
-  const research = list(activeScene.file.outlinks).filter((value) => clean(value?.path ?? value).startsWith(researchPrefix));
+  const research = contextOutlinks.filter((value) => clean(value?.path ?? value).startsWith(researchPrefix));
   addContextRow(section, "Research", research, activeScene.file.path);
 
   const codexPrefix = `${projectBase}/Codex/`;
-  const projectReferences = list(activeScene.file.outlinks).filter((value) => clean(value?.path ?? value).startsWith(codexPrefix));
+  const projectReferences = contextOutlinks.filter((value) => clean(value?.path ?? value).startsWith(codexPrefix));
   addContextRow(section, "Project references", projectReferences, activeScene.file.path);
 }
 
