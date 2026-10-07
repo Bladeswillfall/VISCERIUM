@@ -67,10 +67,13 @@ test('Templater exposes one story-change action and one derived state view', () 
   assert.ok(templaterConfig.startup_templates.includes('Templates/_Startup/Ensure StoryLine Fields.md'));
 });
 
-test('Open Story State passes the selected project into the shared state view', () => {
+test('Open Story State passes the selected project and active scene into the shared state view', () => {
   assert.match(script, /workspace\.__visceriumStoryStateProjectBase = project\.base/);
   assert.match(stateView, /workspace\?\.__visceriumStoryStateProjectBase/);
   assert.match(stateView, /delete app\.workspace\.__visceriumStoryStateProjectBase/);
+  assert.match(script, /workspace\.__visceriumStoryStateScenePath = active\.path/);
+  assert.match(stateView, /workspace\?\.__visceriumStoryStateScenePath/);
+  assert.match(stateView, /delete app\.workspace\.__visceriumStoryStateScenePath/);
 });
 
 test('Story State derives the four working views from scene events', () => {
@@ -80,6 +83,10 @@ test('Story State derives the four working views from scene events', () => {
   assert.match(stateView, /Character State/);
   assert.match(stateView, /Information Map/);
   assert.match(stateView, /Relationships \/ Power/);
+  assert.match(stateView, /Scene Context/);
+  assert.match(stateView, /activeScene\.notesFile/);
+  assert.match(stateView, /Research\//);
+  assert.match(stateView, /Codex\//);
   assert.match(stateView, /consequence-update/);
   assert.match(stateView, /Dependence is rising while trust is falling/);
   assert.match(stateView, /latestByActorType\.set\(`\$\{event\.actor\}\\u0000\$\{event\.type\}`/);
