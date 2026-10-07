@@ -381,8 +381,12 @@ jobs:
   browser:
     needs: [changes, build]
     if: needs.changes.outputs.browser == 'true'
-    name: Browser checks
+    name: Browser checks (${{ matrix.shard }}/2)
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # Verified MCR v1.63.0-noble OCI index
     timeout-minutes: 20
@@ -433,13 +437,13 @@ jobs:
           HOME: /root
         run: |
           set -o pipefail
-          npx --no-install playwright test tests/browser --browser=chromium --reporter=line --workers=2 2>&1 | tee "$RUNNER_TEMP/playwright.log"
+          npx --no-install playwright test tests/browser --browser=chromium --reporter=line --workers=2 --shard=${{ matrix.shard }}/2 2>&1 | tee "$RUNNER_TEMP/playwright.log"
 
       - name: Upload browser check log
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: browser-check-log
+          name: browser-check-log-${{ matrix.shard }}
           path: ${{ runner.temp }}/playwright.log
           if-no-files-found: warn
           retention-days: 1

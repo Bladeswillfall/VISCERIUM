@@ -6,8 +6,9 @@ import { CHECKS, changedPaths, selectChecks } from './select-checks.mjs';
 
 const all = Object.fromEntries(CHECKS.map(name => [name, true]));
 const only = (...names) => Object.fromEntries(CHECKS.map(name => [name, names.includes(name)]));
-const fullSite = only('unit', 'build', 'browser', 'graph_engines', 'contact', 'axe');
-const fullSiteWithPlugin = () => only('unit', 'build', 'obsidian_plugin', 'browser', 'graph_engines', 'contact', 'axe');
+const fullSite = only('unit', 'build', 'browser', 'graph_engines', 'axe');
+const fullSiteWithPlugin = () => only('unit', 'build', 'obsidian_plugin', 'browser', 'graph_engines', 'axe');
+const fullSiteWithContact = () => only('unit', 'build', 'browser', 'graph_engines', 'contact', 'axe');
 
 test('docs-only changes run only mandatory repository policy', () => {
   assert.deepEqual(selectChecks(['CONTRIBUTING.md', 'docs/guide.md']), only());
@@ -48,10 +49,24 @@ test('combined PR changes select the union of affected jobs', () => {
   ]), only('build', 'browser', 'graph_engines', 'axe'));
 });
 
-test('site or Vault changes retain all site coverage', () => {
+test('site or Vault changes retain normal site coverage without rebuilding the contact fixture', () => {
   for (const file of ['Site/src/pages/index.astro', 'Site/public/_headers', 'Vault/Lore/example.md',
-    'Site/package-lock.json', 'Site/tests/fixtures/storyline-test-scene.md']) {
+    'Site/tests/fixtures/storyline-test-scene.md']) {
     assert.deepEqual(selectChecks([file]), fullSite, file);
+  }
+});
+
+test('contact-sensitive build inputs retain the enabled contact fixture', () => {
+  const astroConfig = readFileSync(new URL('../../Site/astro.config.mjs', import.meta.url), 'utf8');
+  const customCss = astroConfig.match(/customCss:\s*\[([\s\S]*?)\]/)?.[1];
+  assert.ok(customCss, 'Astro config must declare Starlight customCss');
+  const sharedStyles = [...customCss.matchAll(/['"]\.\/src\/styles\/([^'"]+)['"]/g)]
+    .map((match) => `Site/src/styles/${match[1]}`);
+
+  for (const file of ['Site/src/pages/contact.astro', 'Site/src/styles/contact.css',
+    'Site/src/styles/editorial-shell.css', ...sharedStyles, 'Site/site.config.mjs', 'Site/astro.config.mjs',
+    'Site/package.json', 'Site/package-lock.json']) {
+    assert.deepEqual(selectChecks([file]), fullSiteWithContact(), file);
   }
 });
 
@@ -82,6 +97,12 @@ test('workflow gates each job and verifies both selected and intentionally skipp
   assert.match(workflow, /CHANGES_RESULT:/);
   assert.match(workflow, /test "\$CHANGES_RESULT" = "success"/);
   assert.match(workflow, /"skipped"/);
+
+  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  graph_engines:\n/m)[0];
+  assert.ok(browser, 'browser CI job must exist');
+  assert.match(browser, /shard: \[1, 2\]/);
+  assert.match(browser, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
+  assert.match(browser, /browser-check-log-\$\{\{ matrix\.shard \}\}/);
 });
 
 test('aggregate verification accepts only the skips selected by change detection', () => {
