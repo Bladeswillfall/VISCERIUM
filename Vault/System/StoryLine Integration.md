@@ -47,7 +47,39 @@ Run the hotkey-enabled **Open Story State** Templater template to open `System/V
 
 Derived current state is deliberately not written back into scene YAML. Edit the source scene when the story changes; let the view recalculate the result.
 
+When **Open Story State** starts from a scene, the view also shows **Scene Context**. This section is read-only.
+
+Scene Context shows the scene's POV, characters, location, scene notes, linked project research, and linked project Codex notes.
+
 No tracked story-change module is mandatory. A simple scene can use only Want, Pressure and After. Add structured changes only when the change matters beyond the current scene.
+
+## Scene notes and project research
+
+Keep scene prose in the project's `Scenes/` folder.
+
+Use `SceneNotes/` for editorial notes that belong to one scene. Keep StoryLine's `notesFile` path on the scene.
+
+Use scene notes for revision reminders, continuity questions, alternate beats, and research still needed.
+
+Do not copy `viscerium_events` into scene notes. The scene frontmatter remains the authored story-state history.
+
+Use `Research/` for project-local source notes. These notes stay private with the StoryLine project.
+
+A small research note can use this structure:
+
+```yaml
+type: research
+title: Example source
+sourceUrl: https://example.com/source
+tags:
+  - example
+```
+
+Add `sourceUrl` only when one URL identifies the source. Put other provenance or research detail in the note body.
+
+Link relevant research notes from the scene or its scene notes. Scene Context lists links beneath the project's `Research/` folder.
+
+Use the project's `Codex/` folder for story-local entities and working references. Public `Lore/` remains the canonical source.
 
 ## Story dates
 
@@ -103,6 +135,27 @@ StoryLine's executable bundle is managed normally by Obsidian Community Plugins.
 ```
 
 The active project may also be stored there as `activeProjectFile`. VISCERIUM Timelines and the story-state helpers intentionally read that value rather than asking authors to duplicate project selection elsewhere. Pulls and repository maintenance therefore leave each creator's active-project state untouched.
+
+### Recommended local StoryLine profile
+
+These values are local recommendations. They are not repository requirements.
+
+Do not copy another vault's complete StoryLine `data.json`. Keep active-project, workspace, goals, and personal writing state on the device.
+
+| Setting key | Suggested value | Use |
+| --- | --- | --- |
+| `defaultBoardMode` | `corkboard` | Make scene planning the normal board. |
+| `lastBoardGroupBy` | `status` | Keep idea, draft, revision, and final work easy to scan. |
+| `showWordCounts` | `true` | Show scene size while planning. |
+| `showSceneNumberOnCards` | `true` | Keep reading order visible on cards. |
+| `enablePlotHoleDetection` | `true` | Enable StoryLine's structural warnings. |
+| `showWarnings` | `true` | Keep StoryLine warnings visible. |
+| `writeFieldsAsWikilinks` | `true` | Keep character and location references linkable. |
+| `timelineSwimlaneMode` | `true` | Separate timeline context into lanes. |
+| `timelineSwimlaneGroupBy` | `location` | Use location as the default lane grouping. |
+| `warnOnCrossBookMove` | `true` | Warn before moving scenes between books. |
+
+Set word goals, sprint behaviour, focus appearance, and the active project to personal values.
 
 VISCERIUM Timelines is maintained in this repository and its runnable bundle is tracked beneath:
 
