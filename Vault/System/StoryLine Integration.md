@@ -79,7 +79,7 @@ Add `sourceUrl` only when one URL identifies the source. Put other provenance or
 
 Link relevant research notes from the scene or its scene notes. Scene Context lists links beneath the project's `Research/` folder.
 
-Use the project's `Codex/` folder for story-local entities and working references. Public `Lore/` remains the canonical source.
+Use the project or series `Codex/` folder for story-local entities and working references. Public `Lore/` remains the canonical source.
 
 ## Story dates
 
