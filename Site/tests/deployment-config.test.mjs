@@ -101,7 +101,7 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /push:\n\s+branches:\s+\[main\]/);
   assert.match(workflow, /seed_build_cache:/);
-  assert.match(workflow, /if: github\.event_name == 'push'/);
+  assert.match(workflow, /if: \$\{\{ github\.event_name == 'push' && vars\.CLOUDFLARE_DIRECT_DEPLOY != '1' \}\}/);
   assert.match(workflow, /name: Seed build caches/);
   assert.match(workflow, /CF_PAGES: '1'/);
   assert.match(workflow, /changes:\n\s+if: github\.event_name != 'push'/);
