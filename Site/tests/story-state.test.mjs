@@ -85,6 +85,7 @@ test('Story State derives the four working views from scene events', () => {
   assert.match(stateView, /Relationships \/ Power/);
   assert.match(stateView, /Scene Context/);
   assert.match(stateView, /activeScene\.notesFile/);
+  assert.match(stateView, /notesPage\?\.file\?\.outlinks/);
   assert.match(stateView, /Research\//);
   assert.match(stateView, /Codex\//);
   assert.match(stateView, /consequence-update/);
