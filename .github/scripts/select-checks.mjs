@@ -116,6 +116,18 @@ function markTestFile(checks, specs, name) {
   return false;
 }
 
+function markSitePath(checks, specs, name) {
+  checks.build = true;
+
+  if (/^Site\/(?:scripts\/|functions\/|src\/lib\/|src\/data\/.*\.(?:mjs|ts)$|src\/content\.config\.ts$)/.test(name)
+    || GLOBAL_BROWSER_INPUT.test(name)) {
+    checks.unit = true;
+  }
+
+  addBrowserForSource(checks, specs, name);
+  if (needsEnabledContactFixture(name)) checks.contact = true;
+}
+
 function markPath(checks, specs, name) {
   // CI changes run the curated full plan. Unknown paths also fail safe to it.
   if (typeof name !== 'string' || !name || name.startsWith('/')
@@ -154,16 +166,7 @@ function markPath(checks, specs, name) {
 
   if (!name.startsWith('Site/')) return false;
 
-  checks.build = true;
-
-  if (/^Site\/(?:scripts\/|functions\/|src\/lib\/|src\/data\/.*\.(?:mjs|ts)$|src\/content\.config\.ts$)/.test(name)) {
-    checks.unit = true;
-  }
-
-  if (GLOBAL_BROWSER_INPUT.test(name)) checks.unit = true;
-
-  addBrowserForSource(checks, specs, name);
-  if (needsEnabledContactFixture(name)) checks.contact = true;
+  markSitePath(checks, specs, name);
   return true;
 }
 
