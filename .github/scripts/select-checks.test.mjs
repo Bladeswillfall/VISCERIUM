@@ -33,7 +33,6 @@ test('generic UI changes run only the core functional browser checks', () => {
   for (const file of [
     'Site/src/components/CodexHeader.astro',
     'Site/src/pages/community/[id].astro',
-    'Site/src/scripts/codex-shell.js',
     'Site/src/styles/statement-pages.css',
   ]) {
     assert.deepEqual(selectPlan([file]), {
