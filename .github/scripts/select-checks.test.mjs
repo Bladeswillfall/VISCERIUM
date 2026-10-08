@@ -2,88 +2,184 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
-import { CHECKS, changedPaths, selectChecks } from './select-checks.mjs';
+import { BROWSER_SPECS, CHECKS, changedPaths, selectChecks, selectPlan } from './select-checks.mjs';
 
 const all = Object.fromEntries(CHECKS.map(name => [name, true]));
 const only = (...names) => Object.fromEntries(CHECKS.map(name => [name, names.includes(name)]));
-const fullSite = only('unit', 'build', 'browser', 'graph_engines', 'axe');
-const fullSiteWithPlugin = () => only('unit', 'build', 'obsidian_plugin', 'browser', 'graph_engines', 'axe');
-const fullSiteWithContact = () => only('unit', 'build', 'browser', 'graph_engines', 'contact', 'axe');
+const specs = (...groups) => [...new Set(groups.flatMap(group => BROWSER_SPECS[group]))];
 
-test('docs-only changes run only mandatory repository policy', () => {
-  assert.deepEqual(selectChecks(['CONTRIBUTING.md', 'docs/guide.md']), only());
-  assert.deepEqual(selectChecks(['README.md']), only('unit'), 'README rights and badges have unit contracts');
-  assert.deepEqual(selectChecks([]), only());
+test('docs and service changes avoid unrelated site checks', () => {
+  assert.deepEqual(selectPlan(['CONTRIBUTING.md', 'docs/guide.md']), { checks: only(), browserSpecs: [] });
+  assert.deepEqual(selectPlan(['CLOUDFLARE_PAGES_SETUP.md']), { checks: only(), browserSpecs: [] });
+  assert.deepEqual(selectPlan(['README.md']), { checks: only('unit'), browserSpecs: [] });
+  assert.deepEqual(selectPlan(['Services/comment-gateway/src/server.mjs']), {
+    checks: only('gateway'), browserSpecs: [],
+  });
 });
 
-test('gateway-only changes skip unrelated site and plugin jobs', () => {
-  assert.deepEqual(selectChecks(['Services/comment-gateway/src/server.mjs']), only('gateway'));
-});
-
-test('plugin and shared timeline changes run plugin integrity checks', () => {
-  assert.deepEqual(selectChecks(['Tools/obsidian-viscerium-timelines/src/main.ts']), only('obsidian_plugin', 'unit'));
-  assert.deepEqual(selectChecks(['Vault/.obsidian/plugins/viscerium-timelines/main.js']), only('obsidian_plugin', 'unit'));
-  assert.deepEqual(selectChecks(['Site/src/lib/timeline/renderer.mjs']), fullSiteWithPlugin());
-  assert.deepEqual(selectChecks(['Site/src/lib/calendar/runtime.mjs']), fullSiteWithPlugin());
-  assert.deepEqual(selectChecks(['Site/src/styles/timeline-canvas.css']), fullSiteWithPlugin());
-});
-
-test('unit-only and postbuild-only edits do not run browser jobs', () => {
-  assert.deepEqual(selectChecks(['Site/tests/responsive-image-cache.test.mjs']), only('unit'));
-  assert.deepEqual(selectChecks(['Site/tests/i18n-output.postbuild.mjs']), only('build'));
-});
-
-test('browser test edits trigger only necessary browsers and their build', () => {
-  assert.deepEqual(selectChecks(['Site/tests/browser/sidebar-navigation.spec.mjs']), only('build', 'browser'));
-  assert.deepEqual(selectChecks(['Site/tests/browser/graph.spec.mjs']), only('build', 'browser', 'graph_engines'));
-  assert.deepEqual(selectChecks(['Site/tests/browser/contact.spec.mjs']), only('build', 'browser', 'contact'));
-  assert.deepEqual(selectChecks(['Site/tests/accessibility/axe.spec.mjs']), only('build', 'axe'));
-});
-
-test('combined PR changes select the union of affected jobs', () => {
-  assert.deepEqual(selectChecks([
-    'Site/tests/responsive-image-cache.test.mjs', 'Services/comment-gateway/tests/server.test.mjs',
-  ]), only('unit', 'gateway'));
-  assert.deepEqual(selectChecks([
-    'Site/tests/browser/graph.spec.mjs', 'Site/tests/accessibility/axe.spec.mjs',
-  ]), only('build', 'browser', 'graph_engines', 'axe'));
-});
-
-test('site or Vault changes retain normal site coverage without rebuilding the contact fixture', () => {
-  for (const file of ['Site/src/pages/index.astro', 'Site/public/_headers', 'Vault/Lore/example.md',
-    'Site/tests/fixtures/storyline-test-scene.md']) {
-    assert.deepEqual(selectChecks([file]), fullSite, file);
+test('lore and generated-content edits build without browser, graph, or unit suites', () => {
+  for (const file of [
+    'Vault/Lore/Eras/CITADEL/Events/example.md',
+    'Vault/System/Publishing Rules.md',
+    'Site/src/content/docs/example.mdx',
+    'Site/CHANGELOG.md',
+    'Site/public/_headers',
+  ]) {
+    assert.deepEqual(selectPlan([file]), { checks: only('build'), browserSpecs: [] }, file);
   }
 });
 
-test('contact-sensitive build inputs retain the enabled contact fixture', () => {
-  const astroConfig = readFileSync(new URL('../../Site/astro.config.mjs', import.meta.url), 'utf8');
-  const customCss = astroConfig.match(/customCss:\s*\[([\s\S]*?)\]/)?.[1];
-  assert.ok(customCss, 'Astro config must declare Starlight customCss');
-  const sharedStyles = [...customCss.matchAll(/['"]\.\/src\/styles\/([^'"]+)['"]/g)]
-    .map((match) => `Site/src/styles/${match[1]}`);
-
-  for (const file of ['Site/src/pages/contact.astro', 'Site/src/styles/contact.css',
-    'Site/src/styles/editorial-shell.css', ...sharedStyles, 'Site/site.config.mjs', 'Site/astro.config.mjs',
-    'Site/package.json', 'Site/package-lock.json']) {
-    assert.deepEqual(selectChecks([file]), fullSiteWithContact(), file);
+test('generic UI changes run only the core functional browser checks', () => {
+  for (const file of [
+    'Site/src/components/CodexHeader.astro',
+    'Site/src/pages/community/[id].astro',
+    'Site/src/styles/statement-pages.css',
+  ]) {
+    assert.deepEqual(selectPlan([file]), {
+      checks: only('build', 'browser'),
+      browserSpecs: specs('core'),
+    }, file);
   }
 });
 
-test('CI files, unknown paths, and failed path detection run everything', () => {
-  for (const file of ['.github/workflows/checks.yml', '.github/scripts/select-checks.mjs',
-    'Tools/new-tool/config.json', 'Services/new-service/main.mjs', 'docs/generate.mjs',
-    '../outside', '/absolute']) {
-    assert.deepEqual(selectChecks([file]), all, file);
+test('feature changes run only their functional browser specs', () => {
+  assert.deepEqual(selectPlan(['Site/src/components/WorldGraph.astro']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('graph'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/lib/site-graph.mjs']), {
+    checks: only('unit', 'build', 'browser'),
+    browserSpecs: specs('graph'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/pages/maps/[id].astro']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('atlas'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/pages/index.astro']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('home'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/components/CodexDiscussions.astro']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('discussions'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/components/StorytellerSwitcher.astro']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('storyteller'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/components/era/EraPrimer.astro']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('era'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/pages/404.astro']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('notFound'),
+  });
+});
+
+test('timeline code keeps plugin integrity and only the timeline browser smoke test', () => {
+  assert.deepEqual(selectPlan(['Tools/obsidian-viscerium-timelines/src/main.ts']), {
+    checks: only('unit', 'obsidian_plugin'),
+    browserSpecs: [],
+  });
+  assert.deepEqual(selectPlan(['Site/src/lib/timeline/renderer.mjs']), {
+    checks: only('unit', 'build', 'obsidian_plugin', 'browser'),
+    browserSpecs: specs('timeline'),
+  });
+  assert.deepEqual(selectPlan(['Site/src/styles/timeline-vis.css']), {
+    checks: only('unit', 'build', 'obsidian_plugin', 'browser'),
+    browserSpecs: specs('timeline'),
+  });
+});
+
+test('contact-sensitive inputs keep the enabled-form fixture without broad browser coverage', () => {
+  assert.deepEqual(selectPlan(['Site/src/pages/contact.astro']), {
+    checks: only('build', 'browser', 'contact'),
+    browserSpecs: specs('contact'),
+  });
+  for (const file of ['Site/src/styles/a11y.css', 'Site/src/styles/typography.css']) {
+    assert.deepEqual(selectPlan([file]), {
+      checks: only('build', 'browser', 'contact'),
+      browserSpecs: specs('core'),
+    }, file);
+  }
+});
+
+test('tested runtime config sources still select unit tests', () => {
+  assert.deepEqual(selectPlan(['Site/src/config/rights.mjs']), {
+    checks: only('unit', 'build'),
+    browserSpecs: [],
+  });
+  assert.deepEqual(selectPlan(['Site/src/scripts/reader-settings.js']), {
+    checks: only('unit', 'build', 'browser'),
+    browserSpecs: specs('core'),
+  });
+});
+
+test('dependency and global config changes run the curated full browser set', () => {
+  const plan = selectPlan(['Site/package-lock.json']);
+  assert.deepEqual(plan.checks, only('unit', 'build', 'browser', 'contact'));
+  assert.deepEqual(plan.browserSpecs, specs(
+    'core', 'graph', 'timeline', 'atlas', 'home', 'discussions', 'contact', 'storyteller', 'era', 'notFound',
+  ));
+});
+
+test('test-file edits run only tests that still participate in PR CI', () => {
+  assert.deepEqual(selectPlan(['Site/tests/responsive-image-cache.test.mjs']), {
+    checks: only('unit'), browserSpecs: [],
+  });
+  assert.deepEqual(selectPlan(['Site/tests/i18n-output.postbuild.mjs']), {
+    checks: only('build'), browserSpecs: [],
+  });
+  assert.deepEqual(selectPlan(['Site/tests/browser/graph.spec.mjs']), {
+    checks: only('build', 'browser'), browserSpecs: specs('graph'),
+  });
+  assert.deepEqual(selectPlan(['Site/tests/browser/graph-label-contrast.spec.mjs']), {
+    checks: only(), browserSpecs: [],
+  });
+  assert.deepEqual(selectPlan(['Site/tests/accessibility/axe.spec.mjs']), {
+    checks: only(), browserSpecs: [],
+  });
+});
+
+test('combined changes select the union of affected functional checks', () => {
+  assert.deepEqual(selectPlan([
+    'Site/src/components/WorldGraph.astro',
+    'Site/src/pages/maps/[id].astro',
+    'Services/comment-gateway/tests/server.test.mjs',
+  ]), {
+    checks: only('gateway', 'build', 'browser'),
+    browserSpecs: specs('graph', 'atlas'),
+  });
+});
+
+test('CI files, unknown paths, and failed path detection use the curated full plan', () => {
+  for (const file of [
+    '.github/workflows/checks.yml',
+    '.github/scripts/select-checks.mjs',
+    'Tools/new-tool/config.json',
+    'Services/new-service/main.mjs',
+    'docs/generate.mjs',
+    '../outside',
+    '/absolute',
+  ]) {
+    const plan = selectPlan([file]);
+    assert.deepEqual(plan.checks, all, file);
+    assert.deepEqual(plan.browserSpecs, specs(
+      'core', 'graph', 'timeline', 'atlas', 'home', 'discussions', 'contact', 'storyteller', 'era', 'notFound',
+    ), file);
   }
   assert.deepEqual(selectChecks(null), all);
   assert.deepEqual(selectChecks(['README.md'], { fullRun: true }), all);
   assert.throws(() => changedPaths('not-a-commit'), /invalid PR base/);
 });
 
-test('workflow gates each job and verifies both selected and intentionally skipped results', () => {
+test('workflow gates selected jobs and passes explicit browser specs', () => {
   const workflow = readFileSync(new URL('../workflows/checks.yml', import.meta.url), 'utf8');
+  assert.match(workflow, /group: checks-\$\{\{ github\.event\.pull_request\.number \|\| github\.ref \}\}/);
+  assert.match(workflow, /cancel-in-progress: \$\{\{ github\.event_name == 'pull_request' \}\}/);
   assert.match(workflow, /^  changes:\n/m);
+  assert.match(workflow, /browser_specs: \$\{\{ steps\.select\.outputs\.browser_specs \}\}/);
   assert.match(workflow, /PR_BASE_SHA:/);
   assert.match(workflow, /node \.github\/scripts\/select-checks\.mjs/);
   for (const name of CHECKS) {
@@ -94,18 +190,19 @@ test('workflow gates each job and verifies both selected and intentionally skipp
     assert.match(job, /needs:.*changes/, name + ' needs change detection');
     assert.match(workflow, new RegExp('needs\\.changes\\.outputs\\.' + name));
   }
-  assert.match(workflow, /CHANGES_RESULT:/);
-  assert.match(workflow, /test "\$CHANGES_RESULT" = "success"/);
-  assert.match(workflow, /"skipped"/);
+  assert.doesNotMatch(workflow, /^  graph_engines:\n/m);
+  assert.doesNotMatch(workflow, /^  axe:\n/m);
+  assert.doesNotMatch(workflow, /benchmark:timelines/);
 
-  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  graph_engines:\n/m)[0];
+  const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  contact:\n/m)[0];
   assert.ok(browser, 'browser CI job must exist');
-  assert.match(browser, /shard: \[1, 2\]/);
-  assert.match(browser, /--shard=\$\{\{ matrix\.shard \}\}\/2/);
-  assert.match(browser, /browser-check-log-\$\{\{ matrix\.shard \}\}/);
+  assert.match(browser, /BROWSER_SPECS: \$\{\{ needs\.changes\.outputs\.browser_specs \}\}/);
+  assert.match(browser, /read -r -a specs <<< "\$BROWSER_SPECS"/);
+  assert.match(browser, /playwright test "\$\{specs\[@\]\}"/);
+  assert.doesNotMatch(browser, /matrix\.shard|--shard=/);
 });
 
-test('aggregate verification accepts only the skips selected by change detection', () => {
+test('aggregate verification accepts only skips selected by change detection', () => {
   const workflow = readFileSync(new URL('../workflows/checks.yml', import.meta.url), 'utf8');
   const script = workflow.split(/^  verify:\n/m)[1]?.split('        run: |\n')[1]?.replace(/^          /gm, '');
   assert.ok(script, 'aggregate verification must have a runnable shell script');
