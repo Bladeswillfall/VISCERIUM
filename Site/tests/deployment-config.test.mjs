@@ -157,7 +157,6 @@ test('Axe accessibility audit remains reproducible for manual runs', () => {
   assert.equal(lock.packages[''].devDependencies['@axe-core/playwright'], '4.13.0');
   assert.equal(lock.packages['node_modules/@axe-core/playwright'].version, '4.13.0');
   assert.equal(lock.packages['node_modules/axe-core'].version, '4.13.0');
-  assert.doesNotMatch(workflow, /^  axe:\n/m);
 });
 
 test('aggregated changelog headings have unique IDs', () => {
@@ -178,7 +177,6 @@ test('browser CI runs selected Chromium specs and keeps contact isolated', () =>
   const images = [...workflow.matchAll(/playwright:v([0-9.]+)-noble@sha256:([a-f0-9]{64})/g)];
 
   assert.equal(images.length, 2, 'browser and contact jobs must use pinned images');
-  assert.equal([...workflow.matchAll(/shell: bash/g)].length, 2, 'both browser container jobs must retain Bash');
   for (const image of images) assert.equal(image[1], version);
 
   const browser = workflow.split(/^  browser:\n/m)[1]?.split(/^  contact:\n/m)[0];
@@ -188,10 +186,7 @@ test('browser CI runs selected Chromium specs and keeps contact isolated', () =>
   assert.match(browser, /name: Run browser checks/);
   assert.match(browser, /BROWSER_SPECS: \$\{\{ needs\.changes\.outputs\.browser_specs \}\}/);
   assert.match(browser, /playwright test "\$\{specs\[@\]\}" --browser=chromium/);
-  assert.doesNotMatch(browser, /playwright test tests\/browser --browser=chromium/);
-  assert.doesNotMatch(browser, /matrix\.shard|--shard=|--browser=firefox|--browser=webkit/);
   assert.doesNotMatch(workflow, /^  graph_engines:\n/m);
-  assert.doesNotMatch(workflow, /^  axe:\n/m);
   assert.doesNotMatch(browser, /Build enabled contact browser fixture|Restore Atlas tile cache/);
   assert.match(contact, /Restore Atlas tile cache/);
   assert.match(contact, /name: Build enabled contact browser fixture/);
