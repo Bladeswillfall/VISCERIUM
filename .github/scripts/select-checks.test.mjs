@@ -238,7 +238,7 @@ test('metadata-only edit reuses verification only when the exact head already pa
   const head = 'a'.repeat(40);
   const event = { action: 'edited', changes: { body: { from: 'old' } },
     pull_request: { head: { sha: head } } };
-  const passed = [{ name: 'verify', head_sha: head, status: 'completed', conclusion: 'success' }];
+  const passed = [{ id: 100, name: 'verify', head_sha: head, status: 'completed', conclusion: 'success' }];
   assert.equal(canReuseVerifiedChecks(event, passed), true);
   assert.equal(canReuseVerifiedChecks({ ...event, changes: { title: { from: 'old' } } }, passed), true);
   assert.equal(canReuseVerifiedChecks({ ...event, changes: { body: {}, base: {} } }, passed), false);
@@ -248,4 +248,18 @@ test('metadata-only edit reuses verification only when the exact head already pa
   assert.equal(canReuseVerifiedChecks(event, [{ ...passed[0], conclusion: 'failure' }]), false);
   assert.equal(canReuseVerifiedChecks(event, [{ ...passed[0], status: 'in_progress' }]), false);
   assert.equal(canReuseVerifiedChecks(event, null), false);
+  assert.equal(canReuseVerifiedChecks(event, [
+    ...passed, { ...passed[0], id: 101, conclusion: 'failure' },
+  ]), false, 'newer failed verification must override an older success');
+  assert.equal(canReuseVerifiedChecks(event, [
+    { ...passed[0], id: 101, conclusion: 'failure' }, ...passed,
+  ]), false, 'check API ordering must not change the decision');
+  assert.equal(canReuseVerifiedChecks(event, [
+    ...passed, { ...passed[0], id: 101, status: 'in_progress', conclusion: null },
+  ]), false, 'newer incomplete verification blocks the fast path');
+  assert.equal(canReuseVerifiedChecks(event, [
+    { ...passed[0], id: 99, conclusion: 'failure' }, ...passed,
+  ]), true, 'newest completed verification decides the result');
+  assert.equal(canReuseVerifiedChecks(event, [{ ...passed[0], id: undefined }]), false);
+
 });
