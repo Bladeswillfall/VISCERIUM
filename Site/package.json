@@ -51,7 +51,7 @@
   "dependencies": {
     "@astrojs/mdx": "^8.0.2",
     "@astrojs/sitemap": "3.7.4",
-    "@astrojs/starlight": "^0.42.4",
+    "@astrojs/starlight": "^0.42.5",
     "astro": "^7.3.5",
     "cytoscape": "3.34.3",
     "cytoscape-dagre": "4.0.1",
