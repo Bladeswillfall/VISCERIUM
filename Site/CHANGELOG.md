@@ -17,6 +17,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Prepared GitHub Actions to deploy the cached production artifact directly to the existing Cloudflare Pages project, with a safe fallback until deployment credentials are configured.
 - Split Chromium browser checks across two CI shards and limited the enabled-contact fixture rebuild to contact-sensitive changes.
 - Replaced the Human Made authorship mark with the CC0 Brainmade mark across the Codex footer, content-production policy and repository badge.
 - Enabled Astro's experimental incremental static-build cache for VISCERIUM-owned dynamic routes, moved Atlas and responsive-image caches into Cloudflare's persisted Astro cache tree, skipped duplicate validation during Cloudflare builds, and replaced post-merge full CI with a cache-seeding build on main.

@@ -102,7 +102,7 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /push:\n\s+branches:\s+\[main\]/);
   assert.match(workflow, /seed_build_cache:/);
   assert.match(workflow, /if: github\.event_name == 'push'/);
-  assert.match(workflow, /name: Seed build caches/);
+  assert.match(workflow, /name: Build production artifact/);
   assert.match(workflow, /CF_PAGES: '1'/);
   assert.match(workflow, /changes:\n\s+if: github\.event_name != 'push'/);
   assert.match(workflow, /repository:\n\s+if: github\.event_name != 'push'/);
@@ -120,6 +120,32 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.ok(build && contact, 'build and contact jobs must exist');
   assert.match(build, /name: Restore Astro incremental build cache/);
   assert.doesNotMatch(contact, /name: Restore Astro incremental build cache/);
+});
+
+test('main builds can deploy the prebuilt artifact directly to Cloudflare Pages', () => {
+  const workflow = read('../../.github/workflows/checks.yml');
+  const wrangler = read('../wrangler.toml');
+  const deploy = workflow.split(/^  deploy_pages:\n/m)[1]?.split(/^  verify:\n/m)[0];
+
+  assert.match(wrangler, /^name = "viscerium-site"$/m);
+  assert.ok(deploy, 'direct Pages deploy job must exist');
+  assert.match(workflow, /name: Load public production build variables/);
+  assert.match(workflow, /tomllib\.loads\(Path\("wrangler\.toml"\)/);
+  assert.match(workflow, /name\.startswith\("PUBLIC_"\)/);
+  assert.match(workflow, /name: Upload production artifact/);
+  assert.match(workflow, /name: production-site-dist/);
+  assert.match(deploy, /needs: seed_build_cache/);
+  assert.match(deploy, /group: cloudflare-pages-production/);
+  assert.match(deploy, /cancel-in-progress: true/);
+  assert.match(deploy, /contents: read/);
+  assert.match(deploy, /name: Check Cloudflare deploy credentials/);
+  assert.match(deploy, /secrets\.CLOUDFLARE_API_TOKEN/);
+  assert.match(deploy, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
+  assert.match(deploy, /git ls-remote origin refs\/heads\/main/);
+  assert.match(deploy, /\[ "\$current_main" != "\$GITHUB_SHA" \]/);
+  assert.match(deploy, /npm exec --yes --package=wrangler@4\.136\.3 -- wrangler pages deploy dist/);
+  assert.match(deploy, /--project-name=viscerium-site --branch=main/);
+  assert.doesNotMatch(workflow, /PUBLIC_CONTACT_FORM_ENDPOINT:\s*https:/);
 });
 
 test('Axe accessibility runtime uses the lockfile instead of a second npm install', () => {
