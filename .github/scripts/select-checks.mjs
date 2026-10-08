@@ -4,16 +4,56 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const CHECKS = Object.freeze([
-  'unit', 'gateway', 'build', 'obsidian_plugin', 'browser', 'graph_engines', 'contact', 'axe',
+  'unit', 'gateway', 'build', 'obsidian_plugin', 'browser', 'contact',
 ]);
 
-const full = () => Object.fromEntries(CHECKS.map(name => [name, true]));
-const empty = () => Object.fromEntries(CHECKS.map(name => [name, false]));
+export const BROWSER_SPECS = Object.freeze({
+  core: Object.freeze([
+    'tests/browser/sidebar-navigation.spec.mjs',
+    'tests/browser/mobile-accessibility.spec.mjs',
+  ]),
+  graph: Object.freeze(['tests/browser/graph.spec.mjs']),
+  timeline: Object.freeze(['tests/browser/timeline-smoke.spec.mjs']),
+  atlas: Object.freeze([
+    'tests/browser/atlas-layout.spec.mjs',
+    'tests/browser/atlas-zoom-out.spec.mjs',
+  ]),
+  home: Object.freeze(['tests/browser/homepage-recent-articles.spec.mjs']),
+  discussions: Object.freeze(['tests/browser/comments.spec.mjs']),
+  contact: Object.freeze(['tests/browser/contact.spec.mjs']),
+  storyteller: Object.freeze(['tests/browser/storyteller.spec.mjs']),
+  era: Object.freeze([
+    'tests/browser/era-context.spec.mjs',
+    'tests/browser/era-primer.spec.mjs',
+  ]),
+  notFound: Object.freeze(['tests/browser/404.spec.mjs']),
+});
 
-function markSite(checks) {
-  for (const name of ['unit', 'build', 'browser', 'graph_engines', 'contact', 'axe']) {
-    checks[name] = true;
+const ALL_BROWSER_SPECS = Object.freeze([...new Set(Object.values(BROWSER_SPECS).flat())]);
+const fullChecks = () => Object.fromEntries(CHECKS.map(name => [name, true]));
+const emptyChecks = () => Object.fromEntries(CHECKS.map(name => [name, false]));
+
+const CONTACT_STYLE_INPUT = /^Site\/src\/styles\/(?:a11y|codex-ui|color-tokens|contact|editorial-shell|era-styles|header-controls|ion-(?:expressive-code|layers|theme)|layout|navigation|reader-settings|typography)\.css$/;
+const GLOBAL_BROWSER_INPUT = /^(?:Site\/(?:astro|site)\.config\.mjs|Site\/package(?:-lock)?\.json)$/;
+const GENERIC_UI_INPUT = /^Site\/src\/(?:components\/.*\.astro|pages\/.*\.astro|scripts\/.*\.js|styles\/.*\.css)$/;
+
+function addBrowserSpecs(checks, specs, ...groups) {
+  for (const group of groups) {
+    for (const spec of BROWSER_SPECS[group]) specs.add(spec);
   }
+  checks.browser = specs.size > 0;
+}
+
+function addAllBrowserSpecs(checks, specs) {
+  for (const spec of ALL_BROWSER_SPECS) specs.add(spec);
+  checks.browser = true;
+}
+
+function needsEnabledContactFixture(name) {
+  return name === 'Site/src/pages/contact.astro'
+    || name === 'Site/src/components/support/SupportHub.astro'
+    || CONTACT_STYLE_INPUT.test(name)
+    || GLOBAL_BROWSER_INPUT.test(name);
 }
 
 function isTimelinePluginSource(name) {
@@ -24,56 +64,129 @@ function isTimelinePluginSource(name) {
     || name === 'Tools/scripts/sync-obsidian-plugins.mjs';
 }
 
-function markTestFile(checks, name) {
-  if (/^Site\/tests\/[^/]+\.test\.mjs$/.test(name)) {
-    checks.unit = true;
-  } else if (/^Site\/tests\/accessibility\/[^/]+\.spec\.mjs$/.test(name)) {
-    checks.build = true;
-    checks.axe = true;
-  } else if (/^Site\/tests\/browser\/[^/]+\.spec\.mjs$/.test(name)) {
-    checks.build = true;
-    checks.browser = true;
-    if (/^Site\/tests\/browser\/graph[^/]*\.spec\.mjs$/.test(name)) checks.graph_engines = true;
-    if (name === 'Site/tests/browser/contact.spec.mjs') checks.contact = true;
-  } else if (/^Site\/tests\/[^/]+\.postbuild\.mjs$/.test(name)) {
-    checks.build = true;
-  } else {
-    return false;
+function addBrowserForSource(checks, specs, name) {
+  if (GLOBAL_BROWSER_INPUT.test(name)) {
+    addAllBrowserSpecs(checks, specs);
+    return;
   }
-  return true;
+
+  const lower = name.toLowerCase();
+  const groups = [];
+
+  if (/(?:\/graph(?:\.|\/)|worldgraph|site-graph|relationship|cytoscape|dagre)/.test(lower)) groups.push('graph');
+  if (/(?:timeline|calendar|chronicle)/.test(lower)) groups.push('timeline');
+  if (/(?:atlas|leaflet|worldmap|\/maps?\/|maps\.json)/.test(lower)) groups.push('atlas');
+  if (/site\/src\/(?:components\/home\/|pages\/index\.astro$|styles\/homepage\.css$)/.test(lower)) groups.push('home');
+  if (/(?:comments?|webmentions?|codexdiscussions)/.test(lower)) groups.push('discussions');
+  if (/(?:contact|support)/.test(lower)) groups.push('contact');
+  if (/storyteller/.test(lower)) groups.push('storyteller');
+  if (/(?:components\/era\/|eracontext|era-primer|era-styles)/.test(lower)) groups.push('era');
+  if (/site\/src\/pages\/404\.astro$/.test(lower)) groups.push('notFound');
+
+  if (groups.length) {
+    addBrowserSpecs(checks, specs, ...new Set(groups));
+  } else if (GENERIC_UI_INPUT.test(name)) {
+    addBrowserSpecs(checks, specs, 'core');
+  }
 }
 
-function markPath(checks, name) {
-  // Unknown or CI-related changes run everything. Never guess their dependencies.
+function markTestFile(checks, specs, name) {
+  if (/^Site\/tests\/[^/]+\.test\.mjs$/.test(name)) {
+    checks.unit = true;
+    return true;
+  }
+
+  if (/^Site\/tests\/[^/]+\.postbuild\.mjs$/.test(name)) {
+    checks.build = true;
+    return true;
+  }
+
+  if (/^Site\/tests\/browser\/[^/]+\.spec\.mjs$/.test(name)) {
+    const relative = name.replace(/^Site\//, '');
+    if (ALL_BROWSER_SPECS.includes(relative)) {
+      checks.build = true;
+      specs.add(relative);
+      checks.browser = true;
+      if (name === 'Site/tests/browser/contact.spec.mjs') checks.contact = true;
+    }
+    return true;
+  }
+
+  if (/^Site\/tests\/(?:accessibility|fixtures)\//.test(name)) return true;
+  return false;
+}
+
+function markSitePath(checks, specs, name) {
+  checks.build = true;
+
+  if (/^Site\/(?:scripts\/|functions\/|src\/(?:scripts|config|lib)\/|src\/data\/.*\.(?:mjs|ts)$|src\/content\.config\.ts$)/.test(name)
+    || GLOBAL_BROWSER_INPUT.test(name)) {
+    checks.unit = true;
+  }
+
+  addBrowserForSource(checks, specs, name);
+  if (needsEnabledContactFixture(name)) checks.contact = true;
+}
+
+function markPath(checks, specs, name) {
+  // CI changes run the curated full plan. Unknown paths also fail safe to it.
   if (typeof name !== 'string' || !name || name.startsWith('/')
     || name.includes('..') || /^\.github\/(?:workflows|scripts)\//.test(name)) return false;
 
   if (name === 'README.md') {
-    checks.unit = true; // Site tests validate README rights notices and badges.
-  } else if (/^(?:CONTRIBUTING|CODE_OF_CONDUCT)\.md$/.test(name)
-    || /^docs\/.+\.md$/.test(name) || name === 'Site/tests/README.md') {
+    checks.unit = true;
     return true;
-  } else if (name.startsWith('Services/comment-gateway/')) {
+  }
+
+  if (/^(?:CONTRIBUTING|CODE_OF_CONDUCT)\.md$/.test(name)
+    || /^docs\/.+\.md$/.test(name) || name === 'Site/tests/README.md'
+    || name === 'CLOUDFLARE_PAGES_SETUP.md') return true;
+
+  if (name.startsWith('Services/comment-gateway/')) {
     checks.gateway = true;
-  } else if (isTimelinePluginSource(name)) {
+    return true;
+  }
+
+  if (isTimelinePluginSource(name)) {
     checks.obsidian_plugin = true;
     checks.unit = true;
-    if (name.startsWith('Site/')) markSite(checks);
-  } else if (name.startsWith('Site/tests/') && markTestFile(checks, name)) {
+    if (name.startsWith('Site/')) {
+      checks.build = true;
+      addBrowserSpecs(checks, specs, 'timeline');
+    }
     return true;
-  } else if (name.startsWith('Site/') || name.startsWith('Vault/')) {
-    markSite(checks);
-  } else {
-    return false;
   }
+
+  if (name.startsWith('Site/tests/') && markTestFile(checks, specs, name)) return true;
+
+  if (name.startsWith('Vault/')) {
+    checks.build = true;
+    return true;
+  }
+
+  if (!name.startsWith('Site/')) return false;
+
+  markSitePath(checks, specs, name);
   return true;
 }
 
-export function selectChecks(paths, { fullRun = false } = {}) {
-  if (fullRun || !Array.isArray(paths)) return full();
-  const checks = empty();
-  for (const name of paths) if (!markPath(checks, name)) return full();
-  return checks;
+export function selectPlan(paths, { fullRun = false } = {}) {
+  if (fullRun || !Array.isArray(paths)) {
+    return { checks: fullChecks(), browserSpecs: [...ALL_BROWSER_SPECS] };
+  }
+
+  const checks = emptyChecks();
+  const specs = new Set();
+  for (const name of paths) {
+    if (!markPath(checks, specs, name)) {
+      return { checks: fullChecks(), browserSpecs: [...ALL_BROWSER_SPECS] };
+    }
+  }
+  return { checks, browserSpecs: [...specs] };
+}
+
+export function selectChecks(paths, options) {
+  return selectPlan(paths, options).checks;
 }
 
 export function changedPaths(base) {
@@ -89,21 +202,26 @@ export function changedPaths(base) {
 
 function main() {
   const event = process.env.GITHUB_EVENT_NAME;
-  let checks;
+  let plan;
   if (event === 'pull_request') {
     try {
-      checks = selectChecks(changedPaths(process.env.PR_BASE_SHA));
+      plan = selectPlan(changedPaths(process.env.PR_BASE_SHA));
     } catch (error) {
       console.warn(error.message);
-      checks = full();
+      plan = selectPlan(null);
     }
   } else {
-    checks = full(); // A push to main or an unfamiliar event always gets full coverage.
+    plan = selectPlan(null);
   }
-  const output = CHECKS.map(name => name + '=' + checks[name] + '\n').join('');
+
+  const output = [
+    ...CHECKS.map(name => name + '=' + plan.checks[name]),
+    'browser_specs=' + plan.browserSpecs.join(' '),
+  ].join('\n') + '\n';
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, output);
-  console.log('CI selection:', Object.entries(checks).map(([name, enabled]) =>
+  console.log('CI selection:', Object.entries(plan.checks).map(([name, enabled]) =>
     name + '=' + (enabled ? 'run' : 'skip')).join(', '));
+  if (plan.browserSpecs.length) console.log('Browser specs:', plan.browserSpecs.join(', '));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

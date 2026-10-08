@@ -77,16 +77,27 @@ test('Astro footer renders the managed creative-rights notice', () => {
   assert.match(footer, /const creativeRightsNotice = visceriumCreativeNotice\(\);/);
   assert.match(footer, /<strong>\{creativeRightsNotice\}<\/strong>/);
   assert.doesNotMatch(footer, /<strong>© VISCERIUM Codex<\/strong>/);
+  assert.match(footer, /\/assets\/policies\/brainmade\.svg/);
+  assert.doesNotMatch(footer, /\/assets\/policies\/human-made\.svg/);
 });
 
 test('README badges communicate the mixed licensing model', () => {
   const readme = read('README.md');
   assert.match(readme, /Creative_IP-All_Rights_Reserved/);
   assert.match(readme, /First--party_Code-MIT/);
-  assert.match(readme, /Creative_Canon-Human--made/);
+  assert.match(readme, /Creative_Canon-Brainmade/);
   assert.match(readme, /Third--party_Software-Upstream_Licences/);
   assert.match(readme, /Published VISCERIUM Lore and creative canon are human-made\./);
   assert.match(readme, /Original first-party code is separately available under the \*\*\[MIT License\]/);
+});
+
+test('Brainmade is the canonical human-authorship mark', () => {
+  const policy = read('Vault/Lore/Policies/CONTENT-PRODUCTION.md');
+  assert.match(policy, /## Brainmade mark/);
+  assert.match(policy, /\[Brainmade mark\]\(https:\/\/brainmade\.org\/\)/);
+  assert.doesNotMatch(policy, /Human Made mark|hinokodo\.itch\.io\/human-made/);
+  assert.ok(fs.existsSync(path.join(repo, 'Site/public/assets/policies/brainmade.svg')));
+  assert.ok(!fs.existsSync(path.join(repo, 'Site/public/assets/policies/human-made.svg')));
 });
 
 test('package scripts and workflows protect managed notice freshness', () => {

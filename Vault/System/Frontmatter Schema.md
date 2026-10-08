@@ -193,9 +193,15 @@ The public build identifies the section through its markers and renders the same
 
 See [[Storyteller View SOP]] for authoring rules and the admission test.
 
+## Public article stubs
+
+`stub: true` marks a published standard Codex article as short on details. The public page shows a Stub notice and links readers directly to the canonical GitHub source so they can help expand or correct it.
+
+`stub` does not publish a note and does not replace `status: published`. Leave it absent on normal articles. Do not infer it from article length.
+
 ## Creator maturity
 
-`development_level: stub` means an intentionally incomplete creator record. It is not a publication state. Generated relationship stubs belong under `Drafts/Inbox/` until developed and deliberately promoted.
+`development_level: stub` means an intentionally incomplete creator record. It is not a publication state and is separate from the reader-facing `stub: true` flag. Generated relationship stubs belong under `Drafts/Inbox/` until developed and deliberately promoted.
 
 Specialist databases may retain provenance/import fields when those fields answer a real workflow question. For example, Myrkild `source_*` fields remain distinct from public metadata.
 

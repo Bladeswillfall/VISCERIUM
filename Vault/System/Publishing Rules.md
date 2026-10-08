@@ -16,6 +16,8 @@ type: article
 ---
 ```
 
+A published standard article may also set `stub: true` when it is useful to readers but short on details. The public site then shows the Stub contribution notice and a direct GitHub edit link. `stub` never publishes a note by itself; `status: published` remains authoritative.
+
 `published` is the first genuine public-release date, not the note creation date. Existing articles with no authoritative historical publication date may leave it blank until that date can be established; do not invent one from Git, filesystem, build, deployment, export, or import timestamps. See [[Publication Date Rules]].
 
 The sync script derives the public route from the note path relative to `Vault/Lore/`. Do not add `slug` frontmatter, and treat file moves as URL changes. Treat `Vault/Lore/` as the source of truth; never manually maintain generated files in `Site/src/content/docs/`.

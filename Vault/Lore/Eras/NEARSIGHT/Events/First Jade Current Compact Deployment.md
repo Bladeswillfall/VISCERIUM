@@ -3,6 +3,7 @@ title: "First Jade Current Compact Deployment"
 description: "The Jade Current Compact deployed a civil-compatible expeditionary force after a coastal infrastructure collapse."
 status: published
 type: event
+stub: true
 era: NEARSIGHT
 calendarDate:
   calendar: okse
