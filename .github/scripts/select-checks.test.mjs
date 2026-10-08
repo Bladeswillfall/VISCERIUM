@@ -176,9 +176,10 @@ test('CI files, unknown paths, and failed path detection run all browser specs',
   assert.throws(() => changedPaths('not-a-commit'), /invalid PR base/);
 });
 
-test('scheduled plan covers every browser spec and Axe without unrelated jobs', () => {
+test('scheduled plan covers all browser specs, Axe, and the enabled contact fixture', () => {
   const plan = selectScheduledPlan();
-  assert.deepEqual(plan.checks, only('build', 'browser'));
+  assert.deepEqual(plan.checks, only('build', 'browser', 'contact'));
+  assert.ok(plan.browserSpecs.includes('tests/browser/contact.spec.mjs'));
   assert.deepEqual(plan.browserSpecs, COMPLETE_BROWSER_SPECS);
   assert.ok(plan.browserSpecs.includes('tests/browser/graph-label-contrast.spec.mjs'));
   assert.ok(plan.browserSpecs.includes('tests/accessibility/axe.spec.mjs'));

@@ -203,7 +203,7 @@ export function selectPlan(paths, { fullRun = false } = {}) {
 }
 
 export function selectScheduledPlan() {
-  return { checks: { ...emptyChecks(), build: true, browser: true }, browserSpecs: [...COMPLETE_BROWSER_SPECS] };
+  return { checks: { ...emptyChecks(), build: true, browser: true, contact: true }, browserSpecs: [...COMPLETE_BROWSER_SPECS] };
 }
 
 export function selectChecks(paths, options) {

@@ -26,7 +26,7 @@ Create a subdirectory when a test family has a separate runner or has enough fil
 
 Pull requests use `.github/scripts/select-checks.mjs` to select affected checks. A changed browser spec runs even if it is outside the fast smoke list. Accessibility spec changes run Axe. CI config and unfamiliar file changes fall back to the full browser and accessibility set.
 
-A weekly scheduled Checks run builds the site and runs every browser spec plus Axe. Manual workflow dispatch runs the full check plan. Pushes to `main` build and optionally deploy production, while the `verify` status is required before normal PR merges. The small browser list exists only to make routine PR checks faster, not as an inventory of all browser tests.
+A weekly scheduled Checks run builds the site and runs every browser spec plus Axe and the enabled contact form fixture. Manual workflow dispatch runs the full check plan. Pushes to `main` build and optionally deploy production, while the `verify` status is required before normal PR merges. The small browser list exists only to make routine PR checks faster, not as an inventory of all browser tests.
 
 ## Measuring responsive cache performance
 
