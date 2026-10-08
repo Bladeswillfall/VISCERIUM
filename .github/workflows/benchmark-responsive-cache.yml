@@ -145,6 +145,9 @@ jobs:
           test "$elapsed" -gt 0
           echo "ms=$elapsed" >> "$GITHUB_OUTPUT"
           echo "entries=$entries" >> "$GITHUB_OUTPUT"
+          echo "dist_bytes=$(du -sb dist | cut -f1)" >> "$GITHUB_OUTPUT"
+          echo "astro_bytes=$(du -sb dist/_astro | cut -f1)" >> "$GITHUB_OUTPUT"
+          echo "map_tiles_bytes=$(du -sb dist/assets/map-tiles | cut -f1)" >> "$GITHUB_OUTPUT"
       - name: Report build and restore times
         env:
           COLD_MS: ${{ needs.cold.outputs.build_ms }}
@@ -153,6 +156,9 @@ jobs:
           COLD_VARIANTS: ${{ needs.cold.outputs.entries }}
           WARM_VARIANTS: ${{ steps.warm_build.outputs.entries }}
           CACHE_BYTES: ${{ needs.cold.outputs.bytes }}
+          DIST_BYTES: ${{ steps.warm_build.outputs.dist_bytes }}
+          ASTRO_BYTES: ${{ steps.warm_build.outputs.astro_bytes }}
+          MAP_TILES_BYTES: ${{ steps.warm_build.outputs.map_tiles_bytes }}
           ATLAS_COLD_HIT: ${{ needs.cold.outputs.atlas_hit }}
           ATLAS_WARM_HIT: ${{ steps.atlas.outputs.cache-hit }}
           ATLAS_COLD_KEY: ${{ needs.cold.outputs.atlas_key }}

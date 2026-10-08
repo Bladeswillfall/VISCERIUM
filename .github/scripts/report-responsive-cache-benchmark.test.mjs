@@ -10,6 +10,9 @@ const sample = {
   COLD_VARIANTS: '12',
   WARM_VARIANTS: '12',
   CACHE_BYTES: '2621440',
+  DIST_BYTES: '10485760',
+  ASTRO_BYTES: '1048576',
+  MAP_TILES_BYTES: '2097152',
   ATLAS_COLD_HIT: 'true',
   ATLAS_WARM_HIT: 'true',
   ATLAS_COLD_KEY: 'atlas-tiles-v1-exact',
@@ -24,6 +27,9 @@ test('compares full builds and includes the real cache restore time', () => {
   assert.match(summary, /Real GitHub cache restore \| 1.50 s/);
   assert.match(summary, /Warm build \+ restore \| 20.50 s/);
   assert.match(summary, /Cold minus warm \+ restore \| \+9.50 s/);
+  assert.match(summary, /Generated site size \| 10.00 MiB/);
+  assert.match(summary, /Compiled _astro assets \| 1.00 MiB/);
+  assert.match(summary, /Generated Atlas map tiles \| 2.00 MiB/);
   assert.match(summary, /separate GitHub-hosted runners/);
 });
 
@@ -33,8 +39,10 @@ test('exports numeric measurements and comparability for later comparisons', () 
     cold: result.cold, warm: result.warm, restore: result.restore,
     totalWarm: result.totalWarm, difference: result.difference,
     comparable: result.comparable,
+    distBytes: result.distBytes, astroBytes: result.astroBytes, mapTilesBytes: result.mapTilesBytes,
   }, { cold: 30000, warm: 19000, restore: 1500, totalWarm: 20500,
-    difference: 9500, comparable: true });
+    difference: 9500, comparable: true,
+    distBytes: 10485760, astroBytes: 1048576, mapTilesBytes: 2097152 });
 });
 
 test('reports a regression rather than hiding slower warm builds', () => {
@@ -46,6 +54,8 @@ test('rejects missing restores or invalid measurements', () => {
   assert.throws(() => benchmarkReport({ ...sample, RESPONSIVE_HIT: 'false' }), /did not restore/);
   assert.throws(() => benchmarkReport({ ...sample, COLD_MS: '' }), /Invalid benchmark measurement/);
   assert.throws(() => benchmarkReport({ ...sample, CACHE_BYTES: '-5' }), /Invalid benchmark measurement/);
+  assert.throws(() => benchmarkReport({ ...sample, DIST_BYTES: '0' }), /Invalid benchmark measurement/);
+  assert.throws(() => benchmarkReport({ ...sample, MAP_TILES_BYTES: undefined }), /Invalid benchmark measurement/);
 });
 
 test('distinguishes matched fallback restores from misses', () => {
