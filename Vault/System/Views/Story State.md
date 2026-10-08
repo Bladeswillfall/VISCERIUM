@@ -76,6 +76,12 @@ const scenes = [...dv.pages()]
   .filter((page) => page.file.path.startsWith(scenePrefix) && clean(page.type).toLowerCase() === "scene")
   .sort((a, b) => compare(a.act, b.act) || compare(a.chapter, b.chapter) || compare(a.sequence, b.sequence) || a.file.path.localeCompare(b.file.path));
 
+const requestedScenePath = clean(app.workspace?.__visceriumStoryStateScenePath);
+if (requestedScenePath) delete app.workspace.__visceriumStoryStateScenePath;
+const activeScene = requestedScenePath.startsWith(scenePrefix)
+  ? scenes.find((scene) => scene.file.path === requestedScenePath) ?? null
+  : null;
+
 const events = [];
 for (const scene of scenes) {
   for (const event of list(scene.viscerium_events)) {
@@ -91,6 +97,36 @@ const sceneLink = (parent, event, label = null) => {
     void app.workspace.openLinkText(event.scenePath, "");
   });
   return anchor;
+};
+
+const referenceLink = (parent, value, sourcePath) => {
+  const raw = clean(value?.path ?? value);
+  const target = cleanLink(raw);
+  if (!target) return null;
+  const label = clean(value?.display) || target.split("/").at(-1).replace(/\.md$/i, "");
+  const anchor = parent.createEl("a", { text: label, href: "#" });
+  anchor.addEventListener("click", (click) => {
+    click.preventDefault();
+    void app.workspace.openLinkText(target, sourcePath);
+  });
+  return anchor;
+};
+
+const addContextRow = (section, label, values, sourcePath) => {
+  const seen = new Set();
+  const items = list(values).filter((value) => {
+    const target = cleanLink(clean(value?.path ?? value));
+    if (!target || seen.has(target)) return false;
+    seen.add(target);
+    return true;
+  });
+  if (!items.length) return;
+
+  const row = section.createDiv({ cls: "vc-story-state-row" });
+  const body = row.createDiv();
+  body.createEl("strong", { text: label });
+  const links = body.createDiv({ cls: "vc-story-state-meta" });
+  for (const value of items) referenceLink(links, value, sourcePath);
 };
 
 const createSection = (title, description) => {
@@ -154,6 +190,44 @@ const titleRow = heading.createDiv({ cls: "vc-story-state-title-row" });
 titleRow.createEl("h1", { text: projectTitle });
 titleRow.createEl("span", { text: "Story state", cls: "vc-story-state-context" });
 heading.createEl("p", { text: "Derived from scene metadata. Edit scenes; this view stays read-only." });
+
+// SCENE CONTEXT
+if (activeScene) {
+  const section = createSection("Scene Context", "References for the scene that opened this view.");
+  const title = clean(activeScene.title) || activeScene.file.name;
+  const detail = [
+    activeScene.act ? `Act ${activeScene.act}` : "",
+    activeScene.chapter ? `Chapter ${activeScene.chapter}` : "",
+    clean(activeScene.status),
+    clean(activeScene.storyDate),
+  ].filter(Boolean).join(" · ");
+  section.createEl("p", { text: detail ? `${title} · ${detail}` : title, cls: "vc-story-state-help" });
+
+  addContextRow(section, "POV", activeScene.pov, activeScene.file.path);
+  addContextRow(section, "Characters", activeScene.characters, activeScene.file.path);
+  addContextRow(section, "Location", activeScene.location, activeScene.file.path);
+
+  const notesPath = clean(activeScene.notesFile);
+  addContextRow(section, "Scene notes", notesPath, activeScene.file.path);
+  const notesPage = notesPath ? (dv.page(notesPath) ?? dv.page(notesPath.replace(/\.md$/i, ""))) : null;
+  const contextOutlinks = [...list(activeScene.file.outlinks), ...list(notesPage?.file?.outlinks)];
+
+  const researchPrefix = `${projectBase}/Research/`;
+  const research = contextOutlinks.filter((value) => clean(value?.path ?? value).startsWith(researchPrefix));
+  addContextRow(section, "Research", research, activeScene.file.path);
+
+  const projectPage = dv.page(`${projectBase}/${projectTitle}`);
+  const codexPrefixes = [`${projectBase}/Codex/`];
+  if (clean(projectPage?.seriesId)) {
+    const seriesBase = projectBase.split("/").slice(0, -1).join("/");
+    if (seriesBase) codexPrefixes.push(`${seriesBase}/Codex/`);
+  }
+  const projectReferences = contextOutlinks.filter((value) => {
+    const path = clean(value?.path ?? value);
+    return codexPrefixes.some((prefix) => path.startsWith(prefix));
+  });
+  addContextRow(section, "Project references", projectReferences, activeScene.file.path);
+}
 
 // CURRENT PRESSURES
 {
