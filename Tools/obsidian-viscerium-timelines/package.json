@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "moment": "2.31.0",
-    "vis-data": "8.0.4",
+    "vis-data": "8.0.5",
     "vis-timeline": "8.5.4"
   },
   "devDependencies": {
