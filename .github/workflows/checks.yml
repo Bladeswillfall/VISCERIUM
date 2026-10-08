@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  checks: read
 
 concurrency:
   group: checks-${{ github.event.pull_request.number || github.ref }}
@@ -43,6 +44,7 @@ jobs:
         id: select
         env:
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GH_TOKEN: ${{ github.token }}
         run: node .github/scripts/select-checks.mjs
 
   repository:

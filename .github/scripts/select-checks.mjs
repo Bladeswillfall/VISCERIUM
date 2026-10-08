@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { appendFileSync, readdirSync } from 'node:fs';
+import { appendFileSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -221,12 +221,45 @@ export function changedPaths(base) {
   return result.stdout.toString('utf8').split('\0').filter(Boolean);
 }
 
+// A metadata edit may reuse an already-passing verification for this exact head SHA.
+// A missing, failed, or untrusted API result falls back to the complete plan.
+export function canReuseVerifiedChecks(event, checkRuns) {
+  if (event?.action !== 'edited' || !event.changes || !Array.isArray(checkRuns)) return false;
+  const changed = Object.keys(event.changes);
+  if (!changed.length || changed.some(name => name !== 'title' && name !== 'body')) return false;
+  const head = event.pull_request?.head?.sha;
+  if (!/^[0-9a-f]{40}$/.test(head ?? '')) return false;
+  const latest = checkRuns
+    .filter(check => check.name === 'verify' && check.head_sha === head
+      && Number.isSafeInteger(check.id))
+    .sort((a, b) => b.id - a.id)[0];
+  return latest?.status === 'completed' && latest.conclusion === 'success';
+}
+
+function canSkipMetadataOnlyEdit() {
+  try {
+    const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+    if (event?.action !== 'edited') return false;
+    const head = event.pull_request?.head?.sha;
+    const repo = process.env.GITHUB_REPOSITORY;
+    if (!/^[0-9a-f]{40}$/.test(head ?? '')
+      || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo ?? '')) return false;
+    const result = spawnSync('gh', ['api', `repos/${repo}/commits/${head}/check-runs?filter=all&per_page=100`], {
+      encoding: 'utf8', maxBuffer: 2 * 1024 * 1024,
+    });
+    if (result.error || result.status !== 0) return false;
+    return canReuseVerifiedChecks(event, JSON.parse(result.stdout).check_runs);
+  } catch {
+    return false;
+  }
+}
+
 function main() {
   const event = process.env.GITHUB_EVENT_NAME;
   let plan;
   if (event === 'pull_request') {
     try {
-      plan = selectPlan(changedPaths(process.env.PR_BASE_SHA));
+      plan = canSkipMetadataOnlyEdit() ? selectPlan([]) : selectPlan(changedPaths(process.env.PR_BASE_SHA));
     } catch (error) {
       console.warn(error.message);
       plan = selectPlan(null);

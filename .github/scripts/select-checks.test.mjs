@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
-import { BROWSER_SPECS, CHECKS, COMPLETE_BROWSER_SPECS, changedPaths, selectChecks, selectPlan, selectScheduledPlan } from './select-checks.mjs';
+import { BROWSER_SPECS, CHECKS, COMPLETE_BROWSER_SPECS, canReuseVerifiedChecks, changedPaths, selectChecks, selectPlan, selectScheduledPlan } from './select-checks.mjs';
 
 const all = Object.fromEntries(CHECKS.map(name => [name, true]));
 const only = (...names) => Object.fromEntries(CHECKS.map(name => [name, names.includes(name)]));
@@ -232,4 +232,34 @@ test('aggregate verification accepts only skips selected by change detection', (
   assert.notEqual(run({ UNIT_RESULT: 'failure' }).status, 0, 'an unselected failed job is not an intentional skip');
   assert.notEqual(run({ CHANGES_RESULT: 'failure' }).status, 0, 'broken change detection cannot pass');
   assert.equal(run({ RUN_UNIT: 'true', UNIT_RESULT: 'success' }).status, 0);
+});
+
+test('metadata-only edit reuses verification only when the exact head already passed', () => {
+  const head = 'a'.repeat(40);
+  const event = { action: 'edited', changes: { body: { from: 'old' } },
+    pull_request: { head: { sha: head } } };
+  const passed = [{ id: 100, name: 'verify', head_sha: head, status: 'completed', conclusion: 'success' }];
+  assert.equal(canReuseVerifiedChecks(event, passed), true);
+  assert.equal(canReuseVerifiedChecks({ ...event, changes: { title: { from: 'old' } } }, passed), true);
+  assert.equal(canReuseVerifiedChecks({ ...event, changes: { body: {}, base: {} } }, passed), false);
+  assert.equal(canReuseVerifiedChecks({ ...event, changes: {} }, passed), false);
+  assert.equal(canReuseVerifiedChecks({ ...event, action: 'synchronize' }, passed), false);
+  assert.equal(canReuseVerifiedChecks(event, [{ ...passed[0], head_sha: 'b'.repeat(40) }]), false);
+  assert.equal(canReuseVerifiedChecks(event, [{ ...passed[0], conclusion: 'failure' }]), false);
+  assert.equal(canReuseVerifiedChecks(event, [{ ...passed[0], status: 'in_progress' }]), false);
+  assert.equal(canReuseVerifiedChecks(event, null), false);
+  assert.equal(canReuseVerifiedChecks(event, [
+    ...passed, { ...passed[0], id: 101, conclusion: 'failure' },
+  ]), false, 'newer failed verification must override an older success');
+  assert.equal(canReuseVerifiedChecks(event, [
+    { ...passed[0], id: 101, conclusion: 'failure' }, ...passed,
+  ]), false, 'check API ordering must not change the decision');
+  assert.equal(canReuseVerifiedChecks(event, [
+    ...passed, { ...passed[0], id: 101, status: 'in_progress', conclusion: null },
+  ]), false, 'newer incomplete verification blocks the fast path');
+  assert.equal(canReuseVerifiedChecks(event, [
+    { ...passed[0], id: 99, conclusion: 'failure' }, ...passed,
+  ]), true, 'newest completed verification decides the result');
+  assert.equal(canReuseVerifiedChecks(event, [{ ...passed[0], id: undefined }]), false);
+
 });
