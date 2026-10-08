@@ -33,6 +33,7 @@ test('generic UI changes run only the core functional browser checks', () => {
   for (const file of [
     'Site/src/components/CodexHeader.astro',
     'Site/src/pages/community/[id].astro',
+    'Site/src/scripts/codex-shell.js',
     'Site/src/styles/statement-pages.css',
   ]) {
     assert.deepEqual(selectPlan([file]), {
@@ -97,8 +98,21 @@ test('contact-sensitive inputs keep the enabled-form fixture without broad brows
     checks: only('build', 'browser', 'contact'),
     browserSpecs: specs('contact'),
   });
-  assert.deepEqual(selectPlan(['Site/src/styles/a11y.css']), {
-    checks: only('build', 'browser', 'contact'),
+  for (const file of ['Site/src/styles/a11y.css', 'Site/src/styles/typography.css']) {
+    assert.deepEqual(selectPlan([file]), {
+      checks: only('build', 'browser', 'contact'),
+      browserSpecs: specs('core'),
+    }, file);
+  }
+});
+
+test('tested runtime config sources still select unit tests', () => {
+  assert.deepEqual(selectPlan(['Site/src/config/rights.mjs']), {
+    checks: only('unit', 'build'),
+    browserSpecs: [],
+  });
+  assert.deepEqual(selectPlan(['Site/src/scripts/reader-settings.js']), {
+    checks: only('unit', 'build', 'browser'),
     browserSpecs: specs('core'),
   });
 });
