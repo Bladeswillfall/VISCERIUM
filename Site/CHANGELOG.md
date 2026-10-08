@@ -33,7 +33,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Removed in Unreleased
 
-- Removed the redundant legacy `Vault/maps/Errack-NEARSIGHT.webp` image; the canonical `Vault/Assets/Maps/` source remains unchanged.
+- Removed redundant legacy NEARSIGHT and SMOG rasters from `Vault/maps/`, preserving their identical canonical sources in `Vault/Assets/Maps/`.
 
 - Removed the standalone What's New page and its link from the homepage Recent Articles section; the carousel and public feeds remain available.
 
