@@ -49,12 +49,12 @@ test('mobile footer keeps readable text and full-size route targets in light mod
   await page.goto('http://127.0.0.1:4321/', { waitUntil: 'networkidle' });
 
   const footer = page.locator('.ion-codex-footer');
-  await expect(footer.locator('.footer-wayfinder__primary')).toHaveAttribute('href', '/start-here/');
+  await expect(footer.locator('.footer-wayfinder__links a[href="/start-here/"]')).toHaveCount(1);
 
   const state = await footer.evaluate((element) => {
     const notice = element.querySelector('.footer-brand__notice');
     const description = element.querySelector('.policy-link__description');
-    const routes = [...element.querySelectorAll('.footer-wayfinder__routes a')];
+    const routes = [...element.querySelectorAll('.footer-wayfinder__links a')];
     if (!(notice instanceof HTMLElement) || !(description instanceof HTMLElement)) {
       throw new Error('Missing footer text');
     }
@@ -74,4 +74,20 @@ test('mobile footer keeps readable text and full-size route targets in light mod
   expect(state.descriptionColor).toBe(state.footerColor);
   expect(state.routeRects.length).toBeGreaterThan(0);
   expect(state.routeRects.every(({ width, height }) => width >= 48 && height >= 48)).toBe(true);
+});
+
+test('draft footer pages survive the content build and render', async ({ page }) => {
+  const routes = [
+    ['/about/', 'About us'],
+    ['/privacy/', 'Privacy'],
+    ['/accessibility/', 'Accessibility'],
+    ['/copyright/', 'Copyright & permissions'],
+  ];
+
+  for (const [path, title] of routes) {
+    const response = await page.goto(`http://127.0.0.1:4321${path}`, { waitUntil: 'domcontentloaded' });
+    expect(response?.status()).toBe(200);
+    await expect(page.locator('[data-draft-footer-page]')).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
+  }
 });
