@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
-import { BROWSER_SPECS, CHECKS, changedPaths, selectChecks, selectPlan } from './select-checks.mjs';
+import { BROWSER_SPECS, CHECKS, COMPLETE_BROWSER_SPECS, changedPaths, selectChecks, selectPlan, selectScheduledPlan } from './select-checks.mjs';
 
 const all = Object.fromEntries(CHECKS.map(name => [name, true]));
 const only = (...names) => Object.fromEntries(CHECKS.map(name => [name, names.includes(name)]));
@@ -124,7 +124,7 @@ test('dependency and global config changes run the curated full browser set', ()
   ));
 });
 
-test('test-file edits run only tests that still participate in PR CI', () => {
+test('browser and Axe test-file edits run their specs', () => {
   assert.deepEqual(selectPlan(['Site/tests/responsive-image-cache.test.mjs']), {
     checks: only('unit'), browserSpecs: [],
   });
@@ -135,10 +135,14 @@ test('test-file edits run only tests that still participate in PR CI', () => {
     checks: only('build', 'browser'), browserSpecs: specs('graph'),
   });
   assert.deepEqual(selectPlan(['Site/tests/browser/graph-label-contrast.spec.mjs']), {
-    checks: only(), browserSpecs: [],
+    checks: only('build', 'browser'), browserSpecs: ['tests/browser/graph-label-contrast.spec.mjs'],
   });
   assert.deepEqual(selectPlan(['Site/tests/accessibility/axe.spec.mjs']), {
-    checks: only(), browserSpecs: [],
+    checks: only('build', 'browser'), browserSpecs: ['tests/accessibility/axe.spec.mjs'],
+  });
+  assert.deepEqual(selectPlan(['Site/tests/browser/removed.spec.mjs']), {
+    checks: only('build', 'browser'),
+    browserSpecs: specs('core', 'graph', 'timeline', 'atlas', 'home', 'discussions', 'contact', 'storyteller', 'era', 'notFound'),
   });
 });
 
@@ -153,7 +157,7 @@ test('combined changes select the union of affected functional checks', () => {
   });
 });
 
-test('CI files, unknown paths, and failed path detection use the curated full plan', () => {
+test('CI files, unknown paths, and failed path detection run all browser specs', () => {
   for (const file of [
     '.github/workflows/checks.yml',
     '.github/scripts/select-checks.mjs',
@@ -165,13 +169,22 @@ test('CI files, unknown paths, and failed path detection use the curated full pl
   ]) {
     const plan = selectPlan([file]);
     assert.deepEqual(plan.checks, all, file);
-    assert.deepEqual(plan.browserSpecs, specs(
-      'core', 'graph', 'timeline', 'atlas', 'home', 'discussions', 'contact', 'storyteller', 'era', 'notFound',
-    ), file);
+    assert.deepEqual(plan.browserSpecs, COMPLETE_BROWSER_SPECS, file);
   }
   assert.deepEqual(selectChecks(null), all);
   assert.deepEqual(selectChecks(['README.md'], { fullRun: true }), all);
   assert.throws(() => changedPaths('not-a-commit'), /invalid PR base/);
+});
+
+test('scheduled plan covers all browser specs, Axe, and the enabled contact fixture', () => {
+  const plan = selectScheduledPlan();
+  assert.deepEqual(plan.checks, only('build', 'browser', 'contact'));
+  assert.ok(plan.browserSpecs.includes('tests/browser/contact.spec.mjs'));
+  assert.deepEqual(plan.browserSpecs, COMPLETE_BROWSER_SPECS);
+  assert.ok(plan.browserSpecs.includes('tests/browser/graph-label-contrast.spec.mjs'));
+  assert.ok(plan.browserSpecs.includes('tests/accessibility/axe.spec.mjs'));
+  const workflow = readFileSync(new URL('../workflows/checks.yml', import.meta.url), 'utf8');
+  assert.match(workflow, /schedule:\n\s+- cron:/);
 });
 
 test('workflow gates selected jobs and passes explicit browser specs', () => {

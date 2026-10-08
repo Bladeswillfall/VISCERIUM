@@ -105,8 +105,8 @@ test('incremental Astro builds persist route output between CI runs', () => {
   assert.match(workflow, /name: Build production artifact/);
   assert.match(workflow, /CF_PAGES: '1'/);
   assert.match(workflow, /changes:\n\s+if: github\.event_name != 'push'/);
-  assert.match(workflow, /repository:\n\s+if: github\.event_name != 'push'/);
-  assert.match(workflow, /verify:\n\s+if: \$\{\{ github\.event_name != 'push' && always\(\) \}\}/);
+  assert.match(workflow, /repository:\n\s+if: github\.event_name != 'push' && github\.event_name != 'schedule'/);
+  assert.match(workflow, /verify:\n\s+if: \$\{\{ github\.event_name != 'push' && github\.event_name != 'schedule' && always\(\) \}\}/);
   assert.match(workflow, /name: Restore Astro incremental build cache/);
   assert.match(workflow, /Site\/node_modules\/\.astro\/incremental-build\.json/);
   assert.match(workflow, /Site\/node_modules\/\.astro\/dist/);
@@ -151,7 +151,7 @@ test('main builds can deploy the prebuilt artifact directly to Cloudflare Pages'
   assert.doesNotMatch(workflow, /PUBLIC_CONTACT_FORM_ENDPOINT:\s*https:/);
 });
 
-test('Axe accessibility audit remains reproducible for manual runs', () => {
+test('Axe accessibility audit remains pinned for scheduled and manual runs', () => {
   const pkg = JSON.parse(read('../package.json'));
   const lock = JSON.parse(read('../package-lock.json'));
   const workflow = read('../../.github/workflows/checks.yml');

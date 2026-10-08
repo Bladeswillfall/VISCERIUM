@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -30,6 +30,13 @@ export const BROWSER_SPECS = Object.freeze({
 });
 
 const ALL_BROWSER_SPECS = Object.freeze([...new Set(Object.values(BROWSER_SPECS).flat())]);
+export const COMPLETE_BROWSER_SPECS = Object.freeze([
+  ...readdirSync(new URL('../../Site/tests/browser/', import.meta.url))
+    .filter(name => name.endsWith('.spec.mjs'))
+    .map(name => 'tests/browser/' + name)
+    .sort(),
+  'tests/accessibility/axe.spec.mjs',
+]);
 const fullChecks = () => Object.fromEntries(CHECKS.map(name => [name, true]));
 const emptyChecks = () => Object.fromEntries(CHECKS.map(name => [name, false]));
 
@@ -103,16 +110,26 @@ function markTestFile(checks, specs, name) {
 
   if (/^Site\/tests\/browser\/[^/]+\.spec\.mjs$/.test(name)) {
     const relative = name.replace(/^Site\//, '');
-    if (ALL_BROWSER_SPECS.includes(relative)) {
-      checks.build = true;
+    checks.build = true;
+    if (COMPLETE_BROWSER_SPECS.includes(relative)) {
       specs.add(relative);
       checks.browser = true;
       if (name === 'Site/tests/browser/contact.spec.mjs') checks.contact = true;
+    } else {
+      // Deleted browser specs still trigger the current smoke tests.
+      addAllBrowserSpecs(checks, specs);
     }
     return true;
   }
 
-  if (/^Site\/tests\/(?:accessibility|fixtures)\//.test(name)) return true;
+  if (/^Site\/tests\/accessibility\//.test(name)) {
+    checks.build = true;
+    checks.browser = true;
+    specs.add('tests/accessibility/axe.spec.mjs');
+    return true;
+  }
+
+  if (/^Site\/tests\/fixtures\//.test(name)) return true;
   return false;
 }
 
@@ -129,7 +146,7 @@ function markSitePath(checks, specs, name) {
 }
 
 function markPath(checks, specs, name) {
-  // CI changes run the curated full plan. Unknown paths also fail safe to it.
+  // CI changes and unknown paths run the complete plan.
   if (typeof name !== 'string' || !name || name.startsWith('/')
     || name.includes('..') || /^\.github\/(?:workflows|scripts)\//.test(name)) return false;
 
@@ -172,17 +189,21 @@ function markPath(checks, specs, name) {
 
 export function selectPlan(paths, { fullRun = false } = {}) {
   if (fullRun || !Array.isArray(paths)) {
-    return { checks: fullChecks(), browserSpecs: [...ALL_BROWSER_SPECS] };
+    return { checks: fullChecks(), browserSpecs: [...COMPLETE_BROWSER_SPECS] };
   }
 
   const checks = emptyChecks();
   const specs = new Set();
   for (const name of paths) {
     if (!markPath(checks, specs, name)) {
-      return { checks: fullChecks(), browserSpecs: [...ALL_BROWSER_SPECS] };
+      return { checks: fullChecks(), browserSpecs: [...COMPLETE_BROWSER_SPECS] };
     }
   }
   return { checks, browserSpecs: [...specs] };
+}
+
+export function selectScheduledPlan() {
+  return { checks: { ...emptyChecks(), build: true, browser: true, contact: true }, browserSpecs: [...COMPLETE_BROWSER_SPECS] };
 }
 
 export function selectChecks(paths, options) {
@@ -210,6 +231,8 @@ function main() {
       console.warn(error.message);
       plan = selectPlan(null);
     }
+  } else if (event === 'schedule') {
+    plan = selectScheduledPlan();
   } else {
     plan = selectPlan(null);
   }
