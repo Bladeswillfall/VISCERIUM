@@ -35,7 +35,7 @@ const emptyChecks = () => Object.fromEntries(CHECKS.map(name => [name, false]));
 
 const CONTACT_STYLE_INPUT = /^Site\/src\/styles\/(?:a11y|codex-ui|color-tokens|contact|editorial-shell|era-styles|header-controls|ion-(?:expressive-code|layers|theme)|layout|navigation|reader-settings|typography)\.css$/;
 const GLOBAL_BROWSER_INPUT = /^(?:Site\/(?:astro|site)\.config\.mjs|Site\/package(?:-lock)?\.json)$/;
-const GENERIC_UI_INPUT = /^Site\/src\/(?:components\/.*\.astro|pages\/.*\.astro|styles\/.*\.css)$/;
+const GENERIC_UI_INPUT = /^Site\/src\/(?:components\/.*\.astro|pages\/.*\.astro|scripts\/.*\.js|styles\/.*\.css)$/;
 
 function addBrowserSpecs(checks, specs, ...groups) {
   for (const group of groups) {
@@ -73,7 +73,7 @@ function addBrowserForSource(checks, specs, name) {
   const lower = name.toLowerCase();
   const groups = [];
 
-  if (/(?:graph|relationship|cytoscape|dagre)/.test(lower)) groups.push('graph');
+  if (/(?:\/graph(?:\.|\/)|worldgraph|site-graph|relationship|cytoscape|dagre)/.test(lower)) groups.push('graph');
   if (/(?:timeline|calendar|chronicle)/.test(lower)) groups.push('timeline');
   if (/(?:atlas|leaflet|worldmap|\/maps?\/|maps\.json)/.test(lower)) groups.push('atlas');
   if (/site\/src\/(?:components\/home\/|pages\/index\.astro$|styles\/homepage\.css$)/.test(lower)) groups.push('home');
@@ -119,7 +119,7 @@ function markTestFile(checks, specs, name) {
 function markSitePath(checks, specs, name) {
   checks.build = true;
 
-  if (/^Site\/(?:scripts\/|functions\/|src\/lib\/|src\/data\/.*\.(?:mjs|ts)$|src\/content\.config\.ts$)/.test(name)
+  if (/^Site\/(?:scripts\/|functions\/|src\/(?:scripts|config|lib)\/|src\/data\/.*\.(?:mjs|ts)$|src\/content\.config\.ts$)/.test(name)
     || GLOBAL_BROWSER_INPUT.test(name)) {
     checks.unit = true;
   }
