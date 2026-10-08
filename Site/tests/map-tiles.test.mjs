@@ -173,6 +173,10 @@ test('Atlas cache key ignores map copy and marker edits but tracks map sources',
   assert.equal(mapDefinitionFingerprint(original), mapDefinitionFingerprint(sameSource));
   assert.notEqual(mapDefinitionFingerprint(original), mapDefinitionFingerprint(changedImage));
   assert.notEqual(mapDefinitionFingerprint(original), mapDefinitionFingerprint(changedId));
+  assert.notEqual(mapDefinitionFingerprint(original), mapDefinitionFingerprint(original.map((record) => ({
+    ...record, data: { ...record.data, type: 'article' },
+  }))), 'changing a map into an article invalidates the cache');
+
   assert.notEqual(mapDefinitionFingerprint(original), mapDefinitionFingerprint([...original, {
     relativePath: 'Lore/Maps/another.md', data: { type: 'map', mapId: 'another', image: '/assets/maps/another.webp' },
   }]));
