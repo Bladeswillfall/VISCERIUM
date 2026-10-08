@@ -11,6 +11,7 @@ const sourcePaths = {
   'viscerium-timelines': 'Tools/obsidian-viscerium-timelines',
   'viscerium-creator-tools': 'Tools/obsidian-viscerium-creator-tools',
   'viscerium-layout-tools': 'Tools/obsidian-viscerium-layout-tools',
+  'viscerium-unit-cards': 'Tools/obsidian-viscerium-unit-cards',
   'viscerium-image-tools': 'Tools/obsidian-viscerium-image-tools',
   'viscerium-journal-tools': 'Tools/obsidian-viscerium-journal-tools',
 };
