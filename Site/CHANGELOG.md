@@ -10,12 +10,17 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added opt-in Stub notices for short published articles, with a direct GitHub contribution link.
 - Added reusable era-themed artifacts and anchored marginalia, including accessible CITADEL manuscript pagination ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
 - Added seven Elias Vail WebP cell illustrations with contour wrapping and clickable Bailey-format attribution pages in Myrkild (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
 - Added a responsive homepage Recent Articles carousel with era-themed header placeholders, an expandable grid and smooth drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
 
 ### Changed in Unreleased
 
+- Reduced pull-request CI to relevant functional checks: content-only changes now build without browser suites, feature code selects its own Chromium specs, and duplicate Axe/cross-browser graph jobs no longer block PRs.
+- Prepared GitHub Actions to deploy the cached production artifact directly to the existing Cloudflare Pages project, with a safe fallback until deployment credentials are configured.
+- Split Chromium browser checks across two CI shards and limited the enabled-contact fixture rebuild to contact-sensitive changes.
+- Replaced the Human Made authorship mark with the CC0 Brainmade mark across the Codex footer, content-production policy and repository badge.
 - Enabled Astro's experimental incremental static-build cache for VISCERIUM-owned dynamic routes, moved Atlas and responsive-image caches into Cloudflare's persisted Astro cache tree, skipped duplicate validation during Cloudflare builds, and replaced post-merge full CI with a cache-seeding build on main.
 - Increased the homepage Recent Articles grid limit from 6 to 36 entries ([#224](https://github.com/Bladeswillfall/VISCERIUM/pull/224)).
 - Restored ordinary Myrkild strain prose and removed cell-image margins (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).

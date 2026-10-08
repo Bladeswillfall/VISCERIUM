@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   changes:
     if: github.event_name != 'push'
@@ -22,9 +26,8 @@ jobs:
       build: ${{ steps.select.outputs.build }}
       obsidian_plugin: ${{ steps.select.outputs.obsidian_plugin }}
       browser: ${{ steps.select.outputs.browser }}
-      graph_engines: ${{ steps.select.outputs.graph_engines }}
+      browser_specs: ${{ steps.select.outputs.browser_specs }}
       contact: ${{ steps.select.outputs.contact }}
-      axe: ${{ steps.select.outputs.axe }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -99,7 +102,7 @@ jobs:
   unit:
     needs: changes
     if: needs.changes.outputs.unit == 'true'
-    name: Unit tests and benchmarks
+    name: Unit tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -140,7 +143,6 @@ jobs:
           if-no-files-found: warn
           retention-days: 1
 
-      - run: npm run benchmark:timelines
 
   gateway:
     needs: changes
@@ -313,75 +315,10 @@ jobs:
             exit 1
           }
 
-  axe:
-    needs: [changes, build]
-    if: needs.changes.outputs.axe == 'true'
-    name: Axe accessibility checks
-    runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # Verified MCR v1.63.0-noble OCI index
-    timeout-minutes: 20
-    defaults:
-      run:
-        shell: bash
-        working-directory: Site
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          fetch-depth: 500
-          persist-credentials: false
-          show-progress: false
-
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: Site/package-lock.json
-
-      - name: Use npm with lifecycle-script policy support
-        working-directory: .
-        run: |
-          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
-          test "$(npm --version)" = "11.18.0"
-
-      - run: npm ci --silent --no-audit --no-fund
-
-      - name: Download production build
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: site-dist
-          path: Site/dist/
-
-      - name: Start preview
-        run: |
-          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
-          echo $! > "$RUNNER_TEMP/viscerium-preview.pid"
-          for attempt in {1..30}; do
-            curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0
-            sleep 1
-          done
-          cat "$RUNNER_TEMP/viscerium-preview.log"
-          exit 1
-
-      - name: Run Axe accessibility checks
-        run: |
-          set -o pipefail
-          npx --no-install playwright test tests/accessibility/axe.spec.mjs \
-            --browser=chromium --reporter=line --workers=1 2>&1 | tee "$RUNNER_TEMP/axe.log"
-
-      - name: Upload accessibility log
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: axe-check-log
-          path: ${{ runner.temp }}/axe.log
-          if-no-files-found: warn
-          retention-days: 1
-
   browser:
     needs: [changes, build]
     if: needs.changes.outputs.browser == 'true'
-    name: Browser checks
+    name: Browser functional checks
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # Verified MCR v1.63.0-noble OCI index
@@ -431,9 +368,12 @@ jobs:
       - name: Run browser checks
         env:
           HOME: /root
+          BROWSER_SPECS: ${{ needs.changes.outputs.browser_specs }}
         run: |
           set -o pipefail
-          npx --no-install playwright test tests/browser --browser=chromium --reporter=line --workers=2 2>&1 | tee "$RUNNER_TEMP/playwright.log"
+          read -r -a specs <<< "$BROWSER_SPECS"
+          test "${#specs[@]}" -gt 0
+          npx --no-install playwright test "${specs[@]}" --browser=chromium --reporter=line --workers=2 2>&1 | tee "$RUNNER_TEMP/playwright.log"
 
       - name: Upload browser check log
         if: always()
@@ -441,75 +381,6 @@ jobs:
         with:
           name: browser-check-log
           path: ${{ runner.temp }}/playwright.log
-          if-no-files-found: warn
-          retention-days: 1
-
-  graph_engines:
-    needs: [changes, build]
-    if: needs.changes.outputs.graph_engines == 'true'
-    name: Graph Firefox and WebKit checks
-    runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # Verified MCR v1.63.0-noble OCI index
-    timeout-minutes: 20
-    defaults:
-      run:
-        shell: bash
-        working-directory: Site
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          fetch-depth: 500
-          persist-credentials: false
-          show-progress: false
-
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: Site/package-lock.json
-
-      - name: Use npm with lifecycle-script policy support
-        working-directory: .
-        run: |
-          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
-          test "$(npm --version)" = "11.18.0"
-
-      - run: npm ci --silent --no-audit --no-fund
-
-      - name: Download production build
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: site-dist
-          path: Site/dist/
-
-      - name: Start preview
-        run: |
-          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/viscerium-preview.log" 2>&1 &
-          echo $! > "$RUNNER_TEMP/viscerium-preview.pid"
-          for attempt in {1..30}; do
-            curl --fail --silent http://127.0.0.1:4321/eras/citadel/ > /dev/null && exit 0
-            sleep 1
-          done
-          cat "$RUNNER_TEMP/viscerium-preview.log"
-          exit 1
-
-      - name: Run Graph checks in Firefox and WebKit
-        env:
-          HOME: /root
-        run: |
-          set -e -o pipefail
-          {
-            npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
-            npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
-          } 2>&1 | tee "$RUNNER_TEMP/graph-engines.log"
-
-      - name: Upload Graph cross-browser log
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: graph-engines-check-log
-          path: ${{ runner.temp }}/graph-engines.log
           if-no-files-found: warn
           retention-days: 1
 
@@ -614,7 +485,7 @@ jobs:
 
   seed_build_cache:
     if: github.event_name == 'push'
-    name: Seed build caches
+    name: Build production artifact
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -640,6 +511,21 @@ jobs:
           test "$(npm --version)" = "11.18.0"
 
       - run: npm ci --silent --no-audit --no-fund
+
+      - name: Load public production build variables
+        run: |
+          python - <<'PY'
+          import os
+          import tomllib
+          from pathlib import Path
+
+          config = tomllib.loads(Path("wrangler.toml").read_text(encoding="utf-8"))
+          variables = config["env"]["production"]["vars"]
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+              for name, value in variables.items():
+                  if name.startswith("PUBLIC_"):
+                      print(f"{name}={value}", file=output)
+          PY
 
       - name: Fingerprint Atlas map definitions
         id: atlas_maps
@@ -671,10 +557,75 @@ jobs:
           restore-keys: |
             astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-
 
-      - name: Seed build caches
+      - name: Build production artifact
         env:
           CF_PAGES: '1'
         run: npm run build
+
+      - name: Upload production artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: production-site-dist
+          path: Site/dist/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+
+  deploy_pages:
+    needs: seed_build_cache
+    if: github.event_name == 'push'
+    name: Deploy production to Cloudflare Pages
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cloudflare-pages-production
+      cancel-in-progress: true
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          show-progress: false
+
+      - name: Download production artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: production-site-dist
+          path: Site/dist/
+
+      - name: Check Cloudflare deploy credentials
+        id: cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Direct Cloudflare deploy is ready but skipped until CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets are configured."
+          fi
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.cloudflare.outputs.enabled == 'true'
+        with:
+          node-version: 24
+
+      - name: Deploy tested artifact
+        if: steps.cloudflare.outputs.enabled == 'true'
+        working-directory: Site
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          current_main="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$current_main" != "$GITHUB_SHA" ]; then
+            echo "::notice::Skipping stale production deploy for $GITHUB_SHA; main is $current_main."
+            exit 0
+          fi
+          npm exec --yes --package=wrangler@4.136.3 -- wrangler pages deploy dist --project-name=viscerium-site --branch=main --commit-hash="$GITHUB_SHA"
 
   verify:
     if: ${{ github.event_name != 'push' && always() }}
@@ -686,9 +637,7 @@ jobs:
       - build
       - obsidian_plugin
       - browser
-      - graph_engines
       - contact
-      - axe
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
@@ -706,12 +655,8 @@ jobs:
           OBSIDIAN_PLUGIN_RESULT: ${{ needs.obsidian_plugin.result }}
           RUN_BROWSER: ${{ needs.changes.outputs.browser }}
           BROWSER_RESULT: ${{ needs.browser.result }}
-          RUN_GRAPH_ENGINES: ${{ needs.changes.outputs.graph_engines }}
-          GRAPH_ENGINES_RESULT: ${{ needs.graph_engines.result }}
           RUN_CONTACT: ${{ needs.changes.outputs.contact }}
           CONTACT_RESULT: ${{ needs.contact.result }}
-          RUN_AXE: ${{ needs.changes.outputs.axe }}
-          AXE_RESULT: ${{ needs.axe.result }}
         run: |
           test "$CHANGES_RESULT" = "success"
           test "$REPOSITORY_RESULT" = "success"
@@ -740,18 +685,8 @@ jobs:
           else
             test "$BROWSER_RESULT" = "skipped"
           fi
-          if [ "$RUN_GRAPH_ENGINES" = "true" ]; then
-            test "$GRAPH_ENGINES_RESULT" = "success"
-          else
-            test "$GRAPH_ENGINES_RESULT" = "skipped"
-          fi
           if [ "$RUN_CONTACT" = "true" ]; then
             test "$CONTACT_RESULT" = "success"
           else
             test "$CONTACT_RESULT" = "skipped"
-          fi
-          if [ "$RUN_AXE" = "true" ]; then
-            test "$AXE_RESULT" = "success"
-          else
-            test "$AXE_RESULT" = "skipped"
           fi

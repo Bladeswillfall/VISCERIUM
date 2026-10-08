@@ -3,6 +3,7 @@ title: "The Abberath Disclosure"
 description: "Leaked archives revealed that Abberath manifestations had been catalogued, cultivated and suppressed for centuries."
 status: published
 type: event
+stub: true
 era: ENTROPY
 calendarDate:
   calendar: okse
