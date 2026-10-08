@@ -124,3 +124,10 @@ test('checked-in Atlas sidecars retain a non-empty active base', async () => {
     );
   }
 });
+
+test('NEARSIGHT map remains canonical without a duplicate legacy raster', async () => {
+  const canonical = path.join(vaultRoot, 'Assets/Maps/Errack-NEARSIGHT.webp');
+  const oldCopy = path.join(vaultRoot, 'maps/Errack-NEARSIGHT.webp');
+  await fs.access(canonical);
+  await assert.rejects(fs.access(oldCopy), { code: 'ENOENT' });
+});
