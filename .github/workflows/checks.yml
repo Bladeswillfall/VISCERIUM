@@ -6,6 +6,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 1'
 
 permissions:
   contents: read
@@ -44,7 +46,7 @@ jobs:
         run: node .github/scripts/select-checks.mjs
 
   repository:
-    if: github.event_name != 'push'
+    if: github.event_name != 'push' && github.event_name != 'schedule'
     name: Repository checks
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -628,7 +630,7 @@ jobs:
           npm exec --yes --package=wrangler@4.136.3 -- wrangler pages deploy dist --project-name=viscerium-site --branch=main --commit-hash="$GITHUB_SHA"
 
   verify:
-    if: ${{ github.event_name != 'push' && always() }}
+    if: ${{ github.event_name != 'push' && github.event_name != 'schedule' && always() }}
     needs:
       - changes
       - repository
