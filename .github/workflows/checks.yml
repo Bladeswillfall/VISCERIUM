@@ -215,7 +215,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: Site/node_modules/.astro/viscerium/map-tiles
-          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Vault/maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
+          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
           restore-keys: |
             atlas-tiles-v1-${{ runner.os }}-
 
@@ -427,7 +427,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: Site/node_modules/.astro/viscerium/map-tiles
-          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Vault/maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
+          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
           restore-keys: |
             atlas-tiles-v1-${{ runner.os }}-
 
@@ -537,7 +537,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: Site/node_modules/.astro/viscerium/map-tiles
-          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Vault/maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
+          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
           restore-keys: |
             atlas-tiles-v1-${{ runner.os }}-
 
