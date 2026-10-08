@@ -5,7 +5,7 @@ interface LanguageOption {
   nativeLabel: string;
   secondaryLabel?: string;
   secondaryLang?: string;
-  flag: 'gb' | 'fr' | 'de';
+  flag: 'gb' | 'fr' | 'de' | 'es' | 'zh' | 'ru' | 'ja';
   current?: boolean;
 }
 
@@ -20,6 +20,10 @@ const flagSrc = {
   gb: '/flags/gb.svg',
   fr: '/flags/fr.svg',
   de: '/flags/de.svg',
+  es: '/flags/es.svg',
+  zh: '/flags/zh.svg',
+  ru: '/flags/ru.svg',
+  ja: '/flags/ja.svg',
 } as const;
 ---
 
@@ -69,7 +73,7 @@ const flagSrc = {
   </nav>
 </details>
 
-<style>
+<style is:inline>
   .codex-language-menu {
     position: relative;
     width: 2.5rem;

@@ -16,6 +16,10 @@ const flagUrls = {
   gb: new URL('../public/flags/gb.svg', import.meta.url),
   fr: new URL('../public/flags/fr.svg', import.meta.url),
   de: new URL('../public/flags/de.svg', import.meta.url),
+  es: new URL('../public/flags/es.svg', import.meta.url),
+  zh: new URL('../public/flags/zh.svg', import.meta.url),
+  ru: new URL('../public/flags/ru.svg', import.meta.url),
+  ja: new URL('../public/flags/ja.svg', import.meta.url),
 };
 const sourceRoot = new URL('../src/', import.meta.url);
 
@@ -70,21 +74,26 @@ test('French and German placeholders cover every custom UI key without publishin
   }
 });
 
-test('accessible flag language menu is staged beside reader settings without being mounted', async () => {
-  const [header, menu, icon, gbFlag, frFlag, deFlag] = await Promise.all([
+test('homepage language menu mounts beside reader settings for the translation test-bed', async () => {
+  const [header, menu, icon, gbFlag, frFlag, deFlag, esFlag, zhFlag, ruFlag, jaFlag] = await Promise.all([
     fs.readFile(codexHeaderUrl, 'utf8'),
     fs.readFile(languageMenuUrl, 'utf8'),
     fs.readFile(languageIconUrl, 'utf8'),
     fs.readFile(flagUrls.gb, 'utf8'),
     fs.readFile(flagUrls.fr, 'utf8'),
     fs.readFile(flagUrls.de, 'utf8'),
+    fs.readFile(flagUrls.es, 'utf8'),
+    fs.readFile(flagUrls.zh, 'utf8'),
+    fs.readFile(flagUrls.ru, 'utf8'),
+    fs.readFile(flagUrls.ja, 'utf8'),
   ]);
   const settingsIndex = header.indexOf('<ReaderSettings />');
-  const dormantIndex = header.indexOf('CodexLanguageMenu');
+  const menuIndex = header.indexOf('<CodexLanguageMenu');
 
-  assert.ok(settingsIndex !== -1 && dormantIndex > settingsIndex);
+  assert.ok(settingsIndex !== -1 && menuIndex > settingsIndex);
   assert.doesNotMatch(header, /virtual:starlight\/components\/LanguageSelect/);
-  assert.doesNotMatch(header, /<CodexLanguageMenu/);
+  assert.match(header, /homeLanguageForPath\(Astro\.url\.pathname\)/);
+  assert.match(header, /homeLanguageMenu &&/);
   assert.match(menu, /<details[^>]+data-codex-language-menu/);
   assert.match(menu, /<summary class="codex-language-menu__trigger">/);
   assert.match(menu, /<nav class="codex-language-menu__panel" aria-label={panelLabel}>/);
@@ -108,6 +117,13 @@ test('accessible flag language menu is staged beside reader settings without bei
   assert.match(frFlag, /#ef4135/);
   assert.match(deFlag, /#dd0000/);
   assert.match(deFlag, /#ffce00/);
+  assert.match(esFlag, /#aa151b/);
+  assert.match(esFlag, /#f1bf00/);
+  assert.match(zhFlag, /#de2910/);
+  assert.match(zhFlag, /#ffde00/);
+  assert.match(ruFlag, /#0039a6/);
+  assert.match(ruFlag, /#d52b1e/);
+  assert.match(jaFlag, /#bc002d/);
 });
 
 test('the native i18next layer falls back to the default catalog', async () => {

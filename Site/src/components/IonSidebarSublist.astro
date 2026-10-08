@@ -3,6 +3,7 @@ import { Badge } from '@astrojs/starlight/components';
 import { sidebarIconForLabel } from '../config/sidebar-taxonomy.mjs';
 import { HISTORICAL_ERAS } from '../lib/era-context.mjs';
 import { sidebarGroupContent } from '../lib/sidebar-group-content.mjs';
+import { getHomeShellTranslationForPath } from '../lib/home-i18n.mjs';
 import { parseIconLabel, parseIconSpec } from '../lib/icon-spec.mjs';
 import LocalIcon from './LocalIcon.astro';
 
@@ -13,6 +14,7 @@ interface Props {
 
 const { sublist, depth = 0 } = Astro.props;
 const { t } = Astro.locals;
+const homeSidebar = getHomeShellTranslationForPath(Astro.url.pathname)?.sidebar;
 const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
 ---
 
@@ -29,6 +31,7 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
       ?? parsed.icon
       ?? parseIconSpec(inferredIcon)?.spec;
     const label = parsed.label;
+    const displayLabel = homeSidebar?.[label] ?? label;
     const labelledEra = entry.type === 'group'
       ? HISTORICAL_ERAS.find((era) => era === label.toUpperCase())
       : undefined;
@@ -60,7 +63,7 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
             {...attrs}
           >
             {icon && <LocalIcon name={icon} />}
-            <span>{label}</span>
+            <span>{displayLabel}</span>
             {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
           </a>
         ) : overviewOnlyLink ? (
@@ -71,7 +74,7 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
           >
             <span class="group-label">
               {icon && <LocalIcon name={icon} />}
-              <span class="large">{label}</span>
+              <span class="large">{displayLabel}</span>
               {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
             </span>
           </a>
@@ -79,12 +82,12 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
           <div
             class="empty-group"
             aria-disabled="true"
-            aria-label={t('viscerium.sidebar.emptyLabel', { label, interpolation: { escapeValue: false } })}
+            aria-label={t('viscerium.sidebar.emptyLabel', { label: displayLabel, interpolation: { escapeValue: false } })}
             title={t('viscerium.sidebar.emptyTitle')}
           >
             <span class="group-label">
               {icon && <LocalIcon name={icon} />}
-              <span class="large">{label}</span>
+              <span class="large">{displayLabel}</span>
               {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
             </span>
           </div>
@@ -96,7 +99,7 @@ const visibleSublist = sidebarGroupContent(sublist).visibleEntries;
             <summary>
               <span class="group-label">
                 {icon && <LocalIcon name={icon} />}
-                <span class="large">{label}</span>
+                <span class="large">{displayLabel}</span>
                 {entry.badge && <Badge text={entry.badge.text} variant={entry.badge.variant} />}
                 <span class="caret" aria-hidden="true">›</span>
               </span>

@@ -1,11 +1,28 @@
 ---
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
 import siteConfig from '../../site.config.mjs';
+import { HOME_LANGUAGES, getHomeTranslation, homeLanguageForPath, homepageHref } from '../lib/home-i18n.mjs';
+import CodexLanguageMenu from './CodexLanguageMenu.astro';
 import CodexSearch from './CodexSearch.astro';
 import EraContextControls from './EraContextControls.astro';
 import ReaderSettings from './ReaderSettings.astro';
 
 const { t } = Astro.locals;
+const currentHomeLanguage = homeLanguageForPath(Astro.url.pathname);
+const homeLanguageMenu = currentHomeLanguage
+  ? {
+      copy: getHomeTranslation(currentHomeLanguage.locale).languageMenu,
+      options: HOME_LANGUAGES.map((language) => ({
+        locale: language.locale,
+        href: homepageHref(language.route),
+        nativeLabel: language.nativeLabel,
+        secondaryLabel: language.locale === 'en-GB' ? undefined : language.englishLabel,
+        secondaryLang: language.locale === 'en-GB' ? undefined : 'en-GB',
+        flag: language.flag,
+        current: language.locale === currentHomeLanguage.locale,
+      })),
+    }
+  : undefined;
 ---
 
 <script is:inline>
@@ -49,7 +66,15 @@ const { t } = Astro.locals;
   <div class="right-group codex-header-controls print:hidden" data-codex-header-controls>
     <EraContextControls />
     <ReaderSettings />
-    <!-- Dormant: mount CodexLanguageMenu here only after a second locale is approved. -->
+    {
+      homeLanguageMenu && (
+        <CodexLanguageMenu
+          triggerLabel={homeLanguageMenu.copy.trigger}
+          panelLabel={homeLanguageMenu.copy.panel}
+          options={homeLanguageMenu.options}
+        />
+      )
+    }
   </div>
 </div>
 

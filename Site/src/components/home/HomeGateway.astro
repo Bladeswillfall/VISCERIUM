@@ -1,37 +1,45 @@
 ---
+import { getHomeTranslation } from '../../lib/home-i18n.mjs';
 import RecentArticles from './RecentArticles.astro';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = 'en-GB' } = Astro.props;
+const copy = getHomeTranslation(locale);
 ---
 
 <div class="home-gateway" id="home-gateway-top">
   <section class="home-hero" aria-labelledby="home-hero-title">
     <div class="home-hero__copy">
-      <p class="home-eyebrow">Choose an age. Enter the same world.</p>
+      <p class="home-eyebrow">{copy.hero.eyebrow}</p>
       <h1 id="home-hero-title">VISCERIUM</h1>
-      <p class="home-hero__deck">One timeline. Four eras. Infinite stories.</p>
+      <p class="home-hero__deck">{copy.hero.deck}</p>
       <div class="home-actions">
         <a
           class="home-button"
           href="/start-here/"
           data-rybbit-event="home_start_click"
           data-rybbit-prop-placement="hero"
-        >Start here</a>
+        >{copy.hero.start}</a>
         <a
           class="home-button home-button--secondary"
           href="#home-era-gateway"
           data-rybbit-event="home_era_prompt_click"
-        >Explore the four eras</a>
+        >{copy.hero.explore}</a>
       </div>
     </div>
 
     <p class="home-era-scroll-hint" aria-hidden="true">
-      <span>Swipe or scroll through the ages</span>
+      <span>{copy.hero.scrollHint}</span>
       <span>I → IV</span>
     </p>
 
     <ol
       class="home-era-gateway"
       id="home-era-gateway"
-      aria-label="The four eras of VISCERIUM. On medium screens, scroll horizontally to explore them."
+      aria-label={copy.hero.erasLabel}
       tabindex="0"
     >
       <li>
@@ -43,11 +51,11 @@ import RecentArticles from './RecentArticles.astro';
           data-rybbit-prop-era="CITADEL"
         >
           <div class="home-era-card__content">
-            <span class="home-era-card__number">Era I</span>
+            <span class="home-era-card__number">{copy.eras[0].number}</span>
             <h2>CITADEL</h2>
-            <p class="home-era-card__tags">Steel · Bone · Early gunpowder</p>
-            <p class="home-era-card__description" id="home-citadel-description">A medieval age of walled realms, ritualised Resonance and horrors still mistaken for folklore.</p>
-            <span class="home-era-card__action">Explore CITADEL</span>
+            <p class="home-era-card__tags">{copy.eras[0].tags}</p>
+            <p class="home-era-card__description" id="home-citadel-description">{copy.eras[0].description}</p>
+            <span class="home-era-card__action">{copy.eras[0].action}</span>
           </div>
         </a>
       </li>
@@ -60,11 +68,11 @@ import RecentArticles from './RecentArticles.astro';
           data-rybbit-prop-era="SMOG"
         >
           <div class="home-era-card__content">
-            <span class="home-era-card__number">Era II</span>
+            <span class="home-era-card__number">{copy.eras[1].number}</span>
             <h2>SMOG</h2>
-            <p class="home-era-card__tags">Industry · Trenches · Occult machinery</p>
-            <p class="home-era-card__description" id="home-smog-description">Civilisation industrialises its wars faster than it learns from them, filling the old world with soot, engines and inherited grief.</p>
-            <span class="home-era-card__action">Explore SMOG</span>
+            <p class="home-era-card__tags">{copy.eras[1].tags}</p>
+            <p class="home-era-card__description" id="home-smog-description">{copy.eras[1].description}</p>
+            <span class="home-era-card__action">{copy.eras[1].action}</span>
           </div>
         </a>
       </li>
@@ -77,11 +85,11 @@ import RecentArticles from './RecentArticles.astro';
           data-rybbit-prop-era="NEARSIGHT"
         >
           <div class="home-era-card__content">
-            <span class="home-era-card__number">Era III</span>
+            <span class="home-era-card__number">{copy.eras[2].number}</span>
             <h2>NEARSIGHT</h2>
-            <p class="home-era-card__tags">Satellites · Exoskeletons · Cassette futurism</p>
-            <p class="home-era-card__description" id="home-nearsight-description">Humanity believes the world is finally observable while the real enemy remains beyond its field of view.</p>
-            <span class="home-era-card__action">Explore NEARSIGHT</span>
+            <p class="home-era-card__tags">{copy.eras[2].tags}</p>
+            <p class="home-era-card__description" id="home-nearsight-description">{copy.eras[2].description}</p>
+            <span class="home-era-card__action">{copy.eras[2].action}</span>
           </div>
         </a>
       </li>
@@ -94,11 +102,11 @@ import RecentArticles from './RecentArticles.astro';
           data-rybbit-prop-era="ENTROPY"
         >
           <div class="home-era-card__content">
-            <span class="home-era-card__number">Era IV</span>
+            <span class="home-era-card__number">{copy.eras[3].number}</span>
             <h2>ENTROPY</h2>
-            <p class="home-era-card__tags">Orbital war · Altered flesh · Extinction</p>
-            <p class="home-era-card__description" id="home-entropy-description">The old struggle escapes Errack and reveals the scale of what has always surrounded the Degel System.</p>
-            <span class="home-era-card__action">Explore ENTROPY</span>
+            <p class="home-era-card__tags">{copy.eras[3].tags}</p>
+            <p class="home-era-card__description" id="home-entropy-description">{copy.eras[3].description}</p>
+            <span class="home-era-card__action">{copy.eras[3].action}</span>
           </div>
         </a>
       </li>
@@ -107,9 +115,9 @@ import RecentArticles from './RecentArticles.astro';
 
   <section class="home-section" id="home-routes" aria-labelledby="home-routes-title">
     <header class="home-section__intro">
-      <p class="home-eyebrow">Choose your route</p>
-      <h2 class="home-section__heading" id="home-routes-title">Enter with the context you want.</h2>
-      <p class="home-lead">Start with the guided primer, the wider system, or the history that connects every era.</p>
+      <p class="home-eyebrow">{copy.routes.eyebrow}</p>
+      <h2 class="home-section__heading" id="home-routes-title">{copy.routes.heading}</h2>
+      <p class="home-lead">{copy.routes.lead}</p>
     </header>
 
     <div class="home-route-grid">
@@ -120,9 +128,9 @@ import RecentArticles from './RecentArticles.astro';
         data-rybbit-prop-target="start-here"
       >
         <span class="home-route-card__symbol" aria-hidden="true">Ⅰ</span>
-        <h3>Start Here</h3>
-        <p>The essential primer to VISCERIUM, the Degel System and its four eras.</p>
-        <strong>Recommended first</strong>
+        <h3>{copy.routes.cards[0].title}</h3>
+        <p>{copy.routes.cards[0].description}</p>
+        <strong>{copy.routes.cards[0].action}</strong>
       </a>
       <a
         class="home-route-card"
@@ -131,9 +139,9 @@ import RecentArticles from './RecentArticles.astro';
         data-rybbit-prop-target="degel-system"
       >
         <span class="home-route-card__symbol" aria-hidden="true">⌁</span>
-        <h3>The Degel System</h3>
-        <p>Begin with the star system whose worlds, wounds and hidden structures contain the greater struggle.</p>
-        <strong>Enter the setting</strong>
+        <h3>{copy.routes.cards[1].title}</h3>
+        <p>{copy.routes.cards[1].description}</p>
+        <strong>{copy.routes.cards[1].action}</strong>
       </a>
       <a
         class="home-route-card"
@@ -142,9 +150,9 @@ import RecentArticles from './RecentArticles.astro';
         data-rybbit-prop-target="timeline"
       >
         <span class="home-route-card__symbol" aria-hidden="true">✣</span>
-        <h3>The Timeline</h3>
-        <p>Follow the inherited events that connect CITADEL, SMOG, NEARSIGHT and ENTROPY.</p>
-        <strong>Trace the history</strong>
+        <h3>{copy.routes.cards[2].title}</h3>
+        <p>{copy.routes.cards[2].description}</p>
+        <strong>{copy.routes.cards[2].action}</strong>
       </a>
     </div>
   </section>
@@ -152,15 +160,16 @@ import RecentArticles from './RecentArticles.astro';
   <section class="home-section" id="home-continuum" aria-labelledby="home-continuum-title">
     <div class="home-section__grid">
       <header>
-        <p class="home-eyebrow">One wounded history</p>
-        <h2 class="home-section__heading" id="home-continuum-title">The world advances. The struggle does not.</h2>
-        <p class="home-lead">VISCERIUM follows one secondary world across millennia rather than resetting the setting whenever its technology changes.</p>
+        <p class="home-eyebrow">{copy.continuum.eyebrow}</p>
+        <h2 class="home-section__heading" id="home-continuum-title">{copy.continuum.heading}</h2>
+        <p class="home-lead">{copy.continuum.lead}</p>
       </header>
       <div class="home-body-copy">
-        <p>Kingdoms become republics. Rituals become sciences. Old superstitions survive inside military doctrine, industry and orbital infrastructure. Resonance, incursion and mortal ambition remain the connective tissue.</p>
-        <p>The four gateways are not separate universes. They are four moments in the same history, each carrying the damage, discoveries and lies of the age before it.</p>
+        <p>{copy.continuum.body[0]}</p>
+        <p>{copy.continuum.body[1]}</p>
       </div>
     </div>
   </section>
-  <RecentArticles />
+  <RecentArticles locale={locale} copy={copy.recent} />
 </div>
+
