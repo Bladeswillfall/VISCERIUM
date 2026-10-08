@@ -135,10 +135,13 @@ test('main builds can deploy the prebuilt artifact directly to Cloudflare Pages'
   assert.match(workflow, /name: Upload production artifact/);
   assert.match(workflow, /name: production-site-dist/);
   assert.match(deploy, /needs: seed_build_cache/);
+  assert.match(deploy, /vars\.CLOUDFLARE_DIRECT_DEPLOY == '1'/);
   assert.match(deploy, /group: cloudflare-pages-production/);
   assert.match(deploy, /cancel-in-progress: true/);
   assert.match(deploy, /contents: read/);
   assert.match(deploy, /name: Check Cloudflare deploy credentials/);
+  assert.match(deploy, /::error::CLOUDFLARE_DIRECT_DEPLOY is enabled but Cloudflare credentials are missing/);
+  assert.doesNotMatch(deploy, /steps\.cloudflare\.outputs\.enabled/);
   assert.match(deploy, /secrets\.CLOUDFLARE_API_TOKEN/);
   assert.match(deploy, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
   assert.match(deploy, /git ls-remote origin refs\/heads\/main/);
