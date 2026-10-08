@@ -30,9 +30,11 @@ CLOUDFLARE_ACCOUNT_ID
 CLOUDFLARE_API_TOKEN
 ```
 
-Create the API token with the Cloudflare account permission **Cloudflare Pages: Edit**. If either secret is missing, the GitHub deploy job skips without replacing the current Cloudflare Git deployment.
+Create the API token with the Cloudflare account permission **Cloudflare Pages: Edit**. Direct upload is opt-in. After adding both secrets, set the GitHub Actions repository variable `CLOUDFLARE_DIRECT_DEPLOY=1` to enable the deploy job on pushes to `main`. Without that variable, the job is skipped and Cloudflare Git deployment remains unchanged.
 
-After the secrets exist, run the `Checks` workflow on `main` again and confirm the `Deploy production to Cloudflare Pages` job succeeds. Only then disable **automatic production branch deployments** under the Pages project's branch controls. Keep automatic preview deployments enabled until a separate preview-upload workflow replaces them.
+If direct upload is enabled but credentials are missing, the deploy job fails instead of reporting success without uploading anything. Confirm a successful real upload and verify the deployed commit and live routes before disabling **automatic production branch deployments** under the Pages project's branch controls. Keep automatic preview deployments enabled until a separate preview-upload workflow replaces them.
+
+To return to the Cloudflare Git deployment path, clear or set `CLOUDFLARE_DIRECT_DEPLOY=0`, and confirm Cloudflare's automatic production deployments are enabled.
 
 After Cloudflare assigns the real `pages.dev` hostname, either redirect it to the canonical domain or add hostname-specific `X-Robots-Tag: noindex` rules. The old project hostname was removed from `Site/public/_headers`, and a replacement cannot be written accurately before Cloudflare creates the project.
 

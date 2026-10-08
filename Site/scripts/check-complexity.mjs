@@ -46,6 +46,11 @@ function runEslint(files, maxComplexity) {
       '--report-unused-disable-directives',
       '--rule',
       `complexity: ["error", ${maxComplexity}]`,
+      // Use the same ESLint pass for low-noise JavaScript correctness rules.
+      '--rule', 'no-debugger: error',
+      '--rule', 'no-dupe-args: error',
+      '--rule', 'no-duplicate-case: error',
+      '--rule', 'no-unreachable: error',
       ...files,
     ],
     { cwd: repoRoot, stdio: 'inherit' },

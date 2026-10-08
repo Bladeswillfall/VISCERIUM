@@ -19,6 +19,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 - Restored coverage of individual browser and accessibility test edits and scheduled a weekly complete Chromium and Axe audit.
 
+- Made direct Cloudflare Pages uploads an explicit repository-variable opt-in and fail when enabled without credentials, so skipped uploads no longer look successful.
+
 - Reduced pull-request CI to relevant functional checks: content-only changes now build without browser suites, feature code selects its own Chromium specs, and duplicate Axe/cross-browser graph jobs no longer block PRs.
 - Prepared GitHub Actions to deploy the cached production artifact directly to the existing Cloudflare Pages project, with a safe fallback until deployment credentials are configured.
 - Split Chromium browser checks across two CI shards and limited the enabled-contact fixture rebuild to contact-sensitive changes.

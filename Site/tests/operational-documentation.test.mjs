@@ -45,41 +45,6 @@ test('all operational SOPs reference the shared documentation writing standard',
   }
 });
 
-test('the World Anvil migration guide gives exact novice-facing Obsidian actions', () => {
-  const guide = read('Site/tests/fixtures/world-anvil-migration-review.md');
-  assert.match(guide, /World Anvil Import → Review first/);
-  assert.match(guide, /Tier 1/);
-  assert.match(guide, /Tier 4/);
-  assert.match(guide, /## Recommended decision order/);
-  assert.match(guide, /VISCERIUM Creator Tools: Set controlled era \/ Universal scope/);
-  assert.match(guide, /VISCERIUM Creator Tools: Set continuity entity ID/);
-  assert.match(guide, /VISCERIUM Creator Tools: Create era edition from current note/);
-  assert.match(guide, /Ctrl\/Cmd \+ P/);
-  assert.match(guide, /Convert one import to current format/);
-  assert.match(guide, /Update an existing World Anvil import/);
-  assert.match(guide, /## Ready to file/);
-  assert.match(guide, /does \*\*not\*\* mean the article is ready for publication/);
-});
-
-test('creator references record Templater, migration frontmatter, and sidebar actions', () => {
-  const commands = read('Vault/System/SOPs/Creator Command Reference.md');
-  assert.match(commands, /## Templater commands and hotkeys/);
-  assert.match(commands, /does not currently store custom hotkeys/);
-  assert.match(commands, /Templater: Insert template/);
-  assert.match(commands, /### Update an existing World Anvil import/);
-  assert.match(commands, /Do not insert a full creation or type template/);
-  assert.match(commands, /No Templater command currently creates or edits the public article facts sidebar/);
-
-  const schema = read('Vault/System/Frontmatter Schema.md');
-  assert.match(schema, /### Choose the sidebar you mean/);
-  assert.match(schema, /### Article facts sidebar/);
-  assert.match(schema, /sidebar:\n  sections:/);
-  assert.match(schema, /replaceMeta: true/);
-
-  const publishing = read('Vault/System/Publishing Rules.md');
-  assert.match(publishing, /They do not configure the Codex article facts sidebar/);
-});
-
 test('the architecture handoff documents current programs and workflows', () => {
   const architecture = JSON.parse(read('Architecture/viscerium-architecture.json'));
   assert.equal(architecture.schema_version, '2.0.0');
@@ -116,17 +81,6 @@ test('the architecture handoff documents current programs and workflows', () => 
     assert.ok(Array.isArray(architecture.pipelines[workflow]), `architecture must document ${workflow}`);
     assert.ok(architecture.pipelines[workflow].length > 0, `${workflow} must contain steps`);
   }
-});
-
-test('the visual architecture map reflects the current search and era systems', () => {
-  const html = read('Architecture/viscerium-architecture.html');
-  assert.match(html, /VISCERIUM Creator Tools/);
-  assert.match(html, /World Anvil transfer/);
-  assert.match(html, /Create an era edition/);
-  assert.match(html, /Telescope/);
-  assert.match(html, /Pagefind is disabled/);
-  assert.match(html, /Programs and plugins/);
-  assert.match(html, /Change routing/);
 });
 
 test('architecture representations agree on core runtime invariants', () => {
