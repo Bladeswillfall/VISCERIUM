@@ -12,6 +12,7 @@ import {
   mapTileMaxLevel,
 } from '../scripts/generate-map-tiles.mjs';
 import { walk } from '../scripts/lib/walk.mjs';
+import { mapDefinitionFingerprint } from '../scripts/map-cache-key.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, '..');
@@ -150,4 +151,29 @@ test('Atlas renderer prefers generated tiles and retains the original image over
   assert.match(renderer, /zoomOffset:\s*Number\(tiles\.zoomOffset\)/);
   assert.match(renderer, /L\.imageOverlay\(data\.image/);
   assert.match(renderer, /root\.dataset\.atlasRaster = 'tiles'/);
+});
+
+test('Atlas cache key ignores map copy and marker edits but tracks map sources', () => {
+  const original = [
+    { relativePath: 'Lore/Eras/SMOG/Errack SMOG Map.md', data: {
+      type: 'map', mapId: 'errack-smog', image: '/assets/maps/Errack-SMOG.webp',
+      description: 'Old description', mapMarkers: 'Assets/Maps/old.json',
+    }, raw: 'Original note body' },
+  ];
+  const sameSource = original.map((record) => ({
+    ...record, raw: 'New prose',
+    data: { ...record.data, description: 'New description', mapMarkers: 'Assets/Maps/new.json' },
+  }));
+  const changedImage = original.map((record) => ({
+    ...record, data: { ...record.data, image: '/assets/maps/replaced.webp' },
+  }));
+  const changedId = original.map((record) => ({
+    ...record, data: { ...record.data, mapId: 'errack-smog-new' },
+  }));
+  assert.equal(mapDefinitionFingerprint(original), mapDefinitionFingerprint(sameSource));
+  assert.notEqual(mapDefinitionFingerprint(original), mapDefinitionFingerprint(changedImage));
+  assert.notEqual(mapDefinitionFingerprint(original), mapDefinitionFingerprint(changedId));
+  assert.notEqual(mapDefinitionFingerprint(original), mapDefinitionFingerprint([...original, {
+    relativePath: 'Lore/Maps/another.md', data: { type: 'map', mapId: 'another', image: '/assets/maps/another.webp' },
+  }]));
 });
