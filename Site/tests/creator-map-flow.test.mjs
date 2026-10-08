@@ -125,9 +125,9 @@ test('checked-in Atlas sidecars retain a non-empty active base', async () => {
   }
 });
 
-test('NEARSIGHT map remains canonical without a duplicate legacy raster', async () => {
-  const canonical = path.join(vaultRoot, 'Assets/Maps/Errack-NEARSIGHT.webp');
-  const oldCopy = path.join(vaultRoot, 'maps/Errack-NEARSIGHT.webp');
-  await fs.access(canonical);
-  await assert.rejects(fs.access(oldCopy), { code: 'ENOENT' });
+test('NEARSIGHT and SMOG maps keep canonical sources without legacy raster copies', async () => {
+  for (const name of ['Errack-NEARSIGHT.webp', 'Errack-SMOG.webp']) {
+    await fs.access(path.join(vaultRoot, 'Assets', 'Maps', name));
+    await assert.rejects(fs.access(path.join(vaultRoot, 'maps', name)), { code: 'ENOENT' });
+  }
 });
