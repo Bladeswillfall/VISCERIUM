@@ -163,6 +163,8 @@ test('CI files, unknown paths, and failed path detection use the curated full pl
 
 test('workflow gates selected jobs and passes explicit browser specs', () => {
   const workflow = readFileSync(new URL('../workflows/checks.yml', import.meta.url), 'utf8');
+  assert.match(workflow, /group: checks-\$\{\{ github\.event\.pull_request\.number \|\| github\.ref \}\}/);
+  assert.match(workflow, /cancel-in-progress: \$\{\{ github\.event_name == 'pull_request' \}\}/);
   assert.match(workflow, /^  changes:\n/m);
   assert.match(workflow, /browser_specs: \$\{\{ steps\.select\.outputs\.browser_specs \}\}/);
   assert.match(workflow, /PR_BASE_SHA:/);
