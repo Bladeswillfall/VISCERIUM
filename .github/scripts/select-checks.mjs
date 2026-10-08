@@ -228,9 +228,12 @@ export function canReuseVerifiedChecks(event, checkRuns) {
   const changed = Object.keys(event.changes);
   if (!changed.length || changed.some(name => name !== 'title' && name !== 'body')) return false;
   const head = event.pull_request?.head?.sha;
-  return /^[0-9a-f]{40}$/.test(head ?? '') && checkRuns.some(check =>
-    check.name === 'verify' && check.head_sha === head
-    && check.status === 'completed' && check.conclusion === 'success');
+  if (!/^[0-9a-f]{40}$/.test(head ?? '')) return false;
+  const latest = checkRuns
+    .filter(check => check.name === 'verify' && check.head_sha === head
+      && Number.isSafeInteger(check.id))
+    .sort((a, b) => b.id - a.id)[0];
+  return latest?.status === 'completed' && latest.conclusion === 'success';
 }
 
 function canSkipMetadataOnlyEdit() {
@@ -241,7 +244,7 @@ function canSkipMetadataOnlyEdit() {
     const repo = process.env.GITHUB_REPOSITORY;
     if (!/^[0-9a-f]{40}$/.test(head ?? '')
       || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo ?? '')) return false;
-    const result = spawnSync('gh', ['api', `repos/${repo}/commits/${head}/check-runs?per_page=100`], {
+    const result = spawnSync('gh', ['api', `repos/${repo}/commits/${head}/check-runs?filter=all&per_page=100`], {
       encoding: 'utf8', maxBuffer: 2 * 1024 * 1024,
     });
     if (result.error || result.status !== 0) return false;
