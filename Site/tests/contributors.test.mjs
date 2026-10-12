@@ -104,6 +104,11 @@ test('Myrkild has only its original WorldAnvil author-note credit', () => {
   assert.ok(strip.includes("reference.source === 'worldanvil'"));
   assert.ok(strip.includes('contributor.legacyWorldAnvil &&'));
   assert.ok(strip.includes('class="worldanvil-source"'));
+  assert.ok(strip.includes('src="https://user-images.githubusercontent.com/660175/81419148-b7c2f680-9145-11ea-9b0a-aa9a618631c1.png"'));
+  assert.match(strip, /class="worldanvil-source"[\\s\\S]*?width="24"\\s+height="16"/);
+  assert.ok(strip.includes('.contributor-avatar-wrap img {'));
+  assert.ok(strip.includes('.worldanvil-source img {'));
+  assert.doesNotMatch(strip, /<svg viewBox="0 0 24 16"/);
   assert.ok(translation.includes('viscerium.contributors.worldAnvilCredit'));
 });
 
