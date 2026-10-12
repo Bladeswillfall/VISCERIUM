@@ -296,7 +296,13 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
   }
 
   @media print, (forced-colors: active) {
+    :global(html[data-theme]) .codex-archive,
     .codex-archive {
+      --archive-ink: CanvasText;
+      --archive-text: CanvasText;
+      --archive-muted: CanvasText;
+      --archive-line: CanvasText;
+      --archive-avatar: Canvas;
       color: CanvasText;
     }
     .codex-archive__brand-link img {
