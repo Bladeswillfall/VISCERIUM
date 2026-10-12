@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -83,4 +83,16 @@ test('every registered contributor has a checked-in avatar file', () => {
       `Missing avatar file for ${id}: ${publicPath}`,
     );
   }
+});
+
+test('Myrkild includes the imported contributor attribution', () => {
+  const article = readFileSync(new URL('../../Vault/Lore/Myrkildicary/Myrkild.md', import.meta.url), 'utf8');
+  const strip = readFileSync(new URL('../src/components/ContributorStrip.astro', import.meta.url), 'utf8');
+  assert.ok(strip.includes("'species'"));
+  for (const id of ['nimrodiallibrary', 'negev1812', 'tulcor']) {
+    assert.ok(article.includes(`  - id: ${id}`));
+    assert.ok(contributorRegistry.profiles[id].url.startsWith('https://www.worldanvil.com/author/'));
+    assert.equal(contributorAssets[id], `/assets/contributors/generated/${id}.svg`);
+  }
+  assert.ok(article.includes('  - id: negev1812\n    roles:\n      - Consultant\n      - Editor'));
 });
