@@ -119,16 +119,14 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
                         title={t('viscerium.contributors.worldAnvilCredit')}
                         aria-hidden="true"
                       >
-                        <svg viewBox="0 0 24 16" focusable="false" aria-hidden="true">
-                          <path
-                            d="M2 3.5 5 12.5 8 7 11 12.5 14 3.5 M15.5 12.5 19 3.5 22.5 12.5 M17 9.5H21"
-                            stroke="currentColor"
-                            stroke-width="1.7"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            fill="none"
-                          />
-                        </svg>
+                        <img
+                          src="https://user-images.githubusercontent.com/660175/81419148-b7c2f680-9145-11ea-9b0a-aa9a618631c1.png"
+                          alt=""
+                          width="24"
+                          height="16"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </span>
                     )}
                   </small>
@@ -220,7 +218,7 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
   .role-ring .role-consultant { stroke: var(--role-consultant); }
   .role-ring .role-other { stroke: var(--role-other); }
 
-  img {
+  .contributor-avatar-wrap img {
     position: absolute;
     inset: .25rem;
     box-sizing: border-box;
@@ -252,9 +250,10 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
     color: var(--sl-color-gray-3);
   }
 
-  .worldanvil-source svg {
+  .worldanvil-source img {
     display: block;
     width: 1.5em;
     height: 1em;
+    object-fit: contain;
   }
 </style>
