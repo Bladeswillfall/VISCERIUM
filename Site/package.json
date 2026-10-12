@@ -90,7 +90,9 @@
     "astro-integration-kit": {
       "astro": "$astro"
     },
-    "picomatch": "^4.0.3"
+    "picomatch": "^4.0.3",
+    "argparse": "2.0.1",
+    "postcss-selector-parser": "7.1.6"
   },
   "allowScripts": {
     "esbuild@0.28.1": true,
