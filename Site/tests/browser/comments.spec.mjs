@@ -189,3 +189,20 @@ test('a failed comments load reports the problem and a later page can retry', as
   await expect(nextComments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
   await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 });
+
+test('Okse Dominion shows its attributed World Anvil archive without changing other articles', async ({ page }) => {
+  await page.goto(`${preview}/eras/citadel/nations/okse-dominion/`, { waitUntil: 'domcontentloaded' });
+
+  const archive = page.locator('.codex-archive');
+  await expect(archive).toBeVisible();
+  await expect(archive.getByRole('heading', { name: 'From the World Anvil archive' })).toBeVisible();
+  await expect(archive.locator('li')).toHaveCount(3);
+  await expect(archive.locator('li').nth(1)).toContainText('Reply to K.S. Bishoff');
+  await expect(archive.locator('li').nth(0)).toContainText('Editorial summary:');
+  await expect(archive.getByRole('link', { name: 'Read the original discussion on World Anvil' }))
+    .toHaveAttribute('href', 'https://www.worldanvil.com/w/viscerium/a/okse-dominion-article');
+  await expect(page.locator('.codex-webmentions')).toHaveCount(1);
+
+  await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.codex-archive')).toHaveCount(0);
+});
