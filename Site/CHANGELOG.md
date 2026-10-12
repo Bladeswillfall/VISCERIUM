@@ -10,6 +10,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added a World Anvil discussion archive pilot to Okse Dominion, with dated attribution, source links and editorial summaries where republication permission is missing.
+
 - Added the HINOKODO Human Made mark and a short authorship statement to explicitly verified image attribution pages, with per-artwork sidecar flags.
 - Added opt-in Stub notices for short published articles, with a direct GitHub contribution link.
 - Added reusable era-themed artifacts and anchored marginalia, including accessible CITADEL manuscript pagination ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
