@@ -71,6 +71,7 @@ test('Solacons are deterministic SVGs derived from the contributor name', () => 
   assert.notEqual(first, other);
   assert.match(first, /^<svg /);
   assert.match(first, /<path /);
+  assert.doesNotMatch(first, /<rect\\b/);
   assert.doesNotMatch(first, /<script/i);
 });
 
