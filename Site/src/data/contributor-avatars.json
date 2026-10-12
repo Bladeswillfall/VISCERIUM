@@ -1,4 +1,11 @@
 {
   "fallback": "/assets/contributors/fallback.svg",
-  "elias": "/assets/contributors/elias-vail.webp"
+  "elias": "/assets/contributors/elias-vail.webp",
+  "negev1812": "/assets/contributors/generated/negev1812.svg",
+  "emberean": "/assets/contributors/generated/emberean.svg",
+  "nimrodiallibrary": "/assets/contributors/generated/nimrodiallibrary.svg",
+  "gabrielle-decker": "/assets/contributors/generated/gabrielle-decker.svg",
+  "tulcor": "/assets/contributors/generated/tulcor.svg",
+  "chrispy-0": "/assets/contributors/generated/chrispy-0.svg",
+  "everwild": "/assets/contributors/generated/everwild.svg"
 }
