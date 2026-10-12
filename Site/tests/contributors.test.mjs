@@ -104,7 +104,15 @@ test('Myrkild has only its original WorldAnvil author-note credit', () => {
   assert.ok(strip.includes("reference.source === 'worldanvil'"));
   assert.ok(strip.includes('contributor.legacyWorldAnvil &&'));
   assert.ok(strip.includes('class="worldanvil-source"'));
-  assert.ok(strip.includes('src="https://user-images.githubusercontent.com/660175/81419148-b7c2f680-9145-11ea-9b0a-aa9a618631c1.png"'));
+  assert.ok(strip.includes('src="/assets/contributors/worldanvil-mark.svg"'));
+  assert.doesNotMatch(strip, /user-images\\.githubusercontent\\.com/);
+  const mark = readFileSync(new URL('../public/assets/contributors/worldanvil-mark.svg', import.meta.url), 'utf8');
+  assert.ok(Buffer.byteLength(mark) < 700, 'Keep the WorldAnvil marker smaller than the 2x lossless WebP');
+  assert.match(mark, /^<svg /);
+  assert.match(mark, /<path /);
+  assert.doesNotMatch(mark, /<script|<foreignObject/i);
+  assert.ok(strip.includes('filter: invert(1)'));
+  assert.ok(strip.includes("html[data-theme='light']"));
   assert.match(strip, /class="worldanvil-source"[\s\S]*?width="24"\s+height="16"/);
   assert.ok(strip.includes('.contributor-avatar-wrap img {'));
   assert.ok(strip.includes('.worldanvil-source img {'));
