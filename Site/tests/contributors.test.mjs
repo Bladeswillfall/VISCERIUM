@@ -96,3 +96,13 @@ test('Myrkild includes the imported contributor attribution', () => {
   }
   assert.ok(article.includes('  - id: negev1812\n    roles:\n      - Consultant\n      - Editor'));
 });
+
+test('WorldAnvil avatars match the existing deterministic Solacon generator', () => {
+  for (const [id, profile] of Object.entries(contributorRegistry.profiles)) {
+    if (!profile.url.startsWith('https://www.worldanvil.com/author/')) continue;
+    const asset = contributorAssets[id];
+    assert.ok(asset, `Missing WorldAnvil avatar for ${id}`);
+    const actual = readFileSync(path.join(siteRoot, 'public', asset.replace(/^\\//, '')), 'utf8');
+    assert.equal(actual, generateSolaconSvg(profile.name), `Stale Solacon for ${id}`);
+  }
+});
