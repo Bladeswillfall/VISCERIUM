@@ -26,12 +26,12 @@ The local `Drafts/WorldAnvil Import` migration queue is Git-ignored. This tracke
 
 ## Applied to public Lore
 
-- `Vault/Lore/Myrkildicary/Myrkild.md` credits `nimrodiallibrary` as Consultant for Myrkild Pride concepts.
-- The current Myrkild article also contains the Hornd-bound material. That section credits `negev1812` as Consultant and Editor, and `tulcor` as Editor. Keep these credits when Hornd-bound gets its own public note.
+- `Vault/Lore/Myrkildicary/Myrkild.md` credits **only** `nimrodiallibrary` as Consultant for the original Myrkild article's "Pride concept support" note, with `source: worldanvil`.
+- The Hornd-bound WorldAnvil article separately credits `negev1812` and `tulcor`. Even though the public Myrkild article incorporates Hornd-bound material, these remain attached to their original source title in this migration record until an appropriate destination is established.
 
 ## Pending migration matches
 
-The other 12 original source titles remain in this list until their canonical destinations are verified. Do not attribute content based only on a similar title.
+The other 12 original source titles remain in this list until their canonical destinations are verified. Every imported credit should include `source: worldanvil` when applied to a public article. Do not attribute content based only on a similar title.
 
 - `RD-76 Dart` is a vehicle, not the same article as `The RD-76 Dart Plunge Trial` event.
 - The `Xateal, Nadir of Greed` source displays **Negev182** but links to the **Negev1812** profile. This merge by URL is provisional and must be confirmed before applying the Xateal attribution.
@@ -45,6 +45,7 @@ Example for an article with a verified destination:
 contributors:
   - id: negev1812
     role: Consultant
+    source: worldanvil
 ```
 
 Preserve the original author notes so attribution can be checked during migration.
