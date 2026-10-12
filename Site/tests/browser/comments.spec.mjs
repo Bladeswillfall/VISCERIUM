@@ -231,9 +231,18 @@ test('Okse Dominion shows its attributed World Anvil archive without changing ot
         '.codex-archive__body',
         '.codex-archive__note',
       ];
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 1;
+      const context = canvas.getContext('2d');
+      const rgb = (color) => {
+        context.clearRect(0, 0, 1, 1);
+        context.fillStyle = color;
+        context.fillRect(0, 0, 1, 1);
+        return Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3));
+      };
       return {
-        expected,
-        actual: selectors.map((selector) => getComputedStyle(element.querySelector(selector)).color),
+        expected: rgb(expected),
+        actual: selectors.map((selector) => rgb(getComputedStyle(element.querySelector(selector)).color)),
       };
     });
     expect(printColors.actual).toEqual(Array(printColors.actual.length).fill(printColors.expected));
