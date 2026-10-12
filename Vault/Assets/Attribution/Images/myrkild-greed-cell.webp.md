@@ -7,6 +7,7 @@ asset: "/assets/images/myrkild-greed-cell.webp"
 image: "/assets/images/myrkild-greed-cell.webp"
 alt: "Illustration of a Greed Myrkild cell with dark masses connected by amber filaments"
 artist: "Elias Vail"
+humanMade: true
 artistUrl:
 editor:
 source:

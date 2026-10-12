@@ -7,6 +7,7 @@ asset: "/assets/images/myrkild-pride-cell.webp"
 image: "/assets/images/myrkild-pride-cell.webp"
 alt: "Illustration of a Pride Myrkild cell with dark masses connected by slate-blue and ochre filaments"
 artist: "Elias Vail"
+humanMade: true
 artistUrl:
 editor:
 source:

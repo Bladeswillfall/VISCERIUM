@@ -7,6 +7,7 @@ asset: "/assets/images/myrkild-gluttony-cell.webp"
 image: "/assets/images/myrkild-gluttony-cell.webp"
 alt: "Illustration of a Gluttony Myrkild cell with dark masses connected by olive-gold filaments"
 artist: "Elias Vail"
+humanMade: true
 artistUrl:
 editor:
 source:

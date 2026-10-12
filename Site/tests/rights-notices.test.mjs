@@ -100,6 +100,21 @@ test('Brainmade is the canonical human-authorship mark', () => {
   assert.ok(!fs.existsSync(path.join(repo, 'Site/public/assets/policies/human-made.svg')));
 });
 
+test('Human Made mark appears only for opted-in image attribution records', () => {
+  const attribution = read('Site/src/components/ImageAttributionTable.astro');
+  const schema = read('Site/src/content.config.ts');
+  const notices = read('THIRD_PARTY_NOTICES.md');
+  assert.match(attribution, /entry\.humanMade === true/);
+  assert.match(attribution, /\/assets\/attribution\/human-made\.svg/);
+  assert.match(attribution, /hinokodo\.itch\.io\/human-made/);
+  assert.match(attribution, /viscerium\.attribution\.humanMadeStatement/);
+  assert.match(attribution, /alt=\{t\('viscerium\.attribution\.humanMadeMark'\)\}/);
+  assert.doesNotMatch(attribution, /aria-label=\{t\('viscerium\.attribution\.humanMadeMark'\)\}/);
+  assert.match(schema, /humanMade: z\.boolean\(\)\.optional\(\)/);
+  assert.match(notices, /Human Made mark by HINOKODO/);
+  assert.ok(fs.existsSync(path.join(repo, 'Site/public/assets/attribution/human-made.svg')));
+});
+
 test('package scripts and workflows protect managed notice freshness', () => {
   const packageJson = JSON.parse(read('Site/package.json'));
   assert.equal(packageJson.scripts['notices:update'], 'node scripts/update-rights-notices.mjs --write');
