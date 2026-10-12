@@ -209,6 +209,36 @@ test('Okse Dominion shows its attributed World Anvil archive without changing ot
   await expect.poll(() => archive.locator('.codex-archive__brand-link img').evaluate((img) => img.naturalWidth)).toBeGreaterThan(0);
   await expect(page.locator('.codex-webmentions')).toHaveCount(1);
 
+  await page.emulateMedia({ media: 'print' });
+  for (const theme of ['dark', 'light']) {
+    await page.evaluate((value) => {
+      document.documentElement.dataset.theme = value;
+    }, theme);
+    const printColors = await archive.evaluate((element) => {
+      const reference = document.createElement('span');
+      reference.style.color = 'CanvasText';
+      element.appendChild(reference);
+      const expected = getComputedStyle(reference).color;
+      reference.remove();
+      const selectors = [
+        '.codex-archive__heading h2',
+        '.codex-archive__identity strong',
+        '.codex-archive__original',
+        '.codex-archive__byline strong',
+        '.codex-archive time',
+        '.codex-archive__summary-label',
+        '.codex-archive__body',
+        '.codex-archive__note',
+      ];
+      return {
+        expected,
+        actual: selectors.map((selector) => getComputedStyle(element.querySelector(selector)).color),
+      };
+    });
+    expect(printColors.actual).toEqual(Array(printColors.actual.length).fill(printColors.expected));
+  }
+  await page.emulateMedia({ media: 'screen' });
+
   await page.setViewportSize({ width: 390, height: 780 });
   const archiveSize = await archive.evaluate((element) => ({
     width: element.clientWidth,
