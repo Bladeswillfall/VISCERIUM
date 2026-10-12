@@ -101,11 +101,12 @@ Do not insert a full creation template into an imported note.
 2. Set `era` or Universal scope with VISCERIUM Creator Tools.
 3. Set `entity_id` only when continuity requires it.
 4. Confirm that the generated description is accurate. Write one manually when the audit reports it as unresolved.
-5. Add `created` only when an authoritative source creation date is known. Otherwise leave it absent.
-6. Move the note to its deliberate Drafts or Lore destination.
-7. Edit the note once after the move.
-8. Confirm that Auto-Properties fills `updated`, `word_count`, and `open_task_count` as applicable.
-9. Keep `status: draft` until publication is deliberate.
+5. Check [[System/References/WorldAnvil Contributor Credits|WorldAnvil Contributor Credits]] for original author-note attribution. Add the appropriate registry IDs and roles after confirming the article identity.
+6. Add `created` only when an authoritative source creation date is known. Otherwise leave it absent.
+7. Move the note to its deliberate Drafts or Lore destination.
+8. Edit the note once after the move.
+9. Confirm that Auto-Properties fills `updated`, `word_count`, and `open_task_count` as applicable.
+10. Keep `status: draft` until publication is deliberate.
 
 The import queue is excluded from Auto-Properties. The migration pass seeds `updated:` there so normal editing can maintain it after filing. It does not seed `created:`.
 
