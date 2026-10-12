@@ -24,7 +24,7 @@ contributors:
       - Research
 ```
 
-For contributions credited in the **original WorldAnvil article's author notes**, mark the individual article reference with `source: worldanvil`. The contributor strip then displays a small WA monogram beside the role and includes the source in the profile link's accessible name. Do not infer this from the contributor's profile URL, since the same person may also contribute directly to the current Codex.
+For contributions credited in the **original WorldAnvil article's author notes**, mark the individual article reference with `source: worldanvil`. The contributor strip then displays the small, locally cached WorldAnvil SVG mark (`public/assets/contributors/worldanvil-mark.svg`) beside the role and includes the source in the profile link's accessible name. The mark was traced from the original WorldAnvil image supplied for this project. Do not infer this from the contributor's profile URL, since the same person may also contribute directly to the current Codex.
 
 ```yaml
 contributors:
