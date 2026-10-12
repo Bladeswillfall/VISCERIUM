@@ -202,6 +202,7 @@ const contributorReferenceSchema = z.union([
     id: z.string(),
     role: z.string().optional(),
     roles: z.array(z.string()).optional(),
+    source: z.literal('worldanvil').optional(),
   }),
 ]);
 const referencedInSchema = z.object({

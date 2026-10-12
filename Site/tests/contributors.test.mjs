@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -71,6 +71,7 @@ test('Solacons are deterministic SVGs derived from the contributor name', () => 
   assert.notEqual(first, other);
   assert.match(first, /^<svg /);
   assert.match(first, /<path /);
+  assert.doesNotMatch(first, /<rect\\b/);
   assert.doesNotMatch(first, /<script/i);
 });
 
@@ -82,5 +83,49 @@ test('every registered contributor has a checked-in avatar file', () => {
       existsSync(path.join(siteRoot, 'public', publicPath.replace(/^\//, ''))),
       `Missing avatar file for ${id}: ${publicPath}`,
     );
+  }
+});
+
+test('Myrkild has only its original WorldAnvil author-note credit', () => {
+  const article = readFileSync(new URL('../../Vault/Lore/Myrkildicary/Myrkild.md', import.meta.url), 'utf8');
+  const strip = readFileSync(new URL('../src/components/ContributorStrip.astro', import.meta.url), 'utf8');
+  const schema = readFileSync(new URL('../src/content.config.ts', import.meta.url), 'utf8');
+  const translation = readFileSync(new URL('../src/content/i18n/en-GB.json', import.meta.url), 'utf8');
+  const header = article.slice(0, article.indexOf('\n---\n', 4));
+
+  assert.ok(strip.includes("'species'"));
+  assert.ok(header.includes('  - id: nimrodiallibrary\n    role: Consultant\n    source: worldanvil'));
+  assert.equal((header.match(/^  - id:/gm) ?? []).length, 1);
+  assert.doesNotMatch(header, /  - id: (?:negev1812|tulcor)/);
+  assert.ok(contributorRegistry.profiles.nimrodiallibrary.url.startsWith('https://www.worldanvil.com/author/'));
+  assert.equal(contributorAssets.nimrodiallibrary, '/assets/contributors/generated/nimrodiallibrary.svg');
+
+  assert.ok(schema.includes("source: z.literal('worldanvil').optional()"));
+  assert.ok(strip.includes("reference.source === 'worldanvil'"));
+  assert.ok(strip.includes('contributor.legacyWorldAnvil &&'));
+  assert.ok(strip.includes('class="worldanvil-source"'));
+  assert.ok(strip.includes('src="/assets/contributors/worldanvil-mark.svg"'));
+  assert.doesNotMatch(strip, /user-images\\.githubusercontent\\.com/);
+  const mark = readFileSync(new URL('../public/assets/contributors/worldanvil-mark.svg', import.meta.url), 'utf8');
+  assert.ok(Buffer.byteLength(mark) < 700, 'Keep the WorldAnvil marker smaller than the 2x lossless WebP');
+  assert.match(mark, /^<svg /);
+  assert.match(mark, /<path /);
+  assert.doesNotMatch(mark, /<script|<foreignObject/i);
+  assert.ok(strip.includes('filter: invert(1)'));
+  assert.ok(strip.includes("html[data-theme='light']"));
+  assert.match(strip, /class="worldanvil-source"[\s\S]*?width="24"\s+height="16"/);
+  assert.ok(strip.includes('.contributor-avatar-wrap img {'));
+  assert.ok(strip.includes('.worldanvil-source img {'));
+  assert.doesNotMatch(strip, /<svg viewBox="0 0 24 16"/);
+  assert.ok(translation.includes('viscerium.contributors.worldAnvilCredit'));
+});
+
+test('WorldAnvil avatars match the existing deterministic Solacon generator', () => {
+  for (const [id, profile] of Object.entries(contributorRegistry.profiles)) {
+    if (!profile.url.startsWith('https://www.worldanvil.com/author/')) continue;
+    const asset = contributorAssets[id];
+    assert.ok(asset, `Missing WorldAnvil avatar for ${id}`);
+    const actual = readFileSync(path.join(siteRoot, 'public', asset.slice(1)), 'utf8');
+    assert.equal(actual, generateSolaconSvg(profile.name), `Stale Solacon for ${id}`);
   }
 });
