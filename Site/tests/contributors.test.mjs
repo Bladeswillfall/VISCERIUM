@@ -86,16 +86,25 @@ test('every registered contributor has a checked-in avatar file', () => {
   }
 });
 
-test('Myrkild includes the imported contributor attribution', () => {
+test('Myrkild has only its original WorldAnvil author-note credit', () => {
   const article = readFileSync(new URL('../../Vault/Lore/Myrkildicary/Myrkild.md', import.meta.url), 'utf8');
   const strip = readFileSync(new URL('../src/components/ContributorStrip.astro', import.meta.url), 'utf8');
+  const schema = readFileSync(new URL('../src/content.config.ts', import.meta.url), 'utf8');
+  const translation = readFileSync(new URL('../src/content/i18n/en-GB.json', import.meta.url), 'utf8');
+  const header = article.slice(0, article.indexOf('\\n---\\n', 4));
+
   assert.ok(strip.includes("'species'"));
-  for (const id of ['nimrodiallibrary', 'negev1812', 'tulcor']) {
-    assert.ok(article.includes(`  - id: ${id}`));
-    assert.ok(contributorRegistry.profiles[id].url.startsWith('https://www.worldanvil.com/author/'));
-    assert.equal(contributorAssets[id], `/assets/contributors/generated/${id}.svg`);
-  }
-  assert.ok(article.includes('  - id: negev1812\n    roles:\n      - Consultant\n      - Editor'));
+  assert.ok(header.includes('  - id: nimrodiallibrary\\n    role: Consultant\\n    source: worldanvil'));
+  assert.equal((header.match(/^  - id:/gm) ?? []).length, 1);
+  assert.doesNotMatch(header, /  - id: (?:negev1812|tulcor)/);
+  assert.ok(contributorRegistry.profiles.nimrodiallibrary.url.startsWith('https://www.worldanvil.com/author/'));
+  assert.equal(contributorAssets.nimrodiallibrary, '/assets/contributors/generated/nimrodiallibrary.svg');
+
+  assert.ok(schema.includes("source: z.literal('worldanvil').optional()"));
+  assert.ok(strip.includes("reference.source === 'worldanvil'"));
+  assert.ok(strip.includes('contributor.legacyWorldAnvil &&'));
+  assert.ok(strip.includes('class="worldanvil-source"'));
+  assert.ok(translation.includes('viscerium.contributors.worldAnvilCredit'));
 });
 
 test('WorldAnvil avatars match the existing deterministic Solacon generator', () => {
