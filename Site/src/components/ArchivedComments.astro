@@ -1,9 +1,12 @@
 ---
 import { worldAnvilArchives } from '../data/world-anvil-archive.mjs';
 
+type ArchivedComment = { author: string; date: string; replyTo?: string; body?: string; summary?: string };
+type ArticleArchive = { sourceUrl: string; comments: ArchivedComment[] };
+
 const { entry } = Astro.locals.starlightRoute;
-const archive = worldAnvilArchives[entry.data.community_id ?? ''];
-const displayDate = (date) => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', {
+const archive = (worldAnvilArchives as Record<string, ArticleArchive>)[entry.data.community_id ?? ''];
+const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
