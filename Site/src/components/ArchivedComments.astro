@@ -103,7 +103,7 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
     flex-wrap: wrap;
     gap: .75rem 1.75rem;
     padding: 1rem 1.25rem;
-    border: 1px solid var(--archive-line);
+    border: 1px dashed var(--archive-line);
     border-block-end: 0;
   }
 
@@ -175,7 +175,7 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
   }
 
   .codex-archive__content {
-    border: 1px solid var(--archive-line);
+    border: 1px dashed var(--archive-line);
     padding: 1.25rem 1.4rem 0;
   }
 
@@ -209,7 +209,7 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
     margin-inline-start: 2.6rem;
     padding: 0 0 1.5rem 1rem;
     border-block-start: 0;
-    border-inline-start: 2px solid var(--archive-line);
+    border-inline-start: 1px solid var(--archive-line);
   }
 
   .codex-archive__comment {
