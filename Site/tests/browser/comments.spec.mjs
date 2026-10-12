@@ -204,7 +204,9 @@ test('Okse Dominion shows its attributed World Anvil archive without changing ot
   await expect(archive.getByRole('link', { name: /Original Okse Dominion article/ }))
     .toHaveAttribute('href', 'https://www.worldanvil.com/w/viscerium/a/okse-dominion-article');
   await expect(archive.locator('.codex-archive__brand-link img'))
-    .toHaveAttribute('src', 'https://user-images.githubusercontent.com/660175/81419148-b7c2f680-9145-11ea-9b0a-aa9a618631c1.png');
+    .toHaveAttribute('src', '/assets/contributors/worldanvil-mark.svg');
+  await expect(archive.locator('.codex-archive__brand-link img')).toHaveJSProperty('complete', true);
+  await expect.poll(() => archive.locator('.codex-archive__brand-link img').evaluate((img) => img.naturalWidth)).toBeGreaterThan(0);
   await expect(page.locator('.codex-webmentions')).toHaveCount(1);
 
   await page.setViewportSize({ width: 390, height: 780 });
