@@ -295,6 +295,13 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
     }
   }
 
+  @media print {
+    .codex-archive {
+      color-scheme: light;
+      background: Canvas;
+    }
+  }
+
   @media print, (forced-colors: active) {
     :global(html[data-theme]) .codex-archive,
     .codex-archive {
@@ -304,10 +311,6 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
       --archive-line: CanvasText;
       --archive-avatar: Canvas;
       color: CanvasText;
-    }
-    .codex-archive__identity strong,
-    .codex-archive__original {
-      color: CanvasText !important;
     }
     .codex-archive__brand-link img {
       filter: none;
