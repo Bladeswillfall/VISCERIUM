@@ -13,6 +13,8 @@ test('Remark42 iframe override is served before the stock web app', async () => 
   assert.match(caddy, /rewrite\s+\*\s+\/iframe\.html/);
   assert.match(caddy, /respond\s+@commentImageUpload\s+404/);
   assert.match(caddy, /Content-Security-Policy/);
+  assert.match(caddy, /frame-ancestors[^\n]*https:\/\/feature-worldanvil-okse-arch\.viscerium-site\.pages\.dev/);
+  assert.doesNotMatch(caddy, /frame-ancestors[^\n]*https:\/\/\*\.pages\.dev/);
 });
 
 test('Remark42 iframe removes image upload affordances and transfer handlers', async () => {
