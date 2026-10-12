@@ -26,3 +26,14 @@ test('external authors are summarised, not quoted as imported comments', () => {
     }
   }
 });
+
+test('Errack archive keeps the original source and reply attribution', () => {
+  const archive = worldAnvilArchives['d833d093-b73c-4bf0-859e-4fbf31dda9fd'];
+  assert.ok(archive);
+  assert.equal(archive.sourceUrl, 'https://www.worldanvil.com/w/viscerium/a/errack-location');
+  assert.equal(archive.comments.length, 2);
+  assert.deepEqual(archive.comments.map(({ author }) => author), [
+    'Dr Emily Vair-Turnbull', 'Fall',
+  ]);
+  assert.equal(archive.comments[1].replyTo, archive.comments[0].author);
+});
