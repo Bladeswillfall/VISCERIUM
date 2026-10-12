@@ -91,10 +91,10 @@ test('Myrkild has only its original WorldAnvil author-note credit', () => {
   const strip = readFileSync(new URL('../src/components/ContributorStrip.astro', import.meta.url), 'utf8');
   const schema = readFileSync(new URL('../src/content.config.ts', import.meta.url), 'utf8');
   const translation = readFileSync(new URL('../src/content/i18n/en-GB.json', import.meta.url), 'utf8');
-  const header = article.slice(0, article.indexOf('\\n---\\n', 4));
+  const header = article.slice(0, article.indexOf('\n---\n', 4));
 
   assert.ok(strip.includes("'species'"));
-  assert.ok(header.includes('  - id: nimrodiallibrary\\n    role: Consultant\\n    source: worldanvil'));
+  assert.ok(header.includes('  - id: nimrodiallibrary\n    role: Consultant\n    source: worldanvil'));
   assert.equal((header.match(/^  - id:/gm) ?? []).length, 1);
   assert.doesNotMatch(header, /  - id: (?:negev1812|tulcor)/);
   assert.ok(contributorRegistry.profiles.nimrodiallibrary.url.startsWith('https://www.worldanvil.com/author/'));
