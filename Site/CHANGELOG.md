@@ -10,6 +10,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added source-specific WorldAnvil contributor credits, checked-in Solacon avatars, and a discreet WA provenance mark beside legacy contributor roles ([#261](https://github.com/Bladeswillfall/VISCERIUM/pull/261)).
 - Added the HINOKODO Human Made mark and a short authorship statement to explicitly verified image attribution pages, with per-artwork sidecar flags.
 - Added opt-in Stub notices for short published articles, with a direct GitHub contribution link.
 - Added reusable era-themed artifacts and anchored marginalia, including accessible CITADEL manuscript pagination ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
