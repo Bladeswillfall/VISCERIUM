@@ -1,0 +1,106 @@
+---
+import { worldAnvilArchives } from '../data/world-anvil-archive.mjs';
+
+const { entry } = Astro.locals.starlightRoute;
+const archive = worldAnvilArchives[entry.data.community_id ?? ''];
+const displayDate = (date) => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+{archive && (
+  <section class="codex-archive" aria-labelledby="codex-archive-title">
+    <h2 id="codex-archive-title">From the World Anvil archive</h2>
+    <p class="codex-archive__note">
+      These comments refer to an older version of this article. Other contributors' words
+      remain on World Anvil until we have permission to republish them.
+    </p>
+    <ol class="codex-archive__entries" role="list">
+      {archive.comments.map((comment) => (
+        <li class={comment.replyTo ? 'codex-archive__entry codex-archive__entry--reply' : 'codex-archive__entry'}>
+          <p class="codex-archive__byline">
+            <strong>{comment.author}</strong>
+            <time datetime={comment.date}>{displayDate(comment.date)}</time>
+          </p>
+          {comment.replyTo && <p class="codex-archive__reply">Reply to {comment.replyTo}</p>}
+          {comment.body
+            ? <p class="codex-archive__body">{comment.body}</p>
+            : <p class="codex-archive__body"><em>Editorial summary:</em> {comment.summary}</p>}
+        </li>
+      ))}
+    </ol>
+    <p class="codex-archive__source">
+      <a href={archive.sourceUrl} rel="noreferrer">Read the original discussion on World Anvil</a>
+    </p>
+  </section>
+)}
+
+<style>
+  .codex-archive {
+    margin-block: 2rem;
+    padding: 1.5rem var(--sl-content-pad-x);
+    border-block-start: 1px solid var(--sl-color-hairline-light);
+  }
+
+  .codex-archive h2 {
+    margin: 0 0 .5rem;
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-lg);
+  }
+
+  .codex-archive__note,
+  .codex-archive__reply,
+  .codex-archive time {
+    color: var(--sl-color-gray-2);
+  }
+
+  .codex-archive__note {
+    max-width: 70ch;
+    margin: 0 0 1.5rem;
+  }
+
+  .codex-archive__entries {
+    display: grid;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .codex-archive__entry--reply {
+    margin-inline-start: clamp(.5rem, 3vw, 1.5rem);
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid var(--sl-color-gray-5);
+  }
+
+  .codex-archive__byline {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: .75rem;
+    row-gap: .1rem;
+    margin: 0 0 .25rem;
+  }
+
+  .codex-archive time,
+  .codex-archive__reply {
+    font-size: var(--sl-text-sm);
+  }
+
+  .codex-archive__reply,
+  .codex-archive__body {
+    margin: .25rem 0 0;
+  }
+
+  .codex-archive__source {
+    margin: 1.5rem 0 0;
+  }
+
+  .codex-archive a {
+    color: var(--sl-color-text-accent);
+    text-underline-offset: .15em;
+  }
+</style>
