@@ -195,13 +195,24 @@ test('Okse Dominion shows its attributed World Anvil archive without changing ot
 
   const archive = page.locator('.codex-archive');
   await expect(archive).toBeVisible();
-  await expect(archive.getByRole('heading', { name: 'From the World Anvil archive' })).toBeVisible();
+  await expect(archive.getByRole('heading', { name: 'Earlier discussion' })).toBeVisible();
   await expect(archive.locator('li')).toHaveCount(3);
-  await expect(archive.locator('li').nth(1)).toContainText('Reply to K.S. Bishoff');
-  await expect(archive.locator('li').nth(0)).toContainText('Editorial summary:');
-  await expect(archive.getByRole('link', { name: 'Read the original discussion on World Anvil' }))
+  await expect(archive.locator('li').nth(1)).toContainText('In reply to K.S. Bishoff');
+  await expect(archive.locator('li').nth(0)).toContainText('Summary');
+  await expect(archive.getByRole('link', { name: 'World Anvil (opens in a new tab)' }))
+    .toHaveAttribute('href', 'https://www.worldanvil.com/');
+  await expect(archive.getByRole('link', { name: /Original Okse Dominion article/ }))
     .toHaveAttribute('href', 'https://www.worldanvil.com/w/viscerium/a/okse-dominion-article');
+  await expect(archive.locator('.codex-archive__brand-link img'))
+    .toHaveAttribute('src', 'https://user-images.githubusercontent.com/660175/81419148-b7c2f680-9145-11ea-9b0a-aa9a618631c1.png');
   await expect(page.locator('.codex-webmentions')).toHaveCount(1);
+
+  await page.setViewportSize({ width: 390, height: 780 });
+  const archiveSize = await archive.evaluate((element) => ({
+    width: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }));
+  expect(archiveSize.scrollWidth).toBeLessThanOrEqual(archiveSize.width + 1);
 
   await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.codex-archive')).toHaveCount(0);
