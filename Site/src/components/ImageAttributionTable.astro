@@ -38,9 +38,8 @@ const rights = presentImageRights(rightsValue, t('viscerium.attribution.notRecor
                 href="https://hinokodo.itch.io/human-made"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={t('viscerium.attribution.humanMadeMark')}
               >
-                <img src="/assets/attribution/human-made.svg" width="104" height="47" alt="" decoding="async" />
+                <img src="/assets/attribution/human-made.svg" width="104" height="47" alt={t('viscerium.attribution.humanMadeMark')} decoding="async" />
                 <span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
               </a>
               <span>{t('viscerium.attribution.humanMadeStatement')}</span>

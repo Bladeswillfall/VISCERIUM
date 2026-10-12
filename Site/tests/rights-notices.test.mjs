@@ -108,6 +108,8 @@ test('Human Made mark appears only for opted-in image attribution records', () =
   assert.match(attribution, /\/assets\/attribution\/human-made\.svg/);
   assert.match(attribution, /hinokodo\.itch\.io\/human-made/);
   assert.match(attribution, /viscerium\.attribution\.humanMadeStatement/);
+  assert.match(attribution, /alt=\{t\('viscerium\.attribution\.humanMadeMark'\)\}/);
+  assert.doesNotMatch(attribution, /aria-label=\{t\('viscerium\.attribution\.humanMadeMark'\)\}/);
   assert.match(schema, /humanMade: z\.boolean\(\)\.optional\(\)/);
   assert.match(notices, /Human Made mark by HINOKODO/);
   assert.ok(fs.existsSync(path.join(repo, 'Site/public/assets/attribution/human-made.svg')));
