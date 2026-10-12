@@ -77,11 +77,11 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
 
 <style>
   .codex-archive {
-    --archive-ink: #f5f5f5;
-    --archive-text: #dedede;
-    --archive-muted: #b3b3b3;
-    --archive-line: #515151;
-    --archive-avatar: #252525;
+    --archive-ink: var(--codex-fixed-light);
+    --archive-text: color-mix(in srgb, var(--codex-fixed-light) 87%, var(--codex-fixed-dark));
+    --archive-muted: color-mix(in srgb, var(--codex-fixed-light) 70%, var(--codex-fixed-dark));
+    --archive-line: color-mix(in srgb, var(--codex-fixed-light) 32%, var(--codex-fixed-dark));
+    --archive-avatar: color-mix(in srgb, var(--codex-fixed-dark) 85%, var(--codex-fixed-light));
     margin-block: 2rem;
     padding: 1.5rem var(--sl-content-pad-x);
     border-block-start: 1px solid var(--sl-color-hairline-light);
@@ -89,11 +89,11 @@ const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDate
   }
 
   :global(html[data-theme='light']) .codex-archive {
-    --archive-ink: #111;
-    --archive-text: #252525;
-    --archive-muted: #555;
-    --archive-line: #777;
-    --archive-avatar: #dedede;
+    --archive-ink: var(--codex-fixed-dark);
+    --archive-text: color-mix(in srgb, var(--codex-fixed-dark) 85%, var(--codex-fixed-light));
+    --archive-muted: color-mix(in srgb, var(--codex-fixed-dark) 65%, var(--codex-fixed-light));
+    --archive-line: color-mix(in srgb, var(--codex-fixed-dark) 55%, var(--codex-fixed-light));
+    --archive-avatar: color-mix(in srgb, var(--codex-fixed-light) 87%, var(--codex-fixed-dark));
   }
 
   .codex-archive__brand {
