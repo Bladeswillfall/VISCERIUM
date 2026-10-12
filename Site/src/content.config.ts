@@ -281,6 +281,7 @@ export const collections = {
         credit: optionalString,
         artist: optionalString,
         artistUrl: optionalString,
+        humanMade: z.boolean().optional(),
         editor: optionalString,
         source: optionalString,
         sourceUrl: optionalString,

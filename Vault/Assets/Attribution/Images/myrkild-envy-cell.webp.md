@@ -7,6 +7,7 @@ asset: "/assets/images/myrkild-envy-cell.webp"
 image: "/assets/images/myrkild-envy-cell.webp"
 alt: "Illustration of an Envy Myrkild cell with dark masses connected by bright green filaments"
 artist: "Elias Vail"
+humanMade: true
 artistUrl:
 editor:
 source:

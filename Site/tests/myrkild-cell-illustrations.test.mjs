@@ -48,6 +48,7 @@ test('the seven cells are valid WebP with linked attribution records', () => {
     assert.ok(attribution.includes('status: published'));
     assert.ok(attribution.includes('type: image'));
     assert.ok(attribution.includes('artist: "Elias Vail"'));
+    assert.ok(attribution.includes('humanMade: true'));
     assert.ok(attribution.includes('credit: "Elias Vail"'));
     assert.ok(attribution.includes('rights: "Copyright"'));
     assert.ok(attribution.includes('tags: [attribution]'));

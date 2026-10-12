@@ -7,6 +7,7 @@ asset: "/assets/images/myrkild-lust-cell.webp"
 image: "/assets/images/myrkild-lust-cell.webp"
 alt: "Illustration of a Lust Myrkild cell with dark masses connected by magenta filaments"
 artist: "Elias Vail"
+humanMade: true
 artistUrl:
 editor:
 source:

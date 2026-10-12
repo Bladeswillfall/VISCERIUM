@@ -29,6 +29,25 @@ const rights = presentImageRights(rightsValue, t('viscerium.attribution.notRecor
         <th scope="row">{t('viscerium.attribution.artist')}</th>
         <td>{isPresent(artist) ? artist : t('viscerium.attribution.notRecorded')}</td>
       </tr>
+      {entry.humanMade === true && (
+        <tr>
+          <th scope="row">{t('viscerium.attribution.authorship')}</th>
+          <td>
+            <div class="codex-attribution-human-made">
+              <a
+                href="https://hinokodo.itch.io/human-made"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t('viscerium.attribution.humanMadeMark')}
+              >
+                <img src="/assets/attribution/human-made.svg" width="104" height="47" alt="" decoding="async" />
+                <span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
+              </a>
+              <span>{t('viscerium.attribution.humanMadeStatement')}</span>
+            </div>
+          </td>
+        </tr>
+      )}
       <tr>
         <th scope="row">{t('viscerium.attribution.originalArtwork')}</th>
         <td>
@@ -141,6 +160,30 @@ const rights = presentImageRights(rightsValue, t('viscerium.attribution.notRecor
     .codex-attribution-alt {
       font-family: var(--vc-font-reading);
       line-height: 1.5;
+    }
+
+    .codex-attribution-human-made {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem 0.85rem;
+      line-height: 1.5;
+    }
+
+    .codex-attribution-human-made a {
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+    }
+
+    .codex-attribution-human-made img {
+      display: block;
+      width: 6.5rem;
+      height: auto;
+    }
+
+    :global(:root:not([data-theme='light'])) .codex-attribution-human-made img {
+      filter: invert(1);
     }
 
     .codex-rights-badge {

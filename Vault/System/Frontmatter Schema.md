@@ -209,6 +209,8 @@ Specialist databases may retain provenance/import fields when those fields answe
 
 `artist` identifies the maker where known. `credit` is the display/rights-holder credit and may differ from the artist. `source`, `sourceUrl`, `license`, `rights`, and `usage` remain provenance/permission fields rather than synonyms.
 
+Set `humanMade: true` only for image attribution records whose finished artwork has been verified to contain no AI-generated imagery. Otherwise use `false` or omit the field. This enables the per-artwork Human Made mark without making a claim about the software used to build the Codex.
+
 ## Content notes and sensitive media
 
 `contentWarnings` is an optional controlled list of reader-facing content notes. Use it when a topic is worth flagging beyond VISCERIUM's normal mature baseline; do not populate every adult article merely because it contains ordinary swearing, violence, or grim subject matter.

@@ -7,6 +7,7 @@ asset: "/assets/images/myrkild-wrath-cell.webp"
 image: "/assets/images/myrkild-wrath-cell.webp"
 alt: "Illustration of a Wrath Myrkild cell with dark masses connected by red filaments"
 artist: "Elias Vail"
+humanMade: true
 artistUrl:
 editor:
 source:
