@@ -120,7 +120,7 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
                         aria-hidden="true"
                       >
                         <img
-                          src="https://user-images.githubusercontent.com/660175/81419148-b7c2f680-9145-11ea-9b0a-aa9a618631c1.png"
+                          src="/assets/contributors/worldanvil-mark.svg"
                           alt=""
                           width="24"
                           height="16"
@@ -255,5 +255,11 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
     width: 1.5em;
     height: 1em;
     object-fit: contain;
+    filter: invert(1);
+    opacity: .82;
+  }
+
+  :global(html[data-theme='light']) .worldanvil-source img {
+    filter: none;
   }
 </style>
