@@ -215,5 +215,13 @@ test('Okse Dominion shows its attributed World Anvil archive without changing ot
   expect(archiveSize.scrollWidth).toBeLessThanOrEqual(archiveSize.width + 1);
 
   await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+  const errackArchive = page.locator('.codex-archive');
+  await expect(errackArchive).toBeVisible();
+  await expect(errackArchive.locator('li')).toHaveCount(2);
+  await expect(errackArchive.locator('li').nth(1)).toContainText('In reply to Dr Emily Vair-Turnbull');
+  await expect(errackArchive.getByRole('link', { name: /Original Errack article/ }))
+    .toHaveAttribute('href', 'https://www.worldanvil.com/w/viscerium/a/errack-location');
+
+  await page.goto(`${preview}/myrkildicary/myrkild/`, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.codex-archive')).toHaveCount(0);
 });
