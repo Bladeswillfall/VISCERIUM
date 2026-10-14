@@ -506,7 +506,7 @@ class NoteContextView extends ItemView {
       target.createSpan({ text: displayFact(relation.target) });
       target.createSpan({ text: relation.kind, cls: 'vc-dossier-label' });
       target.setAttribute('aria-label', `Open ${displayFact(relation.target)} (${relation.kind})`);
-      this.registerDomEvent(target, 'click', () => void this.app.workspace.openLinkText(relation.target, this.file.path));
+      this.registerDomEvent(target, 'click', () => void this.app.workspace.openLinkText(relation.target.replace(/^\[\[/, '').replace(/\]\]$/, '').split('|')[0], this.file.path));
       const remove = edge.createEl('button', { cls: 'vc-dossier-remove', text: '×' });
       remove.setAttribute('aria-label', `Remove ${relation.kind} relationship to ${displayFact(relation.target)}`);
       this.registerDomEvent(remove, 'click', () => void this.plugin.removeSemanticRelationship(this.file, relation.kind, relation.entry));
