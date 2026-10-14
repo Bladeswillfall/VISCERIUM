@@ -407,7 +407,7 @@ function semanticRelations(frontmatter) {
 function displayFact(value) {
   if (Array.isArray(value)) return value.map(displayFact).filter(Boolean).join(', ');
   if (typeof value !== 'string' && typeof value !== 'number') return '';
-  return String(value).replace(/\\[\\[([^\\]|]+)(?:\\|([^\\]]+))?\\]\\]/g, (_match, path, alias) => alias || path.split('/').pop()).trim();
+  return String(value).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_match, path, alias) => alias || path.split('/').pop()).trim();
 }
 
 class NoteContextView extends ItemView {
@@ -506,7 +506,7 @@ class NoteContextView extends ItemView {
       target.createSpan({ text: displayFact(relation.target) });
       target.createSpan({ text: relation.kind, cls: 'vc-dossier-label' });
       target.setAttribute('aria-label', `Open ${displayFact(relation.target)} (${relation.kind})`);
-      this.registerDomEvent(target, 'click', () => void this.app.workspace.openLinkText(relation.target, this.file.path));
+      this.registerDomEvent(target, 'click', () => void this.app.workspace.openLinkText(relation.target.replace(/^\[\[/, '').replace(/\]\]$/, '').split('|')[0], this.file.path));
       const remove = edge.createEl('button', { cls: 'vc-dossier-remove', text: '×' });
       remove.setAttribute('aria-label', `Remove ${relation.kind} relationship to ${displayFact(relation.target)}`);
       this.registerDomEvent(remove, 'click', () => void this.plugin.removeSemanticRelationship(this.file, relation.kind, relation.entry));
@@ -1019,11 +1019,11 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
   }
 
   dossierImageFile(file, raw) {
-    const path = String(raw ?? '').trim().replace(/^\\[\\[/, '').replace(/\\]\\]$/, '').split('|')[0];
+    const path = String(raw ?? '').trim().replace(/^\[\[/, '').replace(/\]\]$/, '').split('|')[0];
     if (!path) return null;
     const image = this.app.vault.getAbstractFileByPath(path)
       ?? this.app.metadataCache.getFirstLinkpathDest(path, file.path);
-    return image instanceof TFile && /\\.(?:png|jpe?g|webp|gif|avif|svg)$/i.test(image.path) ? image : null;
+    return image instanceof TFile && /\.(?:png|jpe?g|webp|gif|avif|svg)$/i.test(image.path) ? image : null;
   }
 
   async editDossierFact(file, field, referenceType) {
@@ -1078,7 +1078,7 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       title: 'Edit tags',
       label: 'Comma-separated tags',
       value: tags.map(String).join(', '),
-      validate: (text) => text.split(',').some((tag) => /\\s/.test(tag.trim()) || /[\\[\\]#]/.test(tag.trim().replace(/^#/, '')))
+      validate: (text) => text.split(',').some((tag) => /\s/.test(tag.trim()) || /[\[\]#]/.test(tag.trim().replace(/^#/, '')))
         ? 'Use comma-separated Obsidian tags without spaces or brackets.' : '',
     }).prompt();
     if (value === null) return;
@@ -1117,7 +1117,7 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     if (!path) return;
     const target = this.app.vault.getAbstractFileByPath(path);
     if (!(target instanceof TFile)) return;
-    const link = `[[${target.path.replace(/\\.md$/, '')}|${this.titleFor(target)}]]`;
+    const link = `[[${target.path.replace(/\.md$/, '')}|${this.titleFor(target)}]]`;
     let duplicate = false;
     await this.app.fileManager.processFrontMatter(file, (data) => {
       const groups = data.relationships && typeof data.relationships === 'object' && !Array.isArray(data.relationships)
