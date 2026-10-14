@@ -2,6 +2,13 @@ const { ItemView, Modal, Notice, Plugin, Setting, SuggestModal, TFile, normalize
 
 const HISTORICAL_ERAS = ['CITADEL', 'SMOG', 'NEARSIGHT', 'ENTROPY'];
 const ERA_VALUES = [...HISTORICAL_ERAS, 'Universal'];
+// Dossier fields use the same frontmatter keys as Bases and the public Codex.
+const DOSSIER_FIELDS = {
+  character: [['Faction', 'faction', 'faction'], ['Location', 'location', 'location'], ['Species', 'species', 'species'], ['Occupation', 'occupation']],
+  faction: [['Leader', 'leader', 'character'], ['Capital', 'capital', 'location'], ['Government', 'government'], ['Territory', 'territory']],
+  location: [['Faction', 'faction', 'faction'], ['Region', 'region'], ['Kind', 'location_kind'], ['Population', 'population_band']],
+};
+const RELATIONSHIP_TYPES = ['allies', 'rivals', 'member-of', 'leader-of', 'located-in', 'parent-of', 'reports-to', 'owned-by', 'capital-of'];
 const ENTITY_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const REVIEW_START = '<!-- era-edition-review:start -->';
 const REVIEW_END = '<!-- era-edition-review:end -->';
@@ -385,6 +392,24 @@ class TextPromptModal extends Modal {
   }
 }
 
+function semanticRelations(frontmatter) {
+  const groups = frontmatter.relationships;
+  if (!groups || typeof groups !== 'object' || Array.isArray(groups)) return [];
+  return Object.entries(groups).flatMap(([kind, values]) => {
+    const list = Array.isArray(values) ? values : [values];
+    return list.map((entry) => {
+      const target = typeof entry === 'string' ? entry : entry?.target ?? entry?.to ?? entry?.ref ?? entry?.article ?? entry?.title;
+      return typeof target === 'string' && target.trim() ? { kind, entry, target: target.trim() } : null;
+    }).filter(Boolean);
+  });
+}
+
+function displayFact(value) {
+  if (Array.isArray(value)) return value.map(displayFact).filter(Boolean).join(', ');
+  if (typeof value !== 'string' && typeof value !== 'number') return '';
+  return String(value).replace(/\\[\\[([^\\]|]+)(?:\\|([^\\]]+))?\\]\\]/g, (_match, path, alias) => alias || path.split('/').pop()).trim();
+}
+
 class NoteContextView extends ItemView {
   constructor(leaf, plugin) {
     super(leaf);
@@ -428,6 +453,67 @@ class NoteContextView extends ItemView {
     this.registerDomEvent(button, 'click', () => {
       void this.app.workspace.openLinkText(item.target, this.file.path);
     });
+  }
+
+  renderDossier(root, frontmatter, type) {
+    if (!DOSSIER_FIELDS[type]) return;
+    const dossier = root.createDiv({ cls: 'vc-dossier' });
+    const hero = dossier.createDiv({ cls: 'vc-dossier-hero' });
+    const imageFile = this.plugin.dossierImageFile(this.file, frontmatter.image);
+    if (imageFile) {
+      const image = hero.createEl('img', {
+        cls: 'vc-dossier-art',
+        attr: { src: this.app.vault.getResourcePath(imageFile), alt: String(frontmatter.alt || this.plugin.titleFor(this.file)) },
+      });
+      image.loading = 'lazy';
+    } else {
+      hero.createDiv({ cls: 'vc-dossier-art vc-dossier-empty', text: 'NO ARTWORK' });
+    }
+    const summary = hero.createDiv({ cls: 'vc-dossier-summary' });
+    summary.createDiv({ cls: 'vc-dossier-kind', text: type });
+    summary.createEl('p', { text: String(frontmatter.description || 'Add a description in the note to identify this subject.'), cls: 'vc-dossier-description' });
+    const era = summary.createEl('button', { cls: 'vc-dossier-era', text: String(frontmatter.era || 'Set era') });
+    era.setAttribute('aria-label', 'Edit historical era');
+    this.registerDomEvent(era, 'click', () => void this.plugin.setControlledEra(this.file));
+
+    const facts = dossier.createDiv({ cls: 'vc-dossier-facts' });
+    for (const [label, field, referenceType] of DOSSIER_FIELDS[type]) {
+      const fact = facts.createEl('button', { cls: 'vc-dossier-fact' });
+      fact.createSpan({ text: label, cls: 'vc-dossier-label' });
+      fact.createSpan({ text: displayFact(frontmatter[field]) || 'Add', cls: 'vc-dossier-value' });
+      fact.setAttribute('aria-label', `Edit ${label}`);
+      this.registerDomEvent(fact, 'click', () => void this.plugin.editDossierFact(this.file, field, referenceType));
+    }
+
+    const tagSection = dossier.createDiv({ cls: 'vc-dossier-tags' });
+    const tagHeader = tagSection.createDiv({ cls: 'vc-dossier-row' });
+    tagHeader.createSpan({ cls: 'vc-note-context-section-label', text: 'TAGS' });
+    const editTags = tagHeader.createEl('button', { text: 'Edit tags' });
+    this.registerDomEvent(editTags, 'click', () => void this.plugin.editDossierTags(this.file));
+    const tagList = tagSection.createDiv({ cls: 'vc-dossier-tag-list' });
+    const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : frontmatter.tags ? [frontmatter.tags] : [];
+    for (const tag of tags) tagList.createSpan({ text: `#${String(tag).replace(/^#/, '')}`, cls: 'vc-dossier-tag' });
+    if (!tags.length) tagList.createSpan({ text: 'No tags', cls: 'vc-note-context-muted' });
+
+    const edges = semanticRelations(frontmatter);
+    const network = dossier.createDiv({ cls: 'vc-dossier-network' });
+    network.createDiv({ cls: 'vc-note-context-section-label', text: 'RELATIONSHIP NETWORK' });
+    network.createDiv({ cls: 'vc-dossier-node', text: this.plugin.titleFor(this.file) });
+    const links = network.createDiv({ cls: 'vc-dossier-edges' });
+    for (const relation of edges) {
+      const edge = links.createDiv({ cls: 'vc-dossier-edge' });
+      const target = edge.createEl('button', { cls: 'vc-dossier-target' });
+      target.createSpan({ text: displayFact(relation.target) });
+      target.createSpan({ text: relation.kind, cls: 'vc-dossier-label' });
+      target.setAttribute('aria-label', `Open ${displayFact(relation.target)} (${relation.kind})`);
+      this.registerDomEvent(target, 'click', () => void this.app.workspace.openLinkText(relation.target, this.file.path));
+      const remove = edge.createEl('button', { cls: 'vc-dossier-remove', text: '×' });
+      remove.setAttribute('aria-label', `Remove ${relation.kind} relationship to ${displayFact(relation.target)}`);
+      this.registerDomEvent(remove, 'click', () => void this.plugin.removeSemanticRelationship(this.file, relation.kind, relation.entry));
+    }
+    if (!edges.length) links.createSpan({ cls: 'vc-note-context-muted', text: 'No structured relationships yet.' });
+    const add = network.createEl('button', { cls: 'vc-dossier-add', text: '+ Add relationship' });
+    this.registerDomEvent(add, 'click', () => void this.plugin.addSemanticRelationship(this.file));
   }
 
   async renderTypeContext(root, frontmatter, type) {
@@ -506,9 +592,11 @@ class NoteContextView extends ItemView {
       for (const [label, value] of states) state.createSpan({ text: `${label}: ${value}` });
     }
 
+    this.renderDossier(root, frontmatter, type);
     await this.renderTypeContext(root, frontmatter, type);
 
-    const connections = this.plugin.contextLinks(this.file);
+    const connections = this.plugin.contextLinks(this.file)
+      .filter((link) => !DOSSIER_FIELDS[type] || link.kind === 'Related');
     if (connections.length) {
       const related = this.section(root, 'RELATIONSHIPS', `${connections.length} connected`);
       const list = related.createDiv({ cls: 'vc-note-context-links' });
@@ -928,6 +1016,139 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     const date = [day, month, year].filter(Boolean).join(' ');
     const calendar = String(value.calendar ?? '').trim();
     return [date, calendar].filter(Boolean).join(' · ');
+  }
+
+  dossierImageFile(file, raw) {
+    const path = String(raw ?? '').trim().replace(/^\\[\\[/, '').replace(/\\]\\]$/, '').split('|')[0];
+    if (!path) return null;
+    const image = this.app.vault.getAbstractFileByPath(path)
+      ?? this.app.metadataCache.getFirstLinkpathDest(path, file.path);
+    return image instanceof TFile && /\\.(?:png|jpe?g|webp|gif|avif|svg)$/i.test(image.path) ? image : null;
+  }
+
+  async editDossierFact(file, field, referenceType) {
+    const raw = this.frontmatter(file)[field];
+    if (raw != null && typeof raw !== 'string' && typeof raw !== 'number') {
+      new Notice('This property contains structured values. Edit it in the note properties instead.', 8000);
+      return;
+    }
+    let value;
+    if (referenceType) {
+      const published = file.path.startsWith('Lore/') && this.frontmatter(file).status === 'published';
+      const matches = this.app.vault.getMarkdownFiles().filter((candidate) => (
+        this.isCreatorNote(candidate)
+        && String(this.frontmatter(candidate).type).toLowerCase() === referenceType
+        && (!published || (candidate.path.startsWith('Lore/') && this.frontmatter(candidate).status === 'published'))
+      ));
+      const selection = await new ChoiceModal(this.app, [
+        { label: 'Clear value', value: '' },
+        ...matches.map((candidate) => ({
+          label: this.titleFor(candidate),
+          hint: [this.frontmatter(candidate).era, candidate.path].filter(Boolean).join(' · '),
+          value: candidate.path,
+        })),
+      ], `Choose ${field}`).choose();
+      if (selection === null) return;
+      const selected = this.app.vault.getAbstractFileByPath(selection);
+      value = selected instanceof TFile ? this.titleFor(selected) : '';
+    } else if (field === 'location_kind') {
+      value = await new ChoiceModal(this.app, [
+        { label: 'Clear kind', value: '' },
+        ...['region', 'settlement', 'wilderness', 'route', 'site'].map((kind) => ({ label: kind, value: kind })),
+      ], 'Location kind').choose();
+    } else {
+      value = await new TextPromptModal(this.app, {
+        title: `Edit ${field}`,
+        label: field,
+        value: String(raw ?? ''),
+      }).prompt();
+    }
+    if (value === null) return;
+    await this.app.fileManager.processFrontMatter(file, (data) => {
+      if (value) data[field] = value;
+      else delete data[field];
+    });
+    await this.refreshNoteContext(file);
+  }
+
+  async editDossierTags(file) {
+    const raw = this.frontmatter(file).tags;
+    const tags = Array.isArray(raw) ? raw : raw ? [raw] : [];
+    const value = await new TextPromptModal(this.app, {
+      title: 'Edit tags',
+      label: 'Comma-separated tags',
+      value: tags.map(String).join(', '),
+      validate: (text) => text.split(',').some((tag) => /\\s/.test(tag.trim()) || /[\\[\\]#]/.test(tag.trim().replace(/^#/, '')))
+        ? 'Use comma-separated Obsidian tags without spaces or brackets.' : '',
+    }).prompt();
+    if (value === null) return;
+    const updated = [...new Set(value.split(',').map((tag) => tag.trim().replace(/^#/, '')).filter(Boolean))];
+    await this.app.fileManager.processFrontMatter(file, (data) => { data.tags = updated; });
+    await this.refreshNoteContext(file);
+  }
+
+  async addSemanticRelationship(file) {
+    const current = this.frontmatter(file).relationships;
+    const existing = current && typeof current === 'object' && !Array.isArray(current) ? Object.keys(current) : [];
+    let kind = await new ChoiceModal(this.app, [
+      ...[...new Set([...RELATIONSHIP_TYPES, ...existing])].map((value) => ({ label: value, value })),
+      { label: 'Other relationship type...', value: '__custom__' },
+    ], 'Relationship type').choose();
+    if (kind === null) return;
+    if (kind === '__custom__') {
+      kind = await new TextPromptModal(this.app, {
+        title: 'Relationship type',
+        label: 'Short kebab-case type',
+        validate: (value) => /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(value)
+          ? '' : 'Use lowercase kebab-case, e.g. founded-by.',
+      }).prompt();
+    }
+    if (!kind) return;
+    const published = file.path.startsWith('Lore/') && this.frontmatter(file).status === 'published';
+    const targets = this.app.vault.getMarkdownFiles()
+      .filter((candidate) => this.isCreatorNote(candidate) && candidate.path !== file.path)
+      .filter((candidate) => !published || (candidate.path.startsWith('Lore/') && this.frontmatter(candidate).status === 'published'))
+      .sort((a, b) => this.titleFor(a).localeCompare(this.titleFor(b)));
+    const path = await new ChoiceModal(this.app, targets.map((candidate) => ({
+      label: this.titleFor(candidate),
+      hint: [this.frontmatter(candidate).era, candidate.path].filter(Boolean).join(' · '),
+      value: candidate.path,
+    })), 'Connect to which article?').choose();
+    if (!path) return;
+    const target = this.app.vault.getAbstractFileByPath(path);
+    if (!(target instanceof TFile)) return;
+    const link = `[[${target.path.replace(/\\.md$/, '')}|${this.titleFor(target)}]]`;
+    let duplicate = false;
+    await this.app.fileManager.processFrontMatter(file, (data) => {
+      const groups = data.relationships && typeof data.relationships === 'object' && !Array.isArray(data.relationships)
+        ? data.relationships : {};
+      const entries = Array.isArray(groups[kind]) ? groups[kind] : groups[kind] ? [groups[kind]] : [];
+      duplicate = entries.some((entry) => {
+        const raw = typeof entry === 'string' ? entry : entry?.target ?? entry?.to ?? entry?.ref ?? entry?.article ?? entry?.title;
+        const normal = normaliseLinkTarget(raw);
+        const resolved = this.app.metadataCache.getFirstLinkpathDest(normal, file.path);
+        return resolved?.path === target.path || normal === normaliseLinkTarget(target.path);
+      });
+      if (duplicate) return;
+      groups[kind] = [...entries, link];
+      data.relationships = groups;
+    });
+    if (duplicate) new Notice('This relationship already exists.');
+    await this.refreshNoteContext(file);
+  }
+
+  async removeSemanticRelationship(file, kind, expected) {
+    await this.app.fileManager.processFrontMatter(file, (data) => {
+      const groups = data.relationships;
+      if (!groups || typeof groups !== 'object' || Array.isArray(groups)) return;
+      const entries = Array.isArray(groups[kind]) ? [...groups[kind]] : [groups[kind]];
+      const index = entries.findIndex((entry) => JSON.stringify(entry) === JSON.stringify(expected));
+      if (index === -1) return;
+      entries.splice(index, 1);
+      if (entries.length) groups[kind] = entries;
+      else delete groups[kind];
+    });
+    await this.refreshNoteContext(file);
   }
 
   contextLinks(file) {
