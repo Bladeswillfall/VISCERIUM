@@ -1022,7 +1022,8 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     const path = String(raw ?? '').trim().replace(/^\[\[/, '').replace(/\]\]$/, '').split('|')[0];
     if (!path) return null;
     const image = this.app.vault.getAbstractFileByPath(path)
-      ?? this.app.metadataCache.getFirstLinkpathDest(path, file.path);
+      ?? this.app.metadataCache.getFirstLinkpathDest(path, file.path)
+      ?? this.app.vault.getFiles().find((asset) => asset.path.startsWith('Assets/') && asset.name === path);
     return image instanceof TFile && /\.(?:png|jpe?g|webp|gif|avif|svg)$/i.test(image.path) ? image : null;
   }
 
