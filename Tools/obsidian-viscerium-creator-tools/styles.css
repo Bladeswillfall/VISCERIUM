@@ -278,3 +278,183 @@ button.vc-note-context-link:focus-visible {
   font-size: 0.64rem;
   line-height: 1.35;
 }
+
+/* Visual lore dossier. This follows the active note in both editor and reading modes. */
+.vc-dossier {
+  display: grid;
+  gap: 12px;
+}
+.vc-dossier-hero {
+  display: grid;
+  grid-template-columns: minmax(82px, 36%) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 10px;
+  background: var(--vc-context-card);
+}
+.vc-dossier-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--vc-radius-control, 4px);
+  background: var(--background-primary);
+}
+.vc-dossier-empty {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  color: var(--text-faint);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.vc-dossier-summary {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.vc-dossier-kind {
+  color: var(--text-faint);
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.vc-dossier-description {
+  margin: 0 !important;
+  color: var(--text-normal) !important;
+  overflow-wrap: anywhere;
+}
+.vc-dossier-era {
+  justify-self: start;
+  padding: 5px 7px;
+  border: 1px solid var(--vc-panel-border);
+  background: var(--background-primary);
+  color: var(--text-accent);
+  font-size: 0.69rem;
+}
+.vc-dossier-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+button.vc-dossier-fact {
+  display: grid;
+  gap: 5px;
+  padding: 10px 9px;
+  min-width: 0;
+  border: 1px solid var(--vc-panel-border);
+  background: var(--vc-context-card);
+  box-shadow: none;
+  text-align: left;
+}
+button.vc-dossier-fact:hover,
+button.vc-dossier-fact:focus-visible,
+.vc-dossier-era:hover,
+.vc-dossier-target:hover {
+  border-color: var(--text-accent);
+}
+.vc-dossier-label {
+  color: var(--text-faint);
+  font-size: 0.65rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.vc-dossier-value {
+  color: var(--text-normal);
+  font-size: 0.76rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.vc-dossier-tags,
+.vc-dossier-network {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  background: var(--vc-context-card);
+}
+.vc-dossier-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.vc-dossier-row button {
+  color: var(--text-accent);
+  font-size: 0.68rem;
+  padding: 4px 7px;
+}
+.vc-dossier-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.vc-dossier-tag {
+  padding: 4px 6px;
+  border-radius: var(--vc-radius-control, 4px);
+  background: var(--background-primary);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+.vc-dossier-node {
+  border: 1px solid var(--text-accent);
+  padding: 10px 8px;
+  color: var(--text-normal);
+  text-align: center;
+  overflow-wrap: anywhere;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.vc-dossier-edges {
+  position: relative;
+  display: grid;
+  gap: 5px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-left: 9px;
+  padding-left: 16px;
+  border-left: 1px solid var(--text-faint);
+}
+.vc-dossier-edge {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 4px;
+  position: relative;
+}
+.vc-dossier-edge::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  width: 12px;
+  border-top: 1px solid var(--text-faint);
+}
+button.vc-dossier-target {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid var(--vc-panel-border);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+button.vc-dossier-remove {
+  min-width: 32px;
+  padding: 4px;
+  color: var(--text-muted);
+}
+button.vc-dossier-remove:hover { color: var(--text-error); }
+button.vc-dossier-add {
+  padding: 8px;
+  border: 1px solid var(--vc-panel-border);
+  background: var(--background-primary);
+  color: var(--text-accent);
+  width: 100%;
+}
+@media (max-width: 380px) {
+  .vc-dossier-hero { grid-template-columns: 78px minmax(0, 1fr); }
+  .vc-dossier-facts { grid-template-columns: 1fr; }
+}
