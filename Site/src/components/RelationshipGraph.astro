@@ -647,12 +647,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     };
 
     root.querySelectorAll<HTMLElement>('[data-relationship-search-shell]').forEach(bindSearch);
-    root.querySelectorAll<HTMLAnchorElement>('[data-relationship-list-node]').forEach((link) => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        focusNode(link.dataset.relationshipListNode);
-      });
-    });
     root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
       button.addEventListener('click', () => setViewMode(canvas.hidden ? 'graph' : 'list'));
     });
@@ -686,6 +680,14 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     const observer = new ResizeObserver(() => cy.resize());
     observer.observe(canvas);
     root.dataset.relationshipReady = 'true';
+    root.querySelectorAll<HTMLAnchorElement>('[data-relationship-list-node]').forEach((link) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.relationshipListNode = link.dataset.relationshipListNode ?? '';
+      button.textContent = link.textContent;
+      button.addEventListener('click', () => focusNode(button.dataset.relationshipListNode));
+      link.replaceWith(button);
+    });
     setViewMode('graph');
   }
 

@@ -57,4 +57,6 @@ test('relationship explorer exposes entity links until graph mounting succeeds',
   const switchToGraph = source.lastIndexOf("setViewMode('graph')");
   assert.ok(ready > source.indexOf('const cy = cytoscape('));
   assert.ok(switchToGraph > ready, 'canvas replaces the fallback only after mounting');
+  assert.ok(source.indexOf('link.replaceWith(button)') > ready,
+    'entity links become graph-selection buttons only after mounting');
 });
