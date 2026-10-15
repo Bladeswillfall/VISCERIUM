@@ -331,7 +331,7 @@ html[data-codex-desktop-sidebar] .codex-page-sidebar .sl-container {
   max-inline-size: none;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 72rem) {
   html[data-codex-desktop-sidebar] {
     --sl-mobile-toc-height: 0rem;
   }

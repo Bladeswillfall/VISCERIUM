@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 
 const worldMapUrl = new URL('../src/components/WorldMap.astro', import.meta.url);
 const timelineUrl = new URL('../src/components/timeline/TimelineApp.astro', import.meta.url);
+const relationshipUrl = new URL('../src/components/RelationshipGraph.astro', import.meta.url);
 
 test('Atlas keeps a readable marker index outside the Leaflet canvas', async () => {
   const source = await fs.readFile(worldMapUrl, 'utf8');
@@ -45,4 +46,15 @@ test('timeline keeps its HTML fallback visible until enhanced mounting succeeds'
     -1,
     'fallback must not be hidden anywhere else in the enhancement flow',
   );
+});
+
+test('relationship explorer exposes entity links until graph mounting succeeds', async () => {
+  const source = await fs.readFile(relationshipUrl, 'utf8');
+  assert.match(source, /class="relationship-explorer__list" data-relationship-list aria-label=/);
+  assert.match(source, /<a href=\{source\.page\} data-relationship-list-node=\{source\.id\}>/);
+  assert.match(source, /<a href=\{target\.page\} data-relationship-list-node=\{target\.id\}>/);
+  const ready = source.lastIndexOf("root.dataset.relationshipReady = 'true'");
+  const switchToGraph = source.lastIndexOf("setViewMode('graph')");
+  assert.ok(ready > source.indexOf('const cy = cytoscape('));
+  assert.ok(switchToGraph > ready, 'canvas replaces the fallback only after mounting');
 });

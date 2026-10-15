@@ -183,3 +183,28 @@ test('mobile On this page control only appears below the desktop breakpoint', as
   await page.reload({ waitUntil: 'networkidle' });
   await expect(mobileToc).toBeVisible();
 });
+
+test('article TOC stays available between the sidebar and reference-rail breakpoints', async ({ page }) => {
+  await page.setViewportSize({ width: 900, height: 900 });
+  await page.goto('http://127.0.0.1:4321/degel-system/errack/', { waitUntil: 'networkidle' });
+  await expect(page.locator('#starlight__on-this-page--mobile')).toBeVisible();
+
+  await page.setViewportSize({ width: 1152, height: 900 });
+  await expect(page.locator('#starlight__on-this-page--mobile')).toBeHidden();
+});
+
+test('desktop HTML sidebar remains usable without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 900 },
+    javaScriptEnabled: false,
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto('http://127.0.0.1:4321/degel-system/errack/', { waitUntil: 'domcontentloaded' });
+    const sidebar = page.locator('#starlight__sidebar');
+    await expect(sidebar).toBeVisible();
+    await expect(sidebar.locator('a[href]').first()).toBeVisible();
+  } finally {
+    await context.close();
+  }
+});

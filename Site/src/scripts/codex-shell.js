@@ -213,6 +213,7 @@
   const root = document.documentElement;
   const runtime = window.__visceriumSidebar ??= {};
   const desktopQuery = window.matchMedia('(min-width: 800px)');
+  const tocDesktopQuery = window.matchMedia('(min-width: 72rem)');
 
   const setCollapsed = (button, collapsed) => {
     root.classList.toggle('codex-sidebar-collapsed', collapsed);
@@ -227,7 +228,7 @@
     const navigation = summary?.closest('nav');
     if (!navigation) return;
 
-    if (desktopQuery.matches) {
+    if (tocDesktopQuery.matches) {
       navigation.style.setProperty('display', 'none', 'important');
       navigation.setAttribute('aria-hidden', 'true');
     } else {
@@ -271,6 +272,11 @@
   if (!runtime.desktopQueryBound) {
     desktopQuery.addEventListener('change', () => runtime.sync(true));
     runtime.desktopQueryBound = true;
+  }
+
+  if (!runtime.tocDesktopQueryBound) {
+    tocDesktopQuery.addEventListener('change', runtime.syncMobileToc);
+    runtime.tocDesktopQueryBound = true;
   }
 
   if (!runtime.mobileTocObserver) {

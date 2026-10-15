@@ -44,9 +44,9 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
 </script>
 
 <style>
-  /* On desktop, the sidebar stays hidden until the shell script sets its state. */
+  /* Only JS-enhanced desktop shells hide the default sidebar before the overlay initialises. */
   @media (min-width: 800px) {
-    :global(html:not([data-codex-desktop-sidebar]) #starlight__sidebar) {
+    :global(html[data-codex-wide-header]:not([data-codex-desktop-sidebar]) #starlight__sidebar) {
       visibility: hidden;
       transform: translateX(-110%);
       opacity: 0;

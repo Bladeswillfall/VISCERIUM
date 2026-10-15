@@ -6,6 +6,7 @@ import { DEFAULT_LOCALE } from '../../site.config.mjs';
 type RelationshipNode = {
   id: string;
   title: string;
+  page?: string;
   [key: string]: unknown;
 };
 
@@ -92,7 +93,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       <div class="relationship-explorer__frame">
         <div class="relationship-explorer__canvas" data-relationship-canvas role="application" aria-label={t('viscerium.relationship.interactiveLabel')}></div>
 
-        <div class="relationship-explorer__list" data-relationship-list hidden aria-label={t('viscerium.relationship.listLabel')}>
+        <div class="relationship-explorer__list" data-relationship-list aria-label={t('viscerium.relationship.listLabel')}>
           <div class="relationship-list__header">
             <p class="atlas__eyebrow">{t('viscerium.relationship.structured')}</p>
             <p>{t('viscerium.relationship.listDescription')}</p>
@@ -103,12 +104,16 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
               const target = nodeById.get(edge.target);
               return (
                 <li class="relationship-list__item">
-                  <button type="button" data-relationship-list-node={source?.id}>{source?.title ?? edge.source}</button>
+                  {source?.page
+                    ? <a href={source.page} data-relationship-list-node={source.id}>{source.title}</a>
+                    : <span>{source?.title ?? edge.source}</span>}
                   <span class="relationship-list__relation">
                     <strong>{edge.label ?? edge.type}</strong>
                     <span aria-hidden="true">{edge.directed ? '→' : '↔'}</span>
                   </span>
-                  <button type="button" data-relationship-list-node={target?.id}>{target?.title ?? edge.target}</button>
+                  {target?.page
+                    ? <a href={target.page} data-relationship-list-node={target.id}>{target.title}</a>
+                    : <span>{target?.title ?? edge.target}</span>}
                   {edge.description && <p>{edge.description}</p>}
                 </li>
               );
@@ -287,7 +292,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     const list = root.querySelector<HTMLElement>('[data-relationship-list]');
     const payloadElement = root.querySelector<HTMLScriptElement>('[data-relationship-payload]');
     if (!canvas || !payloadElement) return;
-    root.dataset.relationshipReady = 'true';
 
     let graph: RelationshipPayload;
     try {
@@ -643,8 +647,11 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     };
 
     root.querySelectorAll<HTMLElement>('[data-relationship-search-shell]').forEach(bindSearch);
-    root.querySelectorAll<HTMLButtonElement>('[data-relationship-list-node]').forEach((button) => {
-      button.addEventListener('click', () => focusNode(button.dataset.relationshipListNode));
+    root.querySelectorAll<HTMLAnchorElement>('[data-relationship-list-node]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        focusNode(link.dataset.relationshipListNode);
+      });
     });
     root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
       button.addEventListener('click', () => setViewMode(canvas.hidden ? 'graph' : 'list'));
@@ -678,6 +685,8 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
 
     const observer = new ResizeObserver(() => cy.resize());
     observer.observe(canvas);
+    root.dataset.relationshipReady = 'true';
+    setViewMode('graph');
   }
 
   function bootRelationshipExplorers() {
