@@ -31,7 +31,7 @@ main:has(.home-gateway) > .content-panel:last-of-type {
 }
 
 main:has(.home-gateway) > .content-panel:last-of-type > .sl-container {
-  max-width: none;
+  max-width: none !important;
   margin-inline: 0;
 }
 
