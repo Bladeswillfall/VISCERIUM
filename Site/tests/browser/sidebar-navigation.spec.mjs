@@ -203,8 +203,32 @@ test('desktop HTML sidebar remains usable without JavaScript', async ({ browser 
     await page.goto('http://127.0.0.1:4321/degel-system/errack/', { waitUntil: 'domcontentloaded' });
     const sidebar = page.locator('#starlight__sidebar');
     await expect(sidebar).toBeVisible();
-    await expect(sidebar.locator('a[href]').first()).toBeVisible();
+    // The first DOM link is the hidden "Exit · All eras" action. Open
+    // the native details group and verify a real destination instead.
+    const firstGroup = sidebar.locator('.codex-sidebar-main > .sidebar-list > li > details').first();
+    const summary = firstGroup.locator(':scope > summary');
+    await expect(summary).toBeVisible();
+    if (!(await firstGroup.evaluate((details) => details.open))) await summary.click();
+    await expect(sidebar.locator('a[href="/maps/"]')).toBeVisible();
   } finally {
     await context.close();
   }
+});
+
+test('desktop Codex grain texture is painted from the committed asset', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/start-here/', { waitUntil: 'networkidle' });
+
+  const grain = await page.evaluate(() => {
+    const styles = getComputedStyle(document.body, '::before');
+    return {
+      image: styles.backgroundImage,
+      display: styles.display,
+      opacity: Number.parseFloat(styles.opacity),
+      pointerEvents: styles.pointerEvents,
+    };
+  });
+  expect(grain.image).toContain('/assets/images/codex-noise-v2.webp');
+  expect(grain.display).not.toBe('none');
+  expect(grain.opacity).toBeGreaterThan(0);
+  expect(grain.pointerEvents).toBe('none');
 });

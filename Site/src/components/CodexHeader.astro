@@ -54,10 +54,41 @@ const { t } = Astro.locals;
 </div>
 
 <style is:global>
+  /* Draws the grain texture above the page content. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: url('/assets/images/codex-noise-v2.webp') repeat;
+    opacity: .2;
+    visibility: visible;
+    pointer-events: none;
+    display: block;
+    mix-blend-mode: soft-light;
+  }
+
+  :root[data-theme='light'] body::before {
+    opacity: .2;
+  }
+
+  /* The grain is barely visible on small screens but still costs a fixed paint layer and request. */
+  @media (max-width: 40rem) {
+    body::before,
+    :root[data-theme='light'] body::before {
+      display: none;
+    }
+  }
+
   :root[data-exploration-focus] .codex-header {
     display: none !important;
   }
 
+  @media print, (forced-colors: active) {
+    body::before {
+      display: none;
+    }
+  }
 </style>
 
 <script>
