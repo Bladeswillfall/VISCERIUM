@@ -14,7 +14,6 @@
   --codex-z-elevated-surface: 2;
   --codex-z-navigation: 60;
   --codex-z-control: 1000;
-  --codex-z-grain: 999999;
 }
 
 @layer ion {
@@ -80,7 +79,3 @@
   z-index: var(--codex-z-control) !important;
 }
 
-/* Place film grain above the other page layers. */
-body::before {
-  z-index: var(--codex-z-grain) !important;
-}
