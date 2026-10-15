@@ -135,7 +135,7 @@ const { t } = Astro.locals;
       max-inline-size: 31rem;
       margin: 0;
       color: var(--codex-nav-text);
-      font-size: clamp(0.56rem, 1.05vw, 0.88rem);
+      font-size: clamp(0.75rem, 1.05vw, 0.88rem);
       line-height: 1.45;
       overflow-wrap: anywhere;
     }
@@ -170,7 +170,7 @@ const { t } = Astro.locals;
 
     .footer-wayfinder__routes a {
       color: var(--codex-nav-muted);
-      font-size: clamp(0.58rem, 1.05vw, 0.92rem);
+      font-size: clamp(0.8125rem, 1.05vw, 0.92rem);
       font-weight: 600;
       line-height: 1.3;
       text-decoration: none;
@@ -219,7 +219,7 @@ const { t } = Astro.locals;
 
     .policy-link__title {
       color: currentColor;
-      font-size: clamp(0.59rem, 1.05vw, 0.92rem);
+      font-size: clamp(0.8125rem, 1.05vw, 0.92rem);
       font-weight: 700;
       line-height: 1.28;
       overflow-wrap: anywhere;
@@ -227,7 +227,7 @@ const { t } = Astro.locals;
 
     .policy-link__description {
       color: var(--codex-nav-text);
-      font-size: clamp(0.54rem, 0.9vw, 0.78rem);
+      font-size: clamp(0.75rem, 0.9vw, 0.85rem);
       line-height: 1.4;
       overflow-wrap: anywhere;
     }
@@ -251,6 +251,17 @@ const { t } = Astro.locals;
     }
 
     @media (max-width: 40rem) {
+      .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 1.5rem;
+      }
+
+      .footer-policy {
+        grid-column: 1 / -1;
+        justify-self: start;
+        max-inline-size: 25rem;
+      }
+
       .ion-codex-footer {
         --ion-codex-footer-padding: 3.1rem clamp(0.6rem, 3vw, 1rem) clamp(4.1rem, 10vw, 5rem);
         --ion-codex-footer-column-gap: clamp(0.45rem, 2vw, 0.8rem);
@@ -278,6 +289,14 @@ const { t } = Astro.locals;
     }
 
     @media (max-width: 25rem) {
+      .footer-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .footer-policy {
+        grid-column: auto;
+      }
+
       .ion-codex-footer {
         --ion-codex-footer-padding: 2.8rem 0.5rem 3.8rem;
         --ion-codex-footer-column-gap: 0.35rem;
@@ -289,9 +308,6 @@ const { t } = Astro.locals;
         gap: 0.5rem;
       }
 
-      .policy-link__description {
-        font-size: 0.52rem;
-      }
     }
 
     @media (prefers-reduced-motion: reduce) {

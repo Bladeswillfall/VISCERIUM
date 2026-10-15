@@ -38,6 +38,25 @@
   --relationship-inspector: color-mix(in oklch, var(--codex-surface-raised) 92%, var(--codex-fixed-light));
 }
 
+/* Preserve the server-rendered relationship links if JavaScript never loads. */
+.relationship-explorer:not([data-relationship-ready]) .relationship-explorer__frame {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+
+.relationship-explorer:not([data-relationship-ready]) :is(
+  .relationship-explorer__canvas,
+  .relationship-explorer__details,
+  .relationship-explorer__toolbar,
+  .relationship-explorer__mobile-controls
+) {
+  display: none !important;
+}
+
+.relationship-explorer:not([data-relationship-ready]) .relationship-explorer__list {
+  min-height: 0;
+}
+
 .relationship-explorer__toolbar {
   position: relative;
   z-index: 4;

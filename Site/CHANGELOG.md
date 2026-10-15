@@ -43,6 +43,9 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Fixed in Unreleased
 
+- Restored navigation and relationship exploration without JavaScript, repaired tablet article contents and reader controls, and kept mobile era descriptions and footer text readable ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
+- Restored the Codex's subtle grain texture using the committed noise image ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
+
 - Kept explicitly included inter-era events visible on the super timeline at wide zoom levels, including their article links ([#222](https://github.com/Bladeswillfall/VISCERIUM/pull/222)).
 
 ## [0.14.0] - 2026-09-28

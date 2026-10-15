@@ -123,7 +123,7 @@
 
   /* Adjust font fot "On this page" header */
   #starlight__on-this-page {
-    font-family: "Space Mono", monospace;
+    font-family: var(--vc-font-mono);
     font-weight: 400;
     font-size: var(--sl-text-md);
   }
