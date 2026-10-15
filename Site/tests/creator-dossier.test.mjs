@@ -225,3 +225,12 @@ test('open Visual Lore galleries follow metadata, file moves, and artwork change
   callbacks.metadata.changed({ path: 'System/Unrelated.md' });
   assert.equal(refreshes, before, 'non-Lore metadata changes do not rebuild the gallery');
 });
+
+test('Visual Lore cards expand beyond Obsidian button height and show square artwork', () => {
+  const card = styles.match(/button\.vc-lore-gallery-card\s*\{([^}]*)\}/s)?.[1] ?? '';
+  const image = styles.match(/\.vc-lore-gallery-art\s*\{([^}]*)\}/s)?.[1] ?? '';
+  assert.match(card, /height:\s*auto;/, 'the host theme must not collapse gallery cards into strips');
+  assert.match(card, /grid-template-rows:\s*auto 1fr;/, 'the artwork and description each get a row');
+  assert.match(image, /aspect-ratio:\s*1\s*\/\s*1;/, 'square previews keep the artwork visible');
+  assert.match(image, /object-fit:\s*cover;/, 'previews retain consistent card dimensions');
+});
