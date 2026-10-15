@@ -13,6 +13,7 @@ type Contributor = ContributorProfile & {
   id: string;
   roles: string[];
   avatarSrc: string;
+  legacyWorldAnvil: boolean;
 };
 
 const profiles = contributorRegistry.profiles as Record<string, ContributorProfile>;
@@ -23,7 +24,7 @@ const entry = Astro.locals.starlightRoute?.entry?.data ?? {};
 const routeId = String(entry.slug ?? Astro.locals.starlightRoute?.entry?.id ?? '')
   .replace(/\.(md|mdx)$/i, '')
   .replace(/^\/+|\/+$/g, '');
-const eligibleTypes = new Set(['article', 'character', 'event', 'era', 'faction', 'image', 'location', 'map', 'timeline']);
+const eligibleTypes = new Set(['article', 'character', 'event', 'era', 'faction', 'image', 'location', 'map', 'timeline', 'species']);
 const useDefaults = entry.defaultContributors !== false
   && entry.status === 'published'
   && routeId !== 'index'
@@ -44,11 +45,13 @@ for (const item of requested) {
     ...profiles[id],
     roles: [],
     avatarSrc: avatarPaths[id] ?? avatarPaths.fallback,
+    legacyWorldAnvil: false,
   };
   const roles = 'roles' in reference && Array.isArray(reference.roles)
     ? reference.roles
     : [reference.role ?? t('viscerium.contributors.defaultRole')];
   contributor.roles = normalizeRoles([...contributor.roles, ...roles]);
+  contributor.legacyWorldAnvil ||= 'source' in reference && reference.source === 'worldanvil';
   byId.set(id, contributor);
 }
 
@@ -78,7 +81,7 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
                   name: contributor.name,
                   roles,
                   interpolation: { escapeValue: false },
-                })}
+                }) + (contributor.legacyWorldAnvil ? ` ${t('viscerium.contributors.worldAnvilCredit')}` : '')}
               >
                 <span class="contributor-avatar-wrap">
                   {segments.length > 0 && (
@@ -106,7 +109,28 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
                     decoding="async"
                   />
                 </span>
-                <span class="contributor-copy"><strong>{contributor.name}</strong><small>{roles}</small></span>
+                <span class="contributor-copy">
+                  <strong>{contributor.name}</strong>
+                  <small>
+                    {roles}
+                    {contributor.legacyWorldAnvil && (
+                      <span
+                        class="worldanvil-source"
+                        title={t('viscerium.contributors.worldAnvilCredit')}
+                        aria-hidden="true"
+                      >
+                        <img
+                          src="/assets/contributors/worldanvil-mark.svg"
+                          alt=""
+                          width="24"
+                          height="16"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
+                    )}
+                  </small>
+                </span>
               </a>
             </li>
           );
@@ -194,7 +218,7 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
   .role-ring .role-consultant { stroke: var(--role-consultant); }
   .role-ring .role-other { stroke: var(--role-other); }
 
-  img {
+  .contributor-avatar-wrap img {
     position: absolute;
     inset: .25rem;
     box-sizing: border-box;
@@ -216,5 +240,26 @@ const collapsedLimit = Math.max(1, Number(contributorRegistry.collapsedLimit) ||
 
   small {
     color: var(--sl-color-gray-3);
+  }
+
+  .worldanvil-source {
+    display: inline-flex;
+    align-items: center;
+    margin-inline-start: .3rem;
+    vertical-align: -0.15em;
+    color: var(--sl-color-gray-3);
+  }
+
+  .worldanvil-source img {
+    display: block;
+    width: 1.5em;
+    height: 1em;
+    object-fit: contain;
+    filter: invert(1);
+    opacity: .82;
+  }
+
+  :global(html[data-theme='light']) .worldanvil-source img {
+    filter: none;
   }
 </style>

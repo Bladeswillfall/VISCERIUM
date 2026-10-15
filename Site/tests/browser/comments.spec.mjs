@@ -189,3 +189,81 @@ test('a failed comments load reports the problem and a later page can retry', as
   await expect(nextComments.locator('[data-remark42-root]')).toHaveText('Mock comments ready');
   await expect.poll(() => page.evaluate(() => window.__remarkNodeMatches)).toBe(true);
 });
+
+test('Okse Dominion shows its attributed World Anvil archive without changing other articles', async ({ page }) => {
+  await page.goto(`${preview}/eras/citadel/nations/okse-dominion/`, { waitUntil: 'domcontentloaded' });
+
+  const archive = page.locator('.codex-archive');
+  await expect(archive).toBeVisible();
+  await expect(archive.getByRole('heading', { name: 'Earlier discussion' })).toBeVisible();
+  await expect(archive.locator('li')).toHaveCount(3);
+  await expect(archive.locator('li').nth(1)).toContainText('In reply to K.S. Bishoff');
+  await expect(archive.locator('li').nth(0)).toContainText('Summary');
+  await expect(archive.getByRole('link', { name: 'World Anvil (opens in a new tab)' }))
+    .toHaveAttribute('href', 'https://www.worldanvil.com/');
+  await expect(archive.getByRole('link', { name: /Original Okse Dominion article/ }))
+    .toHaveAttribute('href', 'https://www.worldanvil.com/w/viscerium/a/okse-dominion-article');
+  const archiveMark = archive.locator('.codex-archive__brand-link img');
+  await expect(archiveMark).toHaveAttribute('src', '/assets/contributors/worldanvil-mark.svg');
+  await archiveMark.scrollIntoViewIfNeeded();
+  await expect.poll(() => archiveMark.evaluate((img) => img.naturalWidth)).toBeGreaterThan(0);
+  await expect(archiveMark).toHaveJSProperty('complete', true);
+  await expect(page.locator('.codex-webmentions')).toHaveCount(1);
+
+  await page.emulateMedia({ media: 'print' });
+  for (const theme of ['dark', 'light']) {
+    await page.evaluate((value) => {
+      document.documentElement.dataset.theme = value;
+    }, theme);
+    const printColors = await archive.evaluate((element) => {
+      const reference = document.createElement('span');
+      reference.style.color = 'CanvasText';
+      element.appendChild(reference);
+      const expected = getComputedStyle(reference).color;
+      reference.remove();
+      const selectors = [
+        '.codex-archive__heading h2',
+        '.codex-archive__identity strong',
+        '.codex-archive__original',
+        '.codex-archive__byline strong',
+        '.codex-archive time',
+        '.codex-archive__summary-label',
+        '.codex-archive__body',
+        '.codex-archive__note',
+      ];
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 1;
+      const context = canvas.getContext('2d');
+      const rgb = (color) => {
+        context.clearRect(0, 0, 1, 1);
+        context.fillStyle = color;
+        context.fillRect(0, 0, 1, 1);
+        return Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3));
+      };
+      return {
+        expected: rgb(expected),
+        actual: selectors.map((selector) => rgb(getComputedStyle(element.querySelector(selector)).color)),
+      };
+    });
+    expect(printColors.actual).toEqual(Array(printColors.actual.length).fill(printColors.expected));
+  }
+  await page.emulateMedia({ media: 'screen' });
+
+  await page.setViewportSize({ width: 390, height: 780 });
+  const archiveSize = await archive.evaluate((element) => ({
+    width: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }));
+  expect(archiveSize.scrollWidth).toBeLessThanOrEqual(archiveSize.width + 1);
+
+  await page.goto(`${preview}/degel-system/errack/`, { waitUntil: 'domcontentloaded' });
+  const errackArchive = page.locator('.codex-archive');
+  await expect(errackArchive).toBeVisible();
+  await expect(errackArchive.locator('li')).toHaveCount(2);
+  await expect(errackArchive.locator('li').nth(1)).toContainText('In reply to Dr Emily Vair-Turnbull');
+  await expect(errackArchive.getByRole('link', { name: /Original Errack article/ }))
+    .toHaveAttribute('href', 'https://www.worldanvil.com/w/viscerium/a/errack-location');
+
+  await page.goto(`${preview}/myrkildicary/myrkild/`, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.codex-archive')).toHaveCount(0);
+});

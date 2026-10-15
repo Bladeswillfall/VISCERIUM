@@ -24,9 +24,9 @@ Create a subdirectory when a test family has a separate runner or has enough fil
 
 ## CI selection
 
-Pull requests use `.github/scripts/select-checks.mjs` to choose affected CI jobs. Changes to a single unit-test file run the unit suite; browser or accessibility test changes run the relevant suite and its required build. Site or Vault content and source changes run all site checks. Comment gateway and timeline plugin edits use their dedicated jobs. Changes to the CI configuration, unfamiliar paths, or an unreadable diff trigger the full suite. Pushes to `main` always run everything. The repository policy job always runs, and the final verification job requires selected jobs to succeed and skipped jobs to be intentionally excluded.
+Pull requests use `.github/scripts/select-checks.mjs` to select affected checks. A changed browser spec runs even if it is outside the fast smoke list. Accessibility spec changes run Axe. CI config and unfamiliar file changes fall back to the full browser and accessibility set.
 
-This selects test **jobs**, not individual unit assertions. The full site test set remains the default when a change could affect more than one area.
+A weekly scheduled Checks run builds the site and runs every browser spec plus Axe and the enabled contact form fixture. Manual workflow dispatch runs the full check plan. Pushes to `main` build and optionally deploy production, while the `verify` status is required before normal PR merges. The small browser list exists only to make routine PR checks faster, not as an inventory of all browser tests.
 
 ## Measuring responsive cache performance
 

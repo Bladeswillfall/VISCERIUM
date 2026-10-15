@@ -124,3 +124,10 @@ test('checked-in Atlas sidecars retain a non-empty active base', async () => {
     );
   }
 });
+
+test('NEARSIGHT and SMOG maps keep canonical sources without legacy raster copies', async () => {
+  for (const name of ['Errack-NEARSIGHT.webp', 'Errack-SMOG.webp']) {
+    await fs.access(path.join(vaultRoot, 'Assets', 'Maps', name));
+    await assert.rejects(fs.access(path.join(vaultRoot, 'maps', name)), { code: 'ENOENT' });
+  }
+});

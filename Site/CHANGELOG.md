@@ -10,6 +10,10 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added source-specific WorldAnvil contributor credits, checked-in Solacon avatars, and a discreet WA provenance mark beside legacy contributor roles ([#261](https://github.com/Bladeswillfall/VISCERIUM/pull/261)).
+- Added a World Anvil discussion archive pilot to Okse Dominion, with dated attribution, source links and editorial summaries where republication permission is missing.
+
+- Added the HINOKODO Human Made mark and a short authorship statement to explicitly verified image attribution pages, with per-artwork sidecar flags.
 - Added opt-in Stub notices for short published articles, with a direct GitHub contribution link.
 - Added reusable era-themed artifacts and anchored marginalia, including accessible CITADEL manuscript pagination ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
 - Added seven Elias Vail WebP cell illustrations with contour wrapping and clickable Bailey-format attribution pages in Myrkild (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
@@ -17,6 +21,14 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Restored coverage of individual browser and accessibility test edits and scheduled a weekly complete Chromium and Axe audit.
+
+- Made direct Cloudflare Pages uploads an explicit repository-variable opt-in and fail when enabled without credentials, so skipped uploads no longer look successful.
+
+- Reduced pull-request CI to relevant functional checks: content-only changes now build without browser suites, feature code selects its own Chromium specs, and duplicate Axe/cross-browser graph jobs no longer block PRs.
+- Prepared GitHub Actions to deploy the cached production artifact directly to the existing Cloudflare Pages project, with a safe fallback until deployment credentials are configured.
+- Split Chromium browser checks across two CI shards and limited the enabled-contact fixture rebuild to contact-sensitive changes.
+- Replaced the Human Made authorship mark with the CC0 Brainmade mark across the Codex footer, content-production policy and repository badge.
 - Enabled Astro's experimental incremental static-build cache for VISCERIUM-owned dynamic routes, moved Atlas and responsive-image caches into Cloudflare's persisted Astro cache tree, skipped duplicate validation during Cloudflare builds, and replaced post-merge full CI with a cache-seeding build on main.
 - Increased the homepage Recent Articles grid limit from 6 to 36 entries ([#224](https://github.com/Bladeswillfall/VISCERIUM/pull/224)).
 - Restored ordinary Myrkild strain prose and removed cell-image margins (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
@@ -24,6 +36,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 - Updated release notes with colour-coded change labels and clearer date and version layouts; fixed British English release-date formatting.
 
 ### Removed in Unreleased
+
+- Removed redundant legacy NEARSIGHT and SMOG rasters from `Vault/maps/`, preserving their identical canonical sources in `Vault/Assets/Maps/`.
 
 - Removed the standalone What's New page and its link from the homepage Recent Articles section; the carousel and public feeds remain available.
 

@@ -7,6 +7,7 @@ asset: "/assets/images/myrkild-sloth-cell.webp"
 image: "/assets/images/myrkild-sloth-cell.webp"
 alt: "Illustration of a Sloth Myrkild cell with dark masses connected by muted purple filaments"
 artist: "Elias Vail"
+humanMade: true
 artistUrl:
 editor:
 source:

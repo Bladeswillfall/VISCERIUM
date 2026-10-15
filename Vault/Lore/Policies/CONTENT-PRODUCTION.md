@@ -14,8 +14,8 @@ community: false
 giscus: false
 prev: false
 next: false
-updated: 2026-09-10
-word_count: 666
+updated: 2026-10-07
+word_count: 693
 ---
 
 VISCERIUM is a human-created fictional universe.
@@ -100,8 +100,10 @@ This does not mean that every piece of software or technical infrastructure used
 The distinction is deliberate:
 **AI may assist the tools around VISCERIUM. People create VISCERIUM.**
 
-## Human Made mark
-Where VISCERIUM displays the third-party [Human Made mark](https://hinokodo.itch.io/human-made), it identifies the human-made creative material covered by this policy.
+## Brainmade mark
+Where VISCERIUM displays the third-party [Brainmade mark](https://brainmade.org/), it identifies the human-made creative material covered by this policy.
+
+Brainmade's published guidance permits some AI-assisted process work. VISCERIUM applies the mark under the stricter standard defined above. AI-generated creative material is not present in published VISCERIUM creative content.
 
 AI-assisted technical development elsewhere in the production process is disclosed openly here.
 

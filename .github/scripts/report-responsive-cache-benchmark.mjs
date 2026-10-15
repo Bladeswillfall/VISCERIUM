@@ -25,6 +25,9 @@ export function benchmarkData(source) {
   const coldVariants = measuredNumber(source, 'COLD_VARIANTS');
   const warmVariants = measuredNumber(source, 'WARM_VARIANTS');
   const bytes = measuredNumber(source, 'CACHE_BYTES');
+  const distBytes = measuredNumber(source, 'DIST_BYTES');
+  const astroBytes = measuredNumber(source, 'ASTRO_BYTES');
+  const mapTilesBytes = measuredNumber(source, 'MAP_TILES_BYTES');
   const totalWarm = warm + restore;
   const difference = cold - totalWarm;
   const atlasColdHit = source.ATLAS_COLD_HIT ?? '';
@@ -35,13 +38,14 @@ export function benchmarkData(source) {
   const atlasWarm = atlasState(atlasWarmHit, atlasWarmKey);
   const comparable = atlasCold !== 'unverified' && atlasCold === atlasWarm
     && atlasColdKey === atlasWarmKey && coldVariants === warmVariants;
-  return { cold, warm, restore, totalWarm, difference, coldVariants, warmVariants, bytes, comparable,
+  return { cold, warm, restore, totalWarm, difference, coldVariants, warmVariants, bytes,
+    distBytes, astroBytes, mapTilesBytes, comparable,
     atlasColdHit, atlasWarmHit, atlasColdKey, atlasWarmKey };
 }
 
 export function benchmarkReport(source) {
   const { cold, warm, restore, totalWarm, difference, coldVariants, warmVariants, bytes,
-    comparable } = benchmarkData(source);
+    distBytes, astroBytes, mapTilesBytes, comparable } = benchmarkData(source);
   const seconds = value => (value / 1000).toFixed(2);
   const atlasCold = atlasState(source.ATLAS_COLD_HIT, source.ATLAS_COLD_KEY);
   const atlasWarm = atlasState(source.ATLAS_WARM_HIT, source.ATLAS_WARM_KEY);
@@ -57,6 +61,9 @@ export function benchmarkReport(source) {
     `| Warm build + restore | ${seconds(totalWarm)} s |`,
     `| Cold minus warm + restore | ${difference >= 0 ? '+' : ''}${seconds(difference)} s |`,
     `| Responsive cache size | ${(bytes / 1024 / 1024).toFixed(2)} MiB |`,
+    `| Generated site size | ${(distBytes / 1024 / 1024).toFixed(2)} MiB |`,
+    `| Compiled _astro assets | ${(astroBytes / 1024 / 1024).toFixed(2)} MiB |`,
+    `| Generated Atlas map tiles | ${(mapTilesBytes / 1024 / 1024).toFixed(2)} MiB |`,
     `| Cached asset entries | ${coldVariants} cold / ${warmVariants} warm |`,
     `| Atlas tile cache | ${atlasCold} cold / ${atlasWarm} warm |`,
     ...(comparable && atlasCold === 'exact hit' ? [] : [

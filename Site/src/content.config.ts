@@ -202,6 +202,7 @@ const contributorReferenceSchema = z.union([
     id: z.string(),
     role: z.string().optional(),
     roles: z.array(z.string()).optional(),
+    source: z.literal('worldanvil').optional(),
   }),
 ]);
 const referencedInSchema = z.object({
@@ -281,6 +282,7 @@ export const collections = {
         credit: optionalString,
         artist: optionalString,
         artistUrl: optionalString,
+        humanMade: z.boolean().optional(),
         editor: optionalString,
         source: optionalString,
         sourceUrl: optionalString,

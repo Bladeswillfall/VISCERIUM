@@ -167,6 +167,17 @@ The Codex typography uses open font families under the SIL Open Font License 1.1
 
 Font names, reserved font names, copyright notices, and licence files must be preserved as required by the respective font packages.
 
+## External marks and assets
+
+| Asset | Role in VISCERIUM | Upstream licence |
+| --- | --- | --- |
+| [Brainmade mark](https://brainmade.org/) | Human-authorship mark displayed in the public Codex and referenced by the content-production policy | CC0-1.0 |
+| [Human Made mark by HINOKODO](https://hinokodo.itch.io/human-made) | Displayed only on image attribution records explicitly marked as human-made | Permission for personal and commercial use, subject to no AI-generated creative content in the marked work and no repackaging or resale of the icon pack |
+
+The redistributed `Site/public/assets/policies/brainmade.svg` is the upstream white SVG logo. The Codex uses it as a monochrome CSS mask without modifying the source artwork.
+
+`Site/public/assets/attribution/human-made.svg` restores the previously used HINOKODO SVG unchanged. It links to the creator's page and appears only when an artwork sidecar declares `humanMade: true`. The mark is not offered as an icon pack.
+
 ## Services and platforms
 
 VISCERIUM also integrates with or deploys through services such as GitHub, Cloudflare Pages, Giscus, Resend, Turnstile, Webmention.io, and optional analytics providers.

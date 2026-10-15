@@ -31,15 +31,20 @@ if (!validModes.has(mode)) {
   process.exitCode = 1;
 } else {
   try {
+    console.time('Content cleanup');
     // Generated delivery artifacts are not source artwork. Remove leftovers
     // before the repository image policy inspects Site/public and Site/src.
     await cleanResponsiveImageVariants();
     await cleanMapTilePyramids();
+    console.timeEnd('Content cleanup');
 
+    console.time('Vault validation');
     const vault = await loadVaultContent();
     if (!validateVaultNotes(vault)) throw new Error('Vault source validation failed.');
     if (!(await validateRepositoryImages())) throw new Error('Repository image policy failed.');
+    console.timeEnd('Vault validation');
 
+    console.time('Content sync and image variants');
     await generateTimelineData({
       manifest: vault,
       validateOnly: mode === 'sync',
@@ -47,6 +52,9 @@ if (!validModes.has(mode)) {
 
     await syncPublicNotes();
     await generateResponsiveImageVariants();
+    console.timeEnd('Content sync and image variants');
+
+    console.time('Content transforms');
     await stripObsidianPluginBlocks();
     await prepareStorytellerMarkers();
     await transformEraPrimerShortcodes();
@@ -61,7 +69,9 @@ if (!validModes.has(mode)) {
     await generateEraTagPages();
     await generateCategoryPages();
     await applyGiscusPolicy();
+    console.timeEnd('Content transforms');
 
+    console.time('Content indexes');
     const docs = await loadGeneratedDocs();
     if (mode === 'build' && !validateGeneratedContent(docs)) {
       throw new Error('Generated content validation failed.');
@@ -72,6 +82,7 @@ if (!validModes.has(mode)) {
       await generateRelationshipData({ manifest: docs });
     }
 
+    console.timeEnd('Content indexes');
     console.log(`Completed shared content pipeline in ${mode} mode.`);
   } catch (error) {
     if (!reportTimelineError(error)) console.error(error.message ?? error);

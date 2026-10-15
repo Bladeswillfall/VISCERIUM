@@ -49,19 +49,23 @@ test('Atlas cache reuses complete output', async (t) => {
 test('Atlas definition key changes when map membership or frontmatter changes', () => {
   const map = {
     relativePath: 'Eras/CITADEL/Atlas.md',
-    data: { type: 'map', mapId: 'citadel' },
+    data: { type: 'map', mapId: 'citadel', image: '/assets/maps/atlas.webp' },
     raw: 'type: map\nmapId: citadel\nimage: /assets/maps/atlas.webp\n',
   };
   const next = {
     relativePath: 'Eras/SMOG/Atlas.md',
-    data: { type: 'map', mapId: 'smog' },
+    data: { type: 'map', mapId: 'smog', image: '/assets/maps/atlas.webp' },
     raw: 'type: map\nmapId: smog\nimage: /assets/maps/atlas.webp\n',
   };
   const ordinaryNote = { relativePath: 'Notes/Note.md', data: { type: 'article' }, raw: 'edited lore' };
   const original = mapDefinitionFingerprint([map]);
 
   assert.notEqual(mapDefinitionFingerprint([map, next]), original, 'new map with existing raster changes key');
-  assert.notEqual(mapDefinitionFingerprint([{ ...map, raw: map.raw.replace('citadel', 'new-id') }]), original);
+  assert.notEqual(mapDefinitionFingerprint([{ ...map,
+    data: { ...map.data, mapId: 'new-id' },
+    raw: map.raw.replace('citadel', 'new-id') }]), original);
+  assert.equal(mapDefinitionFingerprint([{ ...map, raw: map.raw + 'description: edited\\n' }]),
+    original, 'non-source frontmatter and prose do not invalidate tile cache');
   assert.equal(mapDefinitionFingerprint([ordinaryNote, map]), original, 'ordinary lore edits do not bust tile cache');
   assert.equal(mapDefinitionFingerprint([next, map]), mapDefinitionFingerprint([map, next]));
 });
