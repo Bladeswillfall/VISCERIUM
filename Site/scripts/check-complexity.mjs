@@ -69,7 +69,7 @@ function runEslint(files, maxComplexity) {
     }).outputText;
     const result = spawnSync(
       process.execPath,
-      [...args, '--stdin', '--stdin-filename', file.replace(/\\.ts$/, '.js')],
+      [...args, '--stdin', '--stdin-filename', file.slice(0, -3) + '.js'],
       { cwd: repoRoot, input: javascript, stdio: ['pipe', 'inherit', 'inherit'] },
     );
     if (result.error) throw result.error;
@@ -77,6 +77,7 @@ function runEslint(files, maxComplexity) {
   }
   return true;
 }
+
 export function runComplexityCheck() {
   const files = trackedSourceFiles();
   const groups = new Map();
