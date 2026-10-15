@@ -79,7 +79,7 @@ function harness() {
       SuggestModal, TFile, normalizePath: (value) => value,
     };
   };
-  new Function('require', 'module', 'exports', `${creator}\nmodule.exports.__dossierTests = { semanticRelations, displayFact };`)(
+  new Function('require', 'module', 'exports', `${creator}\nmodule.exports.__dossierTests = { semanticRelations, displayFact, LoreGalleryView };`)(
     require, module, module.exports,
   );
   const plugin = Object.create(module.exports.prototype);
@@ -138,4 +138,89 @@ test('visual Lore browsing resolves hash-named artwork and exposes only illustra
   assert.match(creator, /id: 'open-visual-lore-browser'/);
   assert.match(creator, /class LoreGalleryView extends ItemView/);
   assert.match(styles, /\.vc-lore-gallery-cards/);
+});
+
+test('open Visual Lore galleries follow metadata, file moves, and artwork changes', async () => {
+  const { plugin, records, source, artwork, helpers } = harness();
+  const callbacks = { metadata: {}, vault: {} };
+
+  class Element {
+    constructor(options = {}) {
+      this.text = options.text || '';
+      this.cls = options.cls || '';
+      this.children = [];
+    }
+    empty() { this.children = []; }
+    addClass(value) { this.cls = value; }
+    createEl(_tag, options = {}) {
+      const child = new Element(options);
+      this.children.push(child);
+      return child;
+    }
+    createDiv(options = {}) { return this.createEl('div', options); }
+    find(cls) {
+      if (this.cls === cls) return this;
+      return this.children.map((child) => child.find(cls)).find(Boolean) || null;
+    }
+  }
+
+  const view = new helpers.LoreGalleryView(null, plugin);
+  view.app = plugin.app;
+  view.contentEl = new Element();
+  view.registerDomEvent = () => {};
+  plugin.app.vault.getResourcePath = () => 'app://test-artwork';
+  let refreshes = 0;
+  const originalRefresh = view.refresh.bind(view);
+  view.refresh = async () => { refreshes += 1; await originalRefresh(); };
+
+  plugin.app.workspace = {
+    getLeavesOfType: (kind) => kind === 'viscerium-lore-gallery' ? [{ view }] : [],
+    onLayoutReady: (callback) => callback(),
+    getActiveFile: () => null,
+    on: () => ({}),
+  };
+  plugin.app.metadataCache.on = (name, callback) => { callbacks.metadata[name] = callback; return {}; };
+  plugin.app.vault.on = (name, callback) => { callbacks.vault[name] = callback; return {}; };
+  plugin.registerView = () => {};
+  plugin.addCommand = () => {};
+  plugin.registerEvent = () => {};
+
+  await plugin.onload();
+  await view.refresh();
+  const count = () => view.contentEl.find('vc-lore-gallery-count')?.text;
+  assert.equal(count(), '1 illustrated article');
+
+  records.get(source).status = 'draft';
+  callbacks.metadata.changed(source);
+  assert.equal(count(), '0 illustrated articles', 'unpublished notes disappear without reopening the gallery');
+
+  records.get(source).status = 'published';
+  records.get(source).era = 'SMOG';
+  callbacks.metadata.changed(source);
+  assert.ok(view.contentEl.find('vc-lore-gallery-cards'), 'newly published notes reappear after metadata refresh');
+  assert.equal(view.options(plugin.visualLoreEntries(), 'eras')[0], 'SMOG');
+
+  view.filters.faction = 'Target';
+  records.get(source).faction = 'Other';
+  callbacks.metadata.changed(source);
+  assert.equal(view.filters.faction, '', 'a removed filter option is cleared');
+  assert.equal(count(), '1 illustrated article');
+
+  const originalPath = source.path;
+  source.path = 'Drafts/Lore/Source.md';
+  callbacks.vault.rename(source, originalPath);
+  assert.equal(count(), '0 illustrated articles', 'moving a note out of Lore removes its card');
+
+  source.path = originalPath;
+  callbacks.vault.rename(source, 'Drafts/Lore/Source.md');
+  assert.equal(count(), '1 illustrated article', 'moving it back restores its card');
+
+  const oldArtworkPath = artwork.path;
+  artwork.path = 'Private/Images/removed.webp';
+  callbacks.vault.rename(artwork, oldArtworkPath);
+  assert.equal(count(), '0 illustrated articles', 'renaming artwork out of Assets removes a broken card');
+
+  const before = refreshes;
+  callbacks.metadata.changed({ path: 'System/Unrelated.md' });
+  assert.equal(refreshes, before, 'non-Lore metadata changes do not rebuild the gallery');
 });
