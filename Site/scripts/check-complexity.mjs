@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import ts from 'typescript';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -18,10 +19,10 @@ const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const repoRoot = path.resolve(siteRoot, '..');
 const eslintCli = path.join(siteRoot, 'node_modules', 'eslint', 'bin', 'eslint.js');
 
-function trackedJavaScriptFiles() {
+function trackedSourceFiles() {
   const git = spawnSync(
     'git',
-    ['ls-files', '-z', '--', ':(glob)**/*.js', ':(glob)**/*.mjs', ':(glob)**/*.cjs'],
+    ['ls-files', '-z', '--', ':(glob)**/*.js', ':(glob)**/*.mjs', ':(glob)**/*.cjs', ':(glob)**/*.ts'],
     { cwd: repoRoot, encoding: 'utf8' },
   );
   if (git.error) throw git.error;
@@ -31,6 +32,7 @@ function trackedJavaScriptFiles() {
     .split('\0')
     .filter(Boolean)
     .filter((file) => existsSync(path.join(repoRoot, file)))
+    .filter((file) => !file.endsWith('.d.ts'))
     .filter((file) => !file.includes('/dist/'))
     .filter((file) => !file.startsWith('Vault/.obsidian/plugins/'))
     .filter((file) => !file.startsWith('Vault/System/Views/'));
@@ -38,29 +40,45 @@ function trackedJavaScriptFiles() {
 
 function runEslint(files, maxComplexity) {
   if (!files.length) return true;
-  const result = spawnSync(
-    process.execPath,
-    [
-      eslintCli,
-      '--no-config-lookup',
-      '--report-unused-disable-directives',
-      '--rule',
-      `complexity: ["error", ${maxComplexity}]`,
-      // Use the same ESLint pass for low-noise JavaScript correctness rules.
-      '--rule', 'no-debugger: error',
-      '--rule', 'no-dupe-args: error',
-      '--rule', 'no-duplicate-case: error',
-      '--rule', 'no-unreachable: error',
-      ...files,
-    ],
-    { cwd: repoRoot, stdio: 'inherit' },
-  );
-  if (result.error) throw result.error;
-  return result.status === 0;
-}
 
+  const args = [
+    eslintCli,
+    '--no-config-lookup',
+    '--report-unused-disable-directives',
+    '--rule', `complexity: ["error", ${maxComplexity}]`,
+    '--rule', 'no-debugger: error',
+    '--rule', 'no-dupe-args: error',
+    '--rule', 'no-duplicate-case: error',
+    '--rule', 'no-unreachable: error',
+  ];
+  const javascriptFiles = files.filter((file) => !file.endsWith('.ts'));
+  if (javascriptFiles.length) {
+    const result = spawnSync(process.execPath, [...args, ...javascriptFiles], {
+      cwd: repoRoot, stdio: 'inherit',
+    });
+    if (result.error) throw result.error;
+    if (result.status !== 0) return false;
+  }
+
+  // ESLint's default parser reads JavaScript, so strip TypeScript types before linting.
+  for (const file of files.filter((name) => name.endsWith('.ts'))) {
+    const source = readFileSync(path.join(repoRoot, file), 'utf8');
+    const javascript = ts.transpileModule(source, {
+      fileName: file,
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
+    }).outputText;
+    const result = spawnSync(
+      process.execPath,
+      [...args, '--stdin', '--stdin-filename', file.replace(/\\.ts$/, '.js')],
+      { cwd: repoRoot, input: javascript, stdio: ['pipe', 'inherit', 'inherit'] },
+    );
+    if (result.error) throw result.error;
+    if (result.status !== 0) return false;
+  }
+  return true;
+}
 export function runComplexityCheck() {
-  const files = trackedJavaScriptFiles();
+  const files = trackedSourceFiles();
   const groups = new Map();
 
   for (const file of files) {
@@ -74,7 +92,7 @@ export function runComplexityCheck() {
     if (!runEslint(group, ceiling)) return false;
   }
 
-  console.log(`Complexity guard checked ${files.length} tracked JavaScript files at max ${MAX_COMPLEXITY}.`);
+  console.log(`Complexity guard checked ${files.length} tracked JavaScript and TypeScript files at max ${MAX_COMPLEXITY}.`);
   for (const [file, ceiling] of LEGACY_COMPLEXITY_CEILINGS) {
     console.log(`Legacy complexity ceiling ${ceiling}: ${file}`);
   }

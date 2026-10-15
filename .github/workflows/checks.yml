@@ -95,6 +95,7 @@ jobs:
           fi
 
       - run: npm ci --silent --no-audit --no-fund
+      - run: npm run check:astro
       - run: npm run baseline:check
       - run: npm run doctor:vault
       - run: npm run notices:check

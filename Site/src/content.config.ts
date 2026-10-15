@@ -5,7 +5,7 @@ import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { changelogsLoader } from 'starlight-changelogs/loader';
 import { starlightTagsExtension } from 'starlight-tags/schema';
 import { ENTITY_ID_PATTERN } from './lib/era-context.mjs';
-import { frontmatterDate } from './lib/frontmatter-date.mjs';
+import { frontmatterDate } from './lib/frontmatter-date.ts';
 import defaultTranslations from './content/i18n/en-GB.json';
 
 const stringOrStrings = z.union([z.string(), z.array(z.string())]);

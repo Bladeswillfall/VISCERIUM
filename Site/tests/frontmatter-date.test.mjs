@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { frontmatterDate } from '../src/lib/frontmatter-date.mjs';
+import { frontmatterDate } from '../src/lib/frontmatter-date.ts';
 
 test('blank and null frontmatter dates remain missing', () => {
   assert.equal(frontmatterDate.parse(undefined), undefined);
