@@ -49,10 +49,10 @@
     "check:astro": "astro check"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.2",
+    "@astrojs/mdx": "^8.0.3",
     "@astrojs/sitemap": "3.7.4",
-    "@astrojs/starlight": "^0.42.4",
-    "astro": "^7.3.5",
+    "@astrojs/starlight": "^0.42.6",
+    "astro": "^7.4.0",
     "cytoscape": "3.34.3",
     "cytoscape-dagre": "4.0.1",
     "fuse.js": "7.5.0",
