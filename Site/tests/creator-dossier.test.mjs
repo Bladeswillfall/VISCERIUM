@@ -257,3 +257,11 @@ test('published World Anvil provenance does not hide the connected context comma
   assert.equal(plugin.isWorldAnvilImport(ordinaryDraft), false);
   assert.equal(plugin.isCreatorNote(ordinaryDraft), true);
 });
+
+test('dossier fact buttons grow to display their labels and values', () => {
+  const fact = styles.match(/button\.vc-dossier-fact\s*\{([^}]*)\}/s)?.[1] ?? '';
+  assert.match(fact, /height:\s*auto;/, 'Obsidian theme button height must not clip the values');
+  assert.match(fact, /min-height:\s*3\.5rem;/, 'fact cards remain usable at sidebar widths');
+  assert.match(fact, /grid-template-rows:\s*auto auto;/, 'label and value each get a row');
+  assert.match(fact, /white-space:\s*normal;/, 'long values can wrap within the card');
+});
