@@ -432,3 +432,17 @@ html[data-exploration-focus] .exploration-surface-controls {
   display: flex;
   transform: none;
 }
+
+/* Atlas and relationship controls share one border-strength rule. */
+@layer starlight.core {
+  :where(
+    [data-relationship-search],
+    .relationship-control select,
+    .relationship-explorer__reset,
+    [data-atlas-search],
+    .atlas__reset
+  ) {
+    border-color: var(--codex-border-strong) !important;
+  }
+
+}
