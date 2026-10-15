@@ -158,6 +158,7 @@ test('open Visual Lore galleries follow metadata, file moves, and artwork change
       return child;
     }
     createDiv(options = {}) { return this.createEl('div', options); }
+    createSpan(options = {}) { return this.createEl('span', options); }
     find(cls) {
       if (this.cls === cls) return this;
       return this.children.map((child) => child.find(cls)).find(Boolean) || null;
