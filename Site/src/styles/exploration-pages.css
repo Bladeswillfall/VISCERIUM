@@ -241,8 +241,12 @@
   background: var(--relationship-inspector);
 }
 
-.relationship-list__item button {
-  min-height: 2.55rem;
+.relationship-list__item :is(a, button) {
+  display: inline-flex;
+  width: 100%;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
   border: 0;
   border-radius: var(--codex-radius);
   padding: .45rem .55rem;
@@ -250,6 +254,11 @@
   color: var(--sl-color-white);
   font: 600 var(--sl-text-sm) var(--vc-font-ui);
   cursor: pointer;
+}
+
+.relationship-list__item a {
+  text-decoration: underline;
+  text-underline-offset: .18em;
 }
 
 .relationship-list__relation {
