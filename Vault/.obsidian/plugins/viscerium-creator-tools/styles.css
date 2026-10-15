@@ -506,6 +506,9 @@ button.vc-dossier-add {
 }
 button.vc-lore-gallery-card {
   display: grid;
+  grid-template-rows: auto 1fr;
+  height: auto;
+  min-height: 0;
   min-width: 0;
   padding: 0;
   overflow: hidden;
@@ -524,7 +527,8 @@ button.vc-lore-gallery-card:focus-visible {
 .vc-lore-gallery-art {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: auto;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   background: var(--background-primary);
 }

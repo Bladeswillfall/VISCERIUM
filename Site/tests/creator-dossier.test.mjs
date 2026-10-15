@@ -225,3 +225,35 @@ test('open Visual Lore galleries follow metadata, file moves, and artwork change
   callbacks.metadata.changed({ path: 'System/Unrelated.md' });
   assert.equal(refreshes, before, 'non-Lore metadata changes do not rebuild the gallery');
 });
+
+test('Visual Lore cards expand beyond Obsidian button height and show square artwork', () => {
+  const card = styles.match(/button\.vc-lore-gallery-card\s*\{([^}]*)\}/s)?.[1] ?? '';
+  const image = styles.match(/\.vc-lore-gallery-art\s*\{([^}]*)\}/s)?.[1] ?? '';
+  assert.match(card, /height:\s*auto;/, 'the host theme must not collapse gallery cards into strips');
+  assert.match(card, /grid-template-rows:\s*auto 1fr;/, 'the artwork and description each get a row');
+  assert.match(image, /aspect-ratio:\s*1\s*\/\s*1;/, 'square previews keep the artwork visible');
+  assert.match(image, /object-fit:\s*cover;/, 'previews retain consistent card dimensions');
+});
+
+test('published World Anvil provenance does not hide the connected context command', () => {
+  const { plugin, records, source } = harness();
+  records.get(source).import_source = 'worldanvil';
+  records.get(source).import_issues = ['relationship-review'];
+
+  assert.equal(plugin.isWorldAnvilImport(source), false, 'canonical Lore is not an unfinished import');
+  assert.equal(plugin.isCreatorNote(source), true, 'published imported Lore can open connected context');
+
+  const importedDraft = new source.constructor('Drafts/WorldAnvil Import/Legacy faction.md');
+  records.set(importedDraft, { type: 'faction', status: 'draft', import_source: 'worldanvil' });
+  assert.equal(plugin.isWorldAnvilImport(importedDraft), true);
+  assert.equal(plugin.isCreatorNote(importedDraft), false, 'migration drafts keep their review workflow');
+
+  const stagedDraft = new source.constructor('Drafts/Inbox/Staged faction.md');
+  records.set(stagedDraft, { type: 'faction', status: 'draft', import_source: 'worldanvil' });
+  assert.equal(plugin.isWorldAnvilImport(stagedDraft), true, 'relocated imported drafts retain migration context');
+
+  const ordinaryDraft = new source.constructor('Drafts/Inbox/Original faction.md');
+  records.set(ordinaryDraft, { type: 'faction', status: 'draft' });
+  assert.equal(plugin.isWorldAnvilImport(ordinaryDraft), false);
+  assert.equal(plugin.isCreatorNote(ordinaryDraft), true);
+});

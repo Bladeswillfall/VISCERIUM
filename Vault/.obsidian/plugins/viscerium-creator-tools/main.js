@@ -1507,7 +1507,10 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
   isWorldAnvilImport(file) {
     if (!(file instanceof TFile) || file.extension !== 'md') return false;
     const frontmatter = this.frontmatter(file);
-    return String(frontmatter.import_source ?? '').toLowerCase() === 'worldanvil' || file.path.startsWith('Drafts/WorldAnvil Import/');
+    return file.path.startsWith('Drafts/') && (
+      String(frontmatter.import_source ?? '').toLowerCase() === 'worldanvil'
+      || file.path.startsWith('Drafts/WorldAnvil Import/')
+    );
   }
 
   async hasOpenImportReview(file) {
