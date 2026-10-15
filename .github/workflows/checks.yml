@@ -95,7 +95,6 @@ jobs:
           fi
 
       - run: npm ci --silent --no-audit --no-fund
-      - run: npm run check:astro
       - run: npm run baseline:check
       - run: npm run doctor:vault
       - run: npm run notices:check
@@ -253,6 +252,9 @@ jobs:
             echo "Exact responsive cache-key hit: ${{ steps.responsive_cache.outputs.cache-hit }}"
             echo "Exact Astro page-cache hit: ${{ steps.astro_cache.outputs.cache-hit }}"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check generated Astro and TypeScript source
+        run: npm run check:astro
 
       - name: Upload production build
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
