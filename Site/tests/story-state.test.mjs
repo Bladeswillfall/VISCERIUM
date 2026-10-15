@@ -70,10 +70,10 @@ test('Templater exposes one story-change action and one derived state view', () 
 test('Open Story State passes the selected project and active scene into the shared state view', () => {
   assert.match(script, /workspace\.__visceriumStoryStateProjectBase = project\.base/);
   assert.match(stateView, /workspace\?\.__visceriumStoryStateProjectBase/);
-  assert.match(stateView, /delete app\.workspace\.__visceriumStoryStateProjectBase/);
+  assert.doesNotMatch(stateView, /delete app\.workspace\.__visceriumStoryStateProjectBase/);
   assert.match(script, /workspace\.__visceriumStoryStateScenePath = active\.path/);
   assert.match(stateView, /workspace\?\.__visceriumStoryStateScenePath/);
-  assert.match(stateView, /delete app\.workspace\.__visceriumStoryStateScenePath/);
+  assert.doesNotMatch(stateView, /delete app\.workspace\.__visceriumStoryStateScenePath/);
 });
 
 test('Story State derives the four working views from scene events', () => {
@@ -103,4 +103,78 @@ test('Story State presentation follows the creator UI grammar', () => {
   assert.doesNotMatch(stateStyles, /border-bottom:\s*1px solid/);
   assert.doesNotMatch(stateStyles, /box-shadow|linear-gradient|border-radius:\s*(?!4px)/);
   assert.ok(appearance.enabledCssSnippets.includes('Story State'));
+});
+
+test('Scene Context survives refreshes and resolves sibling project notes and relative scene notes', () => {
+  const block = stateView.match(/\`\`\`dataviewjs\n([\s\S]*?)\n\`\`\`/)?.[1];
+  assert.ok(block, 'Story State Dataview script exists');
+
+  class Element {
+    constructor(tag = 'div', options = {}) {
+      this.tag = tag;
+      this.text = options.text ?? '';
+      this.children = [];
+      this.classList = { add() {} };
+    }
+    createEl(tag, options) {
+      const child = new Element(tag, options);
+      this.children.push(child);
+      return child;
+    }
+    createDiv(options) { return this.createEl('div', options); }
+    createSpan(options) { return this.createEl('span', options); }
+    addEventListener() {}
+    texts() { return [this.text, ...this.children.flatMap((child) => child.texts())]; }
+  }
+
+  for (const projectBase of ['Stories/My Series/Book One', 'Stories/My Novel']) {
+    const title = projectBase.split('/').at(-1);
+    const scenePath = `${projectBase}/Scenes/Opening.md`;
+    const notesPath = `${projectBase}/SceneNotes/Opening.md`;
+    const researchPath = `${projectBase}/Research/Source.md`;
+    const seriesCodexPath = `${projectBase.split('/').slice(0, -1).join('/')}/Codex/Shared.md`;
+    const projectNotePath = projectBase.includes('/My Series/')
+      ? projectBase : `${projectBase}/${title}`;
+    const pages = [
+      { type: 'scene', title: 'Opening', file: { path: scenePath, name: 'Opening', outlinks: [] },
+        notesFile: 'SceneNotes/Opening.md' },
+      { file: { path: notesPath, outlinks: [{ path: researchPath }, { path: seriesCodexPath }] } },
+    ];
+    const projectNote = { seriesId: 'series-1', file: { path: `${projectNotePath}.md` } };
+    const workspace = {
+      __visceriumStoryStateProjectBase: projectBase,
+      __visceriumStoryStateScenePath: scenePath,
+      getActiveFile: () => ({ path: 'System/Views/Story State.md' }),
+      openLinkText() {},
+    };
+    const app = { workspace, plugins: { plugins: { storyline: { settings: { storyLineRoot: 'Stories' } } } } };
+    const queried = [];
+    const render = () => {
+      const container = new Element();
+      const dv = {
+        container, pages: () => pages,
+        page(path) {
+          queried.push(path);
+          if (path === projectNotePath) return projectNote;
+          return pages.find((page) => page.file.path === path) ?? null;
+        },
+        el: (_tag, value) => container.createEl('p', { text: value }),
+      };
+      new Function('app', 'dv', block)(app, dv);
+      return container.texts().filter(Boolean);
+    };
+
+    const first = render();
+    const second = render();
+    for (const texts of [first, second]) {
+      assert.ok(texts.includes('Scene Context'), 'selected scene remains visible on both renders');
+      assert.ok(texts.includes('Scene notes'), 'scene notes reference is included');
+      assert.ok(texts.includes('Research'), 'project-relative notes contribute research links');
+      assert.ok(texts.includes('Project references'), 'series-level Codex links are included');
+    }
+    assert.ok(queried.includes(notesPath), 'Dataview looks up the qualified notes path');
+    assert.ok(queried.includes(projectNotePath), 'Dataview finds the supported project-note location');
+    assert.equal(workspace.__visceriumStoryStateScenePath, scenePath, 'refresh preserves scene selection');
+    assert.equal(workspace.__visceriumStoryStateProjectBase, projectBase, 'refresh preserves project selection');
+  }
 });
