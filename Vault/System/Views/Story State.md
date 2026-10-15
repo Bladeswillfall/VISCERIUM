@@ -40,7 +40,6 @@ const inferBase = (path) => {
 function resolveProject() {
   const requestedProjectBase = clean(app.workspace?.__visceriumStoryStateProjectBase);
   if (requestedProjectBase) {
-    delete app.workspace.__visceriumStoryStateProjectBase;
     const normalizedRoot = root.replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
     if (requestedProjectBase.startsWith(`${normalizedRoot}/`)) return requestedProjectBase;
   }
@@ -76,8 +75,8 @@ const scenes = [...dv.pages()]
   .filter((page) => page.file.path.startsWith(scenePrefix) && clean(page.type).toLowerCase() === "scene")
   .sort((a, b) => compare(a.act, b.act) || compare(a.chapter, b.chapter) || compare(a.sequence, b.sequence) || a.file.path.localeCompare(b.file.path));
 
+// Retain the handoff across Dataview refreshes; Open Story State replaces it on the next invocation.
 const requestedScenePath = clean(app.workspace?.__visceriumStoryStateScenePath);
-if (requestedScenePath) delete app.workspace.__visceriumStoryStateScenePath;
 const activeScene = requestedScenePath.startsWith(scenePrefix)
   ? scenes.find((scene) => scene.file.path === requestedScenePath) ?? null
   : null;
@@ -207,16 +206,20 @@ if (activeScene) {
   addContextRow(section, "Characters", activeScene.characters, activeScene.file.path);
   addContextRow(section, "Location", activeScene.location, activeScene.file.path);
 
-  const notesPath = clean(activeScene.notesFile);
-  addContextRow(section, "Scene notes", notesPath, activeScene.file.path);
-  const notesPage = notesPath ? (dv.page(notesPath) ?? dv.page(notesPath.replace(/\.md$/i, ""))) : null;
+  const notesPath = cleanLink(activeScene.notesFile);
+  const normalizedRoot = root.replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
+  const resolvedNotesPath = notesPath && !notesPath.startsWith(`${normalizedRoot}/`)
+    ? `${projectBase}/${notesPath}` : notesPath;
+  addContextRow(section, "Scene notes", resolvedNotesPath, activeScene.file.path);
+  const notesPage = resolvedNotesPath
+    ? (dv.page(resolvedNotesPath) ?? dv.page(resolvedNotesPath.replace(/\.md$/i, ""))) : null;
   const contextOutlinks = [...list(activeScene.file.outlinks), ...list(notesPage?.file?.outlinks)];
 
   const researchPrefix = `${projectBase}/Research/`;
   const research = contextOutlinks.filter((value) => clean(value?.path ?? value).startsWith(researchPrefix));
   addContextRow(section, "Research", research, activeScene.file.path);
 
-  const projectPage = dv.page(`${projectBase}/${projectTitle}`);
+  const projectPage = dv.page(`${projectBase}/${projectTitle}`) ?? dv.page(projectBase);
   const codexPrefixes = [`${projectBase}/Codex/`];
   if (clean(projectPage?.seriesId)) {
     const seriesBase = projectBase.split("/").slice(0, -1).join("/");
