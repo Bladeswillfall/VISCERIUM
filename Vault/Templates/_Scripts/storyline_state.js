@@ -337,6 +337,7 @@ async function addChange(tp) {
 }
 
 async function openState(tp) {
+  const active = tp.app.workspace.getActiveFile();
   const project = resolveProject(tp);
   if (!project) {
     new tp.obsidian.Notice("Open or activate a StoryLine project first.");
@@ -349,6 +350,8 @@ async function openState(tp) {
     return;
   }
   tp.app.workspace.__visceriumStoryStateProjectBase = project.base;
+  delete tp.app.workspace.__visceriumStoryStateScenePath;
+  if (isScene(tp, active)) tp.app.workspace.__visceriumStoryStateScenePath = active.path;
   const leaf = tp.app.workspace.getRightLeaf(false) ?? tp.app.workspace.getLeaf(true);
   await leaf.openFile(file);
   await tp.app.workspace.revealLeaf(leaf);
