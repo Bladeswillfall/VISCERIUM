@@ -662,6 +662,9 @@ class LoreGalleryView extends ItemView {
     root.addClass('vc-lore-gallery');
 
     const entries = this.plugin.visualLoreEntries();
+    for (const [filter, field] of [['era', 'eras'], ['type', 'type'], ['faction', 'factions']]) {
+      if (this.filters[filter] && !this.options(entries, field).includes(this.filters[filter])) this.filters[filter] = '';
+    }
     const header = root.createDiv({ cls: 'vc-lore-gallery-header' });
     header.createEl('h4', { text: 'Visual Lore' });
     header.createEl('p', { text: 'Published Lore with resolved artwork. Open a card to continue reading or editing.' });
@@ -930,7 +933,13 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
     this.app.workspace.onLayoutReady(() => {
       this.registerEvent(this.app.workspace.on('file-open', (file) => void this.handleActiveFile(file)));
       this.registerEvent(this.app.vault.on('modify', (file) => void this.handleModifiedFile(file)));
-      this.registerEvent(this.app.metadataCache.on('changed', (file) => void this.refreshNoteContext(file)));
+      this.registerEvent(this.app.metadataCache.on('changed', (file) => {
+        void this.refreshNoteContext(file);
+        this.refreshVisualLoreBrowser(file);
+      }));
+      this.registerEvent(this.app.vault.on('create', (file) => this.refreshVisualLoreBrowser(file)));
+      this.registerEvent(this.app.vault.on('delete', (file) => this.refreshVisualLoreBrowser(file)));
+      this.registerEvent(this.app.vault.on('rename', (file, oldPath) => this.refreshVisualLoreBrowser(file, oldPath)));
       void this.handleActiveFile(this.app.workspace.getActiveFile());
     });
   }
@@ -1107,6 +1116,13 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       ?? this.app.metadataCache.getFirstLinkpathDest(path, file.path)
       ?? this.app.vault.getFiles().find((asset) => asset.path.startsWith('Assets/') && asset.name === path);
     return image instanceof TFile && /\.(?:png|jpe?g|webp|gif|avif|svg)$/i.test(image.path) ? image : null;
+  }
+
+  refreshVisualLoreBrowser(file, oldPath = '') {
+    if (![file?.path, oldPath].some((path) => path?.startsWith('Lore/') || path?.startsWith('Assets/'))) return;
+    for (const leaf of this.app.workspace.getLeavesOfType(LORE_GALLERY_VIEW)) {
+      if (leaf.view instanceof LoreGalleryView) void leaf.view.refresh();
+    }
   }
 
   visualLoreEntries() {
