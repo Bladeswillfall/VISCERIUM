@@ -82,82 +82,6 @@ h1#_top {
   letter-spacing: .015em;
 }
 
-/*
-  In-article Era Spine hierarchy. The generated page title and the bespoke
-  landing-page composition are deliberately excluded for separate design passes.
-*/
-.sl-markdown-content:not(:has(.home-gateway)) h1 {
-  margin-block: 3.5rem 1.25rem;
-  font-size: clamp(2.35rem, 5vw, 4.8rem);
-  line-height: .92;
-}
-
-.sl-markdown-content:not(:has(.home-gateway)) h2 {
-  position: relative;
-  margin-block: 3.25rem .65rem;
-  padding-inline-start: 1rem;
-  border: 0;
-  font-family: var(--vc-font-display);
-  font-size: clamp(1.8rem, 3vw, 2.7rem);
-  font-weight: 400;
-  letter-spacing: .01em;
-  line-height: 1.08;
-}
-
-.sl-markdown-content:not(:has(.home-gateway)) h2::before {
-  content: '';
-  position: absolute;
-  inset-block: .12em .08em;
-  inset-inline-start: 0;
-  inline-size: .3rem;
-  background: var(--era-heading-accent, var(--sl-color-accent-high));
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
-  pointer-events: none;
-}
-
-.sl-markdown-content:not(:has(.home-gateway)) h3 {
-  margin-block: 2.55rem .4rem;
-  color: var(--era-heading-accent, var(--sl-color-accent-high));
-  font-family: var(--vc-font-ui);
-  font-size: 1.08rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  line-height: 1.35;
-  text-transform: uppercase;
-}
-
-.sl-markdown-content:not(:has(.home-gateway)) h4 {
-  margin-block: 2.05rem .25rem;
-  font-family: var(--vc-font-body);
-  font-size: 1.1rem;
-  font-style: italic;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.4;
-}
-
-.sl-markdown-content:not(:has(.home-gateway)) h5 {
-  margin-block: 1.65rem .25rem;
-  color: var(--sl-color-gray-3);
-  font-family: var(--vc-font-ui);
-  font-size: .72rem;
-  font-weight: 700;
-  letter-spacing: .15em;
-  line-height: 1.45;
-  text-transform: uppercase;
-}
-
-.sl-markdown-content:not(:has(.home-gateway)) h6 {
-  margin-block: 1.45rem .2rem;
-  color: var(--sl-color-gray-4);
-  font-family: var(--vc-font-ui);
-  font-size: .72rem;
-  font-weight: 600;
-  letter-spacing: .08em;
-  line-height: 1.45;
-  text-transform: uppercase;
-}
-
 /* Compose headings across the site and avoid weak final lines in editorial copy. */
 :where(h1, h2, h3, h4, h5, h6) {
   text-wrap: balance;
@@ -308,4 +232,12 @@ table td,
 
 .sl-markdown-content blockquote :is(cite, footer)::before {
   content: '— ';
+}
+
+/* Inline code and heading badges scale with authored headings. */
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) > code { font-size: .925em; }
+.sl-markdown-content :is(h1, h2, h3):has(.sl-badge-lg) {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
 }

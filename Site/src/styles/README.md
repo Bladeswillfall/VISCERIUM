@@ -8,18 +8,17 @@ Styles are owned by the narrowest stable entry point that needs them. Import loc
 
 1. `ion-layers.css`: cascade layers, stacking tokens, and the shared `image-layout.css` import.
 2. `color-tokens.css`: shared palettes and semantic variables.
-3. `ion-theme.css`: broad Starlight theme adaptation.
-4. `ion-expressive-code.css`: code-block theme adaptation.
-5. `typography.css`: type and baseline text rhythm.
-6. `layout.css`: article geometry and structural overrides.
-7. `codex-ui.css`: shared components and authoring utilities.
-8. `header-controls.css`: shared desktop and mobile header controls.
-9. `reader-settings.css`: shared reader preference controls.
-10. `navigation.css`: shared navigation and overlays.
-11. `a11y.css`: focus, target sizing, forced colours, and reduced motion.
-12. `era-styles.css`: final era-specific token and component overrides.
+3. `ion-expressive-code.css`: code-block theme adaptation.
+4. `typography.css`: type and baseline text rhythm.
+5. `layout.css`: article geometry and structural overrides.
+6. `codex-ui.css`: shared components and authoring utilities.
+7. `header-controls.css`: shared desktop and mobile header controls.
+8. `reader-settings.css`: shared reader preference controls.
+9. `navigation.css`: shared navigation and overlays.
+10. `a11y.css`: focus, target sizing, forced colours, and reduced motion.
+11. `era-styles.css`: final era-specific token and component overrides.
 
-The order is deliberate: layers and tokens, theme, typography, layout, shared components, navigation, accessibility, then era overrides. Feature routes do not belong in this list.
+The order is deliberate: layers and tokens, typography, layout, shared components, navigation, accessibility, then era overrides. Feature routes do not belong in this list.
 
 `route-data.ts` adds `article-pages.css` to non-homepage Codex routes and `category-index.css` to category routes. These files stay out of the homepage render-blocking bundle.
 
@@ -28,9 +27,9 @@ The order is deliberate: layers and tokens, theme, typography, layout, shared co
 | Stylesheet | Owner and load boundary |
 | --- | --- |
 | `ion-layers.css`, `color-tokens.css` | Global cascade foundation in `astro.config.mjs` |
-| `ion-theme.css`, `ion-expressive-code.css`, `typography.css` | Global Starlight and text theme in `astro.config.mjs` |
+| `ion-expressive-code.css`, `typography.css` | Code-block and shared text theme in `astro.config.mjs` |
 | `layout.css` | Shared article and structural layout in `astro.config.mjs` |
-| `codex-ui.css`, `header-controls.css`, `reader-settings.css`, `navigation.css` | Shared controls and navigation in `astro.config.mjs` |
+| `codex-ui.css`, `header-controls.css`, `reader-settings.css`, `navigation.css` | Markdown components, header, reader settings, TOC and navigation in `astro.config.mjs` |
 | `a11y.css`, `era-styles.css` | Final global accessibility and era overrides |
 | `article-pages.css` | Non-homepage Codex routes through `route-data.ts` |
 | `category-index.css` | Category routes through `route-data.ts` |

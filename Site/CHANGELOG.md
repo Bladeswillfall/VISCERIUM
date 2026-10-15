@@ -21,6 +21,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Retired the broad Ion theme stylesheet, scoped Markdown card styling, and consolidated article headings and navigation styles.
+
 - Restored coverage of individual browser and accessibility test edits and scheduled a weekly complete Chromium and Axe audit.
 
 - Made direct Cloudflare Pages uploads an explicit repository-variable opt-in and fail when enabled without credentials, so skipped uploads no longer look successful.

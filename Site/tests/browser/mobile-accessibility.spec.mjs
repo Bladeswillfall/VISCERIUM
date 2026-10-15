@@ -56,3 +56,36 @@ test('footer secondary copy remains readable at narrow viewport widths', async (
     expect(Math.min(...values)).toBeGreaterThanOrEqual(12);
   }
 });
+
+test('article H2 has one Codex rule without a decorative notch', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/degel-system/errack/', { waitUntil: 'networkidle' });
+  const heading = page.locator('.sl-markdown-content h2').first();
+  await expect(heading).toBeVisible();
+  const styles = await heading.evaluate((node) => ({
+    before: getComputedStyle(node, '::before').content,
+    after: getComputedStyle(node, '::after').content,
+    fontFamily: getComputedStyle(node).fontFamily,
+  }));
+  expect(styles.before).toBe('none');
+  expect(styles.after).not.toBe('none');
+  expect(styles.fontFamily).toContain('Cinzel');
+});
+
+test('footer hides empty metadata but preserves article edit links', async ({ page }) => {
+  const footerMeta = page.locator('.codex-site-footer > .meta.sl-flex');
+
+  for (const width of [390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+
+    for (const path of ['/maps/', '/graph/', '/support/', '/404.html']) {
+      await page.goto(`http://127.0.0.1:4321${path}`, { waitUntil: 'domcontentloaded' });
+      await expect(footerMeta).toHaveCount(1);
+      expect(await footerMeta.locator('*').count()).toBe(0);
+      await expect(footerMeta).toBeHidden();
+    }
+
+    await page.goto('http://127.0.0.1:4321/degel-system/errack/', { waitUntil: 'domcontentloaded' });
+    await expect(footerMeta).toBeVisible();
+    await expect(footerMeta.locator('a.codex-edit-link')).toBeVisible();
+  }
+});

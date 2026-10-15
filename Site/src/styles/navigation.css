@@ -360,3 +360,42 @@ html[data-codex-desktop-sidebar] .codex-page-sidebar .sl-container {
     display: none !important;
   }
 }
+
+/* Sidebar and article navigation own their Starlight overrides. */
+@layer ion {
+  #starlight__sidebar {
+    --codex-accent: var(--codex-nav-text);
+    --codex-accent-high: var(--codex-nav-text);
+    --codex-border: var(--codex-nav-border);
+    --sl-color-text: var(--codex-nav-text);
+    --sl-color-accent: var(--codex-nav-text);
+    --sl-color-accent-high: var(--codex-nav-text);
+    --sl-color-white: var(--codex-nav-text);
+    --sl-color-gray-1: var(--codex-nav-text);
+    --sl-color-gray-2: var(--codex-nav-text);
+    --sl-color-gray-3: var(--codex-nav-muted);
+    --sl-color-gray-4: var(--codex-nav-muted);
+    --sl-color-gray-5: var(--codex-nav-border);
+    --sl-color-gray-6: var(--codex-nav-hover);
+    --sl-color-black: var(--codex-nav-bg);
+    --sl-color-hairline: var(--codex-nav-border);
+    --sl-color-hairline-light: var(--codex-nav-border);
+    --sl-border: var(--codex-nav-border);
+    background-color: var(--sl-color-bg-sidebar);
+    border-inline-end: 1px solid var(--codex-nav-border);
+  }
+
+  #starlight__on-this-page {
+    font-family: var(--vc-font-mono);
+    font-weight: 400;
+    font-size: var(--sl-text-md);
+  }
+
+  starlight-toc a {
+    padding-inline: calc(1rem * var(--depth)) var(--pad-inline) !important;
+  }
+
+  nav[aria-labelledby='starlight__on-this-page--mobile'] a {
+    width: 100% !important;
+  }
+}

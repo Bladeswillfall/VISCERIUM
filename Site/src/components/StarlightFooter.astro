@@ -135,4 +135,11 @@ const pageKind = classifyCodexPage(starlightRoute.entry.data, starlightRoute.ent
       display: none !important;
     }
   }
+
+  /* Frontmatter-only routes have no edit link or publication dates. */
+  @layer ion {
+    .meta.sl-flex:not(:has(*)) {
+      display: none;
+    }
+  }
 </style>

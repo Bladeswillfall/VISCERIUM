@@ -132,3 +132,18 @@ test('homepage has no link to the retired What\'s New route', async ({ page, req
   const response = await request.get(new URL('/changelog/', homepage).href);
   expect(response.status()).toBe(404);
 });
+
+test('homepage stays full-width at mobile, tablet and desktop sizes', async ({ page }) => {
+  await page.goto(homepage, { waitUntil: 'networkidle' });
+  for (const width of [390, 900, 1152, 1280, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const bounds = await page.locator('.home-gateway').evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, width: rect.width, scrollWidth: document.documentElement.scrollWidth };
+    });
+    expect(bounds.left).toBeGreaterThanOrEqual(-1);
+    expect(bounds.right).toBeLessThanOrEqual(width + 1);
+    expect(bounds.width).toBeGreaterThanOrEqual(width - 1);
+    expect(bounds.scrollWidth).toBeLessThanOrEqual(width + 1);
+  }
+});

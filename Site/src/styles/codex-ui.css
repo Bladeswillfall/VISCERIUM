@@ -158,3 +158,25 @@
   }
 
 }
+
+/* Authored Markdown cards retain their own geometry; bespoke cards do not inherit it. */
+@layer ion {
+  .sl-markdown-content :is(.card, .sl-link-card) {
+    border-radius: var(--codex-radius);
+    padding: 1.5rem;
+  }
+
+  .sl-markdown-content .sl-link-card {
+    transition: color .15s ease, background-color .15s ease, border-color .15s ease;
+  }
+
+  .sl-markdown-content a[role='tab'][aria-selected='true'] {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-accent);
+  }
+
+  starlight-file-tree.not-content {
+    background-color: var(--sl-color-black);
+    border-radius: var(--codex-radius);
+  }
+}
