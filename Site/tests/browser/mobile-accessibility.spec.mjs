@@ -56,3 +56,17 @@ test('footer secondary copy remains readable at narrow viewport widths', async (
     expect(Math.min(...values)).toBeGreaterThanOrEqual(12);
   }
 });
+
+test('article H2 has one Codex rule without a decorative notch', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/degel-system/errack/', { waitUntil: 'networkidle' });
+  const heading = page.locator('.sl-markdown-content h2').first();
+  await expect(heading).toBeVisible();
+  const styles = await heading.evaluate((node) => ({
+    before: getComputedStyle(node, '::before').content,
+    after: getComputedStyle(node, '::after').content,
+    fontFamily: getComputedStyle(node).fontFamily,
+  }));
+  expect(styles.before).toBe('none');
+  expect(styles.after).not.toBe('none');
+  expect(styles.fontFamily).toContain('Cinzel');
+});
