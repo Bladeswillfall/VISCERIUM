@@ -458,3 +458,100 @@ button.vc-dossier-add {
   .vc-dossier-hero { grid-template-columns: 78px minmax(0, 1fr); }
   .vc-dossier-facts { grid-template-columns: 1fr; }
 }
+
+/* Browse published Lore through the artwork already attached to canonical notes. */
+.vc-lore-gallery {
+  --vc-gallery-surface: color-mix(in srgb, var(--background-secondary) 78%, var(--background-primary));
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  padding: 20px;
+  font-family: var(--font-interface);
+}
+.vc-lore-gallery-header h4 {
+  margin: 0;
+  color: var(--text-normal);
+  font-size: 1.3rem;
+  line-height: 1.15;
+}
+.vc-lore-gallery-header p,
+.vc-lore-gallery-empty,
+.vc-lore-gallery-count {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+.vc-lore-gallery-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.vc-lore-gallery-filter {
+  display: grid;
+  gap: 4px;
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+.vc-lore-gallery-filter select {
+  width: 100%;
+  min-width: 0;
+  background: var(--background-primary);
+  color: var(--text-normal);
+}
+.vc-lore-gallery-count { margin: 0; font-size: 0.82rem; }
+.vc-lore-gallery-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+button.vc-lore-gallery-card {
+  display: grid;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--vc-panel-border, var(--background-modifier-border));
+  border-radius: var(--vc-radius-control, 4px);
+  background: var(--vc-gallery-surface);
+  box-shadow: none;
+  color: var(--text-normal);
+  text-align: left;
+}
+button.vc-lore-gallery-card:hover,
+button.vc-lore-gallery-card:focus-visible {
+  border-color: var(--text-accent);
+  background: color-mix(in srgb, var(--text-accent) 5%, var(--vc-gallery-surface));
+}
+.vc-lore-gallery-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--background-primary);
+}
+.vc-lore-gallery-copy {
+  display: grid;
+  gap: 5px;
+  padding: 11px;
+}
+.vc-lore-gallery-copy strong {
+  overflow-wrap: anywhere;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+.vc-lore-gallery-meta {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.vc-lore-gallery-copy p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+@media (max-width: 560px) {
+  .vc-lore-gallery { padding: 14px; }
+  .vc-lore-gallery-filters { grid-template-columns: 1fr; }
+  .vc-lore-gallery-cards { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
+}

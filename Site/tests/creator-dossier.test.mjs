@@ -12,8 +12,10 @@ function harness() {
   class TFile {
     constructor(path) {
       this.path = path;
-      this.basename = path.split('/').at(-1).replace(/\.md$/, '');
-      this.extension = 'md';
+      const name = path.split('/').at(-1);
+      this.name = name;
+      this.basename = name.replace(/\.[^.]+$/, '');
+      this.extension = name.split('.').at(-1);
     }
   }
 
@@ -43,15 +45,22 @@ function harness() {
     new TFile(sourcePath),
     new TFile(targetPath),
     new TFile('Drafts/Lore/Unpublished.md'),
+    new TFile('Lore/Unpublished.md'),
   ];
+  const artwork = new TFile('Assets/Images/640faf5b8cd2814de13871ff58c900b6.webp');
   const records = new Map([
-    [files[0], { title: 'Source', type: 'character', status: 'published', era: 'CITADEL', tags: [], relationships: {} }],
+    [files[0], {
+      title: 'Source', type: 'character', status: 'published', era: 'CITADEL', faction: 'Target',
+      image: artwork.name, alt: 'Source artwork', description: 'An illustrated source article.', tags: [], relationships: {},
+    }],
     [files[1], { title: 'Target', type: 'faction', status: 'published', era: 'CITADEL' }],
     [files[2], { title: 'Unpublished', type: 'faction', status: 'draft' }],
+    [files[3], { title: 'Unpublished public path', type: 'faction', status: 'draft', image: artwork.name }],
   ]);
   const app = {
     vault: {
       getMarkdownFiles: () => files,
+      getFiles: () => [...files, artwork],
       getAbstractFileByPath: (path) => files.find((file) => file.path === path) ?? null,
     },
     metadataCache: {
@@ -76,7 +85,7 @@ function harness() {
   const plugin = Object.create(module.exports.prototype);
   plugin.app = app;
   plugin.refreshNoteContext = async () => {};
-  return { plugin, records, source: files[0], target: files[1], helpers: module.exports.__dossierTests };
+  return { plugin, records, source: files[0], target: files[1], artwork, helpers: module.exports.__dossierTests };
 }
 
 test('creator dossier retains one canonical frontmatter record for typed relationships and tags', async () => {
@@ -116,4 +125,17 @@ test('the dossier uses existing plugin context and theme styles without website-
   assert.match(styles, /\.vc-dossier-hero/);
   assert.match(styles, /\.vc-dossier-network/);
   assert.match(styles, /var\(--vc-context-card\)/);
+});
+
+test('visual Lore browsing resolves hash-named artwork and exposes only illustrated published Lore', () => {
+  const { plugin, source, artwork } = harness();
+
+  assert.equal(plugin.dossierImageFile(source, artwork.name), artwork, 'hash-named Assets artwork resolves by filename');
+  assert.deepEqual(
+    plugin.visualLoreEntries().map((entry) => [entry.title, entry.eras, entry.type, entry.factions, entry.image]),
+    [['Source', ['CITADEL'], 'character', ['Target'], artwork]],
+  );
+  assert.match(creator, /id: 'open-visual-lore-browser'/);
+  assert.match(creator, /class LoreGalleryView extends ItemView/);
+  assert.match(styles, /\.vc-lore-gallery-cards/);
 });

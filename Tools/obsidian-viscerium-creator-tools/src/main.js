@@ -15,6 +15,7 @@ const REVIEW_END = '<!-- era-edition-review:end -->';
 
 const IMPORT_REVIEW_VIEW = 'viscerium-import-review';
 const NOTE_CONTEXT_VIEW = 'viscerium-note-context';
+const LORE_GALLERY_VIEW = 'viscerium-lore-gallery';
 const IMPORT_REVIEW_START = '<!-- worldanvil-migration-review:start -->';
 const IMPORT_REVIEW_END = '<!-- worldanvil-migration-review:end -->';
 const WORLDANVIL_BASE_PATH = 'System/Bases/World Anvil Import.base';
@@ -624,6 +625,81 @@ class NoteContextView extends ItemView {
   }
 }
 
+class LoreGalleryView extends ItemView {
+  constructor(leaf, plugin) {
+    super(leaf);
+    this.plugin = plugin;
+    this.filters = { era: '', type: '', faction: '' };
+  }
+
+  getViewType() { return LORE_GALLERY_VIEW; }
+  getDisplayText() { return 'Visual Lore'; }
+  getIcon() { return 'image'; }
+
+  async onOpen() { await this.refresh(); }
+
+  options(entries, field) {
+    return [...new Set(entries.flatMap((entry) => Array.isArray(entry[field]) ? entry[field] : [entry[field]]).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  addFilter(root, label, field, values) {
+    const control = root.createEl('label', { cls: 'vc-lore-gallery-filter' });
+    control.createSpan({ text: label });
+    const select = control.createEl('select', { attr: { 'aria-label': `Filter visual lore by ${label.toLowerCase()}` } });
+    select.createEl('option', { text: `All ${label.toLowerCase()}s`, value: '' });
+    for (const value of values) select.createEl('option', { text: value, value });
+    select.value = this.filters[field];
+    this.registerDomEvent(select, 'change', () => {
+      this.filters[field] = select.value;
+      void this.refresh();
+    });
+  }
+
+  async refresh() {
+    const root = this.contentEl;
+    root.empty();
+    root.addClass('vc-lore-gallery');
+
+    const entries = this.plugin.visualLoreEntries();
+    const header = root.createDiv({ cls: 'vc-lore-gallery-header' });
+    header.createEl('h4', { text: 'Visual Lore' });
+    header.createEl('p', { text: 'Published Lore with resolved artwork. Open a card to continue reading or editing.' });
+
+    const filters = root.createDiv({ cls: 'vc-lore-gallery-filters' });
+    this.addFilter(filters, 'Era', 'era', this.options(entries, 'eras'));
+    this.addFilter(filters, 'Type', 'type', this.options(entries, 'type'));
+    this.addFilter(filters, 'Faction', 'faction', this.options(entries, 'factions'));
+
+    const visible = entries.filter((entry) => (
+      (!this.filters.era || entry.eras.includes(this.filters.era))
+      && (!this.filters.type || entry.type === this.filters.type)
+      && (!this.filters.faction || entry.factions.includes(this.filters.faction))
+    ));
+    root.createEl('p', { cls: 'vc-lore-gallery-count', text: `${visible.length} illustrated ${visible.length === 1 ? 'article' : 'articles'}` });
+
+    if (!visible.length) {
+      root.createEl('p', { cls: 'vc-lore-gallery-empty', text: 'No published Lore matches these filters.' });
+      return;
+    }
+
+    const cards = root.createDiv({ cls: 'vc-lore-gallery-cards' });
+    for (const entry of visible) {
+      const card = cards.createEl('button', { cls: 'vc-lore-gallery-card' });
+      const image = card.createEl('img', {
+        cls: 'vc-lore-gallery-art',
+        attr: { src: this.app.vault.getResourcePath(entry.image), alt: entry.alt },
+      });
+      image.loading = 'lazy';
+      const copy = card.createDiv({ cls: 'vc-lore-gallery-copy' });
+      copy.createEl('strong', { text: entry.title });
+      copy.createEl('span', { cls: 'vc-lore-gallery-meta', text: [entry.type, ...entry.eras, ...entry.factions].filter(Boolean).join(' · ') });
+      if (entry.description) copy.createEl('p', { text: entry.description });
+      this.registerDomEvent(card, 'click', () => void this.plugin.openLoreGalleryEntry(entry.file));
+    }
+  }
+}
+
 class ImportReviewView extends ItemView {
   constructor(leaf, plugin) {
     super(leaf);
@@ -754,6 +830,7 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
   async onload() {
     this.registerView(IMPORT_REVIEW_VIEW, (leaf) => new ImportReviewView(leaf, this));
     this.registerView(NOTE_CONTEXT_VIEW, (leaf) => new NoteContextView(leaf, this));
+    this.registerView(LORE_GALLERY_VIEW, (leaf) => new LoreGalleryView(leaf, this));
     this.suspendImportContext = false;
     this.syncingImportIssues = new Set();
 
@@ -771,6 +848,11 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
         if (!checking) void this.showNoteContext(file, true);
         return true;
       },
+    });
+    this.addCommand({
+      id: 'open-visual-lore-browser',
+      name: 'Open visual lore browser',
+      callback: () => void this.showVisualLoreBrowser(),
     });
     this.addCommand({
       id: 'connect-related-note',
@@ -1025,6 +1107,46 @@ module.exports = class VisceriumCreatorToolsPlugin extends Plugin {
       ?? this.app.metadataCache.getFirstLinkpathDest(path, file.path)
       ?? this.app.vault.getFiles().find((asset) => asset.path.startsWith('Assets/') && asset.name === path);
     return image instanceof TFile && /\.(?:png|jpe?g|webp|gif|avif|svg)$/i.test(image.path) ? image : null;
+  }
+
+  visualLoreEntries() {
+    return this.app.vault.getMarkdownFiles()
+      .filter((file) => file.path.startsWith('Lore/'))
+      .map((file) => ({ file, frontmatter: this.frontmatter(file) }))
+      .filter(({ frontmatter }) => frontmatter.status === 'published')
+      .map(({ file, frontmatter }) => ({
+        file,
+        image: this.dossierImageFile(file, frontmatter.image),
+        title: this.titleFor(file),
+        description: String(frontmatter.description ?? '').trim(),
+        alt: String(frontmatter.alt || this.titleFor(file)),
+        eras: (Array.isArray(frontmatter.era) ? frontmatter.era : [frontmatter.era])
+          .map((era) => String(era ?? '').trim())
+          .filter(Boolean),
+        type: String(frontmatter.type ?? '').trim(),
+        factions: (Array.isArray(frontmatter.faction) ? frontmatter.faction : [frontmatter.faction])
+          .map(displayFact)
+          .filter(Boolean),
+      }))
+      .filter((entry) => entry.image && entry.title)
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  async showVisualLoreBrowser() {
+    let leaf = this.app.workspace.getLeavesOfType(LORE_GALLERY_VIEW)[0];
+    if (!leaf) {
+      leaf = this.app.workspace.getLeaf('tab');
+      if (!leaf) return;
+      await leaf.setViewState({ type: LORE_GALLERY_VIEW, active: true });
+    }
+    await this.app.workspace.revealLeaf(leaf);
+    if (leaf.view instanceof LoreGalleryView) await leaf.view.refresh();
+  }
+
+  async openLoreGalleryEntry(file) {
+    const leaf = this.app.workspace.getLeaf('tab');
+    await leaf.openFile(file);
+    this.app.workspace.setActiveLeaf(leaf, { focus: true });
   }
 
   async editDossierFact(file, field, referenceType) {

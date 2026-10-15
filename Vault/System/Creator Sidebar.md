@@ -29,6 +29,12 @@ It does not score progress or turn optional metadata into a completion checklist
 
 World Anvil imports keep their migration-specific review context. The ordinary note pane does not replace Outline, Backlinks or Local Graph.
 
+## Visual Lore browser
+
+Run **VISCERIUM Creator Tools: Open visual lore browser** to browse illustrated, published Lore notes as a gallery. Filter it by era, type, or faction, then select a card to open the source note in a new workspace tab.
+
+The gallery reads only the established `image`, `alt`, `description`, `era`, `type`, and `faction` properties. It does not create a second registry, expose drafts, or change publication state. Notes without resolvable artwork stay out of this image-first view and remain available through the Lore Registry.
+
 ## Visual lore dossier
 
 Open **VISCERIUM Creator Tools: Open connected context** from a character, faction, or location note. The opt-in pane stays usable beside both Live Preview and Reading View. It presents the note's own artwork, description, era, core facts, tags, and a small diagram of its authored semantic relationships.
