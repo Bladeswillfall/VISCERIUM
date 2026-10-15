@@ -341,9 +341,14 @@ button.vc-note-context-link:focus-visible {
 }
 button.vc-dossier-fact {
   display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
   gap: 5px;
+  height: auto;
+  min-height: 3.5rem;
   padding: 10px 9px;
   min-width: 0;
+  white-space: normal;
   border: 1px solid var(--vc-panel-border);
   background: var(--vc-context-card);
   box-shadow: none;
