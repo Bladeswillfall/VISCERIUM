@@ -102,6 +102,14 @@
       "runtimePath": "Vault/.obsidian/plugins/viscerium-layout-tools"
     },
     {
+      "id": "viscerium-unit-cards",
+      "name": "VISCERIUM Unit Cards",
+      "testedVersion": "0.1.0",
+      "source": "first-party",
+      "sourcePath": "Tools/obsidian-viscerium-unit-cards",
+      "runtimePath": "Vault/.obsidian/plugins/viscerium-unit-cards"
+    },
+    {
       "id": "viscerium-image-tools",
       "name": "VISCERIUM Image Tools",
       "testedVersion": "0.2.1",
