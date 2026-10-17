@@ -1,8 +1,33 @@
 ---
 import { getCollection } from 'astro:content';
 import { getRecentArticles } from '../../lib/recent-articles.mjs';
+import { getHomeRecentMetadataTranslation } from '../../lib/home-i18n.mjs';
 
-const formatter = new Intl.DateTimeFormat(Astro.currentLocale ?? 'en-GB', {
+interface RecentCopy {
+  title: string;
+  intro: string;
+  expand: string;
+  collapse: string;
+  navigation: string;
+  previous: string;
+  next: string;
+  latest: string;
+  read: string;
+  railHint: string;
+  gridHint: string;
+  mobileHint: string;
+  universal: string;
+  era: string;
+}
+
+interface Props {
+  locale?: string;
+  copy: RecentCopy;
+}
+
+const { locale = 'en-GB', copy } = Astro.props;
+const metadataCopy = getHomeRecentMetadataTranslation(locale);
+const formatter = new Intl.DateTimeFormat(locale, {
   day: 'numeric', month: 'long', year: 'numeric',
 });
 type RecentArticle = {
@@ -26,25 +51,33 @@ const articles = (getRecentArticles(await getCollection('docs')) as RecentArticl
 ---
 
 {articles.length > 0 && (
-<section class="recent" id="recent-articles" data-view="rail" aria-labelledby="recent-title" aria-describedby="recent-intro">
+<section
+  class="recent"
+  id="recent-articles"
+  data-view="rail"
+  data-expand-label={copy.expand}
+  data-collapse-label={copy.collapse}
+  aria-labelledby="recent-title"
+  aria-describedby="recent-intro"
+>
       <div class="recent__inner">
         <header class="recent__top">
           <div>
-            <h2 class="recent__title" id="recent-title">Recent articles</h2>
-            <p class="recent__intro" id="recent-intro">New entries and revised records from across the VISCERIUM Codex.</p>
+            <h2 class="recent__title" id="recent-title">{copy.title}</h2>
+            <p class="recent__intro" id="recent-intro">{copy.intro}</p>
           </div>
           <div class="recent__actions">
             <button class="recent__view" id="recent-toggle" type="button" aria-controls="recent-track" aria-expanded="false" hidden>
               <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="7" height="7"/><rect x="11.5" y="1.5" width="7" height="7"/><rect x="1.5" y="11.5" width="7" height="7"/><rect x="11.5" y="11.5" width="7" height="7"/></svg>
-              <span id="recent-toggle-text">Expand to grid</span>
+              <span id="recent-toggle-text">{copy.expand}</span>
             </button>
-            <div class="recent__controls" role="group" aria-label="Article carousel navigation">
-              <button class="recent__arrow" id="recent-prev" type="button" aria-label="Scroll to previous article" aria-controls="recent-track" hidden>←</button>
-              <button class="recent__arrow" id="recent-next" type="button" aria-label="Scroll to next article" aria-controls="recent-track" hidden>→</button>
+            <div class="recent__controls" role="group" aria-label={copy.navigation}>
+              <button class="recent__arrow" id="recent-prev" type="button" aria-label={copy.previous} aria-controls="recent-track" hidden>←</button>
+              <button class="recent__arrow" id="recent-next" type="button" aria-label={copy.next} aria-controls="recent-track" hidden>→</button>
             </div>
           </div>
         </header>
-        <ol class="recent__track" id="recent-track" tabindex="-1" aria-label="Latest Codex articles">
+        <ol class="recent__track" id="recent-track" tabindex="-1" aria-label={copy.latest}>
   {articles.map((article) => (
     <li>
       <a class:list={['record', article.eraClass]} href={article.href}
@@ -56,27 +89,26 @@ const articles = (getRecentArticles(await getCollection('docs')) as RecentArticl
         <span class="record__content">
           <span class="record__line">
             <span class="record__ordinal">{article.ordinal}</span>
-            <span class="record__date">{article.kind}<time datetime={article.date.toISOString()}>{formatter.format(article.date)}</time></span>
+            <span class="record__date">{article.kind === 'Published' ? metadataCopy.published : metadataCopy.updated}<time datetime={article.date.toISOString()}>{formatter.format(article.date)}</time></span>
           </span>
-          <span class="record__type">{article.type}</span>
+          <span class="record__type">{metadataCopy.types[String(article.type).toLowerCase()] ?? article.type}</span>
           <h3>{article.title}</h3>
           {article.description && <span class="record__description">{article.description}</span>}
         </span>
         <span class="record__bottom">
-          <span class="record__era">{article.era === 'Universal' ? 'UNIVERSAL' : `${article.era} / ERA ${article.eraMark}`}</span>
-          <span class="record__action">Read article <span aria-hidden="true">↗</span></span>
+          <span class="record__era">{article.era === 'Universal' ? copy.universal : `${article.era} / ${copy.era} ${article.eraMark}`}</span>
+          <span class="record__action">{copy.read} <span aria-hidden="true">↗</span></span>
         </span>
       </a>
     </li>
   ))}
 </ol>
         <div class="recent__foot">
-          <p class="recent__hint"><span class="recent__hint--rail">Drag cards, swipe, scroll or use the arrows to browse.</span><span class="recent__hint--grid">All recent cards are visible.</span><span class="recent__hint--mobile">Era treatments in the compact article list.</span></p>
+          <p class="recent__hint"><span class="recent__hint--rail">{copy.railHint}</span><span class="recent__hint--grid">{copy.gridHint}</span><span class="recent__hint--mobile">{copy.mobileHint}</span></p>
         </div>
       </div>
     </section>
 )}
-
 
 <script>
 
@@ -199,7 +231,7 @@ const articles = (getRecentArticles(await getCollection('docs')) as RecentArticl
         const expanded = section.dataset.view !== 'grid';
         section.dataset.view = expanded ? 'grid' : 'rail';
         toggle.setAttribute('aria-expanded', String(expanded));
-        toggleText.textContent = expanded ? 'Return to carousel' : 'Expand to grid';
+        toggleText.textContent = expanded ? section.dataset.collapseLabel ?? '' : section.dataset.expandLabel ?? '';
         updateControls();
       });
       previous.addEventListener('click', () => scrollOne(-1));

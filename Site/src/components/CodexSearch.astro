@@ -1,7 +1,9 @@
 ---
 import { Icon } from '@astrojs/starlight/components';
+import { getHomeShellTranslationForPath } from '../lib/home-i18n.mjs';
 
 const { t } = Astro.locals;
+const homeShell = getHomeShellTranslationForPath(Astro.url.pathname);
 ---
 
 <button
@@ -15,7 +17,7 @@ const { t } = Astro.locals;
   disabled
 >
   <Icon name="magnifier" />
-  <span>{t('search.label')}</span>
+  <span>{homeShell?.search ?? t('search.label')}</span>
   <kbd>{t('search.ctrlKey')} K</kbd>
 </button>
 

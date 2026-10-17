@@ -1,9 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import { getHomeShellTranslationForPath } from '../lib/home-i18n.mjs';
 import CodexIcon from './CodexIcon.astro';
 
 const { t } = Astro.locals;
+const homeSettings = getHomeShellTranslationForPath(Astro.url.pathname)?.settings;
 const docs = await getCollection('docs');
 const sensitiveMediaManifest = docs.flatMap((doc) => {
   const asset = typeof doc.data.asset === 'string' ? doc.data.asset.trim() : '';
@@ -20,16 +22,16 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
 
 <viscerium-reader-settings
   class="reader-settings"
-  data-sensitive-reveal-label={t('viscerium.settings.revealImage')}
-  data-sensitive-warning-label={t('viscerium.settings.sensitiveImage')}
+  data-sensitive-reveal-label={homeSettings?.revealImage ?? t('viscerium.settings.revealImage')}
+  data-sensitive-warning-label={homeSettings?.sensitiveImage ?? t('viscerium.settings.sensitiveImage')}
 >
   <button
     class="reader-settings-trigger"
     type="button"
     aria-expanded="false"
     aria-controls="reader-settings-panel"
-    aria-label={t('viscerium.settings.open')}
-    title={t('viscerium.settings.open')}
+    aria-label={homeSettings?.open ?? t('viscerium.settings.open')}
+    title={homeSettings?.open ?? t('viscerium.settings.open')}
     data-reader-settings-trigger
   >
     <CodexIcon spec="settings" />
@@ -45,13 +47,13 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
   >
     <div class="reader-settings-heading">
       <div>
-        <p class="reader-settings-kicker">{t('viscerium.settings.kicker')}</p>
-        <h2 id="reader-settings-title">{t('viscerium.settings.title')}</h2>
+        <p class="reader-settings-kicker">{homeSettings?.kicker ?? t('viscerium.settings.kicker')}</p>
+        <h2 id="reader-settings-title">{homeSettings?.title ?? t('viscerium.settings.title')}</h2>
       </div>
       <button
         class="reader-settings-close"
         type="button"
-        aria-label={t('viscerium.settings.close')}
+        aria-label={homeSettings?.close ?? t('viscerium.settings.close')}
         data-reader-settings-close
       >
         <CodexIcon spec="close" />
@@ -61,28 +63,28 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
     <fieldset class="reader-settings-section" data-reader-theme-group>
       <legend>
         <CodexIcon spec="palette" class="reader-settings-section-icon" />
-        <span>{t('viscerium.settings.appearance')}</span>
+        <span>{homeSettings?.appearance ?? t('viscerium.settings.appearance')}</span>
       </legend>
       <div class="reader-theme-options">
         <label>
           <input type="radio" name="reader-theme" value="auto" data-reader-theme-option />
           <span>
             <CodexIcon spec="desktop" />
-            <span>{t('themeSelect.auto')}</span>
+            <span>{homeSettings?.auto ?? t('themeSelect.auto')}</span>
           </span>
         </label>
         <label>
           <input type="radio" name="reader-theme" value="light" data-reader-theme-option />
           <span>
             <CodexIcon spec="light-mode" />
-            <span>{t('themeSelect.light')}</span>
+            <span>{homeSettings?.light ?? t('themeSelect.light')}</span>
           </span>
         </label>
         <label>
           <input type="radio" name="reader-theme" value="dark" data-reader-theme-option />
           <span>
             <CodexIcon spec="dark-mode" />
-            <span>{t('themeSelect.dark')}</span>
+            <span>{homeSettings?.dark ?? t('themeSelect.dark')}</span>
           </span>
         </label>
       </div>
@@ -94,22 +96,22 @@ const sensitiveMediaManifestJson = JSON.stringify(sensitiveMediaManifest).replac
     <fieldset class="reader-settings-section">
       <legend>
         <CodexIcon spec="visibility" class="reader-settings-section-icon" />
-        <span>{t('viscerium.settings.content')}</span>
+        <span>{homeSettings?.content ?? t('viscerium.settings.content')}</span>
       </legend>
       <label class="reader-settings-switch-row">
         <span>
-          <strong>{t('viscerium.settings.concealSensitive')}</strong>
-          <small>Blurs marked artwork until you reveal it.</small>
+          <strong>{homeSettings?.concealSensitive ?? t('viscerium.settings.concealSensitive')}</strong>
+          <small>{homeSettings?.concealSensitiveDescription ?? 'Blurs marked artwork until you reveal it.'}</small>
         </span>
         <input
           type="checkbox"
           role="switch"
-          aria-label={t('viscerium.settings.concealSensitive')}
+          aria-label={homeSettings?.concealSensitive ?? t('viscerium.settings.concealSensitive')}
           data-reader-sensitive-toggle
         />
         <span class="reader-settings-switch" aria-hidden="true"></span>
       </label>
-      <p class="reader-settings-note">VISCERIUM is written for mature audiences. This setting only changes how marked images are shown.</p>
+      <p class="reader-settings-note">{homeSettings?.contentNote ?? 'VISCERIUM is written for mature audiences. This setting only changes how marked images are shown.'}</p>
     </fieldset>
   </div>
 

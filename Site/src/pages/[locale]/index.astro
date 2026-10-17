@@ -1,0 +1,15 @@
+---
+import Homepage from '../index.astro';
+import { HOME_LANGUAGES } from '../../lib/home-i18n.mjs';
+
+export const getStaticPaths = () => HOME_LANGUAGES
+  .filter(({ route }) => route)
+  .map(({ locale, route }) => ({
+    params: { locale: route },
+    props: { locale },
+  }));
+
+const { locale } = Astro.props;
+---
+
+<Homepage locale={locale} />

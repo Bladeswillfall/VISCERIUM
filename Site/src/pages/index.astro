@@ -2,20 +2,30 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import HomeGateway from '../components/home/HomeGateway.astro';
 import homepageStyles from '../styles/homepage.css?raw';
+import { getHomeTranslation } from '../lib/home-i18n.mjs';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = 'en-GB' } = Astro.props;
+const copy = getHomeTranslation(locale);
 ---
 
 <StarlightPage
   frontmatter={{
-    title: 'VISCERIUM Codex',
-    description: 'One timeline, four eras, infinite stories. Enter the public worldbuilding codex for VISCERIUM.',
+    title: copy.meta.title,
+    description: copy.meta.description,
     template: 'splash',
     pagefind: false,
     giscus: false,
     head: [{ tag: 'style', content: homepageStyles }],
   }}
   hasSidebar={true}
+  lang={locale}
+  dir="ltr"
 >
-  <HomeGateway />
+  <HomeGateway locale={locale} />
 </StarlightPage>
 
 <style is:global>
