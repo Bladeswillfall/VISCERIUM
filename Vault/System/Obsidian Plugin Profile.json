@@ -132,6 +132,15 @@
       "sharedSettings": "Vault/.obsidian/plugins/zoom-map/data.json"
     },
     {
+      "id": "xyls-starmap",
+      "name": "Xyl's Starmap",
+      "testedVersion": null,
+      "minimumVersion": "2.0.0",
+      "source": "obsidian-community",
+      "sharedSettings": null,
+      "note": "Use v2.0 or newer for PlanetView authoring. Version has not been validated in the shared vault. Plugin runtime and device settings remain local."
+    },
+    {
       "id": "table-editor-obsidian",
       "name": "Advanced Tables",
       "testedVersion": "0.23.2",
