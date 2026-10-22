@@ -130,6 +130,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Journal Bases](https://github.com/dsebastien/obsidian-journal-base) | Sébastien Dubois / dsebastien | MIT |
 | [Iconic](https://community.obsidian.md/plugins/iconic) | Holo / gfxholo | MIT-0; bundled icon and Unicode resources have separate notices upstream |
 | [TTRPG Tools - Maps](https://community.obsidian.md/plugins/zoom-map) | Johannes Schwartz / Jareika | MIT |
+| [Xyl's Starmap](https://community.obsidian.md/plugins/xyls-starmap) | xylhazlhztarr | CC BY-NC-ND 4.0 reported by community directories; check upstream before redistributing or embedding code |
 | [Advanced Tables](https://community.obsidian.md/plugins/table-editor-obsidian) | Tony Grosinger | GPL-3.0 |
 | [Chronos Timeline](https://community.obsidian.md/plugins/chronos) | Claire Froelich / clairefro | MIT |
 | [Dataview](https://github.com/blacksmithgu/obsidian-dataview) | blacksmithgu and contributors | MIT |
