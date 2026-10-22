@@ -7,17 +7,21 @@ The Myrkild unit database uses **Obsidian Bases** as a browsing and editing laye
 
 ## Open the database
 
-Open [[Myrkild Units.base]] directly, or use the embedded card browser below.
+Open [[Myrkild Units.base]] directly, or use the embedded VISCERIUM card browser below.
 
 ![[Myrkild Units.base#All Units]]
 
 The Base currently provides:
 
-- **All Units** — cards grouped by Myrkild species.
-- **CITADEL / SMOG / NEARSIGHT / ENTROPY** — era-specific card browsers.
-- **Mutated / Purespawn** — origin-specific card browsers.
+- **All Units** — VISCERIUM profile cards grouped by Myrkild species.
+- **CITADEL / SMOG / NEARSIGHT / ENTROPY** — era-specific VISCERIUM card browsers.
+- **Mutated / Purespawn** — origin-specific VISCERIUM card browsers.
 - **Irradiated** — irradiated variants only.
 - **Database** — table view for bulk editing and comparison.
+
+The card renderer is supplied by the first-party **VISCERIUM Unit Cards** plugin. It uses the same Markdown/YAML source as the Base; it is presentation only.
+
+Older imported profiles may show `PROFILE` or `?` for fields introduced by the newer entity/unit framework. This is intentional. Do not invent values to make a card look complete.
 
 ## Seed data
 
@@ -42,7 +46,7 @@ Because the Base filters on `type: myrkild-unit` rather than folder path, a revi
 
 ## Storyteller section
 
-The default unit template remains focused on battlefield role, tactics, weaknesses and availability.
+The profile framework keeps canonical VISCERIUM data system-neutral. Battlefield role, response-based Threat, behaviour, tactics, countermeasures and availability belong here; external game-system conversions do not.
 
 When a specific story needs more, write normal Markdown inside the marked `## Storyteller View` footer. Useful material may include:
 

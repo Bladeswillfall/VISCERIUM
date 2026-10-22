@@ -1,0 +1,9 @@
+{
+  "id": "viscerium-unit-cards",
+  "name": "VISCERIUM Unit Cards",
+  "version": "0.1.0",
+  "minAppVersion": "1.10.0",
+  "description": "A VISCERIUM-specific custom Bases view for entity and unit profile cards.",
+  "author": "VISCERIUM",
+  "isDesktopOnly": false
+}

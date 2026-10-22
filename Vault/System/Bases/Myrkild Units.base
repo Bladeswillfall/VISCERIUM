@@ -15,10 +15,36 @@ properties:
     displayName: Species
   natural_host:
     displayName: Natural host
-  role:
+  profile_scope:
+    displayName: Scope
+  composition:
+    displayName: Composition
+  physical_scale:
+    displayName: Physical scale
+  formation_scale:
+    displayName: Formation scale
+  unit_class:
+    displayName: Class
+  engagement:
+    displayName: Engagement
+  primary_role:
     displayName: Role
+  traits:
+    displayName: Traits
+  protection:
+    displayName: Protection
+  mobility:
+    displayName: Mobility
+  disposition:
+    displayName: Disposition
+  intelligence:
+    displayName: Intelligence
+  threat_notes:
+    displayName: Threat notes
+  role:
+    displayName: Legacy role
   size_class:
-    displayName: Size
+    displayName: Legacy class
   threat_rating:
     displayName: Threat
   strain:
@@ -36,7 +62,7 @@ properties:
   review_status:
     displayName: Review
 views:
-  - type: cards
+  - type: viscerium-unit-cards
     name: All Units
     groupBy:
       property: myrkild_species
@@ -56,11 +82,9 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
-  - type: cards
+    cardSize: 320
+    density: detailed
+  - type: viscerium-unit-cards
     name: CITADEL
     filters:
       and:
@@ -82,11 +106,9 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
-  - type: cards
+    cardSize: 320
+    density: detailed
+  - type: viscerium-unit-cards
     name: SMOG
     filters:
       and:
@@ -108,11 +130,9 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
-  - type: cards
+    cardSize: 320
+    density: detailed
+  - type: viscerium-unit-cards
     name: NEARSIGHT
     filters:
       and:
@@ -134,11 +154,9 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
-  - type: cards
+    cardSize: 320
+    density: detailed
+  - type: viscerium-unit-cards
     name: ENTROPY
     filters:
       and:
@@ -160,11 +178,9 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
-  - type: cards
+    cardSize: 320
+    density: detailed
+  - type: viscerium-unit-cards
     name: Mutated
     filters:
       and:
@@ -187,11 +203,9 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
-  - type: cards
+    cardSize: 320
+    density: detailed
+  - type: viscerium-unit-cards
     name: Purespawn
     filters:
       and:
@@ -212,11 +226,9 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
-  - type: cards
+    cardSize: 320
+    density: detailed
+  - type: viscerium-unit-cards
     name: Irradiated
     filters:
       and:
@@ -237,10 +249,8 @@ views:
         direction: DESC
       - property: unit_name
         direction: ASC
-    cardSize: 260
-    imageFit: cover
-    imageAspectRatio: 1.5
-    image: image
+    cardSize: 320
+    density: detailed
   - type: table
     name: Database
     groupBy:
