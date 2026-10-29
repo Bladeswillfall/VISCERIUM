@@ -49,10 +49,10 @@
     "check:astro": "astro check"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.3",
+    "@astrojs/mdx": "^8.1.1",
     "@astrojs/sitemap": "3.7.4",
-    "@astrojs/starlight": "^0.42.6",
-    "astro": "^7.4.0",
+    "@astrojs/starlight": "^0.42.7",
+    "astro": "^7.4.2",
     "cytoscape": "3.34.3",
     "cytoscape-dagre": "4.0.1",
     "fuse.js": "7.5.0",
@@ -100,7 +100,7 @@
     "fsevents@2.3.3": true
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
+    "@astrojs/check": "0.9.12",
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "@types/leaflet": "1.9.22",
