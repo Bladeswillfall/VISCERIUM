@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "moment": "2.31.0",
-    "vis-data": "8.0.4",
-    "vis-timeline": "8.5.4"
+    "vis-data": "8.0.6",
+    "vis-timeline": "8.5.5"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",
