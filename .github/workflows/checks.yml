@@ -140,7 +140,7 @@ jobs:
 
       - name: Upload unit test log
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: unit-test-log
           path: ${{ runner.temp }}/unit-tests.log
@@ -254,7 +254,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload production build
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: site-dist
           path: Site/dist/
@@ -296,7 +296,7 @@ jobs:
 
       - name: Upload Obsidian timeline plugin bundle
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: viscerium-timelines-plugin
           path: Tools/obsidian-viscerium-timelines/dist/
@@ -381,7 +381,7 @@ jobs:
 
       - name: Upload browser check log
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: browser-check-log
           path: ${{ runner.temp }}/playwright.log
@@ -480,7 +480,7 @@ jobs:
 
       - name: Upload enabled contact browser log
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: contact-check-log
           path: ${{ runner.temp }}/contact.log
@@ -567,7 +567,7 @@ jobs:
         run: npm run build
 
       - name: Upload production artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: production-site-dist
           path: Site/dist/
