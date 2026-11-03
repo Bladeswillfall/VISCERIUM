@@ -41,8 +41,8 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
-| Codex (`Site/`) | `vis-data` | runtime | `8.0.4` |
-| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
+| Codex (`Site/`) | `vis-data` | runtime | `8.0.6` |
+| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.6` |
 | Codex (`Site/`) | `@astrojs/check` | development | `0.9.12` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
