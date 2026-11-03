@@ -36,8 +36,8 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
 | Codex (`Site/`) | `moment` | runtime | `2.31.0` |
-| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
-| Codex (`Site/`) | `starlight-links-validator` | runtime | `^0.26.0` |
+| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.1` |
+| Codex (`Site/`) | `starlight-links-validator` | runtime | `^0.27.0` |
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
