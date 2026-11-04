@@ -253,6 +253,9 @@ jobs:
             echo "Exact Astro page-cache hit: ${{ steps.astro_cache.outputs.cache-hit }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Check generated Astro and TypeScript source
+        run: npm run check:astro
+
       - name: Upload production build
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:

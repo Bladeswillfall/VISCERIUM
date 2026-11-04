@@ -4,7 +4,7 @@ import {
   FEED_FALLBACK_DATE,
   getAuthoredFeedDates,
   latestFeedDate,
-} from '../src/lib/feed-dates.mjs';
+} from '../src/lib/feed-dates.ts';
 
 test('feed dates keep publication and modification timestamps separate', () => {
   const dates = getAuthoredFeedDates({

@@ -1,6 +1,6 @@
 import { getCollection } from 'astro:content';
 import siteConfig from '../../site.config.mjs';
-import { getAuthoredFeedDates, latestFeedDate } from './feed-dates.mjs';
+import { getAuthoredFeedDates, latestFeedDate } from './feed-dates.ts';
 
 export type FeedEntry = {
   title: string;

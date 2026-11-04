@@ -4,7 +4,7 @@ const FALLBACK_ISO = '1970-01-01T00:00:00.000Z';
 
 export const FEED_FALLBACK_DATE = new Date(FALLBACK_ISO);
 
-export function getAuthoredFeedDates(data = {}) {
+export function getAuthoredFeedDates(data: Record<string, unknown> = {}) {
   const { published, updated } = getPublicationDates(data);
 
   return {
@@ -13,7 +13,7 @@ export function getAuthoredFeedDates(data = {}) {
   };
 }
 
-export function latestFeedDate(entries = []) {
+export function latestFeedDate(entries: ReadonlyArray<{ updated: Date }> = []) {
   return entries.reduce((latest, entry) => (
     entry.updated.valueOf() > latest.valueOf() ? entry.updated : latest
   ), FEED_FALLBACK_DATE);
