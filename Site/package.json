@@ -49,10 +49,10 @@
     "check:astro": "astro check"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.3",
+    "@astrojs/mdx": "^8.1.2",
     "@astrojs/sitemap": "3.7.4",
-    "@astrojs/starlight": "^0.42.6",
-    "astro": "^7.4.0",
+    "@astrojs/starlight": "^0.42.8",
+    "astro": "^7.4.4",
     "cytoscape": "3.34.3",
     "cytoscape-dagre": "4.0.1",
     "fuse.js": "7.5.0",
@@ -60,13 +60,13 @@
     "leaflet": "1.9.4",
     "leaflet.control.layers.tree": "1.2.0",
     "moment": "2.31.0",
-    "starlight-changelogs": "^0.7.0",
-    "starlight-links-validator": "^0.26.0",
+    "starlight-changelogs": "^0.7.1",
+    "starlight-links-validator": "^0.27.0",
     "starlight-scroll-to-top": "^2.0.0",
     "starlight-tags": "^2.0.0",
     "starlight-telescope": "^2.0.0",
-    "vis-data": "8.0.4",
-    "vis-timeline": "8.5.4"
+    "vis-data": "8.0.6",
+    "vis-timeline": "8.5.6"
   },
   "engines": {
     "node": ">=24 <25"
@@ -100,7 +100,7 @@
     "fsevents@2.3.3": true
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
+    "@astrojs/check": "0.9.12",
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "@types/leaflet": "1.9.22",

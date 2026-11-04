@@ -386,3 +386,13 @@ html[data-codex-mobile-header] .codex-sidebar-era-toolbar a {
   margin-inline-start: auto;
   white-space: nowrap;
 }
+
+/* Brand spacing belongs to the header rather than the global theme. */
+@layer ion {
+  .codex-header .site-title { gap: 1rem; }
+  .codex-header .site-title > span {
+    display: flex;
+    gap: .5rem;
+    color: var(--sl-color-white);
+  }
+}

@@ -21,6 +21,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Changed in Unreleased
 
+- Retired the broad Ion theme stylesheet, scoped Markdown card styling, and consolidated article headings and navigation styles.
+
 - Restored coverage of individual browser and accessibility test edits and scheduled a weekly complete Chromium and Axe audit.
 
 - Made direct Cloudflare Pages uploads an explicit repository-variable opt-in and fail when enabled without credentials, so skipped uploads no longer look successful.
@@ -42,6 +44,9 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 - Removed the standalone What's New page and its link from the homepage Recent Articles section; the carousel and public feeds remain available.
 
 ### Fixed in Unreleased
+
+- Restored navigation and relationship exploration without JavaScript, repaired tablet article contents and reader controls, and kept mobile era descriptions and footer text readable ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
+- Restored the Codex's subtle grain texture using the committed noise image ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 
 - Kept explicitly included inter-era events visible on the super timeline at wide zoom levels, including their article links ([#222](https://github.com/Bladeswillfall/VISCERIUM/pull/222)).
 

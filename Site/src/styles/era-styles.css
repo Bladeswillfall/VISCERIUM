@@ -269,7 +269,7 @@
     starlight-toc a:focus-visible,
     starlight-toc a[aria-current='true']
   ) {
-    /* ion-theme.css has a generic !important hover/current rule; era pages win here. */
+    /* Era-aware links retain their palette when shared controls set hover colours. */
     color: var(--era-link-hover) !important;
   }
 

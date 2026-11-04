@@ -25,10 +25,10 @@ The block below is maintained from the existing npm package manifests. It record
 <!-- DEPENDENCIES:DIRECT:START -->
 | Project | Package | Scope | Declared version |
 | --- | --- | --- | --- |
-| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^8.0.3` |
+| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^8.1.2` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.4` |
-| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.42.6` |
-| Codex (`Site/`) | `astro` | runtime | `^7.4.0` |
+| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.42.8` |
+| Codex (`Site/`) | `astro` | runtime | `^7.4.4` |
 | Codex (`Site/`) | `cytoscape` | runtime | `3.34.3` |
 | Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.1` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
@@ -36,14 +36,14 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
 | Codex (`Site/`) | `moment` | runtime | `2.31.0` |
-| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
-| Codex (`Site/`) | `starlight-links-validator` | runtime | `^0.26.0` |
+| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.1` |
+| Codex (`Site/`) | `starlight-links-validator` | runtime | `^0.27.0` |
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
-| Codex (`Site/`) | `vis-data` | runtime | `8.0.4` |
-| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
-| Codex (`Site/`) | `@astrojs/check` | development | `0.9.10` |
+| Codex (`Site/`) | `vis-data` | runtime | `8.0.6` |
+| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.6` |
+| Codex (`Site/`) | `@astrojs/check` | development | `0.9.12` |
 | Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
 | Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
 | Codex (`Site/`) | `@types/leaflet` | development | `1.9.22` |

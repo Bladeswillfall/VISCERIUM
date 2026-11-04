@@ -123,7 +123,7 @@ test('desktop sidebar toggle lives in the sticky header while the sidebar runtim
   assert.match(shell, /runtime\.sync\(true\)/);
   assert.match(shell, /button\.dataset\.codexSidebarBound === 'true'/);
   assert.doesNotMatch(shell, /viscerium-sidebar-collapsed/);
-  assert.match(footer, /html:not\(\[data-codex-desktop-sidebar\]\) #starlight__sidebar/);
+  assert.match(footer, /html\[data-codex-wide-header\]:not\(\[data-codex-desktop-sidebar\]\) #starlight__sidebar/);
 });
 
 test('mobile header uses thresholded fixed reveal and hide states', () => {
@@ -186,8 +186,9 @@ test('mobile page table of contents is owned by the responsive runtime', () => {
   const shell = read('../src/scripts/codex-shell.js');
   const navigation = read('../src/styles/navigation.css');
 
-  assert.match(navigation, /@media \(min-width: 800px\)/);
+  assert.match(navigation, /@media \(min-width: 72rem\)/);
   assert.match(navigation, /--sl-mobile-toc-height: 0rem/);
+  assert.match(shell, /const tocDesktopQuery = window\.matchMedia\('\(min-width: 72rem\)'\)/);
   assert.match(shell, /document\.getElementById\('starlight__on-this-page--mobile'\)/);
   assert.match(shell, /summary\?\.closest\('nav'\)/);
   assert.match(shell, /navigation\.style\.setProperty\('display', 'none', 'important'\)/);

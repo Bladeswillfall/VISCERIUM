@@ -227,7 +227,6 @@ export default defineConfig({
       customCss: [
         './src/styles/ion-layers.css',
         './src/styles/color-tokens.css',
-        './src/styles/ion-theme.css',
         './src/styles/ion-expressive-code.css',
         './src/styles/typography.css',
         './src/styles/layout.css',
