@@ -53,7 +53,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Obsidian timelines plugin | `vis-data` | runtime | `8.0.4` |
 | Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.4` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.2` |
-| Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |
+| Obsidian timelines plugin | `obsidian` | development | `^1.14.4` |
 
 #### Approved npm lifecycle scripts
 
