@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { normalisePageSlug } from '../lib/page-kind.mjs';
-import { estimateReadingTime, isReadingTimeArticle } from '../lib/reading-time.mjs';
+import { estimateReadingTime, isReadingTimeArticle } from '../lib/reading-time.ts';
 import ContentNotes from './ContentNotes.astro';
 
 const { starlightRoute } = Astro.locals;

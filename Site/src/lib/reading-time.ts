@@ -8,13 +8,13 @@ const OBSIDIAN_COMMENT = /%%[\s\S]*?%%/g;
 const HTML_COMMENT = /<!--[\s\S]*?-->/g;
 const FENCED_CODE = /(^|\n)\s*(```|~~~)[^\n]*\n[\s\S]*?\n\s*\2(?=\n|$)/g;
 
-export function isReadingTimeArticle(entry = {}, fallbackId = '') {
+export function isReadingTimeArticle(entry: Record<string, unknown> = {}, fallbackId: string = ''): boolean {
   if (!classifyCodexPage(entry, fallbackId).isStandardArticle) return false;
   const type = String(entry.type ?? '').trim().toLowerCase();
   return !NON_READING_TYPES.has(type);
 }
 
-export function readableMarkdownText(markdown = '') {
+export function readableMarkdownText(markdown: unknown = ''): string {
   return String(markdown)
     .replace(STORYTELLER_BLOCK, ' ')
     .replace(OBSIDIAN_COMMENT, ' ')
@@ -42,13 +42,13 @@ export function readableMarkdownText(markdown = '') {
     .trim();
 }
 
-export function countReadableWords(markdown = '') {
+export function countReadableWords(markdown: unknown = ''): number {
   const text = readableMarkdownText(markdown);
   if (!text) return 0;
   return text.match(/[\p{L}\p{N}]+(?:['’.-][\p{L}\p{N}]+)*/gu)?.length ?? 0;
 }
 
-export function estimateReadingTime(markdown = '', wordsPerMinute = DEFAULT_READING_WORDS_PER_MINUTE) {
+export function estimateReadingTime(markdown: unknown = '', wordsPerMinute: number = DEFAULT_READING_WORDS_PER_MINUTE): { words: number; wordsPerMinute: number; minutes: number } {
   const safeRate = Number.isFinite(wordsPerMinute) && wordsPerMinute > 0
     ? wordsPerMinute
     : DEFAULT_READING_WORDS_PER_MINUTE;
