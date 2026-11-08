@@ -1,4 +1,4 @@
-import { parseSidebarWikilink } from './sidebar-links.mjs';
+import { parseSidebarWikilink } from './sidebar-links.ts';
 
 const navigationFields = new Set(['href', 'sourceurl', 'imagepage', 'eventshref', 'nexterahref']);
 const assetFields = new Set(['src', 'image', 'headerimage', 'asset', 'sigil']);

@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { parseSidebarWikilink } from '../src/lib/sidebar-links.mjs';
+import { parseSidebarWikilink } from '../src/lib/sidebar-links.ts';
 import { sidebarMigrationCandidates, slugFromSourcePath } from '../scripts/migrate-sidebar-wikilinks.mjs'
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
