@@ -1,5 +1,5 @@
 import { classifyCodexPage } from './page-kind.mjs';
-import { getPublicationDates, getLastModifiedDate } from './publication-dates.mjs';
+import { getPublicationDates, getLastModifiedDate } from './publication-dates.ts';
 
 const EXCLUDED_TYPES = new Set(['system', 'map', 'image', 'policy', 'statement', 'release']);
 const NON_LORE_PATH = /^(?:policies|statements|releases|support|contact|about|privacy|terms)(?:\/|$)/i;

@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
-import { getLastModifiedDate } from './publication-dates.mjs';
+import { getLastModifiedDate } from './publication-dates.ts';
 
 function normalisePathname(value) {
   const pathname = String(value || '/').replace(/\/+/g, '/');

@@ -1,4 +1,11 @@
-export function readAuthoredDate(value) {
+type AuthoredDateFields = {
+  created?: unknown;
+  published?: unknown;
+  date?: unknown;
+  updated?: unknown;
+};
+
+export function readAuthoredDate(value: unknown): Date | null {
   if (value === null || value === undefined) return null;
   if (typeof value === 'string' && value.trim() === '') return null;
 
@@ -6,7 +13,7 @@ export function readAuthoredDate(value) {
   return Number.isNaN(date.valueOf()) ? null : date;
 }
 
-export function getPublicationDates(data = {}) {
+export function getPublicationDates(data: AuthoredDateFields = {}) {
   const created = readAuthoredDate(data.created);
   const published = readAuthoredDate(data.published)
     ?? readAuthoredDate(data.date);
@@ -18,11 +25,11 @@ export function getPublicationDates(data = {}) {
   return { created, published, updated };
 }
 
-export function getLastModifiedDate(data = {}) {
+export function getLastModifiedDate(data: AuthoredDateFields = {}) {
   const { published, updated } = getPublicationDates(data);
   return updated ?? published;
 }
 
-export function toIsoDate(date) {
+export function toIsoDate(date: Date | null | undefined): string | undefined {
   return date ? date.toISOString() : undefined;
 }
