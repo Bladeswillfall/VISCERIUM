@@ -1,6 +1,6 @@
 import { parseIconLabel } from './icon-spec.mjs';
 
-type SidebarEntry = { type?: string; label?: string };
+type SidebarEntry = { type?: string; label?: string; href?: string; isCurrent?: boolean };
 
 function isOverviewLink(entry: SidebarEntry | null | undefined): boolean {
   return entry?.type === 'link'
