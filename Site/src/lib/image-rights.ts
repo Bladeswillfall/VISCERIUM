@@ -1,6 +1,15 @@
+type RightsIconName = 'cc' | 'by' | 'nc' | 'sa' | 'nd' | 'pd' | 'zero';
+type RightsIcon = { name: RightsIconName; label: string; src: string };
+type RightsPresentation = {
+  kind: 'unknown' | 'copyright' | 'public-domain' | 'creative-commons';
+  label: string;
+  symbol?: string;
+  icons: RightsIcon[];
+};
+
 const CC_ICON_BASE = 'https://mirrors.creativecommons.org/presskit/icons';
 
-const CC_LICENSE_ICONS = {
+const CC_LICENSE_ICONS: Partial<Record<string, RightsIconName[]>> = {
   'BY': ['by'],
   'BY-SA': ['by', 'sa'],
   'BY-ND': ['by', 'nd'],
@@ -9,7 +18,7 @@ const CC_LICENSE_ICONS = {
   'BY-NC-ND': ['by', 'nc', 'nd'],
 };
 
-const ICON_LABELS = {
+const ICON_LABELS: Record<RightsIconName, string> = {
   cc: 'Creative Commons',
   by: 'Attribution',
   nc: 'NonCommercial',
@@ -19,7 +28,7 @@ const ICON_LABELS = {
   zero: 'CC0',
 };
 
-function icon(name) {
+function icon(name: RightsIconName): RightsIcon {
   return {
     name,
     label: ICON_LABELS[name],
@@ -27,7 +36,7 @@ function icon(name) {
   };
 }
 
-function normaliseCcCode(value) {
+function normaliseCcCode(value: unknown): { code: string; version?: string } {
   let normalised = String(value ?? '')
     .trim()
     .toUpperCase()
@@ -38,7 +47,7 @@ function normaliseCcCode(value) {
     .replace(/^CREATIVE COMMONS\s+/, '')
     .replace(/^CC\s+/, '');
 
-  let version;
+  let version: string | undefined;
   const versionMatch = normalised.match(/\s+(\d+(?:\.\d+)?)$/);
   if (versionMatch) {
     version = versionMatch[1];
@@ -53,7 +62,7 @@ function normaliseCcCode(value) {
   return { code, version };
 }
 
-export function presentImageRights(value, notRecorded = 'Not recorded') {
+export function presentImageRights(value: unknown, notRecorded: string = 'Not recorded'): RightsPresentation {
   const raw = String(value ?? '').trim();
   const upper = raw.toUpperCase().replace(/\s+/g, ' ');
 
