@@ -7,7 +7,7 @@ import { slugToRoute, toPosixPath, vaultSourceSlug } from '../src/lib/codex-path
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';
-import { attributionSlugForAsset } from '../src/lib/image-attribution.mjs';
+import { attributionSlugForAsset } from '../src/lib/image-attribution.ts';
 import { parseObsidianImageEmbed, renderArticleImage } from './image-layout.mjs';
 import { inferNoteType, sourceSegments } from './note-inference.mjs';
 import { walk } from './lib/walk.mjs';

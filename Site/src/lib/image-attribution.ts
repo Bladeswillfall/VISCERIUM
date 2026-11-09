@@ -1,6 +1,6 @@
 const imageExtension = /\.(?:avif|bmp|gif|jpe?g|png|svg|webp)$/i;
 
-function cleanSegment(value) {
+function cleanSegment(value: unknown): string {
   return String(value ?? '')
     .trim()
     .toLowerCase()
@@ -8,7 +8,7 @@ function cleanSegment(value) {
     .replace(/^-+|-+$/g, '');
 }
 
-function routePartsForAsset(value) {
+function routePartsForAsset(value: unknown): string[] | null {
   const raw = String(value ?? '').trim();
   if (!raw) return null;
 
@@ -37,12 +37,12 @@ function routePartsForAsset(value) {
   return null;
 }
 
-export function attributionSlugForAsset(value) {
+export function attributionSlugForAsset(value: unknown): string | undefined {
   const parts = routePartsForAsset(value);
   return parts?.every(Boolean) ? ['attribution', ...parts].join('/') : undefined;
 }
 
-export function attributionRouteForAsset(value) {
+export function attributionRouteForAsset(value: unknown): string | undefined {
   const slug = attributionSlugForAsset(value);
   return slug ? `/${slug}/` : undefined;
 }

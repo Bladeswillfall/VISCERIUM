@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { attributionRouteForAsset } from '../src/lib/image-attribution.mjs';
+import { attributionRouteForAsset } from '../src/lib/image-attribution.ts';
 
 const vault = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../Vault');
 const article = readFileSync(path.join(vault, 'Lore/Myrkildicary/Myrkild.md'), 'utf8');
