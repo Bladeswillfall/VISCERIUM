@@ -8,7 +8,7 @@ import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-chang
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import starlightTags from 'starlight-tags';
-import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
+import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.ts';
 import { buildSidebar } from './sidebar.mjs';
 import siteConfig from './site.config.mjs';
 
