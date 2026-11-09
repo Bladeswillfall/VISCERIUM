@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { scopeHistoricalEraBranches } from '../src/lib/sidebar-era-scope.mjs';
+import { scopeHistoricalEraBranches } from '../src/lib/sidebar-era-scope.ts';
 
 function sampleSidebar() {
   return [

@@ -2,7 +2,7 @@
 import SidebarSublist from './IonSidebarSublist.astro';
 import { parseIconLabel } from '../lib/icon-spec.mjs';
 import { HISTORICAL_ERAS, eraFromPath, normaliseEra } from '../lib/era-context.mjs';
-import { scopeHistoricalEraBranches } from '../lib/sidebar-era-scope.mjs';
+import { scopeHistoricalEraBranches } from '../lib/sidebar-era-scope.ts';
 
 const { sidebar, entry } = Astro.locals.starlightRoute;
 const { t } = Astro.locals;

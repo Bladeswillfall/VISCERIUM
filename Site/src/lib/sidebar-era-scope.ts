@@ -1,11 +1,18 @@
 import { HISTORICAL_ERAS, normaliseEra } from './era-context.mjs';
 import { parseIconLabel } from './icon-spec.mjs';
 
-function sidebarLabel(entry) {
+type SidebarEntry = {
+  type?: string;
+  label?: string;
+  collapsed?: boolean;
+  entries?: SidebarEntry[];
+};
+
+function sidebarLabel(entry: SidebarEntry | null | undefined): string {
   return parseIconLabel(entry?.label ?? '').label.trim();
 }
 
-function historicalEra(value) {
+function historicalEra(value: unknown): string | undefined {
   const era = normaliseEra(value);
   return era && HISTORICAL_ERAS.includes(era) ? era : undefined;
 }
@@ -15,7 +22,10 @@ function historicalEra(value) {
  * branches for contextual visibility. Universal and utility entries are never
  * filtered or moved; an active era only hides its three historical siblings.
  */
-export function scopeHistoricalEraBranches(entries, activeEra) {
+export function scopeHistoricalEraBranches(
+  entries: SidebarEntry[] | null | undefined,
+  activeEra?: unknown,
+): SidebarEntry[] {
   const scopedEra = historicalEra(activeEra);
 
   return (entries ?? []).map((entry) => {
