@@ -1,11 +1,13 @@
 import { parseIconLabel } from './icon-spec.mjs';
 
-function isOverviewLink(entry) {
+type SidebarEntry = { type?: string; label?: string };
+
+function isOverviewLink(entry: SidebarEntry | null | undefined): boolean {
   return entry?.type === 'link'
     && parseIconLabel(entry.label ?? '').label.trim() === 'Overview';
 }
 
-export function sidebarGroupContent(entries = []) {
+export function sidebarGroupContent<T extends SidebarEntry>(entries: T[] = []) {
   const visibleEntries = entries.filter((entry) => !isOverviewLink(entry));
   return {
     visibleEntries,
