@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sidebarGroupContent } from '../src/lib/sidebar-group-content.mjs';
+import { sidebarGroupContent } from '../src/lib/sidebar-group-content.ts';
 
 const overview = {
   type: 'link',
