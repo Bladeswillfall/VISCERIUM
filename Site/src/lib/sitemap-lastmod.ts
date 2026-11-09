@@ -3,25 +3,25 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { getLastModifiedDate } from './publication-dates.ts';
 
-function normalisePathname(value) {
+function normalisePathname(value: unknown): string {
   const pathname = String(value || '/').replace(/\/+/g, '/');
   if (pathname === '/') return '/';
   return `/${pathname.replace(/^\/+|\/+$/g, '')}/`;
 }
 
-async function walkMarkdown(dir) {
+async function walkMarkdown(dir: string): Promise<string[]> {
   return (await Array.fromAsync(fs.glob('**/*.{md,mdx}', { cwd: dir })))
     .map((file) => path.join(dir, file));
 }
 
-export async function buildSitemapLastmodMap(contentDir) {
+export async function buildSitemapLastmodMap(contentDir: string): Promise<Map<string, string>> {
   try {
     await fs.access(contentDir);
   } catch {
     return new Map();
   }
 
-  const lastmodByPathname = new Map();
+  const lastmodByPathname = new Map<string, string>();
   const files = await walkMarkdown(contentDir);
 
   for (const file of files) {
@@ -39,6 +39,6 @@ export async function buildSitemapLastmodMap(contentDir) {
   return lastmodByPathname;
 }
 
-export function sitemapPathname(url) {
+export function sitemapPathname(url: string | URL): string {
   return normalisePathname(decodeURI(new URL(url).pathname));
 }
