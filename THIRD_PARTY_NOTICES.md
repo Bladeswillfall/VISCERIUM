@@ -50,8 +50,8 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `eslint` | development | `10.11.0` |
 | Codex (`Site/`) | `typescript` | development | `6.0.3` |
 | Obsidian timelines plugin | `moment` | runtime | `2.31.0` |
-| Obsidian timelines plugin | `vis-data` | runtime | `8.0.4` |
-| Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.4` |
+| Obsidian timelines plugin | `vis-data` | runtime | `8.0.6` |
+| Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.5` |
 | Obsidian timelines plugin | `esbuild` | development | `^0.28.2` |
 | Obsidian timelines plugin | `obsidian` | development | `^1.14.4` |
 
