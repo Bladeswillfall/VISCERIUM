@@ -28,7 +28,7 @@ The block below is maintained from the existing npm package manifests. It record
 | Codex (`Site/`) | `@astrojs/mdx` | runtime | `^8.1.2` |
 | Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.4` |
 | Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.42.8` |
-| Codex (`Site/`) | `astro` | runtime | `^7.4.4` |
+| Codex (`Site/`) | `astro` | runtime | `^7.4.7` |
 | Codex (`Site/`) | `cytoscape` | runtime | `3.34.3` |
 | Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.1` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
