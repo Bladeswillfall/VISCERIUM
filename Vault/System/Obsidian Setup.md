@@ -22,6 +22,20 @@ Open only the `Vault/` folder in Obsidian.
 
 Restart Obsidian after first opening the vault if Templater commands do not appear immediately.
 
+## Degel System starmap authoring
+
+Xyl's Starmap v2.0 or newer is the intended authoring tool for the Degel System's celestial maps and PlanetViews.
+
+1. Install **Xyl's Starmap** from Obsidian Community Plugins and enable it. This repository registers `xyls-starmap`, but does not include its plugin executable.
+2. Open [[Degel Starmap]] in `System/Views/`.
+3. Use the plugin's **Insert Starmap Template** command to generate the YAML structure for your installed version. Populate it using the six published Degel System objects linked in the note. Keep the plugin-generated field names instead of guessing at them.
+4. Use the plugin's v2 PlanetView templates for close-up views, moon orbits, rings, and points of interest. Reference public Lore notes and assets, not Drafts or Stories.
+5. Keep the note in `System/` until a supported public renderer and publication transform have been implemented. Obsidian-only code fences do **not** turn into an interactive Astro component during sync.
+
+The existing public Degel System explorer remains in place during the migration; do not delete it until the replacement has been built and checked. Page-specific CSS is for visual refinements, not a substitute for the Obsidian rendering runtime.
+
+
+
 ## Plugin installation and shared settings
 
 The repository records the creator plugin environment without redistributing ordinary third-party plugin code.
