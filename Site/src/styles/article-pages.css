@@ -472,3 +472,33 @@ body:not(:has(.home-gateway)) .codex-sidebar-art-caption {
 .codex-image-attribution-page .sl-markdown-content:not([hidden]) {
   display: none;
 }
+
+/*
+ * Standard article H3/H4 sections inherit the authored vc-indent rhythm,
+ * without changing H2s, composed pages, or manually indented callouts.
+ * The content script marks the complete sibling range through the next H2.
+ * Keep this unlayered: Starlight's unlayered flow margins override core-layer rules.
+ */
+.sl-markdown-content.codex-editorial-article > [data-codex-section-indent='1'] {
+  --vc-subsection-indent: 2.25rem;
+}
+
+.sl-markdown-content.codex-editorial-article > [data-codex-section-indent='2'] {
+  --vc-subsection-indent: 4.5rem;
+}
+
+.sl-markdown-content.codex-editorial-article > [data-codex-section-indent] {
+  margin-inline-start: var(--vc-subsection-indent);
+  max-inline-size: calc(100% - var(--vc-subsection-indent));
+}
+
+@media (max-width: 48rem) {
+  .sl-markdown-content.codex-editorial-article > [data-codex-section-indent='1'] {
+    --vc-subsection-indent: 1.125rem;
+  }
+
+  .sl-markdown-content.codex-editorial-article > [data-codex-section-indent='2'] {
+    --vc-subsection-indent: 2.25rem;
+  }
+}
+
