@@ -95,6 +95,12 @@ related: []
 > This helper is creator guidance, not canon. Do not use it as a secrecy boundary; unrevealed material still belongs in `Vault/Private`.
 <!-- viscerium:authoring:end -->
 
+<!-- obsidian-only:start -->
+```dataviewjs
+await dv.view("System/Views/Article/Location Context");
+```
+<!-- obsidian-only:end -->
+
 ## Summary
 
 ## Geography and Form

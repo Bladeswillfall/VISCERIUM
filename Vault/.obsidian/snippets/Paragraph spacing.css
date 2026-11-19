@@ -1,9 +1,10 @@
 /*
  * Paragraph spacing
- * Increases line and paragraph spacing in Reading View.
+ * Keeps ordinary prose legible in Reading View and Live Preview.
  */
 
-.markdown-reading-view .markdown-rendered {
+.markdown-reading-view .markdown-rendered,
+.markdown-source-view.mod-cm6:not(.viscerium-home) .cm-content {
   line-height: 1.68;
 }
 
@@ -17,4 +18,8 @@
 
 .markdown-reading-view .markdown-rendered li + li {
   margin-top: 0.22em;
+}
+
+.markdown-source-view.mod-cm6:not(.viscerium-home) .HyperMD-paragraph {
+  padding-block: 0.08em;
 }

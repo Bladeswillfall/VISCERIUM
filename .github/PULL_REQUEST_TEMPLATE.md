@@ -11,6 +11,13 @@
 - [ ] GitHub workflow / issue templates
 - [ ] Documentation only
 
+## Changelog
+
+- [ ] Added an Unreleased entry in `Site/CHANGELOG.md` (or published a new dated version).
+- [ ] No entry needed: (replace with a specific reason)
+
+<!-- If no public release note is warranted, check the second option and replace its placeholder with a specific reason. -->
+
 ## Validation
 
 <!-- Mark what you actually ran. Do not tick boxes for vibes. -->

@@ -88,7 +88,7 @@
     {
       "id": "viscerium-creator-tools",
       "name": "VISCERIUM Creator Tools",
-      "testedVersion": "0.2.0",
+      "testedVersion": "0.5.0",
       "source": "first-party",
       "sourcePath": "Tools/obsidian-viscerium-creator-tools",
       "runtimePath": "Vault/.obsidian/plugins/viscerium-creator-tools"
@@ -138,6 +138,15 @@
       "testedVersion": "2.1.9",
       "source": "obsidian-community",
       "sharedSettings": "Vault/.obsidian/plugins/zoom-map/data.json"
+    },
+    {
+      "id": "xyls-starmap",
+      "name": "Xyl's Starmap",
+      "testedVersion": null,
+      "minimumVersion": "2.0.0",
+      "source": "obsidian-community",
+      "sharedSettings": null,
+      "note": "Use v2.0 or newer for PlanetView authoring. Version has not been validated in the shared vault. Plugin runtime and device settings remain local."
     },
     {
       "id": "table-editor-obsidian",

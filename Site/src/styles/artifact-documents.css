@@ -1,0 +1,476 @@
+/* Era artifacts. Loaded only on pages containing [artifact:...] shortcodes. */
+.cx-artifact {
+  container: artifact / inline-size;
+  --artifact-accent: var(--era-e1-accent, var(--artifact-citadel-accent));
+  --artifact-ink: var(--artifact-citadel-ink);
+  --artifact-paper: var(--artifact-citadel-paper);
+  --artifact-paper-deep: var(--artifact-citadel-edge);
+  --artifact-line: color-mix(in srgb, var(--artifact-accent) 50%, transparent);
+  margin: 1.7rem 0 2rem;
+  min-width: 0;
+  max-width: 100%;
+  font-family: var(--vc-font-ui, sans-serif);
+}
+.cx-artifact *, .cx-artifact *::before, .cx-artifact *::after { box-sizing: border-box; }
+.cx-artifact [hidden] { display: none !important; }
+.cx-artifact-source:not([hidden]) {
+  padding: .75rem 1rem;
+  border-inline-start: 2px solid var(--codex-border, var(--codex-palette-deep));
+  font: 1rem/1.7 var(--vc-font-body, Georgia, serif);
+}
+.cx-artifact-source > :first-child { margin-top: 0; }
+.cx-artifact-source > :last-child { margin-bottom: 0; }
+.cx-artifact-source-note { margin-inline: .2em; color: var(--era-e1-accent, var(--artifact-citadel-accent)); font-size: .89em; font-style: italic; }
+
+/* Follow the Codex action-button rules: era colour, filled hover, pill silhouette.
+   Artifact identity determines accent even when the hosting article belongs to another era. */
+.cx-artifact {
+  --artifact-button: var(--era-button, var(--codex-surface-raised-color));
+  --artifact-button-hover: var(--era-button-hover, var(--codex-palette-deep));
+  --artifact-button-label: var(--era-button-label, var(--era-button-text, var(--codex-fixed-light)));
+}
+.cx-artifact[data-preset="citadel-note"] {
+  --artifact-button: var(--era-e1-button);
+  --artifact-button-hover: var(--era-e1-button-hover);
+}
+.cx-artifact[data-preset="smog-dispatch"] {
+  --artifact-button: var(--era-e2-button);
+  --artifact-button-hover: var(--era-e2-button-hover);
+}
+.cx-artifact[data-preset="nearsight-terminal"] {
+  --artifact-button: var(--era-e3-button);
+  --artifact-button-hover: var(--era-e3-button-hover);
+}
+.cx-artifact[data-preset="entropy-diagnostic"] {
+  --artifact-button: var(--era-e4-button);
+  --artifact-button-hover: var(--era-e4-button-hover);
+}
+.cx-artifact-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin: 1.2rem 0 1.35rem;
+}
+.cx-artifact-view {
+  display: inline-flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: .25rem;
+}
+.cx-artifact :is(.cx-artifact-view, .cx-artifact-pager) button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  padding: .45rem .8rem;
+  background: var(--codex-surface);
+  color: var(--codex-text-body);
+  font: 600 var(--sl-text-sm) / 1.25 var(--vc-font-ui, sans-serif);
+  letter-spacing: normal;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+.cx-artifact .cx-artifact-view button[aria-pressed="true"] {
+  background: var(--artifact-button);
+  color: var(--artifact-button-label);
+}
+.cx-artifact :is(.cx-artifact-view, .cx-artifact-pager) button:is(:hover, :focus-visible):not(:disabled) {
+  background: var(--artifact-button-hover);
+  color: var(--artifact-button-label);
+}
+.cx-artifact :is(.cx-artifact-view, .cx-artifact-pager) button:focus-visible {
+  outline: 2px solid var(--sl-color-accent-high);
+  outline-offset: 3px;
+}
+.cx-artifact-view-meta, .cx-artifact-pager {
+  color: var(--codex-text-minor,var(--artifact-controls-muted)); font: .74rem/1.5 var(--vc-font-ui,sans-serif);
+  letter-spacing: .06em;
+}
+.cx-artifact-view-meta { text-align: right; }
+.cx-artifact-stage { max-width: 620px; width: 100%; margin: 0 auto; position: relative; }
+.cx-artifact-paper {
+  --paper-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.53' numOctaves='3' seed='13' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='280' height='280' opacity='.15' filter='url(%23n)'/%3E%3C/svg%3E");
+  position:relative; isolation:isolate; overflow:hidden; width:100%;
+  height: var(--artifact-folio-height,890px); background: var(--artifact-paper);
+  color: var(--artifact-ink);
+  background-image:
+    radial-gradient(ellipse at 12% 11%, var(--artifact-paper-tone-1),transparent 23%),
+    radial-gradient(ellipse at 93% 73%, var(--artifact-paper-tone-2), transparent 18%),
+    radial-gradient(ellipse at 55% 51%, var(--artifact-paper-tone-3), transparent 69%),
+    repeating-linear-gradient(0deg, var(--artifact-paper-tone-4) 0 1px, transparent 1px 54px),
+    linear-gradient(98deg, var(--artifact-paper-tone-5) 0%, var(--artifact-paper-tone-6) 7%, var(--artifact-paper-tone-7) 75%, var(--artifact-paper-tone-8) 100%);
+  clip-path:polygon(0 .4%,6% 0,14% .3%,20% .15%,26% .3%,35% 0,43% .25%,52% .1%,61% .3%,73% .08%,80% .3%,92% .05%,99.5% 0,99.2% 13%,100% 17%,99.3% 25%,100% 29%,99.5% 38%,100% 45%,99.2% 54%,100% 60%,99.4% 71%,100% 78%,99.5% 89%,100% 100%,88% 99.7%,76% 100%,62% 99.6%,50% 100%,40% 99.65%,29% 99.9%,18% 99.6%,7% 99.85%,.5% 100%,0 94%,.7% 86%,0 77%,.5% 70%,0 62%,.65% 55%,0 46%,.6% 39%,0 31%,.55% 22%,0 12%);
+}
+.cx-artifact-paper::before {
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.46;
+  background-image:var(--paper-noise), url('/assets/artifacts/citadel-parchment.webp');
+  background-size:280px 280px, cover;
+  mix-blend-mode:multiply;
+}
+.cx-artifact-paper::after {
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 9%, var(--artifact-paper-tone-9) 10%,var(--artifact-paper-tone-10) 10.4%,transparent 12%),
+    linear-gradient(0deg,transparent 50%,var(--artifact-paper-tone-11) 50.35%,var(--artifact-paper-tone-12) 50.8%,transparent 51.3%),
+    radial-gradient(circle at 27% 37%,var(--artifact-paper-tone-13) 0 1px,transparent 4px),
+    radial-gradient(circle at 61% 79%,var(--artifact-paper-tone-14) 0 2px,transparent 6px);
+  opacity:.7;
+}
+.cx-artifact-paper[data-condition="archive"]::after {opacity:.17}
+.cx-artifact-paper[data-condition="battered"]::after {opacity:1}
+.cx-artifact-paper[data-condition="battered"] {filter:sepia(.23) contrast(1.035);}
+.cx-artifact-inner {
+  padding: clamp(27px,7%,52px) clamp(31px,9%,62px) clamp(30px,8%,59px) clamp(33px,10%,69px);
+  height:100%; position:relative; z-index:1;
+}
+.cx-artifact-inner::before {
+  content:""; pointer-events:none; position:absolute; top:4%; bottom:5%; left:7%; border-left:1px solid var(--artifact-paper-tone-15);
+  box-shadow:8px 0 0 var(--artifact-paper-tone-16); opacity:.5;
+}
+.cx-artifact-folio-head {
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem;
+  font:italic clamp(11px,2cqw,14px)/1.3 "IM Fell English",Georgia,serif;
+  color:var(--artifact-ink-tone-1);
+}
+.cx-artifact-title {
+  margin:clamp(14px,3.8cqw,28px) 0 1.1rem;
+  color:var(--artifact-ink-tone-2); font:normal clamp(17px,3.5cqw,26px)/1.2 "IM Fell English",Georgia,serif;
+  letter-spacing: .03em; transform:rotate(-1.4deg);
+}
+.cx-artifact-title::after {
+  content:""; display:block; height:1px; width:4.1rem; margin:9px 0 0 1rem;
+  background:var(--artifact-ink-tone-3); transform:rotate(1deg);
+}
+.cx-artifact-continuation { color:var(--artifact-ink-tone-4); margin:1.1rem 0; font:italic 16px Georgia,serif; text-align:center; }
+.cx-artifact-prose {
+  position:relative; margin-top:clamp(9px,1.3cqw,14px);
+  padding-inline-end:11.5%;
+  font:italic clamp(16px,3.55cqw,24px)/1.42 "Fondamento","IM Fell English",Georgia,serif;
+  letter-spacing:-.036em;
+  text-shadow: .26px .19px .36px var(--artifact-ink-soft-shadow);
+  overflow-wrap: anywhere;
+}
+.cx-artifact-prose p { margin:0 0 .64em; line-height:inherit; color:inherit; font:inherit; }
+.cx-artifact-prose :is(em,strong,a) { color:inherit; }
+.cx-artifact-prose strong {text-shadow: .35px .15px currentColor;}
+.cx-artifact-prose > p:first-child::first-letter { color:var(--artifact-ink-tone-5); font-size:2.45em; line-height:.76; float:left; padding:.07em .06em 0 0; font-family:"IM Fell English",Georgia,serif; font-weight:400;}
+.cx-artifact-paper[data-hand="copy"] .cx-artifact-prose {font-family:"IM Fell English",Georgia,serif;letter-spacing:-.015em;font-style:normal;font-size:clamp(16px,3.3cqw,22px);}
+.cx-artifact-paper[data-hand="urgent"] .cx-artifact-prose {font-family:"Jim Nightshade",cursive;font-size:clamp(19px,4.3cqw,27px);line-height:1.33;}
+.cx-artifact-paper[data-ink="feathered"] .cx-artifact-prose {text-shadow:.4px .3px .6px var(--artifact-ink-tone-6);}
+.cx-artifact-paper[data-ink="worn"] .cx-artifact-prose {opacity:.88}
+.cx-artifact-margin-note {
+  position:absolute; right:3.7%; width:11%; z-index:3;
+  color:var(--artifact-ink-tone-7); font:italic clamp(13px,2.8cqw,18px)/1.09 "Jim Nightshade","IM Fell English",Georgia,serif;
+  padding-inline-start:6px; border-inline-start:1px solid var(--artifact-ink-tone-8);
+  transform:rotate(-4deg); overflow-wrap:anywhere; pointer-events:none;
+}
+.cx-artifact-margin-note::before {content:""; position:absolute; left:-11px; top:9px; width:9px; border-block-start:1px solid currentColor; transform:rotate(10deg)}
+.cx-artifact-anchor {text-decoration:underline; text-decoration-color:var(--artifact-ink-tone-9); text-decoration-thickness:1px; text-underline-offset:.1em}
+.cx-artifact-note-trigger {
+  display:inline-flex; vertical-align:super; margin:0 .12em; padding:0 .08em !important;
+  min-width:1.45em; min-height:1.45em; line-height:1 !important;
+  border:0 !important; background:transparent !important; color:var(--artifact-ink-tone-10) !important;
+  font:700 .75em/1 "IM Fell English",Georgia,serif !important;
+}
+.cx-artifact-inline-note {
+  display:block; font:italic .75em/1.23 "Jim Nightshade",Georgia,serif;
+  color:var(--artifact-ink-tone-11); border-inline-start:1px solid currentColor; padding:.25em .6em; margin:.2em 0 .5em;
+}
+.cx-artifact-pager {display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:space-between; margin:1rem 0 1.8rem;}
+.cx-artifact .cx-artifact-pager button {min-width:2.65rem;min-height:2.65rem;padding:.45rem;}
+.cx-artifact .cx-artifact-pager button:disabled {opacity:.45;cursor:default;}
+.cx-artifact-pager .cx-artifact-count {font-variant-numeric:tabular-nums}
+.cx-artifact-pager .cx-artifact-actions {display:flex;align-items:center;gap:1rem}
+.cx-artifact-note-trigger:not(:focus-visible) {opacity:.6}
+.cx-artifact[data-preset="smog-dispatch"] {--artifact-accent:var(--artifact-smog-accent);--artifact-ink:var(--artifact-smog-ink);--artifact-paper:var(--artifact-smog-paper)}
+.cx-artifact[data-preset="smog-dispatch"] .cx-artifact-paper {
+  background-image:radial-gradient(circle at 79% 24%,var(--artifact-smog-tone-1),transparent 29%),
+    repeating-linear-gradient(0deg,transparent 0 29px,var(--artifact-smog-tone-2) 29px 30px),
+    linear-gradient(97deg,var(--artifact-smog-tone-3),var(--artifact-smog-tone-4) 18%,var(--artifact-smog-tone-5) 100%);
+  clip-path:polygon(0 0,98% .4%,100% 13%,99% 100%,3% 99%,0 92%);
+}
+.cx-artifact[data-preset="smog-dispatch"] .cx-artifact-title {color:var(--artifact-smog-tone-6);font:700 clamp(17px,3cqw,23px)/1.25 "IBM Plex Mono",monospace;transform:none;text-transform:uppercase;letter-spacing:.03em}
+.cx-artifact[data-preset="smog-dispatch"] .cx-artifact-prose {font:clamp(13px,2.35cqw,17px)/1.75 "IBM Plex Mono",monospace;letter-spacing:-.035em}
+.cx-artifact[data-preset="smog-dispatch"] .cx-artifact-prose p:first-child::first-letter {float:none;color:inherit;font:inherit;padding:0}
+.cx-artifact[data-preset="smog-dispatch"] .cx-artifact-folio-head,
+.cx-artifact[data-preset="smog-dispatch"] .cx-artifact-margin-note {font-family:"IBM Plex Mono",monospace; font-style:normal}
+.cx-artifact[data-preset="nearsight-terminal"] {--artifact-accent:var(--artifact-nearsight-accent);--artifact-ink:var(--artifact-nearsight-ink);--artifact-paper:var(--artifact-nearsight-paper)}
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-paper {
+  background-image:repeating-linear-gradient(0deg,transparent 0 3px,var(--artifact-nearsight-tone-1) 3px 4px),
+    radial-gradient(ellipse at center,var(--artifact-nearsight-tone-2),var(--artifact-nearsight-tone-3) 80%);
+  border:3px solid var(--artifact-nearsight-tone-4);clip-path:none;box-shadow:inset 0 0 35px var(--artifact-nearsight-tone-5);
+}
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-inner::before {display:none}
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-folio-head,
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-title,
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-prose,
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-margin-note {color:var(--artifact-ink);font:clamp(14px,2.4cqw,18px)/1.55 "IBM Plex Mono",monospace;letter-spacing:0;text-shadow:0 0 3px var(--artifact-nearsight-tone-6);transform:none}
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-prose p:first-child::first-letter {float:none;color:inherit;font:inherit;padding:0}
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-title::after {background:var(--artifact-ink)}
+.cx-artifact[data-preset="entropy-diagnostic"] {--artifact-accent:var(--artifact-entropy-accent);--artifact-ink:var(--artifact-entropy-ink);--artifact-paper:var(--artifact-entropy-paper)}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-paper {
+  clip-path:none; border:1px solid var(--artifact-entropy-tone-1);
+  background-image:linear-gradient(90deg,var(--artifact-entropy-tone-2) 1px,transparent 1px),
+    linear-gradient(0deg,var(--artifact-entropy-tone-3) 1px,transparent 1px),
+    linear-gradient(139deg,var(--artifact-entropy-tone-4),var(--artifact-entropy-tone-5) 90%);background-size:29px 29px,29px 29px,auto;
+}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-inner::before {display:none}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-folio-head,
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-title,
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-prose {color:var(--artifact-ink);font:clamp(14px,2.6cqw,18px)/1.65 "IBM Plex Sans",sans-serif;letter-spacing:0;transform:none;text-shadow:none}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-title {color:var(--artifact-entropy-tone-6);border-block-end:1px solid var(--artifact-entropy-tone-7);padding-block-end:12px;text-transform:uppercase;font-weight:700;letter-spacing:.14em}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-title::after {display:none}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-prose p:first-child::first-letter {float:none;color:inherit;font:inherit;padding:0}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-margin-note,
+.cx-artifact[data-preset="nearsight-terminal"] .cx-artifact-inline-note {color:var(--artifact-entropy-tone-8);font:clamp(11px,2cqw,14px)/1.3 "IBM Plex Mono",monospace}
+.cx-artifact[data-preset="entropy-diagnostic"] .cx-artifact-inline-note {color:var(--artifact-entropy-tone-8);font:clamp(11px,2cqw,14px)/1.3 "IBM Plex Mono",monospace}
+@container artifact (max-width:460px) {
+  .cx-artifact-toolbar {align-items:start}
+  .cx-artifact-view-meta {text-align:left}
+  .cx-artifact-inner {padding:clamp(22px,8cqw,37px) clamp(20px,7cqw,32px) 30px clamp(30px,10cqw,42px)}
+  .cx-artifact-prose {padding-inline-end:0;font-size:clamp(17px,5cqw,21px)}
+  .cx-artifact-title {margin-block:12px 9px}
+  .cx-artifact-paper .cx-artifact-margin-note {display:none}
+  .cx-artifact-pager {font-size:.72rem}
+  .cx-artifact[data-preset="citadel-note"] .cx-artifact-prose {line-height:1.43}
+}
+@media print {
+  .cx-artifact-toolbar,.cx-artifact-pager,.cx-artifact-stage {display:none!important}
+  .cx-artifact .cx-artifact-source[hidden],
+  .cx-artifact .cx-artifact-source {display:block!important;border:0; padding:0}
+}
+@media (forced-colors: active) {
+  .cx-artifact :is(.cx-artifact-view,.cx-artifact-pager) button { background: ButtonFace; color: ButtonText; border: 1px solid ButtonText; }
+  .cx-artifact :is(.cx-artifact-view,.cx-artifact-pager) button[aria-pressed="true"],
+  .cx-artifact :is(.cx-artifact-view,.cx-artifact-pager) button:is(:hover,:focus-visible):not(:disabled) {background: Highlight;color: HighlightText;}
+  .cx-artifact-paper {clip-path:none;border:1px solid CanvasText;background:Canvas;color:CanvasText}
+  .cx-artifact-prose,.cx-artifact-title,.cx-artifact-folio-head,.cx-artifact-margin-note {color:CanvasText!important;text-shadow:none!important}
+}
+@media (prefers-reduced-motion:reduce) {.cx-artifact * {scroll-behavior:auto!important;transition:none!important}}
+
+.cx-artifact:is([data-preset="nearsight-terminal"],[data-preset="entropy-diagnostic"]) .cx-artifact-paper::before {display:none}
+
+
+/* Faithful CITADEL V3 manuscript: source rules and original assets, not a recolour. */
+.cx-artifact[data-preset="citadel-note"] {
+ --paper-ink:var(--artifact-citadel-ink);--paper-red:var(--artifact-citadel-red);
+ --paper-blue:var(--artifact-citadel-blue);
+ --paper-texture:url('/assets/artifacts/citadel-parchment.webp');
+ --wear-texture:url('/assets/artifacts/citadel-wear.webp');
+ --paper-mask:url('/assets/artifacts/citadel-edge-mask.svg');
+}
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-paper.manuscript {
+ clip-path:none;background-image:var(--paper-texture);
+}
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-paper.manuscript::before,
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-paper.manuscript::after,
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-inner.ms-body::before,
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-title.rubric::after {content:none;display:none}
+.cx-artifact[data-preset="citadel-note"] .manuscript{--damage: .54;--ink-bleed:.19;--writing-size:23px;
+ position:relative;isolation:isolate;width:min(100%,684px);min-height:957px;color:var(--paper-ink);
+ margin:5px auto 13px;overflow:hidden;
+ background-image:var(--paper-texture);background-position:center;background-size:100% 100%;
+ box-shadow:none;
+ -webkit-mask-image:var(--paper-mask);mask-image:var(--paper-mask);
+ -webkit-mask-size:100% 100%;mask-size:100% 100%;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+ filter:drop-shadow(0 1px 1px var(--artifact-citadel-v3-detail-01));
+}
+@supports not (mask-image:url("x")){.cx-artifact[data-preset="citadel-note"] .manuscript{clip-path:polygon(.5% .2%,99.2% 0%,99.7% 99.6%,1% 100%)}
+}
+.cx-artifact[data-preset="citadel-note"] .paper-shade{position:absolute;inset:0;z-index:0;pointer-events:none;background:
+ linear-gradient(90deg,var(--artifact-citadel-v3-detail-02),var(--artifact-citadel-v3-detail-03) 3%,transparent 8%,transparent 89%,var(--artifact-citadel-v3-detail-04)),
+ radial-gradient(ellipse 24% 9% at 86% 5%,var(--artifact-citadel-v3-detail-05),transparent 100%),
+ radial-gradient(ellipse 25% 12% at 11% 97%,var(--artifact-citadel-v3-detail-06),transparent 100%)}
+.cx-artifact[data-preset="citadel-note"] .paper-grit{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:var(--damage);background-image:var(--wear-texture);background-size:100% 100%;mix-blend-mode:multiply}
+.cx-artifact[data-preset="citadel-note"] .paper-fold{position:absolute;left:-3%;width:107%;height:14px;top:51%;z-index:1;opacity:.48;transform:rotate(-.35deg);pointer-events:none;background:linear-gradient(to bottom,transparent,var(--artifact-citadel-v3-detail-07) 30%,var(--artifact-citadel-v3-detail-08) 68%,transparent)}
+.cx-artifact[data-preset="citadel-note"] .paper-fold.vertical{width:18px;height:103%;left:12%;top:-2%;transform:rotate(.18deg);opacity:.3;background:linear-gradient(90deg,transparent,var(--artifact-citadel-v3-detail-09),var(--artifact-citadel-v3-detail-10),transparent)}
+.cx-artifact[data-preset="citadel-note"] .page-ghost{position:absolute;pointer-events:none;inset:0;z-index:1;opacity:.075;background:
+ repeating-linear-gradient(174deg,transparent 0px,transparent 12px,var(--artifact-citadel-v3-detail-11) 13px,transparent 17px),
+ radial-gradient(ellipse at 8% 79%,var(--artifact-citadel-v3-detail-12),transparent 23%)}
+.cx-artifact[data-preset="citadel-note"] .ms-body{position:relative;z-index:3;padding:57px 60px 72px 71px}
+.cx-artifact[data-preset="citadel-note"] .gutter{position:absolute;left:30px;top:38px;bottom:37px;width:15px;opacity:.55;background:linear-gradient(90deg,var(--artifact-citadel-v3-detail-13),transparent 65%);border-left:1px solid var(--artifact-citadel-v3-detail-14);border-right:1px solid var(--artifact-citadel-v3-detail-15)}
+.cx-artifact[data-preset="citadel-note"] .pricking{position:absolute;left:54px;top:123px;bottom:122px;width:4px;opacity:.28;background-image:radial-gradient(circle,var(--artifact-citadel-v3-detail-16) .6px,transparent .9px);background-size:4px 33px}
+.cx-artifact[data-preset="citadel-note"] .guidelines{position:absolute;z-index:-1;pointer-events:none;left:65px;right:48px;top:145px;bottom:68px;opacity:.22;background:repeating-linear-gradient(to bottom, transparent 0,transparent 32px,var(--artifact-citadel-v3-detail-17) 32.3px,transparent 33px)}
+.cx-artifact[data-preset="citadel-note"] .ms-header{display:flex;justify-content:space-between;gap:14px;align-items:baseline;font:italic 15px/1.3 "IM Fell English","EB Garamond",Georgia,serif;color:var(--artifact-citadel-v3-detail-18)}
+.cx-artifact[data-preset="citadel-note"] .folio{transform:rotate(5deg);opacity:.7}
+.cx-artifact[data-preset="citadel-note"] .rubric{font:400 22px/1.24 "Eagle Lake","EB Garamond",Georgia,serif;color:var(--paper-red);margin:28px 0 17px;transform:rotate(-.8deg);transform-origin:left;text-shadow:.26px .23px .3px var(--artifact-citadel-v3-detail-19)}
+.cx-artifact[data-preset="citadel-note"] .scratch-rubric{width:88px;height:10px;margin:-13px 0 12px 12px;opacity:.6}
+.cx-artifact[data-preset="citadel-note"] .ms-prose{position:relative;font:italic var(--writing-size)/1.39 "Fondamento","TeX Gyre Chorus","EB Garamond",Georgia,serif;letter-spacing:-.022em;line-break:auto;text-rendering:optimizeLegibility;font-kerning:normal;max-width:100%;padding-right:55px;color:var(--paper-ink)}
+.cx-artifact[data-preset="citadel-note"] .ms-prose p{margin:0 0 17px;transform-origin:10% 50%;text-shadow:.31px .23px .45px color-mix(in srgb,var(--artifact-citadel-shadow-base) calc(var(--ink-bleed) * 100%),transparent), -.2px 0 .36px var(--artifact-citadel-v3-detail-20)}
+.cx-artifact[data-preset="citadel-note"] .ms-prose p:nth-of-type(1){transform:rotate(-.19deg)}
+.cx-artifact[data-preset="citadel-note"] .ms-prose p:nth-of-type(2){transform:rotate(.22deg);margin-left:-2px}
+.cx-artifact[data-preset="citadel-note"] .ms-prose p:nth-of-type(3){transform:rotate(-.28deg);margin-left:4px}
+.cx-artifact[data-preset="citadel-note"] .ms-prose p:nth-of-type(4){transform:rotate(.10deg)}
+.cx-artifact[data-preset="citadel-note"] .heavy{font-weight:600;letter-spacing:-.034em;text-shadow:.38px 0 currentColor,.25px .24px .55px var(--artifact-citadel-v3-detail-21)}
+.cx-artifact[data-preset="citadel-note"] .faint{opacity:.73;letter-spacing:.002em}
+.cx-artifact[data-preset="citadel-note"] .lift{position:relative;top:-.065em;display:inline-block;transform:rotate(-1.1deg)}
+.cx-artifact[data-preset="citadel-note"] .sink{position:relative;top:.07em;display:inline-block;transform:rotate(.9deg)}
+.cx-artifact[data-preset="citadel-note"] .initial{float:left;font:400 77px/.79 "IM Fell English","EB Garamond",Georgia,serif;color:var(--paper-blue);margin:12px 5px 0 -8px;position:relative;text-shadow:1px 1px var(--artifact-citadel-initial-shadow),-.7px -.25px var(--artifact-citadel-initial-ink);transform:rotate(-5deg)}
+.cx-artifact[data-preset="citadel-note"] .initial:after{content:"";position:absolute;width:29px;left:-4px;bottom:-12px;border-bottom:1.2px solid var(--paper-red);transform:rotate(-17deg)}
+.cx-artifact[data-preset="citadel-note"] .revision{color:var(--artifact-citadel-v3-detail-22);display:inline-block;transform:rotate(-3.3deg) translateY(-2px);font-size:.86em;white-space:nowrap;letter-spacing:-.03em;text-shadow:.32px .28px var(--artifact-citadel-v3-detail-23)}
+.cx-artifact[data-preset="citadel-note"] .deleted{position:relative;display:inline}
+.cx-artifact[data-preset="citadel-note"] .deleted:after{content:"";position:absolute;left:2%;top:58%;width:96%;height:1px;background:var(--paper-ink);transform:rotate(-2.1deg);opacity:.63}
+.cx-artifact[data-preset="citadel-note"] .divider-drawn{height:22px;width:88px;margin:9px 0 10px 16px}
+.cx-artifact[data-preset="citadel-note"] .ms-ending{color:var(--artifact-citadel-v3-detail-24);font:italic 18px/1.35 "IM Fell English","EB Garamond",Georgia,serif;margin:17px 0 0;transform:rotate(.35deg)}
+.cx-artifact[data-preset="citadel-note"] .red{color:var(--paper-red)}
+.cx-artifact[data-preset="citadel-note"] .ms-aside{position:absolute;pointer-events:none;right:-3px;top:230px;color:var(--paper-red);font:italic 19px/1.09 "Jim Nightshade","TeX Gyre Chorus","EB Garamond",serif;width:69px;letter-spacing:-.016em;transform:rotate(6deg);border-left:1px solid var(--artifact-citadel-v3-detail-25);padding-left:8px;text-shadow:.3px .4px var(--artifact-citadel-v3-detail-26)}
+.cx-artifact[data-preset="citadel-note"] .ms-aside:before{content:"";position:absolute;width:14px;top:15px;left:-17px;border-top:1px solid currentColor;transform:rotate(-19deg)}
+.cx-artifact[data-preset="citadel-note"] .ms-aside.second{top:623px;right:1px;transform:rotate(-7deg);width:66px;border-color:var(--artifact-citadel-v3-detail-27)}
+.cx-artifact[data-preset="citadel-note"] .ms-aside.third{top:auto;right:5px;bottom:67px;transform:rotate(10deg);font-size:16px;color:var(--artifact-citadel-v3-detail-28);border:0;opacity:.7;width:95px}
+.cx-artifact[data-preset="citadel-note"] .ms-sketch{position:absolute;bottom:168px;right:4px;width:77px;height:103px;opacity:.38;transform:rotate(3deg)}
+.cx-artifact[data-preset="citadel-note"] .ms-page-art{position:absolute;z-index:2;inset:0;pointer-events:none;width:100%;height:100%}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-wear="archive"]{--damage:.1}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-wear="field"]{--damage:.54}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-wear="battered"]{--damage:1}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-wear="archive"] .paper-fold{opacity:.1}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-wear="battered"] .paper-fold{opacity:.86}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-wear="battered"] .paper-shade{background:linear-gradient(90deg,var(--artifact-citadel-v3-detail-29),var(--artifact-citadel-v3-detail-30) 6%,transparent 60%,var(--artifact-citadel-v3-detail-31)),radial-gradient(ellipse at 84% 10%,var(--artifact-citadel-v3-detail-32),transparent 24%)}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-script="copy"]{--writing-size:21px}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-script="copy"] .ms-prose{font-family:"Eagle Lake","EB Garamond",Georgia,serif;font-style:normal;line-height:1.59;letter-spacing:-.04em}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-script="copy"] .ms-prose p{transform:none;margin-left:0}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-script="urgent"]{--writing-size:25px}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-script="urgent"] .ms-prose{font-family:"Jim Nightshade","TeX Gyre Chorus","EB Garamond",serif;line-height:1.31;letter-spacing:-.019em}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-script="urgent"] .rubric{transform:rotate(-2deg)}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-script="urgent"] .ms-prose p:nth-child(2){transform:rotate(-.95deg)}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-ink="fresh"]{--ink-bleed:.07}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-ink="worn"]{--ink-bleed:.19}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-ink="feathered"]{--ink-bleed:.41}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-ink="feathered"] .ms-prose{filter:drop-shadow(.18px .24px .4px var(--artifact-citadel-v3-detail-33))}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-notes="off"] .ms-aside,.cx-artifact[data-preset="citadel-note"] .manuscript[data-notes="off"] .ms-sketch,.cx-artifact[data-preset="citadel-note"] .manuscript[data-notes="off"] .ms-marginal-mark,.cx-artifact[data-preset="citadel-note"] .manuscript[data-notes="off"] .revision{visibility:hidden}
+.cx-artifact[data-preset="citadel-note"] .manuscript[data-notes="off"] .ms-prose{padding-right:20px}
+
+.cx-artifact[data-preset="citadel-note"] .leaves{position:relative;min-width:0;width:100%}
+.cx-artifact[data-preset="citadel-note"] .leaves .manuscript{margin:0 auto 4px;min-height:0!important;height:var(--folio-height,884px)!important;width:min(100%,620px)!important;--writing-size:22px;}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-body{box-sizing:border-box;min-height:0;height:100%;padding:51px 60px 52px 64px}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-prose{font-size:var(--writing-size);line-height:1.42;padding-right:47px;letter-spacing:-.03em}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-prose p{margin:0 0 10px}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-header{font-size:14px}
+.cx-artifact[data-preset="citadel-note"] .leaves .rubric{font-size:20px;margin:20px 0 15px}
+.cx-artifact[data-preset="citadel-note"] .leaves .initial{font-size:70px}
+.cx-artifact[data-preset="citadel-note"] .leaves .guidelines{top:116px;bottom:55px}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-aside{position:absolute;top:0;right:29px;width:57px;z-index:6;pointer-events:none;color:var(--artifact-citadel-v3-detail-34);font-size:18px;line-height:1.05;transform:rotate(5deg);border-left:1px solid var(--artifact-citadel-v3-detail-35);padding-left:7px;max-height:125px;overflow-wrap:break-word}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-aside::before{width:12px;left:-14px;top:12px}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-sketch{right:32px;bottom:68px;width:58px;height:78px;opacity:.22}
+.cx-artifact[data-preset="citadel-note"] .leaves .manuscript[hidden]{display:none!important}
+.cx-artifact[data-preset="citadel-note"] .ms-note-anchor{text-decoration:underline;text-decoration-color:var(--artifact-citadel-v3-detail-36);text-decoration-thickness:.6px;text-underline-offset:.13em}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-prose .ms-note-trigger{font:normal 16px/1 Georgia,serif;color:var(--artifact-citadel-v3-detail-37);border:0;background:transparent;padding:1px 3px;margin-left:2px;vertical-align:middle}
+.cx-artifact[data-preset="citadel-note"] .leaves .ms-prose .ms-inline-note{font:italic 15px/1.24 'IM Fell English',Georgia,serif;color:var(--artifact-citadel-v3-detail-38);letter-spacing:0}
+.cx-artifact[data-preset="citadel-note"] .leaves .manuscript[data-notes='off'] .ms-note-anchor{text-decoration:none}
+.cx-artifact[data-preset="citadel-note"] .leaves .manuscript[data-size='large']{--writing-size:26px}
+.cx-artifact[data-preset="citadel-note"] .leaves .manuscript[data-script='copy'][data-size='large']{--writing-size:24px}
+.cx-artifact[data-preset="citadel-note"] .leaves .manuscript[data-script='urgent'][data-size='large']{--writing-size:29px}
+
+@container artifact (max-width:560px) {
+ .cx-artifact[data-preset="citadel-note"] .leaves .ms-body {padding:36px clamp(26px,8cqw,37px) 44px clamp(34px,9.8cqw,48px)}
+ .cx-artifact[data-preset="citadel-note"] .leaves .ms-header {font-size:clamp(10px,2.8cqw,12px);gap:6px}
+ .cx-artifact[data-preset="citadel-note"] .leaves .rubric {font-size:clamp(15px,4.05cqw,18px);margin:15px 0 10px}
+ .cx-artifact[data-preset="citadel-note"] .leaves .folio-continuation {margin:8px 0 13px}
+ .cx-artifact[data-preset="citadel-note"] .leaves .ms-prose,
+ .cx-artifact[data-preset="citadel-note"] .leaves .manuscript[data-script="copy"] .ms-prose,
+ .cx-artifact[data-preset="citadel-note"] .leaves .manuscript[data-script="urgent"] .ms-prose {
+   padding-right:0;font-size:clamp(17px,4.8cqw,21px);line-height:1.44;letter-spacing:-.027em
+ }
+ .cx-artifact[data-preset="citadel-note"] .leaves .ms-prose p {margin-bottom:7px;transform:none}
+ .cx-artifact[data-preset="citadel-note"] .leaves .ms-aside {display:none}
+ .cx-artifact[data-preset="citadel-note"] .leaves .ms-prose .ms-note-trigger {display:inline-flex}
+ .cx-artifact[data-preset="citadel-note"] .leaves .ms-prose .ms-inline-note:not([hidden]) {
+   display:block;max-width:92%;padding:5px 0 7px 13px;margin:4px 0 6px auto;
+   border-left:1px solid var(--artifact-citadel-mobile-mark);background:var(--artifact-citadel-mobile-wash);
+   transform:rotate(-1deg)
+ }
+ .cx-artifact[data-preset="citadel-note"] .leaves .guidelines {left:36px;right:27px;top:100px;bottom:43px;opacity:.14}
+ .cx-artifact[data-preset="citadel-note"] .leaves .gutter {left:17px;top:24px}
+ .cx-artifact[data-preset="citadel-note"] .leaves .pricking {left:30px}
+}
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-prose > p:first-child::first-letter {
+ float:none;color:inherit;font:inherit;padding:0;text-shadow:none;
+}
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-paper[data-first-leaf] .cx-artifact-prose > p:first-child::first-letter {
+ float:left;color:var(--paper-blue);font:400 70px/.79 "IM Fell English","EB Garamond",Georgia,serif;
+ margin:12px 5px 0 -8px;
+ text-shadow:1px 1px var(--artifact-citadel-initial-shadow),-.7px -.25px var(--artifact-citadel-initial-ink)
+}
+.cx-artifact[data-preset="citadel-note"] .ms-prose p {color:var(--paper-ink);font-family:inherit;font-size:inherit;font-style:inherit;line-height:inherit}
+.cx-artifact[data-preset="citadel-note"] .rubric {color:var(--paper-red)}
+/* Website theme controls the shell; artifact CSS alone controls the document. */
+.cx-artifact .cx-artifact-view-meta,.cx-artifact .cx-artifact-count,.cx-artifact .cx-artifact-pager {color:var(--codex-text-body)}
+
+
+/* CITADEL-only stacked-paper carousel. The manuscript's approved V3
+   texture/mask remain unchanged; offset under-sheets are decorative. */
+.cx-artifact[data-preset="citadel-note"] .cx-artifact-stage.leaves {
+  isolation: isolate;
+  position: relative;
+}
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::before,
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--citadel-stack-height);
+  pointer-events: none;
+  background: var(--paper-texture) center / 100% 100% no-repeat;
+  -webkit-mask: var(--paper-mask) center / 100% 100% no-repeat;
+  mask: var(--paper-mask) center / 100% 100% no-repeat;
+  box-shadow: 1px 3px 7px color-mix(in srgb,var(--paper-ink) 15%,transparent);
+}
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::before {
+  z-index: 0;
+  transform: translate(-4px,6px) rotate(-.7deg) scale(.988);
+  filter: brightness(.96);
+}
+.cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::after {
+  z-index: 1;
+  transform: translate(5px,10px) rotate(.75deg) scale(.985);
+  filter: brightness(.92);
+}
+.cx-artifact[data-preset="citadel-note"] .leaves > .cx-artifact-paper.manuscript {
+  position: relative;
+  z-index: 2;
+}
+.cx-artifact[data-preset="citadel-note"] .leaves.cx-citadel-stacking > .cx-artifact-paper.cx-citadel-stack-target {
+  position: absolute;
+  inset: 0 0 auto;
+  width: min(100%,620px);
+  margin: 0 auto 4px;
+  pointer-events: none;
+}
+.cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform,opacity;
+}
+.cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet > .manuscript {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  pointer-events: none;
+}
+@container artifact (max-width: 560px) {
+  .cx-artifact[data-preset="citadel-note"] .leaves.cx-citadel-stacking {
+    overflow: clip;
+  }
+  .cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::before {
+    transform: translate(-2px,4px) rotate(-.45deg) scale(.993);
+  }
+  .cx-artifact[data-preset="citadel-note"] .leaves[data-stack="multiple"]::after {
+    transform: translate(2px,7px) rotate(.5deg) scale(.993);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet {display:none}
+}
+@media print {
+  .cx-artifact[data-preset="citadel-note"] .cx-citadel-stack-sheet {display:none !important}
+}

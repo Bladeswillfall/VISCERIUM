@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { convertLegacyArticleLinks, issueTasks, importBase, isWorldAnvilArticleFile, runIntegration } from '../scripts/integrate-worldanvil-import.mjs';
+import { convertLegacyArticleLinks, issueTasks, isWorldAnvilArticleFile, runIntegration } from '../scripts/integrate-worldanvil-import.mjs';
 
 test('prefers a unique current Codex note over its legacy import when converting links', () => {
   const resonance = [{ title: 'Resonance', path: 'Drafts/WorldAnvil Import/Law-Resonance-433.md', current: false }];
@@ -80,16 +80,8 @@ Resonance shapes the setting.
   assert.equal(await fs.readFile(note, 'utf8'), afterFirst);
   assert.equal(second.changed, 0);
   await fs.access(path.join(dataDir, 'report.md'));
+  const triageBase = await fs.readFile(path.join(vault, 'System/Bases/World Anvil Import.base'), 'utf8');
+  assert.match(triageBase, /name: Review first/);
+  assert.match(triageBase, /name: Needs attention/);
   await assert.rejects(fs.access(path.join(vault, 'System/Imports/WorldAnvil/report.md')));
-});
-
-test('migration Base provides card browsing and actionable review views', () => {
-  const base = importBase();
-  assert.match(base, /file\.inFolder\("Drafts\/WorldAnvil Import"\)/);
-  assert.match(base, /import_source == "worldanvil"/);
-  assert.match(base, /type: cards\n    name: Cards/);
-  assert.match(base, /name: Needs era/);
-  assert.match(base, /name: Type review/);
-  assert.match(base, /name: Relationship review/);
-  assert.match(base, /name: Link and asset review/);
 });

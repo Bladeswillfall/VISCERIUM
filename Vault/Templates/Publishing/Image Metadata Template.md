@@ -11,6 +11,7 @@ asset:
 image:
 alt:
 artist:
+humanMade: false
 editor:
 source:
 sourceUrl:
@@ -34,7 +35,7 @@ Describe what the image depicts and why it exists in the VISCERIUM project.
 
 ## Provenance
 
-Record who made it, where it came from, who edited it, and whether it is original, commissioned, AI-generated, placeholder/reference material, or due to be replaced.
+Record who made it, where it came from, who edited it, and whether it is original, commissioned, AI-generated, placeholder/reference material, or due to be replaced. Set `humanMade: true` only when the finished artwork is confirmed to contain no AI-generated imagery.
 
 ## Usage Notes
 

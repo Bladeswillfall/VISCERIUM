@@ -419,6 +419,14 @@
   filter: grayscale(1) contrast(1.05);
 }
 
+.era-primer__power img.era-primer__power-sigil--banner {
+  aspect-ratio: auto;
+  object-fit: contain;
+  border-radius: 0;
+  opacity: 1;
+  filter: none;
+}
+
 .era-primer__power h4 {
   margin-top: 0;
 }

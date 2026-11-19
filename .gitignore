@@ -2,6 +2,7 @@
 Site/node_modules/
 Site/dist/
 Site/.astro/
+Site/.cache/
 Site/src/data/timelines/*.json
 Site/src/data/image-variants.json
 Site/src/data/map-tiles.json

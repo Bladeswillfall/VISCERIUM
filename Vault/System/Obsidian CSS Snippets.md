@@ -150,7 +150,7 @@ Do not recreate one of these as another parallel override. Change the owning sub
 
 ## Article width
 
-`Article widths.css` owns ordinary Markdown sizing. It applies the same centred, responsive lane to Reading View and Live Preview, with a `92rem` maximum and gutters that contract safely in narrow panes.
+`Article widths.css` owns ordinary Markdown sizing. It applies the same centred, responsive lane to Reading View and Live Preview, with a `82rem` maximum and gutters that contract safely in narrow panes.
 
 Do not add competing global `markdown-preview-sizer`, `.cm-sizer`, readable-line-width or theme overrides in another snippet. Change `Article widths.css` when ordinary article sizing needs adjustment.
 

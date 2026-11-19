@@ -34,35 +34,39 @@
     "migration:worldanvil:integrate": "node scripts/integrate-worldanvil-import.mjs",
     "migration:worldanvil:prepare": "node scripts/prepare-worldanvil-import-frontmatter.mjs",
     "migration:worldanvil:prepare:write": "node scripts/prepare-worldanvil-import-frontmatter.mjs --write",
-    "migration:worldanvil:integrate:write": "node scripts/integrate-worldanvil-import.mjs --write && node scripts/prepare-worldanvil-import-frontmatter.mjs --write && node scripts/apply-worldanvil-base-triage.mjs",
+    "migration:worldanvil:integrate:write": "node scripts/integrate-worldanvil-import.mjs --write && node scripts/prepare-worldanvil-import-frontmatter.mjs --write",
     "migration:worldanvil:filenames": "node scripts/normalise-worldanvil-filenames.mjs",
     "migration:worldanvil:filenames:write": "node scripts/normalise-worldanvil-filenames.mjs --write",
     "test:unit": "node --test tests/*.test.mjs",
-    "prebuild": "node scripts/build-content.mjs --mode=build",
+    "prebuild": "node scripts/build-content.mjs --mode=build && node scripts/run-build-validation.mjs pre",
     "build": "astro build",
     "performance:check": "node scripts/check-performance-budgets.mjs",
     "security:artifacts": "node scripts/check-public-artifacts.mjs",
-    "postbuild": "npm run validate:icons && node --test tests/i18n-output.postbuild.mjs && npm run security:artifacts && npm run performance:check",
+    "postbuild": "node scripts/run-build-validation.mjs post",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run baseline:check && npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build"
+    "test": "npm run baseline:check && npm run doctor:vault && npm run notices:check && npm run test:unit && npm run build",
+    "check:astro": "astro check"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.3",
-    "@astrojs/sitemap": "3.7.3",
-    "@astrojs/starlight": "^0.41.3",
-    "astro": "^7.2.8",
+    "@astrojs/mdx": "^8.1.2",
+    "@astrojs/sitemap": "3.7.4",
+    "@astrojs/starlight": "^0.42.8",
+    "astro": "^7.4.7",
     "cytoscape": "3.34.3",
-    "cytoscape-dagre": "4.0.0",
+    "cytoscape-dagre": "4.0.1",
     "fuse.js": "7.5.0",
     "gray-matter": "^4.0.3",
     "leaflet": "1.9.4",
     "leaflet.control.layers.tree": "1.2.0",
-    "starlight-changelogs": "^0.7.0",
+    "moment": "2.31.0",
+    "starlight-changelogs": "^0.7.1",
+    "starlight-links-validator": "^0.27.0",
     "starlight-scroll-to-top": "^2.0.0",
     "starlight-tags": "^2.0.0",
     "starlight-telescope": "^2.0.0",
-    "vis-timeline": "8.5.4"
+    "vis-data": "8.0.6",
+    "vis-timeline": "8.5.6"
   },
   "engines": {
     "node": ">=24 <25"
@@ -86,7 +90,9 @@
     "astro-integration-kit": {
       "astro": "$astro"
     },
-    "picomatch": "^4.0.3"
+    "picomatch": "^4.0.3",
+    "argparse": "2.0.1",
+    "postcss-selector-parser": "7.1.6"
   },
   "allowScripts": {
     "esbuild@0.28.1": true,
@@ -94,7 +100,11 @@
     "fsevents@2.3.3": true
   },
   "devDependencies": {
-    "@playwright/test": "1.62.1",
-    "eslint": "10.10.0"
+    "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@types/leaflet": "1.9.22",
+    "eslint": "10.15.0",
+    "typescript": "6.0.3"
   }
 }

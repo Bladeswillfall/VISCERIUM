@@ -1,4 +1,13 @@
 {
+  "starlightChangelogs.compare.label": "All versions forward",
+  "starlightChangelogs.compare.title": "All versions since {{version}}",
+  "starlightChangelogs.pagination.next": "Older versions",
+  "starlightChangelogs.pagination.prev": "Newer versions",
+  "starlightChangelogs.version.date": "{{date, datetime(dateStyle: long)}}",
+  "starlightChangelogs.version.find": "Find a version",
+  "starlightChangelogs.version.open": "View on {{provider}}",
+  "starlightChangelogs.version.title": "Version {{version}}",
+  "starlightChangelogs.versions.all": "All versions",
   "viscerium.common.newTab": " (opens in a new tab)",
   "viscerium.common.search": "Search",
   "viscerium.common.filters": "Filters",
@@ -14,7 +23,6 @@
   "viscerium.common.graph": "Graph",
   "viscerium.common.yes": "Yes",
   "viscerium.common.no": "No",
-
   "viscerium.article.datesLabel": "Article publication dates",
   "viscerium.article.published": "Published",
   "viscerium.article.updated": "Updated",
@@ -22,13 +30,15 @@
   "viscerium.article.readingTime_other": "{{count}} min read",
   "viscerium.article.readingTimeLabel_one": "Reading time: {{count}} minute",
   "viscerium.article.readingTimeLabel_other": "Reading time: {{count}} minutes",
+  "viscerium.article.stubTitle": "This article is a stub",
+  "viscerium.article.stubBody": "It is published, but short on details. You can help expand or correct it on GitHub.",
+  "viscerium.article.stubLink": "Help improve this article",
   "viscerium.article.breadcrumbs": "Breadcrumbs",
   "viscerium.article.home": "Home",
   "viscerium.article.eventDate": "Event date",
   "viscerium.article.articleView": "Article view",
   "viscerium.article.lore": "Lore",
   "viscerium.article.storyteller": "Storyteller",
-
   "viscerium.era.editions": "Era editions",
   "viscerium.era.label": "Era",
   "viscerium.era.all": "All eras",
@@ -39,11 +49,10 @@
   "viscerium.era.activeContext": "Active era context",
   "viscerium.era.mode": "{{era}} mode",
   "viscerium.era.exitEra": "Exit {{era}} · All eras",
-
   "viscerium.contributors.title": "Contributors",
   "viscerium.contributors.defaultRole": "Contributor",
-  "viscerium.contributors.profileLabel": "{{name}}, {{roles}}. Open GitHub profile in a new tab.",
-
+  "viscerium.contributors.profileLabel": "{{name}}, {{roles}}. Open profile in a new tab.",
+  "viscerium.contributors.worldAnvilCredit": "Contribution credited in the original WorldAnvil article.",
   "viscerium.references.index": "Index",
   "viscerium.references.title": "Referenced in",
   "viscerium.references.records_one": "{{count}} record",
@@ -64,7 +73,6 @@
   "viscerium.references.type.person": "People",
   "viscerium.references.type.species": "Species",
   "viscerium.references.type.timeline": "Timelines",
-
   "viscerium.sidebar.releases": "Releases",
   "viscerium.sidebar.emptyLabel": "{{label}}, no published entries",
   "viscerium.sidebar.emptyTitle": "No published entries yet",
@@ -75,7 +83,6 @@
   "viscerium.sidebar.reference": "Reference",
   "viscerium.sidebar.openField": "Open {{label}}",
   "viscerium.sidebar.imageText": "Text shown in image: {{text}}",
-
   "viscerium.settings.open": "Reader settings",
   "viscerium.settings.close": "Close reader settings",
   "viscerium.settings.kicker": "Reader controls",
@@ -88,7 +95,6 @@
   "viscerium.settings.contentNote": "VISCERIUM is written for mature audiences. This preference changes presentation; it does not remove mature prose or replace article content notes.",
   "viscerium.settings.revealImage": "Reveal image",
   "viscerium.settings.sensitiveImage": "Sensitive image",
-
   "viscerium.calendar.date": "Calendar date",
   "viscerium.calendar.worldTime": "World-time calendar",
   "viscerium.calendar.renderedYear": "Rendered year",
@@ -113,10 +119,8 @@
   "viscerium.calendar.seasonMarkerDescription": "Solstice, equinox, or seasonal marker",
   "viscerium.calendar.linkedEvent": "Linked event",
   "viscerium.calendar.linkedEventDescription": "Opens an event article",
-
   "viscerium.sidebar.show": "Show sidebar",
   "viscerium.sidebar.hide": "Hide sidebar",
-
   "viscerium.footer.rightsLabel": "VISCERIUM rights information",
   "viscerium.footer.destinationsLabel": "Codex destinations",
   "viscerium.footer.startHere": "Start Here",
@@ -127,7 +131,6 @@
   "viscerium.footer.policyLabel": "Read the VISCERIUM content and production statement",
   "viscerium.footer.policyTitle": "Content & production statement",
   "viscerium.footer.policyDescription": "Authorship, generative AI, technical assistance, and accountability.",
-
   "viscerium.webmentions.title": "Across the wider web",
   "viscerium.webmentions.loading": "Loading responses...",
   "viscerium.webmentions.none": "No responses yet.",
@@ -147,7 +150,6 @@
   "viscerium.webmentions.action.reply": "replied",
   "viscerium.webmentions.action.mention": "mentioned this page",
   "viscerium.webmentions.action.other": "responded",
-
   "viscerium.timeline.unavailable": "Timeline data is unavailable.",
   "viscerium.timeline.fallbackTitle": "Chronological list",
   "viscerium.timeline.fallbackDescription": "This list remains available when the interactive timeline cannot run.",
@@ -245,7 +247,6 @@
   "viscerium.timeline.zoomEra": "{era}: use the era control to zoom",
   "viscerium.timeline.fitAll": "Fit all",
   "viscerium.timeline.fitAllLabel": "Fit all timeline events",
-
   "viscerium.map.atlas": "VISCERIUM Atlas",
   "viscerium.map.readNotes": "Read map notes",
   "viscerium.map.notes": "Notes",
@@ -274,7 +275,6 @@
   "viscerium.map.markerLabel": "Map marker",
   "viscerium.map.noMatches": "No matching markers.",
   "viscerium.map.untitledMarker": "Untitled marker",
-
   "viscerium.relationship.controls": "Relationship graph controls",
   "viscerium.relationship.findEntity": "Find an entity",
   "viscerium.relationship.searchPlaceholder": "Search people, factions, places…",
@@ -305,5 +305,17 @@
   "viscerium.relationship.fallbackTitle": "Relationship",
   "viscerium.relationship.since": "Since {value}",
   "viscerium.relationship.until": "Until {value}",
-  "viscerium.relationship.noMatches": "No matching entities."
+  "viscerium.relationship.noMatches": "No matching entities.",
+  "viscerium.attribution.details": "Image attribution",
+  "viscerium.attribution.artist": "Artist",
+  "viscerium.attribution.authorship": "Authorship",
+  "viscerium.attribution.humanMadeMark": "Human Made mark by HINOKODO",
+  "viscerium.attribution.humanMadeStatement": "This artwork was made by a person. No AI-generated imagery was used.",
+  "viscerium.attribution.originalArtwork": "Original artwork",
+  "viscerium.attribution.artistWebsite": "Artist website",
+  "viscerium.attribution.altText": "Alt text",
+  "viscerium.attribution.rights": "Rights",
+  "viscerium.attribution.openOriginal": "View original artwork",
+  "viscerium.attribution.openArtistWebsite": "Visit artist website",
+  "viscerium.attribution.notRecorded": "Not recorded"
 }

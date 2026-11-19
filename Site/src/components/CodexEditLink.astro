@@ -3,17 +3,20 @@ import siteConfig from '../../site.config.mjs';
 
 const { starlightRoute } = Astro.locals;
 const { t } = Astro.locals;
+const { label = t('page.editLink') } = Astro.props;
 const sourcePath = starlightRoute.entry.data.sourcePath;
-const encodedSourcePath = typeof sourcePath === 'string'
-  ? sourcePath.split('/').map((segment) => encodeURIComponent(segment)).join('/')
+const sourceRepoPath = starlightRoute.entry.data.sourceRepoPath
+  ?? (typeof sourcePath === 'string' ? `Vault/Lore/${sourcePath}` : undefined);
+const encodedSourcePath = typeof sourceRepoPath === 'string'
+  ? sourceRepoPath.split('/').map((segment) => encodeURIComponent(segment)).join('/')
   : undefined;
 const editUrl = siteConfig.githubRepoUrl && encodedSourcePath
-  ? `${siteConfig.githubRepoUrl}/edit/main/Vault/Lore/${encodedSourcePath}`
+  ? `${siteConfig.githubRepoUrl}/edit/main/${encodedSourcePath}`
   : undefined;
 ---
 
 {editUrl && (
   <a class="codex-edit-link" href={editUrl} target="_blank" rel="noreferrer">
-    {t('page.editLink')}<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
+    {label}<span class="codex-sr-only">{t('viscerium.common.newTab')}</span>
   </a>
 )}

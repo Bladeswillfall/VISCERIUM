@@ -61,7 +61,7 @@ test('French and German placeholders cover every custom UI key without publishin
 
   assert.deepEqual(I18N_ROADMAP.published.map(({ locale }) => locale), ['en-GB']);
   assert.deepEqual(I18N_ROADMAP.placeholders.map(({ locale }) => locale), ['fr-FR', 'de-DE']);
-  assert.deepEqual(I18N_ROADMAP.nextPriorities.map(({ label }) => label), ['Spanish', 'Chinese', 'Russian']);
+  assert.deepEqual(I18N_ROADMAP.nextPriorities.map(({ label }) => label), ['Spanish', 'Chinese', 'Russian', 'Japanese']);
 
   for (const locale of ['fr-FR', 'de-DE']) {
     const placeholder = I18N_PLACEHOLDERS[locale];

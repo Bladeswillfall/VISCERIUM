@@ -8,8 +8,11 @@ const messages = {
   none: t('viscerium.webmentions.none'),
   unavailable: t('viscerium.webmentions.unavailable'),
   responses: Object.fromEntries(
-    ['zero', 'one', 'two', 'few', 'many', 'other']
-      .map((category) => [category, t(`viscerium.webmentions.responses.${category}`)]),
+    (['zero', 'one', 'two', 'few', 'many', 'other'] as const)
+      .map((category) => [
+        category,
+        t(`viscerium.webmentions.responses.${category}` as keyof StarlightApp.I18n),
+      ]),
   ),
   someone: t('viscerium.webmentions.someone'),
   on: t('viscerium.webmentions.on'),

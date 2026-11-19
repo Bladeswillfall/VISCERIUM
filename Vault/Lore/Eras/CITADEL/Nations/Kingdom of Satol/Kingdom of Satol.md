@@ -16,6 +16,7 @@ description: "The Kingdom of Satol is extremely fertile, brimming with farmland 
 updated:
 status: "published"
 type: "faction"
+stub: true
 development_level: "stub"
 era: "CITADEL"
 tags:

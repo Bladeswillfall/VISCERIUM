@@ -31,6 +31,9 @@ related:
 
 Use this map inside Obsidian to place and move markers visually. Each publishable marker must link to its canonical Markdown note. The Codex build reads marker position and the primary layer from the sidecar JSON, then takes title, description, era, faction, region, semantic marker type, zoom visibility and article route from the linked note.
 
+> [!authoring]+ Map controls
+> Drag to pan. Use the mouse wheel or **+ / -** to zoom. **Shift-click** to add a marker. **Right-click** for marker, layer, drawing, measurement, and map options.
+
 ```zoommap
 image: Assets/Maps/Errack-CITADEL.webp
 markers: Demo/Assets/Maps/Errack-CITADEL.webp.markers.json
@@ -39,9 +42,14 @@ height: 720px
 width: 100%
 minZoom: 0.1
 maxZoom: 8
+responsive: false
 render: canvas
 resizable: true
 resizeHandle: native
+view:
+  zoom: 0.2
+  centerX: 0.5
+  centerY: 0.5
 ```
 <!-- obsidian-only:end -->
 

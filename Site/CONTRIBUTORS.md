@@ -24,6 +24,17 @@ contributors:
       - Research
 ```
 
+For contributions credited in the **original WorldAnvil article's author notes**, mark the individual article reference with `source: worldanvil`. The contributor strip then displays the small, locally cached WorldAnvil SVG mark (`public/assets/contributors/worldanvil-mark.svg`) beside the role and includes the source in the profile link's accessible name. The mark was traced from the original WorldAnvil image supplied for this project. Do not infer this from the contributor's profile URL, since the same person may also contribute directly to the current Codex.
+
+```yaml
+contributors:
+  - id: nimrodiallibrary
+    role: Consultant
+    source: worldanvil
+```
+
+Keep the imported role on the article whose WorldAnvil author notes actually name the person. The original wording and unfiled contributions are recorded in `Vault/System/References/WorldAnvil Contributor Credits.md`; attach them to the appropriate destination only after confirming the article identity.
+
 String shorthand is also supported and receives the `Contributor` role:
 
 ```yaml

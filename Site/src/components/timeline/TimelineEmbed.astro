@@ -1,5 +1,16 @@
 ---
 import TimelineApp from './TimelineApp.astro';
+import type { TimelineDataset } from '../../lib/timeline/component-types';
+
+type Props = {
+  timelineId: string;
+  defaultCalendar?: string;
+  laneMode?: 'unified' | 'lane' | 'category';
+  showFilters?: boolean;
+  showMinimap?: boolean;
+  showLegend?: boolean;
+  compact?: boolean;
+};
 
 const {
   timelineId,
@@ -9,13 +20,13 @@ const {
   showMinimap = true,
   showLegend = true,
   compact = false,
-} = Astro.props;
+} = Astro.props as Props;
 
 const datasets = import.meta.glob('../../data/timelines/{super,citadel,smog,nearsight,entropy}.json', {
   eager: true,
   import: 'default',
 });
-const dataset = datasets[`../../data/timelines/${timelineId}.json`];
+const dataset = (datasets as Record<string, TimelineDataset>)[`../../data/timelines/${timelineId}.json`];
 ---
 
 {dataset ? (

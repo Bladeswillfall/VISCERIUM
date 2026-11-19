@@ -84,6 +84,7 @@ eraPrimer:
       summary: A mountain bulwark built around endurance, fortification and the legacy of the Vetruxi Kingdom.
       href: /eras/citadel/nations/okse-dominion/
     - title: Krass Dominion
+      sigilLayout: banner
       summary: A highland dominion where tradition, cunning and intimate knowledge of the land are weapons in their own right.
       href: /eras/citadel/nations/krass-dominion/
     - title: Republic of Askalia

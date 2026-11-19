@@ -2,23 +2,34 @@
 const { starlightRoute, t } = Astro.locals;
 const locale = starlightRoute.lang;
 const data = starlightRoute.entry.data;
-const referencedBy = Array.isArray(data.referencedIn) ? data.referencedIn : [];
-const references = Array.isArray(data.references) ? data.references : [];
+type ReferenceEntry = {
+  title: string;
+  href: string;
+  type: string;
+  era?: string;
+};
 
-const typeLabels = new Map([
+const referencedBy = (Array.isArray(data.referencedIn) ? data.referencedIn : []) as ReferenceEntry[];
+const references = (Array.isArray(data.references) ? data.references : []) as ReferenceEntry[];
+
+const typeLabels = new Map<string, string>([
   ...['article', 'calendar', 'character', 'event', 'faction', 'fauna', 'flora', 'fungi', 'image', 'item', 'location', 'map', 'organisation', 'person', 'species', 'timeline']
-    .map((type) => [type, t(`viscerium.references.type.${type}`)]),
+    .map((type) => [
+      type,
+      t(`viscerium.references.type.${type}` as keyof StarlightApp.I18n),
+    ] as const),
   ['organization', t('viscerium.references.type.organisation')],
 ]);
 
-function groupLabel(type) {
+function groupLabel(type: string) {
   const key = String(type ?? 'article').trim().toLowerCase();
-  if (typeLabels.has(key)) return typeLabels.get(key);
+  const knownLabel = typeLabels.get(key);
+  if (knownLabel) return knownLabel;
   const words = key.replace(/[-_]+/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
   return words.endsWith('s') ? words : `${words}s`;
 }
 
-function groupedReferences(entries) {
+function groupedReferences(entries: ReferenceEntry[]) {
   const groupMap = Map.groupBy(entries, (reference) => groupLabel(reference.type));
   return [...groupMap.entries()]
     .map(([label, groupEntries]) => ({

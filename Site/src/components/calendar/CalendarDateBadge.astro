@@ -24,7 +24,7 @@ const resolvedDates = date ? resolveEquivalentDates(date, calendars, { locale })
           <dt>{resolved.calendar.shortName ?? resolved.calendar.name}</dt>
           <dd>
             <a href={resolved.href}>{resolved.label}</a>
-            <span class={`calendar-season calendar-season--${resolved.season}`}>{t(`viscerium.calendar.season.${resolved.season}`)}</span>
+            <span class={`calendar-season calendar-season--${resolved.season}`}>{t(`viscerium.calendar.season.${resolved.season}` as keyof StarlightApp.I18n)}</span>
             {resolved.observances.map((observance) => (
               <span class={`calendar-observance calendar-observance--${observance.type}`}>{observance.name}</span>
             ))}

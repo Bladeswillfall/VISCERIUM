@@ -4,21 +4,24 @@ import { HISTORICAL_ERAS, normaliseEra } from '../lib/era-context.mjs';
 const { starlightRoute } = Astro.locals;
 const { t } = Astro.locals;
 const entry = starlightRoute.entry.data;
+type ContinuityEra = 'CITADEL' | 'SMOG' | 'NEARSIGHT' | 'ENTROPY' | 'Universal';
 const continuity = entry.continuity && typeof entry.continuity === 'object' ? entry.continuity : undefined;
-const editions = continuity?.editions && typeof continuity.editions === 'object' ? continuity.editions : {};
+const editions = (continuity?.editions ?? {}) as Partial<Record<ContinuityEra, string>>;
+const historicalEras = HISTORICAL_ERAS as ContinuityEra[];
+const hub = typeof continuity?.hub === 'string' ? continuity.hub : '';
 const rawEra = Array.isArray(entry.era) ? entry.era[0] : entry.era;
 const currentEra = normaliseEra(rawEra);
 const isHub = entry.type === 'continuity';
-const hasHistoricalEditions = HISTORICAL_ERAS.some((era) => typeof editions[era] === 'string');
-const eraChoices = hasHistoricalEditions ? HISTORICAL_ERAS : ['Universal'];
-const showSwitcher = Boolean(continuity?.hub) && eraChoices.some((era) => typeof editions[era] === 'string');
+const hasHistoricalEditions = historicalEras.some((era) => typeof editions[era] === 'string');
+const eraChoices: ContinuityEra[] = hasHistoricalEditions ? historicalEras : ['Universal'];
+const showSwitcher = Boolean(hub) && eraChoices.some((era) => typeof editions[era] === 'string');
 ---
 
 {showSwitcher ? (
   <nav class="codex-continuity-switcher" aria-label={t('viscerium.era.editions')} data-pagefind-ignore>
     <span class="codex-continuity-switcher__label">{t('viscerium.era.label')}</span>
     <a
-      href={continuity.hub}
+      href={hub}
       class:list={{ 'codex-continuity-chip': true, active: isHub }}
       aria-current={isHub ? 'page' : undefined}
       data-era-exit

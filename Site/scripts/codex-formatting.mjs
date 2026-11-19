@@ -9,7 +9,8 @@ const CONTAINERS = {
   equation: ['section', 'cx-equation'],
 };
 const ASIDES = { note: 'note', warning: 'caution', lore: 'note' };
-const TAGS = new Set([...Object.keys(CONTAINERS), ...Object.keys(ASIDES)]);
+const TAGS = new Set([...Object.keys(CONTAINERS), ...Object.keys(ASIDES), 'artifact']);
+const ARTIFACT_PRESETS = new Set(['citadel-note', 'smog-dispatch', 'nearsight-terminal', 'entropy-diagnostic']);
 const GAP = { none: '0', xs: '.35rem', sm: '.65rem', md: '1rem', lg: '1.5rem', xl: '2.25rem' };
 const ALIGN = new Set(['start', 'center', 'end', 'stretch']);
 const JUSTIFY = new Set(['start', 'center', 'end', 'between', 'around', 'evenly']);
@@ -96,6 +97,38 @@ function containerOptions(tag, spec) {
   return { element, classes, styles };
 }
 
+function artifactOptions(spec) {
+  const [rawPreset, ...rest] = tokens(spec);
+  const preset = rawPreset?.toLowerCase();
+  if (!ARTIFACT_PRESETS.has(preset)) throw new Error('Unknown artifact preset: ' + (rawPreset ?? '(missing)'));
+  const options = { 'data-preset': preset };
+  for (const match of rest.join(' ').matchAll(/([a-z][a-z-]*)=(?:"([^"]*)"|'([^']*)'|([^\s]+))/gi)) {
+    const name = match[1].toLowerCase();
+    const value = match[2] ?? match[3] ?? match[4] ?? '';
+    if (name === 'title' || name === 'date') options['data-' + name] = value;
+    if (name === 'condition' && ['archive', 'field', 'battered'].includes(value)) options['data-condition'] = value;
+    if (name === 'hand' && ['copy', 'field', 'urgent'].includes(value)) options['data-hand'] = value;
+    if (name === 'ink' && ['fresh', 'worn', 'feathered'].includes(value)) options['data-ink'] = value;
+  }
+  return Object.entries(options).map(([key, val]) => key + '="' + escapeHtml(val) + '"').join(' ');
+}
+
+// Inline marginalia stays with the text it annotates. Nested annotations are rejected.
+function expandMarginalia(line, notes, jsx) {
+  const attr = jsx ? 'className' : 'class';
+  return line.replace(/\[marginalia\s+note=(?:"([^"]+)"|'([^']+)')\]|\[\/marginalia\]/gi, (match, double, single) => {
+    if (/^\[\/marginalia/i.test(match)) {
+      const note = notes.pop();
+      if (note === undefined) throw new Error('Unmatched [/marginalia] inside artifact');
+      return '</span><span ' + attr + '="cx-artifact-source-note">[Marginal note: ' + escapeHtml(note) + ']</span>';
+    }
+    if (notes.length) throw new Error('Nested marginalia are not supported');
+    const note = double ?? single;
+    notes.push(note);
+    return '<span ' + attr + '="cx-artifact-anchor" data-note="' + escapeHtml(note) + '">';
+  });
+}
+
 function parseTag(line) {
   const match = line.match(/^\s*\[(\/)?([a-z][a-z0-9-]*)(?:(?::|\s+)([^\]]*))?\]\s*$/i);
   if (!match) return null;
@@ -125,10 +158,15 @@ function transformTag(line, stack, options) {
   if (parsed.closing) {
     if (stack.at(-1) !== parsed.tag) return null;
     stack.pop();
+    if (parsed.tag === 'artifact') return '\n</div>\n</section>';
     return ASIDES[parsed.tag] ? ':::' : `\n</${CONTAINERS[parsed.tag][0]}>`;
   }
 
   stack.push(parsed.tag);
+  if (parsed.tag === 'artifact') {
+    const classAttr = options.jsx ? 'className' : 'class';
+    return '<section ' + classAttr + '="cx-artifact" ' + artifactOptions(parsed.spec) + '>\n<div ' + classAttr + '="cx-artifact-source">\n';
+  }
   const aside = ASIDES[parsed.tag];
   if (aside) {
     const title = titleFrom(parsed.spec)?.replace(/[\[\]]/g, '');
@@ -151,12 +189,13 @@ function transformHeading(line, options) {
 }
 
 export function requiresCodexMdx(markdown) {
-  return /^\s*\[\/?(?:cols|row|col|card|equation)(?::|\s|\])/im.test(String(markdown));
+  return /^\s*\[\/?(?:cols|row|col|card|equation|artifact)(?::|\s|\])/im.test(String(markdown));
 }
 
 export function transformCodexFormatting(markdown, options = {}) {
   const output = [];
   const stack = [];
+  const notes = [];
   let fence;
 
   for (const line of String(markdown).split(/\r?\n/)) {
@@ -173,9 +212,12 @@ export function transformCodexFormatting(markdown, options = {}) {
     }
 
     for (const logicalLine of expandInlineContainerTags(line)) {
-      output.push(transformHeading(logicalLine, options) ?? transformTag(logicalLine, stack, options) ?? logicalLine);
+      const converted = transformHeading(logicalLine, options) ?? transformTag(logicalLine, stack, options);
+      if (converted?.includes('</section>') && notes.length) throw new Error('Unclosed marginalia inside artifact');
+      output.push(converted ?? (stack.includes('artifact') ? expandMarginalia(logicalLine, notes, options.jsx) : logicalLine));
     }
   }
 
+  if (notes.length) throw new Error('Unclosed marginalia');
   return output.join('\n');
 }

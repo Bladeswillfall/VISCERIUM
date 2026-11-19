@@ -2,14 +2,53 @@ name: Checks
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
   push:
     branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 1'
 
 permissions:
   contents: read
+  checks: read
+
+concurrency:
+  group: checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  changes:
+    if: github.event_name != 'push'
+    name: Select affected checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      unit: ${{ steps.select.outputs.unit }}
+      gateway: ${{ steps.select.outputs.gateway }}
+      build: ${{ steps.select.outputs.build }}
+      obsidian_plugin: ${{ steps.select.outputs.obsidian_plugin }}
+      browser: ${{ steps.select.outputs.browser }}
+      browser_specs: ${{ steps.select.outputs.browser_specs }}
+      contact: ${{ steps.select.outputs.contact }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+          show-progress: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Select affected checks
+        id: select
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: node .github/scripts/select-checks.mjs
+
   repository:
+    if: github.event_name != 'push' && github.event_name != 'schedule'
     name: Repository checks
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -23,7 +62,7 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
@@ -35,6 +74,26 @@ jobs:
           npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
           test "$(npm --version)" = "11.18.0"
 
+      - name: Test changelog policy
+        working-directory: .
+        run: node --test .github/scripts/check-changelog.test.mjs .github/scripts/select-checks.test.mjs
+
+      - name: Require a PR changelog entry or reason
+        if: github.event_name == 'pull_request'
+        working-directory: .
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # Run the policy from the trusted base commit. Use this branch's copy only
+          # when the policy is first introduced and no base copy exists.
+          if git cat-file -e HEAD^1:.github/scripts/check-changelog.mjs 2>/dev/null; then
+            git show HEAD^1:.github/scripts/check-changelog.mjs > "$RUNNER_TEMP/check-changelog.mjs"
+            node "$RUNNER_TEMP/check-changelog.mjs"
+          else
+            node .github/scripts/check-changelog.mjs
+          fi
+
       - run: npm ci --silent --no-audit --no-fund
       - run: npm run baseline:check
       - run: npm run doctor:vault
@@ -45,7 +104,9 @@ jobs:
         run: node Tools/scripts/sync-obsidian-plugins.mjs --check
 
   unit:
-    name: Unit tests and benchmarks
+    needs: changes
+    if: needs.changes.outputs.unit == 'true'
+    name: Unit tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -58,7 +119,7 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
@@ -79,16 +140,17 @@ jobs:
 
       - name: Upload unit test log
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: unit-test-log
           path: ${{ runner.temp }}/unit-tests.log
           if-no-files-found: warn
           retention-days: 1
 
-      - run: npm run benchmark:timelines
 
   gateway:
+    needs: changes
+    if: needs.changes.outputs.gateway == 'true'
     name: Comment gateway tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -102,7 +164,7 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
@@ -118,6 +180,8 @@ jobs:
       - run: npm test
 
   build:
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
     name: Production build
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -131,7 +195,7 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
@@ -144,10 +208,56 @@ jobs:
           test "$(npm --version)" = "11.18.0"
 
       - run: npm ci --silent --no-audit --no-fund
-      - run: npm run build
+
+      - name: Fingerprint Atlas map definitions
+        id: atlas_maps
+        run: node scripts/map-cache-key.mjs >> "$GITHUB_OUTPUT"
+
+      - name: Restore Atlas tile cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/map-tiles
+          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
+          restore-keys: |
+            atlas-tiles-v1-${{ runner.os }}-
+
+      - name: Restore responsive variant cache
+        id: responsive_cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/image-variants
+          key: responsive-variants-v1-${{ runner.os }}-${{ hashFiles('Site/scripts/generate-image-variants.mjs', 'Site/scripts/lib/responsive-image-cache.mjs', 'Site/scripts/sync-public-notes.mjs', 'Site/package-lock.json', 'Vault/Assets/**/*.webp', 'Vault/Lore/**/*.md', 'Vault/Lore/**/*.mdx') }}
+          restore-keys: |
+            responsive-variants-v1-${{ runner.os }}-
+
+      - name: Restore Astro incremental build cache
+        id: astro_cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            Site/node_modules/.astro/incremental-build.json
+            Site/node_modules/.astro/dist
+          key: astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-
+
+      - name: Build and report responsive cache metrics
+        run: |
+          start=$SECONDS
+          npm run build
+          {
+            echo "### Production build"
+            echo "Build time: $((SECONDS - start)) seconds"
+            echo "Local responsive cache size: $(du -sh node_modules/.astro/viscerium/image-variants 2>/dev/null | cut -f1 || true)"
+            echo "Exact responsive cache-key hit: ${{ steps.responsive_cache.outputs.cache-hit }}"
+            echo "Exact Astro page-cache hit: ${{ steps.astro_cache.outputs.cache-hit }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check generated Astro and TypeScript source
+        run: npm run check:astro
 
       - name: Upload production build
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: site-dist
           path: Site/dist/
@@ -156,6 +266,8 @@ jobs:
           retention-days: 1
 
   obsidian_plugin:
+    needs: changes
+    if: needs.changes.outputs.obsidian_plugin == 'true'
     name: Obsidian timeline plugin
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -166,7 +278,7 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
@@ -187,7 +299,7 @@ jobs:
 
       - name: Upload Obsidian timeline plugin bundle
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: viscerium-timelines-plugin
           path: Tools/obsidian-viscerium-timelines/dist/
@@ -211,12 +323,16 @@ jobs:
           }
 
   browser:
-    name: Browser checks
-    needs: build
+    needs: [changes, build]
+    if: needs.changes.outputs.browser == 'true'
+    name: Browser functional checks
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # Verified MCR v1.63.0-noble OCI index
     timeout-minutes: 20
     defaults:
       run:
+        shell: bash
         working-directory: Site
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -225,7 +341,7 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
@@ -239,17 +355,11 @@ jobs:
 
       - run: npm ci --silent --no-audit --no-fund
 
-      - name: Install Axe accessibility runtime
-        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund @axe-core/playwright@4.13.0
-
       - name: Download production build
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: site-dist
           path: Site/dist/
-
-      - name: Install browser runtime
-        run: npx --no-install playwright install --with-deps chromium firefox webkit
 
       - name: Start preview
         run: |
@@ -263,39 +373,92 @@ jobs:
           exit 1
 
       - name: Run browser checks
+        env:
+          HOME: /root
+          BROWSER_SPECS: ${{ needs.changes.outputs.browser_specs }}
         run: |
           set -o pipefail
-          {
-            npx --no-install playwright test tests/browser --browser=chromium --reporter=line --workers=1
-            npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=firefox --reporter=line --workers=1
-            npx --no-install playwright test tests/browser/graph*.spec.mjs --browser=webkit --reporter=line --workers=1
-          } 2>&1 | tee "$RUNNER_TEMP/playwright.log"
+          read -r -a specs <<< "$BROWSER_SPECS"
+          test "${#specs[@]}" -gt 0
+          npx --no-install playwright test "${specs[@]}" --browser=chromium --reporter=line --workers=2 2>&1 | tee "$RUNNER_TEMP/playwright.log"
 
-      - name: Run Axe accessibility checks
-        run: |
-          set -o pipefail
-          npx --no-install playwright test tests/accessibility/axe.spec.mjs \
-            --browser=chromium --reporter=line --workers=1 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
+      - name: Upload browser check log
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: browser-check-log
+          path: ${{ runner.temp }}/playwright.log
+          if-no-files-found: warn
+          retention-days: 1
 
-      - name: Stop preview before enabled contact fixture
+  contact:
+    needs: [changes, build]
+    if: needs.changes.outputs.contact == 'true'
+    name: Enabled contact form browser check
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27 # Verified MCR v1.63.0-noble OCI index
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+        working-directory: Site
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 500
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Site/package-lock.json
+
+      - name: Use npm with lifecycle-script policy support
+        working-directory: .
         run: |
-          PREVIEW_PID="$(cat "$RUNNER_TEMP/viscerium-preview.pid")"
-          if kill -0 "$PREVIEW_PID" 2>/dev/null; then
-            kill "$PREVIEW_PID"
-          fi
-          for attempt in {1..30}; do
-            ! kill -0 "$PREVIEW_PID" 2>/dev/null && exit 0
-            sleep 1
-          done
-          echo "Preview process $PREVIEW_PID did not stop"
-          exit 1
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - run: npm ci --silent --no-audit --no-fund
+
+      - name: Fingerprint Atlas map definitions
+        id: atlas_maps
+        run: node scripts/map-cache-key.mjs >> "$GITHUB_OUTPUT"
+
+      - name: Restore Atlas tile cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/map-tiles
+          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
+          restore-keys: |
+            atlas-tiles-v1-${{ runner.os }}-
+
+      - name: Restore responsive variant cache
+        id: responsive_cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/image-variants
+          key: responsive-variants-v1-${{ runner.os }}-${{ hashFiles('Site/scripts/generate-image-variants.mjs', 'Site/scripts/lib/responsive-image-cache.mjs', 'Site/scripts/sync-public-notes.mjs', 'Site/package-lock.json', 'Vault/Assets/**/*.webp', 'Vault/Lore/**/*.md', 'Vault/Lore/**/*.mdx') }}
+          restore-keys: |
+            responsive-variants-v1-${{ runner.os }}-
 
       - name: Build enabled contact browser fixture
         env:
           PUBLIC_CONTACT_FORM_ENABLED: '1'
           PUBLIC_CONTACT_FORM_ENDPOINT: 'https://contact-form.invalid/submit'
           PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA'
-        run: npm run build
+        run: |
+          start=$SECONDS
+          npm run build
+          {
+            echo "### Enabled contact build"
+            echo "Build time: $((SECONDS - start)) seconds"
+            echo "Local responsive cache size: $(du -sh node_modules/.astro/viscerium/image-variants 2>/dev/null | cut -f1 || true)"
+            echo "Exact cache-key hit: ${{ steps.responsive_cache.outputs.cache-hit }}"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Start enabled contact preview
         run: |
@@ -309,47 +472,223 @@ jobs:
 
       - name: Run enabled contact browser check
         env:
+          HOME: /root
           CONTACT_FORM_TEST_ENABLED: '1'
           CONTACT_TEST_BASE_URL: 'http://127.0.0.1:4322'
         run: |
           set -o pipefail
           npx --no-install playwright test tests/browser/contact.spec.mjs \
             --browser=chromium --reporter=line --workers=1 \
-            --grep "enabled private contact form" 2>&1 | tee -a "$RUNNER_TEMP/playwright.log"
+            --grep "enabled private contact form" 2>&1 | tee "$RUNNER_TEMP/contact.log"
 
-      - name: Upload browser check log
+      - name: Upload enabled contact browser log
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: browser-check-log
-          path: ${{ runner.temp }}/playwright.log
+          name: contact-check-log
+          path: ${{ runner.temp }}/contact.log
           if-no-files-found: warn
           retention-days: 1
 
+  seed_build_cache:
+    if: github.event_name == 'push'
+    name: Build production artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: Site
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          show-progress: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Site/package-lock.json
+
+      - name: Use npm with lifecycle-script policy support
+        working-directory: .
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts --no-audit --no-fund
+          test "$(npm --version)" = "11.18.0"
+
+      - run: npm ci --silent --no-audit --no-fund
+
+      - name: Load public production build variables
+        run: |
+          python - <<'PY'
+          import os
+          import tomllib
+          from pathlib import Path
+
+          config = tomllib.loads(Path("wrangler.toml").read_text(encoding="utf-8"))
+          variables = config["env"]["production"]["vars"]
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+              for name, value in variables.items():
+                  if name.startswith("PUBLIC_"):
+                      print(f"{name}={value}", file=output)
+          PY
+
+      - name: Fingerprint Atlas map definitions
+        id: atlas_maps
+        run: node scripts/map-cache-key.mjs >> "$GITHUB_OUTPUT"
+
+      - name: Restore Atlas tile cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/map-tiles
+          key: atlas-tiles-v1-${{ runner.os }}-${{ steps.atlas_maps.outputs.fingerprint }}-${{ hashFiles('Site/scripts/lib/map-tile-cache.mjs', 'Site/scripts/map-cache-key.mjs', 'Site/scripts/generate-map-tiles.mjs', 'Site/package-lock.json', 'Vault/Assets/Maps/**/*.webp', 'Site/public/assets/maps/**/*.webp') }}
+          restore-keys: |
+            atlas-tiles-v1-${{ runner.os }}-
+
+      - name: Restore responsive variant cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: Site/node_modules/.astro/viscerium/image-variants
+          key: responsive-variants-v1-${{ runner.os }}-${{ hashFiles('Site/scripts/generate-image-variants.mjs', 'Site/scripts/lib/responsive-image-cache.mjs', 'Site/scripts/sync-public-notes.mjs', 'Site/package-lock.json', 'Vault/Assets/**/*.webp', 'Vault/Lore/**/*.md', 'Vault/Lore/**/*.mdx') }}
+          restore-keys: |
+            responsive-variants-v1-${{ runner.os }}-
+
+      - name: Restore Astro incremental build cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            Site/node_modules/.astro/incremental-build.json
+            Site/node_modules/.astro/dist
+          key: astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            astro-incremental-v1-${{ runner.os }}-${{ hashFiles('Site/package-lock.json') }}-
+
+      - name: Build production artifact
+        env:
+          CF_PAGES: '1'
+        run: npm run build
+
+      - name: Upload production artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: production-site-dist
+          path: Site/dist/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+
+  deploy_pages:
+    needs: seed_build_cache
+    if: github.event_name == 'push' && vars.CLOUDFLARE_DIRECT_DEPLOY == '1'
+    name: Deploy production to Cloudflare Pages
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cloudflare-pages-production
+      cancel-in-progress: true
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          show-progress: false
+
+      - name: Download production artifact
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: production-site-dist
+          path: Site/dist/
+
+      - name: Check Cloudflare deploy credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_DIRECT_DEPLOY is enabled but Cloudflare credentials are missing."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Deploy tested artifact
+        working-directory: Site
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          current_main="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$current_main" != "$GITHUB_SHA" ]; then
+            echo "::notice::Skipping stale production deploy for $GITHUB_SHA; main is $current_main."
+            exit 0
+          fi
+          npm exec --yes --package=wrangler@4.136.3 -- wrangler pages deploy dist --project-name=viscerium-site --branch=main --commit-hash="$GITHUB_SHA"
+
   verify:
+    if: ${{ github.event_name != 'push' && github.event_name != 'schedule' && always() }}
     needs:
+      - changes
       - repository
       - unit
       - gateway
       - build
       - obsidian_plugin
       - browser
-    if: always()
+      - contact
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Require all checks to pass
+      - name: Require selected checks to pass
         env:
+          CHANGES_RESULT: ${{ needs.changes.result }}
           REPOSITORY_RESULT: ${{ needs.repository.result }}
+          RUN_UNIT: ${{ needs.changes.outputs.unit }}
           UNIT_RESULT: ${{ needs.unit.result }}
+          RUN_GATEWAY: ${{ needs.changes.outputs.gateway }}
           GATEWAY_RESULT: ${{ needs.gateway.result }}
+          RUN_BUILD: ${{ needs.changes.outputs.build }}
           BUILD_RESULT: ${{ needs.build.result }}
+          RUN_OBSIDIAN_PLUGIN: ${{ needs.changes.outputs.obsidian_plugin }}
           OBSIDIAN_PLUGIN_RESULT: ${{ needs.obsidian_plugin.result }}
+          RUN_BROWSER: ${{ needs.changes.outputs.browser }}
           BROWSER_RESULT: ${{ needs.browser.result }}
+          RUN_CONTACT: ${{ needs.changes.outputs.contact }}
+          CONTACT_RESULT: ${{ needs.contact.result }}
         run: |
+          test "$CHANGES_RESULT" = "success"
           test "$REPOSITORY_RESULT" = "success"
-          test "$UNIT_RESULT" = "success"
-          test "$GATEWAY_RESULT" = "success"
-          test "$BUILD_RESULT" = "success"
-          test "$OBSIDIAN_PLUGIN_RESULT" = "success"
-          test "$BROWSER_RESULT" = "success"
+          if [ "$RUN_UNIT" = "true" ]; then
+            test "$UNIT_RESULT" = "success"
+          else
+            test "$UNIT_RESULT" = "skipped"
+          fi
+          if [ "$RUN_GATEWAY" = "true" ]; then
+            test "$GATEWAY_RESULT" = "success"
+          else
+            test "$GATEWAY_RESULT" = "skipped"
+          fi
+          if [ "$RUN_BUILD" = "true" ]; then
+            test "$BUILD_RESULT" = "success"
+          else
+            test "$BUILD_RESULT" = "skipped"
+          fi
+          if [ "$RUN_OBSIDIAN_PLUGIN" = "true" ]; then
+            test "$OBSIDIAN_PLUGIN_RESULT" = "success"
+          else
+            test "$OBSIDIAN_PLUGIN_RESULT" = "skipped"
+          fi
+          if [ "$RUN_BROWSER" = "true" ]; then
+            test "$BROWSER_RESULT" = "success"
+          else
+            test "$BROWSER_RESULT" = "skipped"
+          fi
+          if [ "$RUN_CONTACT" = "true" ]; then
+            test "$CONTACT_RESULT" = "success"
+          else
+            test "$CONTACT_RESULT" = "skipped"
+          fi

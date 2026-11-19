@@ -1,0 +1,319 @@
+---
+import { worldAnvilArchives } from '../data/world-anvil-archive.mjs';
+
+type ArchivedComment = { author: string; date: string; replyTo?: string; body?: string; summary?: string };
+type ArticleArchive = { sourceUrl: string; comments: ArchivedComment[] };
+
+const { entry } = Astro.locals.starlightRoute;
+const archive = (worldAnvilArchives as Record<string, ArticleArchive>)[entry.data.community_id ?? ''];
+const initials = (name: string) => name.replace(/^Dr\s+/i, '').split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase();
+const displayDate = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+{archive && (
+  <section class="codex-archive" aria-labelledby="codex-archive-title">
+    <header class="codex-archive__brand">
+      <a
+        class="codex-archive__brand-link"
+        href="https://www.worldanvil.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="World Anvil (opens in a new tab)"
+      >
+        <img
+          src="/assets/contributors/worldanvil-mark.svg"
+          alt=""
+          width="47"
+          height="47"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="codex-archive__identity">
+          <strong>WORLD ANVIL</strong>
+          <span>Archive</span>
+        </span>
+      </a>
+      <a class="codex-archive__original" href={archive.sourceUrl} target="_blank" rel="noopener noreferrer">
+        Original {entry.data.title} article
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17 17 7M8 7h9v9" />
+        </svg>
+      </a>
+    </header>
+
+    <div class="codex-archive__content">
+      <div class="codex-archive__heading">
+        <h2 id="codex-archive-title">Earlier discussion</h2>
+        <span>{archive.comments.length} entries</span>
+      </div>
+      <ol class="codex-archive__entries" aria-label="Historical World Anvil comments">
+        {archive.comments.map((comment) => (
+          <li class:list={['codex-archive__entry', { 'codex-archive__entry--reply': Boolean(comment.replyTo) }]}>
+            <article class="codex-archive__comment" aria-label={`${comment.replyTo ? 'Reply' : 'Comment'} by ${comment.author}`}>
+              <span class="codex-archive__avatar" aria-hidden="true">{initials(comment.author)}</span>
+              <div class="codex-archive__main">
+                <div class="codex-archive__byline">
+                  <strong>{comment.author}</strong>
+                  <time datetime={comment.date}>{displayDate(comment.date)}</time>
+                </div>
+                {comment.replyTo && <p class="codex-archive__reply-to">In reply to {comment.replyTo}</p>}
+                {comment.body
+                  ? <p class="codex-archive__body">{comment.body}</p>
+                  : <p class="codex-archive__body"><span class="codex-archive__summary-label">Summary</span>{comment.summary}</p>}
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
+      <p class="codex-archive__note">Third-party comments are summarised pending republication permission.</p>
+    </div>
+  </section>
+)}
+
+<style>
+  .codex-archive {
+    --archive-ink: var(--codex-fixed-light);
+    --archive-text: color-mix(in srgb, var(--codex-fixed-light) 87%, var(--codex-fixed-dark));
+    --archive-muted: color-mix(in srgb, var(--codex-fixed-light) 70%, var(--codex-fixed-dark));
+    --archive-line: color-mix(in srgb, var(--codex-fixed-light) 32%, var(--codex-fixed-dark));
+    --archive-avatar: color-mix(in srgb, var(--codex-fixed-dark) 85%, var(--codex-fixed-light));
+    margin-block: 2rem;
+    padding: 1.5rem var(--sl-content-pad-x);
+    border-block-start: 1px solid var(--sl-color-hairline-light);
+    color: var(--archive-text);
+  }
+
+  :global(html[data-theme='light']) .codex-archive {
+    --archive-ink: var(--codex-fixed-dark);
+    --archive-text: color-mix(in srgb, var(--codex-fixed-dark) 85%, var(--codex-fixed-light));
+    --archive-muted: color-mix(in srgb, var(--codex-fixed-dark) 80%, var(--codex-fixed-light));
+    --archive-line: color-mix(in srgb, var(--codex-fixed-dark) 55%, var(--codex-fixed-light));
+    --archive-avatar: color-mix(in srgb, var(--codex-fixed-light) 87%, var(--codex-fixed-dark));
+  }
+
+  .codex-archive__brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .75rem 1.75rem;
+    padding: 1rem 1.25rem;
+    border: 1px dashed var(--archive-line);
+    border-block-end: 0;
+  }
+
+  .codex-archive__brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .8rem;
+    color: var(--archive-ink);
+    text-decoration: none;
+  }
+
+  .codex-archive__brand-link img {
+    display: block;
+    inline-size: 2.94rem;
+    block-size: 2.94rem;
+    object-fit: contain;
+    filter: grayscale(1) brightness(0) invert(1);
+  }
+
+  :global(html[data-theme='light']) .codex-archive__brand-link img {
+    filter: grayscale(1) brightness(0);
+  }
+
+  .codex-archive__identity {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+  }
+
+  .codex-archive__identity strong {
+    font: 750 1.25rem/1.1 Georgia, 'Times New Roman', serif;
+    letter-spacing: .04em;
+  }
+
+  .codex-archive__identity span,
+  .codex-archive__heading > span,
+  .codex-archive__reply-to,
+  .codex-archive time,
+  .codex-archive__note {
+    color: var(--archive-muted);
+    font-size: .75rem;
+  }
+
+  .codex-archive__original {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    min-block-size: 2.15rem;
+    color: var(--archive-ink);
+    font-size: .8rem;
+    font-weight: 600;
+    text-underline-offset: .2em;
+  }
+
+  .codex-archive__original svg {
+    inline-size: .9rem;
+    block-size: .9rem;
+    flex: none;
+  }
+
+  .codex-archive a:focus-visible {
+    outline: 2px solid var(--archive-ink);
+    outline-offset: 4px;
+  }
+
+  .codex-archive__brand-link:hover strong {
+    text-decoration: underline;
+    text-underline-offset: .2em;
+  }
+
+  .codex-archive__content {
+    border: 1px dashed var(--archive-line);
+    padding: 1.25rem 1.4rem 0;
+  }
+
+  .codex-archive__heading {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .25rem .8rem;
+  }
+
+  .codex-archive__heading h2 {
+    margin: 0;
+    color: var(--archive-ink);
+    font-size: 1.125rem;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  .codex-archive__entries {
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .codex-archive__entry {
+    padding: 1.5rem 0;
+    border-block-start: 1px solid var(--archive-line);
+  }
+
+  .codex-archive__entry--reply {
+    margin-inline-start: 2.6rem;
+    padding: 0 0 1.5rem 1rem;
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--archive-line);
+  }
+
+  .codex-archive__comment {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: .7rem;
+  }
+
+  .codex-archive__avatar {
+    display: grid;
+    place-items: center;
+    inline-size: 1.875rem;
+    block-size: 1.875rem;
+    border: 1px solid var(--archive-line);
+    border-radius: 50%;
+    background: var(--archive-avatar);
+    color: var(--archive-ink);
+    font-size: .6875rem;
+    font-weight: 650;
+  }
+
+  .codex-archive__main {
+    min-inline-size: 0;
+  }
+
+  .codex-archive__byline {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .1rem .75rem;
+    line-height: 1.5;
+  }
+
+  .codex-archive__byline strong {
+    color: var(--archive-ink);
+    font-size: .8125rem;
+  }
+
+  .codex-archive__reply-to {
+    margin: .1rem 0 0;
+  }
+
+  .codex-archive__body {
+    margin: .55rem 0 0;
+    font-size: .875rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+  .codex-archive__summary-label {
+    margin-inline-end: .45rem;
+    color: var(--archive-muted);
+    font-size: .6875rem;
+    font-weight: 700;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+  }
+
+  .codex-archive__note {
+    margin: 0;
+    padding: .8rem 0 1rem;
+    border-block-start: 1px solid var(--archive-line);
+  }
+
+  @media (max-width: 40rem) {
+    .codex-archive__brand {
+      align-items: flex-start;
+      flex-direction: column;
+      padding: .95rem;
+    }
+
+    .codex-archive__original {
+      margin-inline-start: 3.75rem;
+    }
+
+    .codex-archive__content {
+      padding: 1.1rem .95rem 0;
+    }
+
+    .codex-archive__entry--reply {
+      margin-inline-start: .8rem;
+      padding-inline-start: .7rem;
+    }
+  }
+
+  @media print {
+    .codex-archive {
+      color-scheme: light;
+      background: Canvas;
+    }
+  }
+
+  @media print, (forced-colors: active) {
+    :global(html[data-theme]) .codex-archive,
+    .codex-archive {
+      --archive-ink: CanvasText;
+      --archive-text: CanvasText;
+      --archive-muted: CanvasText;
+      --archive-line: CanvasText;
+      --archive-avatar: Canvas;
+      color: CanvasText;
+    }
+    .codex-archive__brand-link img {
+      filter: none;
+    }
+  }
+</style>

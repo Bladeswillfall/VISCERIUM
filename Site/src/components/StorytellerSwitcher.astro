@@ -54,7 +54,9 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
   const START_MARKER = 'viscerium:storyteller:start';
   const END_MARKER = 'viscerium:storyteller:end';
 
-  function findBoundary(container, kind) {
+  type ArticleView = 'lore' | 'storyteller';
+
+  function findBoundary(container: Element, kind: 'start' | 'end'): Node | null {
     const element = container.querySelector(`[data-codex-storyteller-boundary="${kind}"]`);
     if (element) return element;
 
@@ -68,9 +70,9 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
     return null;
   }
 
-  function collectBetween(start, end) {
+  function collectBetween(start: Node, end: Node): Node[] {
     if (!start.parentNode || start.parentNode !== end.parentNode) return [];
-    const nodes = [];
+    const nodes: Node[] = [];
     let current = start.nextSibling;
     while (current && current !== end) {
       nodes.push(current);
@@ -79,7 +81,7 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
     return current === end ? nodes : [];
   }
 
-  function isStorytellerTitle(node) {
+  function isStorytellerTitle(node: Node) {
     if (!(node instanceof HTMLElement)) return false;
 
     const heading = /^H[1-6]$/.test(node.tagName)
@@ -91,20 +93,20 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
     return heading?.textContent?.trim().toLowerCase() === 'storyteller view';
   }
 
-  function isMeaningfulStorytellerNode(node) {
+  function isMeaningfulStorytellerNode(node: Node) {
     if (node.nodeType === Node.TEXT_NODE) return Boolean(node.textContent?.trim());
     if (!(node instanceof HTMLElement) || isStorytellerTitle(node)) return false;
     if (node.matches('img, picture, video, audio, iframe, table, ul, ol, blockquote, pre, hr, figure, .callout')) return true;
     return Boolean(node.textContent?.trim());
   }
 
-  function configureToc(content, activateView) {
+  function configureToc(content: HTMLElement, activateView: (view: ArticleView) => void) {
     const storyIds = new Set(
-      [...content.querySelectorAll('[id]')]
+      [...content.querySelectorAll<HTMLElement>('[id]')]
         .map((element) => element.id)
         .filter(Boolean),
     );
-    const items = [...document.querySelectorAll('.right-sidebar a[href^="#"]')].map((link) => {
+    const items = [...document.querySelectorAll<HTMLAnchorElement>('.right-sidebar a[href^="#"]')].map((link) => {
       const id = decodeURIComponent(link.getAttribute('href')?.slice(1) ?? '');
       return {
         element: link.closest('li') ?? link,
@@ -112,14 +114,14 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
       };
     });
 
-    return (view) => {
+    return (view: ArticleView) => {
       for (const item of items) item.element.hidden = item.view !== view;
       activateView(view);
     };
   }
 
   function initialiseStorytellerSwitcher() {
-    const roots = [...document.querySelectorAll('[data-codex-view-root]')];
+    const roots = [...document.querySelectorAll<HTMLElement>('[data-codex-view-root]')];
     if (!roots.length) {
       delete document.documentElement.dataset.codexArticleView;
       return;
@@ -133,7 +135,7 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
       const lorePanel = main?.querySelector('.sl-markdown-content');
       const storytellerPanel = root.querySelector('[data-codex-storyteller-panel]');
       const storytellerContent = root.querySelector('[data-codex-storyteller-content]');
-      const tabs = [...root.querySelectorAll('[data-codex-view-tab]')];
+      const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-codex-view-tab]')];
       if (!(lorePanel instanceof HTMLElement)
         || !(storytellerPanel instanceof HTMLElement)
         || !(storytellerContent instanceof HTMLElement)
@@ -145,11 +147,11 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
 
       const storytellerNodes = collectBetween(start, end);
       const hasStoryteller = storytellerNodes.some(isMeaningfulStorytellerNode);
-      start.remove();
-      end.remove();
+      start.parentNode?.removeChild(start);
+      end.parentNode?.removeChild(end);
 
       if (!hasStoryteller) {
-        for (const node of storytellerNodes) node.remove();
+        for (const node of storytellerNodes) node.parentNode?.removeChild(node);
         continue;
       }
 
@@ -164,7 +166,7 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
       const loreTab = root.querySelector('[data-codex-view-tab="lore"]');
       if (loreTab instanceof HTMLElement) loreTab.setAttribute('aria-controls', lorePanelId);
 
-      const setPanels = (view) => {
+      const setPanels = (view: ArticleView) => {
         const storytellerActive = view === 'storyteller';
         lorePanel.hidden = storytellerActive;
         storytellerPanel.hidden = !storytellerActive;
@@ -182,7 +184,10 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
 
       for (const tab of tabs) {
         if (!(tab instanceof HTMLButtonElement)) continue;
-        tab.addEventListener('click', () => activate(tab.dataset.codexViewTab ?? 'lore'));
+        tab.addEventListener('click', () => {
+          const view: ArticleView = tab.dataset.codexViewTab === 'storyteller' ? 'storyteller' : 'lore';
+          activate(view);
+        });
         tab.addEventListener('keydown', (event) => {
           if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
           event.preventDefault();
@@ -195,7 +200,8 @@ const eraStyle = starlightRoute.entry.data.eraStyle;
           if (event.key === 'End') nextIndex = tabs.length - 1;
           const next = tabs[nextIndex];
           if (!(next instanceof HTMLButtonElement)) return;
-          activate(next.dataset.codexViewTab ?? 'lore');
+          const view: ArticleView = next.dataset.codexViewTab === 'storyteller' ? 'storyteller' : 'lore';
+          activate(view);
           next.focus();
         });
       }

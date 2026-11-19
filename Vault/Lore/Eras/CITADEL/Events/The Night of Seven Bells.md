@@ -3,6 +3,7 @@ title: "The Night of Seven Bells"
 description: "Seven citadel bells rang together without being struck, drawing thousands into the streets before dawn."
 status: published
 type: event
+stub: true
 era: CITADEL
 calendarDate:
   calendar: okse

@@ -14,6 +14,7 @@ description: "The golden nation of Askalia is the pinacle of trade in Errack."
 updated:
 status: "published"
 type: "faction"
+stub: true
 development_level: "stub"
 era: "CITADEL"
 tags:

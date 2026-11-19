@@ -39,7 +39,7 @@ Do not hand-edit `Site/src/data/maps.json`.
 2. Keep marker storage set to **JSON**.
 3. Use the checked-in defaults that open the marker editor after placement, prefer the active layer and enable drawing and measurement tools.
 4. Keep map images under `Assets/Maps/`.
-5. Use Canvas render mode for very large raster maps such as the 7680 × 3840 CITADEL map.
+5. Use Canvas render mode for large raster maps such as the 7680 × 3840 CITADEL map.
 
 The plugin bundle itself is installed per device. Repository configuration, notes and sidecar data are shared through Git.
 
@@ -47,22 +47,34 @@ The plugin bundle itself is installed per device. Repository configuration, note
 
 ### Create the map note
 
-1. Create the note from [[Map Template]].
-2. Set a unique `mapId`.
-3. Set `image` to the public path, for example `/assets/maps/Errack-CITADEL.webp`.
-4. Set `mapMarkers` to the vault-relative sidecar path, for example `Assets/Maps/Errack-CITADEL.webp.markers.json`.
-5. Record the source image `width` and `height` when known.
-6. Write a reader-safe `description`.
+1. Open [[Home]].
+2. Select **Create new**.
+3. Select **Map**.
+4. Enter the map name and one-line purpose.
+5. Select the era or scope when it is established.
+6. Accept or edit the suggested unique `mapId`.
+7. Select an image from `Assets/Maps/` when one is ready.
+8. Confirm the derived public `image` path and `mapMarkers` sidecar path in frontmatter.
+9. Record the source image `width` and `height` when known.
+
+If you leave the image unassigned, add `image` and `mapMarkers` later. Do not invent them to complete the form.
 
 ### Insert the authoring map
+
+Guided Map creation inserts the authoring block automatically when you select an image.
+
+If you assign the image later:
 
 1. Put the cursor in the map note while in Edit mode.
 2. Run **TTRPG Tools - Maps: Insert new map...**.
 3. Choose the source image from `Assets/Maps/`.
 4. Use the same sidecar path recorded in `mapMarkers`.
 5. Give the code block a stable `id`.
-6. Use `render: canvas` for large SVG or raster maps.
-7. Enable pan clamping from the map context menu when the image should remain within the viewport.
+6. Keep `responsive: false` so pan and zoom gestures stay enabled.
+7. Use Canvas render mode for large raster maps.
+8. Enable pan clamping from the map context menu when the image should remain within the viewport.
+
+For authoring, drag to pan, use the mouse wheel or zoom buttons to zoom, Shift-click to add a marker, and right-click for marker, layer, drawing, measurement, and map options.
 
 The generated public note strips the `zoommap` code block. Readers see the Codex Atlas rather than Obsidian plugin syntax.
 
@@ -101,7 +113,9 @@ Use `/maps/` temporarily when an era does not yet have a dedicated Atlas map. On
 
 ### Prepare the lore note
 
-The marker must link to a canonical note. For public Atlas output, that note must be published.
+Location creation can record the intended Atlas as `map.id` while the note is still a draft. This links the authoring decision without creating public marker state.
+
+The marker itself must link to a canonical note with a stable `Lore/` path. For public Atlas output, that note must be published.
 
 Keep a `map:` block on the linked note for semantic public behaviour:
 
@@ -118,6 +132,10 @@ map:
 `x` and `y` may remain temporarily as migration fallback values, but plugin-backed maps ignore them. Move the marker in the visual map instead.
 
 ### Place the marker visually
+
+From a canonical location note under `Lore/`, run **VISCERIUM Creator Tools: Place active location on Atlas...** to choose the target map and open it beside the location. The command does not edit marker storage.
+
+Alternatively:
 
 1. Open the map note in Reading view.
 2. Shift-click the desired position or right-click and choose **Add marker here**.

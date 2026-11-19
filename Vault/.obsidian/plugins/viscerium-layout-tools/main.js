@@ -557,14 +557,5 @@ module.exports = class VisceriumLayoutToolsPlugin extends Plugin {
       }
     }));
 
-    const repairActiveView = () => {
-      const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-      if (!view?.editor) return;
-      repairLegacyVisualIndents(view.editor);
-      repairMalformedNestedVisualIndents(view.editor);
-    };
-
-    this.app.workspace.onLayoutReady(repairActiveView);
-    this.registerEvent(this.app.workspace.on('file-open', () => setTimeout(repairActiveView, 0)));
   }
 };

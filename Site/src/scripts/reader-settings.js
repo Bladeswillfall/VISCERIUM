@@ -206,6 +206,7 @@ class VisceriumReaderSettings extends HTMLElement {
     const openPanel = () => {
       panel.hidden = false;
       trigger.setAttribute('aria-expanded', 'true');
+      close?.focus();
     };
 
     trigger.addEventListener('click', () => {

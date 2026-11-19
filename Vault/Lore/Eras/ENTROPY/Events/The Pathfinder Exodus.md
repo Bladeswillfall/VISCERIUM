@@ -3,6 +3,7 @@ title: "The Pathfinder Exodus"
 description: "Civilian pathfinder fleets departed Errack in staggered waves to establish redundant human settlements beyond mapped war corridors."
 status: published
 type: event
+stub: true
 era: ENTROPY
 calendarDate:
   calendar: okse

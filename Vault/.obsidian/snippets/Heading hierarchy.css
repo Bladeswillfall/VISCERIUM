@@ -1,13 +1,24 @@
 /*
  * Heading hierarchy
- * Makes long notes easier to scan in Reading View and Live Preview.
- * Creator UI foundation sets the typeface. Heading levels use small color differences.
+ * Editorial article hierarchy for Reading View and Live Preview.
  */
+
+.markdown-rendered:not(.viscerium-home) {
+  counter-reset: vc-article-h2;
+}
 
 .markdown-rendered h1,
 .markdown-source-view.mod-cm6 .HyperMD-header-1 {
   letter-spacing: -0.025em;
   line-height: 1.12;
+}
+
+.markdown-preview-view:not(.viscerium-home) .inline-title,
+.markdown-source-view.mod-cm6:not(.viscerium-home) .inline-title {
+  margin-bottom: 0.7rem;
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
 }
 
 /* The creator dashboard title uses a separate typeface from article headings. */
@@ -17,19 +28,36 @@
   letter-spacing: 0.08em;
 }
 
-.markdown-rendered h2,
-.markdown-source-view.mod-cm6 .HyperMD-header-2 {
-  margin-top: 1.9em;
-  padding-bottom: 0.32em;
-  border-bottom: 1px solid var(--vc-accent-line, var(--background-modifier-border));
-  letter-spacing: -0.015em;
-  line-height: 1.2;
+.markdown-rendered:not(.viscerium-home) h2,
+.markdown-source-view.mod-cm6:not(.viscerium-home) .HyperMD-header-2 {
+  margin-top: 2.15em;
+  padding-bottom: 0;
+  border-bottom: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+
+.markdown-rendered:not(.viscerium-home) h2 {
+  counter-increment: vc-article-h2;
+}
+
+.markdown-rendered:not(.viscerium-home) h2::before {
+  content: counter(vc-article-h2, decimal-leading-zero);
+  display: inline-block;
+  min-width: 2.6rem;
+  margin-right: 0.45rem;
+  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 58%, var(--text-muted));
+  font-family: var(--font-monospace);
+  font-size: 0.48em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  vertical-align: 0.2em;
 }
 
 .markdown-rendered h3,
 .markdown-source-view.mod-cm6 .HyperMD-header-3 {
-  margin-top: 1.6em;
-  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 18%, var(--text-normal));
+  margin-top: 1.7em;
+  color: color-mix(in srgb, var(--vc-accent, var(--interactive-accent)) 12%, var(--text-normal));
   line-height: 1.25;
 }
 

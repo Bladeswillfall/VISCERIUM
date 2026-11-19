@@ -44,19 +44,22 @@ module.exports = class VisceriumJournalToolsPlugin extends Plugin {
     return null;
   }
 
-  activityInsertionOffset(text) {
+  activitySection(text) {
     const headingOffset = text.indexOf(ACTIVITY_HEADING);
-    if (headingOffset === -1) return -1;
+    if (headingOffset === -1) return null;
 
-    const sectionStart = headingOffset + ACTIVITY_HEADING.length;
-    const nextHeading = text.slice(sectionStart).search(/^##\s+/m);
-    const sectionEnd = nextHeading === -1 ? text.length : sectionStart + nextHeading;
-    const section = text.slice(sectionStart, sectionEnd);
-    const comment = section.match(/<!--[\s\S]*?-->/);
+    const start = headingOffset + ACTIVITY_HEADING.length;
+    const nextHeading = text.slice(start).search(/^##\s+/m);
+    const end = nextHeading === -1 ? text.length : start + nextHeading;
+    const content = text.slice(start, end);
+    const comment = content.match(/<!--[\s\S]*?-->/);
 
-    return comment
-      ? sectionStart + comment.index + comment[0].length
-      : sectionStart;
+    return {
+      start,
+      end,
+      content,
+      insertionOffset: comment ? start + comment.index + comment[0].length : start,
+    };
   }
 
   async sealTodaysActivity() {
@@ -70,23 +73,18 @@ module.exports = class VisceriumJournalToolsPlugin extends Plugin {
 
     const editor = view.editor;
     const text = editor.getValue();
-    const headingOffset = text.indexOf(ACTIVITY_HEADING);
-    if (headingOffset === -1) {
+    const activity = this.activitySection(text);
+    if (!activity) {
       new Notice(`Today's journal is missing ${ACTIVITY_HEADING}. Add it or recreate the note from the daily template.`, 10000);
       return;
     }
 
-    const sectionStart = headingOffset + ACTIVITY_HEADING.length;
-    const nextHeading = text.slice(sectionStart).search(/^##\s+/m);
-    const sectionEnd = nextHeading === -1 ? text.length : sectionStart + nextHeading;
-    const activitySection = text.slice(sectionStart, sectionEnd);
-    if (activitySection.includes(ACTIVITY_TIMELINE_HEADING)) {
+    if (activity.content.includes(ACTIVITY_TIMELINE_HEADING)) {
       new Notice("Today's activity is already sealed. Remove the existing timeline before generating another snapshot.", 9000);
       return;
     }
 
-    let insertionOffset = this.activityInsertionOffset(text);
-    if (insertionOffset === -1) return;
+    let insertionOffset = activity.insertionOffset;
 
     const following = text.slice(insertionOffset);
     const existingNewlines = following.match(/^\n*/)?.[0].length ?? 0;

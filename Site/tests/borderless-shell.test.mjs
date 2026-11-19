@@ -26,7 +26,6 @@ test('the Okse Dominion source retains its developed faction-hub structure', asy
 
   for (const destination of [
     'Valenheim',
-    'Rauthrbak Min',
     'Vagrvik',
     'Aldaness',
     'Hjalliberg',
@@ -34,4 +33,11 @@ test('the Okse Dominion source retains its developed faction-hub structure', asy
   ]) {
     assert.match(source, new RegExp(`\\[\\[[^\\]]*${destination}[^\\]]*\\]\\]`), `expected Okse hub link: ${destination}`);
   }
+
+  assert.match(source, /Rauthrbak Min/, 'expected private Workshop holding to remain named');
+  assert.doesNotMatch(
+    source,
+    /\\[\\[[^\\]]*Rauthrbak Min[^\\]]*\\]\\]/,
+    'private Workshop draft must remain unlinked from published Lore',
+  );
 });

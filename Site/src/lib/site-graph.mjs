@@ -3,7 +3,7 @@ import {
   normaliseInternalRoute,
   slugToRoute,
 } from './codex-paths.mjs';
-import { isReadingTimeArticle } from './reading-time.mjs';
+import { isReadingTimeArticle } from './reading-time.ts';
 
 function routeForEntry(entry) {
   const slug = entry.data?.slug || String(entry.id).replace(/\.(md|mdx)$/i, '').replace(/\/index$/i, '') || 'index';
