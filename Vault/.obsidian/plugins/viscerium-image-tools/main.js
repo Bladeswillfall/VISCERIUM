@@ -344,7 +344,13 @@ async function ensureVaultFolder(vault, folderPath) {
 
   for (const segment of segments) {
     current = current ? `${current}/${segment}` : segment;
-    if (!vault.getAbstractFileByPath(current)) await vault.createFolder(current);
+    if (vault.getAbstractFileByPath(current)) continue;
+    try {
+      await vault.createFolder(current);
+    } catch (error) {
+      // Another import may have created the same folder while we were awaiting.
+      if (!vault.getAbstractFileByPath(current)) throw error;
+    }
   }
 }
 

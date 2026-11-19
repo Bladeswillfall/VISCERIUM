@@ -67,7 +67,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
         {map.description && <p>{map.description}</p>}
       </div>
       <div>
-        {map.image && <a class="atlas__article-link" href={attributionRouteForAsset(map.image)}>Artwork & attribution</a>}
+        {map.image && <a class="atlas__article-link" href={attributionRouteForAsset(map.image)} data-mobile-label="Attribution">Artwork & attribution</a>}
         {' '}
         {map.page && <a class="atlas__article-link" href={map.page} data-mobile-label={t('viscerium.map.notes')}>{t('viscerium.map.readNotes')}</a>}
       </div>

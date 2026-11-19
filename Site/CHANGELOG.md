@@ -10,6 +10,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added a Bailey Pittman article preview and image-attribution pages for managed Codex artwork, with automatic Obsidian sidecars and Atlas attribution links ([#161](https://github.com/Bladeswillfall/VISCERIUM/pull/161)).
+
 - Added source-specific WorldAnvil contributor credits, checked-in Solacon avatars, and a discreet WA provenance mark beside legacy contributor roles ([#261](https://github.com/Bladeswillfall/VISCERIUM/pull/261)).
 - Added a World Anvil discussion archive pilot to Okse Dominion, with dated attribution, source links and editorial summaries where republication permission is missing.
 

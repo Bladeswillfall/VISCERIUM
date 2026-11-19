@@ -114,6 +114,48 @@ test('image-tools sidecars default to Copyright without overwriting unsupported 
 });
 
 
+test('concurrent image imports can share a newly created attribution folder', async () => {
+  const source = await readFile(
+    path.join(repoRoot, sourcePaths['viscerium-image-tools'], 'src/main.js'),
+    'utf8',
+  );
+  const context = vm.createContext({
+    module: { exports: {} },
+    exports: {},
+    require: (id) => {
+      assert.equal(id, 'obsidian');
+      return { Notice: class {}, Plugin: class {} };
+    },
+  });
+  new vm.Script(source, { filename: 'viscerium-image-tools/main.js' }).runInContext(context);
+
+  const folders = new Set(['Assets', 'Assets/Attribution', 'Assets/Attribution/Images']);
+  const sidecars = new Map();
+  const vault = {
+    getAbstractFileByPath: (file) => folders.has(file) || sidecars.has(file) ? { path: file } : null,
+    async createFolder(folder) {
+      await Promise.resolve();
+      if (folders.has(folder)) throw new Error('Folder already exists');
+      folders.add(folder);
+    },
+    async create(file, content) {
+      if (sidecars.has(file)) throw new Error('File already exists');
+      sidecars.set(file, content);
+    },
+  };
+
+  const assets = ['a', 'b'].map((basename) => ({
+    path: `Assets/Images/new/${basename}.webp`,
+    extension: 'webp',
+    basename,
+  }));
+  await Promise.all(assets.map((file) => context.ensureAttributionSidecar({ vault }, file)));
+
+  assert.equal(sidecars.size, 2);
+  assert.match(sidecars.get('Assets/Attribution/Images/new/a.webp.md'), /rights: "Copyright"/);
+  assert.match(sidecars.get('Assets/Attribution/Images/new/b.webp.md'), /rights: "Copyright"/);
+});
+
 test('layout-tools keep legacy indent repair explicit', async () => {
   const source = await readFile(
     path.join(repoRoot, sourcePaths['viscerium-layout-tools'], 'src/main.js'),
