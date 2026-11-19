@@ -39,3 +39,13 @@ test('Krass article and Start Here use the same managed flag', async ({ page }) 
   await page.goto(`${preview}/start-here/`);
   await checkImage(page.locator('.start-culture__flag--krass'), asset, 2047);
 });
+
+test('Askalia article and CITADEL power card use its national flag', async ({ page }) => {
+  const asset = '/assets/images/Republic-of-Askalia-flag.webp';
+  await page.goto(`${preview}/eras/citadel/nations/republic-of-askalia/`);
+  await checkImage(page.locator('.codex-sidebar-image'), asset, 2750);
+
+  await page.goto(`${preview}/eras/citadel/`);
+  const card = page.locator('.era-primer__power').filter({ hasText: 'Republic of Askalia' });
+  await checkImage(card.locator('img'), asset, 2750);
+});

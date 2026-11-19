@@ -11,6 +11,11 @@ sidebar:
         - "City - Saffronport"
 title: "Republic of Askalia"
 description: "The golden nation of Askalia is the pinacle of trade in Errack."
+image: Republic-of-Askalia-flag.webp
+headerImage: Republic-of-Askalia-flag.webp
+imageTitle: Republic of Askalia flag
+alt: Three white armoured arms holding curved swords, arranged in a triskelion on a deep burgundy field.
+# Artist, source and rights attribution pending confirmation.
 updated:
 status: "published"
 type: "faction"
