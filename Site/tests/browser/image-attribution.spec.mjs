@@ -32,6 +32,8 @@ test('reader-facing artwork links to attribution records', async ({ page }) => {
     'href',
     '/attribution/images/errack-webp/',
   );
+  await expect(page.locator('a[href="/attribution/images/errack-rings-webp/"] > img')).toHaveCount(1);
+  await expect(page.locator('main')).not.toContainText('](/attribution/images/errack-rings-webp/)');
 });
 
 test('header and sidebar artwork are visually centered inside their links', async ({ page }) => {
@@ -93,4 +95,19 @@ test('attribution records use a dedicated metadata table without the article sid
 
   const editLink = page.locator('a[href*="/edit/main/Vault/Assets/Attribution/Images/bailey-pittman-portrait.webp.md"]');
   await expect(editLink).toHaveCount(1);
+});
+
+test('external attribution records display their artwork', async ({ page }) => {
+  const sourceRoot = 'https://wa-cdn.nyc3.cdn.digitaloceanspaces.com/user-data/production/4e045179-ba57-4130-8eed-cfdd0223c3d7/uploads/images';
+  const filenames = [
+    '0e0f4f66d44a0c03ce3ec042978a6a2f',
+    '598b4c8d3d6aaae231daefd475d4888a',
+    '70c9317a764228e870cb7d68d604a64b',
+    '8959261124e62edee28ea6301fa6e1f2',
+  ];
+
+  for (const filename of filenames) {
+    await page.goto(`${baseUrl}/attribution/external/wa-cdn-nyc3-cdn-digitaloceanspaces-com/${filename}-png/`, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.codex-header-image')).toHaveAttribute('src', `${sourceRoot}/${filename}.png`);
+  }
 });

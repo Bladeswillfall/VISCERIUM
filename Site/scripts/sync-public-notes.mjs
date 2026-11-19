@@ -478,6 +478,7 @@ function transformCalendarShortcodes(content, parsed, currentFile, outFile) {
 
 async function convertContent(content, currentFile, parsed, outFile, outputRequiresMdx) {
   let converted = stripDataviewBlocks(content).replace(/^%%[\s\S]*?%%\s*/gm, '');
+  converted = await rewriteMarkdownImages(converted, currentFile);
   const embeds = [...converted.matchAll(/!\[\[([^\]]+)\]\]/g)];
   for (const match of embeds.reverse()) {
     const imageSpec = parseObsidianImageEmbed(match[1]);
@@ -501,8 +502,6 @@ async function convertContent(content, currentFile, parsed, outFile, outputRequi
     const replacement = renderInsideMarkdownQuote(rendered, quotePrefix);
     converted = `${converted.slice(0, match.index)}${replacement}${converted.slice(match.index + match[0].length)}`;
   }
-
-  converted = await rewriteMarkdownImages(converted, currentFile);
 
   converted = converted.replace(new RegExp(`^#\\s+${RegExp.escape(String(parsed.data.title))}\\s*$`, 'im'), '').trimStart();
   converted = converted.replace(/^#\s+\{\{title\}\}\s*$/im, '').trimStart();
