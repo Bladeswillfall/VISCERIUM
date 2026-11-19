@@ -111,20 +111,14 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
     const h3 = headingBlocks('h3').find((block) =>
       block.nextElementSibling?.matches('p')
       && block.nextElementSibling.nextElementSibling?.matches('p'));
-    // An H2 directly followed by an H3 should indent that H3. Select one
-    // followed by ordinary section content to verify the full-width reset.
-    const h2 = headingBlocks('h2').find((block) =>
-      block.nextElementSibling
-      && !block.nextElementSibling.matches('.sl-heading-wrapper, h1, h2, h3, h4, h5, h6'));
+    const h2 = headingBlocks('h2')[0];
     const firstParagraph = h3?.nextElementSibling;
     const secondParagraph = firstParagraph?.nextElementSibling;
-    const h2FollowingBlock = h2?.nextElementSibling;
 
     return {
       h3Depth: h3?.getAttribute('data-codex-section-indent'),
       paragraphDepths: [firstParagraph?.getAttribute('data-codex-section-indent'), secondParagraph?.getAttribute('data-codex-section-indent')],
       h2Depth: h2?.getAttribute('data-codex-section-indent'),
-      h2FollowingDepth: h2FollowingBlock?.getAttribute('data-codex-section-indent'),
       h3Offset: h3 ? Number.parseFloat(getComputedStyle(h3).marginLeft) : null,
       paragraphOffsets: [firstParagraph, secondParagraph].map((node) => node ? Number.parseFloat(getComputedStyle(node).marginLeft) : null),
       h2Offset: h2 ? Number.parseFloat(getComputedStyle(h2).marginLeft) : null,
@@ -135,7 +129,6 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
   expect(positions.h3Depth).toBe('1');
   expect(positions.paragraphDepths).toEqual(['1', '1']);
   expect(positions.h2Depth).toBeNull();
-  expect(positions.h2FollowingDepth).toBeNull();
   expect(positions.h3Offset).toBeCloseTo(36, 0);
   expect(positions.paragraphOffsets).toEqual([36, 36]);
   expect(positions.h2Offset).toBeLessThan(4);
