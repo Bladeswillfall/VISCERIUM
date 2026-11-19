@@ -90,8 +90,8 @@ test('attribution records use a dedicated metadata table without the article sid
   await expect(altTextRow).toContainText('Not recorded');
 
   const rightsBadge = table.locator('.codex-rights-badge');
-  await expect(rightsBadge).toHaveAttribute('data-rights-kind', 'unknown');
-  await expect(rightsBadge).toContainText('Not recorded');
+  await expect(rightsBadge).toHaveAttribute('data-rights-kind', 'copyright');
+  await expect(rightsBadge).toContainText('Copyright');
 
   const editLink = page.locator('a[href*="/edit/main/Vault/Assets/Attribution/Images/bailey-pittman-portrait.webp.md"]');
   await expect(editLink).toHaveCount(1);
