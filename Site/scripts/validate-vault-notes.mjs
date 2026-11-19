@@ -29,6 +29,7 @@ const remoteDynamicImport = /\bimport\s*\(\s*["'](?:https?:|data:|javascript:)/i
 const eraPrimerShortcode = /^\s*\[EraPrimer:([^\]\s]+)\]\s*$/gim;
 const migrationReviewScaffolding = /<!--\s*worldanvil-migration-review:(?:start|end)\s*-->/i;
 const draftInboxWikilink = /!?\[\[Drafts\/Inbox\/[^\]]+\]\]/i;
+const legacyCompactNestedIndent = /^\s{0,3}>>(?:\s|$)/m;
 
 function relative(file) {
   return path.relative(siteRoot, file).replace(/\\/g, '/');
@@ -111,6 +112,10 @@ function validatePublishedMetadata({ file, data, content }, fail) {
   }
   if (draftInboxWikilink.test(content)) {
     fail(`Published note links to Drafts/Inbox; publish the target or leave the term unlinked: ${relative(file)}`);
+  }
+
+  if (legacyCompactNestedIndent.test(content)) {
+    fail(`Published note uses legacy compact nested indent syntax ">>": ${relative(file)}. Use a nested vc-indent block for visual indentation, or "> >" for an actual nested quotation.`);
   }
 
   validateEraPrimerSource(content, data, file, fail);

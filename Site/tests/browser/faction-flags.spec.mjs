@@ -21,7 +21,7 @@ test('NEARSIGHT powers and their articles use their published flags', async ({ p
   await page.goto(`${preview}/eras/nearsight/`);
   for (const [title, , href, file] of factions) {
     const card = page.locator('.era-primer__power').filter({ hasText: title });
-    await expect(card.getByRole('link', { name: title })).toHaveAttribute('href', href);
+    await expect(card.getByRole('link', { name: title, exact: true })).toHaveAttribute('href', href);
     await checkImage(card.locator('img'), `/assets/images/${file}`, 1600);
   }
 

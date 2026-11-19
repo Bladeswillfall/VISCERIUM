@@ -117,6 +117,38 @@ test('published notes reject World Anvil review scaffolding', () => {
   assert.match(result.errors.join('\n'), /migration review scaffolding/);
 });
 
+test('published notes reject legacy compact nested visual indents', () => {
+  const result = validateQuietly([
+    '> [!vc-indent]',
+    '> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>',
+    '>',
+    '> ### Section',
+    '>> #### Legacy nested section',
+  ].join('\n'));
+
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join('\n'), /legacy compact nested indent syntax/);
+});
+
+test('published notes allow explicit nested vc-indent blocks and nested quotations', () => {
+  const result = validateQuietly([
+    '> [!vc-indent]',
+    '> <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>',
+    '>',
+    '> ### Section',
+    '>',
+    '> > [!vc-indent]',
+    '> > <span class="vc-layout-indent-marker" aria-hidden="true" hidden></span>',
+    '> >',
+    '> > #### Nested section',
+    '>',
+    '> > A real quotation.',
+  ].join('\n'));
+
+  assert.equal(result.valid, true);
+  assert.deepEqual(result.errors, []);
+});
+
 test('published notes reject links into Drafts Inbox', () => {
   const result = validateQuietly('Read [[Drafts/Inbox/Resonance|Resonance]] for more detail.');
 

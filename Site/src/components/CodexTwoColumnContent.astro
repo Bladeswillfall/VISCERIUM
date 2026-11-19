@@ -26,12 +26,14 @@ const isDegelSystemIndex = String(slugPath).replace(/^\/+|\/+$/g, '') === 'degel
     explorationPage && "codex-exploration-page",
     isImageAttributionPage && "codex-image-attribution-page",
     isDegelSystemIndex && "codex-degel-system-page",
+    isImageAttributionPage && "codex-image-attribution-page",
   ]}
   data-era-style={eraStyle}
   data-timeline-page={timelinePage || undefined}
   data-exploration-page={explorationPage || undefined}
   data-image-attribution-page={isImageAttributionPage || undefined}
   data-degel-system-page={isDegelSystemIndex || undefined}
+  data-image-attribution-page={isImageAttributionPage || undefined}
 >
   <div class="main-pane codex-main-pane">
     {isIndieWebEntry && (

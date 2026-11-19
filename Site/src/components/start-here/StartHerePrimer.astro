@@ -2,6 +2,7 @@
 import '../../styles/editorial-shell.css';
 import '../../styles/start-here-pages.css';
 import ErrackMapMark from './ErrackMapMark.astro';
+import { attributionRouteForAsset } from '../../lib/image-attribution.mjs';
 
 const eraRoutes = {
   citadel: '/eras/citadel/',
@@ -14,7 +15,7 @@ const assetRoot = 'https://wa-cdn.nyc3.cdn.digitaloceanspaces.com/user-data/prod
 const nadirMark = `${assetRoot}/598b4c8d3d6aaae231daefd475d4888a.png`;
 const zenithMark = `${assetRoot}/0e0f4f66d44a0c03ce3ec042978a6a2f.png`;
 const resonanceTrail = `${assetRoot}/70c9317a764228e870cb7d68d604a64b.png`;
-const okseFlag = `${assetRoot}/1d6a04547df953b36f4d6f8ce73e91f2.png`;
+const okseFlag = '/assets/images/1d6a04547df953b36f4d6f8ce73e91f2.webp';
 const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
 ---
 
@@ -134,13 +135,20 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
         VISCERIUM is dark, but darkness only matters because there is something to lose. Wonder, culture, humour, ordinary work and stubborn hope are not relief from the setting; they are what gives its violence weight.
       </p>
       <a class="start-inline-link" href="/degel-system/errack/">Explore Errack <span aria-hidden="true">→</span></a>
+      <p>
+        <a class="start-inline-link" href={attributionRouteForAsset('/assets/images/errack.webp')}>Errack artwork attribution <span aria-hidden="true">→</span></a>
+      </p>
     </div>
   </section>
 
   <section class="start-culture" aria-labelledby="start-culture-title">
     <div class="start-culture__flags" aria-hidden="true">
-      <img class="start-culture__flag start-culture__flag--okse" src={okseFlag} alt="" loading="lazy" referrerpolicy="no-referrer" />
-      <img class="start-culture__flag start-culture__flag--krass" src={krassFlag} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      <a href={attributionRouteForAsset(okseFlag)} tabindex="-1">
+        <img class="start-culture__flag start-culture__flag--okse" src={okseFlag} alt="" loading="lazy" />
+      </a>
+      <a href={attributionRouteForAsset(krassFlag)} tabindex="-1">
+        <img class="start-culture__flag start-culture__flag--krass" src={krassFlag} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      </a>
     </div>
     <div class="start-shell start-culture__copy">
       <p class="start-eyebrow">People live here</p>
@@ -177,7 +185,9 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
 
     <div class="start-threat-pair">
       <article class="start-threat-beat start-threat-beat--myrkild">
-        <img class="start-threat-beat__mark" src={nadirMark} alt="Symbol associated with the Nadirs" loading="lazy" referrerpolicy="no-referrer" />
+        <a href={attributionRouteForAsset(nadirMark)} aria-label="Image attribution: symbol associated with the Nadirs">
+          <img class="start-threat-beat__mark" src={nadirMark} alt="Symbol associated with the Nadirs" loading="lazy" referrerpolicy="no-referrer" />
+        </a>
         <div class="start-threat-beat__copy">
           <p class="start-eyebrow">The recurring wound</p>
           <h3>Myrkild</h3>
@@ -187,7 +197,9 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
       </article>
 
       <article class="start-threat-beat start-threat-beat--beyond">
-        <img class="start-threat-beat__mark" src={zenithMark} alt="Symbol associated with the Zeniths" loading="lazy" referrerpolicy="no-referrer" />
+        <a href={attributionRouteForAsset(zenithMark)} aria-label="Image attribution: symbol associated with the Zeniths">
+          <img class="start-threat-beat__mark" src={zenithMark} alt="Symbol associated with the Zeniths" loading="lazy" referrerpolicy="no-referrer" />
+        </a>
         <div class="start-threat-beat__copy">
           <p class="start-eyebrow">Something more precise</p>
           <h3>Beyond the firelight</h3>
@@ -200,7 +212,9 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
 
   <section class="start-wyrd" id="start-resonance" aria-labelledby="start-wyrd-title">
     <div class="start-wyrd__graphic" aria-hidden="true">
-      <img src={resonanceTrail} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      <a class="start-attribution-link" href={attributionRouteForAsset(resonanceTrail)} tabindex="-1">
+        <img src={resonanceTrail} alt="" loading="lazy" referrerpolicy="no-referrer" />
+      </a>
       <span class="start-wyrd__stone"></span>
     </div>
     <div class="start-shell start-wyrd__content">
