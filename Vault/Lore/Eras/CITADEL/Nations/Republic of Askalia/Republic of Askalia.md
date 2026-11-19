@@ -14,8 +14,9 @@ description: "The golden nation of Askalia is the pinacle of trade in Errack."
 image: Republic-of-Askalia-flag.webp
 headerImage: Republic-of-Askalia-flag.webp
 imageTitle: Republic of Askalia flag
-alt: Three white armoured arms holding curved swords, arranged in a triskelion on a deep burgundy field.
-# Artist, source and rights attribution pending confirmation.
+alt: "Flag of The Republic of Askalia. Features a wine-red field with a trio of sword-bearing armored arms rotating about the center."
+artist: "Jake Saunders"
+imagePage: /attribution/images/republic-of-askalia-flag-webp/
 updated:
 status: "published"
 type: "faction"
