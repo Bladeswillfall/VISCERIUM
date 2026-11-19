@@ -360,6 +360,7 @@
   content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background:
     linear-gradient(90deg, var(--start-bg), transparent 35%),
     linear-gradient(0deg, var(--start-bg), transparent 24%, transparent 78%, var(--start-bg));

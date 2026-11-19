@@ -90,6 +90,12 @@ icon: "fa-solid fa-flag"
 
 ## Layout tags
 
+### Standard article subsection hierarchy
+
+Ordinary published Codex articles automatically indent H3 headings and all following blocks within that subsection by 2.25rem on desktop (1.125rem on small screens). H4 and deeper headings inside an H3 subsection step one level further, up to two indent levels. Each new H3 starts a subsection at the first level; an H2 returns the heading and subsequent content to full width.
+
+This applies only to ordinary articles. The homepage, era homepages, category indexes, Start Here, policy and statement pages, and other composed/special pages retain their own layouts. Keep writing normal Markdown headings and paragraphs; do not add a `vc-indent` callout solely for H3 hierarchy. Existing deliberate `vc-indent` callouts retain their authored offset and are not indented a second time. An H4 without a preceding H3 subsection stays at its original alignment.
+
 Controlled layout tags must sit on their own lines:
 
 ```md

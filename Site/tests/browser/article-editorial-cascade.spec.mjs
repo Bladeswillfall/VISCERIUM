@@ -95,3 +95,61 @@ test('Errack renders the approved article hierarchy and detail polish', async ({
   expect(result.artCaptionBackground).toBe('rgba(0, 0, 0, 0)');
   expect(result.artCaptionBorderTopWidth).toBe('0px');
 });
+
+test('ordinary H3 subsections indent their entire prose range while H2 text stays full-width', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/eras/citadel/nations/okse-dominion/', { waitUntil: 'networkidle' });
+
+  const positions = await page.evaluate(() => {
+    const content = document.querySelector('.sl-markdown-content.codex-editorial-article');
+    if (!content) return null;
+
+    const headingBlocks = (level) => [...content.querySelectorAll(level)]
+      .map((heading) => heading.closest('.sl-heading-wrapper') ?? heading)
+      .filter((block) => block.parentElement === content);
+    // The authored prose can differ from the checked-in generated MDX. Verify
+    // the Markdown structure, not a particular revision of an article's text.
+    const h3 = headingBlocks('h3').find((block) =>
+      block.nextElementSibling?.matches('p')
+      && block.nextElementSibling.nextElementSibling?.matches('p'));
+    const h2 = headingBlocks('h2')[0];
+    const firstParagraph = h3?.nextElementSibling;
+    const secondParagraph = firstParagraph?.nextElementSibling;
+
+    return {
+      h3Depth: h3?.getAttribute('data-codex-section-indent'),
+      paragraphDepths: [firstParagraph?.getAttribute('data-codex-section-indent'), secondParagraph?.getAttribute('data-codex-section-indent')],
+      h2Depth: h2?.getAttribute('data-codex-section-indent'),
+      h3Offset: h3 ? Number.parseFloat(getComputedStyle(h3).marginLeft) : null,
+      paragraphOffsets: [firstParagraph, secondParagraph].map((node) => node ? Number.parseFloat(getComputedStyle(node).marginLeft) : null),
+      h2Offset: h2 ? Number.parseFloat(getComputedStyle(h2).marginLeft) : null,
+    };
+  });
+
+  expect(positions).not.toBeNull();
+  expect(positions.h3Depth).toBe('1');
+  expect(positions.paragraphDepths).toEqual(['1', '1']);
+  expect(positions.h2Depth).toBeNull();
+  expect(positions.h3Offset).toBeCloseTo(36, 0);
+  expect(positions.paragraphOffsets).toEqual([36, 36]);
+  expect(positions.h2Offset).toBeLessThan(4);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobileOffset = await page.evaluate(() => {
+    const content = document.querySelector('.sl-markdown-content.codex-editorial-article');
+    const heading = [...content.querySelectorAll('h3')]
+      .map((node) => node.closest('.sl-heading-wrapper') ?? node)
+      .find((block) => block.parentElement === content && block.nextElementSibling?.matches('p')
+        && block.nextElementSibling.nextElementSibling?.matches('p'));
+    return heading ? Number.parseFloat(getComputedStyle(heading).marginLeft) : null;
+  });
+  expect(mobileOffset).toBeCloseTo(18, 0);
+});
+
+test('manual Valenheim indents remain single-depth rather than doubling', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/eras/citadel/nations/okse-dominion/regions/halvmaneheimr/settlements/valenheim/', { waitUntil: 'networkidle' });
+  const authoredIndent = page.locator('.sl-markdown-content blockquote:has(.vc-layout-indent-marker)').first();
+  await expect(authoredIndent).toHaveCount(1);
+  await expect(authoredIndent).not.toHaveAttribute('data-codex-section-indent', /[12]/);
+  const offset = await authoredIndent.evaluate((element) => Number.parseFloat(getComputedStyle(element).marginLeft));
+  expect(offset).toBeCloseTo(36, 0);
+});

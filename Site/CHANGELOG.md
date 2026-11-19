@@ -12,6 +12,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 - Added a Bailey Pittman article preview and image-attribution pages for managed Codex artwork, with automatic Obsidian sidecars and Atlas attribution links ([#161](https://github.com/Bladeswillfall/VISCERIUM/pull/161)).
 
+- Added the Republic of Askalia flag to its CITADEL article and era power card, with a linked artwork attribution page crediting Jake Saunders ([#308](https://github.com/Bladeswillfall/VISCERIUM/pull/308)).
 - Added source-specific WorldAnvil contributor credits, checked-in Solacon avatars, and a discreet WA provenance mark beside legacy contributor roles ([#261](https://github.com/Bladeswillfall/VISCERIUM/pull/261)).
 - Added a World Anvil discussion archive pilot to Okse Dominion, with dated attribution, source links and editorial summaries where republication permission is missing.
 
@@ -47,6 +48,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Fixed in Unreleased
 
+- Applied consistent H3 subsection and paragraph indentation across ordinary Codex articles, while leaving custom layouts and existing authored indents unchanged.
 - Restored navigation and relationship exploration without JavaScript, repaired tablet article contents and reader controls, and kept mobile era descriptions and footer text readable ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 - Restored the Codex's subtle grain texture using the committed noise image ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 

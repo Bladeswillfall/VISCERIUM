@@ -7,6 +7,52 @@ const entry = starlightRoute.entry.data;
 const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
 const isIndieWebEntry = entry.status === 'published' && pageKind.isStandardArticle;
 const isReleasesPage = /^\/releases(?:\/|$)/.test(Astro.url.pathname);
+const isRegularArticle = isIndieWebEntry
+  && !isReleasesPage
+  && !/^(?:policies|statements|support|contact)(?:\/|$)/.test(pageKind.slug)
+  && pageKind.slug !== 'degel-system'
+  && entry.type !== 'image';
 ---
 
-<div class:list={['sl-markdown-content', isIndieWebEntry && 'e-content', isReleasesPage && 'vc-release-content']}><slot /></div>
+<div class:list={['sl-markdown-content', isIndieWebEntry && 'e-content', isReleasesPage && 'vc-release-content', isRegularArticle && 'codex-editorial-article']}><slot /></div>
+
+<script>
+  function indentArticleSubsections() {
+    const article = document.querySelector('.sl-markdown-content.e-content.codex-editorial-article');
+    if (!article) return;
+
+    // Storyteller View moves its Markdown into a separate panel after rendering.
+    const storyteller = document.querySelector('[data-codex-storyteller-content].sl-markdown-content');
+    for (const content of [article, storyteller]) {
+      if (!(content instanceof HTMLElement)) continue;
+      content.classList.add('codex-editorial-article');
+      let depth = 0;
+
+      for (const block of content.children) {
+        if (!(block instanceof HTMLElement)) continue;
+        const heading = block.matches('h2, h3, h4, h5, h6')
+          ? block
+          : block.matches('.sl-heading-wrapper')
+            ? block.querySelector(':scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6')
+            : null;
+
+        if (heading) {
+          const level = Number(heading.tagName.slice(1));
+          if (level <= 2) depth = 0;
+          else if (level === 3) depth = 1;
+          else if (depth) depth = Math.min(level - 2, 2);
+        }
+
+        // Explicit Obsidian indent callouts already provide their own offset.
+        if (depth && !block.matches('blockquote:has(.vc-layout-indent-marker)')) {
+          block.dataset.codexSectionIndent = String(depth);
+        } else {
+          delete block.dataset.codexSectionIndent;
+        }
+      }
+    }
+  }
+
+  indentArticleSubsections();
+  document.addEventListener('astro:page-load', indentArticleSubsections);
+</script>
