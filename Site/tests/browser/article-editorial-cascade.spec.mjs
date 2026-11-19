@@ -111,7 +111,11 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
     const h3 = headingBlocks('h3').find((block) =>
       block.nextElementSibling?.matches('p')
       && block.nextElementSibling.nextElementSibling?.matches('p'));
-    const h2 = headingBlocks('h2').find((block) => block.nextElementSibling) ?? headingBlocks('h2')[0];
+    // An H2 directly followed by an H3 should indent that H3. Select one
+    // followed by ordinary section content to verify the full-width reset.
+    const h2 = headingBlocks('h2').find((block) =>
+      block.nextElementSibling
+      && !block.nextElementSibling.matches('.sl-heading-wrapper, h1, h2, h3, h4, h5, h6'));
     const firstParagraph = h3?.nextElementSibling;
     const secondParagraph = firstParagraph?.nextElementSibling;
     const h2FollowingBlock = h2?.nextElementSibling;
