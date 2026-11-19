@@ -119,10 +119,8 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
   </section>
 
   <section class="start-section start-place" id="start-world" aria-labelledby="start-place-title">
-    <div class="start-place__image">
-      <a class="start-attribution-link" href={attributionRouteForAsset('/assets/images/errack.webp')} aria-label="Image attribution: Errack artwork">
-        <img src="/assets/images/errack.webp" alt="" loading="lazy" />
-      </a>
+    <div class="start-place__image" aria-hidden="true">
+      <img src="/assets/images/errack.webp" alt="" loading="lazy" />
     </div>
     <div class="start-shell start-place__copy">
       <p class="start-eyebrow">The place</p>
@@ -137,6 +135,9 @@ const krassFlag = '/assets/images/Krass-Dominion-flag.webp';
         VISCERIUM is dark, but darkness only matters because there is something to lose. Wonder, culture, humour, ordinary work and stubborn hope are not relief from the setting; they are what gives its violence weight.
       </p>
       <a class="start-inline-link" href="/degel-system/errack/">Explore Errack <span aria-hidden="true">→</span></a>
+      <p>
+        <a class="start-inline-link" href={attributionRouteForAsset('/assets/images/errack.webp')}>Errack artwork attribution <span aria-hidden="true">→</span></a>
+      </p>
     </div>
   </section>
 

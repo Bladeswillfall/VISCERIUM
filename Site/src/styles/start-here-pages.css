@@ -360,7 +360,6 @@
   content: '';
   position: absolute;
   inset: 0;
-  pointer-events: none;
   background:
     linear-gradient(90deg, var(--start-bg), transparent 35%),
     linear-gradient(0deg, var(--start-bg), transparent 24%, transparent 78%, var(--start-bg));
@@ -2014,9 +2013,3 @@ body:has(.start-here-primer) .codex-webmentions {
   border-color: var(--ba) !important;
 }
 
-
-.start-attribution-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}

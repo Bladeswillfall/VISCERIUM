@@ -114,7 +114,7 @@ test('external attribution records display their artwork', async ({ page }) => {
 
 test('Start Here Errack attribution is keyboard reachable and clickable', async ({ page }) => {
   await page.goto(`${baseUrl}/start-here/`, { waitUntil: 'domcontentloaded' });
-  const artworkLink = page.getByRole('link', { name: 'Image attribution: Errack artwork' });
+  const artworkLink = page.getByRole('link', { name: 'Errack artwork attribution', exact: true });
   await expect(artworkLink).toHaveAttribute('href', '/attribution/images/errack-webp/');
   await expect(artworkLink).toHaveJSProperty('tabIndex', 0);
   await artworkLink.click();
