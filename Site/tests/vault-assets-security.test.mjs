@@ -188,7 +188,18 @@ test('source tree does not include non-WebP raster files', async () => {
     files = await listSourceFiles(repoRoot);
   }
 
-  const forbidden = files.filter((file) => forbiddenRasterExtension.test(file));
+  const allowedBrandRasters = new Set([
+    'Site/public/favicons/favicon-16x16.png',
+    'Site/public/favicons/favicon-32x32.png',
+    'Site/public/favicons/favicon-48x48.png',
+    'Site/public/favicons/favicon-96x96.png',
+    'Site/public/favicons/viscerium-favicon-96.png',
+    'Site/public/favicons/apple-touch-icon.png',
+    'Site/public/favicons/android-chrome-192x192.png',
+    'Site/public/favicons/android-chrome-512x512.png',
+    'Site/public/social/og-image-1200x630.png',
+  ]);
+  const forbidden = files.filter((file) => forbiddenRasterExtension.test(file) && !allowedBrandRasters.has(file.replaceAll('\\', '/')));
 
   assert.deepEqual(
     forbidden,

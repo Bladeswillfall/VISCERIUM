@@ -44,12 +44,12 @@ eraPrimer:
     - label: Chemical war
       tip: Smoke, gas, metal dust and occult contamination blur the boundary between weapon, workplace and environmental disaster.
   map:
-    src: /assets/images/errack.webp
-    alt: Errack shown from orbit as a strategic reference for the industrial SMOG era.
-    href: /maps/
+    src: /assets/maps/variants/Errack-SMOG-960.webp
+    alt: The map of Errack during the SMOG era.
+    href: /maps/errack-smog/
     eyebrow: "SMOG: Errack"
     label: Errack in the SMOG age
-    action: Explore maps
+    action: Open in Atlas
   worldNow:
     eyebrow: The world right now
     title: Progress has learned to march in formation.

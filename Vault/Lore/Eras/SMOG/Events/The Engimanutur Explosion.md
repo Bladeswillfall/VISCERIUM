@@ -3,6 +3,7 @@ title: "The Engimanutur Explosion"
 description: "A leap-day pressure failure destroyed the experimental lower furnaces beneath Harkworks and opened a persistent Resonant scar."
 status: published
 type: event
+stub: true
 era: SMOG
 calendarDate:
   calendar: okse

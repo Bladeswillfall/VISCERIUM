@@ -209,8 +209,12 @@ export function importanceIsVisible(importance, threshold) {
   return (importanceRank.get(importance) ?? 99) <= (importanceRank.get(threshold) ?? 99);
 }
 
+export function eventPassesZoomThreshold(event, threshold) {
+  return (event.eras?.length ?? 0) === 0 || importanceIsVisible(event.importance, threshold);
+}
+
 export function eventMatchesFilter(event, state, threshold = 'incidental') {
-  if (!importanceIsVisible(event.importance, threshold)) return false;
+  if (!eventPassesZoomThreshold(event, threshold)) return false;
   if (state.importance?.length && !state.importance.includes(event.importance)) return false;
   if (state.categories?.length && !state.categories.some((category) => event.categories.includes(category))) return false;
   if (state.eras?.length && !state.eras.some((era) => event.eras.includes(era))) return false;

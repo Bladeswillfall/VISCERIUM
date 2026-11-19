@@ -20,7 +20,7 @@ export const GET: APIRoute = async () => {
     const key = telescopeMetadataKey(page.id);
     if (!key) continue;
 
-    const entityId = validEntityId(page.data.entity_id) ? page.data.entity_id : null;
+    const entityId = validEntityId(page.data.entity_id) ? String(page.data.entity_id) : null;
     metadata[key] = {
       era: pageEra(page.data, page.id) ?? null,
       type: page.data.type ?? null,

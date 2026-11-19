@@ -1,6 +1,6 @@
 # Cloudflare Pages setup
 
-The VISCERIUM site remains a static Astro application on Cloudflare Pages. Create a new Pages project only after the replacement GitHub repository has been pushed and verified. Do not reconnect or remove the existing deployment during migration.
+The VISCERIUM site is a static Astro application on the existing Cloudflare Pages project `viscerium-site`.
 
 ## Build settings
 
@@ -17,9 +17,24 @@ PUBLIC_GITHUB_REPO_URL=<omit to use the canonical VISCERIUM repo; blank hides re
 PUBLIC_GITHUB_PROFILE_URL=<public creator profile URL, only if rel="me authn" is required>
 ```
 
-Choose the new Cloudflare project name in the dashboard. No project name or Cloudflare identifier is committed because those values do not exist yet.
+The project name is also recorded in `Site/wrangler.toml`. The build regenerates public content from `Vault/Lore/` before Astro creates `Site/dist/`.
 
-The build regenerates public content from `Vault/Lore/` before Astro creates `Site/dist/`.
+## GitHub production deployment
+
+GitHub Actions builds the production artifact on pushes to `main` and can upload that prebuilt `Site/dist/` directory with Wrangler. The build loads public production variables from `Site/wrangler.toml` so the GitHub artifact matches the production Pages configuration.
+
+Add these GitHub Actions repository secrets before enabling the direct deploy:
+
+```text
+CLOUDFLARE_ACCOUNT_ID
+CLOUDFLARE_API_TOKEN
+```
+
+Create the API token with the Cloudflare account permission **Cloudflare Pages: Edit**. Direct upload is opt-in. After adding both secrets, set the GitHub Actions repository variable `CLOUDFLARE_DIRECT_DEPLOY=1` to enable the deploy job on pushes to `main`. Without that variable, the job is skipped and Cloudflare Git deployment remains unchanged.
+
+If direct upload is enabled but credentials are missing, the deploy job fails instead of reporting success without uploading anything. Confirm a successful real upload and verify the deployed commit and live routes before disabling **automatic production branch deployments** under the Pages project's branch controls. Keep automatic preview deployments enabled until a separate preview-upload workflow replaces them.
+
+To return to the Cloudflare Git deployment path, clear or set `CLOUDFLARE_DIRECT_DEPLOY=0`, and confirm Cloudflare's automatic production deployments are enabled.
 
 After Cloudflare assigns the real `pages.dev` hostname, either redirect it to the canonical domain or add hostname-specific `X-Robots-Tag: noindex` rules. The old project hostname was removed from `Site/public/_headers`, and a replacement cannot be written accurately before Cloudflare creates the project.
 

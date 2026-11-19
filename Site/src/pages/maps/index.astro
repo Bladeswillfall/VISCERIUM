@@ -1,10 +1,22 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import maps from '../../data/maps.json';
+import imageVariants from '../../data/image-variants.json';
 import '../../styles/maps.css';
 import { attributionRouteForAsset } from '../../lib/image-attribution.mjs';
 
-const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeCompare(String(b.title ?? '')));
+type ImagePreview = { url: string; width: number };
+type ImageVariant = { webp?: ImagePreview[] };
+const variantsByImage = imageVariants.images as Record<string, ImageVariant>;
+
+const entries = Object.values(maps).map((map) => {
+  const previews = variantsByImage[map.image]?.webp ?? [];
+  return {
+    ...map,
+    previewSrc: previews[0]?.url ?? map.image,
+    previewSet: previews.map(({ url, width }) => `${url} ${width}w`).join(', '),
+  };
+}).sort((a, b) => String(a.title ?? '').localeCompare(String(b.title ?? '')));
 ---
 
 <StarlightPage frontmatter={{ title: 'Atlas', description: 'Interactive maps of VISCERIUM and the places recorded within them.' }}>
@@ -19,7 +31,7 @@ const entries = Object.values(maps).sort((a, b) => String(a.title ?? '').localeC
           <article class="codex-map-card">
             {map.image && (
               <a class="codex-map-card__image-link" href={attributionRouteForAsset(map.image)} aria-label={`Image attribution: ${map.title}`}>
-                <img src={map.image} alt="" loading="lazy" />
+                <img src={map.previewSrc} srcset={map.previewSet || undefined} sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw" alt="" loading="lazy" />
               </a>
             )}
             <div class="codex-map-card__body">

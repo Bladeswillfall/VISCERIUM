@@ -36,7 +36,7 @@ const inlineDynamicArticleGenerators = [
 ];
 
 const delegatedDynamicArticleGenerators = [
-  'Templates/Lore/New Lore Entity.md',
+  'Templates/_Scripts/create_lore_entity.js',
 ];
 
 async function readTemplate(relativePath) {
@@ -74,7 +74,7 @@ test('delegated dynamic article generators validate and emit configured Storytel
 
     assert.ok(configuredTemplates.length > 0, `${relativePath} should configure delegated templates`);
     assert.match(source, /validateTemplate\(rendered, config\.template\)/);
-    assert.match(source, /tR \+= rendered/);
+    assert.match(source, /return rendered/);
 
     for (const template of configuredTemplates) {
       assert.ok(templates.includes(template), `${template} must be covered by the static Storyteller contract`);

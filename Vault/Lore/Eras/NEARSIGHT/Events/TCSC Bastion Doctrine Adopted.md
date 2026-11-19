@@ -1,8 +1,13 @@
 ---
 title: "TCSC Bastion Doctrine Adopted"
 description: "The TCSC formally adopted slow, mutually supporting armoured formations designed to become mobile walls."
+image: TCSC-flag.webp
+headerImage: TCSC-flag.webp
+imageTitle: TCSC flag
+alt: White rose motif with yellow detailing on a crimson field.
 status: published
 type: event
+stub: true
 era: NEARSIGHT
 calendarDate:
   calendar: okse

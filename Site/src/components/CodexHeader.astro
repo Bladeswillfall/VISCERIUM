@@ -1,5 +1,4 @@
 ---
-import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
 import siteConfig from '../../site.config.mjs';
 import CodexSearch from './CodexSearch.astro';
@@ -50,7 +49,7 @@ const { t } = Astro.locals;
   <div class="right-group codex-header-controls print:hidden" data-codex-header-controls>
     <EraContextControls />
     <ReaderSettings />
-    <LanguageSelect />
+    <!-- Dormant: mount CodexLanguageMenu here only after a second locale is approved. -->
   </div>
 </div>
 

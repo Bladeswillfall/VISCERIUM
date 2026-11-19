@@ -10,7 +10,7 @@
   <p>
     <a href="LICENSE.md"><img src="https://img.shields.io/badge/Creative_IP-All_Rights_Reserved-484137?style=for-the-badge&labelColor=101010" alt="Creative IP: All Rights Reserved" /></a>
     <a href="LICENSE-CODE.md"><img src="https://img.shields.io/badge/First--party_Code-MIT-484137?style=for-the-badge&labelColor=101010" alt="First-party code: MIT" /></a>
-    <a href="ATTRIBUTION.md"><img src="https://img.shields.io/badge/Creative_Canon-Human--made-484137?style=for-the-badge&labelColor=101010" alt="Creative canon: Human-made" /></a>
+    <a href="https://brainmade.org/"><img src="https://img.shields.io/badge/Creative_Canon-Brainmade-484137?style=for-the-badge&labelColor=101010" alt="Creative canon: Brainmade" /></a>
     <a href="THIRD_PARTY_NOTICES.md"><img src="https://img.shields.io/badge/Third--party_Software-Upstream_Licences-484137?style=for-the-badge&labelColor=101010" alt="Third-party software: Upstream licences" /></a>
     <a href="https://github.com/Bladeswillfall/VISCERIUM"><img src="https://img.shields.io/github/repo-size/Bladeswillfall/VISCERIUM?style=for-the-badge&color=484137&labelColor=101010&logo=github&logoColor=c8bfa8" alt="Repository size" /></a>
   </p>

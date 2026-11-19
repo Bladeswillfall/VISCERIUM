@@ -37,7 +37,7 @@ What area does this map cover, and what should somebody use it to understand?
 <!-- obsidian-only:start -->
 ## Authoring Map
 
-Use **TTRPG Tools - Maps: Insert new map...** in Edit mode. Select the same image and marker sidecar recorded in frontmatter. Large maps should use Canvas render mode.
+Use **TTRPG Tools - Maps: Insert new map...** in Edit mode when an image is assigned later. Use Canvas rendering for large raster maps.
 <!-- obsidian-only:end -->
 
 ## Layers

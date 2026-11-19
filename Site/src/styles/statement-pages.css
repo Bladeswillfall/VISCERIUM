@@ -25,3 +25,31 @@
     }
   }
 }
+
+/* --------------------------------------------------------------------------
+   Open-letter presentation
+   Scoped to statement pages that opt in with .vc-open-letter-marker.
+   Keeps policy pages on the standard statement/article treatment.
+   -------------------------------------------------------------------------- */
+
+body:has(.vc-open-letter-marker) .vc-open-letter-marker {
+  display: none !important;
+}
+
+body:has(.vc-open-letter-marker) .vc-open-letter-salutation {
+  margin-block: 2.2rem 1.5rem;
+  color: var(--sl-color-gray-2);
+  font-family: var(--vc-font-body);
+  font-size: clamp(1.05rem, 1rem + .25vw, 1.2rem);
+  line-height: 1.55;
+}
+
+body:has(.vc-open-letter-marker) .vc-open-letter-salutation em {
+  font-style: italic;
+}
+
+@media (max-width: 48rem) {
+  body:has(.vc-open-letter-marker) .vc-open-letter-salutation {
+    margin-block-start: 1.8rem;
+  }
+}

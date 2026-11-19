@@ -5,7 +5,7 @@ import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { changelogsLoader } from 'starlight-changelogs/loader';
 import { starlightTagsExtension } from 'starlight-tags/schema';
 import { ENTITY_ID_PATTERN } from './lib/era-context.mjs';
-import { frontmatterDate } from './lib/frontmatter-date.mjs';
+import { frontmatterDate } from './lib/frontmatter-date.ts';
 import defaultTranslations from './content/i18n/en-GB.json';
 
 const stringOrStrings = z.union([z.string(), z.array(z.string())]);
@@ -72,7 +72,7 @@ const relationshipObjectSchema = z.object({
 );
 const relationshipEntrySchema = z.union([z.string(), relationshipObjectSchema]);
 const relationshipValueSchema = z.union([relationshipEntrySchema, z.array(relationshipEntrySchema)]);
-const relationshipsSchema = z.record(relationshipValueSchema);
+const relationshipsSchema = z.record(z.string(), relationshipValueSchema);
 const mapSchema = z.object({
   id: optionalString,
   x: optionalStringOrNumber,
@@ -188,7 +188,7 @@ const calendarEventLinkSchema = z.union([
     label: z.string().optional(),
   }),
 ]);
-const calendarEventLinksSchema = z.record(calendarEventLinkSchema);
+const calendarEventLinksSchema = z.record(z.string(), calendarEventLinkSchema);
 const calendarShowcaseSchema = z.object({
   calendar: z.string(),
   year: z.number().int().optional(),
@@ -202,6 +202,7 @@ const contributorReferenceSchema = z.union([
     id: z.string(),
     role: z.string().optional(),
     roles: z.array(z.string()).optional(),
+    source: z.literal('worldanvil').optional(),
   }),
 ]);
 const referencedInSchema = z.object({
@@ -240,9 +241,9 @@ export const collections = {
         calendarDate: calendarDateSchema.optional(),
         calendarEndDate: calendarDateSchema.nullable().optional(),
         calendarShowcase: calendarShowcaseSchema.optional(),
-        calendarBlocks: z.record(calendarShowcaseSchema).optional(),
+        calendarBlocks: z.record(z.string(), calendarShowcaseSchema).optional(),
         timeline: timelineSchema.optional(),
-        timelineBlocks: z.record(timelineBlockSchema).optional(),
+        timelineBlocks: z.record(z.string(), timelineBlockSchema).optional(),
         timelinePage: z.boolean().optional(),
         explorationPage: z.boolean().optional(),
         searchable: z.boolean().optional(),
@@ -253,6 +254,7 @@ export const collections = {
         contributors: z.array(contributorReferenceSchema).optional(),
         defaultContributors: z.boolean().optional(),
         giscus: z.boolean().optional(),
+        stub: z.boolean().optional(),
         era: eraOrEras.optional(),
         eras: z.array(eraValue).optional(),
         faction: stringOrStrings.optional(),
@@ -280,6 +282,7 @@ export const collections = {
         credit: optionalString,
         artist: optionalString,
         artistUrl: optionalString,
+        humanMade: z.boolean().optional(),
         editor: optionalString,
         source: optionalString,
         sourceUrl: optionalString,

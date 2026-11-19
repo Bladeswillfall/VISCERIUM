@@ -83,6 +83,59 @@ const pageKind = classifyCodexPage(entry, starlightRoute.entry.id);
   void syncSmartTooltips();
 </script>
 
+
+<script>
+  const ARTIFACT_SELECTOR = '.cx-artifact[data-preset]';
+  const ARTIFACT_STYLE_ID = 'viscerium-artifact-styles';
+  const ARTIFACT_FONT_ID = 'viscerium-artifact-fonts';
+  const artifactWindow = window as typeof window & {
+    __visceriumArtifactsCleanup?: () => void;
+    __visceriumArtifactsLoad?: number;
+    __visceriumArtifactsInstalled?: boolean;
+  };
+
+  const syncArtifacts = async () => {
+    const generation = (artifactWindow.__visceriumArtifactsLoad ?? 0) + 1;
+    artifactWindow.__visceriumArtifactsLoad = generation;
+    artifactWindow.__visceriumArtifactsCleanup?.();
+    artifactWindow.__visceriumArtifactsCleanup = undefined;
+    if (!document.querySelector(ARTIFACT_SELECTOR)) return;
+
+    const [{ installArtifactDocuments }, { default: css }] = await Promise.all([
+      import('../lib/ui/artifact-documents.mjs'),
+      import('../styles/artifact-documents.css?raw'),
+    ]);
+    if (artifactWindow.__visceriumArtifactsLoad !== generation) return;
+
+    if (!document.getElementById(ARTIFACT_STYLE_ID)) {
+      const style = document.createElement('style');
+      style.id = ARTIFACT_STYLE_ID;
+      style.textContent = css;
+      document.head.append(style);
+    }
+    if (document.querySelector('.cx-artifact[data-preset="citadel-note"]')
+      && !document.getElementById(ARTIFACT_FONT_ID)) {
+      const link = document.createElement('link');
+      link.id = ARTIFACT_FONT_ID;
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Eagle+Lake&family=Fondamento:ital@0;1&family=IM+Fell+English:ital@0;1&family=Jim+Nightshade&display=swap';
+      document.head.append(link);
+    }
+    artifactWindow.__visceriumArtifactsCleanup = installArtifactDocuments(document);
+  };
+
+  if (!artifactWindow.__visceriumArtifactsInstalled) {
+    artifactWindow.__visceriumArtifactsInstalled = true;
+    document.addEventListener('astro:page-load', () => void syncArtifacts());
+    document.addEventListener('astro:before-swap', () => {
+      artifactWindow.__visceriumArtifactsLoad = (artifactWindow.__visceriumArtifactsLoad ?? 0) + 1;
+      artifactWindow.__visceriumArtifactsCleanup?.();
+      artifactWindow.__visceriumArtifactsCleanup = undefined;
+    });
+  }
+  void syncArtifacts();
+</script>
+
 <style is:global>
   @layer ion {
     /*

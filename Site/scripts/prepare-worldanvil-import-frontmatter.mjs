@@ -1,34 +1,12 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import { descriptionFromBody, isWorldAnvilArticleFile } from './integrate-worldanvil-import.mjs';
+import { descriptionFromBody, frontmatterTitle, hasKey, isWorldAnvilArticleFile, splitFrontmatter } from './integrate-worldanvil-import.mjs';
 import { isMainModule } from './script-entry.mjs';
 
 const DEFAULT_VAULT = path.resolve(process.cwd(), '../../VISCERIUM-Workshop/Vault');
 const IMPORT_REL = 'Drafts/WorldAnvil Import';
 const REVIEW_BLOCK_RE = /<!-- worldanvil-migration-review:start -->[\s\S]*?<!-- worldanvil-migration-review:end -->\n?/g;
-
-function splitFrontmatter(markdown) {
-  const text = String(markdown ?? '').replace(/\r\n/g, '\n');
-  if (!text.startsWith('---\n')) return { frontmatter: '', body: text, hasFrontmatter: false };
-  const end = text.indexOf('\n---\n', 4);
-  if (end === -1) return { frontmatter: '', body: text, hasFrontmatter: false };
-  return {
-    frontmatter: text.slice(4, end),
-    body: text.slice(end + 5),
-    hasFrontmatter: true,
-  };
-}
-
-function hasProperty(frontmatter, key) {
-  return new RegExp(`^${key}:`, 'm').test(frontmatter);
-}
-
-function frontmatterTitle(frontmatter, fallback) {
-  const match = frontmatter.match(/^title:\s*(.+)$/m);
-  if (!match) return fallback;
-  return match[1].trim().replace(/^['"]|['"]$/g, '') || fallback;
-}
 
 function blankScalarLine(line, key) {
   const match = String(line ?? '').match(new RegExp(`^${key}:\\s*(.*)$`));
@@ -91,7 +69,7 @@ export function prepareImportMarkdown(markdown, fallbackTitle = '') {
   // Do not seed created: for imports. Auto-Properties derives it from the file
   // birth time, which is the export/import time rather than an authoritative
   // World Anvil article creation date.
-  if (!hasProperty(parts.frontmatter, 'updated')) {
+  if (!hasKey(parts.frontmatter, 'updated')) {
     changedFields.push('updated:');
     insertions.push('updated:');
   }

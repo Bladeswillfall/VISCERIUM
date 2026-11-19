@@ -108,6 +108,20 @@ const SPECIES_SUBTYPES = Object.freeze({
 
 const ERA_VALUES = Object.freeze(["CITADEL", "SMOG", "NEARSIGHT", "ENTROPY", "Universal"]);
 
+const STUB_TYPES = new Set([
+  "article",
+  "character",
+  "faction",
+  "location",
+  "event",
+  "species",
+  "item",
+  "culture",
+  "belief",
+  "naming_language",
+  "resonance_practice",
+]);
+
 function normaliseSegment(value) {
   return String(value ?? "")
     .normalize("NFKD")
@@ -169,6 +183,29 @@ function fillBlankScalar(source, key, value) {
   return source.replace(new RegExp(`^${escaped}:\\s*$`, "m"), `${key}: ${JSON.stringify(value)}`);
 }
 
+function seedDevelopmentLevel(source) {
+  if (/^development_level:\s*\S+/m.test(source)) return source;
+  if (/^development_level:\s*$/m.test(source)) {
+    return source.replace(/^development_level:\s*$/m, 'development_level: "stub"');
+  }
+
+  const lines = source.split("\n");
+  const end = lines.indexOf("---", 1);
+  if (lines[0] !== "---" || end < 0) throw new Error("Selected VISCERIUM template is missing valid frontmatter.");
+  const typeIndex = lines.findIndex((line, index) => index > 0 && index < end && /^type:/.test(line));
+  lines.splice(typeIndex >= 0 ? typeIndex + 1 : end, 0, 'development_level: "stub"');
+  return lines.join("\n");
+}
+
+function applyAuthoringBaseline(source, type, folderPath) {
+  let rendered = fillBlankScalar(source, "era", inferEra(folderPath));
+  const subtype = inferSubtype(type, folderPath);
+  if (type === "item") rendered = fillBlankScalar(rendered, "item_type", subtype);
+  if (type === "species") rendered = fillBlankScalar(rendered, "species_kind", subtype);
+  if (STUB_TYPES.has(type)) rendered = seedDevelopmentLevel(rendered);
+  return rendered;
+}
+
 function setTemplateTitle(source, title) {
   return source.replace(
     /^title:\s*["']?\{\{title\}\}["']?\s*$/m,
@@ -203,11 +240,7 @@ async function folderEntityRouter(tp) {
 
   let rendered = await tp.app.vault.read(templateFile);
   rendered = setTemplateTitle(rendered, title);
-  rendered = fillBlankScalar(rendered, "era", inferEra(folder));
-
-  const subtype = inferSubtype(type, folder);
-  if (type === "item") rendered = fillBlankScalar(rendered, "item_type", subtype);
-  if (type === "species") rendered = fillBlankScalar(rendered, "species_kind", subtype);
+  rendered = applyAuthoringBaseline(rendered, type, folder);
 
   return rendered;
 }
@@ -217,4 +250,5 @@ module.exports.ROUTES = ROUTES;
 module.exports.classifyFolder = classifyFolder;
 module.exports.inferEra = inferEra;
 module.exports.inferSubtype = inferSubtype;
+module.exports.applyAuthoringBaseline = applyAuthoringBaseline;
 module.exports.normaliseSegment = normaliseSegment;

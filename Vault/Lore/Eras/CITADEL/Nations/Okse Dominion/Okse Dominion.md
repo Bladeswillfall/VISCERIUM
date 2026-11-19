@@ -68,8 +68,7 @@ sidebar:
       items:
         - label: Valenheim — capital city
           href: "[[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Valenheim|Valenheim]]"
-        - label: Rauthrbak Min — capital prison
-          href: "[[Rauthrbak Min]]"
+        - Rauthrbak Min — capital prison
         - label: Hjalliberg — city
           href: "[[Hjalliberg]]"
         - label: Aldaness — city
@@ -157,7 +156,7 @@ The Okse still raid and pillage for labour as their ancestors raided for wealth,
 
 Thralls and Ambátts work the oil pits, mines and forges, marked by masters who may call the system necessity long after necessity has become profit. Some are raised to Leysingi and find freedom does not scrub the mine from a person's face or other people's memory. The Dominion's ugliest habit is not simply cruelty. It is its talent for making cruelty sound practical.
 
-[[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]] is that argument given stone walls. Prison, mine, forge and place of punishment fold together inside the Halvmane Mountains until confinement and production are difficult to separate. Its harsher traditions have attracted people who enjoy suffering for reasons far less defensible than state necessity, but the Dominion does not need every overseer to be a sadist. The machine works perfectly well with men who think they are doing their duty.
+Rauthrbak Min is that argument given stone walls. Prison, mine, forge and place of punishment fold together inside the Halvmane Mountains until confinement and production are difficult to separate. Its harsher traditions have attracted people who enjoy suffering for reasons far less defensible than state necessity, but the Dominion does not need every overseer to be a sadist. The machine works perfectly well with men who think they are doing their duty.
 
 ## Black Gold
 Oil arrived in a culture already obsessed with self-sufficiency and found itself immediately useful. It treats weapons and armour against rust, feeds lamps through long winters, supplies industry and powers specialised fire-weapons. In a wetter settlement it keeps metal from rotting. In a forge it extends what can be done. In a harbour it fills barrels where old raiding holds once expected plunder.

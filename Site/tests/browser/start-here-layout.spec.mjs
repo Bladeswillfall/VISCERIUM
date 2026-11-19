@@ -84,6 +84,66 @@ test('era sequence alternates map and copy sides on desktop', async ({ page }) =
   expect(positions[3].mapLeft).toBeGreaterThan(positions[3].copyLeft);
 });
 
+test('era bands load responsive maps from the published assets', async ({ page }) => {
+  await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
+  const images = page.locator('.start-era-band__image');
+  const expected = ['CITADEL', 'SMOG', 'NEARSIGHT'];
+  await expect(images).toHaveCount(3);
+  await expect(page.locator('.start-era-band--entropy .start-map-mark')).toHaveCount(1);
+  await expect(page.locator('.start-era-band--entropy .start-era-band__image')).toHaveCount(0);
+
+  for (const [index, era] of expected.entries()) {
+    const image = images.nth(index);
+    await expect(image).toHaveAttribute('src', `/assets/maps/variants/Errack-${era}-960.webp`);
+    await expect(image).toHaveAttribute('srcset', new RegExp(`Errack-${era}-480\\.webp 480w.*Errack-${era}-1600\\.webp 1600w`));
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
+  }
+});
+
+test('narrow era panels display seamless raster artwork without hiding the copy', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
+  for (const theme of ['dark', 'light']) {
+    await page.evaluate((value) => { document.documentElement.dataset.theme = value; }, theme);
+    const bands = page.locator('.start-era-band').filter({ has: page.locator('.start-era-band__image') });
+    await expect(bands).toHaveCount(3);
+
+    for (const index of [0, 1, 2]) {
+      const band = bands.nth(index);
+      const image = band.locator('.start-era-band__image');
+      const copy = band.locator('.start-era-band__copy');
+      await image.scrollIntoViewIfNeeded();
+      const state = await band.evaluate((element) => {
+        const imageElement = element.querySelector('.start-era-band__image');
+        const copyElement = element.querySelector('.start-era-band__copy');
+        const labelElement = element.querySelector('.start-era-band__number');
+        const imageStyle = getComputedStyle(imageElement);
+        return {
+          width: element.getBoundingClientRect().width,
+          imageWidth: imageElement.getBoundingClientRect().width,
+          imageHeight: imageElement.getBoundingClientRect().height,
+          bandHeight: element.getBoundingClientRect().height,
+          fit: imageStyle.objectFit,
+          marginTop: imageStyle.marginTop,
+          mask: imageStyle.maskImage,
+          labelTopGap: labelElement.getBoundingClientRect().top - element.getBoundingClientRect().top,
+          scrim: getComputedStyle(copyElement).backgroundImage,
+        };
+      });
+      expect(almostEqual(state.imageWidth, state.width)).toBe(true);
+      expect(almostEqual(state.imageHeight, state.bandHeight)).toBe(true);
+      expect(state.fit).toBe('cover');
+      expect(state.marginTop).toBe('0px');
+      expect(state.mask).toContain('linear-gradient');
+      expect(state.labelTopGap).toBeGreaterThan(150);
+      expect(state.scrim).toContain('linear-gradient');
+      if (theme === 'light') expect(state.scrim).toMatch(/transparent|rgba\(0,\s*0,\s*0,\s*0\)/);
+      await expect(copy).toBeVisible();
+    }
+  }
+});
+ 
 test('breadcrumb choices keep consistent geometry while era choices carry distinct visual language', async ({ page }) => {
   await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.start-here-primer')).toBeVisible();
@@ -136,7 +196,7 @@ test('Start Here suppresses article social and discussion modules', async ({ pag
   await expect(page.locator('giscus-comments')).toBeHidden();
 });
 
-test('light mode uses warm paper with accessible editorial and map contrast', async ({ page }) => {
+test('light mode keeps accessible editorial contrast with raster maps', async ({ page }) => {
   await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
@@ -216,21 +276,17 @@ test('light mode uses warm paper with accessible editorial and map contrast', as
     const choiceBg = getComputedStyle(choice).backgroundColor;
 
     const eraContrast = bands.map((band) => {
-      const path = band.querySelector('.start-map-mark path');
       const paragraph = band.querySelector('.start-era-band__copy p');
       const number = band.querySelector('.start-era-band__number');
       const action = band.querySelector('.start-era-band__action');
       if (
-        !(path instanceof SVGElement)
-        || !(paragraph instanceof HTMLElement)
+        !(paragraph instanceof HTMLElement)
         || !(number instanceof HTMLElement)
         || !(action instanceof HTMLElement)
       ) return null;
 
       const bandBg = getComputedStyle(band).backgroundColor;
       return {
-        fill: getComputedStyle(path).fill,
-        map: contrast(getComputedStyle(path).fill, bandBg),
         paragraph: contrast(getComputedStyle(paragraph).color, bandBg),
         number: contrast(getComputedStyle(number).color, bandBg),
         action: contrast(getComputedStyle(action).color, bandBg),
@@ -267,9 +323,7 @@ test('light mode uses warm paper with accessible editorial and map contrast', as
   if (state.routeEmptyContrast !== null) expect(state.routeEmptyContrast).toBeGreaterThanOrEqual(4.5);
 
   expect(state.eraContrast.every(Boolean)).toBe(true);
-  expect(new Set(state.eraContrast.map(({ fill }) => fill)).size).toBe(4);
   for (const ratios of state.eraContrast) {
-    expect(ratios.map).toBeGreaterThanOrEqual(3);
     expect(ratios.paragraph).toBeGreaterThanOrEqual(4.5);
     expect(ratios.number).toBeGreaterThanOrEqual(4.5);
     expect(ratios.action).toBeGreaterThanOrEqual(4.5);

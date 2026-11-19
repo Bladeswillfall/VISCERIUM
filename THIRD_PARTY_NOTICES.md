@@ -25,27 +25,35 @@ The block below is maintained from the existing npm package manifests. It record
 <!-- DEPENDENCIES:DIRECT:START -->
 | Project | Package | Scope | Declared version |
 | --- | --- | --- | --- |
-| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^7.0.3` |
-| Codex (`Site/`) | `@astrojs/partytown` | runtime | `^2.1.7` |
-| Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.3` |
-| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.41.3` |
-| Codex (`Site/`) | `astro` | runtime | `^7.2.8` |
+| Codex (`Site/`) | `@astrojs/mdx` | runtime | `^8.1.2` |
+| Codex (`Site/`) | `@astrojs/sitemap` | runtime | `3.7.4` |
+| Codex (`Site/`) | `@astrojs/starlight` | runtime | `^0.42.8` |
+| Codex (`Site/`) | `astro` | runtime | `^7.4.7` |
 | Codex (`Site/`) | `cytoscape` | runtime | `3.34.3` |
-| Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.0` |
+| Codex (`Site/`) | `cytoscape-dagre` | runtime | `4.0.1` |
 | Codex (`Site/`) | `fuse.js` | runtime | `7.5.0` |
 | Codex (`Site/`) | `gray-matter` | runtime | `^4.0.3` |
 | Codex (`Site/`) | `leaflet` | runtime | `1.9.4` |
 | Codex (`Site/`) | `leaflet.control.layers.tree` | runtime | `1.2.0` |
-| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.0` |
+| Codex (`Site/`) | `moment` | runtime | `2.31.0` |
+| Codex (`Site/`) | `starlight-changelogs` | runtime | `^0.7.1` |
+| Codex (`Site/`) | `starlight-links-validator` | runtime | `^0.27.0` |
 | Codex (`Site/`) | `starlight-scroll-to-top` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-tags` | runtime | `^2.0.0` |
 | Codex (`Site/`) | `starlight-telescope` | runtime | `^2.0.0` |
-| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.4` |
-| Codex (`Site/`) | `@playwright/test` | development | `1.62.1` |
-| Codex (`Site/`) | `eslint` | development | `10.10.0` |
-| Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.1` |
-| Obsidian timelines plugin | `esbuild` | development | `^0.28.1` |
-| Obsidian timelines plugin | `obsidian` | development | `^1.8.7` |
+| Codex (`Site/`) | `vis-data` | runtime | `8.0.6` |
+| Codex (`Site/`) | `vis-timeline` | runtime | `8.5.6` |
+| Codex (`Site/`) | `@astrojs/check` | development | `0.9.12` |
+| Codex (`Site/`) | `@axe-core/playwright` | development | `4.13.0` |
+| Codex (`Site/`) | `@playwright/test` | development | `1.63.0` |
+| Codex (`Site/`) | `@types/leaflet` | development | `1.9.22` |
+| Codex (`Site/`) | `eslint` | development | `10.15.0` |
+| Codex (`Site/`) | `typescript` | development | `6.0.3` |
+| Obsidian timelines plugin | `moment` | runtime | `2.31.0` |
+| Obsidian timelines plugin | `vis-data` | runtime | `8.0.4` |
+| Obsidian timelines plugin | `vis-timeline` | runtime | `8.5.4` |
+| Obsidian timelines plugin | `esbuild` | development | `^0.28.2` |
+| Obsidian timelines plugin | `obsidian` | development | `^1.14.4` |
 
 #### Approved npm lifecycle scripts
 
@@ -56,7 +64,7 @@ These exact package/version entries are permitted to run install lifecycle scrip
 | Codex (`Site/`) | `esbuild@0.28.1` | approved |
 | Codex (`Site/`) | `fsevents@2.3.2` | approved |
 | Codex (`Site/`) | `fsevents@2.3.3` | approved |
-| Obsidian timelines plugin | `esbuild@0.28.1` | approved |
+| Obsidian timelines plugin | `esbuild@0.28.2` | approved |
 <!-- DEPENDENCIES:DIRECT:END -->
 
 The lockfiles remain authoritative for exact resolved and transitive versions. The human-authored sections below remain authoritative for why a component is used and for licence, attribution, modification, and redistribution obligations.
@@ -65,20 +73,27 @@ The lockfiles remain authoritative for exact resolved and transitive versions. T
 
 | Component | Role in VISCERIUM | Upstream licence |
 | --- | --- | --- |
-| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, sitemap, and Partytown integrations | MIT |
+| [Astro](https://github.com/withastro/astro) and official `@astrojs/*` integrations | Static site framework, Markdown, MDX, and sitemap integrations | MIT |
 | [Starlight](https://github.com/withastro/starlight) | Documentation-site shell and content framework | MIT |
 | `starlight-changelogs` | Changelog presentation | MIT |
+| `starlight-links-validator` | Build-time validation of internal Starlight links | MIT |
 | `starlight-scroll-to-top` | Scroll-to-top interface | MIT |
 | `starlight-tags` | Tag pages and tag navigation | MIT |
 | `starlight-telescope` | Public search integration | MIT |
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) (`cytoscape`) | Relationship and graph visualisation | MIT |
 | [cytoscape-dagre](https://github.com/cytoscape/cytoscape.js-dagre) | Directed graph layout | MIT |
 | [Leaflet](https://github.com/Leaflet/Leaflet) (`leaflet`) | Public interactive maps | BSD-2-Clause |
+| [Leaflet type definitions](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/leaflet) (`@types/leaflet`) | TypeScript declarations for Leaflet used by Astro Check | MIT |
 | [Leaflet.Control.Layers.Tree](https://github.com/jjimenezshaw/Leaflet.Control.Layers.Tree) (`leaflet.control.layers.tree`) | Hierarchical map-layer controls | BSD-3-Clause |
 | [vis-timeline](https://github.com/visjs/vis-timeline) | Interactive timeline rendering | Apache-2.0 OR MIT |
+| [vis-data](https://github.com/visjs/vis-data) | Shared timeline data sets for the Codex and Obsidian plugin | Apache-2.0 OR MIT |
+| [Moment.js](https://github.com/moment/moment) (`moment`) | Timeline date handling using the separately installed patched dependency | MIT |
 | [Fuse.js](https://github.com/krisk/Fuse.js) (`fuse.js`) | Fuzzy search | Apache-2.0 |
 | [gray-matter](https://github.com/jonschlinkert/gray-matter) | Markdown frontmatter parsing | MIT |
 | [Playwright](https://github.com/microsoft/playwright) (`@playwright/test`) | Browser and interface testing | Apache-2.0 |
+| [axe-core Playwright](https://github.com/dequelabs/axe-core-npm) (`@axe-core/playwright`) | Automated accessibility testing of the public Codex | MPL-2.0 |
+| [Astro Check](https://github.com/withastro/astro/tree/main/packages/language-tools/astro-check) (`@astrojs/check`) | Astro and TypeScript diagnostics during site validation | MIT |
+| [TypeScript](https://github.com/microsoft/TypeScript) (`typescript`) | TypeScript compiler API used by Astro Check | Apache-2.0 |
 | [ESLint](https://github.com/eslint/eslint) (`eslint`) | Cyclomatic-complexity checks for repository JavaScript | MIT |
 | [esbuild](https://github.com/evanw/esbuild) | First-party Obsidian plugin bundling | MIT |
 | [Obsidian API](https://github.com/obsidianmd/obsidian-api) | Type definitions and API surface for first-party plugins | MIT |
@@ -115,6 +130,7 @@ Selected `data.json` files remain tracked when they define an intentional VISCER
 | [Journal Bases](https://github.com/dsebastien/obsidian-journal-base) | Sébastien Dubois / dsebastien | MIT |
 | [Iconic](https://community.obsidian.md/plugins/iconic) | Holo / gfxholo | MIT-0; bundled icon and Unicode resources have separate notices upstream |
 | [TTRPG Tools - Maps](https://community.obsidian.md/plugins/zoom-map) | Johannes Schwartz / Jareika | MIT |
+| [Xyl's Starmap](https://community.obsidian.md/plugins/xyls-starmap) | xylhazlhztarr | CC BY-NC-ND 4.0 reported by community directories; check upstream before redistributing or embedding code |
 | [Advanced Tables](https://community.obsidian.md/plugins/table-editor-obsidian) | Tony Grosinger | GPL-3.0 |
 | [Chronos Timeline](https://community.obsidian.md/plugins/chronos) | Claire Froelich / clairefro | MIT |
 | [Dataview](https://github.com/blacksmithgu/obsidian-dataview) | blacksmithgu and contributors | MIT |
@@ -152,6 +168,17 @@ The Codex typography uses open font families under the SIL Open Font License 1.1
 `Viscerium Reading Serif` is a VISCERIUM-specific WOFF2 derivative of Lora. The upstream family reserves the name `Lora`, so these modified subsets use a different primary family name. See [`LICENSES/OFL-1.1-Lora.txt`](LICENSES/OFL-1.1-Lora.txt) and [`LICENSES/Viscerium-Reading-Serif-NOTICE.md`](LICENSES/Viscerium-Reading-Serif-NOTICE.md).
 
 Font names, reserved font names, copyright notices, and licence files must be preserved as required by the respective font packages.
+
+## External marks and assets
+
+| Asset | Role in VISCERIUM | Upstream licence |
+| --- | --- | --- |
+| [Brainmade mark](https://brainmade.org/) | Human-authorship mark displayed in the public Codex and referenced by the content-production policy | CC0-1.0 |
+| [Human Made mark by HINOKODO](https://hinokodo.itch.io/human-made) | Displayed only on image attribution records explicitly marked as human-made | Permission for personal and commercial use, subject to no AI-generated creative content in the marked work and no repackaging or resale of the icon pack |
+
+The redistributed `Site/public/assets/policies/brainmade.svg` is the upstream white SVG logo. The Codex uses it as a monochrome CSS mask without modifying the source artwork.
+
+`Site/public/assets/attribution/human-made.svg` restores the previously used HINOKODO SVG unchanged. It links to the creator's page and appears only when an artwork sidecar declares `humanMade: true`. The mark is not offered as an icon pack.
 
 ## Services and platforms
 

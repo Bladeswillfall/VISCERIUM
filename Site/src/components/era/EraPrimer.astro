@@ -5,23 +5,56 @@ import { normaliseInternalRoute, slugToRoute } from '../../lib/codex-paths.mjs';
 import { validateEraPrimerData } from '../../lib/era-primer-data.mjs';
 import { attributionRouteForAsset } from '../../lib/image-attribution.mjs';
 
-const { primer } = Astro.props;
+type EraPrimerId = 'citadel' | 'smog' | 'nearsight' | 'entropy';
+type PrimerLink = { label: string; href: string };
+type EraPrimerData = {
+  id: EraPrimerId;
+  number: string;
+  title: string;
+  tagline: string;
+  lead: string;
+  traits: { label: string; tip: string }[];
+  map: { src: string; alt: string; href: string; eyebrow: string; label: string; action: string };
+  worldNow: { eyebrow: string; title: string; body: string | string[] };
+  essentials: { eyebrow: string; title: string; body: string; link?: PrimerLink }[];
+  terms: { label: string; tip: string; href?: string }[];
+  powersIntro?: string;
+  powers: {
+    title: string;
+    summary: string;
+    href?: string;
+    sigil?: string;
+    sigilLayout?: 'banner' | string;
+  }[];
+  knowledge: { label: string; body: string }[];
+  record: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    eventsHref: string;
+    nextEraHref: string;
+    nextEraLabel: string;
+  };
+};
+
+const { primer } = Astro.props as { primer: EraPrimerData };
 const primerErrors = validateEraPrimerData(primer);
 if (primerErrors.length > 0) {
   throw new Error(`Invalid era primer data: ${primerErrors.join(' ')}`);
 }
 
 const placeholderSigil = '/assets/images/era-placeholder-sigil.webp';
-const sectionId = (suffix) => `${primer.id}-primer-${suffix}`;
+const sectionId = (suffix: string) => `${primer.id}-primer-${suffix}`;
 const worldParagraphs = Array.isArray(primer.worldNow.body)
   ? primer.worldNow.body
   : [primer.worldNow.body];
-const eraAccent = {
+const eraAccentById: Record<EraPrimerId, string> = {
   citadel: 'var(--era-e1-accent)',
   smog: 'var(--era-e2-accent)',
   nearsight: 'var(--era-e3-accent)',
   entropy: 'var(--era-e4-accent)',
-}[primer.id] ?? 'var(--sl-color-accent)';
+};
+const eraAccent = eraAccentById[primer.id];
 
 const docs = await getCollection('docs');
 const docsByRoute = new Map(docs.map((doc) => {
@@ -160,7 +193,7 @@ const powers = primer.powers.map((power) => {
             href={attributionRouteForAsset(power.sigil)}
             aria-label={`Image attribution: ${power.title}`}
           >
-            <img src={power.sigil} alt="" loading="lazy" aria-hidden="true" />
+            <img class={power.sigilLayout === "banner" ? "era-primer__power-sigil--banner" : undefined} src={power.sigil} alt="" loading="lazy" aria-hidden="true" />
           </a>
           <div>
             <h4>

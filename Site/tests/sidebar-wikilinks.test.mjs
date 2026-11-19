@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { parseSidebarWikilink } from '../src/lib/sidebar-links.mjs';
+import { parseSidebarWikilink } from '../src/lib/sidebar-links.ts';
 import { sidebarMigrationCandidates, slugFromSourcePath } from '../scripts/migrate-sidebar-wikilinks.mjs'
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -41,7 +41,7 @@ test('the public sidebar resolves authored Obsidian wikilinks through the docs c
   const source = await fs.readFile(sidebarComponent, 'utf8');
 
   assert.match(source, /getCollection\('docs'\)/);
-  assert.match(source, /function resolveSidebarTarget\(rawTarget\)/);
+  assert.match(source, /function resolveSidebarTarget\(rawTarget(?::[^)]*)?\)/);
   assert.match(source, /resolveFrontmatterReference\(value/);
   assert.match(source, /resolveWikilink:\s*resolveSidebarTarget/);
   assert.match(source, /sameEra\.length === 1/);

@@ -3,6 +3,7 @@ title: "The Galdyr Compact"
 description: "A month-long conclave bound rival smith-priests to shared measures for powder, steel and Resonant workmanship."
 status: published
 type: event
+stub: true
 era: CITADEL
 calendarDate:
   calendar: okse

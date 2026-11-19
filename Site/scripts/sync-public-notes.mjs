@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';
 import matter from 'gray-matter';
 import { slugToRoute, toPosixPath, vaultSourceSlug } from '../src/lib/codex-paths.mjs';
-import { attributionRouteForAsset, attributionSlugForAsset } from '../src/lib/image-attribution.mjs';
+import { attributionRouteForAsset, attributionSlugForAsset } from '../src/lib/image-attribution.ts';
 import { pageEra, resolveContextualTarget, validEntityId } from '../src/lib/era-context.mjs';
 import siteConfig from '../site.config.mjs';
 import { requiresCodexMdx, transformCodexFormatting } from './codex-formatting.mjs';

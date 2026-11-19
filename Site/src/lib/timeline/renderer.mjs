@@ -1,4 +1,5 @@
-import { DataSet, Timeline } from 'vis-timeline/standalone';
+import { DataSet } from 'vis-data/peer';
+import { Timeline } from 'vis-timeline/peer';
 import { escapeHtml } from '../codex-paths.mjs';
 import { calendars, defaultCalendarId, formatAbsoluteDay } from '../calendar/runtime.mjs';
 import {
@@ -9,8 +10,8 @@ import {
   compareTimelineEvents,
   createTimelineRangeIndex,
   eventOverlapsRange,
+  eventPassesZoomThreshold,
   getZoomImportanceThreshold,
-  importanceIsVisible,
   parseTimelineUrlState,
   queryTimelineRange,
   syntheticDateToAbsoluteDay as syntheticDateToAbsoluteDayBase,
@@ -202,7 +203,7 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
   }
 
   function eventMatchesActiveFilters(event, threshold) {
-    if (!importanceIsVisible(event.importance, threshold)) return false;
+    if (!eventPassesZoomThreshold(event, threshold)) return false;
     if (state.importance.length && !state.importance.includes(event.importance)) return false;
     if (state.categories.length && !state.categories.some((category) => event.categories.includes(category))) return false;
     if (state.eras.length && !state.eras.some((era) => event.eras.includes(era))) return false;

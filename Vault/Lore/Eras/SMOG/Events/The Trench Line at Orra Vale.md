@@ -3,6 +3,7 @@ title: "The Trench Line at Orra Vale"
 description: "Three winters of static warfare turned Orra Vale into the model for industrial fortification and generational siege."
 status: published
 type: event
+stub: true
 era: SMOG
 calendarDate:
   calendar: okse

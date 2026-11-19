@@ -3,6 +3,7 @@ title: "The Last Calendar Correction"
 description: "On a leap intercalary day, the major human polities reconciled their drifting clocks to one civil chronology for the last time."
 status: published
 type: event
+stub: true
 era: ENTROPY
 calendarDate:
   calendar: okse

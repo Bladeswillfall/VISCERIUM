@@ -5,9 +5,10 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import starlightChangelogs, { makeChangelogsSidebarLinks } from 'starlight-changelogs';
+import starlightLinksValidator from 'starlight-links-validator';
 import starlightScrollToTop from 'starlight-scroll-to-top';
 import starlightTags from 'starlight-tags';
-import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.mjs';
+import { buildSitemapLastmodMap, sitemapPathname } from './src/lib/sitemap-lastmod.ts';
 import { buildSidebar } from './sidebar.mjs';
 import siteConfig from './site.config.mjs';
 
@@ -98,46 +99,28 @@ const webmentionHead = siteConfig.webmentions?.enabled
     ].filter(Boolean)
   : [];
 
-const faviconPath = '/favicons/viscerium-favicon.svg';
-
 const faviconHead = [
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'icon',
-      type: 'image/svg+xml',
-      href: faviconPath,
-    },
-  },
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'shortcut icon',
-      href: faviconPath,
-    },
-  },
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'mask-icon',
-      href: '/favicons/viscerium-mask.svg',
-      color: '#000000',
-    },
-  },
-  {
-    tag: 'link',
-    attrs: {
-      rel: 'manifest',
-      href: '/site.webmanifest',
-    },
-  },
-  {
-    tag: 'meta',
-    attrs: {
-      name: 'theme-color',
-      content: '#000000',
-    },
-  },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico', sizes: '16x16 32x32 48x48' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicons/favicon-16x16.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicons/favicon-32x32.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/favicons/favicon-48x48.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '96x96', href: '/favicons/favicon-96x96.png' } },
+  { tag: 'link', attrs: { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' } },
+  { tag: 'link', attrs: { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicons/apple-touch-icon.png' } },
+  { tag: 'link', attrs: { rel: 'mask-icon', href: '/favicons/safari-pinned-tab.svg', color: '#c8bfa8' } },
+  { tag: 'link', attrs: { rel: 'manifest', href: '/site.webmanifest' } },
+  { tag: 'meta', attrs: { name: 'theme-color', content: '#000000' } },
+];
+
+const socialImageUrl = new URL('/social/og-image-1200x630.png', siteConfig.site).href;
+const socialHead = [
+  { tag: 'meta', attrs: { property: 'og:image', content: socialImageUrl } },
+  { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+  { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+  { tag: 'meta', attrs: { property: 'og:image:alt', content: 'VISCERIUM Codex: one timeline, four eras, infinite stories.' } },
+  { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+  { tag: 'meta', attrs: { name: 'twitter:image', content: socialImageUrl } },
+  { tag: 'meta', attrs: { name: 'twitter:image:alt', content: 'VISCERIUM Codex: one timeline, four eras, infinite stories.' } },
 ];
 
 const cloudflareAnalyticsToken = siteConfig.analytics?.cloudflare?.token ?? '';
@@ -224,10 +207,15 @@ const sidebar = [
 
 export default defineConfig({
   site: siteConfig.site,
+  experimental: {
+    incrementalBuild: true,
+    parallelPrerender: { workers: 2 },
+  },
   integrations: [
     starlight({
       title: siteConfig.title,
       description: siteConfig.description,
+      disable404Route: true,
       locales: {
         root: {
           label: 'English',
@@ -239,7 +227,6 @@ export default defineConfig({
       customCss: [
         './src/styles/ion-layers.css',
         './src/styles/color-tokens.css',
-        './src/styles/ion-theme.css',
         './src/styles/ion-expressive-code.css',
         './src/styles/typography.css',
         './src/styles/layout.css',
@@ -262,12 +249,13 @@ export default defineConfig({
       },
       editLink: githubEditLink,
       plugins: [
+        starlightLinksValidator(),
         starlightTags({ onInlineTagsNotFound: 'create' }),
         starlightChangelogs(),
         starlightScrollToTop(),
       ],
       sidebar,
-      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
+      head: [...feedHead, ...fontHead, ...identityHead, ...webmentionHead, ...faviconHead, ...socialHead, ...cloudflareAnalyticsHead, ...rybbitAnalyticsHead, ...searchVerificationHead, ...readerPreferencesHead],
       social: githubSocial,
     }),
     sitemap({

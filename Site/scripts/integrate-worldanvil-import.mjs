@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { applyWorldAnvilTriageBase } from './apply-worldanvil-base-triage.mjs';
 import { isMainModule } from './script-entry.mjs';
 
 const DEFAULT_VAULT = path.resolve(process.cwd(), '../../VISCERIUM-Workshop/Vault');
@@ -14,15 +15,15 @@ const REL_HINTS = ['title: "Leadership"','title: "Membership"','title: "Successi
 
 function yamlScalar(value) { return JSON.stringify(String(value)); }
 function yamlList(key, values) { return [`${key}:`, ...values.map((value) => `  - ${yamlScalar(value)}`)]; }
-function hasKey(frontmatter, key) { return new RegExp(`^${key}:`, 'm').test(frontmatter); }
-function splitFrontmatter(markdown) {
+export function hasKey(frontmatter, key) { return new RegExp(`^${key}:`, 'm').test(frontmatter); }
+export function splitFrontmatter(markdown) {
   const text = String(markdown ?? '').replace(/\r\n/g, '\n');
   if (!text.startsWith('---\n')) return { frontmatter: '', body: text, hasFrontmatter: false };
   const end = text.indexOf('\n---\n', 4);
   if (end === -1) return { frontmatter: '', body: text, hasFrontmatter: false };
   return { frontmatter: text.slice(4, end), body: text.slice(end + 5), hasFrontmatter: true };
 }
-function frontmatterTitle(frontmatter, fallback) {
+export function frontmatterTitle(frontmatter, fallback) {
   const m = frontmatter.match(/^title:\s*(.+)$/m);
   if (!m) return fallback;
   return m[1].trim().replace(/^['"]|['"]$/g, '') || fallback;
@@ -200,9 +201,6 @@ async function titleIndex(vault, importFiles) {
   }
   return index;
 }
-export function importBase() {
-  return `filters:\n  and:\n    - file.inFolder("Drafts/WorldAnvil Import")\n    - import_source == "worldanvil"\nproperties:\n  title:\n    displayName: Article\n  type:\n    displayName: Codex type\n  import_source_type:\n    displayName: World Anvil type\n  era:\n    displayName: Era\n  eras:\n    displayName: Eras\n  tags:\n    displayName: Tags\n  import_issues:\n    displayName: Migration issues\n  development_level:\n    displayName: Development\n  file.mtime:\n    displayName: Modified\nviews:\n  - type: cards\n    name: Cards\n    order: [title, type, era, eras, import_issues]\n    sort:\n      - property: title\n        direction: ASC\n    cardSize: 260\n  - type: table\n    name: All Imports\n    order: [title, type, import_source_type, era, eras, tags, import_issues, file.mtime]\n    sort:\n      - property: title\n        direction: ASC\n  - type: table\n    name: Needs era\n    filters:\n      and:\n        - list(import_issues).contains("needs-era")\n    order: [title, type, import_source_type, import_issues]\n  - type: table\n    name: Type review\n    filters:\n      or:\n        - list(import_issues).contains("needs-type-review")\n        - list(import_issues).contains("legacy-type-review")\n    order: [title, import_source_type, type, import_issues]\n  - type: table\n    name: Existing matches\n    filters:\n      and:\n        - list(import_issues).contains("existing-codex-match")\n    order: [title, type, import_issues]\n  - type: table\n    name: Relationship review\n    filters:\n      and:\n        - list(import_issues).contains("relationship-review")\n    order: [title, type, import_issues]\n  - type: table\n    name: Link and asset review\n    filters:\n      or:\n        - list(import_issues).contains("unresolved-legacy-links")\n        - list(import_issues).contains("missing-inline-assets")\n    order: [title, type, import_issues]\n`;
-}
 function inbox(stats) {
   const count = (id) => stats.issues.get(id) ?? 0;
   return `---\ntitle: "World Anvil Migration Review"\nstatus: draft\ntype: article\ndevelopment_level: stub\n---\n# World Anvil Migration Review\n\nUse [[System/Bases/World Anvil Import.base|World Anvil Import]] to browse the imported corpus. Individual notes contain precise review tasks where judgement is still required.\n\n## Migration-level next actions\n\n- [ ] Review the **${count('needs-era')}** imports whose era could not be established from the export metadata.\n- [ ] Review the **${count('needs-type-review') + count('legacy-type-review')}** imports whose final Codex structure/type still needs judgement.\n- [ ] Reconcile the **${count('existing-codex-match')}** imports that have an existing Codex note with the same canonical title.\n- [ ] Review meaningful structured relationships for the **${count('relationship-review')}** imports carrying leadership, membership, succession or similar legacy data.\n- [ ] Resolve link/asset exceptions: **${count('unresolved-legacy-links')}** note(s) with legacy links and **${count('missing-inline-assets')}** note(s) with legacy inline asset references.\n\n## Current state\n\n- Total imported articles: **${stats.total}**\n- Mechanically clean (no migration issue flags): **${stats.clean}**\n- Still carrying one or more review flags: **${stats.withIssues}**\n\n→ [[Drafts/WorldAnvil Metadata/report|Full generated report]]\n\n> [!tip]\n> These are migration decisions, not a completeness score. Checking a migration-level task does not automatically resolve the corresponding note-level tasks.\n`;
@@ -262,10 +260,9 @@ export async function runIntegration({ vault=DEFAULT_VAULT, write=false }={}) {
     for (const issue of issues) stats.issues.set(issue,(stats.issues.get(issue)??0)+1);
   }
   if (write) {
-    await fs.mkdir(path.join(vault,'System/Bases'),{recursive:true});
     await fs.mkdir(path.join(vault,'Drafts/Inbox'),{recursive:true});
     await fs.mkdir(path.join(vault,'Drafts/WorldAnvil Metadata'),{recursive:true});
-    await fs.writeFile(path.join(vault,'System/Bases/World Anvil Import.base'),importBase(),'utf8');
+    await applyWorldAnvilTriageBase(vault);
     await fs.writeFile(path.join(vault,'Drafts/Inbox/World Anvil Migration Review.md'),inbox(stats),'utf8');
     await fs.writeFile(path.join(vault,'Drafts/WorldAnvil Metadata/report.md'),report(stats),'utf8');
     const home=path.join(vault,'Home.md'); await fs.writeFile(home,updateHome(await fs.readFile(home,'utf8')),'utf8');

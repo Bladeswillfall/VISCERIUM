@@ -245,18 +245,29 @@
   background: repeating-linear-gradient(0deg, transparent 0 .55rem, color-mix(in oklch, var(--era-accent) 10%, transparent) .58rem .63rem);
 }
 
-.start-map-mark {
+.start-here-primer .start-era-band__image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(100%, 78rem);
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
+  opacity: .9;
+  margin-block: 0;
+  border-radius: 0;
+}
+.start-era-band--nearsight .start-era-band__image { opacity: .95; }
+.start-era-band--entropy .start-map-mark {
   position: relative;
   z-index: 1;
   width: min(100%, 78rem);
   height: auto;
-  opacity: .72;
+  opacity: .5;
+  transform: translate(.4rem, -.2rem);
   filter: drop-shadow(0 0 1.4rem color-mix(in oklch, var(--era-accent) 22%, transparent));
 }
-.start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 70%, var(--home-text-fixed)); }
-.start-era-band--citadel .start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 38%, var(--home-text-fixed)); }
-.start-era-band--nearsight .start-map-mark { opacity: .88; }
-.start-era-band--entropy .start-map-mark { opacity: .5; transform: translate(.4rem, -.2rem); }
+.start-era-band--entropy .start-map-mark path { fill: color-mix(in oklch, var(--era-accent) 70%, var(--home-text-fixed)); }
 
 .start-era-band__copy {
   position: relative;
@@ -502,6 +513,25 @@
 @media (max-width: 62rem) {
   .start-era-band { min-height: 30rem; grid-template-columns: 1fr; }
   .start-era-band__map { position: absolute; inset: 0; }
+  /* Override the generic .sl-markdown-content img height:auto rule. */
+  .start-here-primer .start-era-band__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    mask-image: linear-gradient(to bottom,
+      transparent 0%, color-mix(in srgb, var(--codex-palette-oled) 10%, transparent) 2%,
+      color-mix(in srgb, var(--codex-palette-oled) 30%, transparent) 4%,
+      color-mix(in srgb, var(--codex-palette-oled) 65%, transparent) 6%,
+      color-mix(in srgb, var(--codex-palette-oled) 90%, transparent) 8%,
+      var(--codex-palette-oled) 11%, var(--codex-palette-oled) 72%,
+      color-mix(in srgb, var(--codex-palette-oled) 95%, transparent) 77%,
+      color-mix(in srgb, var(--codex-palette-oled) 75%, transparent) 82%,
+      color-mix(in srgb, var(--codex-palette-oled) 50%, transparent) 88%,
+      color-mix(in srgb, var(--codex-palette-oled) 20%, transparent) 94%, transparent 100%);
+  }
   .start-era-band__copy { width: min(100%, 35rem); margin-left: auto; background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--start-void) 88%, transparent) 32%, var(--start-void)); }
   .start-place__image { inset-inline-start: 18%; opacity: .52; }
   .start-place__copy > * { width: min(100%, 42rem); }
@@ -520,7 +550,7 @@
 @media (max-width: 48rem) {
   .start-choice-row,
   .start-choice-row--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .start-era-band__copy { width: 100%; background: linear-gradient(0deg, var(--start-void), color-mix(in oklch, var(--start-void) 75%, transparent)); }
+  .start-era-band__copy { width: 100%; padding-top: clamp(12rem, 30vw, 14rem); background: linear-gradient(to bottom, transparent 0 7rem, color-mix(in oklch, var(--start-void) 92%, transparent) 9rem, var(--start-void) 11rem); }
   .start-place { min-height: auto; }
   .start-place__image { position: relative; inset: auto; height: 22rem; order: 1; }
   .start-place__image::after { background: linear-gradient(0deg, var(--start-bg), transparent 42%); }
@@ -553,60 +583,9 @@
    Integrates the primer with the Starlight page shell.
    -------------------------------------------------------------------------- */
 
-/* Start Here is an editorial gateway, not a reference article.
-   Remove the desktop article rail at the shell level and let the primer own the
-   content canvas. Internal Start Here sections decide their own readable widths. */
-
-/* The reviewed Start Here composition is edge-to-edge beneath the global nav.
-   Keep these shell resets strictly scoped to this page. */
-.main-frame:has(.start-here-primer) {
-  padding-top: 0 !important;
-  padding-inline: 0 !important;
-}
-
-/* Start Here replaces the ordinary first article panel with its own bespoke hero. */
-.main-frame:has(.start-here-primer) div.content-panel:nth-child(1) {
-  display: none !important;
-}
-
-.main-frame:has(.start-here-primer) > .codex-two-column-content {
-  inline-size: 100% !important;
-  max-inline-size: none !important;
-  margin-inline: 0 !important;
-}
-
-.main-frame:has(.start-here-primer)
-  > .codex-two-column-content
-  > .codex-main-pane {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) !important;
-  column-gap: 0 !important;
-  row-gap: 0 !important;
-  inline-size: 100% !important;
-  max-inline-size: none !important;
-  margin-inline: 0 !important;
-}
-
-.main-frame:has(.start-here-primer)
-  > .codex-two-column-content
-  > .codex-main-pane
-  > main {
-  grid-column: 1 / -1 !important;
-  grid-row: 1 !important;
-  inline-size: 100% !important;
-  max-inline-size: none !important;
-  min-inline-size: 0;
-  margin-inline: 0 !important;
-  padding: 0 !important;
-}
-
+/* Shared full-width geometry lives in editorial-shell.css. */
 .main-frame:has(.start-here-primer) main > .content-panel,
-.main-frame:has(.start-here-primer) main > .content-panel > .sl-container,
-.main-frame:has(.start-here-primer) .sl-markdown-content,
 .main-frame:has(.start-here-primer) .start-here-primer {
-  inline-size: 100% !important;
-  max-inline-size: none !important;
-  margin-inline: 0 !important;
   padding-inline: 0 !important;
 }
 
@@ -617,17 +596,6 @@
 .main-frame:has(.start-here-primer) .content-panel > .sl-container,
 .main-frame:has(.start-here-primer) .sl-markdown-content {
   padding-block-start: 0 !important;
-}
-
-.main-frame:has(.start-here-primer) .sl-markdown-content {
-  margin-block-start: 0 !important;
-}
-
-.main-frame:has(.start-here-primer) .content-panel > .sl-container > .codex-header-fade-filter,
-.main-frame:has(.start-here-primer) .content-panel > .sl-container > .codex-header-figure,
-.main-frame:has(.start-here-primer) .content-panel > .sl-container > h1#_top,
-.main-frame:has(.start-here-primer) .content-panel > .sl-container > .codex-breadcrumbs {
-  display: none !important;
 }
 
 /* Starlight's generic content-flow rule adds a top gap between almost every
@@ -823,45 +791,18 @@
 /* Light mode keeps the cinematic chapters deliberately dark, but the surrounding
    editorial material should read like warm paper rather than dark-mode CSS laid
    over a pale canvas. Use existing Codex theme tokens so this stays in palette. */
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-hero__veil {
-  background:
-    radial-gradient(circle at 50% 42%, transparent 0 16rem, color-mix(in oklch, var(--start-void) 35%, transparent) 48rem),
-    linear-gradient(0deg, var(--start-void), transparent 13rem);
-}
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb {
   border-color: var(--codex-border);
-  background: color-mix(in oklch, var(--start-surface) 82%, var(--start-bg));
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb--quiet {
-  background: color-mix(in oklch, var(--start-surface) 35%, var(--start-bg));
 }
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice {
   border-color: var(--codex-border);
   background: color-mix(in oklch, var(--start-surface) 88%, var(--start-bg));
-  box-shadow: 0 .45rem 1.25rem color-mix(in oklch, var(--codex-palette-oled) 8%, transparent);
 }
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice span {
   color: color-mix(in oklch, var(--start-body) 72%, transparent);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='citadel'] {
-  --choice-accent: var(--era-e1-accent);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='smog'] {
-  --choice-accent: var(--era-e2-accent);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='nearsight'] {
-  --choice-accent: var(--era-e3-accent);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='entropy'] {
-  --choice-accent: var(--era-e4-accent);
 }
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice.is-selected {
@@ -875,7 +816,6 @@
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-wyrd__grid > div:last-child {
   border: 1px solid var(--start-line);
   border-radius: .7rem;
-  background: color-mix(in oklch, var(--start-surface) 90%, transparent);
   box-shadow: 0 .75rem 2rem color-mix(in oklch, var(--codex-palette-oled) 7%, transparent);
 }
 
@@ -918,16 +858,10 @@ body:has(.start-here-primer) .codex-webmentions {
     linear-gradient(0deg, var(--start-bg), transparent 13rem);
 }
 
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-timeline {
-  background: var(--start-bg);
-}
-
 /* Do not rely on Starlight's semantic white/gray aliases here: the Timeline is
    intentionally a light-paper chapter, so give its editorial copy explicit dark
    Codex tokens with comfortable AA contrast. */
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-timeline .start-section__intro {
-  --start-text: var(--codex-palette-ink);
-  --start-body: var(--codex-text-body);
   --start-accent: var(--codex-palette-deep);
 }
 
@@ -939,49 +873,19 @@ body:has(.start-here-primer) .codex-webmentions {
    the wash; the latter is pulled toward Codex ink so the maps and small labels do
    not disappear into the warm paper. */
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band {
-  --era-map-source: var(--vc-event-unknown);
-  --era-map: color-mix(in oklch, var(--era-map-source) 34%, var(--codex-palette-ink));
   --era-accent: color-mix(in oklch, var(--era-map-source) 24%, var(--codex-palette-ink));
   border-color: var(--start-line);
   background: var(--start-bg);
-  color: var(--codex-text-body) !important;
 }
 
-/* Reuse the Codex illustration palette to retain the historical colour coding
-   from the reviewed mock, but feed those hues through the accessible ink above. */
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel {
-  --era-map-source: color-mix(in oklch, var(--vc-event-military) 58%, var(--era-e2-base));
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--smog {
-  --era-map-source: var(--vc-event-economic);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--nearsight {
-  --era-map-source: var(--vc-event-disaster);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy {
-  --era-map-source: var(--vc-event-technology);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__map {
-  background:
-    linear-gradient(90deg, color-mix(in oklch, var(--era-map-source) 12%, var(--start-bg)), var(--start-bg));
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
-  background:
-    linear-gradient(90deg, color-mix(in oklch, var(--start-bg) 72%, transparent), var(--start-bg) 22%);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark {
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__image,
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy .start-map-mark {
   opacity: 1;
+}
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy .start-map-mark {
   filter: none;
 }
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-map-mark path,
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--citadel .start-map-mark path {
+:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band--entropy .start-map-mark path {
   fill: var(--era-map);
 }
 
@@ -991,36 +895,11 @@ body:has(.start-here-primer) .codex-webmentions {
   color: var(--era-accent);
 }
 
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy p {
-  color: var(--codex-text-body);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:hover .start-era-band__action,
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:focus-visible .start-era-band__action {
-  color: var(--codex-palette-oled);
-}
-
-@media (min-width: 62.01rem) {
-  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:nth-child(even) .start-era-band__map {
-    background:
-      linear-gradient(270deg, color-mix(in oklch, var(--era-map-source) 12%, var(--start-bg)), var(--start-bg));
-  }
-
-  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band:nth-child(even) .start-era-band__copy {
-    background:
-      linear-gradient(270deg, color-mix(in oklch, var(--start-bg) 72%, transparent), var(--start-bg) 22%);
-  }
-}
-
 /* Keep the choice pauses visually prominent on light paper without making them
    feel like detached white app cards. Use an opaque base colour for the actual
    contrast surface; era-specific gradients below are decorative overlays only. */
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb {
   background: color-mix(in oklch, var(--codex-palette-light) 52%, var(--start-bg));
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-breadcrumb--quiet {
-  background: color-mix(in oklch, var(--codex-palette-light) 30%, var(--start-bg));
 }
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-choice {
@@ -1040,13 +919,6 @@ body:has(.start-here-primer) .codex-webmentions {
 
 /* The four era gateways keep their own colour identity in light mode. This is
    deliberately more specific than the shared light-card treatment above. */
-:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice {
-  border-color: color-mix(in oklch, var(--choice-accent) 62%, var(--codex-border));
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice strong {
-  color: color-mix(in oklch, var(--choice-accent) 38%, var(--codex-palette-ink));
-}
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) [data-breadcrumb-group='era'] .start-choice[data-value='citadel'] {
   background-image:
@@ -1082,10 +954,6 @@ body:has(.start-here-primer) .codex-webmentions {
 /* Let the Resonance and personal-story chapters sit cleanly on paper. */
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-wyrd__grid > div:last-child {
   background: color-mix(in oklch, var(--codex-palette-light) 62%, transparent);
-}
-
-:root[data-theme='light'] .main-frame:has(.start-here-primer) .start-story-scale {
-  background: color-mix(in oklch, var(--codex-palette-light) 24%, var(--start-bg));
 }
 
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-route-card {
@@ -1539,8 +1407,9 @@ body:has(.start-here-primer) .codex-webmentions {
 
 /* Era bands are links too. Give the image, label and call-to-action a coordinated
    response so the entire band feels clickable rather than only its final line. */
-.start-here-primer .start-map-mark {
-  transition: scale .35s cubic-bezier(.2, .72, .22, 1), opacity .25s ease, filter .25s ease;
+.start-here-primer .start-era-band__image,
+.start-here-primer .start-era-band--entropy .start-map-mark {
+  transition: scale .35s cubic-bezier(.2, .72, .22, 1), opacity .25s ease;
 }
 
 .start-here-primer .start-era-band__action {
@@ -1549,6 +1418,8 @@ body:has(.start-here-primer) .codex-webmentions {
   transition: transform .2s ease, letter-spacing .2s ease, color .2s ease;
 }
 
+.start-here-primer .start-era-band:hover .start-era-band__image,
+.start-here-primer .start-era-band:focus-visible .start-era-band__image,
 .start-here-primer .start-era-band:hover .start-map-mark,
 .start-here-primer .start-era-band:focus-visible .start-map-mark {
   scale: 1.025;
@@ -1674,6 +1545,7 @@ body:has(.start-here-primer) .codex-webmentions {
   .start-here-primer .start-scroll-link::after,
   .start-here-primer .start-inline-link > span,
   .start-here-primer .start-scroll-link > span,
+  .start-here-primer .start-era-band__image,
   .start-here-primer .start-map-mark,
   .start-here-primer .start-era-band__action,
   .start-here-primer .start-route-card,
@@ -1733,6 +1605,18 @@ body:has(.start-here-primer) .codex-webmentions {
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__map,
 :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
   background: var(--codex-bg);
+}
+
+/* Keep the raster visible alongside readable copy when the two columns overlap. */
+@media (max-width: 62rem) {
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
+    background: linear-gradient(90deg, color-mix(in oklch, var(--codex-bg) 96%, transparent), var(--codex-bg) 42%);
+  }
+}
+@media (max-width: 48rem) {
+  :root[data-theme='light'] .main-frame:has(.start-here-primer) .start-era-band__copy {
+    background: linear-gradient(to bottom, transparent 0 7rem, color-mix(in oklch, var(--codex-bg) 97%, transparent) 9rem, var(--codex-bg) 11rem);
+  }
 }
 
 /* Keep the action colourful on hover instead of collapsing to generic black. */
@@ -2083,6 +1967,50 @@ body:has(.start-here-primer) .codex-webmentions {
     inline-size: clamp(2.75rem, 14vw, 4.5rem) !important;
     margin-inline-start: .4rem !important;
   }
+}
+
+/* Start Here owns its link contrast and choice accents. */
+@layer starlight.core {
+  html[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link {
+    color: color-mix(in oklch, var(--start-link-hue) 32%, var(--codex-palette-ink)) !important;
+  }
+
+  html[data-theme='light'] .main-frame:has(.start-here-primer) .start-inline-link:is(:hover, :focus-visible) {
+    color: color-mix(in oklch, var(--start-link-hue) 24%, var(--codex-palette-ink)) !important;
+  }
+
+}
+
+[data-breadcrumb-group]:not([data-breadcrumb-group='era']) .start-choice {
+  border-color: var(--codex-border-strong) !important;
+}
+
+[data-breadcrumb-group='era'] [data-value='citadel'] {
+  --b: var(--era-e1-accent);
+  --ba: var(--era-e1-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='smog'] {
+  --b: var(--era-e2-accent);
+  --ba: var(--era-e2-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='nearsight'] {
+  --b: var(--era-e3-accent);
+  --ba: var(--era-e3-accent-high);
+}
+
+[data-breadcrumb-group='era'] [data-value='entropy'] {
+  --b: var(--era-e4-accent);
+  --ba: var(--era-e4-accent-high);
+}
+
+[data-breadcrumb-group='era'] .start-choice {
+  border-color: var(--b) !important;
+}
+
+[data-breadcrumb-group='era'] .start-choice:is(:hover, :focus-visible, .is-selected) {
+  border-color: var(--ba) !important;
 }
 
 

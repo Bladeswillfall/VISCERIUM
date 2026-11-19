@@ -130,10 +130,6 @@ function solaconColor(hash) {
   return channels.map((channel) => Math.max(42, Math.min(210, channel)));
 }
 
-function mixedWithWhite(channel, amount) {
-  return Math.round(channel * amount + 255 * (1 - amount));
-}
-
 export function generateSolaconSvg(seed, size = 192) {
   const hash = sdbm(seed);
   const slices = (hash & 0x07) + 3;
@@ -161,10 +157,8 @@ export function generateSolaconSvg(seed, size = 192) {
     }
   }
 
-  const background = [r, g, b].map((channel) => mixedWithWhite(channel, 0.16));
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">`,
-    `<rect width="${size}" height="${size}" fill="rgb(${background.join(',')})"/>`,
     ...paths,
     '</svg>',
   ].join('');

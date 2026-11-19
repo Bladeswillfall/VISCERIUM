@@ -8,7 +8,7 @@ sidebar:
     - title: Details
       fields:
         - label: Faction
-          value: "[[Archived - Okse Dominion]]"
+          value: "[[Lore/Eras/CITADEL/Nations/Okse Dominion/Okse Dominion|Okse Dominion]]"
         - label: Region
           value: "[[Halvmaneheimr]]"
         - label: Population
@@ -29,8 +29,7 @@ sidebar:
           href: "[[Hofn Fagrvatn]]"
         - label: Mestrvirki
           href: "[[Mestrvirki]]"
-        - label: Rauthrbak Min
-          href: "[[Drafts/Inbox/Locations/Rauthrbak Min]]"
+        - Rauthrbak Min
 title: Valenheim
 description: Capital of the Okse Dominion, Valenheim is a black-walled river city where survival is engineered, faith clings to every lintel, and comfort depends less on the weather than on who you are.
 created: 2026-08-23
@@ -403,7 +402,7 @@ Valenheim's wars begin long before battlefields. They begin with stores.
 >
 > Some mornings Brattrstein goes quieter before the bells because somebody hears chains.
 >
-> Prisoner columns gather near [[Hrimbru]] and leave for [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]] linked wrist-to-wrist or neck-to-neck. Officials call them *labour transfers*. Mine clerks prefer *northern service*. [[Gamaltrappir]] calls them *redbacks*. Families call whatever name is being taken from them.
+> Prisoner columns gather near [[Hrimbru]] and leave for Rauthrbak Min linked wrist-to-wrist or neck-to-neck. Officials call them *labour transfers*. Mine clerks prefer *northern service*. [[Gamaltrappir]] calls them *redbacks*. Families call whatever name is being taken from them.
 >
 > The road does not carry prisoners alone. Wagons go north with grain, dried fish, timber, charcoal, rope, lamp oil, leather, cloth, replacement tools and cheap boots. They return with what the mine has taken from stone and earth, or with broken equipment somebody in [[Svartsmidja]] is expected to make useful again. Contractors make fortunes on quantities too dull for songs. A merchant can condemn Rauthrbak over supper and bid for its rope contract the next morning.
 >
@@ -497,7 +496,7 @@ Vordr's altar is larger.
 >
 > Belief also attaches itself to infrastructure. Boatmen touch the same pier before difficult water. Masons leave a copper shaving in cracks they have repaired twice. Carters spit over one old bridge joint and not the next. A ritual may begin because somebody once survived; three generations later nobody remembers the person, only that failing to perform it would be stupid when it costs nothing.
 >
-> Darker things travel south from [[Lore/Eras/CITADEL/Nations/Okse Dominion/Regions/Halvmaneheimr/Settlements/Rauthrbak Min|Rauthrbak Min]]. Sevenfold marks of the [[Heptad Synod]] appear on confiscated objects. A few northern-road cellars host private suppers for officials and wealthy men who have learned to call suffering revelation when they are not the ones bleeding.
+> Darker things travel south from Rauthrbak Min. Sevenfold marks of the [[Heptad Synod]] appear on confiscated objects. A few northern-road cellars host private suppers for officials and wealthy men who have learned to call suffering revelation when they are not the ones bleeding.
 
 ## Power That Must Be Counted
 

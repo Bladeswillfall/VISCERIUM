@@ -1,11 +1,17 @@
 ---
+import { createHash } from 'node:crypto';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import RelationshipGraph from '../../../../components/RelationshipGraph.astro';
 import graph from '../../../../data/relationships.json';
 import { HISTORICAL_ERAS } from '../../../../lib/era-context.mjs';
 
 export function getStaticPaths() {
-  return HISTORICAL_ERAS.map((era) => ({ params: { era: era.toLowerCase() }, props: { era } }));
+  const graphCacheKey = createHash('sha256').update(JSON.stringify(graph)).digest('hex');
+  return HISTORICAL_ERAS.map((era) => ({
+    params: { era: era.toLowerCase() },
+    props: { era },
+    cacheKey: `${graphCacheKey}:${era}`,
+  }));
 }
 
 const { era } = Astro.props;

@@ -5,7 +5,7 @@ import {
   estimateReadingTime,
   isReadingTimeArticle,
   readableMarkdownText,
-} from '../src/lib/reading-time.mjs';
+} from '../src/lib/reading-time.ts';
 
 test('reading time is limited to standard reader-facing articles', () => {
   assert.equal(isReadingTimeArticle({ type: 'faction', slug: 'eras/citadel/factions/okse' }), true);

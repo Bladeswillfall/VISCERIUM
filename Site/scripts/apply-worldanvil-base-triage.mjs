@@ -156,45 +156,16 @@ views:
         direction: ASC
     cardSize: 300
 
-  - type: cards
-    name: Tier 1 — setting spine
-    filters:
-      and:
-        - formula.priority_rank == 1
-    order: [title, formula.priority_tier, formula.priority_reason, formula.type_display, formula.era_display, formula.next_action]
-    sort:
-      - property: title
-        direction: ASC
-    cardSize: 300
-
-  - type: cards
-    name: Tier 2 — era anchors
-    filters:
-      and:
-        - formula.priority_rank == 2
-    order: [title, formula.priority_tier, formula.priority_reason, formula.type_display, formula.era_display, formula.next_action]
-    sort:
-      - property: title
-        direction: ASC
-    cardSize: 300
-
   - type: table
-    name: Tier 3 — connective depth
+    name: Identity conflicts
     filters:
-      and:
-        - formula.priority_rank == 3
-    order: [title, formula.priority_tier, formula.priority_reason, type, import_source_type, era, eras, import_issues]
+      or:
+        - formula.issues.contains("existing-codex-match")
+        - formula.issues.contains("duplicate-title")
+    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, import_source_type, era, eras, import_issues]
     sort:
-      - property: title
+      - property: formula.priority_rank
         direction: ASC
-
-  - type: table
-    name: Tier 4 — defer
-    filters:
-      and:
-        - formula.priority_rank == 4
-    order: [title, formula.priority_tier, formula.priority_reason, type, import_source_type, era, eras, import_issues]
-    sort:
       - property: title
         direction: ASC
 
@@ -212,73 +183,6 @@ views:
       - property: title
         direction: ASC
     cardSize: 285
-
-  - type: table
-    name: Existing matches
-    filters:
-      and:
-        - formula.issues.contains("existing-codex-match")
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
-
-  - type: table
-    name: Duplicate titles
-    filters:
-      and:
-        - formula.issues.contains("duplicate-title")
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, import_source_type, era, eras, import_issues]
-
-  - type: table
-    name: Type decisions
-    filters:
-      or:
-        - formula.issues.contains("needs-type-review")
-        - formula.issues.contains("legacy-type-review")
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, import_source_type, type, era, eras, import_issues]
-
-  - type: table
-    name: Era editions
-    filters:
-      and:
-        - formula.era_count > 1
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, eras, entity_id, import_issues]
-    sort:
-      - property: formula.priority_rank
-        direction: ASC
-      - property: title
-        direction: ASC
-
-  - type: table
-    name: Missing era
-    filters:
-      and:
-        - formula.era_count == 0
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, import_source_type, era, eras, import_issues]
-    sort:
-      - property: formula.priority_rank
-        direction: ASC
-      - property: title
-        direction: ASC
-
-  - type: table
-    name: Relationship review
-    filters:
-      and:
-        - formula.issues.contains("relationship-review")
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
-
-  - type: table
-    name: Unresolved links
-    filters:
-      and:
-        - formula.issues.contains("unresolved-legacy-links")
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
-
-  - type: table
-    name: Artwork
-    filters:
-      and:
-        - formula.issues.contains("missing-inline-assets")
-    order: [title, formula.priority_tier, formula.next_action, formula.action_steps, type, era, eras, import_issues]
 
   - type: cards
     name: Ready to file

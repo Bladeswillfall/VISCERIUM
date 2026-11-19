@@ -3,6 +3,7 @@ title: "The Verigoth Chain Census"
 description: "A six-year accounting of captives, debts and hereditary bondage conducted across the Verigoth chain-holds."
 status: published
 type: event
+stub: true
 era: CITADEL
 calendarDate:
   calendar: okse

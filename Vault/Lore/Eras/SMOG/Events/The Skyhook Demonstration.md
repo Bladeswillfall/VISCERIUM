@@ -3,6 +3,7 @@ title: "The Skyhook Demonstration"
 description: "An armoured observation gondola climbed above the smog ceiling on a tethered electric cable before a military audience."
 status: published
 type: event
+stub: true
 era: SMOG
 calendarDate:
   calendar: okse
