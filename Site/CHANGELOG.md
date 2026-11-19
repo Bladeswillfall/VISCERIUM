@@ -10,6 +10,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added the Republic of Askalia flag to its CITADEL article and era power card, with a linked artwork attribution page crediting Jake Saunders ([#308](https://github.com/Bladeswillfall/VISCERIUM/pull/308)).
 - Added source-specific WorldAnvil contributor credits, checked-in Solacon avatars, and a discreet WA provenance mark beside legacy contributor roles ([#261](https://github.com/Bladeswillfall/VISCERIUM/pull/261)).
 - Added a World Anvil discussion archive pilot to Okse Dominion, with dated attribution, source links and editorial summaries where republication permission is missing.
 
