@@ -9,6 +9,7 @@ test('category indexes keep positive H2 separation instead of article compressio
   await page.goto(categoryUrl, { waitUntil: 'domcontentloaded' });
 
   await expect(page.locator('.codex-page-classifier--structural')).toHaveCount(1);
+  await expect(page.locator('.sl-markdown-content.codex-editorial-article')).toHaveCount(0);
   const heading = page.getByRole('heading', { name: 'Pages in this category' });
   await expect(heading).toBeVisible();
 
@@ -21,4 +22,5 @@ test('Start Here is classified as structural despite using article frontmatter',
   await page.goto(startHereUrl, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.codex-page-classifier--structural')).toHaveCount(1);
   await expect(page.locator('.codex-page-classifier--article')).toHaveCount(0);
+  await expect(page.locator('.sl-markdown-content.codex-editorial-article')).toHaveCount(0);
 });
