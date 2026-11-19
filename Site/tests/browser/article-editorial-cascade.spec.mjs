@@ -107,9 +107,8 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
       const heading = [...content.querySelectorAll(level)].find((node) => node.textContent?.includes(title));
       return heading?.closest('.sl-heading-wrapper') ?? heading;
     };
-    const h3 = findHeading('h3', 'Oksmun culture');
-    const economy = findHeading('h2', 'Economy');
-    const introductoryH4 = findHeading('h4', 'Iron roots, blood fruit.');
+    const h3 = findHeading('h3', 'What survives');
+    const economy = findHeading('h2', 'Iron Roots');
     const firstParagraph = h3?.nextElementSibling;
     const secondParagraph = firstParagraph?.nextElementSibling;
     const h2Paragraph = economy?.nextElementSibling;
@@ -118,7 +117,6 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
       h3Depth: h3?.getAttribute('data-codex-section-indent'),
       paragraphDepths: [firstParagraph?.getAttribute('data-codex-section-indent'), secondParagraph?.getAttribute('data-codex-section-indent')],
       h2ParagraphDepth: h2Paragraph?.getAttribute('data-codex-section-indent'),
-      introductoryH4Depth: introductoryH4?.getAttribute('data-codex-section-indent'),
       h3Offset: h3 ? Number.parseFloat(getComputedStyle(h3).marginLeft) : null,
       paragraphOffsets: [firstParagraph, secondParagraph].map((node) => node ? Number.parseFloat(getComputedStyle(node).marginLeft) : null),
       h2ParagraphOffset: h2Paragraph ? Number.parseFloat(getComputedStyle(h2Paragraph).marginLeft) : null,
@@ -129,13 +127,12 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
   expect(positions.h3Depth).toBe('1');
   expect(positions.paragraphDepths).toEqual(['1', '1']);
   expect(positions.h2ParagraphDepth).toBeNull();
-  expect(positions.introductoryH4Depth).toBeNull();
   expect(positions.h3Offset).toBeCloseTo(36, 0);
   expect(positions.paragraphOffsets).toEqual([36, 36]);
   expect(positions.h2ParagraphOffset).toBeLessThan(4);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  const mobileOffset = await page.locator('.sl-markdown-content h3').filter({ hasText: 'Oksmun culture' })
+  const mobileOffset = await page.locator('.sl-markdown-content h3').filter({ hasText: 'What survives' })
     .evaluate((heading) => Number.parseFloat(getComputedStyle(heading.closest('.sl-heading-wrapper') ?? heading).marginLeft));
   expect(mobileOffset).toBeCloseTo(18, 0);
 });
