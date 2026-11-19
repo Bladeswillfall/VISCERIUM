@@ -103,12 +103,15 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
     const content = document.querySelector('.sl-markdown-content.codex-editorial-article');
     if (!content) return null;
 
-    const findHeading = (level, title) => {
-      const heading = [...content.querySelectorAll(level)].find((node) => node.textContent?.includes(title));
-      return heading?.closest('.sl-heading-wrapper') ?? heading;
-    };
-    const h3 = findHeading('h3', 'What survives');
-    const economy = findHeading('h2', 'Iron Roots');
+    const headingBlocks = (level) => [...content.querySelectorAll(level)]
+      .map((heading) => heading.closest('.sl-heading-wrapper') ?? heading)
+      .filter((block) => block.parentElement === content);
+    // The authored prose can differ from the checked-in generated MDX. Verify
+    // the Markdown structure, not a particular revision of an article's text.
+    const h3 = headingBlocks('h3').find((block) =>
+      block.nextElementSibling?.matches('p')
+      && block.nextElementSibling.nextElementSibling?.matches('p'));
+    const economy = headingBlocks('h2').find((block) => block.nextElementSibling?.matches('p'));
     const firstParagraph = h3?.nextElementSibling;
     const secondParagraph = firstParagraph?.nextElementSibling;
     const h2Paragraph = economy?.nextElementSibling;
@@ -132,8 +135,14 @@ test('ordinary H3 subsections indent their entire prose range while H2 text stay
   expect(positions.h2ParagraphOffset).toBeLessThan(4);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  const mobileOffset = await page.locator('.sl-markdown-content h3').filter({ hasText: 'What survives' })
-    .evaluate((heading) => Number.parseFloat(getComputedStyle(heading.closest('.sl-heading-wrapper') ?? heading).marginLeft));
+  const mobileOffset = await page.evaluate(() => {
+    const content = document.querySelector('.sl-markdown-content.codex-editorial-article');
+    const heading = [...content.querySelectorAll('h3')]
+      .map((node) => node.closest('.sl-heading-wrapper') ?? node)
+      .find((block) => block.parentElement === content && block.nextElementSibling?.matches('p')
+        && block.nextElementSibling.nextElementSibling?.matches('p'));
+    return heading ? Number.parseFloat(getComputedStyle(heading).marginLeft) : null;
+  });
   expect(mobileOffset).toBeCloseTo(18, 0);
 });
 
