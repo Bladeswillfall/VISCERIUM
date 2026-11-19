@@ -45,6 +45,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Fixed in Unreleased
 
+- Applied consistent H3 subsection and paragraph indentation across ordinary Codex articles, while leaving custom layouts and existing authored indents unchanged.
 - Restored navigation and relationship exploration without JavaScript, repaired tablet article contents and reader controls, and kept mobile era descriptions and footer text readable ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 - Restored the Codex's subtle grain texture using the committed noise image ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 
