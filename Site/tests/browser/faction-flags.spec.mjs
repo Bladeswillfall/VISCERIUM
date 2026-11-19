@@ -44,6 +44,19 @@ test('Askalia article and CITADEL power card use its national flag', async ({ pa
   const asset = '/assets/images/Republic-of-Askalia-flag.webp';
   await page.goto(`${preview}/eras/citadel/nations/republic-of-askalia/`);
   await checkImage(page.locator('.codex-sidebar-image'), asset, 2750);
+  const attribution = '/attribution/images/republic-of-askalia-flag-webp/';
+  const artworkLink = page.locator('.codex-sidebar-image-link');
+  await expect(artworkLink).toHaveAttribute('href', attribution);
+  await expect(page.locator('.codex-sidebar-art-artist')).toContainText('Jake Saunders');
+
+  await artworkLink.click();
+  await expect(page).toHaveURL(`${preview}${attribution}`);
+  const details = page.locator('.codex-attribution-table');
+  await expect(details).toContainText('Jake Saunders');
+  await expect(details).toContainText('Flag of The Republic of Askalia. Features a wine-red field with a trio of sword-bearing armored arms rotating about the center.');
+  await expect(details).toContainText('Copyright');
+  await expect(details.getByRole('row', { name: /Original artwork/ })).toContainText('Not recorded');
+  await expect(details.getByRole('row', { name: /Artist website/ })).toContainText('Not recorded');
 
   await page.goto(`${preview}/eras/citadel/`);
   const card = page.locator('.era-primer__power').filter({ hasText: 'Republic of Askalia' });
