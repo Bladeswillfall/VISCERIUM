@@ -10,6 +10,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Added in Unreleased
 
+- Added the Kingdom of Satol flag to its CITADEL nation article and era power card, with a linked artwork attribution page crediting Jake Saunders.
 - Added a Bailey Pittman article preview and image-attribution pages for managed Codex artwork, with automatic Obsidian sidecars and Atlas attribution links ([#161](https://github.com/Bladeswillfall/VISCERIUM/pull/161)).
 
 - Added the Republic of Askalia flag to its CITADEL article and era power card, with a linked artwork attribution page crediting Jake Saunders ([#308](https://github.com/Bladeswillfall/VISCERIUM/pull/308)).
