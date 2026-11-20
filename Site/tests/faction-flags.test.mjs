@@ -12,6 +12,7 @@ const flags = [
   { article: 'Eras/NEARSIGHT/Events/TCSC Bastion Doctrine Adopted.md', image: 'TCSC-flag.webp', header: true },
   { article: 'Eras/CITADEL/Nations/Krass Dominion/Krass Dominion.md', image: 'Krass-Dominion-flag.webp', header: true },
   { article: 'Eras/CITADEL/Nations/Republic of Askalia/Republic of Askalia.md', image: 'Republic-of-Askalia-flag.webp', header: true },
+  { article: 'Eras/CITADEL/Nations/Kingdom of Satol/Kingdom of Satol.md', image: 'Kingdom-of-Satol-flag.webp', header: true },
 ];
 
 for (const { article, image, header } of flags) {

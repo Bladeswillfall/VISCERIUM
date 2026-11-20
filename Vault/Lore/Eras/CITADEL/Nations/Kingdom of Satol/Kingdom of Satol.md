@@ -13,6 +13,12 @@ sidebar:
         - "City - Jasperdale"
 title: "Kingdom of Satol"
 description: "The Kingdom of Satol is extremely fertile, brimming with farmland and lush forests alike."
+image: Kingdom-of-Satol-flag.webp
+headerImage: Kingdom-of-Satol-flag.webp
+imageTitle: Kingdom of Satol flag
+alt: "Flag of the Kingdom of Satol, a golden yellow field with a dark brown stylised ear of wheat in the upper-left corner."
+artist: "Jake Saunders"
+imagePage: /attribution/images/kingdom-of-satol-flag-webp/
 updated:
 status: "published"
 type: "faction"

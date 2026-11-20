@@ -62,3 +62,27 @@ test('Askalia article and CITADEL power card use its national flag', async ({ pa
   const card = page.locator('.era-primer__power').filter({ hasText: 'Republic of Askalia' });
   await checkImage(card.locator('img'), asset, 2750);
 });
+
+
+test('Satol article and CITADEL power card use its national flag with attribution', async ({ page }) => {
+  const asset = '/assets/images/Kingdom-of-Satol-flag.webp';
+  const attribution = '/attribution/images/kingdom-of-satol-flag-webp/';
+  await page.goto(`${preview}/eras/citadel/nations/kingdom-of-satol/`);
+  await checkImage(page.locator('.codex-sidebar-image'), asset, 1500);
+  await expect(page.locator('.codex-sidebar-image')).toHaveAttribute('alt', "Flag of the Kingdom of Satol, a golden yellow field with a dark brown stylised ear of wheat in the upper-left corner.");
+  const artworkLink = page.locator('.codex-sidebar-image-link');
+  await expect(artworkLink).toHaveAttribute('href', attribution);
+  await expect(page.locator('.codex-sidebar-art-artist')).toContainText('Jake Saunders');
+
+  await artworkLink.click();
+  await expect(page).toHaveURL(`${preview}${attribution}`);
+  const details = page.locator('.codex-attribution-table');
+  await expect(details).toContainText('Jake Saunders');
+  await expect(details).toContainText('Copyright');
+  await expect(details.getByRole('row', { name: /Original artwork/ })).toContainText('Not recorded');
+  await expect(details.getByRole('row', { name: /Artist website/ })).toContainText('Not recorded');
+
+  await page.goto(`${preview}/eras/citadel/`);
+  const card = page.locator('.era-primer__power').filter({ hasText: 'Kingdom of Satol' });
+  await checkImage(card.locator('img'), asset, 1500);
+});
