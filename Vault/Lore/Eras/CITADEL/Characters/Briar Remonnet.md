@@ -4,8 +4,6 @@ description: The last recorded king of Askalia, assassinated by members of the C
 status: published
 type: character
 era: CITADEL
-faction:
-  - Republic of Askalia
 stub: true
 development_level: stub
 sidebar:
