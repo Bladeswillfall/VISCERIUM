@@ -38,10 +38,6 @@ const messages = {
   since: t('viscerium.relationship.since'),
   until: t('viscerium.relationship.until'),
   noMatches: t('viscerium.relationship.noMatches'),
-  showList: t('viscerium.relationship.showList'),
-  showGraph: t('viscerium.relationship.showGraph'),
-  list: t('viscerium.common.list'),
-  graph: t('viscerium.common.graph'),
 };
 const payload = JSON.stringify({
   ...(graph ?? { nodes: [], edges: [], relationTypes: [] }),
@@ -91,7 +87,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       </div>
 
       <div class="relationship-explorer__frame">
-        <div class="relationship-explorer__canvas" data-relationship-canvas role="application" aria-label={t('viscerium.relationship.interactiveLabel')}></div>
+        <div class="relationship-explorer__canvas" data-relationship-canvas></div>
 
         <div class="relationship-explorer__list" data-relationship-list aria-label={t('viscerium.relationship.listLabel')}>
           <div class="relationship-list__header">
@@ -131,9 +127,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
           </button>
           <button type="button" class="exploration-control" popovertarget="relationship-mobile-filters" aria-label={t('viscerium.relationship.filterLabel')}>
             <span aria-hidden="true">☷</span><span>{t('viscerium.common.filters')}</span>
-          </button>
-          <button type="button" class="exploration-control" data-relationship-view-toggle aria-pressed="false" aria-label={t('viscerium.relationship.showList')}>
-            <span aria-hidden="true">≡</span><span data-relationship-view-label>{t('viscerium.common.list')}</span>
           </button>
           <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label={t('viscerium.common.enterFocusMode')}>
             <span aria-hidden="true">⛶</span><span data-exploration-focus-label>{t('viscerium.common.focus')}</span>
@@ -241,10 +234,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     since: string;
     until: string;
     noMatches: string;
-    showList: string;
-    showGraph: string;
-    list: string;
-    graph: string;
   };
 
   type RelationshipPayload = {
@@ -289,7 +278,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
   function initialiseRelationshipExplorer(root: HTMLElement) {
     if (root.dataset.relationshipReady) return;
     const canvas = root.querySelector<HTMLElement>('[data-relationship-canvas]');
-    const list = root.querySelector<HTMLElement>('[data-relationship-list]');
     const payloadElement = root.querySelector<HTMLScriptElement>('[data-relationship-payload]');
     if (!canvas || !payloadElement) return;
 
@@ -562,25 +550,8 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       ],
     });
 
-    const setViewMode = (mode: 'graph' | 'list') => {
-      const listMode = mode === 'list';
-      canvas.hidden = listMode;
-      if (list) list.hidden = !listMode;
-      root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
-        button.setAttribute('aria-pressed', String(listMode));
-        button.setAttribute('aria-label', listMode ? messages.showGraph : messages.showList);
-        const label = button.querySelector('[data-relationship-view-label]');
-        if (label) label.textContent = listMode ? messages.graph : messages.list;
-      });
-      if (!listMode) requestAnimationFrame(() => {
-        cy.resize();
-        cy.fit(cy.elements(':visible'), 78);
-      });
-    };
-
     const focusNode = (nodeId: string | undefined) => {
       if (!nodeId) return;
-      setViewMode('graph');
       const node = cy.$id(nodeId);
       if (!node.length) return;
       if (node.style('display') === 'none') {
@@ -589,11 +560,13 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       }
       cy.elements().unselect();
       node.select();
-      cy.animate({
-        center: { eles: node },
-        zoom: Math.max(cy.zoom(), 1.15),
-        duration: 280,
-      });
+      const zoom = Math.max(cy.zoom(), 1.15);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        cy.center(node);
+        cy.zoom(zoom);
+      } else {
+        cy.animate({ center: { eles: node }, zoom, duration: 280 });
+      }
       renderNodeDetails(node);
     };
 
@@ -647,10 +620,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     };
 
     root.querySelectorAll<HTMLElement>('[data-relationship-search-shell]').forEach(bindSearch);
-    root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
-      button.addEventListener('click', () => setViewMode(canvas.hidden ? 'graph' : 'list'));
-    });
-
     const resetExplorer = () => {
       relationFilters.forEach((control) => { control.value = ''; });
       layoutSelects.forEach((control) => { control.value = 'cose'; });
@@ -660,7 +629,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
         results.replaceChildren();
       });
       cy.elements().style('display', 'element').unselect();
-      setViewMode('graph');
       runLayout();
       if (details) {
         const hint = document.createElement('p');
@@ -674,21 +642,12 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
 
     bindExplorationFocus(root, () => requestAnimationFrame(() => {
       cy.resize();
-      if (!canvas.hidden) cy.fit(cy.elements(':visible'), 78);
+      cy.fit(cy.elements(':visible'), 78);
     }));
 
     const observer = new ResizeObserver(() => cy.resize());
     observer.observe(canvas);
     root.dataset.relationshipReady = 'true';
-    root.querySelectorAll<HTMLAnchorElement>('[data-relationship-list-node]').forEach((link) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.dataset.relationshipListNode = link.dataset.relationshipListNode ?? '';
-      button.textContent = link.textContent;
-      button.addEventListener('click', () => focusNode(button.dataset.relationshipListNode));
-      link.replaceWith(button);
-    });
-    setViewMode('graph');
   }
 
   function bootRelationshipExplorers() {

@@ -48,15 +48,19 @@ test('timeline keeps its HTML fallback visible until enhanced mounting succeeds'
   );
 });
 
-test('relationship explorer exposes entity links until graph mounting succeeds', async () => {
+test('relationship explorer retains its semantic relationship list after graph mounting', async () => {
   const source = await fs.readFile(relationshipUrl, 'utf8');
   assert.match(source, /class="relationship-explorer__list" data-relationship-list aria-label=/);
   assert.match(source, /<a href=\{source\.page\} data-relationship-list-node=\{source\.id\}>/);
   assert.match(source, /<a href=\{target\.page\} data-relationship-list-node=\{target\.id\}>/);
   const ready = source.lastIndexOf("root.dataset.relationshipReady = 'true'");
-  const switchToGraph = source.lastIndexOf("setViewMode('graph')");
   assert.ok(ready > source.indexOf('const cy = cytoscape('));
-  assert.ok(switchToGraph > ready, 'canvas replaces the fallback only after mounting');
-  assert.ok(source.indexOf('link.replaceWith(button)') > ready,
-    'entity links become graph-selection buttons only after mounting');
+  assert.equal(source.includes('link.replaceWith(button)'), false,
+    'graph enhancement must not replace native article links');
+  assert.equal(source.includes('data-relationship-view-toggle'), false,
+    'the semantic list must not be treated as an alternate view');
+  assert.doesNotMatch(source, /role="application"/,
+    'the canvas must not claim an unsupported application keyboard model');
+  assert.match(source, /window\.matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/,
+    'centering a graph node must respect reduced-motion preferences');
 });
