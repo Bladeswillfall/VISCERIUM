@@ -640,12 +640,13 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     };
     root.querySelectorAll<HTMLButtonElement>('[data-relationship-reset]').forEach((button) => button.addEventListener('click', resetExplorer));
 
-    bindExplorationFocus(root, () => requestAnimationFrame(() => {
+    const resizeGraph = () => {
       cy.resize();
       cy.fit(cy.elements(':visible'), 78);
-    }));
+    };
+    bindExplorationFocus(root, () => requestAnimationFrame(resizeGraph));
 
-    const observer = new ResizeObserver(() => cy.resize());
+    const observer = new ResizeObserver(resizeGraph);
     observer.observe(canvas);
     root.dataset.relationshipReady = 'true';
   }

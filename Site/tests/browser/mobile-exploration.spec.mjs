@@ -82,11 +82,17 @@ test('mobile Relationships keeps native links visible and keyboard reachable in 
   await expect(links.first()).toBeInViewport({ ratio: 1 });
   await page.setViewportSize(phoneLandscape);
   await expect(links.first()).toBeInViewport({ ratio: 1 });
+  const graphBox = await explorer.locator('[data-relationship-canvas]').boundingBox();
+  expect(graphBox?.height ?? 0).toBeGreaterThanOrEqual(phoneLandscape.height * .4);
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Shift+Tab');
   await expect(links.last()).toBeFocused();
   await expect(links.last()).toBeInViewport({ ratio: 1 });
+  expect(await links.last().evaluate((link) => {
+    const box = link.getBoundingClientRect();
+    return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2) === link;
+  })).toBe(true);
   const href = await links.last().getAttribute('href');
   await page.keyboard.press('Enter');
   await page.waitForURL((url) => url.pathname === new URL(href, 'http://127.0.0.1:4321').pathname);

@@ -445,6 +445,18 @@ html[data-exploration-focus] .codex-exploration-page .relationship-explorer__lis
   max-height: 50dvh;
   overflow: auto;
   padding-block-end: calc(6rem + env(safe-area-inset-bottom));
+  scroll-padding-block-end: calc(6rem + env(safe-area-inset-bottom));
+}
+
+@media (48rem < width <= 60rem) {
+  html[data-exploration-focus] .codex-exploration-page .relationship-explorer__frame {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
+  }
+
+  html[data-exploration-focus] .codex-exploration-page .relationship-explorer__details {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
 
 html[data-exploration-focus] .exploration-surface-controls {
