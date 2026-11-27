@@ -70,3 +70,24 @@ test('mobile Relationships renders published structured relationships', async ({
   await expect(explorer.getByRole('button', { name: 'Search relationships' })).toBeVisible();
   await expect(page.locator('.pagination-links')).toHaveCount(0);
 });
+
+test('mobile Relationships keeps native links visible and keyboard reachable in focus mode', async ({ page }) => {
+  await openMobile(page, '/relationships/');
+  const explorer = page.locator('[data-relationship-explorer]');
+  await expect(explorer).toHaveAttribute('data-relationship-ready', 'true');
+  await explorer.getByRole('button', { name: 'Enter focus mode', exact: true }).click();
+  await expect(page.locator('.ion-codex-footer')).toBeHidden();
+  await expect(page.locator('#scroll-to-top-button')).toBeHidden();
+  const links = explorer.locator('[data-relationship-list] a');
+  await expect(links.first()).toBeInViewport({ ratio: 1 });
+  await page.setViewportSize(phoneLandscape);
+  await expect(links.first()).toBeInViewport({ ratio: 1 });
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Shift+Tab');
+  await expect(links.last()).toBeFocused();
+  await expect(links.last()).toBeInViewport({ ratio: 1 });
+  const href = await links.last().getAttribute('href');
+  await page.keyboard.press('Enter');
+  await page.waitForURL((url) => url.pathname === new URL(href, 'http://127.0.0.1:4321').pathname);
+});
