@@ -126,7 +126,6 @@ test('unified chronology keeps exact fictional-calendar ticks inside one bottom 
   expect(metrics.eventCount).toBeGreaterThan(1);
   expect(metrics.labels).toContain('Chronology');
   expect(metrics.canvasHeight).toBeGreaterThanOrEqual(318);
-  expect(metrics.canvasHeight).toBeLessThanOrEqual(642);
   expect(Math.abs(metrics.timelineHeight - metrics.canvasHeight)).toBeLessThanOrEqual(2);
   expect(metrics.externalAxisCount).toBe(0);
   expect(metrics.rootVisibility).toBe('visible');
@@ -151,6 +150,42 @@ test('unified chronology keeps exact fictional-calendar ticks inside one bottom 
   expect(visible.lastBottom).toBeLessThanOrEqual(visible.viewportBottom + 2);
   expect(overview.hostHeight).toBeLessThanOrEqual(74);
   expect(overview.timelineHeight).toBeLessThanOrEqual(74);
+});
+
+test('the timeline grows and shrinks with the browser height', async ({ page }) => {
+  await page.setViewportSize({ width: 1174, height: 800 });
+  await openGlobalTimeline(page);
+
+  const canvas = page.locator('[data-vc-canvas]');
+  const readViewport = () => canvas.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const center = element.querySelector('.vis-panel.vis-center').getBoundingClientRect();
+    const axis = element.querySelector('.vis-panel.vis-bottom').getBoundingClientRect();
+    const overview = document.querySelector('[data-vc-minimap-wrap]').getBoundingClientRect();
+    return {
+      height: bounds.height,
+      centerHeight: center.height,
+      axisBottom: axis.bottom - bounds.bottom,
+      overviewGap: overview.top - bounds.bottom,
+    };
+  });
+  const short = await readViewport();
+  expect(short.height).toBeGreaterThanOrEqual(432);
+
+  await page.setViewportSize({ width: 1174, height: 1600 });
+  await expect.poll(async () => (await readViewport()).centerHeight)
+    .toBeGreaterThan(short.centerHeight + 200);
+  const tall = await readViewport();
+  expect(tall.height).toBeGreaterThan(640);
+  expect(Math.abs(tall.axisBottom)).toBeLessThanOrEqual(2);
+  expect(tall.overviewGap).toBeGreaterThanOrEqual(0);
+
+  await page.setViewportSize({ width: 1174, height: 800 });
+  await expect.poll(async () => Math.abs((await readViewport()).centerHeight - short.centerHeight))
+    .toBeLessThanOrEqual(2);
+  const restored = await readViewport();
+  expect(Math.abs(restored.height - short.height)).toBeLessThanOrEqual(2);
+  expect(Math.abs(restored.axisBottom)).toBeLessThanOrEqual(2);
 });
 
 test('calendar lines remain locked to event geometry throughout a horizontal drag', async ({ page }) => {
