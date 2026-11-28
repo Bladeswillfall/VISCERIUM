@@ -29,7 +29,7 @@ function refitIcon() {
     </svg>`;
 }
 
-export function createTimelineCanvas({ container, model, axis, messages, direction, maximumDays }) {
+export function createTimelineCanvas({ container, model, axis, messages, direction, compact, maximumDays }) {
   if (!container) throw new Error('Timeline canvas requires a container.');
 
   container.classList.add('viscerium-timeline-container');
@@ -39,7 +39,9 @@ export function createTimelineCanvas({ container, model, axis, messages, directi
     align: direction === 'rtl' ? 'right' : 'left',
     rtl: direction === 'rtl',
     clickToUse: false,
-    height: '100%',
+    height: compact ? '22rem' : '24rem',
+    minHeight: '20rem',
+    maxHeight: '40rem',
     zoomKey: 'ctrlKey',
     zoomMin: 86_400_000,
     zoomMax: Math.max(86_400_000, maximumDays * 86_400_000),

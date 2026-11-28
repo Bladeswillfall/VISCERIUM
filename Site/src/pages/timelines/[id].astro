@@ -37,3 +37,27 @@ if (!timeline) return Astro.redirect('/timelines/');
   </header>
   <TimelineApp dataset={timeline} />
 </StarlightPage>
+
+<style is:global>
+  /* Dedicated pages can grow without changing the shared Obsidian renderer. */
+  .codex-timeline-page .vc-timeline-app:not(.is-compact) .vc-timeline-canvas,
+  .codex-timeline-page .vc-timeline-skeleton:not(.is-compact) .vc-timeline-skeleton-stage {
+    block-size: 50vh;
+    block-size: 50dvh;
+    min-height: 27rem;
+    max-height: none;
+  }
+
+  /* Override vis-timeline's inline height constraints on dedicated pages. */
+  .codex-timeline-page .vc-timeline-app:not(.is-compact) .vc-timeline-canvas > .vis-timeline {
+    min-block-size: 100% !important;
+    max-block-size: 100% !important;
+  }
+
+  @media (max-width: 38rem) {
+    .codex-timeline-page .vc-timeline-app:not(.is-compact) .vc-timeline-canvas,
+    .codex-timeline-page .vc-timeline-skeleton:not(.is-compact) .vc-timeline-skeleton-stage {
+      min-height: 22rem;
+    }
+  }
+</style>
