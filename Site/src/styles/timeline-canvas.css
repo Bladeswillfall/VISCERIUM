@@ -1144,9 +1144,9 @@
    -------------------------------------------------------------------------- */
 
 /*
- * The renderer owns one complete, stable viewport. Group and
- * filter changes may alter the internal row stack, but must not move the rest
- * of the page. Dense modes use vis-timeline's native vertical scrolling.
+ * CSS owns the viewport size. Dedicated timeline pages grow with the browser
+ * height, while group and filter changes leave the page layout stable.
+ * Dense modes use vis-timeline's native vertical scrolling.
  */
 
 .vc-timeline-app .vc-timeline-canvas {
@@ -1160,6 +1160,14 @@
 .vc-timeline-app.is-compact .vc-timeline-canvas {
   block-size: 22rem;
   max-height: 22rem;
+}
+
+.codex-timeline-page .vc-timeline-app:not(.is-compact) .vc-timeline-canvas,
+.codex-timeline-page .vc-timeline-skeleton:not(.is-compact) .vc-timeline-skeleton-stage {
+  block-size: 50vh;
+  block-size: 50dvh;
+  min-height: 27rem;
+  max-height: none;
 }
 
 .vc-timeline-app .vc-timeline-canvas > .vis-timeline {
@@ -1280,6 +1288,11 @@ body > .vc-timeline-hovercard[hidden] {
   .vc-timeline-app.is-compact .vc-timeline-canvas {
     block-size: 22rem;
     max-height: 22rem;
+  }
+
+  .codex-timeline-page .vc-timeline-app:not(.is-compact) .vc-timeline-canvas,
+  .codex-timeline-page .vc-timeline-skeleton:not(.is-compact) .vc-timeline-skeleton-stage {
+    min-height: 22rem;
   }
 
   body > .vc-timeline-hovercard {
