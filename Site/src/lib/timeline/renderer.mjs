@@ -245,7 +245,6 @@ export function mountTimeline(root, dataset, suppliedOptions = {}) {
     axis,
     messages: options.messages,
     direction: options.direction,
-    compact: options.compact,
     maximumDays: dataset.absoluteEndDay - dataset.absoluteStartDay + 365,
   });
   const { timeline } = renderer;
