@@ -49,6 +49,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Fixed in Unreleased
 
+- Made dedicated timeline canvases respond to browser height and removed duplicate timeline page headings ([#314](https://github.com/Bladeswillfall/VISCERIUM/pull/314)).
+
 - Restored focus after exploration search and mobile inspectors, announced Relationship and Atlas search results, labelled exploration groups, and respected reduced motion for Atlas search and reset ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
 - Kept relationship article links visible and keyboard accessible after the graph loads, including in mobile focus mode and after phone rotation. Kept mobile graph controls beside the canvas rather than below the relationship list ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
 - Prevented disconnected World Graph groups from overlapping by reserving space for each group's size ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
