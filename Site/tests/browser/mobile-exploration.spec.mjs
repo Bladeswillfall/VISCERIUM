@@ -68,6 +68,12 @@ test('mobile Relationships renders published structured relationships', async ({
   await expect(explorer.locator('[data-relationship-canvas]')).not.toHaveAttribute('role', 'application');
   await expect(explorer.locator('.relationship-explorer__empty')).toHaveCount(0);
   await expect(explorer.getByRole('button', { name: 'Search relationships' })).toBeVisible();
+  await expect(explorer).toHaveAttribute('data-relationship-ready', 'true');
+  await expect.poll(() => explorer.evaluate((root) => {
+    const canvas = root.querySelector('[data-relationship-canvas]').getBoundingClientRect();
+    const controls = root.querySelector('.relationship-explorer__mobile-controls').getBoundingClientRect();
+    return controls.top >= canvas.top && controls.bottom <= canvas.bottom;
+  })).toBe(true);
   await expect(page.locator('.pagination-links')).toHaveCount(0);
 });
 

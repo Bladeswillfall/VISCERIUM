@@ -356,6 +356,11 @@
     display: flex;
   }
 
+  /* Anchor the controls to the canvas row, not the relationship list below it. */
+  html:not([data-exploration-focus]) .relationship-explorer__mobile-controls {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
   .atlas__surface-controls {
     inset-inline: 0;
     inline-size: fit-content;
