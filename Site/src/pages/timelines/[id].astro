@@ -32,7 +32,6 @@ if (!timeline) return Astro.redirect('/timelines/');
 >
   <header class="vc-timeline-page-header">
     <p class="timeline-kicker">Generated chronology</p>
-    <h1>{timeline.title}</h1>
     <p>{timeline.description}</p>
     <p>{timeline.events.length} published event{timeline.events.length === 1 ? '' : 's'}.</p>
   </header>
