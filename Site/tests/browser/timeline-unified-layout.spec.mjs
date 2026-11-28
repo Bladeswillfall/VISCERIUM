@@ -45,6 +45,16 @@ function visibleItemMetrics(canvas) {
   };
 }
 
+test('timeline pages display a single page heading', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/timelines/', { waitUntil: 'networkidle' });
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+  await expect(page.getByRole('heading', { level: 1, name: 'Timelines', exact: true })).toBeVisible();
+
+  await page.getByRole('link', { name: 'The VISCERIUM Timeline', exact: true }).first().click();
+  await expect(page.getByRole('heading', { level: 1, name: 'The VISCERIUM Timeline', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+});
+
 test('unified chronology keeps exact fictional-calendar ticks inside one bottom timeline axis', async ({ page }) => {
   await openGlobalTimeline(page);
 
