@@ -4,59 +4,126 @@ All notable changes to the VISCERIUM Codex and related creator tools are recorde
 
 This file uses [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) so Starlight Changelogs can generate the `/releases/` pages.
 
-The entries from 31 July to 28 September 2026 were reconstructed from merged GitHub pull requests. Their dates are **UTC merge dates**, not independently verified production deployment dates. These retrospective version labels group completed work; they do not claim that matching GitHub Releases or deployments occurred on those dates. The original 8 and 10 July entries are retained as authored.
+The entries from 31 July to 28 November 2026 were reconstructed from merged GitHub pull requests. Their dates are **UTC merge dates**, not independently verified production deployment dates. These retrospective version labels group completed work; they do not claim that matching GitHub Releases or deployments occurred on those dates. The original 8 and 10 July entries are retained as authored.
 
-## [Unreleased]
+## [0.19.2] - 2026-11-28
 
-### Added in Unreleased
+### Fixed in 0.19.2
 
-- Added the Kingdom of Satol flag to its CITADEL nation article and era power card, with a linked artwork attribution page crediting Jake Saunders.
-- Added a Bailey Pittman article preview and image-attribution pages for managed Codex artwork, with automatic Obsidian sidecars and Atlas attribution links ([#161](https://github.com/Bladeswillfall/VISCERIUM/pull/161)).
-
-- Added the Republic of Askalia flag to its CITADEL article and era power card, with a linked artwork attribution page crediting Jake Saunders ([#308](https://github.com/Bladeswillfall/VISCERIUM/pull/308)).
-- Added source-specific WorldAnvil contributor credits, checked-in Solacon avatars, and a discreet WA provenance mark beside legacy contributor roles ([#261](https://github.com/Bladeswillfall/VISCERIUM/pull/261)).
-- Added a World Anvil discussion archive pilot to Okse Dominion, with dated attribution, source links and editorial summaries where republication permission is missing.
-
-- Added the HINOKODO Human Made mark and a short authorship statement to explicitly verified image attribution pages, with per-artwork sidecar flags.
-- Added opt-in Stub notices for short published articles, with a direct GitHub contribution link.
-- Added reusable era-themed artifacts and anchored marginalia, including accessible CITADEL manuscript pagination ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
-- Added seven Elias Vail WebP cell illustrations with contour wrapping and clickable Bailey-format attribution pages in Myrkild (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
-- Added a responsive homepage Recent Articles carousel with era-themed header placeholders, an expandable grid and smooth drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
-
-### Changed in Unreleased
-
-- Retired the broad Ion theme stylesheet, scoped Markdown card styling, and consolidated article headings and navigation styles.
-
-- Restored coverage of individual browser and accessibility test edits and scheduled a weekly complete Chromium and Axe audit.
-
-- Made direct Cloudflare Pages uploads an explicit repository-variable opt-in and fail when enabled without credentials, so skipped uploads no longer look successful.
-
-- Reduced pull-request CI to relevant functional checks: content-only changes now build without browser suites, feature code selects its own Chromium specs, and duplicate Axe/cross-browser graph jobs no longer block PRs.
-- Prepared GitHub Actions to deploy the cached production artifact directly to the existing Cloudflare Pages project, with a safe fallback until deployment credentials are configured.
-- Split Chromium browser checks across two CI shards and limited the enabled-contact fixture rebuild to contact-sensitive changes.
-- Replaced the Human Made authorship mark with the CC0 Brainmade mark across the Codex footer, content-production policy and repository badge.
-- Enabled Astro's experimental incremental static-build cache for VISCERIUM-owned dynamic routes, moved Atlas and responsive-image caches into Cloudflare's persisted Astro cache tree, skipped duplicate validation during Cloudflare builds, and replaced post-merge full CI with a cache-seeding build on main.
-- Increased the homepage Recent Articles grid limit from 6 to 36 entries ([#224](https://github.com/Bladeswillfall/VISCERIUM/pull/224)).
-- Restored ordinary Myrkild strain prose and removed cell-image margins (backported from [#219](https://github.com/Bladeswillfall/VISCERIUM/pull/219)).
-- Made Overview-only sidebar folders link directly to their article and subdued folders without other published articles ([#180](https://github.com/Bladeswillfall/VISCERIUM/pull/180)).
-- Updated release notes with colour-coded change labels and clearer date and version layouts; fixed British English release-date formatting.
-
-### Removed in Unreleased
-
-- Removed redundant legacy NEARSIGHT and SMOG rasters from `Vault/maps/`, preserving their identical canonical sources in `Vault/Assets/Maps/`.
-
-- Removed the standalone What's New page and its link from the homepage Recent Articles section; the carousel and public feeds remain available.
-
-### Fixed in Unreleased
-
-- Restored focus after exploration search and mobile inspectors, announced Relationship and Atlas search results, labelled exploration groups, and respected reduced motion for Atlas search and reset ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
-- Kept relationship article links visible and keyboard accessible after the graph loads, including in mobile focus mode and after phone rotation. Kept mobile graph controls beside the canvas rather than below the relationship list ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
+- Restored focus after exploration search and mobile inspectors, announced Relationship and Atlas search results, and labelled exploration groups. Respected reduced motion when centring relationship nodes or searching and resetting Atlas ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
+- Kept relationship article links visible and keyboard accessible after the graph loads, including in mobile focus mode and after phone rotation. Kept mobile graph controls beside the canvas ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
 - Prevented disconnected World Graph groups from overlapping by reserving space for each group's size ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
-- Applied consistent H3 subsection and paragraph indentation across ordinary Codex articles, while leaving custom layouts and existing authored indents unchanged.
-- Restored navigation and relationship exploration without JavaScript, repaired tablet article contents and reader controls, and kept mobile era descriptions and footer text readable ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
+
+## [0.19.1] - 2026-11-20
+
+### Added in 0.19.1
+
+- Added the Kingdom of Satol flag to its CITADEL nation article and era power card, with a linked attribution page crediting Jake Saunders ([#309](https://github.com/Bladeswillfall/VISCERIUM/pull/309)).
+
+## [0.19.0] - 2026-11-19
+
+### Added in 0.19.0
+
+- Added the Republic of Askalia flag to its CITADEL article and era power card, with a linked attribution page crediting Jake Saunders ([#308](https://github.com/Bladeswillfall/VISCERIUM/pull/308)).
+- Published the first pass of the Tpr. Bailey Pittman ENTROPY article, with provisional artwork ([#161](https://github.com/Bladeswillfall/VISCERIUM/pull/161)).
+- Added site-wide attribution pages for managed Codex artwork, with automatic Obsidian sidecars and links from article images and Atlas maps. Unknown provenance fields display Not recorded ([#161](https://github.com/Bladeswillfall/VISCERIUM/pull/161)).
+
+### Changed in 0.19.0
+
+- Applied automatic H3 subsection indentation and nested H4+ content in ordinary Codex articles. Custom layouts and existing authored indents remain unchanged ([#307](https://github.com/Bladeswillfall/VISCERIUM/pull/307)).
+
+## [0.18.1] - 2026-10-15
+
+### Changed in 0.18.1
+
+- Retired the broad Ion theme stylesheet, scoped Markdown card styling and consolidated article headings and navigation styles ([#279](https://github.com/Bladeswillfall/VISCERIUM/pull/279)).
+- Moved calendar authoring instructions into the repository guide, leaving the public Okse Calendar page focused on the calendar itself ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
+
+### Fixed in 0.18.1
+
+- Restored navigation and relationship exploration without JavaScript. Repaired tablet article contents and reader controls. Kept mobile era descriptions and footer text readable ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 - Restored the Codex's subtle grain texture using the committed noise image ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 
+## [0.18.0] - 2026-10-12
+
+### Added in 0.18.0
+
+- Added the HINOKODO Human Made mark and an authorship statement to explicitly verified artwork attribution pages ([#259](https://github.com/Bladeswillfall/VISCERIUM/pull/259)).
+- Added a World Anvil discussion archive pilot to Okse Dominion, with dated attribution, source links and editorial summaries where republication permission is missing ([#260](https://github.com/Bladeswillfall/VISCERIUM/pull/260)).
+- Added source-specific WorldAnvil contributor credits, checked-in Solacon avatars and a WA provenance mark beside legacy contributor roles ([#261](https://github.com/Bladeswillfall/VISCERIUM/pull/261)).
+
+## [0.17.1] - 2026-10-08
+
+### Changed in 0.17.1
+
+- Prepared GitHub Actions to deploy the cached production artifact directly to the existing Cloudflare Pages project, with a fallback until credentials are configured ([#239](https://github.com/Bladeswillfall/VISCERIUM/pull/239)).
+- Reduced pull-request CI to relevant checks. Content-only changes build without browser suites, feature code selects related Chromium specs, and duplicate Axe and cross-browser graph jobs no longer block PRs ([#244](https://github.com/Bladeswillfall/VISCERIUM/pull/244)).
+- Made direct Cloudflare Pages uploads opt-in through a repository variable. Uploads fail if enabled without credentials ([#246](https://github.com/Bladeswillfall/VISCERIUM/pull/246)).
+
+### Removed in 0.17.1
+
+- Removed redundant legacy NEARSIGHT and SMOG rasters from `Vault/maps/`, preserving their identical canonical sources in `Vault/Assets/Maps/` ([#258](https://github.com/Bladeswillfall/VISCERIUM/pull/258)).
+
+### Fixed in 0.17.1
+
+- Restored coverage of individual browser and accessibility test edits and scheduled a weekly complete Chromium and Axe audit ([#245](https://github.com/Bladeswillfall/VISCERIUM/pull/245)).
+
+## [0.17.0] - 2026-10-07
+
+### Added in 0.17.0
+
+- Added opt-in Stub notices for short published articles, with a direct GitHub contribution link ([#230](https://github.com/Bladeswillfall/VISCERIUM/pull/230)).
+
+### Changed in 0.17.0
+
+- Replaced the Human Made authorship mark with the CC0 Brainmade mark across the Codex footer, content-production policy and repository badge ([#235](https://github.com/Bladeswillfall/VISCERIUM/pull/235)).
+- Split Chromium browser checks across two CI shards and limited the enabled-contact fixture rebuild to contact-sensitive changes ([#238](https://github.com/Bladeswillfall/VISCERIUM/pull/238)).
+
+## [0.16.1] - 2026-10-06
+
+### Changed in 0.16.1
+
+- Enabled Astro's experimental incremental static-build cache for VISCERIUM-owned dynamic routes. Moved Atlas and responsive-image caches into Cloudflare's persisted Astro cache. Skipped duplicate validation during Cloudflare builds and replaced post-merge full CI with a cache-seeding build on main ([#233](https://github.com/Bladeswillfall/VISCERIUM/pull/233)).
+
+## [0.16.0] - 2026-10-02
+
+### Added in 0.16.0
+
+- Added reusable era-themed artifacts and anchored marginalia, including accessible CITADEL manuscript pagination ([#217](https://github.com/Bladeswillfall/VISCERIUM/pull/217)).
+- Added seven Elias Vail WebP cell illustrations to Myrkild, with contour wrapping and linked artwork attribution pages ([#220](https://github.com/Bladeswillfall/VISCERIUM/pull/220)).
+
+### Changed in 0.16.0
+
+- Increased the homepage Recent Articles grid limit from 6 to 36 entries ([#224](https://github.com/Bladeswillfall/VISCERIUM/pull/224)).
+- Restored ordinary Myrkild strain prose and removed cell-image margins ([#220](https://github.com/Bladeswillfall/VISCERIUM/pull/220)).
+
+### Fixed in 0.16.0
+
 - Kept explicitly included inter-era events visible on the super timeline at wide zoom levels, including their article links ([#222](https://github.com/Bladeswillfall/VISCERIUM/pull/222)).
+
+## [0.15.0] - 2026-10-01
+
+### Added in 0.15.0
+
+- Added a responsive homepage Recent Articles carousel with era-themed placeholders, an expandable grid and mouse drag scrolling ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
+
+### Changed in 0.15.0
+
+- Made Overview-only sidebar folders link directly to their article and reduced emphasis on folders without other published articles ([#180](https://github.com/Bladeswillfall/VISCERIUM/pull/180)).
+
+### Removed in 0.15.0
+
+- Removed the standalone What's New page and its homepage link. The Recent Articles carousel and public feeds remain available ([#197](https://github.com/Bladeswillfall/VISCERIUM/pull/197)).
+
+## [0.14.1] - 2026-09-30
+
+### Changed in 0.14.1
+
+- Updated release notes with colour-coded change labels and clearer date and version layouts ([#190](https://github.com/Bladeswillfall/VISCERIUM/pull/190)).
+
+### Fixed in 0.14.1
+
+- Corrected British English release-date formatting ([#190](https://github.com/Bladeswillfall/VISCERIUM/pull/190)).
 
 ## [0.14.0] - 2026-09-28
 
