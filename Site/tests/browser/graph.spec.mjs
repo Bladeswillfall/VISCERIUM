@@ -299,6 +299,34 @@ test('World Graph works in the light mobile layout', async ({ page }) => {
   await inspectGraph(page, { width: 390, height: 844 }, 'light');
 });
 
+test('World Graph leaves room for disconnected groups of different sizes', async ({ page }) => {
+  const nodes = [];
+  const edges = [];
+  for (let group = 0; group < 27; group += 1) {
+    const size = group === 0 ? 11 : group < 7 ? 6 : 1;
+    for (let index = 0; index < size; index += 1) {
+      const id = `${group}:${index}`;
+      nodes.push({ id, title: id, kind: 'page', href: '/start-here/' });
+      if (index) edges.push({ kind: 'link', source: `${group}:0`, target: id });
+    }
+  }
+  await page.addInitScript(() => {
+    let seed = 1;
+    Math.random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 2 ** 32);
+  });
+  await page.route('**/sitegraph/sitemap.json', (route) => route.fulfill({ json: { nodes, edges } }));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`${preview}/graph/`);
+  await expect(page.locator('[data-world-graph]')).toHaveAttribute('data-world-graph-ready', 'true');
+  const overlaps = await page.locator('[data-world-graph-canvas]').evaluate((host) => {
+    const groups = host._cyreg.cy.elements().components().map((component) => component.nodes().boundingBox());
+    return groups.flatMap((left, index) => groups.slice(index + 1).filter((right) => (
+      left.x1 < right.x2 && left.x2 > right.x1 && left.y1 < right.y2 && left.y2 > right.y1
+    )));
+  });
+  expect(overlaps).toEqual([]);
+});
+
 test('World Graph restores Obsidian-like hover and keyboard exploration', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`${preview}/graph/`, { waitUntil: 'domcontentloaded' });
@@ -382,6 +410,12 @@ test('World Graph expanded touch target selects a node without becoming backgrou
   const canvasHost = graph.locator('[data-world-graph-canvas]');
   await expect(graph).toHaveAttribute('data-world-graph-ready', 'true');
 
+  // Measure the touch halo independently of the content-driven fit zoom.
+  await canvasHost.evaluate((host) => {
+    const cy = host._cyreg.cy;
+    cy.zoom(1);
+    cy.center(cy.nodes().filter((node) => node.connectedEdges().length === 1).first());
+  });
   const hovered = await hoverConnectedNode(page, graph, canvasHost);
   expect(hovered).not.toBeNull();
   const centre = hovered;

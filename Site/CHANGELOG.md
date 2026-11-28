@@ -49,6 +49,8 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Fixed in Unreleased
 
+- Kept relationship article links visible and keyboard accessible after the graph loads, including in mobile focus mode and after phone rotation ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
+- Prevented disconnected World Graph groups from overlapping by reserving space for each group's size ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
 - Applied consistent H3 subsection and paragraph indentation across ordinary Codex articles, while leaving custom layouts and existing authored indents unchanged.
 - Restored navigation and relationship exploration without JavaScript, repaired tablet article contents and reader controls, and kept mobile era descriptions and footer text readable ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
 - Restored the Codex's subtle grain texture using the committed noise image ([#278](https://github.com/Bladeswillfall/VISCERIUM/pull/278)).
