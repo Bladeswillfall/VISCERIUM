@@ -38,6 +38,7 @@ const messages = {
   since: t('viscerium.relationship.since'),
   until: t('viscerium.relationship.until'),
   noMatches: t('viscerium.relationship.noMatches'),
+  searchResults: t('viscerium.common.searchResults'),
 };
 const payload = JSON.stringify({
   ...(graph ?? { nodes: [], edges: [], relationTypes: [] }),
@@ -58,11 +59,12 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
 >
   {hasGraph ? (
     <>
-      <div class="relationship-explorer__toolbar" aria-label={t('viscerium.relationship.controls')}>
+      <div class="relationship-explorer__toolbar" role="group" aria-label={t('viscerium.relationship.controls')}>
         <div class="relationship-search" data-relationship-search-shell>
           <label for="relationship-search">{t('viscerium.relationship.findEntity')}</label>
-          <input id="relationship-search" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} data-relationship-search />
-          <div class="relationship-search__results" data-relationship-search-results hidden></div>
+          <input id="relationship-search" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} aria-controls="relationship-search-results" data-relationship-search />
+          <p class="codex-sr-only" role="status" data-exploration-search-status></p>
+          <div id="relationship-search-results" class="relationship-search__results" data-relationship-search-results hidden></div>
         </div>
 
         <label class="relationship-control">
@@ -89,7 +91,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       <div class="relationship-explorer__frame">
         <div class="relationship-explorer__canvas" data-relationship-canvas></div>
 
-        <div class="relationship-explorer__list" data-relationship-list aria-label={t('viscerium.relationship.listLabel')}>
+        <section class="relationship-explorer__list" data-relationship-list aria-label={t('viscerium.relationship.listLabel')}>
           <div class="relationship-list__header">
             <p class="atlas__eyebrow">{t('viscerium.relationship.structured')}</p>
             <p>{t('viscerium.relationship.listDescription')}</p>
@@ -115,13 +117,13 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
               );
             })}
           </ul>
-        </div>
+        </section>
 
         <aside class="relationship-explorer__details" data-relationship-details data-label={t('viscerium.common.inspector')} aria-live="polite">
           <p class="relationship-explorer__details-hint">{t('viscerium.relationship.selectHint')}</p>
         </aside>
 
-        <div class="exploration-surface-controls relationship-explorer__mobile-controls" aria-label={t('viscerium.relationship.mobileControls')}>
+        <div class="exploration-surface-controls relationship-explorer__mobile-controls" role="group" aria-label={t('viscerium.relationship.mobileControls')}>
           <button type="button" class="exploration-control" popovertarget="relationship-mobile-search" aria-label={t('viscerium.relationship.searchLabel')}>
             <span aria-hidden="true">⌕</span><span>{t('viscerium.common.search')}</span>
           </button>
@@ -141,8 +143,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
         </div>
         <div class="relationship-search" data-relationship-search-shell>
           <label for="relationship-mobile-search-input">{t('viscerium.relationship.searchLabel')}</label>
-          <input id="relationship-mobile-search-input" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} data-relationship-search />
-          <div class="relationship-search__results" data-relationship-search-results hidden></div>
+          <input id="relationship-mobile-search-input" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} aria-controls="relationship-mobile-search-results" data-relationship-search />
+          <p class="codex-sr-only" role="status" data-exploration-search-status></p>
+          <div id="relationship-mobile-search-results" class="relationship-search__results" data-relationship-search-results hidden></div>
         </div>
       </div>
 
@@ -198,6 +201,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     bindExplorationFocus,
     closeContainingPopover,
     explorationMobileQuery,
+    setExplorationSearchStatus,
     showExplorationDialog,
   } from '../lib/exploration-ui.mjs';
 
@@ -234,6 +238,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     since: string;
     until: string;
     noMatches: string;
+    searchResults: string;
   };
 
   type RelationshipPayload = {
@@ -579,6 +584,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       const hideResults = () => {
         searchResults.hidden = true;
         searchResults.replaceChildren();
+        setExplorationSearchStatus(searchShell, null, messages, locale);
       };
 
       searchInput.addEventListener('input', () => {
@@ -605,14 +611,16 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
             meta.textContent = [match.item.type, match.item.eraText].filter(Boolean).map(pretty).join(' · ');
             button.append(title, meta);
             button.addEventListener('click', () => {
+              closeContainingPopover(button);
               focusNode(match.item.id);
               hideResults();
-              closeContainingPopover(button);
+              if (!mobileQuery.matches) searchInput.focus({ preventScroll: true });
             });
             searchResults.append(button);
           }
         }
         searchResults.hidden = false;
+        setExplorationSearchStatus(searchShell, matches.length, messages, locale);
       });
       searchInput.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') hideResults();
@@ -627,6 +635,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       root.querySelectorAll<HTMLElement>('[data-relationship-search-results]').forEach((results) => {
         results.hidden = true;
         results.replaceChildren();
+      });
+      root.querySelectorAll<HTMLElement>('[data-relationship-search-shell]').forEach((shell) => {
+        setExplorationSearchStatus(shell, null, messages, locale);
       });
       cy.elements().style('display', 'element').unselect();
       runLayout();

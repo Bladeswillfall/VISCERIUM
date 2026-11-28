@@ -49,6 +49,7 @@ The entries from 31 July to 28 September 2026 were reconstructed from merged Git
 
 ### Fixed in Unreleased
 
+- Restored focus after exploration search and mobile inspectors, announced Relationship and Atlas search results, labelled exploration groups, and respected reduced motion for Atlas search and reset ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
 - Kept relationship article links visible and keyboard accessible after the graph loads, including in mobile focus mode and after phone rotation ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
 - Prevented disconnected World Graph groups from overlapping by reserving space for each group's size ([#312](https://github.com/Bladeswillfall/VISCERIUM/pull/312)).
 - Applied consistent H3 subsection and paragraph indentation across ordinary Codex articles, while leaving custom layouts and existing authored indents unchanged.

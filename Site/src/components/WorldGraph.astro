@@ -39,7 +39,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 ---
 
 <section class="world-graph" data-world-graph data-graph-url={`${base}sitegraph/sitemap.json`}>
-  <div class="world-graph__toolbar" aria-label="World Graph controls">
+  <div class="world-graph__toolbar" role="group" aria-label="World Graph controls">
     <p><strong>{pages.length}</strong> public pages connected by internal links.</p>
     <button type="button" data-world-graph-reset disabled>Reset view</button>
   </div>

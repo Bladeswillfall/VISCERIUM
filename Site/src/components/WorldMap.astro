@@ -44,6 +44,7 @@ const messages = {
   imageLabel: t('viscerium.map.imageLabel'),
   markerLabel: t('viscerium.map.markerLabel'),
   noMatches: t('viscerium.map.noMatches'),
+  searchResults: t('viscerium.common.searchResults'),
   untitledMarker: t('viscerium.map.untitledMarker'),
 };
 const payload = JSON.stringify({ ...(map ?? {}), _locale: locale, _messages: messages }).replace(/</g, '\\u003c');
@@ -75,7 +76,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
 
     {map.image ? (
       <>
-        <div class="atlas__toolbar" aria-label={t('viscerium.map.controls')}>
+        <div class="atlas__toolbar" role="group" aria-label={t('viscerium.map.controls')}>
           <div class="atlas-search" data-atlas-search-shell>
             <label for={`${atlasId}-search`}>{t('viscerium.map.findPlace')}</label>
             <input
@@ -83,9 +84,11 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
               type="search"
               placeholder={t('viscerium.map.searchPlaceholder')}
               autocomplete="off"
+              aria-controls={`${atlasId}-search-results`}
               data-atlas-search
             />
-            <div class="atlas-search__results" data-atlas-search-results hidden></div>
+            <p class="codex-sr-only" role="status" data-exploration-search-status></p>
+            <div id={`${atlasId}-search-results`} class="atlas-search__results" data-atlas-search-results hidden></div>
           </div>
           <button type="button" class="atlas__reset" data-atlas-reset>{t('viscerium.map.resetView')}</button>
         </div>
@@ -98,7 +101,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
             aria-label={t('viscerium.map.interactiveLabel', { title: map.title, interpolation: { escapeValue: false } })}
           ></div>
 
-          <div class="exploration-surface-controls atlas__surface-controls" aria-label={t('viscerium.map.mobileControls')}>
+          <div class="exploration-surface-controls atlas__surface-controls" role="group" aria-label={t('viscerium.map.mobileControls')}>
             <button
               type="button"
               class="exploration-control"
@@ -131,9 +134,11 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
               type="search"
               placeholder={t('viscerium.map.searchPlaceholder')}
               autocomplete="off"
+              aria-controls={`${atlasId}-mobile-search-results`}
               data-atlas-search
             />
-            <div class="atlas-search__results" data-atlas-search-results hidden></div>
+            <p class="codex-sr-only" role="status" data-exploration-search-status></p>
+            <div id={`${atlasId}-mobile-search-results`} class="atlas-search__results" data-atlas-search-results hidden></div>
           </div>
         </div>
 
@@ -184,6 +189,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     bindExplorationFocus,
     closeContainingPopover,
     explorationMobileQuery,
+    setExplorationSearchStatus,
     showExplorationDialog,
   } from '../lib/exploration-ui.mjs';
 
@@ -214,6 +220,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     imageLabel: string;
     markerLabel: string;
     noMatches: string;
+    searchResults: string;
     untitledMarker: string;
   };
 
@@ -434,6 +441,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     const messages = data._messages;
 
     const mobileQuery = explorationMobileQuery();
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (inspector) bindExplorationDialog(inspector);
 
     const tiles = data.tiles ?? null;
@@ -611,7 +619,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       targetZoom = Math.max(targetZoom, fittedZoom + 1);
       targetZoom = Math.min(targetZoom, atlas.getMaxZoom());
       if (!atlas.hasLayer(record.group)) record.group.addTo(atlas);
-      atlas.setView(record.latLng, targetZoom, { animate: true });
+      atlas.setView(record.latLng, targetZoom, { animate: !reducedMotion.matches });
       if (!record.group.hasLayer(record.leafletMarker)) record.group.addLayer(record.leafletMarker);
       if (mobileQuery.matches) openInspector(record.marker);
       else record.leafletMarker.openPopup();
@@ -650,6 +658,7 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
       const hideResults = () => {
         searchResults.hidden = true;
         searchResults.replaceChildren();
+        setExplorationSearchStatus(searchShell, null, messages, locale);
       };
 
       searchInput.addEventListener('input', () => {
@@ -681,14 +690,16 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
               .join(' · ');
             button.append(title, meta);
             button.addEventListener('click', () => {
+              closeContainingPopover(button);
               focusRecord(record);
               hideResults();
-              closeContainingPopover(button);
+              if (!mobileQuery.matches) searchInput.focus({ preventScroll: true });
             });
             searchResults.append(button);
           }
         }
         searchResults.hidden = false;
+        setExplorationSearchStatus(searchShell, matches.length, messages, locale);
       });
       searchInput.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') hideResults();
@@ -698,11 +709,14 @@ const atlasId = `atlas-${String(map?.id ?? 'map').replace(/[^a-z0-9_-]+/gi, '-')
     root.querySelectorAll<HTMLElement>('[data-atlas-search-shell]').forEach(bindSearch);
 
     const resetAtlas = () => {
-      setDefaultView({ animate: true });
+      setDefaultView({ animate: !reducedMotion.matches });
       root.querySelectorAll<HTMLInputElement>('[data-atlas-search]').forEach((input) => { input.value = ''; });
       root.querySelectorAll<HTMLElement>('[data-atlas-search-results]').forEach((results) => {
         results.hidden = true;
         results.replaceChildren();
+      });
+      root.querySelectorAll<HTMLElement>('[data-atlas-search-shell]').forEach((shell) => {
+        setExplorationSearchStatus(shell, null, messages, locale);
       });
     };
     root.querySelectorAll<HTMLButtonElement>('[data-atlas-reset]').forEach((button) => button.addEventListener('click', resetAtlas));
