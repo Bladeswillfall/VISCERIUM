@@ -10,6 +10,7 @@
   "starlightChangelogs.versions.all": "All versions",
   "viscerium.common.newTab": " (opens in a new tab)",
   "viscerium.common.search": "Search",
+  "viscerium.common.searchResults": "Search results: {count}.",
   "viscerium.common.filters": "Filters",
   "viscerium.common.reset": "Reset",
   "viscerium.common.focus": "Focus",

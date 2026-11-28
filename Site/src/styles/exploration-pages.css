@@ -356,6 +356,11 @@
     display: flex;
   }
 
+  /* Anchor the controls to the canvas row, not the relationship list below it. */
+  html:not([data-exploration-focus]) .relationship-explorer__mobile-controls {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
   .atlas__surface-controls {
     inset-inline: 0;
     inline-size: fit-content;
@@ -393,6 +398,8 @@ html[data-exploration-focus] body {
 html[data-exploration-focus] body > header,
 html[data-exploration-focus] #starlight__sidebar,
 html[data-exploration-focus] .codex-page-deck,
+html[data-exploration-focus] .ion-codex-footer,
+html[data-exploration-focus] #scroll-to-top-button,
 html[data-exploration-focus] .right-sidebar,
 html[data-exploration-focus] .codex-exploration-page .atlas__header,
 html[data-exploration-focus] .codex-exploration-page .atlas__toolbar,
@@ -424,12 +431,37 @@ html[data-exploration-focus] .codex-exploration-page .relationship-explorer__fra
   margin: 0;
 }
 
-html[data-exploration-focus] .codex-exploration-page .atlas__canvas,
-html[data-exploration-focus] .codex-exploration-page .relationship-explorer__canvas,
-html[data-exploration-focus] .codex-exploration-page .relationship-explorer__list {
+html[data-exploration-focus] .codex-exploration-page .atlas__canvas {
   width: 100%;
   height: 100dvh;
   min-height: 100dvh;
+}
+
+html[data-exploration-focus] .codex-exploration-page .relationship-explorer__frame {
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+html[data-exploration-focus] .codex-exploration-page .relationship-explorer__canvas {
+  min-height: 0;
+}
+
+html[data-exploration-focus] .codex-exploration-page .relationship-explorer__list {
+  min-height: 0;
+  max-height: 50dvh;
+  overflow: auto;
+  padding-block-end: calc(6rem + env(safe-area-inset-bottom));
+  scroll-padding-block-end: calc(6rem + env(safe-area-inset-bottom));
+}
+
+@media (48rem < width <= 60rem) {
+  html[data-exploration-focus] .codex-exploration-page .relationship-explorer__frame {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
+  }
+
+  html[data-exploration-focus] .codex-exploration-page .relationship-explorer__details {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
 
 html[data-exploration-focus] .exploration-surface-controls {

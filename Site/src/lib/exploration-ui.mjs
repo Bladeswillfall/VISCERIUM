@@ -7,6 +7,13 @@ export function closeContainingPopover(element) {
   if (popover?.matches?.(':popover-open')) popover.hidePopover();
 }
 
+export function setExplorationSearchStatus(shell, count, messages, locale) {
+  const status = shell.querySelector('[data-exploration-search-status]');
+  if (!status) return;
+  status.textContent = count === null ? '' : count === 0 ? messages.noMatches
+    : messages.searchResults.replace('{count}', new Intl.NumberFormat(locale).format(count));
+}
+
 export function showExplorationDialog(dialog) {
   if (!dialog || dialog.open) return;
   dialog.showModal();

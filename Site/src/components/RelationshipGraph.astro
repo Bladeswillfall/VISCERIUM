@@ -38,10 +38,7 @@ const messages = {
   since: t('viscerium.relationship.since'),
   until: t('viscerium.relationship.until'),
   noMatches: t('viscerium.relationship.noMatches'),
-  showList: t('viscerium.relationship.showList'),
-  showGraph: t('viscerium.relationship.showGraph'),
-  list: t('viscerium.common.list'),
-  graph: t('viscerium.common.graph'),
+  searchResults: t('viscerium.common.searchResults'),
 };
 const payload = JSON.stringify({
   ...(graph ?? { nodes: [], edges: [], relationTypes: [] }),
@@ -62,11 +59,12 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
 >
   {hasGraph ? (
     <>
-      <div class="relationship-explorer__toolbar" aria-label={t('viscerium.relationship.controls')}>
+      <div class="relationship-explorer__toolbar" role="group" aria-label={t('viscerium.relationship.controls')}>
         <div class="relationship-search" data-relationship-search-shell>
           <label for="relationship-search">{t('viscerium.relationship.findEntity')}</label>
-          <input id="relationship-search" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} data-relationship-search />
-          <div class="relationship-search__results" data-relationship-search-results hidden></div>
+          <input id="relationship-search" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} aria-controls="relationship-search-results" data-relationship-search />
+          <p class="codex-sr-only" role="status" data-exploration-search-status></p>
+          <div id="relationship-search-results" class="relationship-search__results" data-relationship-search-results hidden></div>
         </div>
 
         <label class="relationship-control">
@@ -91,9 +89,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       </div>
 
       <div class="relationship-explorer__frame">
-        <div class="relationship-explorer__canvas" data-relationship-canvas role="application" aria-label={t('viscerium.relationship.interactiveLabel')}></div>
+        <div class="relationship-explorer__canvas" data-relationship-canvas></div>
 
-        <div class="relationship-explorer__list" data-relationship-list aria-label={t('viscerium.relationship.listLabel')}>
+        <section class="relationship-explorer__list" data-relationship-list aria-label={t('viscerium.relationship.listLabel')}>
           <div class="relationship-list__header">
             <p class="atlas__eyebrow">{t('viscerium.relationship.structured')}</p>
             <p>{t('viscerium.relationship.listDescription')}</p>
@@ -119,21 +117,18 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
               );
             })}
           </ul>
-        </div>
+        </section>
 
         <aside class="relationship-explorer__details" data-relationship-details data-label={t('viscerium.common.inspector')} aria-live="polite">
           <p class="relationship-explorer__details-hint">{t('viscerium.relationship.selectHint')}</p>
         </aside>
 
-        <div class="exploration-surface-controls relationship-explorer__mobile-controls" aria-label={t('viscerium.relationship.mobileControls')}>
+        <div class="exploration-surface-controls relationship-explorer__mobile-controls" role="group" aria-label={t('viscerium.relationship.mobileControls')}>
           <button type="button" class="exploration-control" popovertarget="relationship-mobile-search" aria-label={t('viscerium.relationship.searchLabel')}>
             <span aria-hidden="true">⌕</span><span>{t('viscerium.common.search')}</span>
           </button>
           <button type="button" class="exploration-control" popovertarget="relationship-mobile-filters" aria-label={t('viscerium.relationship.filterLabel')}>
             <span aria-hidden="true">☷</span><span>{t('viscerium.common.filters')}</span>
-          </button>
-          <button type="button" class="exploration-control" data-relationship-view-toggle aria-pressed="false" aria-label={t('viscerium.relationship.showList')}>
-            <span aria-hidden="true">≡</span><span data-relationship-view-label>{t('viscerium.common.list')}</span>
           </button>
           <button type="button" class="exploration-control" data-exploration-focus-toggle aria-pressed="false" aria-label={t('viscerium.common.enterFocusMode')}>
             <span aria-hidden="true">⛶</span><span data-exploration-focus-label>{t('viscerium.common.focus')}</span>
@@ -148,8 +143,9 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
         </div>
         <div class="relationship-search" data-relationship-search-shell>
           <label for="relationship-mobile-search-input">{t('viscerium.relationship.searchLabel')}</label>
-          <input id="relationship-mobile-search-input" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} data-relationship-search />
-          <div class="relationship-search__results" data-relationship-search-results hidden></div>
+          <input id="relationship-mobile-search-input" type="search" autocomplete="off" placeholder={t('viscerium.relationship.searchPlaceholder')} aria-controls="relationship-mobile-search-results" data-relationship-search />
+          <p class="codex-sr-only" role="status" data-exploration-search-status></p>
+          <div id="relationship-mobile-search-results" class="relationship-search__results" data-relationship-search-results hidden></div>
         </div>
       </div>
 
@@ -205,6 +201,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     bindExplorationFocus,
     closeContainingPopover,
     explorationMobileQuery,
+    setExplorationSearchStatus,
     showExplorationDialog,
   } from '../lib/exploration-ui.mjs';
 
@@ -241,10 +238,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     since: string;
     until: string;
     noMatches: string;
-    showList: string;
-    showGraph: string;
-    list: string;
-    graph: string;
+    searchResults: string;
   };
 
   type RelationshipPayload = {
@@ -289,7 +283,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
   function initialiseRelationshipExplorer(root: HTMLElement) {
     if (root.dataset.relationshipReady) return;
     const canvas = root.querySelector<HTMLElement>('[data-relationship-canvas]');
-    const list = root.querySelector<HTMLElement>('[data-relationship-list]');
     const payloadElement = root.querySelector<HTMLScriptElement>('[data-relationship-payload]');
     if (!canvas || !payloadElement) return;
 
@@ -562,25 +555,8 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       ],
     });
 
-    const setViewMode = (mode: 'graph' | 'list') => {
-      const listMode = mode === 'list';
-      canvas.hidden = listMode;
-      if (list) list.hidden = !listMode;
-      root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
-        button.setAttribute('aria-pressed', String(listMode));
-        button.setAttribute('aria-label', listMode ? messages.showGraph : messages.showList);
-        const label = button.querySelector('[data-relationship-view-label]');
-        if (label) label.textContent = listMode ? messages.graph : messages.list;
-      });
-      if (!listMode) requestAnimationFrame(() => {
-        cy.resize();
-        cy.fit(cy.elements(':visible'), 78);
-      });
-    };
-
     const focusNode = (nodeId: string | undefined) => {
       if (!nodeId) return;
-      setViewMode('graph');
       const node = cy.$id(nodeId);
       if (!node.length) return;
       if (node.style('display') === 'none') {
@@ -589,11 +565,13 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       }
       cy.elements().unselect();
       node.select();
-      cy.animate({
-        center: { eles: node },
-        zoom: Math.max(cy.zoom(), 1.15),
-        duration: 280,
-      });
+      const zoom = Math.max(cy.zoom(), 1.15);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        cy.center(node);
+        cy.zoom(zoom);
+      } else {
+        cy.animate({ center: { eles: node }, zoom, duration: 280 });
+      }
       renderNodeDetails(node);
     };
 
@@ -606,6 +584,7 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
       const hideResults = () => {
         searchResults.hidden = true;
         searchResults.replaceChildren();
+        setExplorationSearchStatus(searchShell, null, messages, locale);
       };
 
       searchInput.addEventListener('input', () => {
@@ -632,14 +611,16 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
             meta.textContent = [match.item.type, match.item.eraText].filter(Boolean).map(pretty).join(' · ');
             button.append(title, meta);
             button.addEventListener('click', () => {
+              closeContainingPopover(button);
               focusNode(match.item.id);
               hideResults();
-              closeContainingPopover(button);
+              if (!mobileQuery.matches) searchInput.focus({ preventScroll: true });
             });
             searchResults.append(button);
           }
         }
         searchResults.hidden = false;
+        setExplorationSearchStatus(searchShell, matches.length, messages, locale);
       });
       searchInput.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') hideResults();
@@ -647,10 +628,6 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     };
 
     root.querySelectorAll<HTMLElement>('[data-relationship-search-shell]').forEach(bindSearch);
-    root.querySelectorAll<HTMLButtonElement>('[data-relationship-view-toggle]').forEach((button) => {
-      button.addEventListener('click', () => setViewMode(canvas.hidden ? 'graph' : 'list'));
-    });
-
     const resetExplorer = () => {
       relationFilters.forEach((control) => { control.value = ''; });
       layoutSelects.forEach((control) => { control.value = 'cose'; });
@@ -659,8 +636,10 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
         results.hidden = true;
         results.replaceChildren();
       });
+      root.querySelectorAll<HTMLElement>('[data-relationship-search-shell]').forEach((shell) => {
+        setExplorationSearchStatus(shell, null, messages, locale);
+      });
       cy.elements().style('display', 'element').unselect();
-      setViewMode('graph');
       runLayout();
       if (details) {
         const hint = document.createElement('p');
@@ -672,23 +651,15 @@ const nodeById = new Map((graph?.nodes ?? []).map((node) => [node.id, node]));
     };
     root.querySelectorAll<HTMLButtonElement>('[data-relationship-reset]').forEach((button) => button.addEventListener('click', resetExplorer));
 
-    bindExplorationFocus(root, () => requestAnimationFrame(() => {
+    const resizeGraph = () => {
       cy.resize();
-      if (!canvas.hidden) cy.fit(cy.elements(':visible'), 78);
-    }));
+      cy.fit(cy.elements(':visible'), 78);
+    };
+    bindExplorationFocus(root, () => requestAnimationFrame(resizeGraph));
 
-    const observer = new ResizeObserver(() => cy.resize());
+    const observer = new ResizeObserver(resizeGraph);
     observer.observe(canvas);
     root.dataset.relationshipReady = 'true';
-    root.querySelectorAll<HTMLAnchorElement>('[data-relationship-list-node]').forEach((link) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.dataset.relationshipListNode = link.dataset.relationshipListNode ?? '';
-      button.textContent = link.textContent;
-      button.addEventListener('click', () => focusNode(button.dataset.relationshipListNode));
-      link.replaceWith(button);
-    });
-    setViewMode('graph');
   }
 
   function bootRelationshipExplorers() {

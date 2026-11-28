@@ -166,17 +166,21 @@
 }
 
 .relationship-explorer__canvas {
+  grid-column: 1;
+  grid-row: 1;
   min-width: 0;
   min-height: clamp(42rem, calc(100dvh - 16rem), 64rem);
-  background:
-    linear-gradient(color-mix(in oklch, var(--codex-border) 18%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklch, var(--codex-border) 18%, transparent) 1px, transparent 1px),
-    radial-gradient(circle at 50% 42%, color-mix(in oklch, var(--codex-accent) 7%, transparent), transparent 52%),
-    var(--relationship-canvas);
-  background-size: 2.5rem 2.5rem, 2.5rem 2.5rem, auto, auto;
+  background: var(--relationship-canvas);
+}
+
+.relationship-explorer__list {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--codex-border);
 }
 
 .relationship-explorer__details {
+  grid-column: 2;
+  grid-row: 1;
   overflow: auto;
   max-height: min(76vh, 64rem);
   border-inline-start: 1px solid var(--codex-border);
@@ -283,6 +287,8 @@ body .sl-markdown-content .relationship-explorer__empty h2::after {
   }
 
   .relationship-explorer__details {
+    grid-column: 1;
+    grid-row: auto;
     max-height: none;
     border-top: 1px solid var(--codex-border);
     border-inline-start: 0;
